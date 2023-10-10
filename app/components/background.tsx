@@ -14,6 +14,7 @@ export default function Background() {
           createPortal(
             <div className="flex h-full w-full items-center justify-center">
               <video
+                disablePictureInPicture={true}
                 onContextMenu={event => event.preventDefault()}
                 className="w-full opacity-50 saturate-200"
                 src="/bg.webm"
