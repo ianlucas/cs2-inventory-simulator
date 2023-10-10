@@ -1,3 +1,4 @@
+import { faSteam } from "@fortawesome/free-brands-svg-icons";
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,16 +9,16 @@ import { useEffect, useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
+    { title: "cstrike/inventory" },
     { name: "description", content: "Welcome to Remix!" }
   ];
 };
 
 function getName(csItem: CS_Item) {
-  if (csItem.type === "weapon") {
+  if (["weapon", "melee"].includes(csItem.type)) {
     const [weaponName, ...paintName] = csItem.name.split("|");
     return {
-      model: weaponName.trim(),
+      model: (csItem.type === "melee" ? "★ " : "") + weaponName.trim(),
       name: paintName.join("|")
     };
   }
@@ -31,28 +32,17 @@ export default function Index() {
   const [inventory, setInventory] = useState(
     new CS_Inventory([
       {
-        id: 236
+        id: 236,
+        equippedT: true
       },
       {
-        id: 455
+        id: 455,
+        equippedCT: true
       },
       {
-        id: 236
-      },
-      {
-        id: 455
-      },
-      {
-        id: 236
-      },
-      {
-        id: 455
-      },
-      {
-        id: 236
-      },
-      {
-        id: 455
+        id: 1497,
+        equippedCT: true,
+        equippedT: true
       }
     ])
   );
@@ -64,8 +54,8 @@ export default function Index() {
       index,
       equipped: [
         inventoryItem.equipped && "text-white",
-        (inventoryItem.equippedCT || true) && "text-sky-300",
-        (inventoryItem.equippedT || true) && "text-yellow-400"
+        inventoryItem.equippedCT && "text-sky-300",
+        inventoryItem.equippedT && "text-yellow-400"
       ],
       ...getName(csItem)
     };
@@ -73,12 +63,19 @@ export default function Index() {
 
   return (
     <div>
-      <div className="w-full bg-gradient-to-b from-black/50 to-black/70 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
-        <div className="w-[1024px] m-auto text-white py-4">
-          <button className="flex items-center gap-2">
-            <FontAwesomeIcon className="h-4" icon={faPlus} />
-            Craft Item
-          </button>
+      <div className="w-full bg-gradient-to-b drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+        <div className="w-[1024px] m-auto text-white py-4 flex items-center gap-8">
+          <div className="font-bold select-none">cstrike/inventory</div>
+          <div className="flex items-center gap-2">
+            <button className="flex items-center gap-2 hover:bg-black/30 active:bg-black/70 transition-all px-1.5 py-0.5">
+              <FontAwesomeIcon className="h-4" icon={faPlus} />
+              Craft Item
+            </button>
+            <button className="flex items-center gap-2">
+              <FontAwesomeIcon className="h-4" icon={faSteam} />
+              Sign-in
+            </button>
+          </div>
         </div>
       </div>
       <div className="w-[1024px] m-auto flex my-8 gap-5 flex-wrap select-none">
