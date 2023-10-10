@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 
-export default function Background() {
+export function Background() {
   return (
     <>
       <div

@@ -6,6 +6,7 @@ import type { MetaFunction } from "@remix-run/node";
 import clsx from "clsx";
 import { CS_Inventory, CS_Item, CS_MIN_BATTLE_SCARRED_FLOAT, CS_MIN_FIELD_TESTED_FLOAT, CS_MIN_FLOAT } from "cslib";
 import { useEffect, useState } from "react";
+import { HeaderButton } from "~/components/header-button";
 
 export const meta: MetaFunction = () => {
   return [
@@ -67,14 +68,8 @@ export default function Index() {
         <div className="w-[1024px] m-auto text-white py-4 flex items-center gap-8">
           <div className="font-bold select-none">cstrike/inventory</div>
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 hover:bg-black/30 active:bg-black/70 transition-all px-1.5 py-0.5">
-              <FontAwesomeIcon className="h-4" icon={faPlus} />
-              Craft Item
-            </button>
-            <button className="flex items-center gap-2">
-              <FontAwesomeIcon className="h-4" icon={faSteam} />
-              Sign-in
-            </button>
+            <HeaderButton icon={faPlus} label="Craft Item" />
+            <HeaderButton icon={faSteam} label="Sign-in to sync" />
           </div>
         </div>
       </div>
