@@ -1,0 +1,18 @@
+{
+  "lineWidth": 80,
+  "indentWidth": 2,
+  "typescript": {
+    "trailingCommas": "never",
+    "quoteStyle": "preferDouble",
+    "semiColons": "always",
+    "importDeclaration.forceSingleLine": true,
+    "module.sortImportDeclarations": "caseSensitive"
+  },
+  "json": {},
+  "includes": ["**/*.{ts,tsx,js,jsx,cjs,mjs,json}"],
+  "excludes": ["**/node_modules", "**/*-lock.json"],
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.87.1.wasm",
+    "https://plugins.dprint.dev/json-0.17.4.wasm"
+  ]
+}

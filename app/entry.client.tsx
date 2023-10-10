@@ -5,8 +5,11 @@
  */
 
 import { RemixBrowser } from "@remix-run/react";
+import { CS_Economy, CS_ITEMS } from "cslib";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
+
+CS_Economy.setItems(CS_ITEMS);
 
 startTransition(() => {
   hydrateRoot(
