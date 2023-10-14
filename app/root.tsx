@@ -3,6 +3,8 @@ import type { LinksFunction } from "@remix-run/node";
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 
 import { Background } from "./components/background";
+import { Header } from "./components/header";
+import { Inventory } from "./components/inventory";
 import styles from "./tailwind.css";
 
 export const links: LinksFunction = () => [
@@ -12,7 +14,7 @@ export const links: LinksFunction = () => [
 
 export default function App() {
   return (
-    <html lang="en">
+    <html lang="en" onContextMenu={event => event.preventDefault()}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,6 +23,8 @@ export default function App() {
       </head>
       <body className="bg-stone-800">
         <Background />
+        <Header />
+        <Inventory />
         <Outlet />
         <ScrollRestoration />
         <Scripts />
