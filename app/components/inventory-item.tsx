@@ -102,7 +102,7 @@ export function InventoryItem(
   return (
     <>
       <div
-        className="hover:drop-shadow-[0_0_5px_rgba(0,0,0,1)] transition-all"
+        className="hover:drop-shadow-[0_0_5px_rgba(0,0,0,1)] transition-all w-[154px]"
         ref={ref}
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
@@ -117,6 +117,19 @@ export function InventoryItem(
               )}
               draggable={false}
             />
+          </div>
+          <div className="absolute left-0 bottom-0 p-1 flex items-center">
+            {inventoryItem.stickers !== undefined
+              && inventoryItem.stickers.map(
+                (sticker, index) =>
+                  sticker !== null && (
+                    <img
+                      key={index}
+                      className="h-5"
+                      src={CS_Economy.getById(sticker).image}
+                    />
+                  )
+              )}
           </div>
           <div className="absolute right-0 top-0 p-2 flex items-center gap-1">
             {equipped.map((color, colorIndex) => (typeof color === "string"
@@ -136,14 +149,23 @@ export function InventoryItem(
           style={{ backgroundColor: csItem.rarity }}
         />
         <div className="text-[12px] leading-3 mt-2 text-white drop-shadow-[0_0_1px_rgba(0,0,0,1)]">
-          <div className="font-bold">{model}</div>
-          <div>{name}</div>
+          {inventoryItem.nametag !== undefined
+            ? <>"{inventoryItem.nametag}"</>
+            : (
+              <>
+                <div className="font-bold">
+                  {inventoryItem.stattrak && "StatTrak™ "}
+                  {model}
+                </div>
+                <div>{name}</div>
+              </>
+            )}
         </div>
       </div>
       {isClickOpen && (
         <FloatingFocusManager context={clickContext} modal={false}>
           <div
-            className="z-10 bg-neutral-800 text-white outline-none py-2 w-[128px] text-sm rounded"
+            className="z-10 bg-neutral-800 text-white outline-none py-2 w-[192px] text-sm rounded"
             ref={clickRefs.setFloating}
             style={clickStyles}
             {...getClickFloatingProps()}
@@ -181,6 +203,16 @@ export function InventoryItem(
                 Equip CT
               </ContextButton>
             )}
+            {canEquipCT && canEquipT && (
+              <ContextButton
+                onClick={close(() => {
+                  onEquip(index, CS_TEAM_CT);
+                  onEquip(index, CS_TEAM_T);
+                })}
+              >
+                Equip Both Teams
+              </ContextButton>
+            )}
             <ContextDivider />
             <ContextButton
               onClick={close(() =>
@@ -200,7 +232,9 @@ export function InventoryItem(
             style={hoverStyles}
             {...getHoverFloatingProps()}
           >
-            <div className="font-bold">{model}</div>
+            <div className="font-bold">
+              {inventoryItem.stattrak && "StatTrak™ "} {model}
+            </div>
             <div>{name}</div>
             {CS_Economy.hasFloat(csItem) && (
               <div className="mt-2">

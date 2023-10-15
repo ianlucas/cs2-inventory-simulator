@@ -15,15 +15,15 @@ export function Inventory() {
       .sort(sortByEquipped), [inventory]);
 
   function handleEquip(index: number, team?: CS_Team) {
-    setInventory(inventory.equip(index, team));
+    setInventory(inventory => inventory.equip(index, team));
   }
 
   function handleUnequip(index: number, team?: CS_Team) {
-    setInventory(inventory.unequip(index, team));
+    setInventory(inventory => inventory.unequip(index, team));
   }
 
   function handleDelete(index: number) {
-    setInventory(inventory.remove(index));
+    setInventory(inventory => inventory.remove(index));
   }
 
   return (

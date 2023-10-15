@@ -50,13 +50,19 @@ export function CSItemEditor({
   }
 
   return (
-    <div className="w-[360px] m-auto pb-6">
+    <div className="w-[360px] m-auto pb-6 select-none">
       <img
         className="w-[360px] h-[270px]"
         src={CS_Economy.resolveImageSrc("/localimage", csItem.id, float)}
         alt={csItem.name}
         draggable={false}
       />
+      <div
+        className="text-center font-bold text-lg mb-4"
+        style={{ color: csItem.rarity }}
+      >
+        {csItem.name}
+      </div>
       <div className="space-y-4">
         {hasStickers && (
           <div>
