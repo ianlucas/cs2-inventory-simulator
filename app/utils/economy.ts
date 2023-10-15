@@ -14,11 +14,10 @@ export function getCSItemName(csItem: CS_Item) {
   };
 }
 
-export function getBaseItems({ category }: CS_CategoryMenuItem, team: CS_Team) {
+export function getBaseItems({ category }: CS_CategoryMenuItem) {
   return CS_Economy.filter({
     category,
-    base: true,
-    team
+    base: true
   }).filter(({ free }) =>
     !["glove", "melee", "musickit"].includes(category) || !free
   );
@@ -26,11 +25,9 @@ export function getBaseItems({ category }: CS_CategoryMenuItem, team: CS_Team) {
 
 export function getPaidItems(
   { category }: CS_CategoryMenuItem,
-  team: CS_Team,
   model: string
 ) {
   return CS_Economy.filter({
-    model,
-    team
+    model
   }).filter(({ base }) => category === "melee" || !base);
 }

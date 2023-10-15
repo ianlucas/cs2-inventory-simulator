@@ -5,6 +5,7 @@ import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@re
 import { Background } from "./components/background";
 import { Header } from "./components/header";
 import { Inventory } from "./components/inventory";
+import { RootProvider } from "./components/root-context";
 import styles from "./tailwind.css";
 
 export const links: LinksFunction = () => [
@@ -14,22 +15,24 @@ export const links: LinksFunction = () => [
 
 export default function App() {
   return (
-    <html lang="en" onContextMenu={event => event.preventDefault()}>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body className="bg-stone-800">
-        <Background />
-        <Header />
-        <Inventory />
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
+    <RootProvider>
+      <html lang="en" onContextMenu={event => event.preventDefault()}>
+        <head>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <Meta />
+          <Links />
+        </head>
+        <body className="bg-stone-800">
+          <Background />
+          <Header />
+          <Inventory />
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </body>
+      </html>
+    </RootProvider>
   );
 }

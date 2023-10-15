@@ -1,29 +1,11 @@
-import { faSteam } from "@fortawesome/free-brands-svg-icons";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { CS_Inventory, CS_Team } from "cslib";
-import { useMemo, useState } from "react";
-import { HeaderLink } from "~/components/header-link";
+import { CS_Team } from "cslib";
+import { useMemo } from "react";
 import { InventoryItem } from "~/components/inventory-item";
 import { sortByEquipped, sortByName, sortByType, transform } from "~/utils/inventory";
+import { useRootContext } from "./root-context";
 
 export function Inventory() {
-  const [inventory, setInventory] = useState(
-    new CS_Inventory([
-      {
-        id: 236,
-        equippedT: true
-      },
-      {
-        id: 455,
-        equippedCT: true
-      },
-      {
-        id: 1497,
-        equippedCT: true,
-        equippedT: true
-      }
-    ])
-  );
+  const { inventory, setInventory } = useRootContext();
 
   const items = useMemo(() =>
     inventory.getAll()

@@ -1,14 +1,29 @@
 import { faLongArrowLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "@remix-run/react";
-import { CS_Item } from "cslib";
+import { Link, useNavigate } from "@remix-run/react";
+import { CS_Item, CS_Team } from "cslib";
 import { useState } from "react";
-import { CSItemEditor } from "~/components/cs-item-editor";
+import { CSItemEditor, CSItemEditorAttributes } from "~/components/cs-item-editor";
 import CSItemPicker from "~/components/cs-item-picker";
 import { Modal } from "~/components/modal";
+import { useRootContext } from "~/components/root-context";
 
 export default function Craft() {
+  const navigate = useNavigate();
   const [csItem, setCSItem] = useState<CS_Item>();
+  const { setInventory } = useRootContext();
+
+  function handleSubmit(attributes: CSItemEditorAttributes) {
+    if (csItem !== undefined) {
+      setInventory(inventory =>
+        inventory.add({
+          id: csItem.id,
+          ...attributes
+        })
+      );
+      return navigate("/");
+    }
+  }
 
   return (
     <Modal className="w-[512px]">
@@ -34,7 +49,7 @@ export default function Craft() {
       </div>
       {csItem === undefined
         ? <CSItemPicker onPickItem={setCSItem} />
-        : <CSItemEditor csItem={csItem} />}
+        : <CSItemEditor csItem={csItem} onSubmit={handleSubmit} />}
     </Modal>
   );
 }

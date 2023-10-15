@@ -1,4 +1,4 @@
-import { CS_Economy, CS_Item, CS_MAX_FLOAT, CS_MAX_SEED, CS_MIN_FLOAT, CS_MIN_SEED } from "cslib";
+import { CS_Economy, CS_Item, CS_MAX_FLOAT, CS_MAX_SEED, CS_MIN_FLOAT, CS_MIN_SEED, CS_nametagRE } from "cslib";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
@@ -7,10 +7,20 @@ import { EditorStepRange } from "./editor-step-range";
 import { EditorToggle } from "./editor-toggle";
 import { StickerPicker } from "./sticker-picker";
 
+export interface CSItemEditorAttributes {
+  stickers?: (number | null)[];
+  seed?: number;
+  nametag?: string;
+  float?: number;
+  stattrak?: boolean;
+}
+
 export function CSItemEditor({
-  csItem
+  csItem,
+  onSubmit
 }: {
   csItem: CS_Item;
+  onSubmit(props: CSItemEditorAttributes): void;
 }) {
   const [stattrak, setStattrak] = useCheckbox(false);
   const [float, setFloat] = useState(CS_MIN_FLOAT);
@@ -27,6 +37,16 @@ export function CSItemEditor({
   const hasNametag = CS_Economy.hasNametag(csItem);
 
   function handleSubmit() {
+    onSubmit({
+      stickers: hasStickers
+          && stickers.filter((sticker) => sticker !== null).length > 0
+        ? stickers
+        : undefined,
+      seed: hasSeed && seed !== CS_MIN_SEED ? seed : undefined,
+      nametag: hasNametag && nametag.length > 0 ? nametag : undefined,
+      float: hasFloat && float !== CS_MIN_FLOAT ? float : undefined,
+      stattrak: hasStattrak && stattrak === true ? stattrak : undefined
+    });
   }
 
   return (
@@ -55,6 +75,8 @@ export function CSItemEditor({
               value={nametag}
               placeholder="Type a custom name..."
               onChange={setNametag}
+              pattern={CS_nametagRE}
+              maxLength={20}
             />
           </div>
         )}
