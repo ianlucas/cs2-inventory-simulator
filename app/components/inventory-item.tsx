@@ -133,18 +133,20 @@ export function InventoryItem(
                   )
               )}
           </div>
-          <div className="absolute right-0 top-0 p-2 flex items-center gap-1">
-            {equipped.map((color, colorIndex) => (typeof color === "string"
-              ? (
-                <FontAwesomeIcon
-                  key={colorIndex}
-                  className={clsx("h-3.5 text-sky-300", color)}
-                  icon={faCircleDot}
-                />
-              )
-              : null)
-            )}
-          </div>
+          {isAuthenticated && (
+            <div className="absolute right-0 top-0 p-2 flex items-center gap-1">
+              {equipped.map((color, colorIndex) => (typeof color === "string"
+                ? (
+                  <FontAwesomeIcon
+                    key={colorIndex}
+                    className={clsx("h-3.5 text-sky-300", color)}
+                    icon={faCircleDot}
+                  />
+                )
+                : null)
+              )}
+            </div>
+          )}
         </div>
         <div
           className="shadow shadow-black/50 w-full h-1"
