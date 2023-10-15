@@ -27,3 +27,5 @@ export const inventoryItemShape = z.object({
 });
 
 export const inventoryShape = z.array(inventoryItemShape);
+
+export const csTeamShape = z.literal(2).or(z.literal(3));

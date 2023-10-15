@@ -1,4 +1,4 @@
-import type { CS_InventoryItem } from "cslib";
+import type { CS_Inventory, CS_InventoryItem } from "cslib";
 import { inventoryShape } from "./shapes";
 
 export function storeUserId(value: string) {
@@ -29,7 +29,10 @@ export function retrieveInventoryItems() {
   }
 }
 
-export function parseInventory(inventory: any) {
+export function parseInventory(inventory?: string | null) {
+  if (!inventory) {
+    return [];
+  }
   try {
     return inventoryShape.parse(JSON.parse(inventory));
   } catch {

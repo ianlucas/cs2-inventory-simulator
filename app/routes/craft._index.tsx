@@ -7,6 +7,8 @@ import { CSItemEditor, CSItemEditorAttributes } from "~/components/cs-item-edito
 import CSItemPicker from "~/components/cs-item-picker";
 import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
+import { sync } from "~/utils/sync";
+import { ApiInventoryAddUrl } from "./api.inventory-add._index";
 
 export default function Craft() {
   const navigate = useNavigate();
@@ -15,12 +17,12 @@ export default function Craft() {
 
   function handleSubmit(attributes: CSItemEditorAttributes) {
     if (csItem !== undefined) {
-      setInventory(inventory =>
-        inventory.add({
-          id: csItem.id,
-          ...attributes
-        })
-      );
+      const item = {
+        id: csItem.id,
+        ...attributes
+      };
+      setInventory(inventory => inventory.add(item));
+      sync(ApiInventoryAddUrl, { item });
       return navigate("/");
     }
   }

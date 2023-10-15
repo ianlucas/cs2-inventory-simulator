@@ -1,6 +1,8 @@
-import { CS_InventoryItem } from "cslib";
+import { CS_Inventory, CS_InventoryItem } from "cslib";
 import SteamAPI from "steamapi";
 import { prisma } from "~/db.server";
+import { MAX_INVENTORY_ITEMS } from "~/env.server";
+import { parseInventory } from "~/utils/user";
 
 export async function upsertUser(user: SteamAPI.PlayerSummary) {
   const data = {
@@ -36,6 +38,23 @@ export async function updateUserInventory(
 ) {
   return await prisma.user.update({
     data: { inventory: JSON.stringify(inventory) },
+    where: { id: userId }
+  });
+}
+
+export async function editUserInventory(
+  userId: string,
+  inventory: string | null,
+  callback: (inventory: CS_Inventory) => CS_Inventory
+) {
+  const items = parseInventory(inventory);
+  return await prisma.user.update({
+    data: {
+      inventory: JSON.stringify(
+        callback(new CS_Inventory(items, MAX_INVENTORY_ITEMS))
+          .getItems()
+      )
+    },
     where: { id: userId }
   });
 }

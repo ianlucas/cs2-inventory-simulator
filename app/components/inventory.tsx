@@ -2,6 +2,9 @@ import { CS_Team } from "cslib";
 import { useMemo } from "react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useSync } from "~/hooks/use-sync";
+import { ApiInventoryEquipUrl } from "~/routes/api.inventory-equip._index";
+import { ApiInventoryRemoveUrl } from "~/routes/api.inventory-remove._index";
+import { ApiInventoryUnequipUrl } from "~/routes/api.inventory-unequip._index";
 import { sortByEquipped, sortByName, sortByType, transform } from "~/utils/inventory";
 import { useRootContext } from "./root-context";
 
@@ -18,14 +21,17 @@ export function Inventory() {
 
   function handleEquip(index: number, csTeam?: CS_Team) {
     setInventory(inventory => inventory.equip(index, csTeam));
+    sync(ApiInventoryEquipUrl, { index, csTeam });
   }
 
   function handleUnequip(index: number, csTeam?: CS_Team) {
     setInventory(inventory => inventory.unequip(index, csTeam));
+    sync(ApiInventoryUnequipUrl, { index, csTeam });
   }
 
   function handleDelete(index: number) {
     setInventory(inventory => inventory.remove(index));
+    sync(ApiInventoryRemoveUrl, { index });
   }
 
   return (
