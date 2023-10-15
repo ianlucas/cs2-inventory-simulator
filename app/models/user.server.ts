@@ -1,3 +1,4 @@
+import { CS_InventoryItem } from "cslib";
 import SteamAPI from "steamapi";
 import { prisma } from "~/db.server";
 
@@ -25,6 +26,16 @@ export async function upsertUser(user: SteamAPI.PlayerSummary) {
 
 export async function findUniqueUser(userId: string) {
   return await prisma.user.findUniqueOrThrow({
+    where: { id: userId }
+  });
+}
+
+export async function updateUserInventory(
+  userId: string,
+  inventory: CS_InventoryItem[]
+) {
+  return await prisma.user.update({
+    data: { inventory: JSON.stringify(inventory) },
     where: { id: userId }
   });
 }

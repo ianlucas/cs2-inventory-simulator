@@ -8,6 +8,7 @@ import { useAnyClick } from "~/hooks/floating-ui";
 import { transform } from "~/utils/inventory";
 import { ContextButton } from "./context-button";
 import { ContextDivider } from "./context-divider";
+import { useRootContext } from "./root-context";
 
 export function InventoryItem(
   {
@@ -30,6 +31,7 @@ export function InventoryItem(
       onUnequip(index: number, team?: CS_Team): void;
     }
 ) {
+  const isAuthenticated = useRootContext().user !== undefined;
   const [isClickOpen, setIsClickOpen] = useState(false);
   const [isHoverOpen, setIsHoverOpen] = useState(false);
 
@@ -170,50 +172,60 @@ export function InventoryItem(
             style={clickStyles}
             {...getClickFloatingProps()}
           >
-            {canUnequip && (
-              <ContextButton onClick={close(() => onUnequip(index))}>
-                Unequip T
-              </ContextButton>
+            {isAuthenticated && (
+              <>
+                {canUnequip && (
+                  <ContextButton onClick={close(() => onUnequip(index))}>
+                    Unequip
+                  </ContextButton>
+                )}
+                {canUnequipT && (
+                  <ContextButton
+                    onClick={close(() => onUnequip(index, CS_TEAM_T))}
+                  >
+                    Unequip T
+                  </ContextButton>
+                )}
+                {canUnequipCT && (
+                  <ContextButton
+                    onClick={close(() => onUnequip(index, CS_TEAM_CT))}
+                  >
+                    Unequip CT
+                  </ContextButton>
+                )}
+                {anyUnequip && anyEquip && <ContextDivider />}
+                {canEquip && (
+                  <ContextButton onClick={close(() => onEquip(index))}>
+                    Equip
+                  </ContextButton>
+                )}
+                {canEquipT && (
+                  <ContextButton
+                    onClick={close(() => onEquip(index, CS_TEAM_T))}
+                  >
+                    Equip T
+                  </ContextButton>
+                )}
+                {canEquipCT && (
+                  <ContextButton
+                    onClick={close(() => onEquip(index, CS_TEAM_CT))}
+                  >
+                    Equip CT
+                  </ContextButton>
+                )}
+                {canEquipCT && canEquipT && (
+                  <ContextButton
+                    onClick={close(() => {
+                      onEquip(index, CS_TEAM_CT);
+                      onEquip(index, CS_TEAM_T);
+                    })}
+                  >
+                    Equip Both Teams
+                  </ContextButton>
+                )}
+                <ContextDivider />
+              </>
             )}
-            {canUnequipT && (
-              <ContextButton onClick={close(() => onUnequip(index, CS_TEAM_T))}>
-                Unequip T
-              </ContextButton>
-            )}
-            {canUnequipCT && (
-              <ContextButton
-                onClick={close(() => onUnequip(index, CS_TEAM_CT))}
-              >
-                Unequip CT
-              </ContextButton>
-            )}
-            {anyUnequip && anyEquip && <ContextDivider />}
-            {canEquip && (
-              <ContextButton onClick={close(() => onEquip(index))}>
-                Equip
-              </ContextButton>
-            )}
-            {canEquipT && (
-              <ContextButton onClick={close(() => onEquip(index, CS_TEAM_T))}>
-                Equip T
-              </ContextButton>
-            )}
-            {canEquipCT && (
-              <ContextButton onClick={close(() => onEquip(index, CS_TEAM_CT))}>
-                Equip CT
-              </ContextButton>
-            )}
-            {canEquipCT && canEquipT && (
-              <ContextButton
-                onClick={close(() => {
-                  onEquip(index, CS_TEAM_CT);
-                  onEquip(index, CS_TEAM_T);
-                })}
-              >
-                Equip Both Teams
-              </ContextButton>
-            )}
-            <ContextDivider />
             <ContextButton
               onClick={close(() =>
                 onDelete(index)

@@ -32,3 +32,11 @@ export async function findRequestUser(request: Request) {
     throw redirect("/sign-out");
   }
 }
+
+export async function requireUser(request: Request) {
+  const user = await findRequestUser(request);
+  if (user === undefined) {
+    throw redirect("/sign-in");
+  }
+  return user;
+}
