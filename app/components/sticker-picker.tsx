@@ -134,10 +134,10 @@ export function StickerPicker({
               />
             </div>
             <button
-              className="flex items-center gap-1 text-red-500 hover:bg-black/30 active:bg-black/60 transition px-2 h-[24px] rounded"
+              className="flex items-center gap-1 text-red-500 hover:bg-black/30 active:bg-black/60 transition px-2 h-[24px] rounded cursor-default"
               onClick={handleRemoveSticker}
             >
-              <FontAwesomeIcon icon={faTrashCan} />
+              <FontAwesomeIcon icon={faTrashCan} className="h-4" />
               <label>Remove</label>
             </button>
           </div>

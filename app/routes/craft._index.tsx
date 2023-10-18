@@ -37,7 +37,7 @@ export default function Craft() {
               className="flex items-center gap-1 text-neutral-200 cursor-default hover:bg-black/30 px-2 rounded"
               onClick={() => setCSItem(undefined)}
             >
-              <FontAwesomeIcon icon={faLongArrowLeft} />
+              <FontAwesomeIcon icon={faLongArrowLeft} className="h-4" />
               Reset
             </button>
           )}
