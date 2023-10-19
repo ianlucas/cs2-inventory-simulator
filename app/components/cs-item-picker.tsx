@@ -3,7 +3,7 @@ import { useState } from "react";
 import { CategoryMenu } from "~/components/category-menu";
 import { CSItemBrowser } from "~/components/cs-item-browser";
 import { useInput } from "~/hooks/use-input";
-import { getBaseItems, getPaidItems } from "~/utils/economy";
+import { getBaseItems, getPaidItems, instaSelectCategory } from "~/utils/economy";
 
 export default function CSItemPicker({
   onPickItem
@@ -25,7 +25,7 @@ export default function CSItemPicker({
   }
 
   function handleItemClick(csItem: CS_Item) {
-    if (csItem.teams === undefined || model !== undefined) {
+    if (instaSelectCategory.includes(csItem.type) || model !== undefined) {
       return onPickItem(csItem);
     }
     setQuery("");
@@ -43,7 +43,8 @@ export default function CSItemPicker({
       }
     );
 
-  const ignoreRarityColor = model === undefined;
+  const ignoreRarityColor = model === undefined
+    && !instaSelectCategory.includes(category.category);
 
   return (
     <>

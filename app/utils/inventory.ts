@@ -32,8 +32,11 @@ const typeOrder = {
   "weapon": 0,
   "melee": 1,
   "glove": 2,
-  "musickit": 3,
-  "sticker": 4
+  "agent": 3,
+  "patch": 4,
+  "pin": 5,
+  "musickit": 6,
+  "sticker": 7
 } as const;
 
 export function sortByType(

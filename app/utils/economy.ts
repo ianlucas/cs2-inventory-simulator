@@ -1,4 +1,12 @@
-import { CS_CategoryMenuItem, CS_Economy, CS_Item, CS_Team } from "cslib";
+import { CS_CategoryMenuItem, CS_Economy, CS_Item } from "cslib";
+
+export const instaSelectCategory = [
+  "sticker",
+  "agent",
+  "pin",
+  "patch",
+  "musickit"
+];
 
 export function getCSItemName(csItem: CS_Item) {
   if (["weapon", "melee", "glove"].includes(csItem.type)) {
@@ -15,11 +23,14 @@ export function getCSItemName(csItem: CS_Item) {
 }
 
 export function getBaseItems({ category }: CS_CategoryMenuItem) {
+  const isDisplayAll = instaSelectCategory.includes(category);
   return CS_Economy.filter({
-    category,
-    base: true
+    category: category !== "sticker" ? category : undefined,
+    type: category === "sticker" ? "sticker" : undefined,
+    base: isDisplayAll ? undefined : true
   }).filter(({ free }) =>
     !["glove", "melee", "musickit"].includes(category) || !free
+    || (isDisplayAll && (category !== "musickit" || !free))
   );
 }
 

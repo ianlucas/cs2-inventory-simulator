@@ -39,16 +39,9 @@ export default function App() {
         </head>
         <body className="bg-stone-800">
           <Background />
+          <ClientOnly>{() => <SyncWarn />}</ClientOnly>
           <Header />
-
-          <ClientOnly>
-            {() => (
-              <>
-                <SyncWarn />
-                <Inventory />
-              </>
-            )}
-          </ClientOnly>
+          <ClientOnly>{() => <Inventory />}</ClientOnly>
           <Outlet />
           <ScrollRestoration />
           <Scripts />

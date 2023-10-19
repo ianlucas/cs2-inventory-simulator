@@ -28,7 +28,7 @@ export default function Craft() {
   }
 
   return (
-    <Modal className="w-[512px]">
+    <Modal className="w-[720px]">
       <div className="font-bold px-4 py-2 select-none flex items-center justify-between">
         <span>Craft Item</span>
         <div className="flex items-center gap-8">

@@ -17,7 +17,7 @@ export function CSItemBrowser({
         <CSItemButton
           ignoreRarityColor={ignoreRarityColor}
           csItem={csItem}
-          key={csItem.image}
+          key={csItem.id}
           onClick={onClick}
         />
       ))}
