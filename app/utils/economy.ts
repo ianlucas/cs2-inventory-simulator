@@ -8,6 +8,17 @@ export const instaSelectCategory = [
   "musickit"
 ];
 
+const modelFromType = {
+  "agent": "Agent",
+  "glove": "Glove",
+  "melee": "Knife",
+  "musickit": "Music Kit",
+  "patch": "Patch",
+  "pin": "Pin",
+  "sticker": "Sticker",
+  "weapon": "Weapon"
+} as const;
+
 export function getCSItemName(csItem: CS_Item) {
   if (["weapon", "melee", "glove"].includes(csItem.type)) {
     const [weaponName, ...paintName] = csItem.name.split("|");
@@ -17,7 +28,7 @@ export function getCSItemName(csItem: CS_Item) {
     };
   }
   return {
-    model: csItem.type === "musickit" ? "Music Kit" : "Sticker",
+    model: modelFromType[csItem.type],
     name: csItem.name
   };
 }
