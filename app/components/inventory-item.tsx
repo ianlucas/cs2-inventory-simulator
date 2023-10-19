@@ -176,26 +176,6 @@ export function InventoryItem(
           >
             {isAuthenticated && (
               <>
-                {canUnequip && (
-                  <ContextButton onClick={close(() => onUnequip(index))}>
-                    Unequip
-                  </ContextButton>
-                )}
-                {canUnequipT && (
-                  <ContextButton
-                    onClick={close(() => onUnequip(index, CS_TEAM_T))}
-                  >
-                    Unequip T
-                  </ContextButton>
-                )}
-                {canUnequipCT && (
-                  <ContextButton
-                    onClick={close(() => onUnequip(index, CS_TEAM_CT))}
-                  >
-                    Unequip CT
-                  </ContextButton>
-                )}
-                {anyUnequip && anyEquip && <ContextDivider />}
                 {canEquip && (
                   <ContextButton onClick={close(() => onEquip(index))}>
                     Equip
@@ -225,6 +205,27 @@ export function InventoryItem(
                     Equip Both Teams
                   </ContextButton>
                 )}
+                {anyUnequip && anyEquip && <ContextDivider />}
+                {canUnequip && (
+                  <ContextButton onClick={close(() => onUnequip(index))}>
+                    Unequip
+                  </ContextButton>
+                )}
+                {canUnequipT && (
+                  <ContextButton
+                    onClick={close(() => onUnequip(index, CS_TEAM_T))}
+                  >
+                    Unequip T
+                  </ContextButton>
+                )}
+                {canUnequipCT && (
+                  <ContextButton
+                    onClick={close(() => onUnequip(index, CS_TEAM_CT))}
+                  >
+                    Unequip CT
+                  </ContextButton>
+                )}
+
                 <ContextDivider />
               </>
             )}
