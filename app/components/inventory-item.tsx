@@ -1,9 +1,9 @@
-import { autoUpdate, flip, FloatingFocusManager, offset, shift, useClick, useClientPoint, useDismiss, useFloating, useHover, useInteractions, useMergeRefs, useRole } from "@floating-ui/react";
+import { autoUpdate, flip, FloatingFocusManager, offset, shift, useDismiss, useFloating, useHover, useInteractions, useMergeRefs, useRole } from "@floating-ui/react";
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
-import { CS_Economy, CS_Inventory, CS_MIN_FLOAT, CS_MIN_SEED, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "cslib";
-import { useEffect, useState } from "react";
+import { CS_Economy, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_MIN_FLOAT, CS_MIN_SEED, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "cslib";
+import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
 import { transform } from "~/utils/inventory";
 import { ContextButton } from "./context-button";
@@ -82,7 +82,8 @@ export function InventoryItem(
 
   const ref = useMergeRefs([clickRefs.setReference, hoverRefs.setReference]);
 
-  const canEquip = csItem.teams === undefined && !inventoryItem.equipped;
+  const canEquip = csItem.teams === undefined && !inventoryItem.equipped
+    && CS_INVENTORY_EQUIPPABLE_ITEMS.includes(csItem.type);
   const canEquipT = csItem.teams?.includes(CS_TEAM_T)
     && !inventoryItem.equippedT;
   const canEquipCT = csItem.teams?.includes(CS_TEAM_CT)
@@ -205,7 +206,7 @@ export function InventoryItem(
                     Equip Both Teams
                   </ContextButton>
                 )}
-                {anyUnequip && anyEquip && <ContextDivider />}
+                {anyEquip && <ContextDivider />}
                 {canUnequip && (
                   <ContextButton onClick={close(() => onUnequip(index))}>
                     Unequip
@@ -226,7 +227,7 @@ export function InventoryItem(
                   </ContextButton>
                 )}
 
-                <ContextDivider />
+                {(anyEquip || anyUnequip) && <ContextDivider />}
               </>
             )}
             <ContextButton
