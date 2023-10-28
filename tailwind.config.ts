@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["'Galaxy'", "sans-serif"]
+        sans: ["'Noto Sans'", "sans-serif"]
       },
       fontSize: {
         sm: "0.8rem",

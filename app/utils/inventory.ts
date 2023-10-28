@@ -1,11 +1,8 @@
-import { CS_Inventory } from "cslib";
+import { CS_Economy, CS_InventoryItem } from "cslib";
 import { getCSItemName } from "./economy";
 
-export function transform(
-  { csItem, inventoryItem, index }: ReturnType<
-    InstanceType<typeof CS_Inventory>["getAll"]
-  >[number]
-) {
+export function transform(inventoryItem: CS_InventoryItem, index: number) {
+  const csItem = CS_Economy.getById(inventoryItem.id);
   return {
     csItem,
     inventoryItem,

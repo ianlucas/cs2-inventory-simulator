@@ -1,4 +1,4 @@
-import { CS_CategoryMenuItem, CS_Economy, CS_Item } from "cslib";
+import { CS_CategoryMenuItem, CS_filterItems, CS_Item } from "cslib";
 
 export const instaSelectCategory = [
   "sticker",
@@ -35,7 +35,7 @@ export function getCSItemName(csItem: CS_Item) {
 
 export function getBaseItems({ category }: CS_CategoryMenuItem) {
   const isDisplayAll = instaSelectCategory.includes(category);
-  return CS_Economy.filter({
+  return CS_filterItems({
     category: category !== "sticker" ? category : undefined,
     type: category === "sticker" ? "sticker" : undefined,
     base: isDisplayAll ? undefined : true
@@ -49,7 +49,7 @@ export function getPaidItems(
   { category }: CS_CategoryMenuItem,
   model: string
 ) {
-  return CS_Economy.filter({
+  return CS_filterItems({
     model
   }).filter(({ base }) => category === "melee" || !base);
 }

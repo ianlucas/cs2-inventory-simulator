@@ -4,8 +4,8 @@
 
 import { faBoxOpen, faMagnifyingGlass, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_Item } from "cslib";
-import { useEffect, useState } from "react";
+import { CS_Economy, CS_getStickerCategories, CS_getStickers, CS_Item } from "cslib";
+import { useEffect, useMemo, useState } from "react";
 import { useInput } from "~/hooks/use-input";
 import { EditorInput } from "./editor-input";
 import EditorSelect from "./editor-select";
@@ -23,8 +23,8 @@ export function StickerPicker({
   const [search, setSearch] = useInput("");
   const [activeIndex, setActiveIndex] = useState(null as number | null);
   const [filtered, setFiltered] = useState([] as CS_Item[]);
-  const stickers = CS_Economy.getStickers();
-  const categories = CS_Economy.getStickerCategories();
+  const stickers = useMemo(() => CS_getStickers(), []);
+  const categories = useMemo(() => CS_getStickerCategories(), []);
 
   function handleClickSlot(index: number) {
     return function handleClickSlot() {

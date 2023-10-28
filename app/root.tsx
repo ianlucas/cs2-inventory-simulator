@@ -13,8 +13,14 @@ import { SyncWarn } from "./components/sync-warn";
 import { MAX_INVENTORY_ITEMS } from "./env.server";
 import styles from "./tailwind.css";
 
+const primaryFontUrl =
+  "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;800&display=swap";
+
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  { rel: "preconnect", href: "https://fonts.gstatic.com" },
+  { rel: "stylesheet", href: primaryFontUrl },
   { rel: "stylesheet", href: styles }
 ];
 

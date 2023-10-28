@@ -2,7 +2,7 @@ import { autoUpdate, flip, FloatingFocusManager, offset, shift, useDismiss, useF
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
-import { CS_Economy, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_MIN_FLOAT, CS_MIN_SEED, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "cslib";
+import { CS_Economy, CS_hasFloat, CS_hasSeed, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_MIN_FLOAT, CS_MIN_SEED, CS_resolveItemImage, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "cslib";
 import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
 import { transform } from "~/utils/inventory";
@@ -113,9 +113,9 @@ export function InventoryItem(
           <div className="bg-gradient-to-b from-neutral-500 to-neutral-300 px-1">
             <img
               className="w-[144px] h-[108px]"
-              src={CS_Economy.resolveImageSrc(
+              src={CS_resolveItemImage(
                 "/localimage",
-                inventoryItem.id,
+                csItem,
                 inventoryItem.float
               )}
               draggable={false}
@@ -252,13 +252,13 @@ export function InventoryItem(
               {inventoryItem.stattrak && "StatTrak™ "} {model}
             </div>
             <div>{name}</div>
-            {CS_Economy.hasFloat(csItem) && (
+            {CS_hasFloat(csItem) && (
               <div className="mt-2">
                 <strong className="text-neutral-400">Float:</strong>{" "}
                 {inventoryItem.float ?? CS_MIN_FLOAT}
               </div>
             )}
-            {CS_Economy.hasSeed(csItem) && (
+            {CS_hasSeed(csItem) && (
               <div>
                 <strong className="text-neutral-400">Seed:</strong>{" "}
                 {inventoryItem.seed ?? CS_MIN_SEED}

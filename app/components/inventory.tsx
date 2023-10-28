@@ -13,7 +13,7 @@ export function Inventory() {
   const sync = useSync();
 
   const items = useMemo(() =>
-    inventory.getAll()
+    inventory.getItems()
       .map(transform)
       .sort(sortByName)
       .sort(sortByType)

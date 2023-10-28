@@ -1,4 +1,4 @@
-import { CS_MAX_FLOAT, CS_MAX_SEED, CS_MIN_FLOAT, CS_MIN_SEED, CS_nametagRE } from "cslib";
+import { CS_safeValidateFloat, CS_safeValidateNametag, CS_safeValidateSeed } from "cslib";
 import { z } from "zod";
 
 export const inventoryItemShape = z.object({
@@ -6,20 +6,16 @@ export const inventoryItemShape = z.object({
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
   float: z.number().optional().refine(float =>
-    float === undefined || (
-      String(float).length <= String(CS_MAX_FLOAT).length
-      && float >= CS_MIN_FLOAT && float <= CS_MAX_FLOAT
-    )
+    float === undefined || CS_safeValidateFloat(float)
   ),
   id: z.number(),
   nametag: z.string().optional()
     .transform(nametag => nametag !== undefined ? nametag.trim() : nametag)
-    .refine(nametag => nametag === undefined || CS_nametagRE.exec(nametag)),
+    .refine(nametag =>
+      nametag === undefined || CS_safeValidateNametag(nametag)
+    ),
   seed: z.number().optional().refine(seed =>
-    seed === undefined || (
-      !String(seed).includes(".")
-      && seed >= CS_MIN_SEED && seed <= CS_MAX_SEED
-    )
+    seed === undefined || CS_safeValidateSeed(seed)
   ),
   stattrak: z.boolean().optional(),
   stickers: z.array(z.number().or(z.null())).optional(),

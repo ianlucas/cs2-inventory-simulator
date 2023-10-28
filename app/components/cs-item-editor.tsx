@@ -1,4 +1,4 @@
-import { CS_Economy, CS_Item, CS_MAX_FLOAT, CS_MAX_SEED, CS_MIN_FLOAT, CS_MIN_SEED, CS_nametagRE } from "cslib";
+import { CS_hasFloat, CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers, CS_Item, CS_MAX_FLOAT, CS_MAX_SEED, CS_MIN_FLOAT, CS_MIN_SEED, CS_NAMETAG_RE, CS_resolveItemImage } from "cslib";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
@@ -30,11 +30,11 @@ export function CSItemEditor({
     | number
     | null
   )[]);
-  const hasStickers = CS_Economy.hasStickers(csItem);
-  const hasStattrak = CS_Economy.hasStattrak(csItem);
-  const hasSeed = CS_Economy.hasSeed(csItem);
-  const hasFloat = CS_Economy.hasFloat(csItem);
-  const hasNametag = CS_Economy.hasNametag(csItem);
+  const hasStickers = CS_hasStickers(csItem);
+  const hasStattrak = CS_hasStatTrak(csItem);
+  const hasSeed = CS_hasSeed(csItem);
+  const hasFloat = CS_hasFloat(csItem);
+  const hasNametag = CS_hasNametag(csItem);
 
   function handleSubmit() {
     onSubmit({
@@ -53,7 +53,7 @@ export function CSItemEditor({
     <div className="w-[360px] m-auto pb-6 select-none">
       <img
         className="w-[360px] h-[270px]"
-        src={CS_Economy.resolveImageSrc("/localimage", csItem.id, float)}
+        src={CS_resolveItemImage("/localimage", csItem.id, float)}
         alt={csItem.name}
         draggable={false}
       />
@@ -81,7 +81,7 @@ export function CSItemEditor({
               value={nametag}
               placeholder="Type a custom name..."
               onChange={setNametag}
-              pattern={CS_nametagRE}
+              pattern={CS_NAMETAG_RE}
               maxLength={20}
             />
           </div>
