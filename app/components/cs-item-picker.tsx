@@ -53,7 +53,7 @@ export default function CSItemPicker({
         <input
           value={query}
           onChange={setQuery}
-          className="flex-1 bg-transparent outline-none placeholder-neutral-600"
+          className="flex-1 outline-none placeholder-neutral-600 bg-neutral-950/40 px-3 rounded"
           placeholder="Search for an item..."
         />
       </div>

@@ -91,6 +91,7 @@ export function StickerPicker({
                     draggable={true}
                     className="h-[64px] w-[85.33px]"
                     src={item.image}
+                    alt={item.name}
                   />
                 )
                 : (
@@ -182,6 +183,7 @@ export function StickerItemButton({
           draggable={false}
           className="h-[63px] w-[84px]"
           src={item.image}
+          alt={item.name}
         />
         <span
           className="block overflow-hidden text-ellipsis whitespace-nowrap"

@@ -14,7 +14,7 @@ import { MAX_INVENTORY_ITEMS } from "./env.server";
 import styles from "./tailwind.css";
 
 const primaryFontUrl =
-  "https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;800&display=swap";
+  "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),

@@ -66,7 +66,7 @@ export function CSItemEditor({
       <div className="space-y-4">
         {hasStickers && (
           <div>
-            <label className="font-bold text-neutral-500 w-[64px] select-none">
+            <label className="font-bold text-neutral-500 w-[76.33px] select-none">
               Stickers
             </label>
             <StickerPicker value={stickers} onChange={setStickers} />
@@ -74,7 +74,7 @@ export function CSItemEditor({
         )}
         {hasNametag && (
           <div className="flex items-center gap-4">
-            <label className="font-bold text-neutral-500 w-[64px] select-none">
+            <label className="font-bold text-neutral-500 w-[76.33px] select-none">
               Nametag
             </label>
             <EditorInput
@@ -88,7 +88,9 @@ export function CSItemEditor({
         )}
         {hasSeed && (
           <div className="flex items-center gap-4 select-none">
-            <label className="font-bold text-neutral-500 w-[64px]">Seed</label>
+            <label className="font-bold text-neutral-500 w-[76.33px]">
+              Seed
+            </label>
             <span className="w-[68px]">{seed}</span>
             <EditorStepRange
               className="flex-1"
@@ -102,7 +104,9 @@ export function CSItemEditor({
         )}
         {hasFloat && (
           <div className="flex items-center gap-4 select-none">
-            <label className="font-bold text-neutral-500 w-[64px]">Float</label>
+            <label className="font-bold text-neutral-500 w-[76.33px]">
+              Float
+            </label>
             <span className="w-[68px]">{float}</span>
             <EditorStepRange
               className="flex-1"
@@ -116,7 +120,7 @@ export function CSItemEditor({
         )}
         {hasStattrak && (
           <div className="flex items-center gap-4 select-none">
-            <label className="font-bold text-neutral-500 w-[64px]">
+            <label className="font-bold text-neutral-500 w-[76.33px]">
               StatTrak™
             </label>
             <EditorToggle
@@ -126,7 +130,7 @@ export function CSItemEditor({
           </div>
         )}
       </div>
-      <div className="flex justify-end mt-2">
+      <div className="flex justify-center mt-6">
         <button
           onClick={handleSubmit}
           className="bg-white/80 hover:bg-white text-neutral-700 px-4 py-2 rounded font-bold drop-shadow-lg transition"

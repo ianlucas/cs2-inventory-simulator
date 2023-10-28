@@ -4,16 +4,19 @@ import { HeaderLink } from "./header-link";
 import { useRootContext } from "./root-context";
 
 export function Header() {
-  const { user } = useRootContext();
+  const { user, inventory } = useRootContext();
 
   return (
     <div className="w-full bg-gradient-to-b drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
       <div className="w-[1024px] m-auto text-white py-4 flex items-center gap-8">
         <div className="select-none">
-          cstrike/<span className="font-bold">InventorySim</span>
+          <span className="text-sm text-neutral-300">{"cstrike / "}</span>
+          <span className="font-bold italic">Inventory Simulator</span>
         </div>
         <div className="flex items-center gap-4">
-          <HeaderLink to="craft" icon={faPlus} label="Craft Item" />
+          {!inventory.full() && (
+            <HeaderLink to="craft" icon={faPlus} label="Craft Item" />
+          )}
           {user === undefined && (
             <HeaderLink to="sign-in" icon={faSteam} label="Sign-in to sync" />
           )}
@@ -26,6 +29,7 @@ export function Header() {
                   className="h-6 w-6 rounded-full"
                   src={user.avatar}
                   draggable={false}
+                  alt={user.name}
                 />
               </div>
               <HeaderLink

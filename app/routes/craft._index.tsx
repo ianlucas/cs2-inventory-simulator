@@ -28,9 +28,11 @@ export default function Craft() {
   }
 
   return (
-    <Modal className="w-[720px]">
+    <Modal className="w-[540px]">
       <div className="font-bold px-4 py-2 select-none flex items-center justify-between">
-        <span>Craft Item</span>
+        <span>
+          {csItem === undefined ? "Crafting an item..." : "Confirm craft"}
+        </span>
         <div className="flex items-center gap-8">
           {csItem !== undefined && (
             <button
@@ -38,7 +40,7 @@ export default function Craft() {
               onClick={() => setCSItem(undefined)}
             >
               <FontAwesomeIcon icon={faLongArrowLeft} className="h-4" />
-              Reset
+              Restart
             </button>
           )}
           <Link to="/">

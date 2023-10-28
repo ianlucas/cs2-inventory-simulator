@@ -15,7 +15,7 @@ export function CategoryMenu({
   }
 
   return (
-    <div className="flex justify-between items-center px-2">
+    <div className="flex flex-wrap px-2 gap-1">
       {CS_CATEGORY_MENU.map((item) => (
         <button
           key={item.category}

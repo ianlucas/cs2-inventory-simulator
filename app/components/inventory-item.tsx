@@ -2,7 +2,7 @@ import { autoUpdate, flip, FloatingFocusManager, offset, shift, useDismiss, useF
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
-import { CS_Economy, CS_hasFloat, CS_hasSeed, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_MIN_FLOAT, CS_MIN_SEED, CS_resolveItemImage, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "cslib";
+import { CS_Economy, CS_hasFloat, CS_hasSeed, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_MAX_FLOAT, CS_MIN_FLOAT, CS_MIN_SEED, CS_resolveItemImage, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "cslib";
 import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
 import { transform } from "~/utils/inventory";
@@ -94,6 +94,9 @@ export function InventoryItem(
 
   const anyUnequip = canUnequip || canUnequipT || canUnequipCT;
   const anyEquip = canEquip || canEquipT || canEquipCT;
+  const hasFloat = CS_hasFloat(csItem);
+  const hasSeed = CS_hasSeed(csItem);
+  const hasAttributes = hasFloat || hasSeed;
 
   function close(callbefore: () => void) {
     return function close() {
@@ -119,6 +122,7 @@ export function InventoryItem(
                 inventoryItem.float
               )}
               draggable={false}
+              alt={csItem.name}
             />
           </div>
           <div className="absolute left-0 bottom-0 p-1 flex items-center">
@@ -130,6 +134,7 @@ export function InventoryItem(
                       key={index}
                       className="h-5"
                       src={CS_Economy.getById(sticker).image}
+                      alt={CS_Economy.getById(sticker).name}
                     />
                   )
               )}
@@ -243,7 +248,7 @@ export function InventoryItem(
       {isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <div
-            className="z-50 py-4 px-6 bg-neutral-900/90 rounded text-white outline-none text-sm"
+            className="z-50 py-4 px-6 bg-neutral-900/95 rounded text-white outline-none text-sm"
             ref={hoverRefs.setFloating}
             style={hoverStyles}
             {...getHoverFloatingProps()}
@@ -252,16 +257,34 @@ export function InventoryItem(
               {inventoryItem.stattrak && "StatTrak™ "} {model}
             </div>
             <div>{name}</div>
-            {CS_hasFloat(csItem) && (
-              <div className="mt-2">
-                <strong className="text-neutral-400">Float:</strong>{" "}
-                {inventoryItem.float ?? CS_MIN_FLOAT}
-              </div>
-            )}
-            {CS_hasSeed(csItem) && (
-              <div>
-                <strong className="text-neutral-400">Seed:</strong>{" "}
-                {inventoryItem.seed ?? CS_MIN_SEED}
+            {hasAttributes && (
+              <div className="mt-2 flex flex-col gap-2">
+                {hasFloat && (
+                  <div>
+                    <div>
+                      <strong className="text-neutral-400">Float:</strong>{" "}
+                      {inventoryItem.float ?? CS_MIN_FLOAT}
+                    </div>
+                    <div className="w-[128px] h-1 bg-[linear-gradient(90deg,#3b818f_0,#3b818f_7%,#83b135_0,#83b135_15%,#d7be47_0,#d7be47_38%,#f08140_0,#f08140_45%,#ec4f3d_0,#ec4f3d)] relative">
+                      <div
+                        className="absolute h-1.5 w-[1px] bg-white -top-0.5"
+                        style={{
+                          left: `${
+                            ((inventoryItem.float ?? CS_MIN_FLOAT)
+                              / CS_MAX_FLOAT)
+                            * 100
+                          }%`
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+                {hasSeed && (
+                  <div>
+                    <strong className="text-neutral-400">Seed:</strong>{" "}
+                    {inventoryItem.seed ?? CS_MIN_SEED}
+                  </div>
+                )}
               </div>
             )}
           </div>
