@@ -3,9 +3,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import clsx from "clsx";
-import { CS_Economy, CS_Item, CS_resolveItemImage } from "cslib";
+import { CS_Item, CS_resolveItemImage } from "cslib";
 import { useRef } from "react";
-import { getCSItemName } from "~/utils/economy";
+import { baseUrl, getCSItemName } from "~/utils/economy";
 
 export function CSItemButton({
   bigger,
@@ -53,7 +53,7 @@ export function CSItemButton({
             !bigger && "h-[63px] w-[84px]",
             bigger && "m-auto h-32"
           )}
-          src={CS_resolveItemImage("/localimage", csItem)}
+          src={CS_resolveItemImage(baseUrl, csItem)}
         />
         <div className={clsx(!bigger && "ml-4")}>
           <div style={{ color: ignoreRarityColor ? undefined : csItem.rarity }}>

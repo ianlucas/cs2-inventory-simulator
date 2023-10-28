@@ -1,5 +1,7 @@
 import { CS_CategoryMenuItem, CS_filterItems, CS_Item } from "cslib";
 
+export const baseUrl = "/cslib-images";
+
 export const instaSelectCategory = [
   "sticker",
   "agent",

@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { CS_Economy, CS_hasFloat, CS_hasSeed, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_MAX_FLOAT, CS_MIN_FLOAT, CS_MIN_SEED, CS_resolveItemImage, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "cslib";
 import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
+import { baseUrl } from "~/utils/economy";
 import { transform } from "~/utils/inventory";
 import { ContextButton } from "./context-button";
 import { ContextDivider } from "./context-divider";
@@ -117,7 +118,7 @@ export function InventoryItem(
             <img
               className="w-[144px] h-[108px]"
               src={CS_resolveItemImage(
-                "/localimage",
+                baseUrl,
                 csItem,
                 inventoryItem.float
               )}

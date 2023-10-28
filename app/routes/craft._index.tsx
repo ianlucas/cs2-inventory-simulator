@@ -1,7 +1,8 @@
 import { faLongArrowLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
-import { CS_Item, CS_Team } from "cslib";
+import { CS_Item } from "cslib";
 import { useState } from "react";
 import { CSItemEditor, CSItemEditorAttributes } from "~/components/cs-item-editor";
 import CSItemPicker from "~/components/cs-item-picker";
@@ -9,6 +10,12 @@ import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
 import { sync } from "~/utils/sync";
 import { ApiInventoryAddUrl } from "./api.inventory-add._index";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Craft - Inventory Simulator" }
+  ];
+};
 
 export default function Craft() {
   const navigate = useNavigate();

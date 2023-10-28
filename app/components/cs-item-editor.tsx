@@ -2,6 +2,7 @@ import { CS_hasFloat, CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers,
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
+import { baseUrl } from "~/utils/economy";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
 import { EditorToggle } from "./editor-toggle";
@@ -53,7 +54,7 @@ export function CSItemEditor({
     <div className="w-[360px] m-auto pb-6 select-none">
       <img
         className="w-[360px] h-[270px]"
-        src={CS_resolveItemImage("/localimage", csItem.id, float)}
+        src={CS_resolveItemImage(baseUrl, csItem.id, float)}
         alt={csItem.name}
         draggable={false}
       />
