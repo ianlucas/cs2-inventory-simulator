@@ -18,7 +18,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       return toValveKeyValue(transformEquipped(inventory));
     },
     mimeType: "text/plain",
-    throwData: "",
+    throwBody: "",
     url: ApiEquippedUserIdCfgUrl,
     userId
   });

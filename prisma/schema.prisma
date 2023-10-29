@@ -25,7 +25,7 @@ model User {
 
 model UserCache {
   @@id([url, userId])
-  response String
+  body String
   timestamp DateTime
   url String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

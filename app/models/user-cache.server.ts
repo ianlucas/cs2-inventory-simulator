@@ -5,18 +5,20 @@
 
 import { json } from "@remix-run/node";
 import { CS_InventoryItem } from "cslib";
+import { z } from "zod";
 import { prisma } from "~/db.server";
+import { res } from "~/response.server";
 import { parseInventory } from "~/utils/user";
 
 export async function useUserCache({
   generate,
-  throwData,
+  throwBody,
   mimeType,
   url,
   userId
 }: {
   generate: (inventory: CS_InventoryItem[]) => any;
-  throwData: any;
+  throwBody: any;
   mimeType: string;
   url: string;
   userId: string;
@@ -26,10 +28,12 @@ export async function useUserCache({
     where: { id: userId }
   });
   if (user === null) {
-    throw json(throwData);
+    throw mimeType === "application/json"
+      ? json(throwBody)
+      : res(throwBody, mimeType);
   }
   const cache = await prisma.userCache.findFirst({
-    select: { response: true },
+    select: { body: true },
     where: {
       url,
       userId,
@@ -42,29 +46,25 @@ export async function useUserCache({
   }))?.inventory;
   if (!inventory) {
     throw mimeType === "application/json"
-      ? json(throwData)
-      : new Response(throwData, {
-        headers: { "Content-Type": mimeType }
-      });
+      ? json(throwBody)
+      : res(throwBody, mimeType);
   }
   if (cache !== null) {
-    return new Response(cache.response, {
-      headers: { "Content-Type": mimeType }
-    });
+    return res(cache.body, mimeType);
   }
   const generated = generate(parseInventory(inventory));
-  const response = mimeType === "application/json"
+  const body = mimeType === "application/json"
     ? JSON.stringify(generated)
-    : generated;
+    : z.string().parse(generated);
   await prisma.userCache.upsert({
     create: {
+      body,
+      timestamp: user.syncedAt,
       url,
-      userId,
-      response,
-      timestamp: user.syncedAt
+      userId
     },
     update: {
-      response,
+      body,
       timestamp: user.syncedAt
     },
     where: {
@@ -74,7 +74,5 @@ export async function useUserCache({
       }
     }
   });
-  return new Response(response, {
-    headers: { "Content-Type": mimeType }
-  });
+  return res(body, mimeType);
 }

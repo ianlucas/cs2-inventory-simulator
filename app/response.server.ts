@@ -10,3 +10,9 @@ export const notFound = new Response(null, {
 export const noContent = new Response(null, {
   status: 204
 });
+
+export function res(body: string, mimeType: string) {
+  return new Response(body, {
+    headers: { "Content-Type": mimeType }
+  });
+}

@@ -15,7 +15,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return await useUserCache({
     generate: transformEquipped,
     mimeType: "application/json",
-    throwData: {},
+    throwBody: {},
     url: ApiEquippedUserIdJsonUrl,
     userId
   });

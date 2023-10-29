@@ -20,7 +20,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       }));
     },
     mimeType: "application/json",
-    throwData: [],
+    throwBody: [],
     url: ApiInventoryUserIdUrl,
     userId
   });
