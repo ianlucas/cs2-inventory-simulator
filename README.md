@@ -1,6 +1,4 @@
-# Welcome to Remix!
-
-- [Remix Docs](https://remix.run/docs)
+# CS2 Inventory Simulator
 
 ## Development
 
