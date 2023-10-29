@@ -3,19 +3,21 @@ import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { editUserInventory } from "~/models/user.server";
 import { noContent } from "~/response.server";
-import { inventoryItemShape } from "~/utils/shapes";
+import { csTeamShape } from "~/utils/shapes";
 
-export const ApiInventoryAddUrl = "/api/inventory-add";
+export const ApiActionInventoryUnequipUrl = "/api/action/inventory-unequip";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { id: userId, inventory } = await requireUser(request);
-  const { item } = z.object({ item: inventoryItemShape })
-    .parse(await request.json());
+  const { index, csTeam } = z.object({
+    index: z.number(),
+    csTeam: csTeamShape.optional()
+  }).parse(await request.json());
   await editUserInventory(
     userId,
     inventory,
     csInventory => {
-      return csInventory.add(item);
+      return csInventory.unequip(index, csTeam);
     }
   );
   return noContent;

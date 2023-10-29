@@ -5,7 +5,7 @@ import { editUserInventory } from "~/models/user.server";
 import { noContent } from "~/response.server";
 import { csTeamShape } from "~/utils/shapes";
 
-export const ApiInventoryEquipUrl = "/api/inventory-equip";
+export const ApiActionInventoryEquipUrl = "/api/action/inventory-equip";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { id: userId, inventory } = await requireUser(request);

@@ -37,7 +37,10 @@ export async function updateUserInventory(
   inventory: CS_InventoryItem[]
 ) {
   return await prisma.user.update({
-    data: { inventory: JSON.stringify(inventory) },
+    data: {
+      inventory: JSON.stringify(inventory),
+      syncedAt: new Date()
+    },
     where: { id: userId }
   });
 }
@@ -50,6 +53,7 @@ export async function editUserInventory(
   const items = parseInventory(inventory);
   return await prisma.user.update({
     data: {
+      syncedAt: new Date(),
       inventory: JSON.stringify(
         callback(new CS_Inventory(items, MAX_INVENTORY_ITEMS))
           .getItems()

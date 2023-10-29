@@ -9,7 +9,7 @@ import CSItemPicker from "~/components/cs-item-picker";
 import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
 import { sync } from "~/utils/sync";
-import { ApiInventoryAddUrl } from "./api.inventory-add._index";
+import { ApiActionInventoryAddUrl } from "./api.action.inventory-add._index";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,7 +29,7 @@ export default function Craft() {
         ...attributes
       };
       setInventory(inventory => inventory.add(item));
-      sync(ApiInventoryAddUrl, { item });
+      sync(ApiActionInventoryAddUrl, { item });
       return navigate("/");
     }
   }

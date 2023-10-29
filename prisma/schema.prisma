@@ -9,9 +9,20 @@ datasource db {
 
 model User {
   avatar String
+  caches UserCache[]
+  createdAt DateTime @default(now())
   id String @id @unique
   inventory String?
   name String
-  createdAt DateTime @default(now())
+  syncedAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model UserCache {
+  @@id([url, userId])
+  response String
+  timestamp DateTime
+  url String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
