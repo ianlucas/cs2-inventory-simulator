@@ -5,7 +5,7 @@ export function Background() {
   return (
     <>
       <div
-        className="absolute left-0 top-0 -z-10 h-full w-full overflow-hidden blur-lg"
+        className="fixed left-0 top-0 -z-10 h-full w-full overflow-hidden blur-lg"
         id="background"
       >
       </div>

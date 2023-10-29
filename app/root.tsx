@@ -43,7 +43,7 @@ export default function App() {
           <Meta />
           <Links />
         </head>
-        <body className="bg-stone-800">
+        <body className="bg-stone-800 overflow-y-scroll">
           <Background />
           <ClientOnly>{() => <SyncWarn />}</ClientOnly>
           <Header />

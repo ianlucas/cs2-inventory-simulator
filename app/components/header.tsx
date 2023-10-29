@@ -1,5 +1,5 @@
 import { faSteam } from "@fortawesome/free-brands-svg-icons";
-import { faPlus, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faCode, faPlus, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { HeaderLink } from "./header-link";
 import { useRootContext } from "./root-context";
 
@@ -20,6 +20,7 @@ export function Header() {
           {user === undefined && (
             <HeaderLink to="sign-in" icon={faSteam} label="Sign-in to sync" />
           )}
+          <HeaderLink to="api" icon={faCode} label="API" />
           {user !== undefined && (
             <>
               <div className="flex items-center gap-2 select-none">

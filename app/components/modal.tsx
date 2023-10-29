@@ -5,21 +5,19 @@ import { ClientOnly } from "remix-utils/client-only";
 
 export function Modal({
   className,
-  children,
-  portal
+  children
 }: {
   className?: string;
   children: ReactNode;
-  portal?: boolean;
 }) {
   return (
     <ClientOnly>
       {() =>
         createPortal(
-          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+          <div className="absolute top-0 left-0 w-full min-h-full flex items-center justify-center z-50 py-8">
             <div
               className={clsx(
-                "shadow-lg rounded bg-neutral-900/80 text-white backdrop-blur-sm drop-shadow-lg",
+                "shadow-lg rounded bg-neutral-900/80 min-h-[inherit] text-white backdrop-blur-sm drop-shadow-lg",
                 className
               )}
             >

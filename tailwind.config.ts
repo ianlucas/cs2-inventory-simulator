@@ -5,7 +5,18 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["'Noto Sans'", "sans-serif"]
+        sans: ["'Noto Sans'", "sans-serif"],
+        mono: [
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "Monaco",
+          "Cascadia Code",
+          "Consolas",
+          "Liberation Mono",
+          "Courier New",
+          "monospace"
+        ]
       },
       fontSize: {
         sm: "0.8rem",

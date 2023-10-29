@@ -106,7 +106,7 @@ export function StickerPicker({
         })}
       </div>
       {activeIndex !== null && (
-        <Modal className="w-[640px] pb-1" portal>
+        <Modal className="w-[640px] pb-1">
           <div className="font-bold px-4 py-2 select-none flex justify-between">
             <label>Pick A Sticker</label>
             <button

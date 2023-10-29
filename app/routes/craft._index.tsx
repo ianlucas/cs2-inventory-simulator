@@ -13,7 +13,7 @@ import { ApiActionInventoryAddUrl } from "./api.action.inventory-add._index";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Craft - Inventory Simulator" }
+    { title: "Craft - CS2 Inventory Simulator" }
   ];
 };
 
