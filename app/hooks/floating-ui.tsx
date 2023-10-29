@@ -1,3 +1,8 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 import { ElementProps, FloatingContext, ReferenceType } from "@floating-ui/react";
 import { isMouseLikePointerType, isTypeableElement } from "@floating-ui/react/utils";
 import { isHTMLElement } from "@floating-ui/utils/dom";

@@ -1,3 +1,8 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 import { CS_safeValidateFloat, CS_safeValidateNametag, CS_safeValidateSeed } from "cslib";
 import { z } from "zod";
 

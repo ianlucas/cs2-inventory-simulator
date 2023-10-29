@@ -1,3 +1,8 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 import { CS_CategoryMenuItem, CS_filterItems, CS_Item } from "cslib";
 
 export const baseUrl = "/cslib-images";

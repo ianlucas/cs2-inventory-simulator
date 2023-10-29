@@ -1,6 +1,11 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useNavigate } from "@remix-run/react";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { ClientOnly } from "remix-utils/client-only";

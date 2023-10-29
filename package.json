@@ -1,6 +1,5 @@
 {
-  "name": "cstrike",
-  "private": true,
+  "name": "@ianlucas/cs2-inventory-simulator",
   "sideEffects": false,
   "type": "module",
   "scripts": {

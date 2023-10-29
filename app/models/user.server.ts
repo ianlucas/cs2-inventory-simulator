@@ -1,3 +1,8 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 import { CS_Inventory, CS_InventoryItem } from "cslib";
 import SteamAPI from "steamapi";
 import { prisma } from "~/db.server";

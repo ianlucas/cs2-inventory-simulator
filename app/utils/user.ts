@@ -1,4 +1,9 @@
-import type { CS_Inventory, CS_InventoryItem } from "cslib";
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+import type { CS_InventoryItem } from "cslib";
 import { inventoryShape } from "./shapes";
 
 export function storeUserId(value: string) {

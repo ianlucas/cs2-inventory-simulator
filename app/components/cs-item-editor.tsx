@@ -1,3 +1,8 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 import { CS_hasFloat, CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers, CS_Item, CS_MAX_FLOAT, CS_MAX_SEED, CS_MIN_FLOAT, CS_MIN_SEED, CS_NAMETAG_RE, CS_resolveItemImage } from "cslib";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";

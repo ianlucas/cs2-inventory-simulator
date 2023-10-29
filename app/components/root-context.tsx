@@ -1,3 +1,8 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
 import { CS_Inventory } from "cslib";
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from "react";
 import type { findRequestUser } from "~/auth.server";
