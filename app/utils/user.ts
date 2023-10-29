@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import type { CS_InventoryItem } from "cslib";
+import type { CS_InventoryItem } from "@ianlucas/cslib";
 import { inventoryShape } from "./shapes";
 
 export function storeUserId(value: string) {

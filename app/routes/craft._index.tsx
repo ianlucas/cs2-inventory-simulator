@@ -5,9 +5,9 @@
 
 import { faLongArrowLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CS_Item } from "@ianlucas/cslib";
 import { MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
-import { CS_Item } from "cslib";
 import { useState } from "react";
 import { CSItemEditor, CSItemEditorAttributes } from "~/components/cs-item-editor";
 import CSItemPicker from "~/components/cs-item-picker";

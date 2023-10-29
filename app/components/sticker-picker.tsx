@@ -5,7 +5,7 @@
 
 import { faBoxOpen, faMagnifyingGlass, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_getStickerCategories, CS_getStickers, CS_Item } from "cslib";
+import { CS_Economy, CS_getStickerCategories, CS_getStickers, CS_Item } from "@ianlucas/cslib";
 import { useEffect, useMemo, useState } from "react";
 import { useInput } from "~/hooks/use-input";
 import { EditorInput } from "./editor-input";

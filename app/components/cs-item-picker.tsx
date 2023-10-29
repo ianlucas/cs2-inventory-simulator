@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_CATEGORY_MENU, CS_CategoryMenuItem, CS_Item } from "cslib";
+import { CS_CATEGORY_MENU, CS_CategoryMenuItem, CS_Item } from "@ianlucas/cslib";
 import { useState } from "react";
 import { CategoryMenu } from "~/components/category-menu";
 import { CSItemBrowser } from "~/components/cs-item-browser";

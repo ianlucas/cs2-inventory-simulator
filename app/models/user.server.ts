@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory, CS_InventoryItem } from "cslib";
+import { CS_Inventory, CS_InventoryItem } from "@ianlucas/cslib";
 import SteamAPI from "steamapi";
 import { prisma } from "~/db.server";
 import { MAX_INVENTORY_ITEMS } from "~/env.server";

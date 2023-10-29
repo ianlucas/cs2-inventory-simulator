@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_CategoryMenuItem, CS_filterItems, CS_Item } from "cslib";
+import { CS_CategoryMenuItem, CS_filterItems, CS_Item } from "@ianlucas/cslib";
 
 export const baseUrl = "/cslib-images";
 

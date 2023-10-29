@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_InventoryItem, CS_TEAM_CT, CS_TEAM_T } from "cslib";
+import { CS_Economy, CS_InventoryItem, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
 import { getCSItemName } from "./economy";
 
 export function transform(inventoryItem: CS_InventoryItem, index: number) {

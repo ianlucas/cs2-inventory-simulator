@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS_Inventory } from "@ianlucas/cslib";
 import { ActionFunctionArgs } from "@remix-run/node";
-import { CS_Inventory } from "cslib";
 import { requireUser } from "~/auth.server";
 import { MAX_INVENTORY_ITEMS } from "~/env.server";
 import { updateUserInventory } from "~/models/user.server";

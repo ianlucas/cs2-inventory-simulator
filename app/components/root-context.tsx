@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory } from "cslib";
+import { CS_Inventory } from "@ianlucas/cslib";
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from "react";
 import type { findRequestUser } from "~/auth.server";
 import { ApiSaveCachedInventoryUrl } from "~/routes/api.save-cached-inventory._index";

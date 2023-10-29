@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS_Item, CS_resolveItemImage } from "@ianlucas/cslib";
 import clsx from "clsx";
-import { CS_Item, CS_resolveItemImage } from "cslib";
 import { useRef } from "react";
 import { baseUrl, getCSItemName } from "~/utils/economy";
 

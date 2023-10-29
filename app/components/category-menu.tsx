@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS_CATEGORY_MENU, CS_CategoryMenuItem } from "@ianlucas/cslib";
 import clsx from "clsx";
-import { CS_CATEGORY_MENU, CS_CategoryMenuItem } from "cslib";
 
 export function CategoryMenu({
   onChange,

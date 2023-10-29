@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_safeValidateFloat, CS_safeValidateNametag, CS_safeValidateSeed } from "cslib";
+import { CS_safeValidateFloat, CS_safeValidateNametag, CS_safeValidateSeed } from "@ianlucas/cslib";
 import { z } from "zod";
 
 export const inventoryItemShape = z.object({

@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS_InventoryItem } from "@ianlucas/cslib";
 import { json } from "@remix-run/node";
-import { CS_InventoryItem } from "cslib";
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { res } from "~/response.server";

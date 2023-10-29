@@ -11,10 +11,10 @@
 
 import { PassThrough } from "node:stream";
 
+import { CS_Economy, CS_ITEM_DEFS, CS_ITEMS } from "@ianlucas/cslib";
 import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
-import { CS_Economy, CS_ITEM_DEFS, CS_ITEMS } from "cslib";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 

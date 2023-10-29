@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Team } from "cslib";
+import { CS_Team } from "@ianlucas/cslib";
 import { useMemo } from "react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useSync } from "~/hooks/use-sync";
