@@ -4,15 +4,17 @@ import { prisma } from "~/db.server";
 import { parseInventory } from "~/utils/user";
 
 export async function useUserCache({
-  url,
-  userId,
+  generate,
   throwData,
-  generate
+  mimeType,
+  url,
+  userId
 }: {
+  generate: (inventory: CS_InventoryItem[]) => any;
+  throwData: any;
+  mimeType: string;
   url: string;
   userId: string;
-  throwData: any;
-  generate: (inventory: CS_InventoryItem[]) => any;
 }) {
   const user = await prisma.user.findFirst({
     select: { syncedAt: true },
@@ -34,14 +36,21 @@ export async function useUserCache({
     where: { id: userId }
   }))?.inventory;
   if (!inventory) {
-    throw json(throwData);
+    throw mimeType === "application/json"
+      ? json(throwData)
+      : new Response(throwData, {
+        headers: { "Content-Type": mimeType }
+      });
   }
   if (cache !== null) {
     return new Response(cache.response, {
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": mimeType }
     });
   }
-  const response = JSON.stringify(generate(parseInventory(inventory)));
+  const generated = generate(parseInventory(inventory));
+  const response = mimeType === "application/json"
+    ? JSON.stringify(generated)
+    : generated;
   await prisma.userCache.upsert({
     create: {
       url,
@@ -61,6 +70,6 @@ export async function useUserCache({
     }
   });
   return new Response(response, {
-    headers: { "Content-Type": "application/json" }
+    headers: { "Content-Type": mimeType }
   });
 }

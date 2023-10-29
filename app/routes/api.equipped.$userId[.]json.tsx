@@ -1,22 +1,17 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { CS_Economy } from "cslib";
 import { z } from "zod";
 import { useUserCache } from "~/models/user-cache.server";
+import { transformEquipped } from "~/utils/inventory";
 
-export const ApiInventoryUserIdUrl = "/api/inventory/$userId";
+export const ApiEquippedUserIdJsonUrl = "/api/equipped/$userId.json";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const userId = z.string().parse(params.userId);
   return await useUserCache({
-    generate(inventory) {
-      return inventory.map(item => ({
-        ...item,
-        ...CS_Economy.getDefById(item.id)
-      }));
-    },
+    generate: transformEquipped,
     mimeType: "application/json",
-    throwData: [],
-    url: ApiInventoryUserIdUrl,
+    throwData: {},
+    url: ApiEquippedUserIdJsonUrl,
     userId
   });
 }

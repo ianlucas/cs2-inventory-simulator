@@ -1,22 +1,20 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { CS_Economy } from "cslib";
 import { z } from "zod";
 import { useUserCache } from "~/models/user-cache.server";
+import { transformEquipped } from "~/utils/inventory";
+import { toValveKeyValue } from "~/utils/valve-key-value";
 
-export const ApiInventoryUserIdUrl = "/api/inventory/$userId";
+export const ApiEquippedUserIdCfgUrl = "/api/equipped/$userId.cfg";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const userId = z.string().parse(params.userId);
   return await useUserCache({
     generate(inventory) {
-      return inventory.map(item => ({
-        ...item,
-        ...CS_Economy.getDefById(item.id)
-      }));
+      return toValveKeyValue(transformEquipped(inventory));
     },
-    mimeType: "application/json",
-    throwData: [],
-    url: ApiInventoryUserIdUrl,
+    mimeType: "text/plain",
+    throwData: "",
+    url: ApiEquippedUserIdCfgUrl,
     userId
   });
 }
