@@ -123,7 +123,7 @@ export function StickerPicker({
               <EditorInput
                 value={search}
                 onChange={setSearch}
-                placeholder={"Type a sticker name..."}
+                placeholder={"Search sticker..."}
               />
             </div>
             <div className="flex items-center gap-2">

@@ -48,11 +48,11 @@ export default function Craft() {
         <div className="flex items-center gap-8">
           {csItem !== undefined && (
             <button
-              className="flex items-center gap-1 text-neutral-200 cursor-default hover:bg-black/30 px-2 rounded"
+              className="flex items-center gap-1 text-neutral-200 cursor-default hover:bg-black/30 px-2 rounded font-normal"
               onClick={() => setCSItem(undefined)}
             >
               <FontAwesomeIcon icon={faLongArrowLeft} className="h-4" />
-              Restart
+              Reset
             </button>
           )}
           <Link to="/">
