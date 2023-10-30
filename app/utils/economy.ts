@@ -5,7 +5,8 @@
 
 import { CS_CategoryMenuItem, CS_filterItems, CS_Item } from "@ianlucas/cslib";
 
-export const baseUrl = "/cslib-images";
+export const baseUrl =
+  "https://cdn.statically.io/gh/ianlucas/cslib/main/dist/images";
 
 export const instaSelectCategory = [
   "sticker",
