@@ -22,29 +22,28 @@ export function Header() {
           {!inventory.full() && (
             <HeaderLink to="craft" icon={faPlus} label="Craft Item" />
           )}
-          {user === undefined && (
-            <HeaderLink to="sign-in" icon={faSteam} label="Sign-in to sync" />
-          )}
           <HeaderLink to="api" icon={faCode} label="API" />
-          {user !== undefined && (
-            <>
-              <div className="flex items-center gap-2 select-none">
-                <span className="text-neutral-400">Signed in as</span>
-                <span>{user.name}</span>{" "}
-                <img
-                  className="h-6 w-6 rounded-full"
-                  src={user.avatar}
-                  draggable={false}
-                  alt={user.name}
+          {user === undefined
+            ? <HeaderLink to="sign-in" icon={faSteam} label="Sign-in to sync" />
+            : (
+              <>
+                <div className="flex items-center gap-2 select-none">
+                  <span className="text-neutral-400">Signed in as</span>
+                  <span>{user.name}</span>{" "}
+                  <img
+                    className="h-6 w-6 rounded-full"
+                    src={user.avatar}
+                    draggable={false}
+                    alt={user.name}
+                  />
+                </div>
+                <HeaderLink
+                  to="sign-out"
+                  icon={faRightFromBracket}
+                  label="Sign out"
                 />
-              </div>
-              <HeaderLink
-                to="sign-out"
-                icon={faRightFromBracket}
-                label="Sign out"
-              />
-            </>
-          )}
+              </>
+            )}
         </div>
       </div>
     </div>
