@@ -81,12 +81,12 @@ export function sortByEquipped(
 export function getFreeItemsToDisplay() {
   return CS_filterItems({
     free: true
-  }).map(csItem => ({
+  }).map((csItem, index) => ({
     csItem,
     inventoryItem: {
       id: csItem.id
     },
-    index: -1,
+    index: -1 * (index + 1),
     equipped: [],
     ...getCSItemName(csItem)
   }));
