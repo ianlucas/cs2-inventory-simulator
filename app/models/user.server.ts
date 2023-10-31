@@ -7,7 +7,7 @@ import { CS_Inventory, CS_InventoryItem } from "@ianlucas/cslib";
 import SteamAPI from "steamapi";
 import { prisma } from "~/db.server";
 import { MAX_INVENTORY_ITEMS } from "~/env.server";
-import { parseInventory } from "~/utils/user";
+import { parseInventory } from "~/utils/inventory";
 
 export async function upsertUser(user: SteamAPI.PlayerSummary) {
   const data = {

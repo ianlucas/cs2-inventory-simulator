@@ -7,8 +7,9 @@ import { CS_Inventory } from "@ianlucas/cslib";
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from "react";
 import type { findRequestUser } from "~/auth.server";
 import { ApiSaveCachedInventoryUrl } from "~/routes/api.save-cached-inventory._index";
+import { parseInventory } from "~/utils/inventory";
 import { sync } from "~/utils/sync";
-import { parseInventory, retrieveInventoryItems, retrieveUserId, storeInventoryItems, storeUserId } from "~/utils/user";
+import { retrieveInventoryItems, retrieveUserId, storeInventoryItems, storeUserId } from "~/utils/user";
 
 const RootContext = createContext<{
   inventory: CS_Inventory;

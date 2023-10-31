@@ -5,6 +5,18 @@
 
 import { CS_Economy, CS_InventoryItem, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
 import { getCSItemName } from "./economy";
+import { inventoryShape } from "./shapes";
+
+export function parseInventory(inventory?: string | null) {
+  if (!inventory) {
+    return [];
+  }
+  try {
+    return inventoryShape.parse(JSON.parse(inventory));
+  } catch {
+    return [];
+  }
+}
 
 export function transform(inventoryItem: CS_InventoryItem, index: number) {
   const csItem = CS_Economy.getById(inventoryItem.id);

@@ -8,7 +8,7 @@ import { json } from "@remix-run/node";
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { res } from "~/response.server";
-import { parseInventory } from "~/utils/user";
+import { parseInventory } from "~/utils/inventory";
 
 export async function useUserCache({
   generate,
