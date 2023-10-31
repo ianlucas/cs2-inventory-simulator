@@ -13,6 +13,7 @@ import { CSItemEditor, CSItemEditorAttributes } from "~/components/cs-item-edito
 import CSItemPicker from "~/components/cs-item-picker";
 import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
+import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { sync } from "~/utils/sync";
 import { ApiActionInventoryAddUrl } from "./api.action.inventory-add._index";
 
@@ -26,6 +27,8 @@ export default function Craft() {
   const navigate = useNavigate();
   const [csItem, setCSItem] = useState<CS_Item>();
   const { setInventory } = useRootContext();
+
+  useLockScroll();
 
   function handleSubmit(attributes: CSItemEditorAttributes) {
     if (csItem !== undefined) {

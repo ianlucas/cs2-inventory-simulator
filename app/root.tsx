@@ -5,9 +5,8 @@
 
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLocation } from "@remix-run/react";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 
-import clsx from "clsx";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { ClientOnly } from "remix-utils/client-only";
 import { findRequestUser } from "./auth.server";
@@ -38,7 +37,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function App() {
-  const location = useLocation();
   const { maxInventoryItems, user } = useTypedLoaderData<typeof loader>();
 
   return (
@@ -50,14 +48,7 @@ export default function App() {
           <Meta />
           <Links />
         </head>
-        <body
-          className={clsx(
-            "bg-stone-800",
-            location.pathname === "/craft"
-              ? "overflow-hidden"
-              : "overflow-y-scroll"
-          )}
-        >
+        <body className="bg-stone-800 overflow-y-scroll">
           <Background />
           <ClientOnly>{() => <SyncWarn />}</ClientOnly>
           <Header />

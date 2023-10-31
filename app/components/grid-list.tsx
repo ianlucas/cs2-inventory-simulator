@@ -37,8 +37,8 @@ export function GridList({
     );
   }
 
-  function handleWheel(e: WheelEvent<HTMLDivElement>) {
-    handleScroll(e.deltaY);
+  function handleWheel(event: WheelEvent<HTMLDivElement>) {
+    handleScroll(event.deltaY);
   }
 
   function handleScrollbarClick(event: MouseEvent<HTMLDivElement>) {
