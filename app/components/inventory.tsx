@@ -10,7 +10,7 @@ import { useSync } from "~/hooks/use-sync";
 import { ApiActionInventoryEquipUrl } from "~/routes/api.action.inventory-equip._index";
 import { ApiActionInventoryRemoveUrl } from "~/routes/api.action.inventory-remove._index";
 import { ApiActionInventoryUnequipUrl } from "~/routes/api.action.inventory-unequip._index";
-import { sortByEquipped, sortByName, sortByType, transform } from "~/utils/inventory";
+import { getFreeItemsToDisplay, sortByEquipped, sortByName, sortByType, transform } from "~/utils/inventory";
 import { useRootContext } from "./root-context";
 
 export function Inventory() {
@@ -23,6 +23,12 @@ export function Inventory() {
       .sort(sortByName)
       .sort(sortByType)
       .sort(sortByEquipped), [inventory]);
+
+  const defaultItems = useMemo(() =>
+    getFreeItemsToDisplay()
+      .sort(sortByName)
+      .sort(sortByType)
+      .sort(sortByEquipped), []);
 
   function handleEquip(index: number, csTeam?: CS_Team) {
     setInventory(inventory => inventory.equip(index, csTeam));
@@ -48,6 +54,13 @@ export function Inventory() {
           onUnequip={handleUnequip}
           onEquip={handleEquip}
           onDelete={handleDelete}
+        />
+      ))}
+      {defaultItems.map(item => (
+        <InventoryItem
+          key={item.index}
+          {...item}
+          readOnly
         />
       ))}
     </div>

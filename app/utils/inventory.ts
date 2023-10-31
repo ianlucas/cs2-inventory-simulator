@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_InventoryItem, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
+import { CS_Economy, CS_filterItems, CS_InventoryItem, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
 import { getCSItemName } from "./economy";
 import { inventoryShape } from "./shapes";
 
@@ -76,6 +76,20 @@ export function sortByEquipped(
   } else {
     return 0;
   }
+}
+
+export function getFreeItemsToDisplay() {
+  return CS_filterItems({
+    free: true
+  }).map(csItem => ({
+    csItem,
+    inventoryItem: {
+      id: csItem.id
+    },
+    index: -1,
+    equipped: [],
+    ...getCSItemName(csItem)
+  }));
 }
 
 export const MUSIC_KIT_PREFIX = "mk";

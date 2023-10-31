@@ -26,15 +26,17 @@ export function InventoryItem(
     name,
     onDelete,
     onEquip,
-    onUnequip
+    onUnequip,
+    readOnly
   }:
     & ReturnType<
       typeof transform
     >
     & {
-      onDelete(index: number): void;
-      onEquip(index: number, team?: CS_Team): void;
-      onUnequip(index: number, team?: CS_Team): void;
+      onDelete?(index: number): void;
+      onEquip?(index: number, team?: CS_Team): void;
+      onUnequip?(index: number, team?: CS_Team): void;
+      readOnly?: boolean;
     }
 ) {
   const isAuthenticated = useRootContext().user !== undefined;
@@ -100,8 +102,8 @@ export function InventoryItem(
 
   const anyUnequip = canUnequip || canUnequipT || canUnequipCT;
   const anyEquip = canEquip || canEquipT || canEquipCT;
-  const hasFloat = CS_hasFloat(csItem);
-  const hasSeed = CS_hasSeed(csItem);
+  const hasFloat = !csItem.free && CS_hasFloat(csItem);
+  const hasSeed = !csItem.free && CS_hasSeed(csItem);
   const hasModel = model || inventoryItem.stattrak;
   const hasAttributes = hasFloat || hasSeed;
 
@@ -181,7 +183,7 @@ export function InventoryItem(
             )}
         </div>
       </div>
-      {isClickOpen && (
+      {!readOnly && isClickOpen && (
         <FloatingFocusManager context={clickContext} modal={false}>
           <div
             className="z-10 bg-neutral-800 text-white outline-none py-2 w-[192px] text-sm rounded"
@@ -192,20 +194,20 @@ export function InventoryItem(
             {isAuthenticated && (
               <>
                 {canEquip && (
-                  <ContextButton onClick={close(() => onEquip(index))}>
+                  <ContextButton onClick={close(() => onEquip?.(index))}>
                     Equip
                   </ContextButton>
                 )}
                 {canEquipT && (
                   <ContextButton
-                    onClick={close(() => onEquip(index, CS_TEAM_T))}
+                    onClick={close(() => onEquip?.(index, CS_TEAM_T))}
                   >
                     Equip T
                   </ContextButton>
                 )}
                 {canEquipCT && (
                   <ContextButton
-                    onClick={close(() => onEquip(index, CS_TEAM_CT))}
+                    onClick={close(() => onEquip?.(index, CS_TEAM_CT))}
                   >
                     Equip CT
                   </ContextButton>
@@ -213,8 +215,8 @@ export function InventoryItem(
                 {canEquipCT && canEquipT && (
                   <ContextButton
                     onClick={close(() => {
-                      onEquip(index, CS_TEAM_CT);
-                      onEquip(index, CS_TEAM_T);
+                      onEquip?.(index, CS_TEAM_CT);
+                      onEquip?.(index, CS_TEAM_T);
                     })}
                   >
                     Equip Both Teams
@@ -222,20 +224,20 @@ export function InventoryItem(
                 )}
                 {anyEquip && <ContextDivider />}
                 {canUnequip && (
-                  <ContextButton onClick={close(() => onUnequip(index))}>
+                  <ContextButton onClick={close(() => onUnequip?.(index))}>
                     Unequip
                   </ContextButton>
                 )}
                 {canUnequipT && (
                   <ContextButton
-                    onClick={close(() => onUnequip(index, CS_TEAM_T))}
+                    onClick={close(() => onUnequip?.(index, CS_TEAM_T))}
                   >
                     Unequip T
                   </ContextButton>
                 )}
                 {canUnequipCT && (
                   <ContextButton
-                    onClick={close(() => onUnequip(index, CS_TEAM_CT))}
+                    onClick={close(() => onUnequip?.(index, CS_TEAM_CT))}
                   >
                     Unequip CT
                   </ContextButton>
@@ -246,7 +248,7 @@ export function InventoryItem(
             )}
             <ContextButton
               onClick={close(() =>
-                onDelete(index)
+                onDelete?.(index)
               )}
             >
               Delete
@@ -254,7 +256,7 @@ export function InventoryItem(
           </div>
         </FloatingFocusManager>
       )}
-      {isHoverOpen && !isClickOpen && (
+      {!readOnly && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <div
             className="z-50 py-4 px-6 bg-neutral-900/95 rounded text-white outline-none text-sm"
