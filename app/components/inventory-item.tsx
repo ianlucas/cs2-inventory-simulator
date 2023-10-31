@@ -169,10 +169,12 @@ export function InventoryItem(
             ? <>"{inventoryItem.nametag}"</>
             : (
               <>
-                <div className="font-bold">
-                  {inventoryItem.stattrak && "StatTrak™ "}
-                  {model}
-                </div>
+                {(model || inventoryItem.stattrak) && (
+                  <div className="font-bold">
+                    {inventoryItem.stattrak && "StatTrak™ "}
+                    {model}
+                  </div>
+                )}
                 <div>{name}</div>
               </>
             )}

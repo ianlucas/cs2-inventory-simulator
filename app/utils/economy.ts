@@ -13,7 +13,8 @@ export const instaSelectCategory = [
   "agent",
   "pin",
   "patch",
-  "musickit"
+  "musickit",
+  "case"
 ];
 
 const modelFromType = {
@@ -24,7 +25,8 @@ const modelFromType = {
   "patch": "Patch",
   "pin": "Pin",
   "sticker": "Sticker",
-  "weapon": "Weapon"
+  "weapon": "Weapon",
+  "case": ""
 } as const;
 
 export function getCSItemName(csItem: CS_Item) {
