@@ -41,12 +41,12 @@ export function GridList({
     handleScroll(e.deltaY);
   }
 
-  function handleScrollbarClick(e: MouseEvent<HTMLDivElement>) {
+  function handleScrollbarClick(event: MouseEvent<HTMLDivElement>) {
     if (!scrollbar.current) {
       return;
     }
     const scrollbarHeight = scrollbar.current.clientHeight;
-    const isMoveDown = e.nativeEvent.offsetY > scrollbarHeight / 2;
+    const isMoveDown = event.nativeEvent.offsetY > scrollbarHeight / 2;
     handleScroll(isMoveDown ? 1 : -1);
   }
 
