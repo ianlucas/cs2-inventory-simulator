@@ -102,6 +102,7 @@ export function InventoryItem(
   const anyEquip = canEquip || canEquipT || canEquipCT;
   const hasFloat = CS_hasFloat(csItem);
   const hasSeed = CS_hasSeed(csItem);
+  const hasModel = model || inventoryItem.stattrak;
   const hasAttributes = hasFloat || hasSeed;
 
   function close(callbefore: () => void) {
@@ -169,7 +170,7 @@ export function InventoryItem(
             ? <>"{inventoryItem.nametag}"</>
             : (
               <>
-                {(model || inventoryItem.stattrak) && (
+                {hasModel && (
                   <div className="font-bold">
                     {inventoryItem.stattrak && "StatTrak™ "}
                     {model}
@@ -261,9 +262,11 @@ export function InventoryItem(
             style={hoverStyles}
             {...getHoverFloatingProps()}
           >
-            <div className="font-bold">
-              {inventoryItem.stattrak && "StatTrak™ "} {model}
-            </div>
+            {hasModel && (
+              <div className="font-bold">
+                {inventoryItem.stattrak && "StatTrak™ "} {model}
+              </div>
+            )}
             <div>{name}</div>
             {hasAttributes && (
               <div className="mt-2 flex flex-col gap-2">

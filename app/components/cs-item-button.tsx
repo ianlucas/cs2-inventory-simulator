@@ -29,6 +29,9 @@ export function CSItemButton({
 
   const { model, name } = getCSItemName(csItem);
   const clickable = onClick !== undefined;
+  const showAltname = csItem.altname !== undefined
+    && (csItem.altname.includes("Collectible")
+      || csItem.altname.includes("Commodity"));
 
   return (
     <button
@@ -56,10 +59,13 @@ export function CSItemButton({
           )}
           src={CS_resolveItemImage(baseUrl, csItem)}
         />
-        <div className={clsx(!bigger && "ml-4")}>
+        <div className={clsx("text-left", !bigger && "ml-4")}>
           <div style={{ color: ignoreRarityColor ? undefined : csItem.rarity }}>
             {name || model}
           </div>
+          {showAltname && (
+            <div className="text-neutral-400">{csItem.altname}</div>
+          )}
         </div>
       </div>
     </button>
