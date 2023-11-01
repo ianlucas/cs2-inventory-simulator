@@ -62,7 +62,7 @@ export default function CSItemPicker({
           placeholder="Search for an item..."
         />
       </div>
-      <div className="py-1">
+      <div className="pt-1 pb-2">
         <CSItemBrowser
           csItems={items}
           onClick={handleItemClick}

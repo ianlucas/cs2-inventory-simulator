@@ -33,9 +33,11 @@ export function Header() {
                   icon={faRightFromBracket}
                   label="Sign out"
                 />
-                <div className="flex items-center gap-2 select-none flex-1 overflow-hidden">
+                <div className="flex items-center gap-2 select-none flex-1 overflow-hidden justify-end">
                   <span className="text-neutral-400">Signed in as</span>
-                  <span>{user.name}</span>{" "}
+                  <span className="max-w-[256px] whitespace-nowrap text-ellipsis overflow-hidden">
+                    {user.name}
+                  </span>
                   <img
                     className="h-6 w-6 rounded-full"
                     src={user.avatar}
