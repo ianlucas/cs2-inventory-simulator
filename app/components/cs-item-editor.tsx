@@ -58,13 +58,13 @@ export function CSItemEditor({
   return (
     <div className="w-[360px] m-auto pb-6 select-none">
       <img
-        className="w-[360px] h-[270px]"
+        className="w-[256px] h-[192px] m-auto"
         src={CS_resolveItemImage(baseUrl, csItem.id, float)}
         alt={csItem.name}
         draggable={false}
       />
       <div
-        className="text-center font-bold text-lg mb-4"
+        className="text-center font-bold mb-4"
         style={{ color: csItem.rarity }}
       >
         {csItem.name}

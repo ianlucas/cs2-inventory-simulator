@@ -28,7 +28,7 @@ export function CategoryMenu({
             "rounded bg-opacity-50 px-2 transition-all hover:text-neutral-200",
             item.category !== value.category && "text-neutral-400",
             item.category === value.category
-              && "bg-neutral-900 text-neutral-200"
+              && "bg-black/50 text-neutral-200"
           )}
           onClick={handleClick(item)}
         >

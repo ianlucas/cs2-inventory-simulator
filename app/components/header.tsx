@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { faSteam } from "@fortawesome/free-brands-svg-icons";
-import { faCode, faPlus, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faBoxesStacked, faCode, faPlus, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { HeaderLink } from "./header-link";
 import { useRootContext } from "./root-context";
 
@@ -18,16 +18,22 @@ export function Header() {
           <span className="text-sm text-neutral-300">{"cstrike / "}</span>
           <span className="font-bold italic">Inventory Simulator</span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 text-sm flex-1">
+          <HeaderLink to="/" icon={faBoxesStacked} label="Inventory" />
           {!inventory.full() && (
-            <HeaderLink to="craft" icon={faPlus} label="Craft Item" />
+            <HeaderLink to="/craft" icon={faPlus} label="Craft Item" />
           )}
-          <HeaderLink to="api" icon={faCode} label="API" />
+          <HeaderLink to="/api" icon={faCode} label="API" />
           {user === undefined
             ? <HeaderLink to="sign-in" icon={faSteam} label="Sign-in to sync" />
             : (
               <>
-                <div className="flex items-center gap-2 select-none">
+                <HeaderLink
+                  to="sign-out"
+                  icon={faRightFromBracket}
+                  label="Sign out"
+                />
+                <div className="flex items-center gap-2 select-none flex-1 overflow-hidden">
                   <span className="text-neutral-400">Signed in as</span>
                   <span>{user.name}</span>{" "}
                   <img
@@ -37,11 +43,6 @@ export function Header() {
                     alt={user.name}
                   />
                 </div>
-                <HeaderLink
-                  to="sign-out"
-                  icon={faRightFromBracket}
-                  label="Sign out"
-                />
               </>
             )}
         </div>

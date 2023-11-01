@@ -44,8 +44,8 @@ export default function Craft() {
 
   return (
     <Modal className="w-[540px]">
-      <div className="font-bold px-4 py-2 select-none flex items-center justify-between">
-        <span>
+      <div className="font-bold px-4 py-2 select-none flex items-center justify-between text-sm">
+        <span className="text-neutral-400">
           {csItem === undefined ? "Crafting an item..." : "Confirm craft"}
         </span>
         <div className="flex items-center gap-8">

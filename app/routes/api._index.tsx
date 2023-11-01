@@ -3,12 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "@remix-run/react";
 import { Highlight, themes } from "prism-react-renderer";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
-import { Modal } from "~/components/modal";
 import { STEAM_CALLBACK_URL } from "~/env.server";
 import { AGENT_PATCH_PREFIX, AGENT_PREFIX, FLOAT_PREFIX, GLOVE_PREFIX, MELEE_PREFIX, MUSIC_KIT_PREFIX, NAMETAG_PREFIX, PAINT_PREFIX, PIN_PREFIX, SEED_PREFIX, STATTRAK_PREFIX, STICKER_PREFIX, STICKERFLOAT_PREFIX } from "~/utils/inventory";
 
@@ -22,19 +18,11 @@ export default function ApiIndex() {
   const { baseUrl } = useTypedLoaderData<typeof loader>();
 
   return (
-    <Modal className="w-[540px] pb-3">
-      <div className="font-bold px-4 py-2 select-none flex items-center justify-between">
-        <span>API</span>
-        <div className="flex items-center gap-8">
-          <Link to="/">
-            <FontAwesomeIcon
-              icon={faXmark}
-              className="h-4 opacity-50 hover:opacity-100"
-            />
-          </Link>
-        </div>
-      </div>
-      <div className="flex flex-col gap-4">
+    <div className="w-[1024px] m-auto my-6">
+      <h1 className="select-none flex items-center justify-between text-xl text-neutral-300">
+        Application Programming Interfaces
+      </h1>
+      <div className="grid gap-4 mt-4 grid-cols-2">
         <ApiInterface
           method="GET"
           name="Get User Inventory"
@@ -77,19 +65,19 @@ type GetUserEquippedItemsResponse = {
   ["${AGENT_PATCH_PREFIX}{CSTeam}"]: number | undefined;
   // PaintKit equipped for T and/or CT and a weapon/melee/glove.
   ["${PAINT_PREFIX}{CSTeam}_{ItemDef}"]: number | undefined;
-  // Seed equipped for a T and/or CT weapon/melee/glove.
+  // Seed equipped for a T and/or CT weapon/melee.
   ["${SEED_PREFIX}{CSTeam}_{ItemDef}"]: number | undefined;
   // Float equipped for a T and/or CT weapon/melee/glove.
   ["${FLOAT_PREFIX}{CSTeam}_{ItemDef}"]: number | undefined;
-  // StatTrak equipped for a T and/or CT weapon/melee/glove.
+  // StatTrak equipped for a T and/or CT weapon/melee.
   ["${STATTRAK_PREFIX}{CSTeam}_{ItemDef}"]: boolean | undefined;
-  // Float equipped for a T and/or CT weapon/melee/glove.
+  // Nametag equipped for a T and/or CT weapon/melee/glove.
   ["${NAMETAG_PREFIX}{CSTeam}_{ItemDef}"]: string | undefined;
-  // Whether a T and/or CT weapon/melee/glove has stickers.
+  // Whether a T and/or CT weapon has stickers.
   ["${STICKER_PREFIX}{CSTeam}_{ItemDef}"]: boolean | undefined;
-  // Sticker equipped for a T and/or CT weapon/melee/glove.
+  // Sticker equipped for a T and/or CT weapon.
   ["${STICKER_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}"]: number | undefined;
-  // Float of an equipped sticker for a T and/or CT weapon/melee/glove.
+  // Float of an equipped sticker for a T and/or CT weapon.
   ["${STICKERFLOAT_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}"]: number | undefined;
 };`}
           endpoint={`${baseUrl}/api/equipped/{steamID64}.json`}
@@ -113,25 +101,25 @@ type GetUserEquippedItemsResponse = {
   "${AGENT_PATCH_PREFIX}{CSTeam}" "number"
   // PaintKit equipped for T and/or CT and a weapon/melee/glove.
   "${PAINT_PREFIX}{CSTeam}_{ItemDef}" "number"
-  // Seed equipped for a T and/or CT weapon/melee/glove.
+  // Seed equipped for a T and/or CT weapon/melee.
   "${SEED_PREFIX}{CSTeam}_{ItemDef}" "number"
   // Float equipped for a T and/or CT weapon/melee/glove.
   "${FLOAT_PREFIX}{CSTeam}_{ItemDef}" "number"
-  // StatTrak equipped for a T and/or CT weapon/melee/glove.
+  // StatTrak equipped for a T and/or CT weapon/melee.
   "${STATTRAK_PREFIX}{CSTeam}_{ItemDef}" "{0 | 1}"
-  // Float equipped for a T and/or CT weapon/melee/glove.
+  // Nametag equipped for a T and/or CT weapon/melee/glove.
   "${NAMETAG_PREFIX}{CSTeam}_{ItemDef}" "string"
-  // Whether a T and/or CT weapon/melee/glove has stickers.
+  // Whether a T and/or CT weapon has stickers.
   "${STICKER_PREFIX}{CSTeam}_{ItemDef}" "{0 | 1}"
-  // Sticker equipped for a T and/or CT weapon/melee/glove.
+  // Sticker equipped for a T and/or CT weapon.
   "${STICKER_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}" "number"
-  // Float of an equipped sticker for a T and/or CT weapon/melee/glove.
+  // Float of an equipped sticker for a T and/or CT weapon.
   "${STICKERFLOAT_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}" "number"
 }`}
           endpoint={`${baseUrl}/api/equipped/{steamID64}.cfg`}
         />
       </div>
-    </Modal>
+    </div>
   );
 }
 
@@ -149,22 +137,22 @@ function ApiInterface({
   type: string;
 }) {
   return (
-    <div className="px-4">
+    <div>
       <div className="flex items-center gap-2">
         <span className="text-lg">{name}</span>
         <span className="text-neutral-500 text-sm font-bold">{type}</span>
       </div>
-      <div className="mt-1 flex items-center rounded-full overflow-hidden text-sm">
-        <div className="px-2 bg-green-500/80 font-bold">
+      <div className="mt-1 flex items-center rounded-tl rounded-tr overflow-hidden text-sm">
+        <div className="px-2 py-1 bg-green-500/80 font-bold">
           {method}
         </div>
         <input
-          className="flex-1 bg-neutral-950/50 px-2 font-mono outline-none"
+          className="flex-1 py-1 bg-neutral-950/80 px-2 font-mono outline-none"
           value={endpoint}
           readOnly
         />
       </div>
-      <div className="mt-2">
+      <div className="rounded-bl rounded-br overflow-hidden bg-[#1e1e1e] p-1">
         <Highlight
           code={response}
           language="typescript"
@@ -173,7 +161,7 @@ function ApiInterface({
             { style, tokens, getLineProps, getTokenProps }
           ) => (
             <pre
-              className="text-sm p-2 rounded mt-2 overflow-x-auto"
+              className="text-sm p-2 overflow-x-auto h-[256px]"
               style={style}
             >
               {tokens.map((line, i) => (

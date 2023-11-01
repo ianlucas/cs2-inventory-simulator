@@ -5,7 +5,7 @@
 
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLocation } from "@remix-run/react";
 
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { ClientOnly } from "remix-utils/client-only";
@@ -37,7 +37,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function App() {
+  const location = useLocation();
   const { maxInventoryItems, user } = useTypedLoaderData<typeof loader>();
+  const showInventory = location.pathname !== "/api";
 
   return (
     <RootProvider user={user} maxInventoryItems={maxInventoryItems}>
@@ -49,10 +51,14 @@ export default function App() {
           <Links />
         </head>
         <body className="bg-stone-800 overflow-y-scroll">
-          <Background />
-          <ClientOnly>{() => <SyncWarn />}</ClientOnly>
+          <div
+            className="fixed left-0 top-0 -z-10 h-full w-full overflow-hidden blur-lg"
+            id="background"
+          />
+          {showInventory && <Background />}
+          {showInventory && <ClientOnly>{() => <SyncWarn />}</ClientOnly>}
           <Header />
-          <ClientOnly>{() => <Inventory />}</ClientOnly>
+          {showInventory && <ClientOnly>{() => <Inventory />}</ClientOnly>}
           <Outlet />
           <ScrollRestoration />
           <Scripts />

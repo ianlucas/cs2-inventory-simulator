@@ -109,7 +109,9 @@ export function StickerPicker({
       {activeIndex !== null && (
         <Modal className="w-[640px] pb-1">
           <div className="font-bold px-4 py-2 select-none flex justify-between">
-            <label>Pick A Sticker</label>
+            <label className="text-sm text-neutral-400">
+              Pick a sticker...
+            </label>
             <button
               onClick={handleCloseModal}
               className="cursor-default text-white/50 hover:text-white"

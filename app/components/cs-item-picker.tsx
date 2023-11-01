@@ -54,7 +54,7 @@ export default function CSItemPicker({
   return (
     <>
       <CategoryMenu value={category} onChange={handleCategoryClick} />
-      <div className="flex pr-4 my-2 gap-2 h-[36px] pl-4">
+      <div className="flex px-2 my-2 gap-2 h-[36px]">
         <input
           value={query}
           onChange={setQuery}

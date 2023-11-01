@@ -5,7 +5,8 @@
 
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "@remix-run/react";
+import { Link, useLocation } from "@remix-run/react";
+import clsx from "clsx";
 import { ComponentProps } from "react";
 
 export function HeaderLink(
@@ -14,10 +15,15 @@ export function HeaderLink(
     label: string;
   }
 ) {
+  const location = useLocation();
+  const isActive = location.pathname === rest.to;
   return (
     <Link
       {...rest}
-      className="flex items-center gap-2 hover:bg-black/30 active:bg-black/70 transition-all px-1.5 py-0.5"
+      className={clsx(
+        "flex items-center gap-2 hover:bg-black/30 active:bg-black/70 transition-all px-1.5 py-0.5",
+        isActive && "bg-black/30"
+      )}
     >
       <FontAwesomeIcon className="h-4" icon={icon} />
       {label}
