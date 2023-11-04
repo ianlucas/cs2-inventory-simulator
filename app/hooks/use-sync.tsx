@@ -8,9 +8,9 @@ import { sync } from "~/utils/sync";
 
 export function useSync() {
   const { user } = useRootContext();
-  return async function useSync(url: string, data: any) {
+  return async function useSync(type: string, data: any) {
     if (user !== undefined) {
-      await sync(url, data);
+      await sync(type, data);
     }
   };
 }

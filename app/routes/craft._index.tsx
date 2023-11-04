@@ -14,8 +14,7 @@ import CSItemPicker from "~/components/cs-item-picker";
 import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
 import { useLockScroll } from "~/hooks/use-lock-scroll";
-import { sync } from "~/utils/sync";
-import { ApiActionInventoryAddUrl } from "./api.action.inventory-add._index";
+import { useSync } from "~/hooks/use-sync";
 
 export const meta: MetaFunction = () => {
   return [
@@ -24,6 +23,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Craft() {
+  const sync = useSync();
   const navigate = useNavigate();
   const [csItem, setCSItem] = useState<CS_Item>();
   const { setInventory } = useRootContext();
@@ -37,7 +37,7 @@ export default function Craft() {
         ...attributes
       };
       setInventory(inventory => inventory.add(item));
-      sync(ApiActionInventoryAddUrl, { item });
+      sync("add", { item });
       return navigate("/");
     }
   }
