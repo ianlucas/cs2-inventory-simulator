@@ -8,23 +8,8 @@ import { useEffect } from "react";
 /**
  * @see https://stackoverflow.com/questions/4770025/how-to-disable-scrolling-temporarily
  */
-const scrollKeys: Record<string, boolean> = {
-  "Space": true,
-  "PageUp": true,
-  "PageDown": true,
-  "End": true,
-  "Home": true
-};
-
 function preventDefault(event: Event) {
   event.preventDefault();
-}
-
-function preventDefaultForScrollKeys(event: globalThis.KeyboardEvent) {
-  if (scrollKeys[event.code]) {
-    preventDefault(event);
-    return false;
-  }
 }
 
 function getSupportsPassive() {
@@ -58,7 +43,6 @@ function disableScroll() {
   window.addEventListener("DOMMouseScroll", preventDefault, false);
   window.addEventListener(wheelEvent, preventDefault, wheelOpt);
   window.addEventListener("touchmove", preventDefault, wheelOpt);
-  window.addEventListener("keydown", preventDefaultForScrollKeys, false);
 }
 
 function enableScroll() {
@@ -68,7 +52,6 @@ function enableScroll() {
   window.removeEventListener(wheelEvent, preventDefault, wheelOpt);
   // @ts-ignore
   window.removeEventListener("touchmove", preventDefault, wheelOpt);
-  window.removeEventListener("keydown", preventDefaultForScrollKeys, false);
 }
 
 export function useLockScroll() {
