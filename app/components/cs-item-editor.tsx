@@ -3,7 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_hasFloat, CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers, CS_Item, CS_MAX_FLOAT, CS_MAX_SEED, CS_MIN_FLOAT, CS_MIN_SEED, CS_NAMETAG_RE, CS_resolveItemImage } from "@ianlucas/cslib";
+import { faBolt, faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CS_hasFloat, CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers, CS_Item, CS_MAX_FLOAT, CS_MAX_SEED, CS_MIN_FLOAT, CS_MIN_SEED, CS_NAMETAG_RE, CS_resolveItemImage, CS_safeValidateFloat, CS_safeValidateNametag, CS_safeValidateSeed } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
@@ -23,9 +25,11 @@ export interface CSItemEditorAttributes {
 
 export function CSItemEditor({
   csItem,
+  onReset,
   onSubmit
 }: {
   csItem: CS_Item;
+  onReset(): void;
   onSubmit(props: CSItemEditorAttributes): void;
 }) {
   const [stattrak, setStattrak] = useCheckbox(false);
@@ -41,6 +45,9 @@ export function CSItemEditor({
   const hasSeed = CS_hasSeed(csItem);
   const hasFloat = CS_hasFloat(csItem);
   const hasNametag = CS_hasNametag(csItem);
+  const isValid = CS_safeValidateFloat(float)
+    && (CS_safeValidateNametag(nametag) || nametag.length === 0)
+    && CS_safeValidateSeed(seed);
 
   function handleSubmit() {
     onSubmit({
@@ -136,11 +143,26 @@ export function CSItemEditor({
           </div>
         )}
       </div>
-      <div className="flex justify-center mt-6">
+      <div className="flex justify-center mt-6 gap-2">
         <button
-          onClick={handleSubmit}
-          className="bg-white/80 hover:bg-white text-neutral-700 px-4 py-2 rounded font-bold drop-shadow-lg transition"
+          onClick={onReset}
+          className="flex items-center gap-2 px-4 py-2 rounded drop-shadow-lg cursor-default text-neutral-300 hover:text-neutral-100"
         >
+          <FontAwesomeIcon
+            icon={faLongArrowLeft}
+            className="h-4"
+          />
+          Reset
+        </button>
+        <button
+          disabled={!isValid}
+          onClick={handleSubmit}
+          className="flex items-center gap-2 bg-white/80 hover:bg-white text-neutral-700 px-4 py-2 rounded font-bold drop-shadow-lg transition disabled:bg-neutral-500 disabled:text-neutral-700 cursor-default"
+        >
+          <FontAwesomeIcon
+            icon={faBolt}
+            className="h-4"
+          />
           Craft
         </button>
       </div>

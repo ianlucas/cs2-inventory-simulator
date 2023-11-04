@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faLongArrowLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Item } from "@ianlucas/cslib";
 import { MetaFunction } from "@remix-run/node";
@@ -48,27 +48,24 @@ export default function Craft() {
         <span className="text-neutral-400">
           {csItem === undefined ? "Crafting an item..." : "Confirm craft"}
         </span>
-        <div className="flex items-center gap-8">
-          {csItem !== undefined && (
-            <button
-              className="flex items-center gap-1 text-neutral-200 cursor-default hover:bg-black/30 px-2 rounded font-normal"
-              onClick={() => setCSItem(undefined)}
-            >
-              <FontAwesomeIcon icon={faLongArrowLeft} className="h-4" />
-              Reset
-            </button>
-          )}
-          <Link to="/">
+        <div className="flex items-center">
+          <Link className="opacity-50 hover:opacity-100" to="/">
             <FontAwesomeIcon
               icon={faXmark}
-              className="h-4 opacity-50 hover:opacity-100"
+              className="h-4"
             />
           </Link>
         </div>
       </div>
       {csItem === undefined
         ? <CSItemPicker onPickItem={setCSItem} />
-        : <CSItemEditor csItem={csItem} onSubmit={handleSubmit} />}
+        : (
+          <CSItemEditor
+            csItem={csItem}
+            onSubmit={handleSubmit}
+            onReset={() => setCSItem(undefined)}
+          />
+        )}
     </Modal>
   );
 }
