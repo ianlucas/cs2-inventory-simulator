@@ -13,12 +13,12 @@ export function Header() {
 
   return (
     <div className="w-full bg-gradient-to-b drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
-      <div className="w-[1024px] m-auto text-white py-4 flex items-center gap-8">
+      <div className="lg:w-[1024px] m-auto text-white py-4 flex items-center gap-4 lg:gap-8 lg:flex-row flex-col">
         <div className="select-none">
           <span className="text-sm text-neutral-300">{"cstrike / "}</span>
           <span className="font-bold italic">Inventory Simulator</span>
         </div>
-        <div className="flex items-center gap-4 text-sm flex-1">
+        <div className="w-[80%] lg:w-auto lg:flex lg:items-center lg:gap-4 text-sm flex-1">
           <HeaderLink to="/" icon={faBoxesStacked} label="Inventory" />
           {!inventory.full() && (
             <HeaderLink to="/craft" icon={faPlus} label="Craft Item" />

@@ -21,6 +21,7 @@ export function GridList({
   const [scrollbarHeight, setScrollbarHeight] = useState(0);
   const [scrollbarTop, setScrollbarTop] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
+  const [touchStartY, setTouchStartY] = useState(0);
   const scrollable = useRef<HTMLDivElement>(null);
   const scrollbar = useRef<HTMLDivElement>(null);
   const currentIndex = scrollTop / itemHeight;
@@ -67,6 +68,20 @@ export function GridList({
     setScrollbarTop(top);
   };
 
+  function handleTouchStart(event: React.TouchEvent<HTMLDivElement>) {
+    console.log("hey");
+    setTouchStartY(event.touches[0].clientY);
+  }
+
+  function handleTouchMove(event: React.TouchEvent<HTMLDivElement>) {
+    const deltaY = event.touches[0].clientY - touchStartY;
+    handleScroll(-deltaY);
+  }
+
+  function handleTouchEnd() {
+    setTouchStartY(0);
+  }
+
   useEffect(() => {
     updateScrollbar();
   }, []);
@@ -83,12 +98,15 @@ export function GridList({
   return (
     <div className="relative">
       <div
-        className="overflow-hidden px-2"
+        className="overflow-hidden px-2 touch-none"
         style={{
           height: itemHeight * (maxItemsIntoView || 2)
         }}
         onWheel={handleWheel}
         ref={scrollable}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {range(maxItemsIntoView).map((index) => children[currentIndex + index])}
       </div>

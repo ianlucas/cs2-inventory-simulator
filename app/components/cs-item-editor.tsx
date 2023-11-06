@@ -63,7 +63,7 @@ export function CSItemEditor({
   }
 
   return (
-    <div className="w-[360px] m-auto pb-6 select-none">
+    <div className="w-[360px] m-auto pb-6 select-none px-4 lg:px-0">
       <img
         className="w-[256px] h-[192px] m-auto"
         src={CS_resolveItemImage(baseUrl, csItem.id, float)}

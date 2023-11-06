@@ -11,7 +11,7 @@ export function Background() {
     <ClientOnly>
       {() =>
         createPortal(
-          <div className="flex h-full w-full items-center justify-center">
+          <div className="hidden h-full w-full items-center justify-center lg:flex">
             <video
               disablePictureInPicture={true}
               onContextMenu={event => event.preventDefault()}

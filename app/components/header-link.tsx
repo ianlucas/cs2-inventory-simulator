@@ -21,7 +21,7 @@ export function HeaderLink(
     <Link
       {...rest}
       className={clsx(
-        "flex items-center gap-2 hover:bg-black/30 active:bg-black/70 transition-all px-1.5 py-0.5",
+        "flex items-center gap-2 hover:bg-black/30 active:bg-black/70 transition-all px-1.5 py-1 lg:py-0.5",
         isActive && "bg-black/30"
       )}
     >

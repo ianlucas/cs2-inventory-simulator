@@ -119,7 +119,7 @@ export function StickerPicker({
               <FontAwesomeIcon icon={faXmark} className="h-4" />
             </button>
           </div>
-          <div className="mb-4 pl-4 pr-2 flex items-center gap-2">
+          <div className="mb-4 px-2 lg:pl-4 lg:pr-2 flex lg:items-center flex-col lg:flex-row gap-2">
             <div className="flex items-center flex-1 gap-2">
               <FontAwesomeIcon icon={faMagnifyingGlass} className="h-4" />
               <EditorInput

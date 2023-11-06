@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Team } from "@ianlucas/cslib";
-import { useMemo } from "react";
+import { ReactNode, useMemo } from "react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useSync } from "~/hooks/use-sync";
 import { getFreeItemsToDisplay, sortByEquipped, sortByName, sortByType, transform } from "~/utils/inventory";
@@ -43,23 +43,41 @@ export function Inventory() {
   }
 
   return (
-    <div className="w-[1024px] m-auto flex my-8 gap-5 flex-wrap select-none">
+    <div className="w-full px-2 lg:px-0 lg:w-[1024px] m-auto grid grid-cols-2 lg:grid-cols-6 my-8 gap-2 lg:gap-5 select-none">
       {items.map(item => (
-        <InventoryItem
-          key={item.index}
-          {...item}
-          onUnequip={handleUnequip}
-          onEquip={handleEquip}
-          onDelete={handleDelete}
-        />
+        <InventoryItemWrapper>
+          <InventoryItem
+            key={item.index}
+            {...item}
+            onUnequip={handleUnequip}
+            onEquip={handleEquip}
+            onDelete={handleDelete}
+          />
+        </InventoryItemWrapper>
       ))}
       {defaultItems.map(item => (
-        <InventoryItem
-          key={item.index}
-          {...item}
-          readOnly
-        />
+        <InventoryItemWrapper>
+          <InventoryItem
+            key={item.index}
+            {...item}
+            readOnly
+          />
+        </InventoryItemWrapper>
       ))}
+    </div>
+  );
+}
+
+function InventoryItemWrapper({
+  children
+}: {
+  children: ReactNode;
+}) {
+  return (
+    <div>
+      <div className="w-full h-full flex items-center justify-center lg:w-auto lg:h-auto lg:block">
+        {children}
+      </div>
     </div>
   );
 }
