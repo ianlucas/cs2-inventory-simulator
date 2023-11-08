@@ -18,11 +18,11 @@ export default function ApiIndex() {
   const { baseUrl } = useTypedLoaderData<typeof loader>();
 
   return (
-    <div className="w-[1024px] m-auto my-6">
-      <h1 className="select-none flex items-center justify-between text-xl text-neutral-300">
+    <div className="lg:w-[1024px] m-auto my-6 px-4 lg:px-0">
+      <h1 className="select-none flex items-center justify-between lg:text-xl text-neutral-300">
         Application Programming Interfaces
       </h1>
-      <div className="grid gap-4 mt-4 grid-cols-2">
+      <div className="mt-4 lg:grid lg:gap-4 lg:grid-cols-2">
         <ApiInterface
           method="GET"
           name="Get User Inventory"
@@ -137,9 +137,9 @@ function ApiInterface({
   type: string;
 }) {
   return (
-    <div>
+    <div className="mt-4 lg:mt-0">
       <div className="flex items-center gap-2">
-        <span className="text-lg">{name}</span>
+        <span className="lg:text-lg">{name}</span>
         <span className="text-neutral-500 text-sm font-bold">{type}</span>
       </div>
       <div className="mt-1 flex items-center rounded-tl rounded-tr overflow-hidden text-sm">
