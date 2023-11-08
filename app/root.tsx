@@ -52,7 +52,7 @@ export default function App() {
         </head>
         <body className="bg-stone-800 overflow-y-scroll">
           <div
-            className="fixed left-0 top-0 -z-10 h-full w-full overflow-hidden blur-lg"
+            className="fixed left-0 top-0 -z-10 h-full w-full overflow-hidden lg:blur-lg"
             id="background"
           />
           {showInventory && <Background />}
