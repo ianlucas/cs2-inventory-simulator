@@ -12,7 +12,7 @@ export function Header() {
   const { user, inventory } = useRootContext();
 
   return (
-    <div className="w-full bg-gradient-to-b drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+    <div className="w-full drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] bg-gradient-to-b from-black/60 to-transparent sticky top-0 left-0 z-30">
       <div className="lg:w-[1024px] m-auto text-white py-4 flex items-center gap-4 lg:gap-8 lg:flex-row flex-col">
         <div className="select-none">
           <span className="text-sm text-neutral-300">{"cstrike / "}</span>

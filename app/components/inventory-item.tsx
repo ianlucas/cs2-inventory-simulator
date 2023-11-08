@@ -259,7 +259,7 @@ export function InventoryItem(
       {!readOnly && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <div
-            className="z-50 py-4 px-6 bg-neutral-900/95 rounded text-white outline-none text-sm"
+            className="z-20 py-4 px-6 bg-neutral-900/95 rounded text-white outline-none text-sm"
             ref={hoverRefs.setFloating}
             style={hoverStyles}
             {...getHoverFloatingProps()}
