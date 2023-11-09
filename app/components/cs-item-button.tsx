@@ -7,6 +7,7 @@ import { CS_Item, CS_resolveItemImage } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useRef } from "react";
 import { baseUrl, getCSItemName } from "~/utils/economy";
+import { TextSlider } from "./text-slider";
 
 export function CSItemButton({
   bigger,
@@ -58,13 +59,16 @@ export function CSItemButton({
             bigger && "m-auto h-32"
           )}
           src={CS_resolveItemImage(baseUrl, csItem)}
+          alt={csItem.name}
         />
-        <div className={clsx("text-left", !bigger && "ml-4")}>
+        <div
+          className={clsx("text-left flex-1 w-0 min-w-0", !bigger && "ml-4")}
+        >
           <div style={{ color: ignoreRarityColor ? undefined : csItem.rarity }}>
-            {name || model}
+            <TextSlider text={name || model} />
           </div>
-          {showAltname && (
-            <div className="text-neutral-400">{csItem.altname}</div>
+          {showAltname && csItem.altname !== undefined && (
+            <TextSlider className="text-neutral-400" text={csItem.altname} />
           )}
         </div>
       </div>
