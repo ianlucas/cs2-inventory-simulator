@@ -43,7 +43,7 @@ export function Inventory() {
   }
 
   return (
-    <div className="w-full px-2 lg:px-0 lg:w-[1024px] m-auto grid grid-cols-2 lg:grid-cols-6 my-8 gap-2 lg:gap-5 select-none">
+    <div className="w-full px-2 lg:px-0 lg:w-[1024px] m-auto grid grid-cols-2 lg:grid-cols-6 lg:my-8 gap-2 lg:gap-5 select-none">
       {items.map(item => (
         <InventoryItemWrapper key={item.index}>
           <InventoryItem

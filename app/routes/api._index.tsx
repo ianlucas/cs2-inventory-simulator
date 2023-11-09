@@ -18,8 +18,8 @@ export default function ApiIndex() {
   const { baseUrl } = useTypedLoaderData<typeof loader>();
 
   return (
-    <div className="lg:w-[1024px] m-auto my-6 px-4 lg:px-0">
-      <h1 className="select-none flex items-center justify-between lg:text-xl text-neutral-300">
+    <div className="lg:w-[1024px] m-auto lg:my-6 px-4 lg:px-0">
+      <h1 className="select-none flex items-center justify-between text-lg lg:text-xl text-neutral-300">
         Application Programming Interfaces
       </h1>
       <div className="mt-4 lg:grid lg:gap-4 lg:grid-cols-2">

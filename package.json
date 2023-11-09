@@ -21,6 +21,7 @@
     "@remix-run/node": "^2.0.1",
     "@remix-run/react": "^2.0.1",
     "@remix-run/serve": "^2.0.1",
+    "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.0.0",
     "isbot": "^3.6.8",
     "prism-react-renderer": "^2.1.0",
