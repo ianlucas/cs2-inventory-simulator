@@ -1,6 +1,6 @@
 # [https://inventory.cstrike.app](https://inventory.cstrike.app/)
 
-<img src="https://raw.githubusercontent.com/ianlucas/cs2-inventory-simulator/main/InventorySimulator.png" alt="Inventory Simulator homepage" title="CS2 Inventory Simulator" />
+<img src="https://raw.githubusercontent.com/ianlucas/cs2-inventory-simulator/main/screenshot.png" alt="Inventory Simulator homepage" title="CS2 Inventory Simulator" />
 
 ## Development
 
