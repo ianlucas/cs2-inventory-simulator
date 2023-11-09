@@ -19,10 +19,10 @@ export function Modal({
     <ClientOnly>
       {() =>
         createPortal(
-          <div className="absolute top-0 left-0 w-full min-h-full flex items-center justify-center z-50 py-8">
+          <div className="absolute top-0 left-0 w-full min-h-full flex items-center justify-center z-50">
             <div
               className={clsx(
-                "shadow-lg rounded bg-neutral-900/95 min-h-[inherit] text-white lg:backdrop-blur-sm drop-shadow-lg border border-white/10 overflow-hidden",
+                "shadow-lg rounded bg-neutral-900 lg:bg-neutral-900/95 min-h-[inherit] text-white lg:backdrop-blur-sm drop-shadow-lg border border-white/10 overflow-hidden",
                 className
               )}
             >
