@@ -28,7 +28,10 @@ export function Header() {
             <span className="text-sm text-neutral-300">{"cstrike / "}</span>
             <span className="font-bold italic">Inventory Simulator</span>
           </div>
-          <button className="py-1 px-2" onClick={() => toggleIsMenuOpen()}>
+          <button
+            className="py-1 px-2 lg:hidden"
+            onClick={() => toggleIsMenuOpen()}
+          >
             <FontAwesomeIcon
               icon={isMenuOpen ? faXmark : faBarsStaggered}
               className="h-4"
