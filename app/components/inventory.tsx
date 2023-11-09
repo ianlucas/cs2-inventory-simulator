@@ -45,9 +45,8 @@ export function Inventory() {
   return (
     <div className="w-full px-2 lg:px-0 lg:w-[1024px] m-auto grid grid-cols-2 lg:grid-cols-6 my-8 gap-2 lg:gap-5 select-none">
       {items.map(item => (
-        <InventoryItemWrapper>
+        <InventoryItemWrapper key={item.index}>
           <InventoryItem
-            key={item.index}
             {...item}
             onUnequip={handleUnequip}
             onEquip={handleEquip}
@@ -56,9 +55,8 @@ export function Inventory() {
         </InventoryItemWrapper>
       ))}
       {defaultItems.map(item => (
-        <InventoryItemWrapper>
+        <InventoryItemWrapper key={item.index}>
           <InventoryItem
-            key={item.index}
             {...item}
             readOnly
           />
