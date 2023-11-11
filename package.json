@@ -39,6 +39,9 @@
     "remix-auth-steam": {
       "remix-auth": "^3.6.0",
       "@remix-run/server-runtime": "2.0.1"
+    },
+    "openid": {
+      "axios": "^1.6.1"
     }
   },
   "devDependencies": {
