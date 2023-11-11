@@ -11,11 +11,11 @@ export function Background() {
     <ClientOnly>
       {() =>
         createPortal(
-          <div className="hidden h-full w-full items-center justify-center lg:flex">
+          <div className="flex h-full w-full items-center justify-center">
             <video
               disablePictureInPicture={true}
               onContextMenu={event => event.preventDefault()}
-              className="w-full opacity-50 saturate-200"
+              className="h-screen lg:h-auto lg:w-full opacity-50 saturate-200 object-cover"
               src="/bg.webm"
               autoPlay
               loop

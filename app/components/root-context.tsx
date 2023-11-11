@@ -13,9 +13,12 @@ import { retrieveInventoryItems, retrieveUserId, storeInventoryItems, storeUserI
 
 const RootContext = createContext<{
   inventory: CS_Inventory;
-  setInventory: Dispatch<SetStateAction<CS_Inventory>>;
-  user: Awaited<ReturnType<typeof findRequestUser>>;
+  itemTranslation: Record<string, string | undefined>;
+  language: string;
   requireAuth: boolean;
+  setInventory: Dispatch<SetStateAction<CS_Inventory>>;
+  translation: Record<string, string | undefined>;
+  user: Awaited<ReturnType<typeof findRequestUser>>;
 }>(null!);
 
 export function useRootContext() {
@@ -24,11 +27,17 @@ export function useRootContext() {
 
 export function RootProvider({
   children,
+  itemTranslation,
+  language,
   maxInventoryItems,
+  translation,
   user
 }: {
   children: ReactNode;
+  itemTranslation: Record<string, string | undefined>;
+  language: string;
   maxInventoryItems: number;
+  translation: Record<string, string | undefined>;
   user: Awaited<ReturnType<typeof findRequestUser>>;
 }) {
   const [inventory, setInventory] = useState(
@@ -65,8 +74,11 @@ export function RootProvider({
     <RootContext.Provider
       value={{
         inventory,
+        itemTranslation,
+        language,
         requireAuth: retrieveUserId() !== undefined,
         setInventory,
+        translation,
         user
       }}
     >

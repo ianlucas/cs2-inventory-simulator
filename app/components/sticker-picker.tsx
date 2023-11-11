@@ -6,8 +6,10 @@
 import { faBoxOpen, faMagnifyingGlass, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Economy, CS_getStickerCategories, CS_getStickers, CS_Item } from "@ianlucas/cslib";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useInput } from "~/hooks/use-input";
+import { useItemTranslation } from "~/hooks/use-item-translation";
+import { useTranslation } from "~/hooks/use-translation";
 import { EditorInput } from "./editor-input";
 import EditorSelect from "./editor-select";
 import { GridList } from "./grid-list";
@@ -20,11 +22,20 @@ export function StickerPicker({
   onChange: (value: (number | null)[]) => void;
   value: (number | null)[];
 }) {
+  const translate = useTranslation();
+  const translateItem = useItemTranslation();
+
+  function translateAll(item: CS_Item) {
+    return {
+      ...item,
+      name: translateItem(item).name
+    };
+  }
+
   const [category, setCategory] = useState("");
   const [search, setSearch] = useInput("");
   const [activeIndex, setActiveIndex] = useState(null as number | null);
-  const [filtered, setFiltered] = useState([] as CS_Item[]);
-  const stickers = useMemo(() => CS_getStickers(), []);
+  const stickers = useMemo(() => CS_getStickers().map(translateAll), []);
   const categories = useMemo(() => CS_getStickerCategories(), []);
 
   function handleClickSlot(index: number) {
@@ -51,28 +62,26 @@ export function StickerPicker({
     setActiveIndex(null);
   }
 
-  useEffect(() => {
+  const filtered = useMemo(() => {
     const words = search.split(" ").map((word) => word.toLowerCase());
-    setFiltered(
-      stickers.filter((item) => {
-        if (search.length === 0) {
-          return item.category === category;
-        }
-        if (category !== "" && item.category !== category) {
+    return stickers.filter((item) => {
+      if (search.length === 0) {
+        return item.category === category;
+      }
+      if (category !== "" && item.category !== category) {
+        return false;
+      }
+      if (search.length < 1) {
+        return false;
+      }
+      const name = item.name.toLowerCase();
+      for (const word of words) {
+        if (word.length > 0 && name.indexOf(word) === -1) {
           return false;
         }
-        if (search.length < 1) {
-          return false;
-        }
-        const name = item.name.toLowerCase();
-        for (const word of words) {
-          if (word.length > 0 && name.indexOf(word) === -1) {
-            return false;
-          }
-        }
-        return true;
-      })
-    );
+      }
+      return true;
+    });
   }, [search, category]);
 
   return (
@@ -97,7 +106,7 @@ export function StickerPicker({
                 )
                 : (
                   <div className="flex h-[64px] w-[85.33px] items-center justify-center text-neutral-700">
-                    N/A
+                    {translate("StickerPickerNA")}
                   </div>
                 )}
               <div className="absolute left-0 top-0 h-full w-full transition-all hover:shadow-[inset_0_0_0_3px_#fff]">
@@ -110,7 +119,7 @@ export function StickerPicker({
         <Modal className="w-[640px] pb-1">
           <div className="font-bold px-4 py-2 select-none flex justify-between">
             <label className="text-sm text-neutral-400">
-              Pick a sticker...
+              {translate("StickerPickerHeader")}
             </label>
             <button
               onClick={handleCloseModal}
@@ -125,7 +134,7 @@ export function StickerPicker({
               <EditorInput
                 value={search}
                 onChange={setSearch}
-                placeholder={"Search sticker..."}
+                placeholder={translate("StickerPickerSearchPlaceholder")}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -133,7 +142,7 @@ export function StickerPicker({
               <EditorSelect
                 onChange={setCategory}
                 options={categories}
-                placeholder="Filter by category..."
+                placeholder={translate("StickerPickerFilterPlaceholder")}
                 value={category}
               />
             </div>
@@ -142,7 +151,7 @@ export function StickerPicker({
               onClick={handleRemoveSticker}
             >
               <FontAwesomeIcon icon={faTrashCan} className="h-4" />
-              <label>Remove</label>
+              <label>{translate("StickerPickerRemove")}</label>
             </button>
           </div>
           <GridList itemHeight={64} maxItemsIntoView={6}>
@@ -172,8 +181,6 @@ export function StickerItemButton({
       onClick(item);
     }
   }
-
-  const clickable = onClick !== undefined;
 
   return (
     <button

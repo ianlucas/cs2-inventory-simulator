@@ -15,6 +15,7 @@ import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
 import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
+import { useTranslation } from "~/hooks/use-translation";
 
 export const meta: MetaFunction = () => {
   return [
@@ -27,6 +28,7 @@ export default function Craft() {
   const navigate = useNavigate();
   const [csItem, setCSItem] = useState<CS_Item>();
   const { setInventory } = useRootContext();
+  const translate = useTranslation();
 
   useLockScroll();
 
@@ -46,7 +48,9 @@ export default function Craft() {
     <Modal className="w-[540px]">
       <div className="font-bold px-4 py-2 select-none flex items-center justify-between text-sm">
         <span className="text-neutral-400">
-          {csItem === undefined ? "Crafting an item..." : "Confirm craft"}
+          {csItem === undefined
+            ? translate("CraftSelectHeader")
+            : translate("CraftConfirmHeader")}
         </span>
         <div className="flex items-center">
           <Link className="opacity-50 hover:opacity-100" to="/">

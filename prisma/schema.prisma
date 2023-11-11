@@ -19,6 +19,7 @@ model User {
   id String @id @unique
   inventory String?
   name String
+  preferences UserPreferences?
   syncedAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -30,4 +31,10 @@ model UserCache {
   url String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
+}
+
+model UserPreferences {
+  language String?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @id
 }

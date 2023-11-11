@@ -12,7 +12,7 @@ import { ComponentProps } from "react";
 export function HeaderLink(
   { icon, label, ...rest }: ComponentProps<typeof Link> & {
     icon: IconProp;
-    label: string;
+    label?: string;
   }
 ) {
   const location = useLocation();

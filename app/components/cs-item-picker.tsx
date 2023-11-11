@@ -4,10 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_CATEGORY_MENU, CS_CategoryMenuItem, CS_Item } from "@ianlucas/cslib";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CategoryMenu } from "~/components/category-menu";
 import { CSItemBrowser } from "~/components/cs-item-browser";
 import { useInput } from "~/hooks/use-input";
+import { useItemTranslation } from "~/hooks/use-item-translation";
+import { useTranslation } from "~/hooks/use-translation";
 import { getBaseItems, getPaidItems, instaSelectCategory } from "~/utils/economy";
 
 export default function CSItemPicker({
@@ -18,6 +20,8 @@ export default function CSItemPicker({
   const [category, setCategory] = useState(CS_CATEGORY_MENU[0]);
   const [model, setModel] = useState<string | undefined>();
   const [query, setQuery] = useInput("");
+  const translate = useTranslation();
+  const translateItem = useItemTranslation();
 
   function reset() {
     setQuery("");
@@ -37,16 +41,24 @@ export default function CSItemPicker({
     setModel(csItem.model);
   }
 
-  const items = (model === undefined
-    ? getBaseItems(category)
-    : getPaidItems(category, model)).filter(
-      ({ name }) => {
-        if (query.length < 2) {
-          return true;
+  function translateAll(item: CS_Item) {
+    return {
+      ...item,
+      name: translateItem(item).name
+    };
+  }
+
+  const items = useMemo(() =>
+    (model === undefined
+      ? getBaseItems(category)
+      : getPaidItems(category, model)).map(translateAll).filter(
+        ({ name }) => {
+          if (query.length < 2) {
+            return true;
+          }
+          return name.toLowerCase().includes(query.toLowerCase());
         }
-        return name.toLowerCase().includes(query.toLowerCase());
-      }
-    );
+      ), [category, model, query]);
 
   const ignoreRarityColor = model === undefined
     && !instaSelectCategory.includes(category.category);
@@ -59,7 +71,7 @@ export default function CSItemPicker({
           value={query}
           onChange={setQuery}
           className="flex-1 outline-none placeholder-neutral-600 bg-neutral-950/40 px-3 rounded"
-          placeholder="Search for an item..."
+          placeholder={translate("CraftSearchPlaceholder")}
         />
       </div>
       <div className="pt-1 pb-2">

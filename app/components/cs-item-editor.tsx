@@ -9,6 +9,7 @@ import { CS_hasFloat, CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers,
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
+import { useTranslation } from "~/hooks/use-translation";
 import { baseUrl } from "~/utils/economy";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
@@ -48,6 +49,7 @@ export function CSItemEditor({
   const isValid = CS_safeValidateFloat(float)
     && (CS_safeValidateNametag(nametag) || nametag.length === 0)
     && CS_safeValidateSeed(seed);
+  const translate = useTranslation();
 
   function handleSubmit() {
     onSubmit({
@@ -80,7 +82,7 @@ export function CSItemEditor({
         {hasStickers && (
           <div>
             <label className="font-bold text-neutral-500 w-[76.33px] select-none">
-              Stickers
+              {translate("EditorStickers")}
             </label>
             <StickerPicker value={stickers} onChange={setStickers} />
           </div>
@@ -88,11 +90,11 @@ export function CSItemEditor({
         {hasNametag && (
           <div className="flex items-center gap-4">
             <label className="font-bold text-neutral-500 w-[76.33px] select-none">
-              Nametag
+              {translate("EditorNametag")}
             </label>
             <EditorInput
               value={nametag}
-              placeholder="Type a custom name..."
+              placeholder={translate("EditorNametagPlaceholder")}
               onChange={setNametag}
               pattern={CS_NAMETAG_RE}
               maxLength={20}
@@ -102,7 +104,7 @@ export function CSItemEditor({
         {hasSeed && (
           <div className="flex items-center gap-4 select-none">
             <label className="font-bold text-neutral-500 w-[76.33px]">
-              Seed
+              {translate("EditorSeed")}
             </label>
             <span className="w-[68px]">{seed}</span>
             <EditorStepRange
@@ -118,7 +120,7 @@ export function CSItemEditor({
         {hasFloat && (
           <div className="flex items-center gap-4 select-none">
             <label className="font-bold text-neutral-500 w-[76.33px]">
-              Float
+              {translate("EditorFloat")}
             </label>
             <span className="w-[68px]">{float}</span>
             <EditorStepRange
@@ -134,7 +136,7 @@ export function CSItemEditor({
         {hasStattrak && (
           <div className="flex items-center gap-4 select-none">
             <label className="font-bold text-neutral-500 w-[76.33px]">
-              StatTrak™
+              {translate("EditorStatTrak")}
             </label>
             <EditorToggle
               checked={stattrak}
@@ -152,7 +154,7 @@ export function CSItemEditor({
             icon={faLongArrowLeft}
             className="h-4"
           />
-          Reset
+          {translate("EditorReset")}
         </button>
         <button
           disabled={!isValid}
@@ -163,7 +165,7 @@ export function CSItemEditor({
             icon={faBolt}
             className="h-4"
           />
-          Craft
+          {translate("EditorCraft")}
         </button>
       </div>
     </div>

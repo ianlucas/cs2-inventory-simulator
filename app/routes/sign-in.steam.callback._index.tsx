@@ -8,7 +8,7 @@ import { authenticator } from "~/auth.server";
 
 export function loader({ request }: LoaderFunctionArgs) {
   return authenticator.authenticate("steam", request, {
-    successRedirect: "/",
+    successRedirect: "/api/action/preferences",
     failureRedirect: "/"
   });
 }

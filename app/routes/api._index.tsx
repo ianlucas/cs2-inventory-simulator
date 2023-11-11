@@ -6,6 +6,7 @@
 import { Highlight, themes } from "prism-react-renderer";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { STEAM_CALLBACK_URL } from "~/env.server";
+import { useTranslation } from "~/hooks/use-translation";
 import { AGENT_PATCH_PREFIX, AGENT_PREFIX, FLOAT_PREFIX, GLOVE_PREFIX, MELEE_PREFIX, MUSIC_KIT_PREFIX, NAMETAG_PREFIX, PAINT_PREFIX, PIN_PREFIX, SEED_PREFIX, STATTRAK_PREFIX, STICKER_PREFIX, STICKERFLOAT_PREFIX } from "~/utils/inventory";
 
 export async function loader() {
@@ -16,11 +17,12 @@ export async function loader() {
 
 export default function ApiIndex() {
   const { baseUrl } = useTypedLoaderData<typeof loader>();
+  const translate = useTranslation();
 
   return (
     <div className="lg:w-[1024px] m-auto lg:my-6 px-4 lg:px-0">
       <h1 className="select-none flex items-center justify-between text-lg lg:text-xl text-neutral-300">
-        Application Programming Interfaces
+        {translate("APIPageHeader")}
       </h1>
       <div className="mt-4 lg:grid lg:gap-4 lg:grid-cols-2">
         <ApiInterface
@@ -28,13 +30,11 @@ export default function ApiIndex() {
           name="Get User Inventory"
           type="application/json"
           response={`type GetUserInventoryResponse = Array<{
-  def?: number;
   equipped?: boolean;
   equippedCT?: boolean;
   equippedT?: boolean;
   float?: number;
   id: number;
-  itemid?: number;
   nametag?: string;
   seed?: number;
   stattrak?: boolean;

@@ -5,6 +5,7 @@
 
 import { CS_CATEGORY_MENU, CS_CategoryMenuItem } from "@ianlucas/cslib";
 import clsx from "clsx";
+import { useTranslation } from "~/hooks/use-translation";
 
 export function CategoryMenu({
   onChange,
@@ -13,6 +14,8 @@ export function CategoryMenu({
   onChange(newValue: CS_CategoryMenuItem): void;
   value: CS_CategoryMenuItem;
 }) {
+  const translate = useTranslation();
+
   function handleClick(category: CS_CategoryMenuItem) {
     return function handleClick() {
       onChange(category);
@@ -32,7 +35,7 @@ export function CategoryMenu({
           )}
           onClick={handleClick(item)}
         >
-          {item.label}
+          {translate(`Category${item.label}`)}
         </button>
       ))}
     </div>

@@ -11,7 +11,7 @@
 
 import { PassThrough } from "node:stream";
 
-import { CS_Economy, CS_ITEM_DEFS, CS_ITEMS } from "@ianlucas/cslib";
+import { CS_Economy, CS_ITEMS } from "@ianlucas/cslib";
 import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
@@ -20,7 +20,7 @@ import { renderToPipeableStream } from "react-dom/server";
 
 const ABORT_DELAY = 5_000;
 
-CS_Economy.setItems(CS_ITEMS, CS_ITEM_DEFS);
+CS_Economy.initialize(CS_ITEMS);
 
 export default function handleRequest(
   request: Request,

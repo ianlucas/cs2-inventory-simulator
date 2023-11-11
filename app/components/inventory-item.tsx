@@ -10,6 +10,8 @@ import { CS_Economy, CS_hasFloat, CS_hasSeed, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_
 import clsx from "clsx";
 import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
+import { useItemTranslation } from "~/hooks/use-item-translation";
+import { useTranslation } from "~/hooks/use-translation";
 import { baseUrl } from "~/utils/economy";
 import { transform } from "~/utils/inventory";
 import { ContextButton } from "./context-button";
@@ -22,8 +24,6 @@ export function InventoryItem(
     equipped,
     index,
     inventoryItem,
-    model,
-    name,
     onDelete,
     onEquip,
     onUnequip,
@@ -40,8 +40,11 @@ export function InventoryItem(
     }
 ) {
   const isAuthenticated = useRootContext().user !== undefined;
+  const translateItem = useItemTranslation();
+  const translate = useTranslation();
   const [isClickOpen, setIsClickOpen] = useState(false);
   const [isHoverOpen, setIsHoverOpen] = useState(false);
+  const { model, name } = translateItem(csItem);
 
   const {
     refs: clickRefs,
@@ -195,21 +198,21 @@ export function InventoryItem(
               <>
                 {canEquip && (
                   <ContextButton onClick={close(() => onEquip?.(index))}>
-                    Equip
+                    {translate("InventoryItemEquip")}
                   </ContextButton>
                 )}
                 {canEquipT && (
                   <ContextButton
                     onClick={close(() => onEquip?.(index, CS_TEAM_T))}
                   >
-                    Equip T
+                    {translate("InventoryItemEquipT")}
                   </ContextButton>
                 )}
                 {canEquipCT && (
                   <ContextButton
                     onClick={close(() => onEquip?.(index, CS_TEAM_CT))}
                   >
-                    Equip CT
+                    {translate("InventoryItemEquipCT")}
                   </ContextButton>
                 )}
                 {canEquipCT && canEquipT && (
@@ -219,27 +222,27 @@ export function InventoryItem(
                       onEquip?.(index, CS_TEAM_T);
                     })}
                   >
-                    Equip Both Teams
+                    {translate("InventoryItemEquipBothTeams")}
                   </ContextButton>
                 )}
                 {anyEquip && <ContextDivider />}
                 {canUnequip && (
                   <ContextButton onClick={close(() => onUnequip?.(index))}>
-                    Unequip
+                    {translate("InventoryItemUnequip")}
                   </ContextButton>
                 )}
                 {canUnequipT && (
                   <ContextButton
                     onClick={close(() => onUnequip?.(index, CS_TEAM_T))}
                   >
-                    Unequip T
+                    {translate("InventoryItemUnequipT")}
                   </ContextButton>
                 )}
                 {canUnequipCT && (
                   <ContextButton
                     onClick={close(() => onUnequip?.(index, CS_TEAM_CT))}
                   >
-                    Unequip CT
+                    {translate("InventoryItemUnequipCT")}
                   </ContextButton>
                 )}
 
@@ -251,7 +254,7 @@ export function InventoryItem(
                 onDelete?.(index)
               )}
             >
-              Delete
+              {translate("InventoryItemDelete")}
             </ContextButton>
           </div>
         </FloatingFocusManager>
@@ -266,7 +269,8 @@ export function InventoryItem(
           >
             {hasModel && (
               <div className="font-bold">
-                {inventoryItem.stattrak && "StatTrak™ "} {model}
+                {inventoryItem.stattrak
+                  && `${translate("InventoryItemStatTrak")} `} {model}
               </div>
             )}
             <div>{name}</div>
@@ -275,7 +279,9 @@ export function InventoryItem(
                 {hasFloat && (
                   <div>
                     <div>
-                      <strong className="text-neutral-400">Float:</strong>{" "}
+                      <strong className="text-neutral-400">
+                        {translate("InventoryItemFloat")}
+                      </strong>{" "}
                       {inventoryItem.float ?? CS_MIN_FLOAT}
                     </div>
                     <div className="w-[128px] h-1 bg-[linear-gradient(90deg,#3b818f_0,#3b818f_7%,#83b135_0,#83b135_15%,#d7be47_0,#d7be47_38%,#f08140_0,#f08140_45%,#ec4f3d_0,#ec4f3d)] relative">
@@ -294,7 +300,9 @@ export function InventoryItem(
                 )}
                 {hasSeed && (
                   <div>
-                    <strong className="text-neutral-400">Seed:</strong>{" "}
+                    <strong className="text-neutral-400">
+                      {translate("InventoryItemSeed")}
+                    </strong>{" "}
                     {inventoryItem.seed ?? CS_MIN_SEED}
                   </div>
                 )}

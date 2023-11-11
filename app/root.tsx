@@ -17,6 +17,7 @@ import { RootProvider } from "./components/root-context";
 import { SyncWarn } from "./components/sync-warn";
 import { MAX_INVENTORY_ITEMS } from "./env.server";
 import styles from "./tailwind.css";
+import { getTranslations } from "./translations.server";
 
 const primaryFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
@@ -32,17 +33,20 @@ export const links: LinksFunction = () => [
 export async function loader({ request }: LoaderFunctionArgs) {
   return typedjson({
     user: await findRequestUser(request),
-    maxInventoryItems: MAX_INVENTORY_ITEMS
+    maxInventoryItems: MAX_INVENTORY_ITEMS,
+    ...await getTranslations(request)
   });
 }
 
 export default function App() {
   const location = useLocation();
-  const { maxInventoryItems, user } = useTypedLoaderData<typeof loader>();
+  const providerProps = useTypedLoaderData<typeof loader>();
   const showInventory = location.pathname !== "/api";
 
   return (
-    <RootProvider user={user} maxInventoryItems={maxInventoryItems}>
+    <RootProvider
+      {...providerProps}
+    >
       <html lang="en" onContextMenu={event => event.preventDefault()}>
         <head>
           <meta charSet="utf-8" />
@@ -55,7 +59,7 @@ export default function App() {
             className="fixed left-0 top-0 -z-10 h-full w-full overflow-hidden lg:blur-lg"
             id="background"
           />
-          {showInventory && <Background />}
+          <Background />
           {showInventory && <ClientOnly>{() => <SyncWarn />}</ClientOnly>}
           <Header />
           {showInventory && <ClientOnly>{() => <Inventory />}</ClientOnly>}

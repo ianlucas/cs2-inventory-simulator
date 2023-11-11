@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy, CS_filterItems, CS_InventoryItem, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
-import { getCSItemName } from "./economy";
 import { inventoryShape } from "./shapes";
 
 export function parseInventory(inventory?: string | null) {
@@ -28,8 +27,7 @@ export function transform(inventoryItem: CS_InventoryItem, index: number) {
       inventoryItem.equipped && "text-white",
       inventoryItem.equippedCT && "text-sky-300",
       inventoryItem.equippedT && "text-yellow-400"
-    ],
-    ...getCSItemName(csItem)
+    ]
   };
 }
 
@@ -87,8 +85,7 @@ export function getFreeItemsToDisplay() {
       id: csItem.id
     },
     index: -1 * (index + 1),
-    equipped: [],
-    ...getCSItemName(csItem)
+    equipped: []
   }));
 }
 
@@ -146,13 +143,12 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
         }
       ) => {
         const csItem = CS_Economy.getById(id);
-        const csDef = CS_Economy.getDefById(id);
         const keyvalues: [string, any][] = [];
         if (csItem.type === "musickit") {
-          keyvalues.push([MUSIC_KIT_PREFIX, csDef.itemid]);
+          keyvalues.push([MUSIC_KIT_PREFIX, csItem.itemid]);
         }
         if (csItem.type === "pin") {
-          keyvalues.push([PIN_PREFIX, csDef.def]);
+          keyvalues.push([PIN_PREFIX, csItem.def]);
         }
         if (csItem.type === "melee") {
           pushTeam(
@@ -161,7 +157,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
             equippedT,
             equippedCT,
             "",
-            csDef.def
+            csItem.def
           );
         }
         if (csItem.type === "glove") {
@@ -171,7 +167,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
             equippedT,
             equippedCT,
             "",
-            csDef.def
+            csItem.def
           );
         }
         if (csItem.type === "agent") {
@@ -181,7 +177,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
             equippedT,
             equippedCT,
             "",
-            csDef.def
+            csItem.def
           );
         }
         if (csItem.type === "patch") {
@@ -191,7 +187,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
             equippedT,
             equippedCT,
             "",
-            csDef.itemid
+            csItem.itemid
           );
         }
         if (nametag !== undefined) {
@@ -200,7 +196,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
             NAMETAG_PREFIX,
             equippedT,
             equippedCT,
-            `_${csDef.def}`,
+            `_${csItem.def}`,
             nametag
           );
         }
@@ -210,7 +206,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
             SEED_PREFIX,
             equippedT,
             equippedCT,
-            `_${csDef.def}`,
+            `_${csItem.def}`,
             seed
           );
         }
@@ -220,7 +216,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
             FLOAT_PREFIX,
             equippedT,
             equippedCT,
-            `_${csDef.def}`,
+            `_${csItem.def}`,
             float
           );
         }
@@ -230,21 +226,21 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
             STATTRAK_PREFIX,
             equippedT,
             equippedCT,
-            `_${csDef.def}`,
+            `_${csItem.def}`,
             stattrak
           );
         }
         if (
           ["melee", "glove", "weapon"].includes(csItem.type)
-          && csDef.itemid !== undefined && csDef.itemid !== 0
+          && csItem.itemid !== undefined && csItem.itemid !== 0
         ) {
           pushTeam(
             keyvalues,
             PAINT_PREFIX,
             equippedT,
             equippedCT,
-            `_${csDef.def}`,
-            csDef.itemid
+            `_${csItem.def}`,
+            csItem.itemid
           );
         }
         stickers?.forEach((sticker, slot) => {
@@ -254,7 +250,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               STICKER_PREFIX,
               equippedT,
               equippedCT,
-              `_${csDef.def}`,
+              `_${csItem.def}`,
               true
             );
             pushTeam(
@@ -262,7 +258,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               STICKER_PREFIX,
               equippedT,
               equippedCT,
-              `_${csDef.def}_${slot}`,
+              `_${csItem.def}_${slot}`,
               sticker
             );
             if (stickersfloat?.[slot] !== null) {
@@ -271,7 +267,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
                 STICKERFLOAT_PREFIX,
                 equippedT,
                 equippedCT,
-                `_${csDef.def}_${slot}`,
+                `_${csItem.def}_${slot}`,
                 stickersfloat?.[slot]
               );
             }

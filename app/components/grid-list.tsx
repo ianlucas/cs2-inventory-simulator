@@ -69,7 +69,6 @@ export function GridList({
   };
 
   function handleTouchStart(event: React.TouchEvent<HTMLDivElement>) {
-    console.log("hey");
     setTouchStartY(event.touches[0].clientY);
   }
 

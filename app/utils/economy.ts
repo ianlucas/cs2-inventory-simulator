@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_CategoryMenuItem, CS_filterItems, CS_Item } from "@ianlucas/cslib";
+import { useItemTranslation } from "~/hooks/use-item-translation";
 
 export const baseUrl =
   "https://cdn.statically.io/gh/ianlucas/cslib/main/dist/images";
@@ -17,7 +18,7 @@ export const instaSelectCategory = [
   "case"
 ];
 
-const modelFromType = {
+export const modelFromType = {
   "agent": "Agent",
   "glove": "Glove",
   "melee": "Knife",
@@ -28,20 +29,6 @@ const modelFromType = {
   "weapon": "Weapon",
   "case": ""
 } as const;
-
-export function getCSItemName(csItem: CS_Item) {
-  if (["weapon", "melee", "glove"].includes(csItem.type)) {
-    const [weaponName, ...paintName] = csItem.name.split("|");
-    return {
-      model: (csItem.type === "melee" ? "★ " : "") + weaponName.trim(),
-      name: paintName.join("|")
-    };
-  }
-  return {
-    model: modelFromType[csItem.type],
-    name: csItem.name
-  };
-}
 
 export function getBaseItems({ category }: CS_CategoryMenuItem) {
   const isDisplayAll = instaSelectCategory.includes(category);

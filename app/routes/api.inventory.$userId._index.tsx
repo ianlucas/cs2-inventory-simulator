@@ -14,10 +14,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const userId = z.string().parse(params.userId);
   return await handleUserCachedResponse({
     generate(inventory) {
-      return inventory.map(item => ({
-        ...item,
-        ...CS_Economy.getDefById(item.id)
-      }));
+      return inventory;
     },
     mimeType: "application/json",
     throwBody: [],
