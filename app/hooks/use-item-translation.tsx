@@ -12,10 +12,16 @@ export function useItemTranslation() {
   const { itemTranslation } = useRootContext();
   const translate = useTranslation();
   return function translateItem(csItem: CS_Item) {
+    const translatedName = itemTranslation[csItem.id] || csItem.name;
+    if (csItem.free && csItem.base) {
+      return {
+        model: translatedName,
+        name: ""
+      };
+    }
     if (["weapon", "melee", "glove"].includes(csItem.type) && !csItem.free) {
-      const [weaponName, ...paintName] =
-        (itemTranslation[csItem.id] || csItem.name)
-          .split("|");
+      const [weaponName, ...paintName] = translatedName
+        .split("|");
       return {
         model: (csItem.type === "melee" ? "★ " : "") + weaponName.trim(),
         name: paintName.join("|")
@@ -23,7 +29,7 @@ export function useItemTranslation() {
     }
     return {
       model: translate(`Model${modelFromType[csItem.type]}`),
-      name: (itemTranslation[csItem.id] || csItem.name)
+      name: translatedName
     };
   };
 }
