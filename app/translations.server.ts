@@ -6,8 +6,7 @@
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { z } from "zod";
-import { authenticator, findRequestUser } from "./auth.server";
-import { prisma } from "./db.server";
+import { authenticator } from "./auth.server";
 import { getUserLanguagePreference } from "./models/user-preferences.server";
 import { commitSession, getSession } from "./session.server";
 import { brazilian } from "./translations/brazilian";
