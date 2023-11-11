@@ -6,13 +6,13 @@
 import { CS_Economy } from "@ianlucas/cslib";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
-import { useUserCache } from "~/models/user-cache.server";
+import { handleUserCachedResponse } from "~/models/user-cache.server";
 
 export const ApiInventoryUserIdUrl = "/api/inventory/$userId";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const userId = z.string().parse(params.userId);
-  return await useUserCache({
+  return await handleUserCachedResponse({
     generate(inventory) {
       return inventory.map(item => ({
         ...item,

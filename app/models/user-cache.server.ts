@@ -10,7 +10,7 @@ import { prisma } from "~/db.server";
 import { res } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
 
-export async function useUserCache({
+export async function handleUserCachedResponse({
   generate,
   throwBody,
   mimeType,
