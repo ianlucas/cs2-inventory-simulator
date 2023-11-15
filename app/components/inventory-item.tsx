@@ -6,7 +6,7 @@
 import { autoUpdate, flip, FloatingFocusManager, offset, shift, useDismiss, useFloating, useHover, useInteractions, useMergeRefs, useRole } from "@floating-ui/react";
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_hasFloat, CS_hasSeed, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_MAX_FLOAT, CS_MIN_FLOAT, CS_MIN_SEED, CS_resolveItemImage, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
+import { CS_Economy, CS_hasSeed, CS_hasWear, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_resolveItemImage, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
@@ -105,10 +105,10 @@ export function InventoryItem(
 
   const anyUnequip = canUnequip || canUnequipT || canUnequipCT;
   const anyEquip = canEquip || canEquipT || canEquipCT;
-  const hasFloat = !csItem.free && CS_hasFloat(csItem);
+  const hasWear = !csItem.free && CS_hasWear(csItem);
   const hasSeed = !csItem.free && CS_hasSeed(csItem);
-  const hasModel = model || inventoryItem.stattrak;
-  const hasAttributes = hasFloat || hasSeed;
+  const hasModel = model || inventoryItem.stattrak !== undefined;
+  const hasAttributes = hasWear || hasSeed;
 
   function close(callbefore: () => void) {
     return function close() {
@@ -131,7 +131,7 @@ export function InventoryItem(
               src={CS_resolveItemImage(
                 baseUrl,
                 csItem,
-                inventoryItem.float
+                inventoryItem.wear
               )}
               draggable={false}
               alt={csItem.name}
@@ -177,11 +177,11 @@ export function InventoryItem(
               <>
                 {hasModel && (
                   <div className="font-bold">
-                    {inventoryItem.stattrak && "StatTrak™ "}
+                    {inventoryItem.stattrak !== undefined && "StatTrak™ "}
                     {model}
                   </div>
                 )}
-                <div>{name}</div>
+                <div className={clsx(csItem.free && "font-bold")}>{name}</div>
               </>
             )}
         </div>
@@ -269,28 +269,28 @@ export function InventoryItem(
           >
             {hasModel && (
               <div className="font-bold">
-                {inventoryItem.stattrak
+                {inventoryItem.stattrak !== undefined
                   && `${translate("InventoryItemStatTrak")} `} {model}
               </div>
             )}
             <div>{name}</div>
             {hasAttributes && (
               <div className="mt-2 flex flex-col gap-2">
-                {hasFloat && (
+                {hasWear && (
                   <div>
                     <div>
                       <strong className="text-neutral-400">
-                        {translate("InventoryItemFloat")}
+                        {translate("InventoryItemWear")}
                       </strong>{" "}
-                      {inventoryItem.float ?? CS_MIN_FLOAT}
+                      {inventoryItem.wear ?? CS_MIN_WEAR}
                     </div>
                     <div className="w-[128px] h-1 bg-[linear-gradient(90deg,#3b818f_0,#3b818f_7%,#83b135_0,#83b135_15%,#d7be47_0,#d7be47_38%,#f08140_0,#f08140_45%,#ec4f3d_0,#ec4f3d)] relative">
                       <div
                         className="absolute h-1.5 w-[1px] bg-white -top-0.5"
                         style={{
                           left: `${
-                            ((inventoryItem.float ?? CS_MIN_FLOAT)
-                              / CS_MAX_FLOAT)
+                            ((inventoryItem.wear ?? CS_MIN_WEAR)
+                              / CS_MAX_WEAR)
                             * 100
                           }%`
                         }}

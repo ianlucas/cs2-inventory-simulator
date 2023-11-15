@@ -97,11 +97,11 @@ export const AGENT_PREFIX = "ag_";
 export const AGENT_PATCH_PREFIX = "ap_";
 export const NAMETAG_PREFIX = "nt_";
 export const SEED_PREFIX = "se_";
-export const FLOAT_PREFIX = "fl_";
+export const WEAR_PREFIX = "fl_";
 export const STATTRAK_PREFIX = "st_";
 export const PAINT_PREFIX = "pa_";
 export const STICKER_PREFIX = "ss_";
-export const STICKERFLOAT_PREFIX = "sf_";
+export const STICKERWEAR_PREFIX = "sf_";
 
 function pushTeam(
   keyvalues: [string, any][],
@@ -136,10 +136,10 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
           equippedT,
           nametag,
           stattrak,
-          float,
+          wear,
           seed,
           stickers,
-          stickersfloat
+          stickerswear
         }
       ) => {
         const csItem = CS_Economy.getById(id);
@@ -210,17 +210,17 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
             seed
           );
         }
-        if (float !== undefined) {
+        if (wear !== undefined) {
           pushTeam(
             keyvalues,
-            FLOAT_PREFIX,
+            WEAR_PREFIX,
             equippedT,
             equippedCT,
             `_${csItem.def}`,
-            float
+            wear
           );
         }
-        if (stattrak) {
+        if (stattrak !== undefined) {
           pushTeam(
             keyvalues,
             STATTRAK_PREFIX,
@@ -261,14 +261,14 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               `_${csItem.def}_${slot}`,
               sticker
             );
-            if (stickersfloat?.[slot] !== null) {
+            if (stickerswear?.[slot] !== null) {
               pushTeam(
                 keyvalues,
-                STICKERFLOAT_PREFIX,
+                STICKERWEAR_PREFIX,
                 equippedT,
                 equippedCT,
                 `_${csItem.def}_${slot}`,
-                stickersfloat?.[slot]
+                stickerswear?.[slot]
               );
             }
           }

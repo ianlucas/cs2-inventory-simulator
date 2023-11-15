@@ -3,15 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_safeValidateFloat, CS_safeValidateNametag, CS_safeValidateSeed } from "@ianlucas/cslib";
+import { CS_safeValidateNametag, CS_safeValidateSeed, CS_safeValidateWear } from "@ianlucas/cslib";
 import { z } from "zod";
 
 export const inventoryItemShape = z.object({
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
-  float: z.number().optional().refine(float =>
-    float === undefined || CS_safeValidateFloat(float)
+  wear: z.number().optional().refine(wear =>
+    wear === undefined || CS_safeValidateWear(wear)
   ),
   id: z.number(),
   nametag: z.string().optional()
@@ -22,9 +22,9 @@ export const inventoryItemShape = z.object({
   seed: z.number().optional().refine(seed =>
     seed === undefined || CS_safeValidateSeed(seed)
   ),
-  stattrak: z.boolean().optional(),
+  stattrak: z.literal(0).optional(),
   stickers: z.array(z.number().or(z.null())).optional(),
-  stickersfloat: z.array(z.number().or(z.null())).optional()
+  stickerswear: z.array(z.number().or(z.null())).optional()
 });
 
 export const inventoryShape = z.array(inventoryItemShape);

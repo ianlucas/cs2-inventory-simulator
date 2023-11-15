@@ -32,10 +32,11 @@ export default function Craft() {
 
   useLockScroll();
 
-  function handleSubmit(attributes: CSItemEditorAttributes) {
+  function handleSubmit({ stattrak, ...attributes }: CSItemEditorAttributes) {
     if (csItem !== undefined) {
       const item = {
         id: csItem.id,
+        stattrak: stattrak ? 0 : undefined,
         ...attributes
       };
       setInventory(inventory => inventory.add(item));

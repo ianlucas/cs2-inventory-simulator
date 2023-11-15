@@ -15,8 +15,8 @@ export function useItemTranslation() {
     const translatedName = itemTranslation[csItem.id] || csItem.name;
     if (csItem.free && csItem.base) {
       return {
-        model: translatedName,
-        name: ""
+        model: "",
+        name: translatedName
       };
     }
     if (["weapon", "melee", "glove"].includes(csItem.type) && !csItem.free) {

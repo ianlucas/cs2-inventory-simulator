@@ -7,7 +7,7 @@ import { Highlight, themes } from "prism-react-renderer";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { STEAM_CALLBACK_URL } from "~/env.server";
 import { useTranslation } from "~/hooks/use-translation";
-import { AGENT_PATCH_PREFIX, AGENT_PREFIX, FLOAT_PREFIX, GLOVE_PREFIX, MELEE_PREFIX, MUSIC_KIT_PREFIX, NAMETAG_PREFIX, PAINT_PREFIX, PIN_PREFIX, SEED_PREFIX, STATTRAK_PREFIX, STICKER_PREFIX, STICKERFLOAT_PREFIX } from "~/utils/inventory";
+import { AGENT_PATCH_PREFIX, AGENT_PREFIX, GLOVE_PREFIX, MELEE_PREFIX, MUSIC_KIT_PREFIX, NAMETAG_PREFIX, PAINT_PREFIX, PIN_PREFIX, SEED_PREFIX, STATTRAK_PREFIX, STICKER_PREFIX, STICKERWEAR_PREFIX, WEAR_PREFIX } from "~/utils/inventory";
 
 export async function loader() {
   return typedjson({
@@ -33,13 +33,13 @@ export default function ApiIndex() {
   equipped?: boolean;
   equippedCT?: boolean;
   equippedT?: boolean;
-  float?: number;
   id: number;
   nametag?: string;
   seed?: number;
-  stattrak?: boolean;
+  stattrak?: number;
   stickers?: (number | null)[];
-  stickersfloat?: (number | null)[];
+  stickerswear?: (number | null)[];
+  wear?: number;
 }>;`}
           endpoint={`${baseUrl}/api/inventory/{steamID64}`}
         />
@@ -67,18 +67,18 @@ type GetUserEquippedItemsResponse = {
   ["${PAINT_PREFIX}{CSTeam}_{ItemDef}"]: number | undefined;
   // Seed equipped for a T and/or CT weapon/melee.
   ["${SEED_PREFIX}{CSTeam}_{ItemDef}"]: number | undefined;
-  // Float equipped for a T and/or CT weapon/melee/glove.
-  ["${FLOAT_PREFIX}{CSTeam}_{ItemDef}"]: number | undefined;
-  // StatTrak equipped for a T and/or CT weapon/melee.
-  ["${STATTRAK_PREFIX}{CSTeam}_{ItemDef}"]: boolean | undefined;
+  // Wear equipped for a T and/or CT weapon/melee/glove.
+  ["${WEAR_PREFIX}{CSTeam}_{ItemDef}"]: number | undefined;
+  // StatTrak count for a T and/or CT weapon/melee.
+  ["${STATTRAK_PREFIX}{CSTeam}_{ItemDef}"]: number | undefined;
   // Nametag equipped for a T and/or CT weapon/melee/glove.
   ["${NAMETAG_PREFIX}{CSTeam}_{ItemDef}"]: string | undefined;
   // Whether a T and/or CT weapon has stickers.
   ["${STICKER_PREFIX}{CSTeam}_{ItemDef}"]: boolean | undefined;
   // Sticker equipped for a T and/or CT weapon.
   ["${STICKER_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}"]: number | undefined;
-  // Float of an equipped sticker for a T and/or CT weapon.
-  ["${STICKERFLOAT_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}"]: number | undefined;
+  // Wear of an equipped sticker for a T and/or CT weapon.
+  ["${STICKERWEAR_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}"]: number | undefined;
 };`}
           endpoint={`${baseUrl}/api/equipped/{steamID64}.json`}
         />
@@ -103,18 +103,18 @@ type GetUserEquippedItemsResponse = {
   "${PAINT_PREFIX}{CSTeam}_{ItemDef}" "number"
   // Seed equipped for a T and/or CT weapon/melee.
   "${SEED_PREFIX}{CSTeam}_{ItemDef}" "number"
-  // Float equipped for a T and/or CT weapon/melee/glove.
-  "${FLOAT_PREFIX}{CSTeam}_{ItemDef}" "number"
-  // StatTrak equipped for a T and/or CT weapon/melee.
-  "${STATTRAK_PREFIX}{CSTeam}_{ItemDef}" "{0 | 1}"
+  // Wear equipped for a T and/or CT weapon/melee/glove.
+  "${WEAR_PREFIX}{CSTeam}_{ItemDef}" "number"
+  // StatTrak count for a T and/or CT weapon/melee.
+  "${STATTRAK_PREFIX}{CSTeam}_{ItemDef}" "0 ~ 999999"
   // Nametag equipped for a T and/or CT weapon/melee/glove.
   "${NAMETAG_PREFIX}{CSTeam}_{ItemDef}" "string"
   // Whether a T and/or CT weapon has stickers.
   "${STICKER_PREFIX}{CSTeam}_{ItemDef}" "{0 | 1}"
   // Sticker equipped for a T and/or CT weapon.
   "${STICKER_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}" "number"
-  // Float of an equipped sticker for a T and/or CT weapon.
-  "${STICKERFLOAT_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}" "number"
+  // Wear of an equipped sticker for a T and/or CT weapon.
+  "${STICKERWEAR_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}" "number"
 }`}
           endpoint={`${baseUrl}/api/equipped/{steamID64}.cfg`}
         />

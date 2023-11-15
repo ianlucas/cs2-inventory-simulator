@@ -15,7 +15,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@ianlucas/cslib": "^2.0.0",
+    "@ianlucas/cslib": "^3.0.0",
     "@prisma/client": "^5.4.2",
     "@remix-run/css-bundle": "^2.0.1",
     "@remix-run/node": "^2.0.1",

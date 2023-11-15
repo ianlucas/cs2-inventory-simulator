@@ -5,7 +5,7 @@
 
 import { faBolt, faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_hasFloat, CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers, CS_Item, CS_MAX_FLOAT, CS_MAX_SEED, CS_MIN_FLOAT, CS_MIN_SEED, CS_NAMETAG_RE, CS_resolveItemImage, CS_safeValidateFloat, CS_safeValidateNametag, CS_safeValidateSeed } from "@ianlucas/cslib";
+import { CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers, CS_hasWear, CS_Item, CS_MAX_SEED, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_NAMETAG_RE, CS_resolveItemImage, CS_safeValidateNametag, CS_safeValidateSeed, CS_safeValidateWear } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
@@ -20,7 +20,7 @@ export interface CSItemEditorAttributes {
   stickers?: (number | null)[];
   seed?: number;
   nametag?: string;
-  float?: number;
+  wear?: number;
   stattrak?: boolean;
 }
 
@@ -34,7 +34,7 @@ export function CSItemEditor({
   onSubmit(props: CSItemEditorAttributes): void;
 }) {
   const [stattrak, setStattrak] = useCheckbox(false);
-  const [float, setFloat] = useState(CS_MIN_FLOAT);
+  const [wear, setWear] = useState(CS_MIN_WEAR);
   const [seed, setSeed] = useState(1);
   const [nametag, setNametag] = useInput("");
   const [stickers, setStickers] = useState([null, null, null, null] as (
@@ -44,9 +44,9 @@ export function CSItemEditor({
   const hasStickers = CS_hasStickers(csItem);
   const hasStattrak = CS_hasStatTrak(csItem);
   const hasSeed = CS_hasSeed(csItem);
-  const hasFloat = CS_hasFloat(csItem);
+  const hasWear = CS_hasWear(csItem);
   const hasNametag = CS_hasNametag(csItem);
-  const isValid = CS_safeValidateFloat(float)
+  const isValid = CS_safeValidateWear(wear)
     && (CS_safeValidateNametag(nametag) || nametag.length === 0)
     && CS_safeValidateSeed(seed);
   const translate = useTranslation();
@@ -59,7 +59,7 @@ export function CSItemEditor({
         : undefined,
       seed: hasSeed && seed !== CS_MIN_SEED ? seed : undefined,
       nametag: hasNametag && nametag.length > 0 ? nametag : undefined,
-      float: hasFloat && float !== CS_MIN_FLOAT ? float : undefined,
+      wear: hasWear && wear !== CS_MIN_WEAR ? wear : undefined,
       stattrak: hasStattrak && stattrak === true ? stattrak : undefined
     });
   }
@@ -68,7 +68,7 @@ export function CSItemEditor({
     <div className="w-[360px] m-auto pb-6 select-none px-4 lg:px-0">
       <img
         className="w-[256px] h-[192px] m-auto"
-        src={CS_resolveItemImage(baseUrl, csItem.id, float)}
+        src={CS_resolveItemImage(baseUrl, csItem.id, wear)}
         alt={csItem.name}
         draggable={false}
       />
@@ -117,19 +117,19 @@ export function CSItemEditor({
             />
           </div>
         )}
-        {hasFloat && (
+        {hasWear && (
           <div className="flex items-center gap-4 select-none">
             <label className="font-bold text-neutral-500 w-[76.33px]">
-              {translate("EditorFloat")}
+              {translate("EditorWear")}
             </label>
-            <span className="w-[68px]">{float}</span>
+            <span className="w-[68px]">{wear}</span>
             <EditorStepRange
               className="flex-1"
-              value={float}
-              onChange={setFloat}
-              max={CS_MAX_FLOAT}
-              min={CS_MIN_FLOAT}
-              step={CS_MIN_FLOAT}
+              value={wear}
+              onChange={setWear}
+              max={CS_MAX_WEAR}
+              min={CS_MIN_WEAR}
+              step={CS_MIN_WEAR}
             />
           </div>
         )}
