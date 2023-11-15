@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item } from "@ianlucas/cslib";
 import { useRootContext } from "~/components/root-context";
 import { modelFromType } from "~/utils/economy";
 import { useTranslation } from "./use-translation";
@@ -12,8 +12,9 @@ export function useItemTranslation() {
   const { itemTranslation } = useRootContext();
   const translate = useTranslation();
   return function translateItem(csItem: CS_Item) {
+    csItem = CS_Economy.getById(csItem.id);
     const translatedName = itemTranslation[csItem.id] || csItem.name;
-    if (csItem.free && csItem.base) {
+    if (csItem.free) {
       return {
         model: "",
         name: translatedName
