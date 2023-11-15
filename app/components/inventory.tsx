@@ -11,7 +11,7 @@ import { getFreeItemsToDisplay, sortByEquipped, sortByName, sortByType, transfor
 import { useRootContext } from "./root-context";
 
 export function Inventory() {
-  const { inventory, setInventory } = useRootContext();
+  const { inventory, setInventory, language } = useRootContext();
   const sync = useSync();
 
   const items = useMemo(() =>
@@ -19,13 +19,13 @@ export function Inventory() {
       .map(transform)
       .sort(sortByName)
       .sort(sortByType)
-      .sort(sortByEquipped), [inventory]);
+      .sort(sortByEquipped), [inventory, language]);
 
   const defaultItems = useMemo(() =>
     getFreeItemsToDisplay()
       .sort(sortByName)
       .sort(sortByType)
-      .sort(sortByEquipped), []);
+      .sort(sortByEquipped), [language]);
 
   function handleEquip(index: number, csTeam?: CS_Team) {
     setInventory(inventory => inventory.equip(index, csTeam));

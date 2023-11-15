@@ -7,6 +7,7 @@ import { CS_Inventory } from "@ianlucas/cslib";
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from "react";
 import type { findRequestUser } from "~/auth.server";
 import { ApiSaveCachedInventoryUrl } from "~/routes/api.save-cached-inventory._index";
+import { translateItems } from "~/utils/economy";
 import { parseInventory } from "~/utils/inventory";
 import { sync } from "~/utils/sync";
 import { retrieveInventoryItems, retrieveUserId, storeInventoryItems, storeUserId } from "~/utils/user";
@@ -69,6 +70,8 @@ export function RootProvider({
       storeUserId(user.id);
     }
   }, [user]);
+
+  translateItems(language, itemTranslation);
 
   return (
     <RootContext.Provider

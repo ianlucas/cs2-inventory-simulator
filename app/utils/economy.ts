@@ -3,8 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_CategoryMenuItem, CS_filterItems, CS_Item } from "@ianlucas/cslib";
-import { useItemTranslation } from "~/hooks/use-item-translation";
+import { CS_CategoryMenuItem, CS_Economy, CS_filterItems, CS_Item, CS_ITEMS } from "@ianlucas/cslib";
 
 export const baseUrl =
   "https://cdn.statically.io/gh/ianlucas/cslib/main/dist/images";
@@ -29,6 +28,35 @@ export const modelFromType = {
   "weapon": "Weapon",
   "case": ""
 } as const;
+
+let currentLanguage = "";
+export function translateItems(
+  language: string,
+  itemTranslation: Record<string, string | undefined>
+) {
+  if (currentLanguage === language) {
+    return;
+  }
+  currentLanguage = language;
+  CS_Economy.initialize(CS_ITEMS.map(item => ({
+    ...item,
+    name: itemTranslation[item.id] || item.name
+  })));
+}
+
+export function getCSItemName(csItem: CS_Item) {
+  if (["weapon", "melee", "glove"].includes(csItem.type)) {
+    const [weaponName, ...paintName] = csItem.name.split("|");
+    return {
+      model: (csItem.type === "melee" ? "★ " : "") + weaponName.trim(),
+      name: paintName.join("|")
+    };
+  }
+  return {
+    model: modelFromType[csItem.type],
+    name: csItem.name
+  };
+}
 
 export function getBaseItems({ category }: CS_CategoryMenuItem) {
   const isDisplayAll = instaSelectCategory.includes(category);

@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy, CS_filterItems, CS_InventoryItem, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
+import { getCSItemName } from "./economy";
 import { inventoryShape } from "./shapes";
 
 export function parseInventory(inventory?: string | null) {
@@ -27,7 +28,8 @@ export function transform(inventoryItem: CS_InventoryItem, index: number) {
       inventoryItem.equipped && "text-white",
       inventoryItem.equippedCT && "text-sky-300",
       inventoryItem.equippedT && "text-yellow-400"
-    ]
+    ],
+    ...getCSItemName(csItem)
   };
 }
 
@@ -85,7 +87,8 @@ export function getFreeItemsToDisplay() {
       id: csItem.id
     },
     index: -1 * (index + 1),
-    equipped: []
+    equipped: [],
+    ...getCSItemName(csItem)
   }));
 }
 

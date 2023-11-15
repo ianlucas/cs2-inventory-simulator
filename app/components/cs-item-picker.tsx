@@ -8,7 +8,6 @@ import { useMemo, useState } from "react";
 import { CategoryMenu } from "~/components/category-menu";
 import { CSItemBrowser } from "~/components/cs-item-browser";
 import { useInput } from "~/hooks/use-input";
-import { useItemTranslation } from "~/hooks/use-item-translation";
 import { useTranslation } from "~/hooks/use-translation";
 import { getBaseItems, getPaidItems, instaSelectCategory } from "~/utils/economy";
 
@@ -21,7 +20,6 @@ export default function CSItemPicker({
   const [model, setModel] = useState<string | undefined>();
   const [query, setQuery] = useInput("");
   const translate = useTranslation();
-  const translateItem = useItemTranslation();
 
   function reset() {
     setQuery("");
@@ -41,17 +39,10 @@ export default function CSItemPicker({
     setModel(csItem.model);
   }
 
-  function translateAll(item: CS_Item) {
-    return {
-      ...item,
-      name: translateItem(item).name
-    };
-  }
-
   const items = useMemo(() =>
     (model === undefined
       ? getBaseItems(category)
-      : getPaidItems(category, model)).map(translateAll).filter(
+      : getPaidItems(category, model)).filter(
         ({ name }) => {
           if (query.length < 2) {
             return true;

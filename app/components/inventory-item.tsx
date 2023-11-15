@@ -10,7 +10,6 @@ import { CS_Economy, CS_hasSeed, CS_hasWear, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_M
 import clsx from "clsx";
 import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
-import { useItemTranslation } from "~/hooks/use-item-translation";
 import { useTranslation } from "~/hooks/use-translation";
 import { baseUrl } from "~/utils/economy";
 import { transform } from "~/utils/inventory";
@@ -24,6 +23,8 @@ export function InventoryItem(
     equipped,
     index,
     inventoryItem,
+    model,
+    name,
     onDelete,
     onEquip,
     onUnequip,
@@ -40,11 +41,9 @@ export function InventoryItem(
     }
 ) {
   const isAuthenticated = useRootContext().user !== undefined;
-  const translateItem = useItemTranslation();
   const translate = useTranslation();
   const [isClickOpen, setIsClickOpen] = useState(false);
   const [isHoverOpen, setIsHoverOpen] = useState(false);
-  const { model, name } = translateItem(csItem);
 
   const {
     refs: clickRefs,

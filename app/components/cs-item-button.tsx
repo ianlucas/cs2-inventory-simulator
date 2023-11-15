@@ -6,8 +6,7 @@
 import { CS_Item, CS_resolveItemImage } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useRef } from "react";
-import { useItemTranslation } from "~/hooks/use-item-translation";
-import { baseUrl } from "~/utils/economy";
+import { baseUrl, getCSItemName } from "~/utils/economy";
 import { TextSlider } from "./text-slider";
 
 export function CSItemButton({
@@ -20,8 +19,8 @@ export function CSItemButton({
   ignoreRarityColor?: boolean;
   csItem: CS_Item;
   onClick?(item: CS_Item): void;
+  model?: string;
 }) {
-  const translateItem = useItemTranslation();
   const ref = useRef<HTMLButtonElement>(null);
 
   function handleClick() {
@@ -30,7 +29,7 @@ export function CSItemButton({
     }
   }
 
-  const { model, name } = translateItem(csItem);
+  const { model, name } = getCSItemName(csItem);
   const clickable = onClick !== undefined;
   const showAltname = csItem.altname !== undefined
     && (csItem.altname.includes("Collectible")

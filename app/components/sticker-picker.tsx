@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Economy, CS_getStickerCategories, CS_getStickers, CS_Item } from "@ianlucas/cslib";
 import { useMemo, useState } from "react";
 import { useInput } from "~/hooks/use-input";
-import { useItemTranslation } from "~/hooks/use-item-translation";
 import { useTranslation } from "~/hooks/use-translation";
 import { EditorInput } from "./editor-input";
 import EditorSelect from "./editor-select";
@@ -23,19 +22,11 @@ export function StickerPicker({
   value: (number | null)[];
 }) {
   const translate = useTranslation();
-  const translateItem = useItemTranslation();
-
-  function translateAll(item: CS_Item) {
-    return {
-      ...item,
-      name: translateItem(item).name
-    };
-  }
 
   const [category, setCategory] = useState("");
   const [search, setSearch] = useInput("");
   const [activeIndex, setActiveIndex] = useState(null as number | null);
-  const stickers = useMemo(() => CS_getStickers().map(translateAll), []);
+  const stickers = useMemo(() => CS_getStickers(), []);
   const categories = useMemo(() => CS_getStickerCategories(), []);
 
   function handleClickSlot(index: number) {
