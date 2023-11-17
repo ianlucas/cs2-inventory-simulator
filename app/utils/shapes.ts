@@ -6,7 +6,7 @@
 import { CS_safeValidateNametag, CS_safeValidateSeed, CS_safeValidateWear } from "@ianlucas/cslib";
 import { z } from "zod";
 
-export const inventoryItemShape = z.object({
+const inventoryItemProps = {
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
@@ -25,8 +25,15 @@ export const inventoryItemShape = z.object({
   stattrak: z.literal(0).optional(),
   stickers: z.array(z.number().or(z.null())).optional(),
   stickerswear: z.array(z.number().or(z.null())).optional()
-});
+};
 
-export const inventoryShape = z.array(inventoryItemShape);
+export const craftInventoryItemShape = z.object(inventoryItemProps);
+export const craftInventoryShape = z.array(craftInventoryItemShape);
+export const inventoryShape = z.array(z.object({
+  ...inventoryItemProps,
+  stattrak: z.number().optional().refine(stattrak =>
+    stattrak === undefined || stattrak >= 0 || stattrak <= 999999
+  )
+}));
 
 export const csTeamShape = z.literal(2).or(z.literal(3));

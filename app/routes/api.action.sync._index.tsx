@@ -8,7 +8,7 @@ import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { editUserInventory } from "~/models/user.server";
 import { noContent } from "~/response.server";
-import { csTeamShape, inventoryItemShape } from "~/utils/shapes";
+import { craftInventoryItemShape, csTeamShape } from "~/utils/shapes";
 
 export const ApiActionSync = "/api/action/sync";
 
@@ -17,7 +17,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const actions = z.array(
     z.object({
       type: z.literal("add"),
-      item: inventoryItemShape
+      item: craftInventoryItemShape
     }).or(z.object({
       type: z.literal("equip"),
       index: z.number(),
