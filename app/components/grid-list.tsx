@@ -9,11 +9,13 @@ import { range } from "~/utils/number";
 
 export function GridList({
   children,
+  className,
   hideScrollbar,
   itemHeight,
   maxItemsIntoView = 6
 }: {
   children: ReactNode[];
+  className?: string;
   hideScrollbar?: boolean;
   itemHeight: number;
   maxItemsIntoView?: number;
@@ -97,7 +99,7 @@ export function GridList({
   return (
     <div className="relative">
       <div
-        className="overflow-hidden px-2 touch-none"
+        className={clsx("overflow-hidden px-2 touch-none", className)}
         style={{
           height: itemHeight * (maxItemsIntoView || 2)
         }}

@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { ChangeEvent, ComponentProps } from "react";
 
 export default function EditorSelect({
+  className,
   onChange,
   options,
   placeholder,
@@ -27,7 +28,8 @@ export default function EditorSelect({
       {...rest}
       className={clsx(
         "bg-black/50 rounded h-[24px] outline-none",
-        value === "" && "text-neutral-500"
+        value === "" && "text-neutral-500",
+        className
       )}
       onChange={handleChange}
       value={value}

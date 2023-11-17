@@ -3,6 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_CATEGORY_MENU, CS_CategoryMenuItem, CS_Item } from "@ianlucas/cslib";
 import { useMemo, useState } from "react";
 import { CategoryMenu } from "~/components/category-menu";
@@ -57,11 +59,15 @@ export default function CSItemPicker({
   return (
     <>
       <CategoryMenu value={category} onChange={handleCategoryClick} />
-      <div className="flex px-2 my-2 gap-2 h-[36px]">
+      <div className="flex items-center px-4 my-2 gap-2">
+        <FontAwesomeIcon
+          icon={faMagnifyingGlass}
+          className="h-4 text-neutral-500"
+        />
         <input
           value={query}
           onChange={setQuery}
-          className="flex-1 outline-none placeholder-neutral-600 bg-neutral-950/40 px-3 rounded"
+          className="flex-1 outline-none placeholder-neutral-600 bg-neutral-950/40 px-3 py-1 rounded"
           placeholder={translate("CraftSearchPlaceholder")}
         />
       </div>

@@ -45,6 +45,14 @@ export function translateItems(
 }
 
 export function getCSItemName(csItem: CS_Item) {
+  if (csItem.free) {
+    return {
+      model: ["musickit"].includes(csItem.type)
+        ? modelFromType[csItem.type]
+        : "",
+      name: csItem.name
+    };
+  }
   if (["weapon", "melee", "glove"].includes(csItem.type)) {
     const [weaponName, ...paintName] = csItem.name.split("|");
     return {

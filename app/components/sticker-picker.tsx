@@ -9,6 +9,7 @@ import { CS_Economy, CS_getStickerCategories, CS_getStickers, CS_Item } from "@i
 import { useMemo, useState } from "react";
 import { useInput } from "~/hooks/use-input";
 import { useTranslation } from "~/hooks/use-translation";
+import { CSItemBrowser } from "./cs-item-browser";
 import { EditorInput } from "./editor-input";
 import EditorSelect from "./editor-select";
 import { GridList } from "./grid-list";
@@ -107,7 +108,7 @@ export function StickerPicker({
         })}
       </div>
       {activeIndex !== null && (
-        <Modal className="w-[640px] pb-1">
+        <Modal className="w-[540px] pb-1" blur>
           <div className="font-bold px-4 py-2 select-none flex justify-between">
             <label className="text-sm text-neutral-400">
               {translate("StickerPickerHeader")}
@@ -131,6 +132,7 @@ export function StickerPicker({
             <div className="flex items-center gap-2">
               <FontAwesomeIcon icon={faBoxOpen} className="h-4" />
               <EditorSelect
+                className="w-[192px]"
                 onChange={setCategory}
                 options={categories}
                 placeholder={translate("StickerPickerFilterPlaceholder")}
@@ -145,54 +147,9 @@ export function StickerPicker({
               <label>{translate("StickerPickerRemove")}</label>
             </button>
           </div>
-          <GridList itemHeight={64} maxItemsIntoView={6}>
-            {filtered.map((item) => (
-              <StickerItemButton
-                item={item}
-                key={item.id}
-                onClick={handleAddSticker}
-              />
-            ))}
-          </GridList>
+          <CSItemBrowser csItems={filtered} onClick={handleAddSticker} />
         </Modal>
       )}
     </>
-  );
-}
-
-export function StickerItemButton({
-  item,
-  onClick
-}: {
-  item: CS_Item;
-  onClick?(item: CS_Item): void;
-}) {
-  function handleClick() {
-    if (onClick) {
-      onClick(item);
-    }
-  }
-
-  return (
-    <button
-      onClick={handleClick}
-      className="bg-opacity-50 transition-all hover:bg-black/20 active:bg-black/30 block h-[64px] w-full px-2 rounded"
-    >
-      <div className="flex items-center">
-        <img
-          key={item.image}
-          draggable={false}
-          className="h-[63px] w-[84px]"
-          src={item.image}
-          alt={item.name}
-        />
-        <span
-          className="block overflow-hidden text-ellipsis whitespace-nowrap"
-          style={{ color: item.rarity }}
-        >
-          {item.name}
-        </span>
-      </div>
-    </button>
   );
 }

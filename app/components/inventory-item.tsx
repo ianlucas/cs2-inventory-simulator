@@ -180,7 +180,9 @@ export function InventoryItem(
                     {model}
                   </div>
                 )}
-                <div className={clsx(csItem.free && "font-bold")}>{name}</div>
+                <div className={clsx(!hasModel && csItem.free && "font-bold")}>
+                  {name}
+                </div>
               </>
             )}
         </div>
