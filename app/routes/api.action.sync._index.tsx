@@ -6,7 +6,7 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
-import { editUserInventory } from "~/models/user.server";
+import { manipulateUserInventory } from "~/models/user.server";
 import { noContent } from "~/response.server";
 import { craftInventoryItemShape, csTeamShape } from "~/utils/shapes";
 
@@ -32,31 +32,22 @@ export async function action({ request }: ActionFunctionArgs) {
     }))
   )
     .parse(await request.json());
-  await editUserInventory(
+  await manipulateUserInventory(
     userId,
     inventory,
-    csInventory => {
-      for (const action of actions) {
+    csInventory =>
+      actions.forEach(action => {
         switch (action.type) {
           case "add":
-            csInventory = csInventory.add(action.item);
-            break;
-
+            return csInventory.add(action.item);
           case "equip":
-            csInventory = csInventory.equip(action.index, action.csTeam);
-            break;
-
+            return csInventory.equip(action.index, action.csTeam);
           case "remove":
-            csInventory = csInventory.remove(action.index);
-            break;
-
+            return csInventory.remove(action.index);
           case "unequip":
-            csInventory = csInventory.unequip(action.index, action.csTeam);
-            break;
+            return csInventory.unequip(action.index, action.csTeam);
         }
-      }
-      return csInventory;
-    }
+      })
   );
   return noContent;
 }

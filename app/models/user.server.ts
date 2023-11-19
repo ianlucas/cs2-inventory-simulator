@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory, CS_InventoryItem } from "@ianlucas/cslib";
+import { CS_InventoryItem, CS_MutableInventory } from "@ianlucas/cslib";
 import SteamAPI from "steamapi";
 import { prisma } from "~/db.server";
 import { MAX_INVENTORY_ITEMS } from "~/env.server";
@@ -39,30 +39,31 @@ export async function findUniqueUser(userId: string) {
 
 export async function updateUserInventory(
   userId: string,
-  inventory: CS_InventoryItem[]
+  items: CS_InventoryItem[]
 ) {
   return await prisma.user.update({
     data: {
-      inventory: JSON.stringify(inventory),
+      inventory: JSON.stringify(items),
       syncedAt: new Date()
     },
     where: { id: userId }
   });
 }
 
-export async function editUserInventory(
+export async function manipulateUserInventory(
   userId: string,
-  inventory: string | null,
-  callback: (inventory: CS_Inventory) => CS_Inventory
+  rawInventory: string | null,
+  manipulate: (inventory: CS_MutableInventory) => void
 ) {
-  const items = parseInventory(inventory);
+  const csInventory = new CS_MutableInventory(
+    parseInventory(rawInventory),
+    MAX_INVENTORY_ITEMS
+  );
+  manipulate(csInventory);
   return await prisma.user.update({
     data: {
       syncedAt: new Date(),
-      inventory: JSON.stringify(
-        callback(new CS_Inventory(items, MAX_INVENTORY_ITEMS))
-          .getItems()
-      )
+      inventory: JSON.stringify(csInventory.getItems())
     },
     where: { id: userId }
   });

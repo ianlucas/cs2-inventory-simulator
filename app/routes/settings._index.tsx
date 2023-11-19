@@ -5,8 +5,8 @@
 
 import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { json, MetaFunction } from "@remix-run/node";
-import { Link, useNavigate, useSubmit } from "@remix-run/react";
+import { MetaFunction } from "@remix-run/node";
+import { Link, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { LanguageSelect } from "~/components/language-select";

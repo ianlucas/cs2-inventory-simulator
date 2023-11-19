@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory } from "@ianlucas/cslib";
+import { CS_MutableInventory } from "@ianlucas/cslib";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { requireUser } from "~/auth.server";
 import { MAX_INVENTORY_ITEMS } from "~/env.server";
@@ -19,10 +19,8 @@ export async function action({ request }: ActionFunctionArgs) {
     return notFound;
   }
   const items = craftInventoryShape.parse(await request.json());
-  let inventory = new CS_Inventory([], MAX_INVENTORY_ITEMS);
-  items.forEach(item => {
-    inventory = inventory.add(item);
-  });
+  const inventory = new CS_MutableInventory([], MAX_INVENTORY_ITEMS);
+  items.forEach(item => inventory.add(item));
   await updateUserInventory(userId, inventory.getItems());
   return noContent;
 }

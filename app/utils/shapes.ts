@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_safeValidateNametag, CS_safeValidateSeed, CS_safeValidateWear } from "@ianlucas/cslib";
+import { CS_safeValidateNametag, CS_safeValidateSeed, CS_safeValidateStatTrak, CS_safeValidateWear } from "@ianlucas/cslib";
 import { z } from "zod";
 
 const inventoryItemProps = {
@@ -32,7 +32,7 @@ export const craftInventoryShape = z.array(craftInventoryItemShape);
 export const inventoryShape = z.array(z.object({
   ...inventoryItemProps,
   stattrak: z.number().optional().refine(stattrak =>
-    stattrak === undefined || stattrak >= 0 || stattrak <= 999999
+    stattrak === undefined || CS_safeValidateStatTrak(stattrak)
   )
 }));
 
