@@ -7,11 +7,15 @@ import { useRootContext } from "~/components/root-context";
 
 export function useTranslation() {
   const { translation } = useRootContext();
-  return function translate(token: string, ...values: string[]) {
+  return function translate(
+    token: string,
+    defaultValue?: string,
+    ...values: string[]
+  ) {
     token = token.replace(/\s/g, "");
     const value = translation[token];
     if (value === undefined) {
-      return "???";
+      return defaultValue || "???";
     }
     return value.replace(/\{(\d+)\}/g, (_, index) => values[Number(index) - 1]);
   };

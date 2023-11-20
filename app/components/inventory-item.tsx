@@ -177,7 +177,7 @@ export function InventoryItem(
                 {hasModel && (
                   <div className="font-bold">
                     {inventoryItem.stattrak !== undefined && "StatTrak™ "}
-                    {model}
+                    {translate(`Model${model}`, model)}
                   </div>
                 )}
                 <div className={clsx(!hasModel && csItem.free && "font-bold")}>
