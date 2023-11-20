@@ -11,6 +11,7 @@ import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { ClientOnly } from "remix-utils/client-only";
 import { findRequestUser } from "./auth.server";
 import { Background } from "./components/background";
+import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { Inventory } from "./components/inventory";
 import { RootProvider } from "./components/root-context";
@@ -64,6 +65,7 @@ export default function App() {
           <Header />
           {showInventory && <ClientOnly>{() => <Inventory />}</ClientOnly>}
           <Outlet />
+          <Footer />
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
