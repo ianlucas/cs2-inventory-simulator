@@ -78,6 +78,7 @@ export function Header() {
                 to="/settings"
                 icon={faCog}
                 onClick={closeMenu}
+                label={isDesktop ? undefined : translate("HeaderSettingsLabel")}
               />
               {user === undefined
                 ? (
