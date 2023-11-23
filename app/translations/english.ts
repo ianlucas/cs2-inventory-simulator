@@ -78,6 +78,7 @@ export const english = {
   CaseSeed: "SEED",
   CaseWear: "WEAR",
   CaseRareItem: "★ Rare Special Item ★",
+  CaseContainsOne: "Contains one of the following:",
   LanguageNbrazilian: "Português do Brasil",
   LanguageNbulgarian: "Български",
   LanguageNczech: "Čeština",

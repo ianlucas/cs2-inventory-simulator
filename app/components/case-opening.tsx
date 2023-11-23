@@ -5,7 +5,7 @@
 
 import { faCircleInfo, faCircleNotch, faUnlock, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_InventoryItem, CS_Item, CS_listCaseItems, CS_randomInt, CS_resolveCaseRareImage, CS_resolveItemImage, CS_roll } from "@ianlucas/cslib";
+import { CS_Item, CS_listCaseItems, CS_randomInt, CS_resolveCaseRareImage, CS_resolveItemImage, CS_roll } from "@ianlucas/cslib";
 import { useWindowSize } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { ComponentProps, ForwardedRef, forwardRef, useEffect, useRef, useState } from "react";
@@ -350,7 +350,7 @@ export function CaseOpening(
                     }}
                   >
                     <div className="max-w-[1024px] m-auto p-2 rounded bg-gradient-to-b from-transparent to-white/20">
-                      <h2 className="my-2">Contains one of the following:</h2>
+                      <h2 className="my-2">{translate("CaseContainsOne")}</h2>
                       <div className="h-[320px] overflow-y-scroll flex flex-wrap gap-3">
                         {[
                           ...CS_listCaseItems(caseItem, true)

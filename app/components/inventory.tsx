@@ -5,7 +5,7 @@
 
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_Inventory, CS_InventoryItem, CS_Item, CS_resolveItemImage, CS_Team } from "@ianlucas/cslib";
+import { CS_Item, CS_resolveItemImage, CS_Team } from "@ianlucas/cslib";
 import { ReactNode, useMemo, useState } from "react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useSync } from "~/hooks/use-sync";

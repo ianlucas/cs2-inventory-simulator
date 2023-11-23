@@ -4,14 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { autoUpdate, flip, FloatingFocusManager, offset, shift, useDismiss, useFloating, useHover, useInteractions, useMergeRefs, useRole } from "@floating-ui/react";
-import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_hasSeed, CS_hasWear, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_Item, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_resolveItemImage, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
+import { CS_hasSeed, CS_hasWear, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_Item, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
 import { useTranslation } from "~/hooks/use-translation";
-import { baseUrl } from "~/utils/economy";
 import { transform } from "~/utils/inventory";
 import { ContextButton } from "./context-button";
 import { ContextDivider } from "./context-divider";

@@ -12,7 +12,6 @@ import { useTranslation } from "~/hooks/use-translation";
 import { CSItemBrowser } from "./cs-item-browser";
 import { EditorInput } from "./editor-input";
 import EditorSelect from "./editor-select";
-import { GridList } from "./grid-list";
 import { Modal } from "./modal";
 
 export function StickerPicker({
