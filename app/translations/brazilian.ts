@@ -33,7 +33,7 @@ export const brazilian = {
   CategoryKey: "Chave",
   EditorStickers: "Adesivos",
   EditorNametagPlaceholder: "Digite um nome...",
-  EditorQuantity: "Quantidade",
+  EditorQuantity: "Qtd.",
   EditorReset: "Reiniciar",
   EditorCraft: "Criar",
   StickerPickerHeader: "Pegue um adesivo...",
