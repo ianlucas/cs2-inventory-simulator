@@ -16,6 +16,7 @@ const RootContext = createContext<{
   inventory: CS_Inventory;
   itemTranslation: Record<string, string | undefined>;
   language: string;
+  maxInventoryItems: number;
   requireAuth: boolean;
   setInventory: Dispatch<SetStateAction<CS_Inventory>>;
   translation: Record<string, string | undefined>;
@@ -79,6 +80,7 @@ export function RootProvider({
         inventory,
         itemTranslation,
         language,
+        maxInventoryItems,
         requireAuth: retrieveUserId() !== undefined,
         setInventory,
         translation,

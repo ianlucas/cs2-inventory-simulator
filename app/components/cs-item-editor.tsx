@@ -14,14 +14,16 @@ import { baseUrl } from "~/utils/economy";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
 import { EditorToggle } from "./editor-toggle";
+import { useRootContext } from "./root-context";
 import { StickerPicker } from "./sticker-picker";
 
 export interface CSItemEditorAttributes {
-  stickers?: (number | null)[];
-  seed?: number;
   nametag?: string;
-  wear?: number;
+  quantity: number;
+  seed?: number;
   stattrak?: boolean;
+  stickers?: (number | null)[];
+  wear?: number;
 }
 
 export function CSItemEditor({
@@ -33,6 +35,7 @@ export function CSItemEditor({
   onReset(): void;
   onSubmit(props: CSItemEditorAttributes): void;
 }) {
+  const { maxInventoryItems, inventory } = useRootContext();
   const [stattrak, setStattrak] = useCheckbox(false);
   const [wear, setWear] = useState(CS_MIN_WEAR);
   const [seed, setSeed] = useState(1);
@@ -41,6 +44,7 @@ export function CSItemEditor({
     | number
     | null
   )[]);
+  const [quantity, setQuantity] = useState(1);
   const hasStickers = CS_hasStickers(csItem);
   const hasStattrak = CS_hasStatTrak(csItem);
   const hasSeed = CS_hasSeed(csItem);
@@ -49,16 +53,19 @@ export function CSItemEditor({
   const isValid = CS_safeValidateWear(wear)
     && (CS_safeValidateNametag(nametag) || nametag.length === 0)
     && CS_safeValidateSeed(seed);
+  const maxQuantity = maxInventoryItems - inventory.size();
+  const hasQuantity = ["case", "key", "sticker"].includes(csItem.type);
   const translate = useTranslation();
 
   function handleSubmit() {
     onSubmit({
+      nametag: hasNametag && nametag.length > 0 ? nametag : undefined,
+      quantity,
       stickers: hasStickers
           && stickers.filter((sticker) => sticker !== null).length > 0
         ? stickers
         : undefined,
       seed: hasSeed && seed !== CS_MIN_SEED ? seed : undefined,
-      nametag: hasNametag && nametag.length > 0 ? nametag : undefined,
       wear: hasWear && wear !== CS_MIN_WEAR ? wear : undefined,
       stattrak: hasStattrak && stattrak === true ? stattrak : undefined
     });
@@ -141,6 +148,22 @@ export function CSItemEditor({
             <EditorToggle
               checked={stattrak}
               onChange={setStattrak}
+            />
+          </div>
+        )}
+        {hasQuantity && (
+          <div className="flex items-center gap-4 select-none">
+            <label className="font-bold text-neutral-500 w-[76.33px]">
+              {translate("EditorQuantity")}
+            </label>
+            <span className="w-[68px]">{quantity}</span>
+            <EditorStepRange
+              className="flex-1"
+              value={quantity}
+              onChange={setQuantity}
+              max={maxQuantity}
+              min={1}
+              step={1}
             />
           </div>
         )}

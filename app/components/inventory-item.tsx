@@ -6,7 +6,7 @@
 import { autoUpdate, flip, FloatingFocusManager, offset, shift, useDismiss, useFloating, useHover, useInteractions, useMergeRefs, useRole } from "@floating-ui/react";
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_hasSeed, CS_hasWear, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_resolveItemImage, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
+import { CS_Economy, CS_hasSeed, CS_hasWear, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_Item, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_resolveItemImage, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
@@ -15,31 +15,39 @@ import { baseUrl } from "~/utils/economy";
 import { transform } from "~/utils/inventory";
 import { ContextButton } from "./context-button";
 import { ContextDivider } from "./context-divider";
+import { CSItem } from "./cs-item";
 import { useRootContext } from "./root-context";
 
 export function InventoryItem(
   {
     csItem,
+    disableContextMenu,
+    disableHover,
     equipped,
     index,
     inventoryItem,
     model,
     name,
+    onClick,
     onDelete,
     onEquip,
     onUnequip,
-    readOnly
+    onUnlockContainer
   }:
     & ReturnType<
       typeof transform
     >
     & {
+      disableContextMenu?: boolean;
+      disableHover?: boolean;
+      onClick?(index: number, csItem: CS_Item): void;
       onDelete?(index: number): void;
       onEquip?(index: number, team?: CS_Team): void;
       onUnequip?(index: number, team?: CS_Team): void;
-      readOnly?: boolean;
+      onUnlockContainer?(index: number, csItem: CS_Item): void;
     }
 ) {
+  const stubInventoryItem = index < 0;
   const isAuthenticated = useRootContext().user !== undefined;
   const translate = useTranslation();
   const [isClickOpen, setIsClickOpen] = useState(false);
@@ -108,6 +116,8 @@ export function InventoryItem(
   const hasSeed = !csItem.free && CS_hasSeed(csItem);
   const hasModel = model || inventoryItem.stattrak !== undefined;
   const hasAttributes = hasWear || hasSeed;
+  const canUnlockContainer = isAuthenticated
+    && ["case", "key"].includes(csItem.type);
 
   function close(callbefore: () => void) {
     return function close() {
@@ -119,75 +129,26 @@ export function InventoryItem(
   return (
     <>
       <div
-        className="hover:drop-shadow-[0_0_5px_rgba(0,0,0,1)] transition-all w-[154px]"
+        className={clsx(
+          "transition-all w-[154px] relative",
+          onClick === undefined && "hover:drop-shadow-[0_0_5px_rgba(0,0,0,1)]"
+        )}
         ref={ref}
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
-        <div className="p-[1px] bg-gradient-to-b from-neutral-600 to-neutral-400 relative">
-          <div className="bg-gradient-to-b from-neutral-500 to-neutral-300 px-1">
-            <img
-              className="w-[144px] h-[108px]"
-              src={CS_resolveItemImage(
-                baseUrl,
-                csItem,
-                inventoryItem.wear
-              )}
-              draggable={false}
-              alt={csItem.name}
-            />
-          </div>
-          <div className="absolute left-0 bottom-0 p-1 flex items-center">
-            {inventoryItem.stickers !== undefined
-              && inventoryItem.stickers.map(
-                (sticker, index) =>
-                  sticker !== null && (
-                    <img
-                      key={index}
-                      className="h-5"
-                      src={CS_Economy.getById(sticker).image}
-                      alt={CS_Economy.getById(sticker).name}
-                    />
-                  )
-              )}
-          </div>
-          {isAuthenticated && (
-            <div className="absolute right-0 top-0 p-2 flex items-center gap-1">
-              {equipped.map((color, colorIndex) => (typeof color === "string"
-                ? (
-                  <FontAwesomeIcon
-                    key={colorIndex}
-                    className={clsx("h-3.5 text-sky-300", color)}
-                    icon={faCircleDot}
-                  />
-                )
-                : null)
-              )}
-            </div>
-          )}
-        </div>
-        <div
-          className="shadow shadow-black/50 w-full h-1"
-          style={{ backgroundColor: csItem.rarity }}
+        <CSItem
+          csItem={csItem}
+          equipped={isAuthenticated ? equipped : undefined}
+          nametag={inventoryItem.nametag}
+          onClick={onClick !== undefined
+            ? () => onClick(index, csItem)
+            : undefined}
+          stattrak={inventoryItem.stattrak}
+          stickers={inventoryItem.stickers}
+          wear={inventoryItem.wear}
         />
-        <div className="text-[12px] leading-3 mt-2 text-white drop-shadow-[0_0_1px_rgba(0,0,0,1)]">
-          {inventoryItem.nametag !== undefined
-            ? <>"{inventoryItem.nametag}"</>
-            : (
-              <>
-                {hasModel && (
-                  <div className="font-bold">
-                    {inventoryItem.stattrak !== undefined && "StatTrak™ "}
-                    {translate(`Model${model}`, model)}
-                  </div>
-                )}
-                <div className={clsx(!hasModel && csItem.free && "font-bold")}>
-                  {name}
-                </div>
-              </>
-            )}
-        </div>
       </div>
-      {!readOnly && isClickOpen && (
+      {!stubInventoryItem && !disableContextMenu && isClickOpen && (
         <FloatingFocusManager context={clickContext} modal={false}>
           <div
             className="z-10 bg-neutral-800 text-white outline-none py-2 w-[192px] text-sm rounded"
@@ -248,19 +209,27 @@ export function InventoryItem(
                 )}
 
                 {(anyEquip || anyUnequip) && <ContextDivider />}
+
+                {canUnlockContainer && (
+                  <ContextButton
+                    onClick={() => onUnlockContainer?.(index, csItem)}
+                  >
+                    {translate("InventoryItemUnlockContainer")}
+                  </ContextButton>
+                )}
+
+                {canUnlockContainer && <ContextDivider />}
               </>
             )}
             <ContextButton
-              onClick={close(() =>
-                onDelete?.(index)
-              )}
+              onClick={close(() => onDelete?.(index))}
             >
               {translate("InventoryItemDelete")}
             </ContextButton>
           </div>
         </FloatingFocusManager>
       )}
-      {!readOnly && isHoverOpen && !isClickOpen && (
+      {!stubInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <div
             className="z-20 py-4 px-6 bg-neutral-900/95 rounded text-white outline-none text-sm"

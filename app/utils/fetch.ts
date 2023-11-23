@@ -3,20 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-export const notFound = new Response(null, {
-  status: 404
-});
-
-export const noContent = new Response(null, {
-  status: 204
-});
-
-export const badRequest = new Response(null, {
-  status: 400
-});
-
-export function res(body: string, mimeType: string) {
-  return new Response(body, {
-    headers: { "Content-Type": mimeType }
+export async function postJson<T>(url: string, body: any) {
+  const response = await fetch(url, {
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json"
+    },
+    method: "POST"
   });
+  return (await response.json()) as T;
 }

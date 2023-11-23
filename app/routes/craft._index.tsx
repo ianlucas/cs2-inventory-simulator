@@ -16,6 +16,7 @@ import { useRootContext } from "~/components/root-context";
 import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
+import { range } from "~/utils/number";
 
 export const meta: MetaFunction = () => {
   return [
@@ -32,15 +33,21 @@ export default function Craft() {
 
   useLockScroll();
 
-  function handleSubmit({ stattrak, ...attributes }: CSItemEditorAttributes) {
+  function handleSubmit(
+    { quantity, stattrak, ...attributes }: CSItemEditorAttributes
+  ) {
     if (csItem !== undefined) {
       const item = {
         id: csItem.id,
         stattrak: stattrak ? 0 : undefined,
         ...attributes
       };
-      setInventory(inventory => inventory.add(item));
-      sync("add", { item });
+      /** @TODO place this list in a better place. */
+      range(["case", "key", "sticker"].includes(csItem.type) ? quantity : 1)
+        .forEach(() => {
+          setInventory(inventory => inventory.add(item));
+          sync("add", { item });
+        });
       return navigate("/");
     }
   }

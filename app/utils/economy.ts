@@ -14,7 +14,8 @@ export const instaSelectCategory = [
   "pin",
   "patch",
   "musickit",
-  "case"
+  "case",
+  "key"
 ];
 
 export const modelFromType = {
@@ -26,7 +27,8 @@ export const modelFromType = {
   "pin": "Pin",
   "sticker": "Sticker",
   "weapon": "Weapon",
-  "case": ""
+  "case": "",
+  "key": "Key"
 } as const;
 
 let currentLanguage = "";

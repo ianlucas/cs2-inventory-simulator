@@ -51,7 +51,8 @@ const typeOrder = {
   "pin": 5,
   "musickit": 6,
   "sticker": 7,
-  "case": 8
+  "case": 8,
+  "key": 9
 } as const;
 
 export function sortByType(
