@@ -5,7 +5,7 @@
 
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Item, CS_resolveItemImage, CS_Team } from "@ianlucas/cslib";
+import { CS_hasNametag, CS_Item, CS_NAMETAG_TOOL_DEF, CS_resolveItemImage, CS_Team } from "@ianlucas/cslib";
 import { ReactNode, useMemo, useState } from "react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useSync } from "~/hooks/use-sync";
@@ -13,6 +13,7 @@ import { useTranslation } from "~/hooks/use-translation";
 import { baseUrl } from "~/utils/economy";
 import { getFreeItemsToDisplay, sortByEquipped, sortByName, sortByType, transform } from "~/utils/inventory";
 import { CaseOpening } from "./case-opening";
+import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
 
 export function Inventory() {
@@ -44,8 +45,14 @@ export function Inventory() {
     caseItem: CS_Item;
     keyIndex?: number;
   }>();
+  const [renameItem, setRenameItem] = useState<{
+    toolIndex: number;
+    targetItem: CS_Item;
+    targetIndex: number;
+  }>();
   const isSelectAItem = useItemAction !== undefined;
   const isUnlockingCase = unlockCase !== undefined;
+  const isRenamingItem = renameItem !== undefined;
 
   function handleEquip(index: number, csTeam?: CS_Team) {
     setInventory(inventory => inventory.equip(index, csTeam));
@@ -81,6 +88,14 @@ export function Inventory() {
     }
   }
 
+  function handleRename(index: number, csItem: CS_Item) {
+    return setUseItemAction({
+      csItem,
+      index,
+      items: items.filter(item => CS_hasNametag(item.csItem))
+    });
+  }
+
   function dismissUseItem() {
     setUseItemAction(undefined);
   }
@@ -88,16 +103,32 @@ export function Inventory() {
   function handleSelectItem(index: number, csItem: CS_Item) {
     if (useItemAction) {
       dismissUseItem();
-      return setUnlockCase({
-        caseItem: csItem.type === "case" ? csItem : useItemAction.csItem,
-        caseIndex: csItem.type === "case" ? index : useItemAction.index,
-        keyIndex: csItem.type === "key" ? index : useItemAction.index
-      });
+      if (["case", "key"].includes(useItemAction.csItem.type)) {
+        return setUnlockCase({
+          caseItem: csItem.type === "case" ? csItem : useItemAction.csItem,
+          caseIndex: csItem.type === "case" ? index : useItemAction.index,
+          keyIndex: csItem.type === "key" ? index : useItemAction.index
+        });
+      }
+      if (
+        useItemAction.csItem.type === "tool"
+        && useItemAction.csItem.def === CS_NAMETAG_TOOL_DEF
+      ) {
+        setRenameItem({
+          targetIndex: index,
+          targetItem: csItem,
+          toolIndex: useItemAction.index
+        });
+      }
     }
   }
 
   function dismissUnlockCase() {
     setUnlockCase(undefined);
+  }
+
+  function dismissRenameItem() {
+    setRenameItem(undefined);
   }
 
   return (
@@ -142,6 +173,7 @@ export function Inventory() {
                 disableHover={isUnlockingCase}
                 onDelete={handleDelete}
                 onEquip={handleEquip}
+                onRename={handleRename}
                 onUnequip={handleUnequip}
                 onUnlockContainer={handleUnlockContainer}
               />
@@ -150,6 +182,9 @@ export function Inventory() {
       </div>
       {isUnlockingCase && (
         <CaseOpening {...unlockCase} onClose={dismissUnlockCase} />
+      )}
+      {isRenamingItem && (
+        <RenameItem {...renameItem} onClose={dismissRenameItem} />
       )}
     </>
   );

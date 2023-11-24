@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { autoUpdate, flip, FloatingFocusManager, offset, shift, useDismiss, useFloating, useHover, useInteractions, useMergeRefs, useRole } from "@floating-ui/react";
-import { CS_hasSeed, CS_hasWear, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_Item, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
+import { CS_hasSeed, CS_hasWear, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_Item, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_NAMETAG_TOOL_DEF, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
@@ -28,6 +28,7 @@ export function InventoryItem(
     onClick,
     onDelete,
     onEquip,
+    onRename,
     onUnequip,
     onUnlockContainer
   }:
@@ -40,6 +41,7 @@ export function InventoryItem(
       onClick?(index: number, csItem: CS_Item): void;
       onDelete?(index: number): void;
       onEquip?(index: number, team?: CS_Team): void;
+      onRename?(index: number, csItem: CS_Item): void;
       onUnequip?(index: number, team?: CS_Team): void;
       onUnlockContainer?(index: number, csItem: CS_Item): void;
     }
@@ -113,6 +115,8 @@ export function InventoryItem(
   const hasSeed = !csItem.free && CS_hasSeed(csItem);
   const hasModel = model || inventoryItem.stattrak !== undefined;
   const hasAttributes = hasWear || hasSeed;
+  const canRename = isAuthenticated && csItem.type == "tool"
+    && csItem.def === CS_NAMETAG_TOOL_DEF;
   const canUnlockContainer = isAuthenticated
     && ["case", "key"].includes(csItem.type);
 
@@ -205,7 +209,7 @@ export function InventoryItem(
                   </ContextButton>
                 )}
 
-                {(anyEquip || anyUnequip) && <ContextDivider />}
+                {anyUnequip && <ContextDivider />}
 
                 {canUnlockContainer && (
                   <ContextButton
@@ -216,6 +220,14 @@ export function InventoryItem(
                 )}
 
                 {canUnlockContainer && <ContextDivider />}
+
+                {canRename && (
+                  <ContextButton onClick={() => onRename?.(index, csItem)}>
+                    {translate("InventoryItemRename")}
+                  </ContextButton>
+                )}
+
+                {canRename && <ContextDivider />}
               </>
             )}
             <ContextButton
@@ -240,7 +252,7 @@ export function InventoryItem(
                   && `${translate("InventoryItemStatTrak")} `} {model}
               </div>
             )}
-            <div>{name}</div>
+            <div className={clsx(!hasModel && "font-bold")}>{name}</div>
             {hasAttributes && (
               <div className="mt-2 flex flex-col gap-2">
                 {hasWear && (

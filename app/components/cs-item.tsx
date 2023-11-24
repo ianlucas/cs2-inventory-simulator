@@ -96,7 +96,7 @@ export function CSItem({
                   {translate(`Model${model}`, model)}
                 </div>
               )}
-              <div className={clsx(!hasModel && csItem.free && "font-bold")}>
+              <div className={clsx(!hasModel && "font-bold")}>
                 {name}
               </div>
             </>

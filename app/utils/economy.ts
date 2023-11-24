@@ -9,26 +9,30 @@ export const baseUrl =
   "https://cdn.statically.io/gh/ianlucas/cslib/main/dist/images";
 
 export const instaSelectCategory = [
-  "sticker",
   "agent",
-  "pin",
-  "patch",
-  "musickit",
   "case",
-  "key"
+  "graffiti",
+  "key",
+  "musickit",
+  "patch",
+  "pin",
+  "sticker",
+  "tool"
 ];
 
 export const modelFromType = {
   "agent": "Agent",
+  "case": "",
   "glove": "Glove",
+  "graffiti": "Graffiti",
+  "key": "",
   "melee": "Knife",
   "musickit": "Music Kit",
   "patch": "Patch",
-  "pin": "Pin",
+  "pin": "",
   "sticker": "Sticker",
-  "weapon": "Weapon",
-  "case": "",
-  "key": "Key"
+  "tool": "",
+  "weapon": "Weapon"
 } as const;
 
 let currentLanguage = "";

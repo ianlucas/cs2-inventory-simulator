@@ -31,6 +31,8 @@ export const brazilian = {
   CategoryPin: "Broche",
   CategoryCase: "Recipiente",
   CategoryKey: "Chave",
+  CategoryTool: "Ferramentas",
+  CategoryGraffiti: "Grafite",
   EditorStickers: "Adesivos",
   EditorNametagPlaceholder: "Digite um nome...",
   EditorQuantity: "Qtd.",
@@ -49,6 +51,7 @@ export const brazilian = {
   InventoryItemUnequipT: "Desequipar T",
   InventoryItemUnequipCT: "Desequipar CT",
   InventoryItemUnlockContainer: "Destrancar recipiente",
+  InventoryItemRename: "Renomear",
   InventoryItemDelete: "Excluir",
   ModelAgent: "Agente",
   ModelGlove: "Luva",
@@ -61,9 +64,14 @@ export const brazilian = {
   SettingsLanguage: "Idioma",
   SettingsSave: "Salvar",
   CaseUnlockContainer: "Destrancar recipiente",
-  CaseUnlock: "Destrancar ",
+  CaseUnlock: "Destrancar",
   CaseOnceWarn: "Este recipiente só pode ser aberto uma vez",
   CaseClose: "Fechar",
   CaseRareItem: "★ Item raro e especial ★",
-  CaseContainsOne: "Contém um dos seguintes itens:"
+  CaseContainsOne: "Contém um dos seguintes itens:",
+  RenameUse: "Usar Etiqueta de Nome",
+  RenameEnterName: "Inserir novo nome para:",
+  RenameWarn: "Etiquetas de Nome só podem ser usadas uma vez",
+  RenameCancel: "Cancelar",
+  RenameRename: "Renomear"
 };

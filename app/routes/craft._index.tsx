@@ -43,7 +43,9 @@ export default function Craft() {
         ...attributes
       };
       /** @TODO place this list in a better place. */
-      range(["case", "key", "sticker"].includes(csItem.type) ? quantity : 1)
+      range(
+        ["case", "key", "sticker", "tool"].includes(csItem.type) ? quantity : 1
+      )
         .forEach(() => {
           setInventory(inventory => inventory.add(item));
           sync("add", { item });

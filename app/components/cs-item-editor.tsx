@@ -54,7 +54,7 @@ export function CSItemEditor({
     && (CS_safeValidateNametag(nametag) || nametag.length === 0)
     && CS_safeValidateSeed(seed);
   const maxQuantity = maxInventoryItems - inventory.size();
-  const hasQuantity = ["case", "key", "sticker"].includes(csItem.type);
+  const hasQuantity = ["case", "key", "sticker", "tool"].includes(csItem.type);
   const translate = useTranslation();
 
   function handleSubmit() {

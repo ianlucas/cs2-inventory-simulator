@@ -21,11 +21,12 @@ export function EditorInput(
 
   return (
     <input
+      {...props}
       className={clsx(
         "outline-none rounded px-1 flex-1 placeholder-neutral-600 min-w-0 w-0",
-        invalid ? "bg-red-500/50" : "bg-black/50"
+        invalid ? "bg-red-500/50" : "bg-black/50",
+        props.className
       )}
-      {...props}
     />
   );
 }

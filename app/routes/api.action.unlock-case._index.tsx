@@ -24,8 +24,8 @@ export async function action({ request }: ActionFunctionArgs) {
     parseInventory(inventory),
     MAX_INVENTORY_ITEMS
   );
-  const { rolledItem } = csInventory.unlockCase(caseIndex, keyIndex);
   try {
+    const { rolledItem } = csInventory.unlockCase(caseIndex, keyIndex);
     await prisma.user.update({
       data: {
         inventory: JSON.stringify(csInventory.getItems())
