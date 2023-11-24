@@ -24,6 +24,8 @@ export function GridList({
   const [scrollbarTop, setScrollbarTop] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
   const [touchStartY, setTouchStartY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
   const scrollable = useRef<HTMLDivElement>(null);
   const scrollbar = useRef<HTMLDivElement>(null);
   const currentIndex = scrollTop / itemHeight;
@@ -83,6 +85,34 @@ export function GridList({
     setTouchStartY(0);
   }
 
+  function handleMouseDown() {
+    setIsDragging(true);
+  }
+
+  function handleMouseMove(event: globalThis.MouseEvent) {
+    if (isDragging && scrollbar.current) {
+      event.preventDefault();
+      const scrollbarHeight = scrollbar.current.clientHeight;
+      const mouseY = event.clientY
+        - scrollbar.current.getBoundingClientRect().top;
+      const clamped = Math.min(
+        Math.max((mouseY / scrollbarHeight) * maxScrollTop, 0),
+        maxScrollTop
+      );
+      let scrollTop = 0;
+      while (
+        scrollTop < maxScrollTop && clamped >= scrollTop + itemHeight
+      ) {
+        scrollTop += itemHeight;
+      }
+      setScrollTop(scrollTop);
+    }
+  }
+
+  function handleMouseUp() {
+    setIsDragging(false);
+  }
+
   useEffect(() => {
     updateScrollbar();
   }, []);
@@ -95,6 +125,16 @@ export function GridList({
     setScrollTop(0);
     updateScrollbar();
   }, [children]);
+
+  useEffect(() => {
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
 
   return (
     <div className="relative">
@@ -114,6 +154,7 @@ export function GridList({
       <div
         className="absolute right-0 top-0 h-full w-2"
         onClick={handleScrollbarClick}
+        onMouseDown={handleMouseDown}
         ref={scrollbar}
       >
         <div className="relative h-full w-1/2 overflow-hidden">
