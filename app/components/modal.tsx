@@ -29,7 +29,7 @@ export function Modal({
           >
             <div
               className={clsx(
-                "shadow-lg rounded bg-neutral-900 lg:bg-neutral-900/95 min-h-[inherit] text-white lg:backdrop-blur-sm drop-shadow-lg border border-white/10",
+                "shadow-lg rounded bg-neutral-900 lg:bg-neutral-900 lg:bg-opacity-[0.98] min-h-[inherit] text-white lg:backdrop-blur-sm drop-shadow-lg border border-white/10",
                 className
               )}
             >
