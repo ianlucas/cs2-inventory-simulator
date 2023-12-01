@@ -5,19 +5,20 @@
 
 import { faCircleInfo, faCircleNotch, faUnlock, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Item, CS_listCaseItems, CS_randomInt, CS_resolveCaseRareImage, CS_resolveItemImage, CS_roll } from "@ianlucas/cslib";
-import { useWindowSize } from "@uidotdev/usehooks";
+import { CS_Item, CS_listCaseItems, CS_resolveItemImage, CS_roll } from "@ianlucas/cslib";
 import clsx from "clsx";
-import { ComponentProps, ForwardedRef, forwardRef, useEffect, useRef, useState } from "react";
+import { ComponentProps, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useDetectCollision } from "~/hooks/use-detect-collision";
+import { useResponsiveScale } from "~/hooks/use-responsive-scale";
 import { useTranslation } from "~/hooks/use-translation";
 import { ApiActionUnlockCaseUrl } from "~/routes/api.action.unlock-case._index";
 import { baseUrl } from "~/utils/economy";
 import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
+import { CaseOpeningWheel } from "./case-opening-wheel";
 import { CaseRareItem } from "./case-rare-item";
 import { CSItem } from "./cs-item";
 import { useRootContext } from "./root-context";
@@ -46,88 +47,6 @@ function Layer(
   );
 }
 
-function Item(
-  {
-    caseItem,
-    item,
-    index
-  }: {
-    caseItem: CS_Item;
-    item: ReturnType<typeof CS_roll>;
-    index: number;
-  }
-) {
-  return (
-    <div
-      data-id={index}
-      className="w-[256px] h-[192px] relative inline-block ml-4 first-of-type:ml-0"
-      style={{
-        backgroundImage:
-          `linear-gradient(180deg, #8a8a8a 0%, #8a8a8a 60%, ${item.csItem.rarity} 92%, #000 100%)`
-      }}
-    >
-      <div
-        className="absolute left-0 bottom-0 h-2 w-full"
-        style={{ backgroundColor: item.csItem.rarity }}
-      />
-      <img
-        title={index.toString()}
-        className="w-full h-full absolute top-0 left-0"
-        src={item.special
-          ? CS_resolveCaseRareImage(baseUrl, caseItem)
-          : CS_resolveItemImage(baseUrl, item.csItem)}
-      />
-    </div>
-  );
-}
-
-const Items = forwardRef(function Items(
-  {
-    caseItem,
-    instant,
-    items,
-    translateX
-  }: {
-    caseItem: CS_Item;
-    instant?: boolean;
-    items: ReturnType<typeof CS_roll>[];
-    translateX: number;
-  },
-  ref: ForwardedRef<Element>
-) {
-  return (
-    <div
-      className={clsx(
-        "h-[192px] whitespace-nowrap",
-        !instant && "[transition:all_6s_cubic-bezier(0,0.11,0.33,1)_0s]"
-      )}
-      ref={ref as any}
-      style={{ transform: `translate(${translateX}px, 0)` }}
-    >
-      {items.map((item, index) => (
-        <Item
-          key={index}
-          item={item}
-          caseItem={caseItem}
-          index={index}
-        />
-      ))}
-    </div>
-  );
-});
-
-function getRatio(width: number) {
-  if (width >= 1920) {
-    return 1;
-  }
-  if (width <= 360) {
-    return 0.7;
-  }
-  const slope = (1 - 0.7) / (1920 - 360);
-  const intercept = 1 - slope * 1920;
-  return slope * width + intercept;
-}
-
 export function CaseOpening(
   {
     caseIndex,
@@ -145,20 +64,17 @@ export function CaseOpening(
   const translate = useTranslation();
 
   const [items, setItems] = useState<ReturnType<typeof CS_roll>[]>([]);
-  const [translateX, setTranslateX] = useState(0);
-  const [scaleY, setScaleY] = useState(0);
+  const [isDisplaying, setIsDisplaying] = useState(false);
   const [canRoll, setCanRoll] = useState(true);
-  const [scale, setScale] = useState(1);
   const [rolledItem, setRolledItem] = useState<ReturnType<typeof CS_roll>>();
   const [rolledScale, setRolledScale] = useState(0);
   const [contentsTranslateY, setContentsTranslateY] = useState(0);
+  const scale = useResponsiveScale();
   const targetRef = useRef<HTMLDivElement>(null);
   const hitsRef = useRef<HTMLDivElement>(null);
-  const isDisplaying = scaleY !== 0;
-  const size = useWindowSize();
 
   async function roll() {
-    setScaleY(0);
+    setIsDisplaying(false);
     setCanRoll(false);
     /** @TODO Error handling needed, page will just get stuck if this fails. */
     /** @TODO We need to infer this from unlock case action. */
@@ -167,7 +83,6 @@ export function CaseOpening(
       { caseIndex, keyIndex }
     );
     setTimeout(() => {
-      setTranslateX(0);
       setContentsTranslateY(500);
       playSound("/open.mp3");
       setTimeout(() => {
@@ -175,9 +90,7 @@ export function CaseOpening(
           index === 28 ? rolledItem : CS_roll(caseItem)
         );
         setItems(items);
-        setScaleY(1);
-        const randomOffset = CS_randomInt(188, 440);
-        setTranslateX((-29 * 256) + randomOffset);
+        setIsDisplaying(true);
         setTimeout(() => {
           setRolledItem(rolledItem);
           setInventory(inventory =>
@@ -193,19 +106,13 @@ export function CaseOpening(
   }
 
   useDetectCollision({
-    disabled: canRoll || translateX === 0,
+    disabled: !isDisplaying,
     target: targetRef,
     hits: hitsRef,
     then() {
       playSound("/roll.mp3");
     }
   });
-
-  useEffect(() => {
-    if (size.width) {
-      setScale(getRatio(size.width));
-    }
-  }, [size]);
 
   return (
     <ClientOnly>
@@ -219,6 +126,19 @@ export function CaseOpening(
             {rolledItem
               ? (
                 <>
+                  <Layer
+                    className="[transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
+                    style={{ transform: `scale(${rolledScale})` }}
+                  >
+                    <img
+                      src={CS_resolveItemImage(
+                        baseUrl,
+                        rolledItem.csItem,
+                        rolledItem.attributes.wear
+                      )}
+                      draggable={false}
+                    />
+                  </Layer>
                   <div className="fixed top-28 left-0 w-full h-full text-center drop-shadow">
                     <div className="font-bold text-2xl px-4">
                       <span
@@ -239,19 +159,6 @@ export function CaseOpening(
                       <span>{caseItem.name}</span>
                     </div>
                   </div>
-                  <Layer
-                    className="[transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
-                    style={{ transform: `scale(${rolledScale})` }}
-                  >
-                    <img
-                      src={CS_resolveItemImage(
-                        baseUrl,
-                        rolledItem.csItem,
-                        rolledItem.attributes.wear
-                      )}
-                      draggable={false}
-                    />
-                  </Layer>
                   <div className="fixed bottom-28 left-0 w-full text-center drop-shadow flex items-center justify-center gap-8">
                     {rolledItem.attributes.wear !== undefined && (
                       <div>
@@ -308,41 +215,14 @@ export function CaseOpening(
                       <span>{translate("CaseOnceWarn")}</span>
                     </div>
                   </div>
-                  <Layer block style={{ transform: `scale(${scale})` }}>
-                    <Layer
-                      block
-                      className="[transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
-                      style={{ transform: `scaleY(${scaleY})` }}
-                    >
-                      <Layer className="blur-[2px] opacity-90 [-webkit-mask-image:radial-gradient(circle_closest-side,#fff0_246px,#000_246px)]">
-                        <div className="h-[192px] overflow-hidden w-[1269.980px] [-webkit-mask-image:linear-gradient(to_left,#fff0_0%,#000_10%,#000_90%,#fff0_100%)]">
-                          <Items
-                            items={items}
-                            caseItem={caseItem}
-                            translateX={translateX}
-                            instant={!isDisplaying}
-                          />
-                        </div>
-                      </Layer>
-                      <Layer className="scale-[1.15] opacity-95">
-                        <div className="w-[1269.980px] h-[432px] bg-black/50 flex items-center relative [clip-path:circle(22.7%_at_50%_50%)]">
-                          <Items
-                            ref={hitsRef}
-                            items={items}
-                            caseItem={caseItem}
-                            translateX={translateX}
-                            instant={!isDisplaying}
-                          />
-                          <Layer absolute>
-                            <div
-                              ref={targetRef}
-                              className="w-1 shadow shadow-black bg-[#aeb035] h-[192px]"
-                            />
-                          </Layer>
-                        </div>
-                      </Layer>
-                    </Layer>
-                  </Layer>
+                  <CaseOpeningWheel
+                    caseItem={caseItem}
+                    hitsRef={hitsRef}
+                    isDisplaying={isDisplaying}
+                    items={items}
+                    scale={scale}
+                    targetRef={targetRef}
+                  />
                   <div
                     className="fixed bottom-0 pb-28 left-0 w-full flex justify-center drop-shadow gap-4 [transition:all_cubic-bezier(0.4,0,0.2,1)_500ms]"
                     style={{
