@@ -138,7 +138,7 @@ export function InventoryItem(
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
         <CSItem
-          csItem={csItem}
+          item={csItem}
           equipped={isAuthenticated ? equipped : undefined}
           nametag={inventoryItem.nametag}
           onClick={onClick !== undefined

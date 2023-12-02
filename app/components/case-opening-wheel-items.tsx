@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_roll } from "@ianlucas/cslib";
+import { CS_Item, CS_unlockCase } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { ForwardedRef, forwardRef } from "react";
 import { CaseOpeningWheelItem } from "./case-opening-wheel-item";
@@ -17,7 +17,7 @@ export const CaseOpeningWheelItems = forwardRef(function Items(
   }: {
     caseItem: CS_Item;
     instant?: boolean;
-    items: ReturnType<typeof CS_roll>[];
+    items: ReturnType<typeof CS_unlockCase>[];
     translateX: number;
   },
   ref: ForwardedRef<Element>
@@ -33,10 +33,10 @@ export const CaseOpeningWheelItems = forwardRef(function Items(
     >
       {items.map((item, index) => (
         <CaseOpeningWheelItem
-          key={index}
-          item={item}
           caseItem={caseItem}
           index={index}
+          key={index}
+          unlockedItem={item}
         />
       ))}
     </div>

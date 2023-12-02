@@ -3,22 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_CategoryMenuItem, CS_Economy, CS_filterItems, CS_Item, CS_ITEMS } from "@ianlucas/cslib";
+import { CS_Economy, CS_filterItems, CS_Item, CS_ITEMS } from "@ianlucas/cslib";
+import { ItemFiltersItem } from "./economy-item-filters";
 
 export const baseUrl =
   "https://cdn.statically.io/gh/ianlucas/cslib/main/dist/images";
-
-export const instaSelectCategory = [
-  "agent",
-  "case",
-  "graffiti",
-  "key",
-  "musickit",
-  "patch",
-  "pin",
-  "sticker",
-  "tool"
-];
 
 export const modelFromType = {
   "agent": "Agent",
@@ -72,23 +61,23 @@ export function getCSItemName(csItem: CS_Item) {
   };
 }
 
-export function getBaseItems({ category }: CS_CategoryMenuItem) {
-  const isDisplayAll = instaSelectCategory.includes(category);
+export function getBaseItems({ category, expand, type }: ItemFiltersItem) {
   return CS_filterItems({
-    category: category !== "sticker" ? category : undefined,
-    type: category === "sticker" ? "sticker" : undefined,
-    base: isDisplayAll ? undefined : true
-  }).filter(({ free }) =>
-    !["glove", "melee", "musickit"].includes(category) || !free
-    || (isDisplayAll && (category !== "musickit" || !free))
+    category,
+    type,
+    base: expand ? true : undefined
+  }).filter((
+    { free }
+  ) => ((expand && type === undefined ? free : !free)
+    || (!expand && (type !== "musickit" || !free)))
   );
 }
 
 export function getPaidItems(
-  { category }: CS_CategoryMenuItem,
+  { type }: ItemFiltersItem,
   model: string
 ) {
   return CS_filterItems({
     model
-  }).filter(({ base }) => category === "melee" || !base);
+  }).filter(({ base }) => type === "melee" || !base);
 }

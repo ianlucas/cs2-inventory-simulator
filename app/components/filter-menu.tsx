@@ -3,39 +3,41 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_CATEGORY_MENU, CS_CategoryMenuItem } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
+import { ITEM_FILTERS, ItemFiltersItem } from "~/utils/economy-item-filters";
 
-export function CategoryMenu({
+export function FilterMenu({
   onChange,
   value
 }: {
-  onChange(newValue: CS_CategoryMenuItem): void;
-  value: CS_CategoryMenuItem;
+  onChange(newValue: ItemFiltersItem): void;
+  value: ItemFiltersItem;
 }) {
   const translate = useTranslation();
 
-  function handleClick(category: CS_CategoryMenuItem) {
+  function handleClick(filter: ItemFiltersItem) {
     return function handleClick() {
-      onChange(category);
+      onChange(filter);
     };
   }
 
   return (
     <div className="flex flex-wrap px-2 gap-1">
-      {CS_CATEGORY_MENU.map((item) => (
+      {ITEM_FILTERS.map((filter, index) => (
         <button
-          key={item.category}
+          key={index}
           className={clsx(
             "rounded bg-opacity-50 px-2 transition-all hover:text-neutral-200",
-            item.category !== value.category && "text-neutral-400",
-            item.category === value.category
+            (!(filter.category === value.category
+              && filter.type === value.type))
+              && "text-neutral-400",
+            (filter.category === value.category && filter.type === value.type)
               && "bg-black/50 text-neutral-200"
           )}
-          onClick={handleClick(item)}
+          onClick={handleClick(filter)}
         >
-          {translate(`Category${item.label}`)}
+          {translate(`Category${filter.label}`)}
         </button>
       ))}
     </div>

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_MutableInventory } from "@ianlucas/cslib";
+import { CS_Inventory } from "@ianlucas/cslib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
@@ -20,19 +20,19 @@ export async function action({ request }: ActionFunctionArgs) {
     caseIndex: z.number(),
     keyIndex: z.number().optional()
   }).parse(await request.json());
-  const csInventory = new CS_MutableInventory(
+  const csInventory = new CS_Inventory(
     parseInventory(inventory),
     MAX_INVENTORY_ITEMS
   );
   try {
-    const { rolledItem } = csInventory.unlockCase(caseIndex, keyIndex);
+    const unlockedItem = csInventory.unlockCase(caseIndex, keyIndex);
     await prisma.user.update({
       data: {
-        inventory: JSON.stringify(csInventory.getItems())
+        inventory: JSON.stringify(csInventory.getAll())
       },
       where: { id: userId }
     });
-    return json(rolledItem);
+    return json(unlockedItem);
   } catch {
     throw badRequest;
   }

@@ -11,7 +11,7 @@ import { useTranslation } from "~/hooks/use-translation";
 import { baseUrl, getCSItemName } from "~/utils/economy";
 
 export function CSItem({
-  csItem,
+  item,
   equipped,
   nametag,
   onClick,
@@ -19,7 +19,7 @@ export function CSItem({
   stickers,
   wear
 }: {
-  csItem: CS_Item;
+  item: CS_Item;
   equipped?: (string | false | undefined)[];
   nametag?: string;
   onClick?(): void;
@@ -28,7 +28,7 @@ export function CSItem({
   wear?: number;
 }) {
   const translate = useTranslation();
-  const { model, name } = getCSItemName(csItem);
+  const { model, name } = getCSItemName(item);
   const hasModel = model || stattrak !== undefined;
 
   return (
@@ -39,11 +39,11 @@ export function CSItem({
             className="w-[144px] h-[108px]"
             src={CS_resolveItemImage(
               baseUrl,
-              csItem,
+              item,
               wear
             )}
             draggable={false}
-            alt={csItem.name}
+            alt={item.name}
           />
         </div>
         <div className="absolute left-0 bottom-0 p-1 flex items-center">
@@ -83,7 +83,7 @@ export function CSItem({
       </div>
       <div
         className="shadow shadow-black/50 h-1"
-        style={{ backgroundColor: csItem.rarity }}
+        style={{ backgroundColor: item.rarity }}
       />
       <div className="text-[12px] leading-3 mt-2 text-white drop-shadow-[0_0_1px_rgba(0,0,0,1)]">
         {nametag !== undefined

@@ -23,7 +23,7 @@ export function Inventory() {
 
   const items = useMemo(() => [
     // Inventory Items
-    ...inventory.getItems()
+    ...inventory.getAll()
       .map(transform)
       .sort(sortByName)
       .sort(sortByType)

@@ -5,7 +5,7 @@
 
 import { faBolt, faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers, CS_hasWear, CS_Item, CS_MAX_SEED, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_NAMETAG_RE, CS_resolveItemImage, CS_safeValidateNametag, CS_safeValidateSeed, CS_safeValidateWear } from "@ianlucas/cslib";
+import { CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers, CS_hasWear, CS_Item, CS_MAX_SEED, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_NAMETAG_RE, CS_resolveItemImage, CS_safeValidateNametag, CS_safeValidateSeed, CS_safeValidateWear, CS_WEAR_FACTOR } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
@@ -129,14 +129,16 @@ export function CSItemEditor({
             <label className="font-bold text-neutral-500 w-[76.33px]">
               {translate("EditorWear")}
             </label>
-            <span className="w-[68px]">{wear}</span>
+            <span className="w-[68px]">
+              {wear.toFixed(String(CS_WEAR_FACTOR).length - 2)}
+            </span>
             <EditorStepRange
               className="flex-1"
               value={wear}
               onChange={setWear}
-              max={CS_MAX_WEAR}
-              min={CS_MIN_WEAR}
-              step={CS_MIN_WEAR}
+              max={csItem.wearmax ?? CS_MAX_WEAR}
+              min={csItem.wearmin ?? CS_MIN_WEAR}
+              step={CS_WEAR_FACTOR}
             />
           </div>
         )}

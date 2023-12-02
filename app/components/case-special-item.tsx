@@ -3,12 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_resolveCaseRareImage } from "@ianlucas/cslib";
+import { CS_Item, CS_resolveCaseSpecialItemImage } from "@ianlucas/cslib";
 import { useTranslation } from "~/hooks/use-translation";
 import { baseUrl } from "~/utils/economy";
 import { CSItem } from "./cs-item";
 
-export function CaseRareItem({
+export function CaseSpecialItem({
   caseItem
 }: {
   caseItem: CS_Item;
@@ -16,10 +16,10 @@ export function CaseRareItem({
   const translate = useTranslation();
   return (
     <CSItem
-      csItem={{
+      item={{
         id: -1,
         name: translate("CaseRareItem"),
-        image: CS_resolveCaseRareImage(
+        image: CS_resolveCaseSpecialItemImage(
           baseUrl,
           caseItem
         ),

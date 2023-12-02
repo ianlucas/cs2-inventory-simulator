@@ -5,20 +5,21 @@
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_CATEGORY_MENU, CS_CategoryMenuItem, CS_Item } from "@ianlucas/cslib";
+import { CS_Item } from "@ianlucas/cslib";
 import { useMemo, useState } from "react";
-import { CategoryMenu } from "~/components/category-menu";
 import { CSItemBrowser } from "~/components/cs-item-browser";
+import { FilterMenu } from "~/components/filter-menu";
 import { useInput } from "~/hooks/use-input";
 import { useTranslation } from "~/hooks/use-translation";
-import { getBaseItems, getPaidItems, instaSelectCategory } from "~/utils/economy";
+import { getBaseItems, getPaidItems } from "~/utils/economy";
+import { ITEM_FILTERS, ItemFiltersItem } from "~/utils/economy-item-filters";
 
 export default function CSItemPicker({
   onPickItem
 }: {
   onPickItem(csItem: CS_Item): void;
 }) {
-  const [category, setCategory] = useState(CS_CATEGORY_MENU[0]);
+  const [filter, setFilter] = useState(ITEM_FILTERS[0]);
   const [model, setModel] = useState<string | undefined>();
   const [query, setQuery] = useInput("");
   const translate = useTranslation();
@@ -28,13 +29,13 @@ export default function CSItemPicker({
     setModel(undefined);
   }
 
-  function handleCategoryClick(category: CS_CategoryMenuItem) {
-    setCategory(category);
+  function handleCategoryClick(filter: ItemFiltersItem) {
+    setFilter(filter);
     return reset();
   }
 
   function handleItemClick(csItem: CS_Item) {
-    if (instaSelectCategory.includes(csItem.type) || model !== undefined) {
+    if (!filter.expand || model !== undefined) {
       return onPickItem(csItem);
     }
     setQuery("");
@@ -43,22 +44,22 @@ export default function CSItemPicker({
 
   const items = useMemo(() =>
     (model === undefined
-      ? getBaseItems(category)
-      : getPaidItems(category, model)).filter(
+      ? getBaseItems(filter)
+      : getPaidItems(filter, model)).filter(
         ({ name }) => {
           if (query.length < 2) {
             return true;
           }
           return name.toLowerCase().includes(query.toLowerCase());
         }
-      ), [category, model, query]);
+      ), [filter, model, query]);
 
   const ignoreRarityColor = model === undefined
-    && !instaSelectCategory.includes(category.category);
+    && filter.expand;
 
   return (
     <>
-      <CategoryMenu value={category} onChange={handleCategoryClick} />
+      <FilterMenu value={filter} onChange={handleCategoryClick} />
       <div className="flex items-center px-4 my-2 gap-2">
         <FontAwesomeIcon
           icon={faMagnifyingGlass}

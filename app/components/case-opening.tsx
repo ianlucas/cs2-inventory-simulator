@@ -5,7 +5,7 @@
 
 import { faCircleInfo, faCircleNotch, faUnlock, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Item, CS_listCaseItems, CS_resolveItemImage, CS_roll } from "@ianlucas/cslib";
+import { CS_Economy, CS_Inventory, CS_Item, CS_listCaseContents, CS_resolveItemImage, CS_unlockCase } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { ComponentProps, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -19,7 +19,7 @@ import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { CaseOpeningWheel } from "./case-opening-wheel";
-import { CaseRareItem } from "./case-rare-item";
+import { CaseSpecialItem } from "./case-special-item";
 import { CSItem } from "./cs-item";
 import { useRootContext } from "./root-context";
 
@@ -63,10 +63,12 @@ export function CaseOpening(
   const { setInventory } = useRootContext();
   const translate = useTranslation();
 
-  const [items, setItems] = useState<ReturnType<typeof CS_roll>[]>([]);
+  const [items, setItems] = useState<ReturnType<typeof CS_unlockCase>[]>([]);
   const [isDisplaying, setIsDisplaying] = useState(false);
   const [canRoll, setCanRoll] = useState(true);
-  const [rolledItem, setRolledItem] = useState<ReturnType<typeof CS_roll>>();
+  const [unlockedItem, setUnlockedItem] = useState<
+    ReturnType<typeof CS_unlockCase>
+  >();
   const [rolledScale, setRolledScale] = useState(0);
   const [contentsTranslateY, setContentsTranslateY] = useState(0);
   const scale = useResponsiveScale();
@@ -78,7 +80,7 @@ export function CaseOpening(
     setCanRoll(false);
     /** @TODO Error handling needed, page will just get stuck if this fails. */
     /** @TODO We need to infer this from unlock case action. */
-    const rolledItem = await postJson<ReturnType<typeof CS_roll>>(
+    const unlockedItem = await postJson<ReturnType<typeof CS_unlockCase>>(
       ApiActionUnlockCaseUrl,
       { caseIndex, keyIndex }
     );
@@ -87,16 +89,17 @@ export function CaseOpening(
       playSound("/open.mp3");
       setTimeout(() => {
         const items = range(32).map((_, index) =>
-          index === 28 ? rolledItem : CS_roll(caseItem)
+          index === 28 ? unlockedItem : CS_unlockCase(caseItem)
         );
         setItems(items);
         setIsDisplaying(true);
         setTimeout(() => {
-          setRolledItem(rolledItem);
-          setInventory(inventory =>
-            inventory.unlockCase(caseIndex, keyIndex, rolledItem).state
-          );
-          playSound(`/case_awarded_${rolledItem.rarity}.mp3`);
+          setUnlockedItem(unlockedItem);
+          setInventory(inventory => {
+            inventory.unlockCase(caseIndex, keyIndex, unlockedItem);
+            return inventory;
+          });
+          playSound(`/case_awarded_${unlockedItem.rarity}.mp3`);
           setTimeout(() => {
             setRolledScale(scale);
           }, 100);
@@ -114,6 +117,10 @@ export function CaseOpening(
     }
   });
 
+  const receivedItem = unlockedItem !== undefined
+    ? CS_Economy.getById(unlockedItem.id)
+    : undefined;
+
   return (
     <ClientOnly>
       {() =>
@@ -123,7 +130,7 @@ export function CaseOpening(
               "z-50 backdrop-blur-sm bg-black/60 select-none"
             )}
           >
-            {rolledItem
+            {unlockedItem && receivedItem
               ? (
                 <>
                   <Layer
@@ -133,8 +140,8 @@ export function CaseOpening(
                     <img
                       src={CS_resolveItemImage(
                         baseUrl,
-                        rolledItem.csItem,
-                        rolledItem.attributes.wear
+                        receivedItem,
+                        unlockedItem.attributes.wear
                       )}
                       draggable={false}
                     />
@@ -143,11 +150,11 @@ export function CaseOpening(
                     <div className="font-bold text-2xl px-4">
                       <span
                         className="border-b-4 drop-shadow pb-1"
-                        style={{ borderColor: rolledItem.csItem.rarity }}
+                        style={{ borderColor: receivedItem.rarity }}
                       >
-                        {rolledItem.attributes.stattrak !== undefined
+                        {unlockedItem.attributes.stattrak !== undefined
                           && translate("InventoryItemStatTrak")}{" "}
-                        {rolledItem.csItem.name}
+                        {receivedItem.name}
                       </span>
                     </div>
                     <div className="text-lg flex items-center justify-center gap-2 mt-4">
@@ -160,20 +167,20 @@ export function CaseOpening(
                     </div>
                   </div>
                   <div className="fixed bottom-28 left-0 w-full text-center drop-shadow flex items-center justify-center gap-8">
-                    {rolledItem.attributes.wear !== undefined && (
+                    {unlockedItem.attributes.wear !== undefined && (
                       <div>
                         <div className="font-bold text-sm">
                           {translate("CaseWear")}
                         </div>
-                        <div>{rolledItem.attributes.wear}</div>
+                        <div>{unlockedItem.attributes.wear}</div>
                       </div>
                     )}
-                    {rolledItem.attributes.wear !== undefined && (
+                    {unlockedItem.attributes.wear !== undefined && (
                       <div>
                         <div className="font-bold text-sm">
                           {translate("CaseSeed")}
                         </div>
-                        <div>{rolledItem.attributes.seed}</div>
+                        <div>{unlockedItem.attributes.seed}</div>
                       </div>
                     )}
                     <button
@@ -233,12 +240,12 @@ export function CaseOpening(
                       <h2 className="my-2">{translate("CaseContainsOne")}</h2>
                       <div className="h-[320px] overflow-y-scroll flex flex-wrap gap-3">
                         {[
-                          ...CS_listCaseItems(caseItem, true)
-                            .map((csItem, index) => (
-                              <CSItem key={index} csItem={csItem} />
+                          ...CS_listCaseContents(caseItem, true)
+                            .map((item, index) => (
+                              <CSItem key={index} item={item} />
                             )),
-                          caseItem.rarecontents !== undefined && (
-                            <CaseRareItem key={-1} caseItem={caseItem} />
+                          caseItem.specialcontents !== undefined && (
+                            <CaseSpecialItem key={-1} caseItem={caseItem} />
                           )
                         ]}
                       </div>

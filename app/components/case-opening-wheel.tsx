@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_randomInt, CS_roll } from "@ianlucas/cslib";
+import { CS_Item, CS_randomInt, CS_unlockCase } from "@ianlucas/cslib";
 import { RefObject, useState } from "react";
 import { CaseOpeningWheelItems } from "./case-opening-wheel-items";
 
@@ -16,7 +16,7 @@ export function CaseOpeningWheel({
   isDisplaying
 }: {
   scale: number;
-  items: ReturnType<typeof CS_roll>[];
+  items: ReturnType<typeof CS_unlockCase>[];
   hitsRef: RefObject<HTMLDivElement>;
   targetRef: RefObject<HTMLDivElement>;
   caseItem: CS_Item;

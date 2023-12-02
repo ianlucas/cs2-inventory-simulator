@@ -53,7 +53,7 @@ export function RootProvider({
 
   useEffect(() => {
     storeInventoryItems(
-      inventory.getItems()
+      inventory.getAll()
     );
   }, [inventory]);
 
@@ -82,7 +82,18 @@ export function RootProvider({
         language,
         maxInventoryItems,
         requireAuth: retrieveUserId() !== undefined,
-        setInventory,
+        setInventory(
+          value: CS_Inventory | ((value: CS_Inventory) => CS_Inventory)
+        ) {
+          return setInventory(current => {
+            return new CS_Inventory(
+              typeof value !== "function"
+                ? value.getAll()
+                : value(current).getAll(),
+              maxInventoryItems
+            );
+          });
+        },
         translation,
         user
       }}
