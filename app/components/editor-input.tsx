@@ -6,24 +6,23 @@
 import clsx from "clsx";
 import { ComponentProps } from "react";
 
-export function EditorInput(
-  {
-    pattern,
-    ...props
-  }: Omit<ComponentProps<"input">, "pattern"> & {
-    pattern?: RegExp;
-  }
-) {
-  const invalid = pattern !== undefined
-    && typeof props.value === "string"
-    && props.value !== ""
-    && pattern.exec(props.value.trim()) === null;
+export function EditorInput({
+  pattern,
+  ...props
+}: Omit<ComponentProps<"input">, "pattern"> & {
+  pattern?: RegExp;
+}) {
+  const invalid =
+    pattern !== undefined &&
+    typeof props.value === "string" &&
+    props.value !== "" &&
+    pattern.exec(props.value.trim()) === null;
 
   return (
     <input
       {...props}
       className={clsx(
-        "outline-none rounded px-1 flex-1 placeholder-neutral-600 min-w-0 w-0",
+        "w-0 min-w-0 flex-1 rounded px-1 placeholder-neutral-600 outline-none",
         invalid ? "bg-red-500/50" : "bg-black/50",
         props.className
       )}

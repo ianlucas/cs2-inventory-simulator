@@ -14,17 +14,17 @@ export function Background() {
           <div className="flex h-full w-full items-center justify-center">
             <video
               disablePictureInPicture={true}
-              onContextMenu={event => event.preventDefault()}
-              className="h-screen lg:h-auto lg:w-full opacity-50 saturate-200 object-cover"
+              onContextMenu={(event) => event.preventDefault()}
+              className="h-screen object-cover opacity-50 saturate-200 lg:h-auto lg:w-full"
               src="/bg.webm"
               autoPlay
               loop
               muted
-            >
-            </video>
+            ></video>
           </div>,
           document.getElementById("background")!
-        )}
+        )
+      }
     </ClientOnly>
   );
 }

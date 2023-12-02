@@ -10,13 +10,12 @@ export function EditorToggle({ className, ...props }: ComponentProps<"input">) {
   return (
     <label
       className={clsx(
-        "relative inline-flex items-center cursor-pointer",
+        "relative inline-flex cursor-pointer items-center",
         className
       )}
     >
-      <input {...props} type="checkbox" className="sr-only peer" />
-      <div className="w-9 h-5 peer-focus:outline-none rounded-full peer bg-black/50 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600">
-      </div>
+      <input {...props} type="checkbox" className="peer sr-only" />
+      <div className="peer h-5 w-9 rounded-full bg-black/50 after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"></div>
     </label>
   );
 }

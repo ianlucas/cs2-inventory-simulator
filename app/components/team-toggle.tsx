@@ -22,7 +22,7 @@ export function TeamToggle({
 
   return (
     <button
-      className="flex items-center justify-center rounded px-2 pb-2 pt-1 text-neutral-400 hover:bg-neutral-900/50 hover:text-neutral-200 active:text-white cursor-default gap-2"
+      className="flex cursor-default items-center justify-center gap-2 rounded px-2 pb-2 pt-1 text-neutral-400 hover:bg-neutral-900/50 hover:text-neutral-200 active:text-white"
       onClick={handleClick}
     >
       <FontAwesomeIcon icon={faRotate} className="w-4 fill-current pt-2" />

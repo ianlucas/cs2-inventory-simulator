@@ -27,10 +27,10 @@ export function useDetectCollision({
           for (const child of children) {
             const childRect = child.getBoundingClientRect();
             if (
-              childRect.left < targetRect.right
-              && childRect.right > targetRect.left
-              && childRect.top < targetRect.bottom
-              && childRect.bottom > targetRect.top
+              childRect.left < targetRect.right &&
+              childRect.right > targetRect.left &&
+              childRect.top < targetRect.bottom &&
+              childRect.bottom > targetRect.top
             ) {
               if (lastCollisionId !== child.getAttribute("data-id")) {
                 lastCollisionId = child.getAttribute("data-id")!;
@@ -44,9 +44,5 @@ export function useDetectCollision({
       check();
       return () => clearTimeout(idx);
     }
-  }, [
-    disabled,
-    target.current,
-    hits.current
-  ]);
+  }, [disabled, target.current, hits.current]);
 }

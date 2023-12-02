@@ -27,9 +27,9 @@ export function EditorStepRange({
       max={max}
       value={value}
       step={step}
-      onChange={event => onChange(Number(event.target.value))}
+      onChange={(event) => onChange(Number(event.target.value))}
       className={clsx(
-        "w-full h-2 bg-black/50 rounded-lg appearance-none cursor-pointer accent-white",
+        "h-2 w-full cursor-pointer appearance-none rounded-lg bg-black/50 accent-white",
         className
       )}
     />

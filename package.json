@@ -5,6 +5,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev --manual",
+    "format": "prettier . --write",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
   },
@@ -51,6 +52,8 @@
     "@types/react-dom": "^18.2.7",
     "@types/steamapi": "^2.2.3",
     "eslint": "^8.38.0",
+    "prettier": "3.1.0",
+    "prettier-plugin-tailwindcss": "^0.5.7",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6"
   },

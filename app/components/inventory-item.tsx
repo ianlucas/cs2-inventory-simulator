@@ -3,8 +3,32 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { autoUpdate, flip, FloatingFocusManager, offset, shift, useDismiss, useFloating, useHover, useInteractions, useMergeRefs, useRole } from "@floating-ui/react";
-import { CS_hasSeed, CS_hasWear, CS_INVENTORY_EQUIPPABLE_ITEMS, CS_Item, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_NAMETAG_TOOL_DEF, CS_Team, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
+import {
+  autoUpdate,
+  flip,
+  FloatingFocusManager,
+  offset,
+  shift,
+  useDismiss,
+  useFloating,
+  useHover,
+  useInteractions,
+  useMergeRefs,
+  useRole
+} from "@floating-ui/react";
+import {
+  CS_hasSeed,
+  CS_hasWear,
+  CS_INVENTORY_EQUIPPABLE_ITEMS,
+  CS_Item,
+  CS_MAX_WEAR,
+  CS_MIN_SEED,
+  CS_MIN_WEAR,
+  CS_NAMETAG_TOOL_DEF,
+  CS_Team,
+  CS_TEAM_CT,
+  CS_TEAM_T
+} from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useState } from "react";
 import { useAnyClick } from "~/hooks/floating-ui";
@@ -15,37 +39,31 @@ import { ContextDivider } from "./context-divider";
 import { CSItem } from "./cs-item";
 import { useRootContext } from "./root-context";
 
-export function InventoryItem(
-  {
-    csItem,
-    disableContextMenu,
-    disableHover,
-    equipped,
-    index,
-    inventoryItem,
-    model,
-    name,
-    onClick,
-    onDelete,
-    onEquip,
-    onRename,
-    onUnequip,
-    onUnlockContainer
-  }:
-    & ReturnType<
-      typeof transform
-    >
-    & {
-      disableContextMenu?: boolean;
-      disableHover?: boolean;
-      onClick?(index: number, csItem: CS_Item): void;
-      onDelete?(index: number): void;
-      onEquip?(index: number, team?: CS_Team): void;
-      onRename?(index: number, csItem: CS_Item): void;
-      onUnequip?(index: number, team?: CS_Team): void;
-      onUnlockContainer?(index: number, csItem: CS_Item): void;
-    }
-) {
+export function InventoryItem({
+  csItem,
+  disableContextMenu,
+  disableHover,
+  equipped,
+  index,
+  inventoryItem,
+  model,
+  name,
+  onClick,
+  onDelete,
+  onEquip,
+  onRename,
+  onUnequip,
+  onUnlockContainer
+}: ReturnType<typeof transform> & {
+  disableContextMenu?: boolean;
+  disableHover?: boolean;
+  onClick?(index: number, csItem: CS_Item): void;
+  onDelete?(index: number): void;
+  onEquip?(index: number, team?: CS_Team): void;
+  onRename?(index: number, csItem: CS_Item): void;
+  onUnequip?(index: number, team?: CS_Team): void;
+  onUnlockContainer?(index: number, csItem: CS_Item): void;
+}) {
   const stubInventoryItem = index < 0;
   const isAuthenticated = useRootContext().user !== undefined;
   const translate = useTranslation();
@@ -84,27 +102,23 @@ export function InventoryItem(
   const {
     getReferenceProps: getClickReferenceProps,
     getFloatingProps: getClickFloatingProps
-  } = useInteractions([
-    click,
-    dismiss,
-    role
-  ]);
+  } = useInteractions([click, dismiss, role]);
 
   const {
     getReferenceProps: getHoverReferenceProps,
     getFloatingProps: getHoverFloatingProps
-  } = useInteractions([
-    hover
-  ]);
+  } = useInteractions([hover]);
 
   const ref = useMergeRefs([clickRefs.setReference, hoverRefs.setReference]);
 
-  const canEquip = csItem.teams === undefined && !inventoryItem.equipped
-    && CS_INVENTORY_EQUIPPABLE_ITEMS.includes(csItem.type);
-  const canEquipT = csItem.teams?.includes(CS_TEAM_T)
-    && !inventoryItem.equippedT;
-  const canEquipCT = csItem.teams?.includes(CS_TEAM_CT)
-    && !inventoryItem.equippedCT;
+  const canEquip =
+    csItem.teams === undefined &&
+    !inventoryItem.equipped &&
+    CS_INVENTORY_EQUIPPABLE_ITEMS.includes(csItem.type);
+  const canEquipT =
+    csItem.teams?.includes(CS_TEAM_T) && !inventoryItem.equippedT;
+  const canEquipCT =
+    csItem.teams?.includes(CS_TEAM_CT) && !inventoryItem.equippedCT;
   const canUnequip = inventoryItem.equipped === true;
   const canUnequipT = inventoryItem.equippedT === true;
   const canUnequipCT = inventoryItem.equippedCT === true;
@@ -115,10 +129,12 @@ export function InventoryItem(
   const hasSeed = !csItem.free && CS_hasSeed(csItem);
   const hasModel = model || inventoryItem.stattrak !== undefined;
   const hasAttributes = hasWear || hasSeed;
-  const canRename = isAuthenticated && csItem.type == "tool"
-    && csItem.def === CS_NAMETAG_TOOL_DEF;
-  const canUnlockContainer = isAuthenticated
-    && ["case", "key"].includes(csItem.type);
+  const canRename =
+    isAuthenticated &&
+    csItem.type == "tool" &&
+    csItem.def === CS_NAMETAG_TOOL_DEF;
+  const canUnlockContainer =
+    isAuthenticated && ["case", "key"].includes(csItem.type);
 
   function close(callbefore: () => void) {
     return function close() {
@@ -131,7 +147,7 @@ export function InventoryItem(
     <>
       <div
         className={clsx(
-          "transition-all w-[154px] relative",
+          "relative w-[154px] transition-all",
           onClick === undefined && "hover:drop-shadow-[0_0_5px_rgba(0,0,0,1)]"
         )}
         ref={ref}
@@ -141,9 +157,9 @@ export function InventoryItem(
           item={csItem}
           equipped={isAuthenticated ? equipped : undefined}
           nametag={inventoryItem.nametag}
-          onClick={onClick !== undefined
-            ? () => onClick(index, csItem)
-            : undefined}
+          onClick={
+            onClick !== undefined ? () => onClick(index, csItem) : undefined
+          }
           stattrak={inventoryItem.stattrak}
           stickers={inventoryItem.stickers}
           wear={inventoryItem.wear}
@@ -152,7 +168,7 @@ export function InventoryItem(
       {!stubInventoryItem && !disableContextMenu && isClickOpen && (
         <FloatingFocusManager context={clickContext} modal={false}>
           <div
-            className="z-10 bg-neutral-800 text-white outline-none py-2 w-[192px] text-sm rounded"
+            className="z-10 w-[192px] rounded bg-neutral-800 py-2 text-sm text-white outline-none"
             ref={clickRefs.setFloating}
             style={clickStyles}
             {...getClickFloatingProps()}
@@ -230,9 +246,7 @@ export function InventoryItem(
                 {canRename && <ContextDivider />}
               </>
             )}
-            <ContextButton
-              onClick={close(() => onDelete?.(index))}
-            >
+            <ContextButton onClick={close(() => onDelete?.(index))}>
               {translate("InventoryItemDelete")}
             </ContextButton>
           </div>
@@ -241,15 +255,16 @@ export function InventoryItem(
       {!stubInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <div
-            className="z-20 py-4 px-6 bg-neutral-900/95 rounded text-white outline-none text-sm"
+            className="z-20 rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none"
             ref={hoverRefs.setFloating}
             style={hoverStyles}
             {...getHoverFloatingProps()}
           >
             {hasModel && (
               <div className="font-bold">
-                {inventoryItem.stattrak !== undefined
-                  && `${translate("InventoryItemStatTrak")} `} {model}
+                {inventoryItem.stattrak !== undefined &&
+                  `${translate("InventoryItemStatTrak")} `}{" "}
+                {model}
               </div>
             )}
             <div className={clsx(!hasModel && "font-bold")}>{name}</div>
@@ -263,14 +278,14 @@ export function InventoryItem(
                       </strong>{" "}
                       {inventoryItem.wear ?? CS_MIN_WEAR}
                     </div>
-                    <div className="w-[128px] h-1 bg-[linear-gradient(90deg,#3b818f_0,#3b818f_7%,#83b135_0,#83b135_15%,#d7be47_0,#d7be47_38%,#f08140_0,#f08140_45%,#ec4f3d_0,#ec4f3d)] relative">
+                    <div className="relative h-1 w-[128px] bg-[linear-gradient(90deg,#3b818f_0,#3b818f_7%,#83b135_0,#83b135_15%,#d7be47_0,#d7be47_38%,#f08140_0,#f08140_45%,#ec4f3d_0,#ec4f3d)]">
                       <div
-                        className="absolute h-1.5 w-[1px] bg-white -top-0.5"
+                        className="absolute -top-0.5 h-1.5 w-[1px] bg-white"
                         style={{
                           left: `${
-                            ((inventoryItem.wear ?? CS_MIN_WEAR)
-                              / CS_MAX_WEAR)
-                            * 100
+                            ((inventoryItem.wear ?? CS_MIN_WEAR) /
+                              CS_MAX_WEAR) *
+                            100
                           }%`
                         }}
                       />

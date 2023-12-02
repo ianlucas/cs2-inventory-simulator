@@ -27,7 +27,7 @@ export default function EditorSelect({
     <select
       {...rest}
       className={clsx(
-        "bg-black/50 rounded h-[24px] outline-none",
+        "h-[24px] rounded bg-black/50 outline-none",
         value === "" && "text-neutral-500",
         className
       )}

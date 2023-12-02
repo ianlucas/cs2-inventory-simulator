@@ -81,4 +81,4 @@ export const ITEM_FILTERS = [
   }
 ];
 
-export type ItemFiltersItem = typeof ITEM_FILTERS[number];
+export type ItemFiltersItem = (typeof ITEM_FILTERS)[number];

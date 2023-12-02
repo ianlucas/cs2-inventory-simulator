@@ -8,11 +8,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function Footer() {
   return (
-    <div className="flex justify-center items-center my-8 text-sm gap-2 text-neutral-400 drop-shadow-sm select-none">
+    <div className="my-8 flex select-none items-center justify-center gap-2 text-sm text-neutral-400 drop-shadow-sm">
       <span>&copy; 2023, CS2 Inventory Simulator.</span>
       <a
         href="https://github.com/ianlucas/cs2-inventory-simulator"
-        className="flex items-center gap-1 hover:text-blue-500 transition-all"
+        className="flex items-center gap-1 transition-all hover:text-blue-500"
         target="_blank"
       >
         <FontAwesomeIcon icon={faGithub} className="h-4" />

@@ -10,11 +10,14 @@ export function toValveKeyValue(obj: any) {
       continue;
     }
     vkv += `"${key}" `;
-    vkv += (typeof value === "object")
-      ? toValveKeyValue(value)
-      : typeof value === "boolean"
-      ? value ? '"1"\n' : '"0"\n'
-      : `"${value}"\n`;
+    vkv +=
+      typeof value === "object"
+        ? toValveKeyValue(value)
+        : typeof value === "boolean"
+          ? value
+            ? '"1"\n'
+            : '"0"\n'
+          : `"${value}"\n`;
   }
   vkv += "}";
   return vkv;

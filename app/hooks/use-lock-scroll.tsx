@@ -20,7 +20,7 @@ function getSupportsPassive() {
       "test",
       null,
       Object.defineProperty({}, "passive", {
-        get: function() {
+        get: function () {
           supportsPassive = true;
         }
       })
@@ -32,9 +32,10 @@ function getSupportsPassive() {
 function getWheelArgs() {
   return {
     wheelOpt: getSupportsPassive() ? { passive: false } : false,
-    wheelEvent: "onwheel" in document.createElement("div")
-      ? "wheel" as const
-      : "mousewheel" as const
+    wheelEvent:
+      "onwheel" in document.createElement("div")
+        ? ("wheel" as const)
+        : ("mousewheel" as const)
   };
 }
 

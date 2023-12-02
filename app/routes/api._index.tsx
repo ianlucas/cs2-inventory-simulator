@@ -7,7 +7,21 @@ import { Highlight, themes } from "prism-react-renderer";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { STEAM_CALLBACK_URL } from "~/env.server";
 import { useTranslation } from "~/hooks/use-translation";
-import { AGENT_PATCH_PREFIX, AGENT_PREFIX, GLOVE_PREFIX, MELEE_PREFIX, MUSIC_KIT_PREFIX, NAMETAG_PREFIX, PAINT_PREFIX, PIN_PREFIX, SEED_PREFIX, STATTRAK_PREFIX, STICKER_PREFIX, STICKERWEAR_PREFIX, WEAR_PREFIX } from "~/utils/inventory";
+import {
+  AGENT_PATCH_PREFIX,
+  AGENT_PREFIX,
+  GLOVE_PREFIX,
+  MELEE_PREFIX,
+  MUSIC_KIT_PREFIX,
+  NAMETAG_PREFIX,
+  PAINT_PREFIX,
+  PIN_PREFIX,
+  SEED_PREFIX,
+  STATTRAK_PREFIX,
+  STICKER_PREFIX,
+  STICKERWEAR_PREFIX,
+  WEAR_PREFIX
+} from "~/utils/inventory";
 
 export async function loader() {
   return typedjson({
@@ -20,11 +34,11 @@ export default function ApiIndex() {
   const translate = useTranslation();
 
   return (
-    <div className="lg:w-[1024px] m-auto lg:my-6 px-4 lg:px-0">
-      <h1 className="select-none flex items-center justify-between text-lg lg:text-xl text-neutral-300">
+    <div className="m-auto px-4 lg:my-6 lg:w-[1024px] lg:px-0">
+      <h1 className="flex select-none items-center justify-between text-lg text-neutral-300 lg:text-xl">
         {translate("APIPageHeader")}
       </h1>
-      <div className="mt-4 lg:grid lg:gap-4 lg:grid-cols-2">
+      <div className="mt-4 lg:grid lg:grid-cols-2 lg:gap-4">
         <ApiInterface
           method="GET"
           name="Get User Inventory"
@@ -140,28 +154,24 @@ function ApiInterface({
     <div className="mt-4 lg:mt-0">
       <div className="flex items-center gap-2">
         <span className="lg:text-lg">{name}</span>
-        <span className="text-neutral-500 text-sm font-bold">{type}</span>
+        <span className="text-sm font-bold text-neutral-500">{type}</span>
       </div>
-      <div className="mt-1 flex items-center rounded-tl rounded-tr overflow-hidden text-sm">
-        <div className="px-2 py-1 bg-green-500/80 font-bold">
-          {method}
-        </div>
+      <div className="mt-1 flex items-center overflow-hidden rounded-tl rounded-tr text-sm">
+        <div className="bg-green-500/80 px-2 py-1 font-bold">{method}</div>
         <input
-          className="flex-1 py-1 bg-neutral-950/80 px-2 font-mono outline-none"
+          className="flex-1 bg-neutral-950/80 px-2 py-1 font-mono outline-none"
           value={endpoint}
           readOnly
         />
       </div>
-      <div className="rounded-bl rounded-br overflow-hidden bg-[#1e1e1e] p-1">
+      <div className="overflow-hidden rounded-bl rounded-br bg-[#1e1e1e] p-1">
         <Highlight
           code={response}
           language="typescript"
           theme={themes.vsDark}
-          children={(
-            { style, tokens, getLineProps, getTokenProps }
-          ) => (
+          children={({ style, tokens, getLineProps, getTokenProps }) => (
             <pre
-              className="text-sm p-2 overflow-x-auto h-[256px]"
+              className="h-[256px] overflow-x-auto p-2 text-sm"
               style={style}
             >
               {tokens.map((line, i) => (

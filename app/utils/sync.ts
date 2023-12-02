@@ -12,7 +12,7 @@ export async function sync(type: string, data: any) {
 }
 
 async function doSync() {
-  let actions = [] as { type: string; data: string; }[];
+  let actions = [] as { type: string; data: string }[];
   while (queue[0]) {
     const [type, data] = queue.shift()!;
     actions.push({ type, ...data });

@@ -5,7 +5,24 @@
 
 import { faBolt, faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_hasNametag, CS_hasSeed, CS_hasStatTrak, CS_hasStickers, CS_hasWear, CS_Item, CS_MAX_SEED, CS_MAX_WEAR, CS_MIN_SEED, CS_MIN_WEAR, CS_NAMETAG_RE, CS_resolveItemImage, CS_safeValidateNametag, CS_safeValidateSeed, CS_safeValidateWear, CS_WEAR_FACTOR } from "@ianlucas/cslib";
+import {
+  CS_hasNametag,
+  CS_hasSeed,
+  CS_hasStatTrak,
+  CS_hasStickers,
+  CS_hasWear,
+  CS_Item,
+  CS_MAX_SEED,
+  CS_MAX_WEAR,
+  CS_MIN_SEED,
+  CS_MIN_WEAR,
+  CS_NAMETAG_RE,
+  CS_resolveItemImage,
+  CS_safeValidateNametag,
+  CS_safeValidateSeed,
+  CS_safeValidateWear,
+  CS_WEAR_FACTOR
+} from "@ianlucas/cslib";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
@@ -50,9 +67,10 @@ export function CSItemEditor({
   const hasSeed = CS_hasSeed(csItem);
   const hasWear = CS_hasWear(csItem);
   const hasNametag = CS_hasNametag(csItem);
-  const isValid = CS_safeValidateWear(wear)
-    && (CS_safeValidateNametag(nametag) || nametag.length === 0)
-    && CS_safeValidateSeed(seed);
+  const isValid =
+    CS_safeValidateWear(wear) &&
+    (CS_safeValidateNametag(nametag) || nametag.length === 0) &&
+    CS_safeValidateSeed(seed);
   const maxQuantity = maxInventoryItems - inventory.size();
   const hasQuantity = ["case", "key", "sticker", "tool"].includes(csItem.type);
   const translate = useTranslation();
@@ -61,10 +79,10 @@ export function CSItemEditor({
     onSubmit({
       nametag: hasNametag && nametag.length > 0 ? nametag : undefined,
       quantity,
-      stickers: hasStickers
-          && stickers.filter((sticker) => sticker !== null).length > 0
-        ? stickers
-        : undefined,
+      stickers:
+        hasStickers && stickers.filter((sticker) => sticker !== null).length > 0
+          ? stickers
+          : undefined,
       seed: hasSeed && seed !== CS_MIN_SEED ? seed : undefined,
       wear: hasWear && wear !== CS_MIN_WEAR ? wear : undefined,
       stattrak: hasStattrak && stattrak === true ? stattrak : undefined
@@ -72,15 +90,15 @@ export function CSItemEditor({
   }
 
   return (
-    <div className="w-[360px] m-auto pb-6 select-none px-4 lg:px-0">
+    <div className="m-auto w-[360px] select-none px-4 pb-6 lg:px-0">
       <img
-        className="w-[256px] h-[192px] m-auto"
+        className="m-auto h-[192px] w-[256px]"
         src={CS_resolveItemImage(baseUrl, csItem.id, wear)}
         alt={csItem.name}
         draggable={false}
       />
       <div
-        className="text-center font-bold mb-4"
+        className="mb-4 text-center font-bold"
         style={{ color: csItem.rarity }}
       >
         {csItem.name}
@@ -88,7 +106,7 @@ export function CSItemEditor({
       <div className="space-y-4">
         {hasStickers && (
           <div>
-            <label className="font-bold text-neutral-500 w-[76.33px] select-none">
+            <label className="w-[76.33px] select-none font-bold text-neutral-500">
               {translate("EditorStickers")}
             </label>
             <StickerPicker value={stickers} onChange={setStickers} />
@@ -96,7 +114,7 @@ export function CSItemEditor({
         )}
         {hasNametag && (
           <div className="flex items-center gap-4">
-            <label className="font-bold text-neutral-500 w-[76.33px] select-none">
+            <label className="w-[76.33px] select-none font-bold text-neutral-500">
               {translate("EditorNametag")}
             </label>
             <EditorInput
@@ -109,8 +127,8 @@ export function CSItemEditor({
           </div>
         )}
         {hasSeed && (
-          <div className="flex items-center gap-4 select-none">
-            <label className="font-bold text-neutral-500 w-[76.33px]">
+          <div className="flex select-none items-center gap-4">
+            <label className="w-[76.33px] font-bold text-neutral-500">
               {translate("EditorSeed")}
             </label>
             <span className="w-[68px]">{seed}</span>
@@ -125,8 +143,8 @@ export function CSItemEditor({
           </div>
         )}
         {hasWear && (
-          <div className="flex items-center gap-4 select-none">
-            <label className="font-bold text-neutral-500 w-[76.33px]">
+          <div className="flex select-none items-center gap-4">
+            <label className="w-[76.33px] font-bold text-neutral-500">
               {translate("EditorWear")}
             </label>
             <span className="w-[68px]">
@@ -143,19 +161,16 @@ export function CSItemEditor({
           </div>
         )}
         {hasStattrak && (
-          <div className="flex items-center gap-4 select-none">
-            <label className="font-bold text-neutral-500 w-[76.33px]">
+          <div className="flex select-none items-center gap-4">
+            <label className="w-[76.33px] font-bold text-neutral-500">
               {translate("EditorStatTrak")}
             </label>
-            <EditorToggle
-              checked={stattrak}
-              onChange={setStattrak}
-            />
+            <EditorToggle checked={stattrak} onChange={setStattrak} />
           </div>
         )}
         {hasQuantity && (
-          <div className="flex items-center gap-4 select-none">
-            <label className="font-bold text-neutral-500 w-[76.33px]">
+          <div className="flex select-none items-center gap-4">
+            <label className="w-[76.33px] font-bold text-neutral-500">
               {translate("EditorQuantity")}
             </label>
             <span className="w-[68px]">{quantity}</span>
@@ -170,26 +185,20 @@ export function CSItemEditor({
           </div>
         )}
       </div>
-      <div className="flex justify-center mt-6 gap-2">
+      <div className="mt-6 flex justify-center gap-2">
         <button
           onClick={onReset}
-          className="flex items-center gap-2 px-4 py-2 rounded drop-shadow-lg cursor-default text-neutral-300 hover:text-neutral-100"
+          className="flex cursor-default items-center gap-2 rounded px-4 py-2 text-neutral-300 drop-shadow-lg hover:text-neutral-100"
         >
-          <FontAwesomeIcon
-            icon={faLongArrowLeft}
-            className="h-4"
-          />
+          <FontAwesomeIcon icon={faLongArrowLeft} className="h-4" />
           {translate("EditorReset")}
         </button>
         <button
           disabled={!isValid}
           onClick={handleSubmit}
-          className="flex items-center gap-2 bg-white/80 hover:bg-white text-neutral-700 px-4 py-2 rounded font-bold drop-shadow-lg transition disabled:bg-neutral-500 disabled:text-neutral-700 cursor-default"
+          className="flex cursor-default items-center gap-2 rounded bg-white/80 px-4 py-2 font-bold text-neutral-700 drop-shadow-lg transition hover:bg-white disabled:bg-neutral-500 disabled:text-neutral-700"
         >
-          <FontAwesomeIcon
-            icon={faBolt}
-            className="h-4"
-          />
+          <FontAwesomeIcon icon={faBolt} className="h-4" />
           {translate("EditorCraft")}
         </button>
       </div>

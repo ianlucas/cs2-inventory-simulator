@@ -3,7 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_filterItems, CS_InventoryItem, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
+import {
+  CS_Economy,
+  CS_filterItems,
+  CS_InventoryItem,
+  CS_TEAM_CT,
+  CS_TEAM_T
+} from "@ianlucas/cslib";
 import { getCSItemName } from "./economy";
 import { inventoryShape } from "./shapes";
 
@@ -43,18 +49,18 @@ export function sortByName(
 }
 
 const typeOrder = {
-  "weapon": 0,
-  "melee": 1,
-  "glove": 2,
-  "agent": 3,
-  "patch": 4,
-  "pin": 5,
-  "musickit": 6,
-  "graffiti": 7,
-  "sticker": 8,
-  "case": 9,
-  "key": 10,
-  "tool": 11
+  weapon: 0,
+  melee: 1,
+  glove: 2,
+  agent: 3,
+  patch: 4,
+  pin: 5,
+  musickit: 6,
+  graffiti: 7,
+  sticker: 8,
+  case: 9,
+  key: 10,
+  tool: 11
 } as const;
 
 export function sortByType(
@@ -68,10 +74,14 @@ export function sortByEquipped(
   a: TransformedInventoryItem,
   b: TransformedInventoryItem
 ) {
-  const equippedA = a.inventoryItem.equipped || a.inventoryItem.equippedCT
-    || a.inventoryItem.equippedT;
-  const equippedB = b.inventoryItem.equipped || b.inventoryItem.equippedCT
-    || b.inventoryItem.equippedT;
+  const equippedA =
+    a.inventoryItem.equipped ||
+    a.inventoryItem.equippedCT ||
+    a.inventoryItem.equippedT;
+  const equippedB =
+    b.inventoryItem.equipped ||
+    b.inventoryItem.equippedCT ||
+    b.inventoryItem.equippedT;
   if (equippedA && !equippedB) {
     return -1;
   } else if (!equippedA && equippedB) {
@@ -118,25 +128,22 @@ function pushTeam(
   value: any
 ) {
   return [CS_TEAM_T, CS_TEAM_CT]
-    .filter(team =>
-      (team === CS_TEAM_T && equippedT)
-      || (team === CS_TEAM_CT && equippedCT)
+    .filter(
+      (team) =>
+        (team === CS_TEAM_T && equippedT) || (team === CS_TEAM_CT && equippedCT)
     )
-    .forEach(team =>
-      keyvalues.push([
-        `${prefix}${team}${suffix}`,
-        value
-      ])
-    );
+    .forEach((team) => keyvalues.push([`${prefix}${team}${suffix}`, value]));
 }
 
 export function transformEquipped(inventory: CS_InventoryItem[]) {
   return Object.fromEntries(
-    inventory.filter(({ equipped, equippedCT, equippedT }) =>
-      equipped || equippedCT || equippedT
-    ).map(
-      (
-        {
+    inventory
+      .filter(
+        ({ equipped, equippedCT, equippedT }) =>
+          equipped || equippedCT || equippedT
+      )
+      .map(
+        ({
           id,
           equippedCT,
           equippedT,
@@ -146,141 +153,142 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
           seed,
           stickers,
           stickerswear
-        }
-      ) => {
-        const csItem = CS_Economy.getById(id);
-        const keyvalues: [string, any][] = [];
-        if (csItem.type === "musickit") {
-          keyvalues.push([MUSIC_KIT_PREFIX, csItem.itemid]);
-        }
-        if (csItem.type === "pin") {
-          keyvalues.push([PIN_PREFIX, csItem.def]);
-        }
-        if (csItem.type === "melee") {
-          pushTeam(
-            keyvalues,
-            MELEE_PREFIX,
-            equippedT,
-            equippedCT,
-            "",
-            csItem.def
-          );
-        }
-        if (csItem.type === "glove") {
-          pushTeam(
-            keyvalues,
-            GLOVE_PREFIX,
-            equippedT,
-            equippedCT,
-            "",
-            csItem.def
-          );
-        }
-        if (csItem.type === "agent") {
-          pushTeam(
-            keyvalues,
-            AGENT_PREFIX,
-            equippedT,
-            equippedCT,
-            "",
-            csItem.def
-          );
-        }
-        if (csItem.type === "patch") {
-          pushTeam(
-            keyvalues,
-            AGENT_PATCH_PREFIX,
-            equippedT,
-            equippedCT,
-            "",
-            csItem.itemid
-          );
-        }
-        if (nametag !== undefined) {
-          pushTeam(
-            keyvalues,
-            NAMETAG_PREFIX,
-            equippedT,
-            equippedCT,
-            `_${csItem.def}`,
-            nametag
-          );
-        }
-        if (seed !== undefined) {
-          pushTeam(
-            keyvalues,
-            SEED_PREFIX,
-            equippedT,
-            equippedCT,
-            `_${csItem.def}`,
-            seed
-          );
-        }
-        if (wear !== undefined) {
-          pushTeam(
-            keyvalues,
-            WEAR_PREFIX,
-            equippedT,
-            equippedCT,
-            `_${csItem.def}`,
-            wear
-          );
-        }
-        if (stattrak !== undefined) {
-          pushTeam(
-            keyvalues,
-            STATTRAK_PREFIX,
-            equippedT,
-            equippedCT,
-            `_${csItem.def}`,
-            stattrak
-          );
-        }
-        if (
-          ["melee", "glove", "weapon"].includes(csItem.type)
-          && csItem.itemid !== undefined && csItem.itemid !== 0
-        ) {
-          pushTeam(
-            keyvalues,
-            PAINT_PREFIX,
-            equippedT,
-            equippedCT,
-            `_${csItem.def}`,
-            csItem.itemid
-          );
-        }
-        stickers?.forEach((sticker, slot) => {
-          if (sticker !== null) {
+        }) => {
+          const csItem = CS_Economy.getById(id);
+          const keyvalues: [string, any][] = [];
+          if (csItem.type === "musickit") {
+            keyvalues.push([MUSIC_KIT_PREFIX, csItem.itemid]);
+          }
+          if (csItem.type === "pin") {
+            keyvalues.push([PIN_PREFIX, csItem.def]);
+          }
+          if (csItem.type === "melee") {
             pushTeam(
               keyvalues,
-              STICKER_PREFIX,
+              MELEE_PREFIX,
+              equippedT,
+              equippedCT,
+              "",
+              csItem.def
+            );
+          }
+          if (csItem.type === "glove") {
+            pushTeam(
+              keyvalues,
+              GLOVE_PREFIX,
+              equippedT,
+              equippedCT,
+              "",
+              csItem.def
+            );
+          }
+          if (csItem.type === "agent") {
+            pushTeam(
+              keyvalues,
+              AGENT_PREFIX,
+              equippedT,
+              equippedCT,
+              "",
+              csItem.def
+            );
+          }
+          if (csItem.type === "patch") {
+            pushTeam(
+              keyvalues,
+              AGENT_PATCH_PREFIX,
+              equippedT,
+              equippedCT,
+              "",
+              csItem.itemid
+            );
+          }
+          if (nametag !== undefined) {
+            pushTeam(
+              keyvalues,
+              NAMETAG_PREFIX,
               equippedT,
               equippedCT,
               `_${csItem.def}`,
-              true
+              nametag
             );
+          }
+          if (seed !== undefined) {
             pushTeam(
               keyvalues,
-              STICKER_PREFIX,
+              SEED_PREFIX,
               equippedT,
               equippedCT,
-              `_${csItem.def}_${slot}`,
-              sticker
+              `_${csItem.def}`,
+              seed
             );
-            if (stickerswear?.[slot] !== null) {
+          }
+          if (wear !== undefined) {
+            pushTeam(
+              keyvalues,
+              WEAR_PREFIX,
+              equippedT,
+              equippedCT,
+              `_${csItem.def}`,
+              wear
+            );
+          }
+          if (stattrak !== undefined) {
+            pushTeam(
+              keyvalues,
+              STATTRAK_PREFIX,
+              equippedT,
+              equippedCT,
+              `_${csItem.def}`,
+              stattrak
+            );
+          }
+          if (
+            ["melee", "glove", "weapon"].includes(csItem.type) &&
+            csItem.itemid !== undefined &&
+            csItem.itemid !== 0
+          ) {
+            pushTeam(
+              keyvalues,
+              PAINT_PREFIX,
+              equippedT,
+              equippedCT,
+              `_${csItem.def}`,
+              csItem.itemid
+            );
+          }
+          stickers?.forEach((sticker, slot) => {
+            if (sticker !== null) {
               pushTeam(
                 keyvalues,
-                STICKERWEAR_PREFIX,
+                STICKER_PREFIX,
+                equippedT,
+                equippedCT,
+                `_${csItem.def}`,
+                true
+              );
+              pushTeam(
+                keyvalues,
+                STICKER_PREFIX,
                 equippedT,
                 equippedCT,
                 `_${csItem.def}_${slot}`,
-                stickerswear?.[slot]
+                sticker
               );
+              if (stickerswear?.[slot] !== null) {
+                pushTeam(
+                  keyvalues,
+                  STICKERWEAR_PREFIX,
+                  equippedT,
+                  equippedCT,
+                  `_${csItem.def}_${slot}`,
+                  stickerswear?.[slot]
+                );
+              }
             }
-          }
-        });
-        return keyvalues;
-      }
-    ).flat()
+          });
+          return keyvalues;
+        }
+      )
+      .flat()
   );
 }

@@ -32,12 +32,12 @@ export function LanguageSelect({
   return (
     <div className="relative">
       <button
-        className="flex items-center gap-2 px-2 bg-black/20 hover:bg-black/40 rounded py-1 min-w-[253px] cursor-default"
+        className="flex min-w-[253px] cursor-default items-center gap-2 rounded bg-black/20 px-2 py-1 hover:bg-black/40"
         onClick={() => setIsOpen(true)}
       >
         <img
           src={`/countries/${selected.country}.svg`}
-          className="w-[34px] h-[24px]"
+          className="h-[24px] w-[34px]"
           alt={selected.country}
         />
         <label className="flex-1 text-left">
@@ -47,7 +47,7 @@ export function LanguageSelect({
       </button>
       {isOpen && (
         <div
-          className="absolute left-0 max-h-[128px] min-w-[253px] overflow-y-scroll bg-neutral-800 z-10"
+          className="absolute left-0 z-10 max-h-[128px] min-w-[253px] overflow-y-scroll bg-neutral-800"
           ref={ref as any}
         >
           {languages.map(({ name, country }) => {
@@ -55,7 +55,7 @@ export function LanguageSelect({
               <button
                 key={name}
                 className={clsx(
-                  "px-2 py-1 w-full transition-all flex items-center gap-2 cursor-default",
+                  "flex w-full cursor-default items-center gap-2 px-2 py-1 transition-all",
                   value === name && "bg-white/50",
                   value !== name && "hover:bg-black/30"
                 )}
@@ -66,7 +66,7 @@ export function LanguageSelect({
               >
                 <img
                   src={`/countries/${country}.svg`}
-                  className="w-[34px] h-[24px]"
+                  className="h-[24px] w-[34px]"
                   alt={country}
                 />
                 {translate(`LanguageN${name}`)}

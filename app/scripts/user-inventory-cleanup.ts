@@ -24,7 +24,7 @@ export async function UserInventoryCleanup() {
     });
     if (inventory) {
       const parsed = parseInventory(inventory);
-      const filtered = parsed.filter(item => CS_Economy.itemMap.has(item.id));
+      const filtered = parsed.filter((item) => CS_Economy.itemMap.has(item.id));
       if (parsed.length !== filtered.length) {
         count += 1;
         await prisma.user.update({

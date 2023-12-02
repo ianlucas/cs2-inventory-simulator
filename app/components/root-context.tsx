@@ -4,13 +4,26 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Inventory } from "@ianlucas/cslib";
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState
+} from "react";
 import type { findRequestUser } from "~/auth.server";
 import { ApiSaveCachedInventoryUrl } from "~/routes/api.save-cached-inventory._index";
 import { translateItems } from "~/utils/economy";
 import { parseInventory } from "~/utils/inventory";
 import { sync } from "~/utils/sync";
-import { retrieveInventoryItems, retrieveUserId, storeInventoryItems, storeUserId } from "~/utils/user";
+import {
+  retrieveInventoryItems,
+  retrieveUserId,
+  storeInventoryItems,
+  storeUserId
+} from "~/utils/user";
 
 const RootContext = createContext<{
   inventory: CS_Inventory;
@@ -52,18 +65,12 @@ export function RootProvider({
   );
 
   useEffect(() => {
-    storeInventoryItems(
-      inventory.getAll()
-    );
+    storeInventoryItems(inventory.getAll());
   }, [inventory]);
 
   useEffect(() => {
     const items = retrieveInventoryItems();
-    if (
-      user !== undefined
-      && user.inventory === null
-      && items.length > 0
-    ) {
+    if (user !== undefined && user.inventory === null && items.length > 0) {
       sync(ApiSaveCachedInventoryUrl, items);
       setInventory(new CS_Inventory(items, maxInventoryItems));
     }
@@ -85,7 +92,7 @@ export function RootProvider({
         setInventory(
           value: CS_Inventory | ((value: CS_Inventory) => CS_Inventory)
         ) {
-          return setInventory(current => {
+          return setInventory((current) => {
             return new CS_Inventory(
               typeof value !== "function"
                 ? value.getAll()

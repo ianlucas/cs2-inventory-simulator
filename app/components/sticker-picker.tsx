@@ -3,9 +3,19 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faBoxOpen, faMagnifyingGlass, faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBoxOpen,
+  faMagnifyingGlass,
+  faTrashCan,
+  faXmark
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_getStickerCategories, CS_getStickers, CS_Item } from "@ianlucas/cslib";
+import {
+  CS_Economy,
+  CS_getStickerCategories,
+  CS_getStickers,
+  CS_Item
+} from "@ianlucas/cslib";
 import { useMemo, useState } from "react";
 import { useInput } from "~/hooks/use-input";
 import { useTranslation } from "~/hooks/use-translation";
@@ -86,29 +96,26 @@ export function StickerPicker({
               className="relative overflow-hidden rounded-lg bg-black/50"
               onClick={handleClickSlot(index)}
             >
-              {item !== null
-                ? (
-                  <img
-                    draggable={true}
-                    className="h-[64px] w-[85.33px]"
-                    src={item.image}
-                    alt={item.name}
-                  />
-                )
-                : (
-                  <div className="flex h-[64px] w-[85.33px] items-center justify-center text-neutral-700">
-                    {translate("StickerPickerNA")}
-                  </div>
-                )}
-              <div className="absolute left-0 top-0 h-full w-full transition-all hover:shadow-[inset_0_0_0_3px_#fff]">
-              </div>
+              {item !== null ? (
+                <img
+                  draggable={true}
+                  className="h-[64px] w-[85.33px]"
+                  src={item.image}
+                  alt={item.name}
+                />
+              ) : (
+                <div className="flex h-[64px] w-[85.33px] items-center justify-center text-neutral-700">
+                  {translate("StickerPickerNA")}
+                </div>
+              )}
+              <div className="absolute left-0 top-0 h-full w-full transition-all hover:shadow-[inset_0_0_0_3px_#fff]"></div>
             </button>
           );
         })}
       </div>
       {activeIndex !== null && (
         <Modal className="w-[540px] pb-1" blur>
-          <div className="font-bold px-4 py-2 select-none flex justify-between">
+          <div className="flex select-none justify-between px-4 py-2 font-bold">
             <label className="text-sm text-neutral-400">
               {translate("StickerPickerHeader")}
             </label>
@@ -119,8 +126,8 @@ export function StickerPicker({
               <FontAwesomeIcon icon={faXmark} className="h-4" />
             </button>
           </div>
-          <div className="mb-4 px-2 lg:pl-4 lg:pr-2 flex lg:items-center flex-col lg:flex-row gap-2">
-            <div className="flex items-center flex-1 gap-2">
+          <div className="mb-4 flex flex-col gap-2 px-2 lg:flex-row lg:items-center lg:pl-4 lg:pr-2">
+            <div className="flex flex-1 items-center gap-2">
               <FontAwesomeIcon icon={faMagnifyingGlass} className="h-4" />
               <EditorInput
                 value={search}
@@ -139,7 +146,7 @@ export function StickerPicker({
               />
             </div>
             <button
-              className="flex items-center gap-1 text-red-500 hover:bg-black/30 active:bg-black/60 transition px-2 h-[24px] rounded cursor-default"
+              className="flex h-[24px] cursor-default items-center gap-1 rounded px-2 text-red-500 transition hover:bg-black/30 active:bg-black/60"
               onClick={handleRemoveSticker}
             >
               <FontAwesomeIcon icon={faTrashCan} className="h-4" />

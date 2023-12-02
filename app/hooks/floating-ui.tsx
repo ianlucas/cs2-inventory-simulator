@@ -3,8 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ElementProps, FloatingContext, ReferenceType } from "@floating-ui/react";
-import { isMouseLikePointerType, isTypeableElement } from "@floating-ui/react/utils";
+import {
+  ElementProps,
+  FloatingContext,
+  ReferenceType
+} from "@floating-ui/react";
+import {
+  isMouseLikePointerType,
+  isTypeableElement
+} from "@floating-ui/react/utils";
 import { isHTMLElement } from "@floating-ui/utils/dom";
 import { useMemo, useRef } from "react";
 
@@ -59,8 +66,8 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
         },
         onMouseDown(event) {
           if (
-            isMouseLikePointerType(pointerTypeRef.current, true)
-            && ignoreMouse
+            isMouseLikePointerType(pointerTypeRef.current, true) &&
+            ignoreMouse
           ) {
             return;
           }
@@ -70,9 +77,9 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
           }
 
           if (
-            open
-            && toggle
-            && (dataRef.current.openEvent
+            open &&
+            toggle &&
+            (dataRef.current.openEvent
               ? dataRef.current.openEvent.type === "mousedown"
               : true)
           ) {
@@ -90,16 +97,16 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
           }
 
           if (
-            isMouseLikePointerType(pointerTypeRef.current, true)
-            && ignoreMouse
+            isMouseLikePointerType(pointerTypeRef.current, true) &&
+            ignoreMouse
           ) {
             return;
           }
 
           if (
-            open
-            && toggle
-            && (dataRef.current.openEvent
+            open &&
+            toggle &&
+            (dataRef.current.openEvent
               ? dataRef.current.openEvent.type === "click"
               : true)
           ) {
@@ -112,9 +119,9 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
           pointerTypeRef.current = undefined;
 
           if (
-            event.defaultPrevented
-            || !keyboardHandlers
-            || isButtonTarget(event)
+            event.defaultPrevented ||
+            !keyboardHandlers ||
+            isButtonTarget(event)
           ) {
             return;
           }
@@ -135,10 +142,10 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
         },
         onKeyUp(event) {
           if (
-            event.defaultPrevented
-            || !keyboardHandlers
-            || isButtonTarget(event)
-            || isSpaceIgnored(domReference)
+            event.defaultPrevented ||
+            !keyboardHandlers ||
+            isButtonTarget(event) ||
+            isSpaceIgnored(domReference)
           ) {
             return;
           }

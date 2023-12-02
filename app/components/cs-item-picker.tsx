@@ -42,25 +42,26 @@ export default function CSItemPicker({
     setModel(csItem.model);
   }
 
-  const items = useMemo(() =>
-    (model === undefined
-      ? getBaseItems(filter)
-      : getPaidItems(filter, model)).filter(
-        ({ name }) => {
-          if (query.length < 2) {
-            return true;
-          }
-          return name.toLowerCase().includes(query.toLowerCase());
+  const items = useMemo(
+    () =>
+      (model === undefined
+        ? getBaseItems(filter)
+        : getPaidItems(filter, model)
+      ).filter(({ name }) => {
+        if (query.length < 2) {
+          return true;
         }
-      ), [filter, model, query]);
+        return name.toLowerCase().includes(query.toLowerCase());
+      }),
+    [filter, model, query]
+  );
 
-  const ignoreRarityColor = model === undefined
-    && filter.expand;
+  const ignoreRarityColor = model === undefined && filter.expand;
 
   return (
     <>
       <FilterMenu value={filter} onChange={handleCategoryClick} />
-      <div className="flex items-center px-4 my-2 gap-2">
+      <div className="my-2 flex items-center gap-2 px-4">
         <FontAwesomeIcon
           icon={faMagnifyingGlass}
           className="h-4 text-neutral-500"
@@ -68,11 +69,11 @@ export default function CSItemPicker({
         <input
           value={query}
           onChange={setQuery}
-          className="flex-1 outline-none placeholder-neutral-600 bg-neutral-950/40 px-3 py-1 rounded"
+          className="flex-1 rounded bg-neutral-950/40 px-3 py-1 placeholder-neutral-600 outline-none"
           placeholder={translate("CraftSearchPlaceholder")}
         />
       </div>
-      <div className="pt-1 pb-2">
+      <div className="pb-2 pt-1">
         <CSItemBrowser
           csItems={items}
           onClick={handleItemClick}

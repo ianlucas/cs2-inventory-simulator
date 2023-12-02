@@ -4,7 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import clsx from "clsx";
-import { MouseEvent, ReactNode, useEffect, useRef, useState, WheelEvent } from "react";
+import {
+  MouseEvent,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+  WheelEvent
+} from "react";
 import { range } from "~/utils/number";
 
 export function GridList({
@@ -61,9 +68,10 @@ export function GridList({
     }
     const scrollableMaxHeight = children.length * itemHeight;
     const scrollbarHeight = scrollbar.current.clientHeight;
-    const height = scrollableMaxHeight > 0
-      ? (scrollbarHeight * scrollableHeight) / scrollableMaxHeight
-      : 0;
+    const height =
+      scrollableMaxHeight > 0
+        ? (scrollbarHeight * scrollableHeight) / scrollableMaxHeight
+        : 0;
     const top = Math.max(
       ((scrollbarHeight - height) * scrollTop) / maxScrollTop,
       0
@@ -93,16 +101,14 @@ export function GridList({
     if (isDragging && scrollbar.current) {
       event.preventDefault();
       const scrollbarHeight = scrollbar.current.clientHeight;
-      const mouseY = event.clientY
-        - scrollbar.current.getBoundingClientRect().top;
+      const mouseY =
+        event.clientY - scrollbar.current.getBoundingClientRect().top;
       const clamped = Math.min(
         Math.max((mouseY / scrollbarHeight) * maxScrollTop, 0),
         maxScrollTop
       );
       let scrollTop = 0;
-      while (
-        scrollTop < maxScrollTop && clamped >= scrollTop + itemHeight
-      ) {
+      while (scrollTop < maxScrollTop && clamped >= scrollTop + itemHeight) {
         scrollTop += itemHeight;
       }
       setScrollTop(scrollTop);
@@ -139,7 +145,7 @@ export function GridList({
   return (
     <div className="relative">
       <div
-        className={clsx("overflow-hidden px-2 touch-none", className)}
+        className={clsx("touch-none overflow-hidden px-2", className)}
         style={{
           height: itemHeight * (maxItemsIntoView || 2)
         }}
@@ -160,7 +166,7 @@ export function GridList({
         <div className="relative h-full w-1/2 overflow-hidden">
           <div
             className={clsx(
-              "absolute w-full bg-white/30 rounded",
+              "absolute w-full rounded bg-white/30",
               (hideScrollbar || children.length === 0) && "opacity-0"
             )}
             style={{

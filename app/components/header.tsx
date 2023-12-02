@@ -4,7 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { faSteam } from "@fortawesome/free-brands-svg-icons";
-import { faBarsStaggered, faBoxesStacked, faCode, faCog, faPlus, faRightFromBracket, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBarsStaggered,
+  faBoxesStacked,
+  faCode,
+  faCog,
+  faPlus,
+  faRightFromBracket,
+  faXmark
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useToggle } from "@uidotdev/usehooks";
 import clsx from "clsx";
@@ -30,19 +38,19 @@ export function Header() {
   return (
     <div
       className={clsx(
-        "w-full drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] sticky top-0 left-0 z-30 transition-all",
+        "sticky left-0 top-0 z-30 w-full drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] transition-all",
         !isOnTop && "bg-gradient-to-b from-black/60 to-transparent"
       )}
       ref={ref}
     >
-      <div className="text-white lg:w-[1024px] m-auto py-4 px-4 lg:px-0 lg:flex lg:items-center lg:gap-8">
+      <div className="m-auto px-4 py-4 text-white lg:flex lg:w-[1024px] lg:items-center lg:gap-8 lg:px-0">
         <div className="flex items-center justify-between">
           <div className="select-none">
             <span className="text-sm text-neutral-300">{"cstrike / "}</span>
             <span className="font-bold italic">Inventory Simulator</span>
           </div>
           <button
-            className="py-1 px-2 lg:hidden"
+            className="px-2 py-1 lg:hidden"
             onClick={() => toggleIsMenuOpen()}
           >
             <FontAwesomeIcon
@@ -52,8 +60,8 @@ export function Header() {
           </button>
         </div>
         {(isDesktop || isMenuOpen) && (
-          <div className="mt-2 flex-1 lg:mt-0 px-4 lg:p-0 w-full lg:w-auto absolute left-0 lg:static">
-            <div className="rounded p-2 lg:p-0 bg-stone-800 lg:bg-transparent lg:flex lg:items-center lg:gap-4 text-sm">
+          <div className="absolute left-0 mt-2 w-full flex-1 px-4 lg:static lg:mt-0 lg:w-auto lg:p-0">
+            <div className="rounded bg-stone-800 p-2 text-sm lg:flex lg:items-center lg:gap-4 lg:bg-transparent lg:p-0">
               <HeaderLink
                 to="/"
                 icon={faBoxesStacked}
@@ -80,37 +88,35 @@ export function Header() {
                 onClick={closeMenu}
                 label={isDesktop ? undefined : translate("HeaderSettingsLabel")}
               />
-              {user === undefined
-                ? (
+              {user === undefined ? (
+                <HeaderLink
+                  to="sign-in"
+                  icon={faSteam}
+                  label={translate("HeaderSignInLabel")}
+                />
+              ) : (
+                <>
                   <HeaderLink
-                    to="sign-in"
-                    icon={faSteam}
-                    label={translate("HeaderSignInLabel")}
+                    to="sign-out"
+                    icon={faRightFromBracket}
+                    label={translate("HeaderSignOutLabel")}
                   />
-                )
-                : (
-                  <>
-                    <HeaderLink
-                      to="sign-out"
-                      icon={faRightFromBracket}
-                      label={translate("HeaderSignOutLabel")}
+                  <div className="flex flex-1 select-none items-center justify-end gap-2 overflow-hidden">
+                    <span className="text-neutral-400">
+                      {translate("HeaderSignedInAsLabel")}
+                    </span>
+                    <span className="max-w-[256px] overflow-hidden text-ellipsis whitespace-nowrap">
+                      {user.name}
+                    </span>
+                    <img
+                      className="h-6 w-6 rounded-full"
+                      src={user.avatar}
+                      draggable={false}
+                      alt={user.name}
                     />
-                    <div className="flex items-center gap-2 select-none flex-1 overflow-hidden justify-end">
-                      <span className="text-neutral-400">
-                        {translate("HeaderSignedInAsLabel")}
-                      </span>
-                      <span className="max-w-[256px] whitespace-nowrap text-ellipsis overflow-hidden">
-                        {user.name}
-                      </span>
-                      <img
-                        className="h-6 w-6 rounded-full"
-                        src={user.avatar}
-                        draggable={false}
-                        alt={user.name}
-                      />
-                    </div>
-                  </>
-                )}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}

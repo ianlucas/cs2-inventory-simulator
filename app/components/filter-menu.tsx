@@ -23,17 +23,18 @@ export function FilterMenu({
   }
 
   return (
-    <div className="flex flex-wrap px-2 gap-1">
+    <div className="flex flex-wrap gap-1 px-2">
       {ITEM_FILTERS.map((filter, index) => (
         <button
           key={index}
           className={clsx(
             "rounded bg-opacity-50 px-2 transition-all hover:text-neutral-200",
-            (!(filter.category === value.category
-              && filter.type === value.type))
-              && "text-neutral-400",
-            (filter.category === value.category && filter.type === value.type)
-              && "bg-black/50 text-neutral-200"
+            !(
+              filter.category === value.category && filter.type === value.type
+            ) && "text-neutral-400",
+            filter.category === value.category &&
+              filter.type === value.type &&
+              "bg-black/50 text-neutral-200"
           )}
           onClick={handleClick(filter)}
         >

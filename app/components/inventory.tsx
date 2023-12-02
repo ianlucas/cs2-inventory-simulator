@@ -5,13 +5,25 @@
 
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_hasNametag, CS_Item, CS_NAMETAG_TOOL_DEF, CS_resolveItemImage, CS_Team } from "@ianlucas/cslib";
+import {
+  CS_hasNametag,
+  CS_Item,
+  CS_NAMETAG_TOOL_DEF,
+  CS_resolveItemImage,
+  CS_Team
+} from "@ianlucas/cslib";
 import { ReactNode, useMemo, useState } from "react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
 import { baseUrl } from "~/utils/economy";
-import { getFreeItemsToDisplay, sortByEquipped, sortByName, sortByType, transform } from "~/utils/inventory";
+import {
+  getFreeItemsToDisplay,
+  sortByEquipped,
+  sortByName,
+  sortByType,
+  transform
+} from "~/utils/inventory";
 import { CaseOpening } from "./case-opening";
 import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
@@ -21,19 +33,23 @@ export function Inventory() {
   const translate = useTranslation();
   const sync = useSync();
 
-  const items = useMemo(() => [
-    // Inventory Items
-    ...inventory.getAll()
-      .map(transform)
-      .sort(sortByName)
-      .sort(sortByType)
-      .sort(sortByEquipped),
-    // Default Game Items
-    ...getFreeItemsToDisplay()
-      .sort(sortByName)
-      .sort(sortByType)
-      .sort(sortByEquipped)
-  ], [inventory, language]);
+  const items = useMemo(
+    () => [
+      // Inventory Items
+      ...inventory
+        .getAll()
+        .map(transform)
+        .sort(sortByName)
+        .sort(sortByType)
+        .sort(sortByEquipped),
+      // Default Game Items
+      ...getFreeItemsToDisplay()
+        .sort(sortByName)
+        .sort(sortByType)
+        .sort(sortByEquipped)
+    ],
+    [inventory, language]
+  );
 
   const [useItemAction, setUseItemAction] = useState<{
     csItem: CS_Item;
@@ -55,17 +71,17 @@ export function Inventory() {
   const isRenamingItem = renameItem !== undefined;
 
   function handleEquip(index: number, csTeam?: CS_Team) {
-    setInventory(inventory => inventory.equip(index, csTeam));
+    setInventory((inventory) => inventory.equip(index, csTeam));
     sync("equip", { index, csTeam });
   }
 
   function handleUnequip(index: number, csTeam?: CS_Team) {
-    setInventory(inventory => inventory.unequip(index, csTeam));
+    setInventory((inventory) => inventory.unequip(index, csTeam));
     sync("unequip", { index, csTeam });
   }
 
   function handleDelete(index: number) {
-    setInventory(inventory => inventory.remove(index));
+    setInventory((inventory) => inventory.remove(index));
     sync("remove", { index });
   }
 
@@ -74,9 +90,10 @@ export function Inventory() {
       return setUseItemAction({
         csItem,
         index,
-        items: items.filter((item) =>
-          (csItem.type === "key" && item?.csItem.keys?.includes(csItem.id))
-          || (csItem.type === "case" && csItem.keys?.includes(item.csItem.id))
+        items: items.filter(
+          (item) =>
+            (csItem.type === "key" && item?.csItem.keys?.includes(csItem.id)) ||
+            (csItem.type === "case" && csItem.keys?.includes(item.csItem.id))
         )
       });
     }
@@ -92,7 +109,7 @@ export function Inventory() {
     return setUseItemAction({
       csItem,
       index,
-      items: items.filter(item => CS_hasNametag(item.csItem))
+      items: items.filter((item) => CS_hasNametag(item.csItem))
     });
   }
 
@@ -111,8 +128,8 @@ export function Inventory() {
         });
       }
       if (
-        useItemAction.csItem.type === "tool"
-        && useItemAction.csItem.def === CS_NAMETAG_TOOL_DEF
+        useItemAction.csItem.type === "tool" &&
+        useItemAction.csItem.def === CS_NAMETAG_TOOL_DEF
       ) {
         setRenameItem({
           targetIndex: index,
@@ -134,14 +151,14 @@ export function Inventory() {
   return (
     <>
       {isSelectAItem && (
-        <div className="w-full px-4 lg:px-0 lg:w-[1024px] m-auto text-xs pb-4 lg:pb-0 lg:text-base lg:flex lg:items-center drop-shadow">
+        <div className="m-auto w-full px-4 pb-4 text-xs drop-shadow lg:flex lg:w-[1024px] lg:items-center lg:px-0 lg:pb-0 lg:text-base">
           <button
-            className="hover:bg-black/30 active:bg-black/70 px-2 py-1"
+            className="px-2 py-1 hover:bg-black/30 active:bg-black/70"
             onClick={dismissUseItem}
           >
             <FontAwesomeIcon icon={faArrowLeft} className="h-5" />
           </button>
-          <div className="flex-1 flex items-center justify-center gap-3 select-none">
+          <div className="flex flex-1 select-none items-center justify-center gap-3">
             <strong>{translate("InventorySelectAnItem")}</strong>
             <img
               draggable={false}
@@ -154,31 +171,31 @@ export function Inventory() {
           </div>
         </div>
       )}
-      <div className="w-full px-2 lg:px-0 lg:w-[1024px] m-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 lg:my-8 gap-2 lg:gap-5 select-none">
+      <div className="m-auto grid w-full select-none grid-cols-2 gap-2 px-2 md:grid-cols-4 lg:my-8 lg:w-[1024px] lg:grid-cols-6 lg:gap-5 lg:px-0">
         {isSelectAItem
           ? useItemAction.items.map((item) => (
-            <InventoryItemWrapper key={item.index}>
-              <InventoryItem
-                {...item}
-                disableContextMenu
-                onClick={handleSelectItem}
-              />
-            </InventoryItemWrapper>
-          ))
-          : items.map(item => (
-            <InventoryItemWrapper key={item.index}>
-              <InventoryItem
-                {...item}
-                disableContextMenu={isUnlockingCase}
-                disableHover={isUnlockingCase}
-                onDelete={handleDelete}
-                onEquip={handleEquip}
-                onRename={handleRename}
-                onUnequip={handleUnequip}
-                onUnlockContainer={handleUnlockContainer}
-              />
-            </InventoryItemWrapper>
-          ))}
+              <InventoryItemWrapper key={item.index}>
+                <InventoryItem
+                  {...item}
+                  disableContextMenu
+                  onClick={handleSelectItem}
+                />
+              </InventoryItemWrapper>
+            ))
+          : items.map((item) => (
+              <InventoryItemWrapper key={item.index}>
+                <InventoryItem
+                  {...item}
+                  disableContextMenu={isUnlockingCase}
+                  disableHover={isUnlockingCase}
+                  onDelete={handleDelete}
+                  onEquip={handleEquip}
+                  onRename={handleRename}
+                  onUnequip={handleUnequip}
+                  onUnlockContainer={handleUnlockContainer}
+                />
+              </InventoryItemWrapper>
+            ))}
       </div>
       {isUnlockingCase && (
         <CaseOpening {...unlockCase} onClose={dismissUnlockCase} />
@@ -190,14 +207,10 @@ export function Inventory() {
   );
 }
 
-function InventoryItemWrapper({
-  children
-}: {
-  children: ReactNode;
-}) {
+function InventoryItemWrapper({ children }: { children: ReactNode }) {
   return (
     <div>
-      <div className="w-full h-full flex items-center justify-center lg:w-auto lg:h-auto lg:block">
+      <div className="flex h-full w-full items-center justify-center lg:block lg:h-auto lg:w-auto">
         {children}
       </div>
     </div>

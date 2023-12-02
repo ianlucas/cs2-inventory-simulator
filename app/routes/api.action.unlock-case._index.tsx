@@ -16,10 +16,12 @@ export const ApiActionUnlockCaseUrl = "/api/action/unlock-case";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { id: userId, inventory } = await requireUser(request);
-  const { caseIndex, keyIndex } = z.object({
-    caseIndex: z.number(),
-    keyIndex: z.number().optional()
-  }).parse(await request.json());
+  const { caseIndex, keyIndex } = z
+    .object({
+      caseIndex: z.number(),
+      keyIndex: z.number().optional()
+    })
+    .parse(await request.json());
   const csInventory = new CS_Inventory(
     parseInventory(inventory),
     MAX_INVENTORY_ITEMS

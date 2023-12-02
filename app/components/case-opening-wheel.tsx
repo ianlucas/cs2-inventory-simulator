@@ -25,16 +25,16 @@ export function CaseOpeningWheel({
   const [offset] = useState(CS_randomInt(188, 440));
   const scaleY = isDisplaying ? 1 : 0;
   // Stops at items[28] with an offset.
-  const translateX = isDisplaying ? (-29 * 256) + offset : 0;
+  const translateX = isDisplaying ? -29 * 256 + offset : 0;
 
   return (
     <div style={{ transform: `scale(${scale})` }}>
       <div
-        className="relative w-[1269.980px] h-[496.8px] [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
+        className="relative h-[496.8px] w-[1269.980px] [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
         style={{ transform: `scaleY(${scaleY})` }}
       >
-        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center blur-[2px] opacity-90 [-webkit-mask-image:radial-gradient(circle_closest-side,#fff0_246px,#000_246px)]">
-          <div className="h-[192px] overflow-hidden w-[1269.980px] [-webkit-mask-image:linear-gradient(to_left,#fff0_0%,#000_10%,#000_90%,#fff0_100%)]">
+        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center opacity-90 blur-[2px] [-webkit-mask-image:radial-gradient(circle_closest-side,#fff0_246px,#000_246px)]">
+          <div className="h-[192px] w-[1269.980px] overflow-hidden [-webkit-mask-image:linear-gradient(to_left,#fff0_0%,#000_10%,#000_90%,#fff0_100%)]">
             <CaseOpeningWheelItems
               items={items}
               caseItem={caseItem}
@@ -43,8 +43,8 @@ export function CaseOpeningWheel({
             />
           </div>
         </div>
-        <div className="absolute top-0 left-0 w-full flex items-center justify-center scale-[1.15] opacity-95">
-          <div className="w-[1269.980px] h-[496.8px] bg-black/50 flex items-center relative [clip-path:circle(22.7%_at_50%_50%)]">
+        <div className="absolute left-0 top-0 flex w-full scale-[1.15] items-center justify-center opacity-95">
+          <div className="relative flex h-[496.8px] w-[1269.980px] items-center bg-black/50 [clip-path:circle(22.7%_at_50%_50%)]">
             <CaseOpeningWheelItems
               ref={hitsRef}
               items={items}
@@ -54,10 +54,10 @@ export function CaseOpeningWheel({
             />
           </div>
         </div>
-        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
           <div
             ref={targetRef}
-            className="w-1 shadow shadow-black bg-[#aeb035] h-[220.8px]"
+            className="h-[220.8px] w-1 bg-[#aeb035] shadow shadow-black"
           />
         </div>
       </div>

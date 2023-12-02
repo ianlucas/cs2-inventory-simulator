@@ -10,15 +10,16 @@ import { sessionStorage } from "~/session.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "./env.server";
 import { findUniqueUser, upsertUser } from "./models/user.server";
 
-export const authenticator = new Authenticator<string>(
-  sessionStorage
-);
+export const authenticator = new Authenticator<string>(sessionStorage);
 
 authenticator.use(
-  new SteamStrategy({
-    returnURL: STEAM_CALLBACK_URL,
-    apiKey: STEAM_API_KEY
-  }, async (user) => await upsertUser(user)),
+  new SteamStrategy(
+    {
+      returnURL: STEAM_CALLBACK_URL,
+      apiKey: STEAM_API_KEY
+    },
+    async (user) => await upsertUser(user)
+  ),
   "steam"
 );
 

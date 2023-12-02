@@ -25,9 +25,8 @@ export function storeInventoryItems(value: CS_InventoryItem[]) {
 
 export function retrieveInventoryItems() {
   try {
-    return (JSON.parse(
-      window.localStorage.getItem("inventoryItems")!
-    ) || []) as CS_InventoryItem[];
+    return (JSON.parse(window.localStorage.getItem("inventoryItems")!) ||
+      []) as CS_InventoryItem[];
   } catch {
     return [];
   }

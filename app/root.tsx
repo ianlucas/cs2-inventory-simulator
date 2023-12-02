@@ -5,7 +5,15 @@
 
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useLocation } from "@remix-run/react";
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLocation
+} from "@remix-run/react";
 
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { ClientOnly } from "remix-utils/client-only";
@@ -35,7 +43,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return typedjson({
     user: await findRequestUser(request),
     maxInventoryItems: MAX_INVENTORY_ITEMS,
-    ...await getTranslations(request)
+    ...(await getTranslations(request))
   });
 }
 
@@ -45,17 +53,15 @@ export default function App() {
   const showInventory = location.pathname !== "/api";
 
   return (
-    <RootProvider
-      {...providerProps}
-    >
-      <html lang="en" onContextMenu={event => event.preventDefault()}>
+    <RootProvider {...providerProps}>
+      <html lang="en" onContextMenu={(event) => event.preventDefault()}>
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <Meta />
           <Links />
         </head>
-        <body className="bg-stone-800 overflow-y-scroll">
+        <body className="overflow-y-scroll bg-stone-800">
           <div
             className="fixed left-0 top-0 -z-10 h-full w-full overflow-hidden lg:blur-lg"
             id="background"

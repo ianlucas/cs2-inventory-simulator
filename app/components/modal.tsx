@@ -23,13 +23,13 @@ export function Modal({
         createPortal(
           <div
             className={clsx(
-              "absolute top-0 left-0 w-full min-h-full flex items-center justify-center z-50",
+              "absolute left-0 top-0 z-50 flex min-h-full w-full items-center justify-center",
               blur && "bg-black/50 lg:bg-transparent lg:backdrop-blur-[2px]"
             )}
           >
             <div
               className={clsx(
-                "shadow-lg rounded bg-neutral-900 lg:bg-neutral-900 lg:bg-opacity-[0.98] min-h-[inherit] text-white lg:backdrop-blur-sm drop-shadow-lg border border-white/10",
+                "min-h-[inherit] rounded border border-white/10 bg-neutral-900 text-white shadow-lg drop-shadow-lg lg:bg-neutral-900 lg:bg-opacity-[0.98] lg:backdrop-blur-sm",
                 className
               )}
             >
@@ -37,7 +37,8 @@ export function Modal({
             </div>
           </div>,
           document.body
-        )}
+        )
+      }
     </ClientOnly>
   );
 }

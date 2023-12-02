@@ -20,7 +20,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   const items = craftInventoryShape.parse(await request.json());
   const inventory = new CS_Inventory([], MAX_INVENTORY_ITEMS);
-  items.forEach(item => inventory.add(item));
+  items.forEach((item) => inventory.add(item));
   await updateUserInventory(userId, inventory.getAll());
   return noContent;
 }

@@ -65,15 +65,18 @@ function readItemTranslation(language: string) {
 }
 
 function getCountryLanguage(countryCode: string) {
-  return languages.find(({ countries }) => {
-    return countries.includes(countryCode);
-  })?.name ?? "english";
+  return (
+    languages.find(({ countries }) => {
+      return countries.includes(countryCode);
+    })?.name ?? "english"
+  );
 }
 
 export async function getTranslations(request: Request) {
   const countryCode = request.headers.get("CF-IPCountry") || "us";
-  const language = await getUserLanguage(request)
-    || getCountryLanguage(countryCode.toLowerCase());
+  const language =
+    (await getUserLanguage(request)) ||
+    getCountryLanguage(countryCode.toLowerCase());
   return {
     itemTranslation: readItemTranslation(language),
     language,
@@ -88,9 +91,7 @@ export async function getUserLanguage(request: Request) {
     return sessionLanguage;
   }
   const userId = await authenticator.isAuthenticated(request);
-  return userId
-    ? await getUserLanguagePreference(userId)
-    : undefined;
+  return userId ? await getUserLanguagePreference(userId) : undefined;
 }
 
 export async function setUserLanguage(request: Request, language?: string) {

@@ -10,18 +10,18 @@ export const baseUrl =
   "https://cdn.statically.io/gh/ianlucas/cslib/main/dist/images";
 
 export const modelFromType = {
-  "agent": "Agent",
-  "case": "",
-  "glove": "Glove",
-  "graffiti": "Graffiti",
-  "key": "",
-  "melee": "Knife",
-  "musickit": "Music Kit",
-  "patch": "Patch",
-  "pin": "",
-  "sticker": "Sticker",
-  "tool": "",
-  "weapon": "Weapon"
+  agent: "Agent",
+  case: "",
+  glove: "Glove",
+  graffiti: "Graffiti",
+  key: "",
+  melee: "Knife",
+  musickit: "Music Kit",
+  patch: "Patch",
+  pin: "",
+  sticker: "Sticker",
+  tool: "",
+  weapon: "Weapon"
 } as const;
 
 let currentLanguage = "";
@@ -33,10 +33,12 @@ export function translateItems(
     return;
   }
   currentLanguage = language;
-  CS_Economy.initialize(CS_ITEMS.map(item => ({
-    ...item,
-    name: itemTranslation[item.id] || item.name
-  })));
+  CS_Economy.initialize(
+    CS_ITEMS.map((item) => ({
+      ...item,
+      name: itemTranslation[item.id] || item.name
+    }))
+  );
 }
 
 export function getCSItemName(csItem: CS_Item) {
@@ -66,17 +68,14 @@ export function getBaseItems({ category, expand, type }: ItemFiltersItem) {
     category,
     type,
     base: expand ? true : undefined
-  }).filter((
-    { free }
-  ) => ((expand && type === undefined ? free : !free)
-    || (!expand && (type !== "musickit" || !free)))
+  }).filter(
+    ({ free }) =>
+      (expand && type === undefined ? free : !free) ||
+      (!expand && (type !== "musickit" || !free))
   );
 }
 
-export function getPaidItems(
-  { type }: ItemFiltersItem,
-  model: string
-) {
+export function getPaidItems({ type }: ItemFiltersItem, model: string) {
   return CS_filterItems({
     model
   }).filter(({ base }) => type === "melee" || !base);

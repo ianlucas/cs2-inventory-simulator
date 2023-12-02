@@ -6,8 +6,10 @@
 import { prisma } from "~/db.server";
 
 export async function getUserLanguagePreference(userId: string) {
-  return (await prisma.userPreferences.findFirst({ where: { userId } }))
-    ?.language || undefined;
+  return (
+    (await prisma.userPreferences.findFirst({ where: { userId } }))?.language ||
+    undefined
+  );
 }
 
 export async function setUserLanguagePreference(

@@ -40,10 +40,12 @@ export async function handleUserCachedResponse({
       timestamp: user.syncedAt
     }
   });
-  const inventory = (await prisma.user.findFirst({
-    select: { inventory: true },
-    where: { id: userId }
-  }))?.inventory;
+  const inventory = (
+    await prisma.user.findFirst({
+      select: { inventory: true },
+      where: { id: userId }
+    })
+  )?.inventory;
   if (!inventory) {
     throw mimeType === "application/json"
       ? json(throwBody)
@@ -53,9 +55,10 @@ export async function handleUserCachedResponse({
     return res(cache.body, mimeType);
   }
   const generated = generate(parseInventory(inventory));
-  const body = mimeType === "application/json"
-    ? JSON.stringify(generated)
-    : z.string().parse(generated);
+  const body =
+    mimeType === "application/json"
+      ? JSON.stringify(generated)
+      : z.string().parse(generated);
   await prisma.userCache.upsert({
     create: {
       body,

@@ -31,17 +31,18 @@ export function CSItemButton({
 
   const { model, name } = getCSItemName(csItem);
   const clickable = onClick !== undefined;
-  const showAltname = csItem.altname !== undefined
-    && (csItem.altname.includes("Collectible")
-      || csItem.altname.includes("Commodity"));
+  const showAltname =
+    csItem.altname !== undefined &&
+    (csItem.altname.includes("Collectible") ||
+      csItem.altname.includes("Commodity"));
 
   return (
     <button
       ref={ref}
       onClick={handleClick}
       className={clsx(
-        clickable
-          && "relative bg-transparent transition-all hover:bg-black/20 active:bg-black/30 overflow-hidden border-y-2 border-transparent",
+        clickable &&
+          "relative overflow-hidden border-y-2 border-transparent bg-transparent transition-all hover:bg-black/20 active:bg-black/30",
         !bigger && "block h-[64px] w-full px-2",
         bigger && "flex h-full w-full items-center justify-center"
       )}
@@ -63,7 +64,7 @@ export function CSItemButton({
           alt={csItem.name}
         />
         <div
-          className={clsx("text-left flex-1 w-0 min-w-0", !bigger && "ml-4")}
+          className={clsx("w-0 min-w-0 flex-1 text-left", !bigger && "ml-4")}
         >
           <div style={{ color: ignoreRarityColor ? undefined : csItem.rarity }}>
             <TextSlider text={name || model} />

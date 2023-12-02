@@ -6,9 +6,13 @@
 import { useEffect, useRef } from "react";
 import { wait } from "~/utils/promise";
 
-export function TextSlider(
-  { className, text }: { className?: string; text: string; }
-) {
+export function TextSlider({
+  className,
+  text
+}: {
+  className?: string;
+  text: string;
+}) {
   const wrapperElement = useRef<HTMLDivElement | null>(null);
   const textElement = useRef<HTMLDivElement | null>(null);
 
@@ -23,9 +27,8 @@ export function TextSlider(
       const duration = text.length * 50 * (goToRight ? 1 : 0.5); // 50 ms per letter.
       const wrapperWidth = wrapperElement.current.clientWidth ?? 0;
       const textWidth = textElement.current.scrollWidth ?? 0;
-      const translation = goToRight && textWidth > wrapperWidth
-        ? -(textWidth - wrapperWidth)
-        : 0;
+      const translation =
+        goToRight && textWidth > wrapperWidth ? -(textWidth - wrapperWidth) : 0;
       textElement.current.style.transitionProperty = "all";
       textElement.current.style.transitionDuration = `${duration}ms`;
       textElement.current.style.transform = `translateX(${translation}px)`;
@@ -36,14 +39,8 @@ export function TextSlider(
   }, [textElement.current]);
 
   return (
-    <div
-      className="overflow-hidden"
-      ref={wrapperElement}
-    >
-      <div
-        className={className}
-        ref={textElement}
-      >
+    <div className="overflow-hidden" ref={wrapperElement}>
+      <div className={className} ref={textElement}>
         {text}
       </div>
     </div>
