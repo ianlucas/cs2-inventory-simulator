@@ -3,19 +3,18 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ApiActionSync } from "~/routes/api.action.sync._index";
+import { ActionShape, ApiActionSync } from "~/routes/api.action.sync._index";
 
-const queue: [string, any][] = [];
+const queue: ActionShape[] = [];
 
-export async function sync(type: string, data: any) {
-  queue.push([type, data]);
+export async function sync(data: ActionShape) {
+  queue.push(data);
 }
 
 async function doSync() {
-  let actions = [] as { type: string; data: string }[];
+  let actions = [] as typeof queue;
   while (queue[0]) {
-    const [type, data] = queue.shift()!;
-    actions.push({ type, ...data });
+    actions.push(queue.shift()!);
   }
   if (actions.length > 0) {
     await fetch(ApiActionSync, {

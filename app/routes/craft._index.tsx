@@ -21,6 +21,7 @@ import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
 import { range } from "~/utils/number";
 import { AddAction } from "./api.action.sync._index";
+import { ExternalInventoryItemShape } from "~/utils/shapes";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Craft - CS2 Inventory Simulator" }];
@@ -53,7 +54,10 @@ export default function Craft() {
           : 1
       ).forEach(() => {
         setInventory((inventory) => inventory.add(inventoryItem));
-        sync(AddAction, { item: inventoryItem });
+        sync({
+          type: AddAction,
+          item: inventoryItem as ExternalInventoryItemShape
+        });
       });
       return navigate("/");
     }

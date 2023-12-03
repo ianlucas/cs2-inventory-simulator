@@ -23,59 +23,59 @@ export const UnequipAction = "unequip";
 export const RenameItemAction = "rename-item";
 export const RemoveAction = "remove";
 
+export const actionShape = z
+  .object({
+    type: z.literal(AddAction),
+    item: externalInventoryItemShape
+  })
+  .or(
+    z.object({
+      type: z.literal(AddFromCacheAction),
+      items: externalInventoryShape
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(AddWithNametagAction),
+      toolIndex: z.number(),
+      itemId: z.number(),
+      nametag: z.string()
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(EquipAction),
+      index: z.number(),
+      team: teamShape.optional()
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(UnequipAction),
+      index: z.number(),
+      team: teamShape.optional()
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(RenameItemAction),
+      toolIndex: z.number(),
+      targetIndex: z.number(),
+      nametag: z.string().optional()
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(RemoveAction),
+      index: z.number()
+    })
+  );
+
+export type ActionShape = z.infer<typeof actionShape>;
+
 export async function action({ request }: ActionFunctionArgs) {
   const { id: userId, inventory: rawInventory } = await requireUser(request);
-  const actions = z
-    .array(
-      z
-        .object({
-          type: z.literal(AddAction),
-          item: externalInventoryItemShape
-        })
-        .or(
-          z.object({
-            type: z.literal(AddFromCacheAction),
-            items: externalInventoryShape
-          })
-        )
-        .or(
-          z.object({
-            type: z.literal(AddWithNametagAction),
-            toolIndex: z.number(),
-            itemId: z.number(),
-            nametag: z.string()
-          })
-        )
-        .or(
-          z.object({
-            type: z.literal(EquipAction),
-            index: z.number(),
-            team: teamShape.optional()
-          })
-        )
-        .or(
-          z.object({
-            type: z.literal(UnequipAction),
-            index: z.number(),
-            team: teamShape.optional()
-          })
-        )
-        .or(
-          z.object({
-            type: z.literal(RenameItemAction),
-            toolIndex: z.number(),
-            targetIndex: z.number(),
-            nametag: z.string().optional()
-          })
-        )
-        .or(
-          z.object({
-            type: z.literal(RemoveAction),
-            index: z.number()
-          })
-        )
-    )
-    .parse(await request.json());
+  const actions = z.array(actionShape).parse(await request.json());
   let addedFromCache = false;
   await manipulateUserInventory(userId, rawInventory, (inventory) =>
     actions.forEach((action) => {

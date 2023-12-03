@@ -77,17 +77,17 @@ export function Inventory() {
 
   function handleEquip(index: number, team?: CS_Team) {
     setInventory((inventory) => inventory.equip(index, team));
-    sync(EquipAction, { index, team });
+    sync({ type: EquipAction, index, team });
   }
 
   function handleUnequip(index: number, team?: CS_Team) {
     setInventory((inventory) => inventory.unequip(index, team));
-    sync(UnequipAction, { index, team });
+    sync({ type: UnequipAction, index, team });
   }
 
   function handleRemove(index: number) {
     setInventory((inventory) => inventory.remove(index));
-    sync(RemoveAction, { index });
+    sync({ type: RemoveAction, index });
   }
 
   function handleUnlockContainer(index: number, useItem: CS_Item) {

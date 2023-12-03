@@ -53,4 +53,9 @@ export const internalInventoryShape = z.array(
   })
 );
 
-export const teamShape = z.literal(2).or(z.literal(3));
+export const teamShape = z.literal(0).or(z.literal(2)).or(z.literal(3));
+
+export type ExternalInventoryItemShape = z.infer<
+  typeof externalInventoryItemShape
+>;
+export type ExternalInventoryShape = z.infer<typeof externalInventoryShape>;

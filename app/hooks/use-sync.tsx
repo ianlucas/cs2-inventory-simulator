@@ -4,14 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useRootContext } from "~/components/root-context";
+import { ActionShape } from "~/routes/api.action.sync._index";
 import { sync } from "~/utils/sync";
 
 export function useSync() {
   const { user } = useRootContext();
-  /** @TODO add type-safety to `data` paramater. */
-  return async function useSync(type: string, data: any) {
+  return async function useSync(data: ActionShape) {
     if (user !== undefined) {
-      await sync(type, data);
+      await sync(data);
     }
   };
 }

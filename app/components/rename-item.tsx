@@ -76,12 +76,18 @@ export function RenameItem({
   const isRenamingFreeItem = freeItems.includes(targetItem.id);
   function handleRename() {
     if (targetIndex < 0 && isRenamingFreeItem) {
-      sync(AddWithNametagAction, { toolIndex, itemId: targetItem.id, nametag });
+      sync({
+        type: AddWithNametagAction,
+        toolIndex,
+        itemId: targetItem.id,
+        nametag
+      });
       setInventory((inventory) =>
         inventory.addWithNametag(toolIndex, targetItem.id, nametag)
       );
     } else {
-      sync(RenameItemAction, {
+      sync({
+        type: RenameItemAction,
         toolIndex,
         targetIndex,
         nametag

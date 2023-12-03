@@ -17,6 +17,7 @@ import { useInventory } from "~/hooks/use-inventory";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { translateItems } from "~/utils/economy";
 import { parseInventory } from "~/utils/inventory";
+import { ExternalInventoryShape } from "~/utils/shapes";
 import { sync } from "~/utils/sync";
 import {
   retrieveInventoryItems,
@@ -71,7 +72,10 @@ export function RootProvider({
   useEffect(() => {
     const items = retrieveInventoryItems();
     if (user !== undefined && user.inventory === null && items.length > 0) {
-      sync(AddFromCacheAction, { items });
+      sync({
+        type: AddFromCacheAction,
+        items: items as ExternalInventoryShape
+      });
       setInventory(
         new CS_Inventory(
           items.map((item) => ({
