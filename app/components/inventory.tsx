@@ -85,7 +85,7 @@ export function Inventory() {
     sync(UnequipAction, { index, team });
   }
 
-  function handleDelete(index: number) {
+  function handleRemove(index: number) {
     setInventory((inventory) => inventory.remove(index));
     sync(RemoveAction, { index });
   }
@@ -192,8 +192,8 @@ export function Inventory() {
                   {...item}
                   disableContextMenu={isUnlockingCase}
                   disableHover={isUnlockingCase}
-                  onDelete={handleDelete}
                   onEquip={handleEquip}
+                  onRemove={handleRemove}
                   onRename={handleRename}
                   onUnequip={handleUnequip}
                   onUnlockContainer={handleUnlockContainer}

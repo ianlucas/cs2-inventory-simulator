@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  CS_Economy,
   CS_safeValidateNametag,
   CS_safeValidateSeed,
   CS_safeValidateStatTrak,
@@ -15,11 +16,7 @@ const inventoryItemProps = {
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
-  wear: z
-    .number()
-    .optional()
-    .refine((wear) => wear === undefined || CS_safeValidateWear(wear)),
-  id: z.number(),
+  id: z.number().refine((id) => !CS_Economy.getById(id).free),
   nametag: z
     .string()
     .optional()
@@ -33,14 +30,19 @@ const inventoryItemProps = {
     .refine((seed) => seed === undefined || CS_safeValidateSeed(seed)),
   stattrak: z.literal(0).optional(),
   stickers: z.array(z.number().or(z.null())).optional(),
-  stickerswear: z.array(z.number().or(z.null())).optional()
+  stickerswear: z.array(z.number().or(z.null())).optional(),
+  wear: z
+    .number()
+    .optional()
+    .refine((wear) => wear === undefined || CS_safeValidateWear(wear))
 };
 
-export const craftInventoryItemShape = z.object(inventoryItemProps);
-export const craftInventoryShape = z.array(craftInventoryItemShape);
-export const inventoryShape = z.array(
+export const externalInventoryItemShape = z.object(inventoryItemProps);
+export const externalInventoryShape = z.array(externalInventoryItemShape);
+export const internalInventoryShape = z.array(
   z.object({
     ...inventoryItemProps,
+    id: z.number(),
     stattrak: z
       .number()
       .optional()

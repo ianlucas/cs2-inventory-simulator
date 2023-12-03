@@ -9,14 +9,15 @@ import { requireUser } from "~/auth.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { noContent } from "~/response.server";
 import {
-  craftInventoryItemShape,
-  craftInventoryShape,
+  externalInventoryItemShape,
+  externalInventoryShape,
   teamShape
 } from "~/utils/shapes";
 
 export const ApiActionSync = "/api/action/sync";
-export const AddFromCacheAction = "add-from-cache";
 export const AddAction = "add";
+export const AddFromCacheAction = "add-from-cache";
+export const AddWithNametagAction = "add-with-nametag";
 export const EquipAction = "equip";
 export const UnequipAction = "unequip";
 export const RenameItemAction = "rename-item";
@@ -28,13 +29,21 @@ export async function action({ request }: ActionFunctionArgs) {
     .array(
       z
         .object({
-          type: z.literal(AddFromCacheAction),
-          items: craftInventoryShape
+          type: z.literal(AddAction),
+          item: externalInventoryItemShape
         })
         .or(
           z.object({
-            type: z.literal(AddAction),
-            item: craftInventoryItemShape
+            type: z.literal(AddFromCacheAction),
+            items: externalInventoryShape
+          })
+        )
+        .or(
+          z.object({
+            type: z.literal(AddWithNametagAction),
+            toolIndex: z.number(),
+            itemId: z.number(),
+            nametag: z.string()
           })
         )
         .or(
@@ -70,10 +79,16 @@ export async function action({ request }: ActionFunctionArgs) {
   await manipulateUserInventory(userId, rawInventory, (inventory) =>
     actions.forEach((action) => {
       switch (action.type) {
-        case AddFromCacheAction:
-          return action.items.forEach((item) => inventory.add(item));
         case AddAction:
           return inventory.add(action.item);
+        case AddFromCacheAction:
+          return action.items.forEach((item) => inventory.add(item));
+        case AddWithNametagAction:
+          return inventory.addWithNametag(
+            action.toolIndex,
+            action.itemId,
+            action.nametag
+          );
         case EquipAction:
           return inventory.equip(action.index, action.team);
         case UnequipAction:

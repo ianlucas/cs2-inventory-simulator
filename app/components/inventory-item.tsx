@@ -37,7 +37,6 @@ import { transform } from "~/utils/inventory";
 import { ContextButton } from "./context-button";
 import { ContextDivider } from "./context-divider";
 import { CSItem } from "./cs-item";
-import { useRootContext } from "./root-context";
 
 export function InventoryItem({
   disableContextMenu,
@@ -49,8 +48,8 @@ export function InventoryItem({
   model,
   name,
   onClick,
-  onDelete,
   onEquip,
+  onRemove,
   onRename,
   onUnequip,
   onUnlockContainer
@@ -58,14 +57,13 @@ export function InventoryItem({
   disableContextMenu?: boolean;
   disableHover?: boolean;
   onClick?(index: number, item: CS_Item): void;
-  onDelete?(index: number): void;
   onEquip?(index: number, team?: CS_Team): void;
+  onRemove?(index: number): void;
   onRename?(index: number, item: CS_Item): void;
   onUnequip?(index: number, team?: CS_Team): void;
   onUnlockContainer?(index: number, item: CS_Item): void;
 }) {
   const stubInventoryItem = index < 0;
-  const isAuthenticated = useRootContext().user !== undefined;
   const translate = useTranslation();
   const [isClickOpen, setIsClickOpen] = useState(false);
   const [isHoverOpen, setIsHoverOpen] = useState(false);
@@ -128,10 +126,8 @@ export function InventoryItem({
   const hasSeed = !item.free && CS_hasSeed(item);
   const hasModel = model || inventoryItem.stattrak !== undefined;
   const hasAttributes = hasWear || hasSeed;
-  const canRename =
-    isAuthenticated && item.type == "tool" && item.def === CS_NAMETAG_TOOL_DEF;
-  const canUnlockContainer =
-    isAuthenticated && ["case", "key"].includes(item.type);
+  const canRename = item.type == "tool" && item.def === CS_NAMETAG_TOOL_DEF;
+  const canUnlockContainer = ["case", "key"].includes(item.type);
 
   function close(callbefore: () => void) {
     return function close() {
@@ -152,7 +148,7 @@ export function InventoryItem({
       >
         <CSItem
           item={item}
-          equipped={isAuthenticated ? equipped : undefined}
+          equipped={equipped}
           nametag={inventoryItem.nametag}
           onClick={
             onClick !== undefined ? () => onClick(index, item) : undefined
@@ -170,80 +166,73 @@ export function InventoryItem({
             style={clickStyles}
             {...getClickFloatingProps()}
           >
-            {isAuthenticated && (
-              <>
-                {canEquip && (
-                  <ContextButton onClick={close(() => onEquip?.(index))}>
-                    {translate("InventoryItemEquip")}
-                  </ContextButton>
-                )}
-                {canEquipT && (
-                  <ContextButton
-                    onClick={close(() => onEquip?.(index, CS_TEAM_T))}
-                  >
-                    {translate("InventoryItemEquipT")}
-                  </ContextButton>
-                )}
-                {canEquipCT && (
-                  <ContextButton
-                    onClick={close(() => onEquip?.(index, CS_TEAM_CT))}
-                  >
-                    {translate("InventoryItemEquipCT")}
-                  </ContextButton>
-                )}
-                {canEquipCT && canEquipT && (
-                  <ContextButton
-                    onClick={close(() => {
-                      onEquip?.(index, CS_TEAM_CT);
-                      onEquip?.(index, CS_TEAM_T);
-                    })}
-                  >
-                    {translate("InventoryItemEquipBothTeams")}
-                  </ContextButton>
-                )}
-                {anyEquip && <ContextDivider />}
-                {canUnequip && (
-                  <ContextButton onClick={close(() => onUnequip?.(index))}>
-                    {translate("InventoryItemUnequip")}
-                  </ContextButton>
-                )}
-                {canUnequipT && (
-                  <ContextButton
-                    onClick={close(() => onUnequip?.(index, CS_TEAM_T))}
-                  >
-                    {translate("InventoryItemUnequipT")}
-                  </ContextButton>
-                )}
-                {canUnequipCT && (
-                  <ContextButton
-                    onClick={close(() => onUnequip?.(index, CS_TEAM_CT))}
-                  >
-                    {translate("InventoryItemUnequipCT")}
-                  </ContextButton>
-                )}
-
-                {anyUnequip && <ContextDivider />}
-
-                {canUnlockContainer && (
-                  <ContextButton
-                    onClick={() => onUnlockContainer?.(index, item)}
-                  >
-                    {translate("InventoryItemUnlockContainer")}
-                  </ContextButton>
-                )}
-
-                {canUnlockContainer && <ContextDivider />}
-
-                {canRename && (
-                  <ContextButton onClick={() => onRename?.(index, item)}>
-                    {translate("InventoryItemRename")}
-                  </ContextButton>
-                )}
-
-                {canRename && <ContextDivider />}
-              </>
+            {canEquip && (
+              <ContextButton onClick={close(() => onEquip?.(index))}>
+                {translate("InventoryItemEquip")}
+              </ContextButton>
             )}
-            <ContextButton onClick={close(() => onDelete?.(index))}>
+            {canEquipT && (
+              <ContextButton onClick={close(() => onEquip?.(index, CS_TEAM_T))}>
+                {translate("InventoryItemEquipT")}
+              </ContextButton>
+            )}
+            {canEquipCT && (
+              <ContextButton
+                onClick={close(() => onEquip?.(index, CS_TEAM_CT))}
+              >
+                {translate("InventoryItemEquipCT")}
+              </ContextButton>
+            )}
+            {canEquipCT && canEquipT && (
+              <ContextButton
+                onClick={close(() => {
+                  onEquip?.(index, CS_TEAM_CT);
+                  onEquip?.(index, CS_TEAM_T);
+                })}
+              >
+                {translate("InventoryItemEquipBothTeams")}
+              </ContextButton>
+            )}
+            {anyEquip && <ContextDivider />}
+            {canUnequip && (
+              <ContextButton onClick={close(() => onUnequip?.(index))}>
+                {translate("InventoryItemUnequip")}
+              </ContextButton>
+            )}
+            {canUnequipT && (
+              <ContextButton
+                onClick={close(() => onUnequip?.(index, CS_TEAM_T))}
+              >
+                {translate("InventoryItemUnequipT")}
+              </ContextButton>
+            )}
+            {canUnequipCT && (
+              <ContextButton
+                onClick={close(() => onUnequip?.(index, CS_TEAM_CT))}
+              >
+                {translate("InventoryItemUnequipCT")}
+              </ContextButton>
+            )}
+
+            {anyUnequip && <ContextDivider />}
+
+            {canUnlockContainer && (
+              <ContextButton onClick={() => onUnlockContainer?.(index, item)}>
+                {translate("InventoryItemUnlockContainer")}
+              </ContextButton>
+            )}
+
+            {canUnlockContainer && <ContextDivider />}
+
+            {canRename && (
+              <ContextButton onClick={() => onRename?.(index, item)}>
+                {translate("InventoryItemRename")}
+              </ContextButton>
+            )}
+
+            {canRename && <ContextDivider />}
+
+            <ContextButton onClick={close(() => onRemove?.(index))}>
               {translate("InventoryItemDelete")}
             </ContextButton>
           </div>

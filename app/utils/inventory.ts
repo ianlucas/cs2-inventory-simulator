@@ -11,14 +11,14 @@ import {
   CS_TEAM_T
 } from "@ianlucas/cslib";
 import { getCSItemName } from "./economy";
-import { inventoryShape } from "./shapes";
+import { internalInventoryShape } from "./shapes";
 
 export function parseInventory(inventory?: string | null) {
   if (!inventory) {
     return [];
   }
   try {
-    return inventoryShape.parse(JSON.parse(inventory));
+    return internalInventoryShape.parse(JSON.parse(inventory));
   } catch {
     return [];
   }

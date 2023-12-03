@@ -24,6 +24,7 @@ import { EditorInput } from "./editor-input";
 import { useRootContext } from "./root-context";
 import {
   AddAction,
+  AddWithNametagAction,
   RemoveAction,
   RenameItemAction
 } from "~/routes/api.action.sync._index";
@@ -75,10 +76,10 @@ export function RenameItem({
   const isRenamingFreeItem = freeItems.includes(targetItem.id);
   function handleRename() {
     if (targetIndex < 0 && isRenamingFreeItem) {
-      const itemToAdd = { id: targetItem.id, nametag };
-      sync(RemoveAction, { index: toolIndex });
-      sync(AddAction, { item: itemToAdd });
-      setInventory((inventory) => inventory.remove(toolIndex).add(itemToAdd));
+      sync(AddWithNametagAction, { toolIndex, itemId: targetItem.id, nametag });
+      setInventory((inventory) =>
+        inventory.addWithNametag(toolIndex, targetItem.id, nametag)
+      );
     } else {
       sync(RenameItemAction, {
         toolIndex,

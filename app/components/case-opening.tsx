@@ -70,9 +70,8 @@ export function CaseOpening({
   onClose(): void;
   keyIndex?: number;
 }) {
-  const { setInventory } = useRootContext();
+  const { user, setInventory } = useRootContext();
   const translate = useTranslation();
-
   const [items, setItems] = useState<ReturnType<typeof CS_unlockCase>[]>([]);
   const [isDisplaying, setIsDisplaying] = useState(false);
   const [canRoll, setCanRoll] = useState(true);
@@ -88,7 +87,7 @@ export function CaseOpening({
     setIsDisplaying(false);
     setCanRoll(false);
     /** @TODO Error handling needed, page will just get stuck if this fails. */
-    const unlockedItem = await postJson<ApiActionUnlockCaseActionData>(
+    const unlockedItem = user === undefined ? CS_unlockCase(caseItem) : await postJson<ApiActionUnlockCaseActionData>(
       ApiActionUnlockCaseUrl,
       { caseIndex, keyIndex }
     );

@@ -14,7 +14,7 @@ export function SyncWarn() {
   const translate = useTranslation();
 
   return user === undefined && typeof retrieveUserId() === "string" ? (
-    <div className="flex select-none items-center justify-center gap-4 bg-red-500/40 px-4 py-2 text-sm text-white lg:gap-2 lg:px-0 lg:text-base">
+    <div className="flex select-none items-center justify-center gap-4 bg-red-500/50 px-4 py-2 text-sm text-white lg:gap-2 lg:px-0 lg:text-base">
       <FontAwesomeIcon icon={faExclamationTriangle} className="h-4" />
       {translate("SyncWarnText")}
     </div>
