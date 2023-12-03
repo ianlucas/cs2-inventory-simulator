@@ -64,15 +64,15 @@ export function RenameItem({
     () =>
       CS_filterItems({
         free: true
-      }).map((csItem) => csItem.id),
+      }).map((item) => item.id),
     []
   );
   const isRenamingFreeItem = freeItems.includes(targetItem.id);
   function handleRename() {
     if (targetIndex < 0 && isRenamingFreeItem) {
       const itemToAdd = { id: targetItem.id, nametag };
-      sync("remove", { toolIndex });
-      sync("add", itemToAdd);
+      sync("remove", { index: toolIndex });
+      sync("add", { item: itemToAdd });
       setInventory((inventory) => inventory.remove(toolIndex).add(itemToAdd));
     } else {
       sync("renameItem", {

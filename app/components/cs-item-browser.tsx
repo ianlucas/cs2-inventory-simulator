@@ -8,13 +8,13 @@ import { CSItemButton } from "./cs-item-button";
 import { GridList } from "./grid-list";
 
 export function CSItemBrowser({
-  csItems,
   ignoreRarityColor,
+  items,
   onClick
 }: {
-  csItems: CS_Item[];
   ignoreRarityColor?: boolean;
-  onClick?(csItem: CS_Item): void;
+  items: CS_Item[];
+  onClick?(item: CS_Item): void;
 }) {
   return (
     <GridList
@@ -22,11 +22,11 @@ export function CSItemBrowser({
       itemHeight={64}
       maxItemsIntoView={6}
     >
-      {csItems.map((csItem) => (
+      {items.map((item) => (
         <CSItemButton
           ignoreRarityColor={ignoreRarityColor}
-          csItem={csItem}
-          key={csItem.id}
+          item={item}
+          key={item.id}
           onClick={onClick}
         />
       ))}

@@ -153,7 +153,7 @@ export function StickerPicker({
               <label>{translate("StickerPickerRemove")}</label>
             </button>
           </div>
-          <CSItemBrowser csItems={filtered} onClick={handleAddSticker} />
+          <CSItemBrowser items={filtered} onClick={handleAddSticker} />
         </Modal>
       )}
     </>

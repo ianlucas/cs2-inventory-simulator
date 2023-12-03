@@ -51,4 +51,4 @@ export const inventoryShape = z.array(
   })
 );
 
-export const csTeamShape = z.literal(2).or(z.literal(3));
+export const teamShape = z.literal(2).or(z.literal(3));

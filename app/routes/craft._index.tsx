@@ -28,7 +28,7 @@ export const meta: MetaFunction = () => {
 export default function Craft() {
   const sync = useSync();
   const navigate = useNavigate();
-  const [csItem, setCSItem] = useState<CS_Item>();
+  const [selectedItem, setSelectedItem] = useState<CS_Item>();
   const { setInventory } = useRootContext();
   const translate = useTranslation();
 
@@ -39,18 +39,20 @@ export default function Craft() {
     stattrak,
     ...attributes
   }: CSItemEditorAttributes) {
-    if (csItem !== undefined) {
-      const item = {
-        id: csItem.id,
+    if (selectedItem !== undefined) {
+      const inventoryItem = {
+        id: selectedItem.id,
         stattrak: stattrak ? 0 : undefined,
         ...attributes
       };
       /** @TODO place this list in a better place. */
       range(
-        ["case", "key", "sticker", "tool"].includes(csItem.type) ? quantity : 1
+        ["case", "key", "sticker", "tool"].includes(selectedItem.type)
+          ? quantity
+          : 1
       ).forEach(() => {
-        setInventory((inventory) => inventory.add(item));
-        sync("add", { item });
+        setInventory((inventory) => inventory.add(inventoryItem));
+        sync("add", { item: inventoryItem });
       });
       return navigate("/");
     }
@@ -60,7 +62,7 @@ export default function Craft() {
     <Modal className="w-[540px]">
       <div className="flex select-none items-center justify-between px-4 py-2 text-sm font-bold">
         <span className="text-neutral-400">
-          {csItem === undefined
+          {selectedItem === undefined
             ? translate("CraftSelectHeader")
             : translate("CraftConfirmHeader")}
         </span>
@@ -70,13 +72,13 @@ export default function Craft() {
           </Link>
         </div>
       </div>
-      {csItem === undefined ? (
-        <CSItemPicker onPickItem={setCSItem} />
+      {selectedItem === undefined ? (
+        <CSItemPicker onPickItem={setSelectedItem} />
       ) : (
         <CSItemEditor
-          csItem={csItem}
+          item={selectedItem}
           onSubmit={handleSubmit}
-          onReset={() => setCSItem(undefined)}
+          onReset={() => setSelectedItem(undefined)}
         />
       )}
     </Modal>

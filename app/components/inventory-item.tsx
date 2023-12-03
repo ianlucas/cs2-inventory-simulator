@@ -40,12 +40,12 @@ import { CSItem } from "./cs-item";
 import { useRootContext } from "./root-context";
 
 export function InventoryItem({
-  csItem,
   disableContextMenu,
   disableHover,
   equipped,
   index,
   inventoryItem,
+  item,
   model,
   name,
   onClick,
@@ -57,12 +57,12 @@ export function InventoryItem({
 }: ReturnType<typeof transform> & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
-  onClick?(index: number, csItem: CS_Item): void;
+  onClick?(index: number, item: CS_Item): void;
   onDelete?(index: number): void;
   onEquip?(index: number, team?: CS_Team): void;
-  onRename?(index: number, csItem: CS_Item): void;
+  onRename?(index: number, item: CS_Item): void;
   onUnequip?(index: number, team?: CS_Team): void;
-  onUnlockContainer?(index: number, csItem: CS_Item): void;
+  onUnlockContainer?(index: number, item: CS_Item): void;
 }) {
   const stubInventoryItem = index < 0;
   const isAuthenticated = useRootContext().user !== undefined;
@@ -112,29 +112,26 @@ export function InventoryItem({
   const ref = useMergeRefs([clickRefs.setReference, hoverRefs.setReference]);
 
   const canEquip =
-    csItem.teams === undefined &&
+    item.teams === undefined &&
     !inventoryItem.equipped &&
-    CS_INVENTORY_EQUIPPABLE_ITEMS.includes(csItem.type);
-  const canEquipT =
-    csItem.teams?.includes(CS_TEAM_T) && !inventoryItem.equippedT;
+    CS_INVENTORY_EQUIPPABLE_ITEMS.includes(item.type);
+  const canEquipT = item.teams?.includes(CS_TEAM_T) && !inventoryItem.equippedT;
   const canEquipCT =
-    csItem.teams?.includes(CS_TEAM_CT) && !inventoryItem.equippedCT;
+    item.teams?.includes(CS_TEAM_CT) && !inventoryItem.equippedCT;
   const canUnequip = inventoryItem.equipped === true;
   const canUnequipT = inventoryItem.equippedT === true;
   const canUnequipCT = inventoryItem.equippedCT === true;
 
   const anyUnequip = canUnequip || canUnequipT || canUnequipCT;
   const anyEquip = canEquip || canEquipT || canEquipCT;
-  const hasWear = !csItem.free && CS_hasWear(csItem);
-  const hasSeed = !csItem.free && CS_hasSeed(csItem);
+  const hasWear = !item.free && CS_hasWear(item);
+  const hasSeed = !item.free && CS_hasSeed(item);
   const hasModel = model || inventoryItem.stattrak !== undefined;
   const hasAttributes = hasWear || hasSeed;
   const canRename =
-    isAuthenticated &&
-    csItem.type == "tool" &&
-    csItem.def === CS_NAMETAG_TOOL_DEF;
+    isAuthenticated && item.type == "tool" && item.def === CS_NAMETAG_TOOL_DEF;
   const canUnlockContainer =
-    isAuthenticated && ["case", "key"].includes(csItem.type);
+    isAuthenticated && ["case", "key"].includes(item.type);
 
   function close(callbefore: () => void) {
     return function close() {
@@ -154,11 +151,11 @@ export function InventoryItem({
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
         <CSItem
-          item={csItem}
+          item={item}
           equipped={isAuthenticated ? equipped : undefined}
           nametag={inventoryItem.nametag}
           onClick={
-            onClick !== undefined ? () => onClick(index, csItem) : undefined
+            onClick !== undefined ? () => onClick(index, item) : undefined
           }
           stattrak={inventoryItem.stattrak}
           stickers={inventoryItem.stickers}
@@ -229,7 +226,7 @@ export function InventoryItem({
 
                 {canUnlockContainer && (
                   <ContextButton
-                    onClick={() => onUnlockContainer?.(index, csItem)}
+                    onClick={() => onUnlockContainer?.(index, item)}
                   >
                     {translate("InventoryItemUnlockContainer")}
                   </ContextButton>
@@ -238,7 +235,7 @@ export function InventoryItem({
                 {canUnlockContainer && <ContextDivider />}
 
                 {canRename && (
-                  <ContextButton onClick={() => onRename?.(index, csItem)}>
+                  <ContextButton onClick={() => onRename?.(index, item)}>
                     {translate("InventoryItemRename")}
                   </ContextButton>
                 )}

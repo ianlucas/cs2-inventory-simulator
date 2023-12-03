@@ -14,7 +14,6 @@ import {
   useState
 } from "react";
 import type { findRequestUser } from "~/auth.server";
-import { ApiSaveCachedInventoryUrl } from "~/routes/api.save-cached-inventory._index";
 import { translateItems } from "~/utils/economy";
 import { parseInventory } from "~/utils/inventory";
 import { sync } from "~/utils/sync";
@@ -71,7 +70,7 @@ export function RootProvider({
   useEffect(() => {
     const items = retrieveInventoryItems();
     if (user !== undefined && user.inventory === null && items.length > 0) {
-      sync(ApiSaveCachedInventoryUrl, items);
+      sync("create-from-cache", items);
       setInventory(new CS_Inventory(items, maxInventoryItems));
     }
     if (user !== undefined) {

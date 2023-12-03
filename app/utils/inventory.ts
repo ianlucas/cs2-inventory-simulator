@@ -25,17 +25,17 @@ export function parseInventory(inventory?: string | null) {
 }
 
 export function transform(inventoryItem: CS_InventoryItem, index: number) {
-  const csItem = CS_Economy.getById(inventoryItem.id);
+  const item = CS_Economy.getById(inventoryItem.id);
   return {
-    csItem,
-    inventoryItem,
-    index,
     equipped: [
       inventoryItem.equipped && "text-white",
       inventoryItem.equippedCT && "text-sky-300",
       inventoryItem.equippedT && "text-yellow-400"
     ],
-    ...getCSItemName(csItem)
+    index,
+    inventoryItem,
+    item,
+    ...getCSItemName(item)
   };
 }
 
@@ -45,7 +45,7 @@ export function sortByName(
   a: TransformedInventoryItem,
   b: TransformedInventoryItem
 ) {
-  return a.csItem.name.localeCompare(b.csItem.name);
+  return a.item.name.localeCompare(b.item.name);
 }
 
 const typeOrder = {
@@ -67,7 +67,7 @@ export function sortByType(
   a: TransformedInventoryItem,
   b: TransformedInventoryItem
 ) {
-  return typeOrder[a.csItem.type] - typeOrder[b.csItem.type];
+  return typeOrder[a.item.type] - typeOrder[b.item.type];
 }
 
 export function sortByEquipped(
@@ -94,14 +94,12 @@ export function sortByEquipped(
 export function getFreeItemsToDisplay() {
   return CS_filterItems({
     free: true
-  }).map((csItem, index) => ({
-    csItem,
-    inventoryItem: {
-      id: csItem.id
-    },
-    index: -1 * (index + 1),
+  }).map((item, index) => ({
     equipped: [],
-    ...getCSItemName(csItem)
+    index: -1 * (index + 1),
+    inventoryItem: { id: item.id },
+    item,
+    ...getCSItemName(item)
   }));
 }
 
@@ -154,52 +152,52 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
           stickers,
           stickerswear
         }) => {
-          const csItem = CS_Economy.getById(id);
+          const item = CS_Economy.getById(id);
           const keyvalues: [string, any][] = [];
-          if (csItem.type === "musickit") {
-            keyvalues.push([MUSIC_KIT_PREFIX, csItem.itemid]);
+          if (item.type === "musickit") {
+            keyvalues.push([MUSIC_KIT_PREFIX, item.itemid]);
           }
-          if (csItem.type === "pin") {
-            keyvalues.push([PIN_PREFIX, csItem.def]);
+          if (item.type === "pin") {
+            keyvalues.push([PIN_PREFIX, item.def]);
           }
-          if (csItem.type === "melee") {
+          if (item.type === "melee") {
             pushTeam(
               keyvalues,
               MELEE_PREFIX,
               equippedT,
               equippedCT,
               "",
-              csItem.def
+              item.def
             );
           }
-          if (csItem.type === "glove") {
+          if (item.type === "glove") {
             pushTeam(
               keyvalues,
               GLOVE_PREFIX,
               equippedT,
               equippedCT,
               "",
-              csItem.def
+              item.def
             );
           }
-          if (csItem.type === "agent") {
+          if (item.type === "agent") {
             pushTeam(
               keyvalues,
               AGENT_PREFIX,
               equippedT,
               equippedCT,
               "",
-              csItem.def
+              item.def
             );
           }
-          if (csItem.type === "patch") {
+          if (item.type === "patch") {
             pushTeam(
               keyvalues,
               AGENT_PATCH_PREFIX,
               equippedT,
               equippedCT,
               "",
-              csItem.itemid
+              item.itemid
             );
           }
           if (nametag !== undefined) {
@@ -208,7 +206,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               NAMETAG_PREFIX,
               equippedT,
               equippedCT,
-              `_${csItem.def}`,
+              `_${item.def}`,
               nametag
             );
           }
@@ -218,7 +216,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               SEED_PREFIX,
               equippedT,
               equippedCT,
-              `_${csItem.def}`,
+              `_${item.def}`,
               seed
             );
           }
@@ -228,7 +226,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               WEAR_PREFIX,
               equippedT,
               equippedCT,
-              `_${csItem.def}`,
+              `_${item.def}`,
               wear
             );
           }
@@ -238,22 +236,22 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               STATTRAK_PREFIX,
               equippedT,
               equippedCT,
-              `_${csItem.def}`,
+              `_${item.def}`,
               stattrak
             );
           }
           if (
-            ["melee", "glove", "weapon"].includes(csItem.type) &&
-            csItem.itemid !== undefined &&
-            csItem.itemid !== 0
+            ["melee", "glove", "weapon"].includes(item.type) &&
+            item.itemid !== undefined &&
+            item.itemid !== 0
           ) {
             pushTeam(
               keyvalues,
               PAINT_PREFIX,
               equippedT,
               equippedCT,
-              `_${csItem.def}`,
-              csItem.itemid
+              `_${item.def}`,
+              item.itemid
             );
           }
           stickers?.forEach((sticker, slot) => {
@@ -263,7 +261,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
                 STICKER_PREFIX,
                 equippedT,
                 equippedCT,
-                `_${csItem.def}`,
+                `_${item.def}`,
                 true
               );
               pushTeam(
@@ -271,7 +269,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
                 STICKER_PREFIX,
                 equippedT,
                 equippedCT,
-                `_${csItem.def}_${slot}`,
+                `_${item.def}_${slot}`,
                 sticker
               );
               if (stickerswear?.[slot] !== null) {
@@ -280,7 +278,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
                   STICKERWEAR_PREFIX,
                   equippedT,
                   equippedCT,
-                  `_${csItem.def}_${slot}`,
+                  `_${item.def}_${slot}`,
                   stickerswear?.[slot]
                 );
               }

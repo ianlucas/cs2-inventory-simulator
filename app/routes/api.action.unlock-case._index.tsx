@@ -15,22 +15,22 @@ import { parseInventory } from "~/utils/inventory";
 export const ApiActionUnlockCaseUrl = "/api/action/unlock-case";
 
 export async function action({ request }: ActionFunctionArgs) {
-  const { id: userId, inventory } = await requireUser(request);
+  const { id: userId, inventory: rawInventory } = await requireUser(request);
   const { caseIndex, keyIndex } = z
     .object({
       caseIndex: z.number(),
       keyIndex: z.number().optional()
     })
     .parse(await request.json());
-  const csInventory = new CS_Inventory(
-    parseInventory(inventory),
+  const inventory = new CS_Inventory(
+    parseInventory(rawInventory),
     MAX_INVENTORY_ITEMS
   );
   try {
-    const unlockedItem = csInventory.unlockCase(caseIndex, keyIndex);
+    const unlockedItem = inventory.unlockCase(caseIndex, keyIndex);
     await prisma.user.update({
       data: {
-        inventory: JSON.stringify(csInventory.getAll())
+        inventory: JSON.stringify(inventory.getAll())
       },
       where: { id: userId }
     });

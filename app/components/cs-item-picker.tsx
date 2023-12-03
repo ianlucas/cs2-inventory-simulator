@@ -17,7 +17,7 @@ import { ITEM_FILTERS, ItemFiltersItem } from "~/utils/economy-item-filters";
 export default function CSItemPicker({
   onPickItem
 }: {
-  onPickItem(csItem: CS_Item): void;
+  onPickItem(item: CS_Item): void;
 }) {
   const [filter, setFilter] = useState(ITEM_FILTERS[0]);
   const [model, setModel] = useState<string | undefined>();
@@ -34,12 +34,12 @@ export default function CSItemPicker({
     return reset();
   }
 
-  function handleItemClick(csItem: CS_Item) {
+  function handleItemClick(item: CS_Item) {
     if (!filter.expand || model !== undefined) {
-      return onPickItem(csItem);
+      return onPickItem(item);
     }
     setQuery("");
-    setModel(csItem.model);
+    setModel(item.model);
   }
 
   const items = useMemo(
@@ -75,7 +75,7 @@ export default function CSItemPicker({
       </div>
       <div className="pb-2 pt-1">
         <CSItemBrowser
-          csItems={items}
+          items={items}
           onClick={handleItemClick}
           ignoreRarityColor={ignoreRarityColor}
         />

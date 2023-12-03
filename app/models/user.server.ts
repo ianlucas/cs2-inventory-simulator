@@ -57,15 +57,15 @@ export async function manipulateUserInventory(
   rawInventory: string | null,
   manipulate: (inventory: CS_Inventory) => void
 ) {
-  const csInventory = new CS_Inventory(
+  const inventory = new CS_Inventory(
     parseInventory(rawInventory),
     MAX_INVENTORY_ITEMS
   );
-  manipulate(csInventory);
+  manipulate(inventory);
   return await prisma.user.update({
     data: {
       syncedAt: new Date(),
-      inventory: JSON.stringify(csInventory.getAll())
+      inventory: JSON.stringify(inventory.getAll())
     },
     where: { id: userId }
   });

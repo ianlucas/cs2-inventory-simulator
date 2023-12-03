@@ -41,25 +41,23 @@ export function translateItems(
   );
 }
 
-export function getCSItemName(csItem: CS_Item) {
-  if (csItem.free) {
+export function getCSItemName(item: CS_Item) {
+  if (item.free) {
     return {
-      model: ["musickit"].includes(csItem.type)
-        ? modelFromType[csItem.type]
-        : "",
-      name: csItem.name
+      model: ["musickit"].includes(item.type) ? modelFromType[item.type] : "",
+      name: item.name
     };
   }
-  if (["weapon", "melee", "glove"].includes(csItem.type)) {
-    const [weaponName, ...paintName] = csItem.name.split("|");
+  if (["weapon", "melee", "glove"].includes(item.type)) {
+    const [weaponName, ...paintName] = item.name.split("|");
     return {
-      model: (csItem.type === "melee" ? "★ " : "") + weaponName.trim(),
+      model: (item.type === "melee" ? "★ " : "") + weaponName.trim(),
       name: paintName.join("|")
     };
   }
   return {
-    model: modelFromType[csItem.type],
-    name: csItem.name
+    model: modelFromType[item.type],
+    name: item.name
   };
 }
 

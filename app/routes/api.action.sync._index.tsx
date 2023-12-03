@@ -8,12 +8,16 @@ import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { noContent } from "~/response.server";
-import { craftInventoryItemShape, csTeamShape } from "~/utils/shapes";
+import {
+  craftInventoryItemShape,
+  craftInventoryShape,
+  teamShape
+} from "~/utils/shapes";
 
 export const ApiActionSync = "/api/action/sync";
 
 export async function action({ request }: ActionFunctionArgs) {
-  const { id: userId, inventory } = await requireUser(request);
+  const { id: userId, inventory: rawInventory } = await requireUser(request);
   const actions = z
     .array(
       z
@@ -25,7 +29,7 @@ export async function action({ request }: ActionFunctionArgs) {
           z.object({
             type: z.literal("equip"),
             index: z.number(),
-            csTeam: csTeamShape.optional()
+            team: teamShape.optional()
           })
         )
         .or(
@@ -38,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
           z.object({
             type: z.literal("unequip"),
             index: z.number(),
-            csTeam: csTeamShape.optional()
+            team: teamShape.optional()
           })
         )
         .or(
@@ -49,21 +53,29 @@ export async function action({ request }: ActionFunctionArgs) {
             nametag: z.string().optional()
           })
         )
+        .or(
+          z.object({
+            type: z.literal("create-from-cache"),
+            items: craftInventoryShape
+          })
+        )
     )
     .parse(await request.json());
-  await manipulateUserInventory(userId, inventory, (csInventory) =>
+  await manipulateUserInventory(userId, rawInventory, (inventory) =>
     actions.forEach((action) => {
       switch (action.type) {
+        case "create-from-cache":
+          return action.items.forEach((item) => inventory.add(item));
         case "add":
-          return csInventory.add(action.item);
+          return inventory.add(action.item);
         case "equip":
-          return csInventory.equip(action.index, action.csTeam);
+          return inventory.equip(action.index, action.team);
         case "remove":
-          return csInventory.remove(action.index);
+          return inventory.remove(action.index);
         case "unequip":
-          return csInventory.unequip(action.index, action.csTeam);
+          return inventory.unequip(action.index, action.team);
         case "renameItem":
-          return csInventory.renameItem(
+          return inventory.renameItem(
             action.toolIndex,
             action.targetIndex,
             action.nametag

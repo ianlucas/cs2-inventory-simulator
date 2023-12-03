@@ -52,7 +52,7 @@ export function Inventory() {
   );
 
   const [useItemAction, setUseItemAction] = useState<{
-    csItem: CS_Item;
+    item: CS_Item;
     index: number;
     items: typeof items;
   }>();
@@ -70,14 +70,14 @@ export function Inventory() {
   const isUnlockingCase = unlockCase !== undefined;
   const isRenamingItem = renameItem !== undefined;
 
-  function handleEquip(index: number, csTeam?: CS_Team) {
-    setInventory((inventory) => inventory.equip(index, csTeam));
-    sync("equip", { index, csTeam });
+  function handleEquip(index: number, team?: CS_Team) {
+    setInventory((inventory) => inventory.equip(index, team));
+    sync("equip", { index, team });
   }
 
-  function handleUnequip(index: number, csTeam?: CS_Team) {
-    setInventory((inventory) => inventory.unequip(index, csTeam));
-    sync("unequip", { index, csTeam });
+  function handleUnequip(index: number, team?: CS_Team) {
+    setInventory((inventory) => inventory.unequip(index, team));
+    sync("unequip", { index, team });
   }
 
   function handleDelete(index: number) {
@@ -85,31 +85,31 @@ export function Inventory() {
     sync("remove", { index });
   }
 
-  function handleUnlockContainer(index: number, csItem: CS_Item) {
-    if (csItem.keys || csItem.type === "key") {
+  function handleUnlockContainer(index: number, useItem: CS_Item) {
+    if (useItem.keys || useItem.type === "key") {
       return setUseItemAction({
-        csItem,
+        item: useItem,
         index,
         items: items.filter(
           (item) =>
-            (csItem.type === "key" && item?.csItem.keys?.includes(csItem.id)) ||
-            (csItem.type === "case" && csItem.keys?.includes(item.csItem.id))
+            (useItem.type === "key" && item?.item.keys?.includes(useItem.id)) ||
+            (useItem.type === "case" && useItem.keys?.includes(item.item.id))
         )
       });
     }
-    if (csItem.type === "case") {
+    if (useItem.type === "case") {
       return setUnlockCase({
         caseIndex: index,
-        caseItem: csItem
+        caseItem: useItem
       });
     }
   }
 
-  function handleRename(index: number, csItem: CS_Item) {
+  function handleRename(index: number, useItem: CS_Item) {
     return setUseItemAction({
-      csItem,
+      item: useItem,
       index,
-      items: items.filter((item) => CS_hasNametag(item.csItem))
+      items: items.filter((item) => CS_hasNametag(item.item))
     });
   }
 
@@ -117,23 +117,24 @@ export function Inventory() {
     setUseItemAction(undefined);
   }
 
-  function handleSelectItem(index: number, csItem: CS_Item) {
+  function handleSelectItem(index: number, selectedItem: CS_Item) {
     if (useItemAction) {
       dismissUseItem();
-      if (["case", "key"].includes(useItemAction.csItem.type)) {
+      if (["case", "key"].includes(useItemAction.item.type)) {
         return setUnlockCase({
-          caseItem: csItem.type === "case" ? csItem : useItemAction.csItem,
-          caseIndex: csItem.type === "case" ? index : useItemAction.index,
-          keyIndex: csItem.type === "key" ? index : useItemAction.index
+          caseItem:
+            selectedItem.type === "case" ? selectedItem : useItemAction.item,
+          caseIndex: selectedItem.type === "case" ? index : useItemAction.index,
+          keyIndex: selectedItem.type === "key" ? index : useItemAction.index
         });
       }
       if (
-        useItemAction.csItem.type === "tool" &&
-        useItemAction.csItem.def === CS_NAMETAG_TOOL_DEF
+        useItemAction.item.type === "tool" &&
+        useItemAction.item.def === CS_NAMETAG_TOOL_DEF
       ) {
         setRenameItem({
           targetIndex: index,
-          targetItem: csItem,
+          targetItem: selectedItem,
           toolIndex: useItemAction.index
         });
       }
@@ -163,11 +164,9 @@ export function Inventory() {
             <img
               draggable={false}
               className="h-8"
-              src={CS_resolveItemImage(baseUrl, useItemAction.csItem)}
+              src={CS_resolveItemImage(baseUrl, useItemAction.item)}
             />
-            <span className="text-neutral-300">
-              {useItemAction.csItem.name}
-            </span>
+            <span className="text-neutral-300">{useItemAction.item.name}</span>
           </div>
         </div>
       )}

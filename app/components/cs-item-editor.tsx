@@ -44,11 +44,11 @@ export interface CSItemEditorAttributes {
 }
 
 export function CSItemEditor({
-  csItem,
+  item,
   onReset,
   onSubmit
 }: {
-  csItem: CS_Item;
+  item: CS_Item;
   onReset(): void;
   onSubmit(props: CSItemEditorAttributes): void;
 }) {
@@ -62,17 +62,17 @@ export function CSItemEditor({
     | null
   )[]);
   const [quantity, setQuantity] = useState(1);
-  const hasStickers = CS_hasStickers(csItem);
-  const hasStattrak = CS_hasStatTrak(csItem);
-  const hasSeed = CS_hasSeed(csItem);
-  const hasWear = CS_hasWear(csItem);
-  const hasNametag = CS_hasNametag(csItem);
+  const hasStickers = CS_hasStickers(item);
+  const hasStattrak = CS_hasStatTrak(item);
+  const hasSeed = CS_hasSeed(item);
+  const hasWear = CS_hasWear(item);
+  const hasNametag = CS_hasNametag(item);
   const isValid =
     CS_safeValidateWear(wear) &&
     (CS_safeValidateNametag(nametag) || nametag.length === 0) &&
     CS_safeValidateSeed(seed);
   const maxQuantity = maxInventoryItems - inventory.size();
-  const hasQuantity = ["case", "key", "sticker", "tool"].includes(csItem.type);
+  const hasQuantity = ["case", "key", "sticker", "tool"].includes(item.type);
   const translate = useTranslation();
 
   function handleSubmit() {
@@ -93,15 +93,15 @@ export function CSItemEditor({
     <div className="m-auto w-[360px] select-none px-4 pb-6 lg:px-0">
       <img
         className="m-auto h-[192px] w-[256px]"
-        src={CS_resolveItemImage(baseUrl, csItem.id, wear)}
-        alt={csItem.name}
+        src={CS_resolveItemImage(baseUrl, item.id, wear)}
+        alt={item.name}
         draggable={false}
       />
       <div
         className="mb-4 text-center font-bold"
-        style={{ color: csItem.rarity }}
+        style={{ color: item.rarity }}
       >
-        {csItem.name}
+        {item.name}
       </div>
       <div className="space-y-4">
         {hasStickers && (
@@ -154,8 +154,8 @@ export function CSItemEditor({
               className="flex-1"
               value={wear}
               onChange={setWear}
-              max={csItem.wearmax ?? CS_MAX_WEAR}
-              min={csItem.wearmin ?? CS_MIN_WEAR}
+              max={item.wearmax ?? CS_MAX_WEAR}
+              min={item.wearmin ?? CS_MIN_WEAR}
               step={CS_WEAR_FACTOR}
             />
           </div>

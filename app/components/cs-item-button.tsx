@@ -12,29 +12,29 @@ import { TextSlider } from "./text-slider";
 export function CSItemButton({
   bigger,
   ignoreRarityColor,
-  csItem,
+  item,
   onClick
 }: {
   bigger?: boolean;
   ignoreRarityColor?: boolean;
-  csItem: CS_Item;
-  onClick?(item: CS_Item): void;
+  item: CS_Item;
   model?: string;
+  onClick?(item: CS_Item): void;
 }) {
   const ref = useRef<HTMLButtonElement>(null);
 
   function handleClick() {
     if (onClick) {
-      onClick(csItem);
+      onClick(item);
     }
   }
 
-  const { model, name } = getCSItemName(csItem);
+  const { model, name } = getCSItemName(item);
   const clickable = onClick !== undefined;
   const showAltname =
-    csItem.altname !== undefined &&
-    (csItem.altname.includes("Collectible") ||
-      csItem.altname.includes("Commodity"));
+    item.altname !== undefined &&
+    (item.altname.includes("Collectible") ||
+      item.altname.includes("Commodity"));
 
   return (
     <button
@@ -54,23 +54,23 @@ export function CSItemButton({
         )}
       >
         <img
-          key={csItem.image}
+          key={item.image}
           draggable={false}
           className={clsx(
             !bigger && "h-[63px] w-[84px]",
             bigger && "m-auto h-32"
           )}
-          src={CS_resolveItemImage(baseUrl, csItem)}
-          alt={csItem.name}
+          src={CS_resolveItemImage(baseUrl, item)}
+          alt={item.name}
         />
         <div
           className={clsx("w-0 min-w-0 flex-1 text-left", !bigger && "ml-4")}
         >
-          <div style={{ color: ignoreRarityColor ? undefined : csItem.rarity }}>
+          <div style={{ color: ignoreRarityColor ? undefined : item.rarity }}>
             <TextSlider text={name || model} />
           </div>
-          {showAltname && csItem.altname !== undefined && (
-            <TextSlider className="text-neutral-400" text={csItem.altname} />
+          {showAltname && item.altname !== undefined && (
+            <TextSlider className="text-neutral-400" text={item.altname} />
           )}
         </div>
       </div>
