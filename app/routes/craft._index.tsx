@@ -22,6 +22,7 @@ import { useTranslation } from "~/hooks/use-translation";
 import { range } from "~/utils/number";
 import { AddAction } from "./api.action.sync._index";
 import { ExternalInventoryItemShape } from "~/utils/shapes";
+import { showQuantity } from "~/utils/economy";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Craft - CS2 Inventory Simulator" }];
@@ -47,12 +48,7 @@ export default function Craft() {
         stattrak: stattrak ? 0 : undefined,
         ...attributes
       };
-      /** @TODO place this list in a better place. */
-      range(
-        ["case", "key", "sticker", "tool"].includes(selectedItem.type)
-          ? quantity
-          : 1
-      ).forEach(() => {
+      range(showQuantity(selectedItem) ? quantity : 1).forEach(() => {
         setInventory((inventory) => inventory.add(inventoryItem));
         sync({
           type: AddAction,

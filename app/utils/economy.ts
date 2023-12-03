@@ -78,3 +78,7 @@ export function getPaidItems({ type }: ItemFiltersItem, model: string) {
     model
   }).filter(({ base }) => type === "melee" || !base);
 }
+
+export function showQuantity(item: CS_Item) {
+  return ["case", "key", "sticker", "tool"].includes(item.type);
+}

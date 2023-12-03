@@ -27,7 +27,7 @@ import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
 import { useTranslation } from "~/hooks/use-translation";
-import { baseUrl } from "~/utils/economy";
+import { baseUrl, showQuantity } from "~/utils/economy";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
 import { EditorToggle } from "./editor-toggle";
@@ -72,7 +72,7 @@ export function CSItemEditor({
     (CS_safeValidateNametag(nametag) || nametag.length === 0) &&
     CS_safeValidateSeed(seed);
   const maxQuantity = maxInventoryItems - inventory.size();
-  const hasQuantity = ["case", "key", "sticker", "tool"].includes(item.type);
+  const hasQuantity = showQuantity(item);
   const translate = useTranslation();
 
   function handleSubmit() {
