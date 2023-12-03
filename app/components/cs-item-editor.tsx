@@ -6,28 +6,27 @@
 import { faBolt, faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  CS_hasNametag,
-  CS_hasSeed,
-  CS_hasStatTrak,
-  CS_hasStickers,
-  CS_hasWear,
   CS_Item,
   CS_MAX_SEED,
   CS_MAX_WEAR,
   CS_MIN_SEED,
   CS_MIN_WEAR,
   CS_NAMETAG_RE,
-  CS_resolveItemImage,
+  CS_WEAR_FACTOR,
+  CS_hasNametag,
+  CS_hasSeed,
+  CS_hasStatTrak,
+  CS_hasStickers,
+  CS_hasWear,
   CS_safeValidateNametag,
   CS_safeValidateSeed,
-  CS_safeValidateWear,
-  CS_WEAR_FACTOR
+  CS_safeValidateWear
 } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
 import { useTranslation } from "~/hooks/use-translation";
-import { baseUrl, showQuantity } from "~/utils/economy";
+import { resolveItemImage, showQuantity } from "~/utils/economy";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
 import { EditorToggle } from "./editor-toggle";
@@ -93,7 +92,7 @@ export function CSItemEditor({
     <div className="m-auto w-[360px] select-none px-4 pb-6 lg:px-0">
       <img
         className="m-auto h-[192px] w-[256px]"
-        src={CS_resolveItemImage(baseUrl, item.id, wear)}
+        src={resolveItemImage(item.id, wear)}
         alt={item.name}
         draggable={false}
       />

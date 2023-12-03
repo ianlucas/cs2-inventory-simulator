@@ -9,14 +9,18 @@ import {
   CS_hasNametag,
   CS_Item,
   CS_NAMETAG_TOOL_DEF,
-  CS_resolveItemImage,
   CS_Team
 } from "@ianlucas/cslib";
 import { ReactNode, useMemo, useState } from "react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
-import { baseUrl } from "~/utils/economy";
+import {
+  EquipAction,
+  RemoveAction,
+  UnequipAction
+} from "~/routes/api.action.sync._index";
+import { resolveItemImage } from "~/utils/economy";
 import {
   getFreeItemsToDisplay,
   sortByEquipped,
@@ -27,11 +31,6 @@ import {
 import { CaseOpening } from "./case-opening";
 import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
-import {
-  EquipAction,
-  RemoveAction,
-  UnequipAction
-} from "~/routes/api.action.sync._index";
 
 export function Inventory() {
   const { inventory, setInventory, language } = useRootContext();
@@ -169,7 +168,7 @@ export function Inventory() {
             <img
               draggable={false}
               className="h-8"
-              src={CS_resolveItemImage(baseUrl, useItemAction.item)}
+              src={resolveItemImage(useItemAction.item)}
             />
             <span className="text-neutral-300">{useItemAction.item.name}</span>
           </div>

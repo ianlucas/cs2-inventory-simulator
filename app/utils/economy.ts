@@ -3,7 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_filterItems, CS_Item, CS_ITEMS } from "@ianlucas/cslib";
+import {
+  CS_Economy,
+  CS_filterItems,
+  CS_Item,
+  CS_ITEMS,
+  CS_resolveCaseSpecialItemImage,
+  CS_resolveItemImage
+} from "@ianlucas/cslib";
 import { ItemFiltersItem } from "./economy-item-filters";
 
 export const baseUrl =
@@ -81,4 +88,12 @@ export function getPaidItems({ type }: ItemFiltersItem, model: string) {
 
 export function showQuantity(item: CS_Item) {
   return ["case", "key", "sticker", "tool"].includes(item.type);
+}
+
+export function resolveItemImage(item: number | CS_Item, wear?: number) {
+  return CS_resolveItemImage(baseUrl, item, wear);
+}
+
+export function resolveCaseSpecialItemImage(item: number | CS_Item) {
+  return CS_resolveCaseSpecialItemImage(baseUrl, item);
 }

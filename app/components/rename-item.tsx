@@ -6,10 +6,9 @@
 import { faCircleInfo, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  CS_filterItems,
   CS_Item,
   CS_NAMETAG_RE,
-  CS_resolveItemImage,
+  CS_filterItems,
   CS_safeValidateNametag
 } from "@ianlucas/cslib";
 import clsx from "clsx";
@@ -19,15 +18,13 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/hooks/use-input";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
-import { baseUrl } from "~/utils/economy";
-import { EditorInput } from "./editor-input";
-import { useRootContext } from "./root-context";
 import {
-  AddAction,
   AddWithNametagAction,
-  RemoveAction,
   RenameItemAction
 } from "~/routes/api.action.sync._index";
+import { resolveItemImage } from "~/utils/economy";
+import { EditorInput } from "./editor-input";
+import { useRootContext } from "./root-context";
 
 function Layer({
   absolute,
@@ -121,7 +118,7 @@ export function RenameItem({
               <img
                 className="aspect-[1.33333] max-w-[512px]"
                 draggable={false}
-                src={CS_resolveItemImage(baseUrl, targetItem)}
+                src={resolveItemImage(targetItem)}
               />
               <div className="flex">
                 <EditorInput

@@ -3,14 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS_Economy,
-  CS_Item,
-  CS_resolveCaseSpecialItemImage,
-  CS_resolveItemImage,
-  CS_unlockCase
-} from "@ianlucas/cslib";
-import { baseUrl } from "~/utils/economy";
+import { CS_Economy, CS_Item, CS_unlockCase } from "@ianlucas/cslib";
+import { resolveCaseSpecialItemImage, resolveItemImage } from "~/utils/economy";
 
 export function CaseOpeningWheelItem({
   caseItem,
@@ -40,8 +34,8 @@ export function CaseOpeningWheelItem({
         className="absolute left-0 top-0 h-full w-full"
         src={
           unlockedItem.special
-            ? CS_resolveCaseSpecialItemImage(baseUrl, caseItem)
-            : CS_resolveItemImage(baseUrl, item)
+            ? resolveCaseSpecialItemImage(caseItem)
+            : resolveItemImage(item)
         }
       />
     </div>

@@ -5,10 +5,10 @@
 
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_Item, CS_resolveItemImage } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
-import { baseUrl, getCSItemName } from "~/utils/economy";
+import { getCSItemName, resolveItemImage } from "~/utils/economy";
 
 export function CSItem({
   item,
@@ -37,7 +37,7 @@ export function CSItem({
         <div className="bg-gradient-to-b from-neutral-500 to-neutral-300 px-1">
           <img
             className="h-[108px] w-[144px]"
-            src={CS_resolveItemImage(baseUrl, item, wear)}
+            src={resolveItemImage(item, wear)}
             draggable={false}
             alt={item.name}
           />

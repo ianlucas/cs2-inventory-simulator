@@ -3,10 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_resolveItemImage } from "@ianlucas/cslib";
+import { CS_Item } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useRef } from "react";
-import { baseUrl, getCSItemName } from "~/utils/economy";
+import { getCSItemName, resolveItemImage } from "~/utils/economy";
 import { TextSlider } from "./text-slider";
 
 export function CSItemButton({
@@ -60,7 +60,7 @@ export function CSItemButton({
             !bigger && "h-[63px] w-[84px]",
             bigger && "m-auto h-32"
           )}
-          src={CS_resolveItemImage(baseUrl, item)}
+          src={resolveItemImage(item)}
           alt={item.name}
         />
         <div

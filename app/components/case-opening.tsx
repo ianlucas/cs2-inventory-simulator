@@ -14,7 +14,6 @@ import {
   CS_Economy,
   CS_Item,
   CS_listCaseContents,
-  CS_resolveItemImage,
   CS_unlockCase
 } from "@ianlucas/cslib";
 import clsx from "clsx";
@@ -28,7 +27,7 @@ import {
   ApiActionUnlockCaseActionData,
   ApiActionUnlockCaseUrl
 } from "~/routes/api.action.unlock-case._index";
-import { baseUrl } from "~/utils/economy";
+import { resolveItemImage } from "~/utils/economy";
 import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
@@ -87,10 +86,13 @@ export function CaseOpening({
     setIsDisplaying(false);
     setCanRoll(false);
     /** @TODO Error handling needed, page will just get stuck if this fails. */
-    const unlockedItem = user === undefined ? CS_unlockCase(caseItem) : await postJson<ApiActionUnlockCaseActionData>(
-      ApiActionUnlockCaseUrl,
-      { caseIndex, keyIndex }
-    );
+    const unlockedItem =
+      user === undefined
+        ? CS_unlockCase(caseItem)
+        : await postJson<ApiActionUnlockCaseActionData>(
+            ApiActionUnlockCaseUrl,
+            { caseIndex, keyIndex }
+          );
     setTimeout(() => {
       setContentsTranslateY(500);
       playSound("/open.mp3");
@@ -142,8 +144,7 @@ export function CaseOpening({
                   style={{ transform: `scale(${rolledScale})` }}
                 >
                   <img
-                    src={CS_resolveItemImage(
-                      baseUrl,
+                    src={resolveItemImage(
                       receivedItem,
                       unlockedItem.attributes.wear
                     )}
@@ -207,7 +208,7 @@ export function CaseOpening({
                 >
                   <img
                     className="h-[198px] w-[256px]"
-                    src={CS_resolveItemImage(baseUrl, caseItem)}
+                    src={resolveItemImage(caseItem)}
                   />
                 </Layer>
                 <div className="fixed left-0 top-28 h-full w-full text-center drop-shadow">
