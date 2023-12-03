@@ -76,13 +76,18 @@ export async function action({ request }: ActionFunctionArgs) {
         )
     )
     .parse(await request.json());
+  let addedFromCache = false;
   await manipulateUserInventory(userId, rawInventory, (inventory) =>
     actions.forEach((action) => {
       switch (action.type) {
         case AddAction:
           return inventory.add(action.item);
         case AddFromCacheAction:
-          return action.items.forEach((item) => inventory.add(item));
+          if (rawInventory === null && !addedFromCache) {
+            action.items.forEach((item) => inventory.add(item));
+            addedFromCache = true;
+          }
+          return;
         case AddWithNametagAction:
           return inventory.addWithNametag(
             action.toolIndex,

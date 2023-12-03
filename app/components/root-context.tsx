@@ -71,8 +71,18 @@ export function RootProvider({
   useEffect(() => {
     const items = retrieveInventoryItems();
     if (user !== undefined && user.inventory === null && items.length > 0) {
-      sync(AddFromCacheAction, items);
-      setInventory(new CS_Inventory(items, maxInventoryItems));
+      sync(AddFromCacheAction, { items });
+      setInventory(
+        new CS_Inventory(
+          items.map((item) => ({
+            ...item,
+            equipped: undefined,
+            equippedCT: undefined,
+            equippedT: undefined
+          })),
+          maxInventoryItems
+        )
+      );
     }
     if (user !== undefined) {
       storeUserId(user.id);
