@@ -8,7 +8,7 @@ A Counter-Strike 2 **Inventory Simulator** for the web using TypeScript and Remi
 
 ## Feature Overview
 
-- **Authentication is optional:** craft works without authentication.
+- **Authentication is optional:** most features work without authentication.
 - **Steam authentication:** enables Steam players to sync their inventories.
 - **Craft Items:** add items to your inventory, including Weapons (Pistol, SMG, Heavy, Rifle), Knives, Gloves, Stickers, Agents, Patches, Music Kits, Graffiti, Pins, Cases, Keys, and Tools.
 - **Equip Items:** equip items as you would do in-game.
