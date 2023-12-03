@@ -31,7 +31,7 @@ import {
 } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useState } from "react";
-import { useAnyClick } from "~/hooks/floating-ui";
+import { useAnyClick } from "~/hooks/use-any-click";
 import { useTranslation } from "~/hooks/use-translation";
 import { transform } from "~/utils/inventory";
 import { ContextButton } from "./context-button";
