@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Item } from "@ianlucas/cslib";
 import { MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
+import { useLockBodyScroll } from "@uidotdev/usehooks";
 import { useState } from "react";
 import {
   CSItemEditor,
@@ -16,13 +17,12 @@ import {
 import CSItemPicker from "~/components/cs-item-picker";
 import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
-import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
-import { range } from "~/utils/number";
-import { AddAction } from "./api.action.sync._index";
-import { ExternalInventoryItemShape } from "~/utils/shapes";
 import { showQuantity } from "~/utils/economy";
+import { range } from "~/utils/number";
+import { ExternalInventoryItemShape } from "~/utils/shapes";
+import { AddAction } from "./api.action.sync._index";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Craft - CS2 Inventory Simulator" }];
@@ -35,7 +35,7 @@ export default function Craft() {
   const { setInventory } = useRootContext();
   const translate = useTranslation();
 
-  useLockScroll();
+  useLockBodyScroll();
 
   function handleSubmit({
     quantity,
