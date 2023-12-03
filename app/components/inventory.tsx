@@ -27,6 +27,11 @@ import {
 import { CaseOpening } from "./case-opening";
 import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
+import {
+  EquipAction,
+  RemoveAction,
+  UnequipAction
+} from "~/routes/api.action.sync._index";
 
 export function Inventory() {
   const { inventory, setInventory, language } = useRootContext();
@@ -72,17 +77,17 @@ export function Inventory() {
 
   function handleEquip(index: number, team?: CS_Team) {
     setInventory((inventory) => inventory.equip(index, team));
-    sync("equip", { index, team });
+    sync(EquipAction, { index, team });
   }
 
   function handleUnequip(index: number, team?: CS_Team) {
     setInventory((inventory) => inventory.unequip(index, team));
-    sync("unequip", { index, team });
+    sync(UnequipAction, { index, team });
   }
 
   function handleDelete(index: number) {
     setInventory((inventory) => inventory.remove(index));
-    sync("remove", { index });
+    sync(RemoveAction, { index });
   }
 
   function handleUnlockContainer(index: number, useItem: CS_Item) {

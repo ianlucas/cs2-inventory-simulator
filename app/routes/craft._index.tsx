@@ -20,6 +20,7 @@ import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
 import { range } from "~/utils/number";
+import { AddAction } from "./api.action.sync._index";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Craft - CS2 Inventory Simulator" }];
@@ -52,7 +53,7 @@ export default function Craft() {
           : 1
       ).forEach(() => {
         setInventory((inventory) => inventory.add(inventoryItem));
-        sync("add", { item: inventoryItem });
+        sync(AddAction, { item: inventoryItem });
       });
       return navigate("/");
     }

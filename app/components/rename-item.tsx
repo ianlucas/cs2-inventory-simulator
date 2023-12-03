@@ -22,6 +22,11 @@ import { useTranslation } from "~/hooks/use-translation";
 import { baseUrl } from "~/utils/economy";
 import { EditorInput } from "./editor-input";
 import { useRootContext } from "./root-context";
+import {
+  AddAction,
+  RemoveAction,
+  RenameItemAction
+} from "~/routes/api.action.sync._index";
 
 function Layer({
   absolute,
@@ -71,11 +76,11 @@ export function RenameItem({
   function handleRename() {
     if (targetIndex < 0 && isRenamingFreeItem) {
       const itemToAdd = { id: targetItem.id, nametag };
-      sync("remove", { index: toolIndex });
-      sync("add", { item: itemToAdd });
+      sync(RemoveAction, { index: toolIndex });
+      sync(AddAction, { item: itemToAdd });
       setInventory((inventory) => inventory.remove(toolIndex).add(itemToAdd));
     } else {
-      sync("renameItem", {
+      sync(RenameItemAction, {
         toolIndex,
         targetIndex,
         nametag

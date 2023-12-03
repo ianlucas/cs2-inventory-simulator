@@ -15,6 +15,12 @@ import {
 } from "~/utils/shapes";
 
 export const ApiActionSync = "/api/action/sync";
+export const AddFromCacheAction = "add-from-cache";
+export const AddAction = "add";
+export const EquipAction = "equip";
+export const UnequipAction = "unequip";
+export const RenameItemAction = "rename-item";
+export const RemoveAction = "remove";
 
 export async function action({ request }: ActionFunctionArgs) {
   const { id: userId, inventory: rawInventory } = await requireUser(request);
@@ -22,32 +28,32 @@ export async function action({ request }: ActionFunctionArgs) {
     .array(
       z
         .object({
-          type: z.literal("add"),
-          item: craftInventoryItemShape
+          type: z.literal(AddFromCacheAction),
+          items: craftInventoryShape
         })
         .or(
           z.object({
-            type: z.literal("equip"),
+            type: z.literal(AddAction),
+            item: craftInventoryItemShape
+          })
+        )
+        .or(
+          z.object({
+            type: z.literal(EquipAction),
             index: z.number(),
             team: teamShape.optional()
           })
         )
         .or(
           z.object({
-            type: z.literal("remove"),
-            index: z.number()
-          })
-        )
-        .or(
-          z.object({
-            type: z.literal("unequip"),
+            type: z.literal(UnequipAction),
             index: z.number(),
             team: teamShape.optional()
           })
         )
         .or(
           z.object({
-            type: z.literal("renameItem"),
+            type: z.literal(RenameItemAction),
             toolIndex: z.number(),
             targetIndex: z.number(),
             nametag: z.string().optional()
@@ -55,8 +61,8 @@ export async function action({ request }: ActionFunctionArgs) {
         )
         .or(
           z.object({
-            type: z.literal("create-from-cache"),
-            items: craftInventoryShape
+            type: z.literal(RemoveAction),
+            index: z.number()
           })
         )
     )
@@ -64,22 +70,22 @@ export async function action({ request }: ActionFunctionArgs) {
   await manipulateUserInventory(userId, rawInventory, (inventory) =>
     actions.forEach((action) => {
       switch (action.type) {
-        case "create-from-cache":
+        case AddFromCacheAction:
           return action.items.forEach((item) => inventory.add(item));
-        case "add":
+        case AddAction:
           return inventory.add(action.item);
-        case "equip":
+        case EquipAction:
           return inventory.equip(action.index, action.team);
-        case "remove":
-          return inventory.remove(action.index);
-        case "unequip":
+        case UnequipAction:
           return inventory.unequip(action.index, action.team);
-        case "renameItem":
+        case RenameItemAction:
           return inventory.renameItem(
             action.toolIndex,
             action.targetIndex,
             action.nametag
           );
+        case RemoveAction:
+          return inventory.remove(action.index);
       }
     })
   );

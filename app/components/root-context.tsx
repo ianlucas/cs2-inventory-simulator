@@ -14,6 +14,7 @@ import {
   useState
 } from "react";
 import type { findRequestUser } from "~/auth.server";
+import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { translateItems } from "~/utils/economy";
 import { parseInventory } from "~/utils/inventory";
 import { sync } from "~/utils/sync";
@@ -70,7 +71,7 @@ export function RootProvider({
   useEffect(() => {
     const items = retrieveInventoryItems();
     if (user !== undefined && user.inventory === null && items.length > 0) {
-      sync("create-from-cache", items);
+      sync(AddFromCacheAction, items);
       setInventory(new CS_Inventory(items, maxInventoryItems));
     }
     if (user !== undefined) {
