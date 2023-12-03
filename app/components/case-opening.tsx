@@ -12,7 +12,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS_Economy,
-  CS_Inventory,
   CS_Item,
   CS_listCaseContents,
   CS_resolveItemImage,
@@ -25,7 +24,10 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useDetectCollision } from "~/hooks/use-detect-collision";
 import { useResponsiveScale } from "~/hooks/use-responsive-scale";
 import { useTranslation } from "~/hooks/use-translation";
-import { ApiActionUnlockCaseUrl } from "~/routes/api.action.unlock-case._index";
+import {
+  ApiActionUnlockCaseActionData,
+  ApiActionUnlockCaseUrl
+} from "~/routes/api.action.unlock-case._index";
 import { baseUrl } from "~/utils/economy";
 import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
@@ -86,8 +88,7 @@ export function CaseOpening({
     setIsDisplaying(false);
     setCanRoll(false);
     /** @TODO Error handling needed, page will just get stuck if this fails. */
-    /** @TODO We need to infer this from unlock case action. */
-    const unlockedItem = await postJson<ReturnType<typeof CS_unlockCase>>(
+    const unlockedItem = await postJson<ApiActionUnlockCaseActionData>(
       ApiActionUnlockCaseUrl,
       { caseIndex, keyIndex }
     );
@@ -102,10 +103,9 @@ export function CaseOpening({
         setIsDisplaying(true);
         setTimeout(() => {
           setUnlockedItem(unlockedItem);
-          setInventory((inventory) => {
-            inventory.unlockCase(caseIndex, keyIndex, unlockedItem);
-            return inventory;
-          });
+          setInventory((inventory) =>
+            inventory.unlockCase(unlockedItem, caseIndex, keyIndex)
+          );
           playSound(`/case_awarded_${unlockedItem.rarity}.mp3`);
           setTimeout(() => {
             setRolledScale(scale);

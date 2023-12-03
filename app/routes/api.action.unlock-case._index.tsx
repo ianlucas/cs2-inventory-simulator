@@ -3,16 +3,19 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory } from "@ianlucas/cslib";
+import { CS_Inventory, CS_unlockCase } from "@ianlucas/cslib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
-import { prisma } from "~/db.server";
 import { MAX_INVENTORY_ITEMS } from "~/env.server";
-import { badRequest } from "~/response.server";
+import { updateUserInventory } from "~/models/user.server";
 import { parseInventory } from "~/utils/inventory";
 
 export const ApiActionUnlockCaseUrl = "/api/action/unlock-case";
+
+export type ApiActionUnlockCaseActionData = ReturnType<
+  Awaited<ReturnType<typeof action>>["json"]
+>;
 
 export async function action({ request }: ActionFunctionArgs) {
   const { id: userId, inventory: rawInventory } = await requireUser(request);
@@ -26,16 +29,8 @@ export async function action({ request }: ActionFunctionArgs) {
     parseInventory(rawInventory),
     MAX_INVENTORY_ITEMS
   );
-  try {
-    const unlockedItem = inventory.unlockCase(caseIndex, keyIndex);
-    await prisma.user.update({
-      data: {
-        inventory: JSON.stringify(inventory.getAll())
-      },
-      where: { id: userId }
-    });
-    return json(unlockedItem);
-  } catch {
-    throw badRequest;
-  }
+  const unlockedItem = CS_unlockCase(inventory.get(caseIndex)!.id);
+  inventory.unlockCase(unlockedItem, caseIndex, keyIndex);
+  await updateUserInventory(userId, inventory.getAll());
+  return json(unlockedItem);
 }

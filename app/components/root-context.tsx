@@ -10,10 +10,10 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
-  useEffect,
-  useState
+  useEffect
 } from "react";
 import type { findRequestUser } from "~/auth.server";
+import { useInventory } from "~/hooks/use-inventory";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { translateItems } from "~/utils/economy";
 import { parseInventory } from "~/utils/inventory";
@@ -55,7 +55,7 @@ export function RootProvider({
   translation: Record<string, string | undefined>;
   user: Awaited<ReturnType<typeof findRequestUser>>;
 }) {
-  const [inventory, setInventory] = useState(
+  const [inventory, setInventory] = useInventory(
     new CS_Inventory(
       user?.inventory
         ? parseInventory(user?.inventory)
@@ -89,18 +89,7 @@ export function RootProvider({
         language,
         maxInventoryItems,
         requireAuth: retrieveUserId() !== undefined,
-        setInventory(
-          value: CS_Inventory | ((value: CS_Inventory) => CS_Inventory)
-        ) {
-          return setInventory((current) => {
-            return new CS_Inventory(
-              typeof value !== "function"
-                ? value.getAll()
-                : value(current).getAll(),
-              maxInventoryItems
-            );
-          });
-        },
+        setInventory,
         translation,
         user
       }}
