@@ -129,8 +129,8 @@ export function CaseOpening({
       : undefined;
 
   return (
-    <ClientOnly>
-      {() =>
+    <ClientOnly
+      children={() =>
         createPortal(
           <Layer
             className={clsx("z-50 select-none bg-black/60 backdrop-blur-sm")}
@@ -298,6 +298,6 @@ export function CaseOpening({
           document.body
         )
       }
-    </ClientOnly>
+    />
   );
 }

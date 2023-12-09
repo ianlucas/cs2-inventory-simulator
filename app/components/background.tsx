@@ -8,8 +8,8 @@ import { ClientOnly } from "remix-utils/client-only";
 
 export function Background() {
   return (
-    <ClientOnly>
-      {() =>
+    <ClientOnly
+      children={() =>
         createPortal(
           <div className="flex h-full w-full items-center justify-center">
             <video
@@ -20,11 +20,11 @@ export function Background() {
               autoPlay
               loop
               muted
-            ></video>
+            />
           </div>,
           document.getElementById("background")!
         )
       }
-    </ClientOnly>
+    />
   );
 }

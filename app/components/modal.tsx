@@ -19,8 +19,8 @@ export function Modal({
   children: ReactNode;
 }) {
   return (
-    <ClientOnly>
-      {() =>
+    <ClientOnly
+      children={() =>
         createPortal(
           <div
             className={clsx(
@@ -42,6 +42,6 @@ export function Modal({
           document.body
         )
       }
-    </ClientOnly>
+    />
   );
 }

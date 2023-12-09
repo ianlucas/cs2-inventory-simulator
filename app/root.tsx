@@ -75,9 +75,9 @@ export default function App() {
             id="background"
           />
           <Background />
-          {showInventory && <ClientOnly>{() => <SyncWarn />}</ClientOnly>}
+          {showInventory && <ClientOnly children={() => <SyncWarn />} />}
           <Header />
-          {showInventory && <ClientOnly>{() => <Inventory />}</ClientOnly>}
+          {showInventory && <ClientOnly children={() => <Inventory />} />}
           <Outlet />
           <Footer />
           <ScrollRestoration />

@@ -98,8 +98,8 @@ export function RenameItem({
   }
 
   return (
-    <ClientOnly>
-      {() =>
+    <ClientOnly
+      children={() =>
         createPortal(
           <Layer
             className={clsx("z-50 select-none bg-black/60 backdrop-blur-sm")}
@@ -154,6 +154,6 @@ export function RenameItem({
           document.body
         )
       }
-    </ClientOnly>
+    />
   );
 }
