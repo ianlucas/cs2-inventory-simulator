@@ -69,6 +69,7 @@ export const brazilian = {
   CaseClose: "Fechar",
   CaseRareItem: "★ Item raro e especial ★",
   CaseContainsOne: "Contém um dos seguintes itens:",
+  CaseUse: "Usar",
   RenameUse: "Usar Etiqueta de Nome",
   RenameEnterName: "Inserir novo nome para:",
   RenameWarn: "Etiquetas de Nome só podem ser usadas uma vez",

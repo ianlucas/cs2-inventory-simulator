@@ -82,6 +82,7 @@ export const english = {
   CaseWear: "WEAR",
   CaseRareItem: "★ Rare Special Item ★",
   CaseContainsOne: "Contains one of the following:",
+  CaseUse: "Use",
   RenameUse: "Use Name Tag",
   RenameEnterName: "Enter a new name for:",
   RenameWarn: "A Name Tag can only be used once",

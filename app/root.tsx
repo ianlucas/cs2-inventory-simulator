@@ -28,14 +28,18 @@ import { MAX_INVENTORY_ITEMS } from "./env.server";
 import styles from "./tailwind.css";
 import { getTranslations } from "./translations.server";
 
-const primaryFontUrl =
+const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
+
+const displayFontUrl =
+  "https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   { rel: "preconnect", href: "https://fonts.gstatic.com" },
-  { rel: "stylesheet", href: primaryFontUrl },
+  { rel: "stylesheet", href: bodyFontUrl },
+  { rel: "stylesheet", href: displayFontUrl },
   { rel: "stylesheet", href: styles }
 ];
 

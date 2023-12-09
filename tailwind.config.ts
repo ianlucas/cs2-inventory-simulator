@@ -10,6 +10,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        display: ["'Exo 2'", "sans-serif"],
         sans: ["'Noto Sans'", "sans-serif"],
         mono: [
           "ui-monospace",

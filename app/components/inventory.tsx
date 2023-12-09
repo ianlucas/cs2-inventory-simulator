@@ -63,6 +63,7 @@ export function Inventory() {
   const [unlockCase, setUnlockCase] = useState<{
     caseIndex: number;
     caseItem: CS_Item;
+    keyItem?: CS_Item;
     keyIndex?: number;
   }>();
   const [renameItem, setRenameItem] = useState<{
@@ -129,7 +130,9 @@ export function Inventory() {
           caseItem:
             selectedItem.type === "case" ? selectedItem : useItemAction.item,
           caseIndex: selectedItem.type === "case" ? index : useItemAction.index,
-          keyIndex: selectedItem.type === "key" ? index : useItemAction.index
+          keyIndex: selectedItem.type === "key" ? index : useItemAction.index,
+          keyItem:
+            selectedItem.type === "key" ? selectedItem : useItemAction.item
         });
       }
       if (

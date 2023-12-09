@@ -35,6 +35,7 @@ import { CaseOpeningWheel } from "./case-opening-wheel";
 import { CaseSpecialItem } from "./case-special-item";
 import { CSItem } from "./cs-item";
 import { useRootContext } from "./root-context";
+import { InfoIcon } from "./info-icon";
 
 function Layer({
   absolute,
@@ -61,13 +62,15 @@ function Layer({
 export function CaseOpening({
   caseIndex,
   caseItem,
-  onClose,
-  keyIndex
+  keyIndex,
+  keyItem,
+  onClose
 }: {
   caseIndex: number;
   caseItem: CS_Item;
-  onClose(): void;
   keyIndex?: number;
+  keyItem?: CS_Item;
+  onClose(): void;
 }) {
   const { user, setInventory } = useRootContext();
   const translate = useTranslation();
@@ -138,20 +141,8 @@ export function CaseOpening({
             className={clsx("z-50 select-none bg-black/60 backdrop-blur-sm")}
           >
             {unlockedItem && receivedItem ? (
-              <>
-                <Layer
-                  className="[transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
-                  style={{ transform: `scale(${rolledScale})` }}
-                >
-                  <img
-                    src={resolveItemImage(
-                      receivedItem,
-                      unlockedItem.attributes.wear
-                    )}
-                    draggable={false}
-                  />
-                </Layer>
-                <div className="fixed left-0 top-28 h-full w-full text-center drop-shadow">
+              <div className="flex h-full w-full items-center justify-center text-center drop-shadow">
+                <div>
                   <div className="px-4 text-2xl font-bold">
                     <span
                       className="border-b-4 pb-1 drop-shadow"
@@ -170,33 +161,45 @@ export function CaseOpening({
                     />
                     <span>{caseItem.name}</span>
                   </div>
-                </div>
-                <div className="fixed bottom-28 left-0 flex w-full items-center justify-center gap-8 text-center drop-shadow">
-                  {unlockedItem.attributes.wear !== undefined && (
-                    <div>
-                      <div className="text-sm font-bold">
-                        {translate("CaseWear")}
-                      </div>
-                      <div>{unlockedItem.attributes.wear}</div>
+                  <img
+                    className="m-auto my-4 [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
+                    src={resolveItemImage(
+                      receivedItem,
+                      unlockedItem.attributes.wear
+                    )}
+                    draggable={false}
+                    style={{ transform: `scale(${rolledScale})` }}
+                  />
+                  <div className="flex w-full items-center justify-between gap-8 border-t border-t-white/10 pt-1.5 text-center drop-shadow">
+                    <div className="flex items-center gap-8">
+                      {unlockedItem.attributes.wear !== undefined && (
+                        <div>
+                          <div className="text-sm font-bold">
+                            {translate("CaseWear")}
+                          </div>
+                          <div>{unlockedItem.attributes.wear}</div>
+                        </div>
+                      )}
+                      {unlockedItem.attributes.wear !== undefined && (
+                        <div>
+                          <div className="text-sm font-bold">
+                            {translate("CaseSeed")}
+                          </div>
+                          <div>{unlockedItem.attributes.seed}</div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                  {unlockedItem.attributes.wear !== undefined && (
-                    <div>
-                      <div className="text-sm font-bold">
-                        {translate("CaseSeed")}
-                      </div>
-                      <div>{unlockedItem.attributes.seed}</div>
-                    </div>
-                  )}
-                  <button
-                    className="flex cursor-default items-center gap-2 rounded bg-white/80 px-4 py-2 font-bold text-neutral-700 drop-shadow-lg transition hover:bg-white disabled:bg-neutral-500 disabled:text-neutral-700"
-                    onClick={onClose}
-                  >
-                    <FontAwesomeIcon icon={faXmark} className="h-4" />
-                    {translate("CaseClose")}
-                  </button>
+                    <button
+                      className="flex h-9 cursor-default items-center gap-2 rounded-sm px-2 font-semibold uppercase text-neutral-100 drop-shadow-lg transition hover:bg-neutral-500/30 hover:text-white disabled:bg-transparent disabled:text-neutral-700"
+                      onClick={onClose}
+                    >
+                      <span className="scale-x-[0.8]">
+                        {translate("CaseClose")}
+                      </span>
+                    </button>
+                  </div>
                 </div>
-              </>
+              </div>
             ) : (
               <>
                 <Layer
@@ -212,14 +215,14 @@ export function CaseOpening({
                   />
                 </Layer>
                 <div className="fixed left-0 top-28 h-full w-full text-center drop-shadow">
-                  <div className="text-2xl font-bold">
+                  <div className="font-display text-3xl font-semibold leading-10 tracking-wider">
                     {translate("CaseUnlockContainer")}
                   </div>
                   <div className="text-lg">
                     {translate("CaseUnlock")} <strong>{caseItem.name}</strong>
                   </div>
-                  <div className="flex items-center justify-center gap-2">
-                    <FontAwesomeIcon icon={faCircleInfo} className="h-4" />
+                  <div className="mt-2 flex items-center justify-center gap-2">
+                    <InfoIcon />
                     <span>{translate("CaseOnceWarn")}</span>
                   </div>
                 </div>
@@ -231,14 +234,16 @@ export function CaseOpening({
                   scale={scale}
                   targetRef={targetRef}
                 />
-                <div
-                  className="fixed bottom-0 left-0 flex w-full justify-center gap-4 pb-28 drop-shadow [transition:all_cubic-bezier(0.4,0,0.2,1)_500ms]"
-                  style={{
-                    transform: `translateY(${contentsTranslateY}px)`
-                  }}
-                >
-                  <div className="m-auto max-w-[1024px] rounded bg-gradient-to-b from-transparent to-white/20 p-2">
-                    <h2 className="my-2">{translate("CaseContainsOne")}</h2>
+                <div className="fixed bottom-12 left-0 w-full">
+                  <div
+                    className="m-auto max-w-[1024px] rounded bg-gradient-to-b from-transparent to-white/20 p-2 [transition:all_cubic-bezier(0.4,0,0.2,1)_500ms]"
+                    style={{
+                      transform: `translateY(${contentsTranslateY}px)`
+                    }}
+                  >
+                    <h2 className="my-2 border-b border-b-white/50 pb-2">
+                      {translate("CaseContainsOne")}
+                    </h2>
                     <div className="flex h-[320px] flex-wrap gap-3 overflow-y-scroll">
                       {[
                         ...CS_listCaseContents(caseItem, true).map(
@@ -250,31 +255,47 @@ export function CaseOpening({
                       ]}
                     </div>
                   </div>
-                </div>
-                <div className="fixed bottom-12 left-0 flex w-full justify-center gap-4 drop-shadow">
-                  <button
-                    disabled={!canRoll}
-                    className="flex cursor-default items-center gap-2 rounded bg-white/80 px-4 py-2 font-bold text-neutral-700 drop-shadow-lg transition hover:bg-white disabled:bg-neutral-500 disabled:text-neutral-700"
-                    onClick={onClose}
-                  >
-                    <FontAwesomeIcon icon={faXmark} className="h-4" />
-                    {translate("CaseClose")}
-                  </button>
-                  <button
-                    onClick={roll}
-                    disabled={!canRoll}
-                    className="flex cursor-default items-center gap-2 rounded bg-green-700/80 px-4 py-2 font-bold text-neutral-200 drop-shadow-lg transition hover:bg-green-600 disabled:bg-green-900 disabled:text-green-600"
-                  >
-                    {canRoll ? (
-                      <FontAwesomeIcon icon={faUnlock} className="h-4" />
-                    ) : (
-                      <FontAwesomeIcon
-                        icon={faCircleNotch}
-                        className="h-4 animate-spin"
-                      />
+                  <div className="m-auto flex min-h-[63px] max-w-[800px] items-center justify-between border-t border-t-white/10 pt-1.5 drop-shadow">
+                    {keyItem !== undefined && (
+                      <div className="font-display flex items-center gap-2 text-lg">
+                        <img
+                          className="h-14"
+                          src={resolveItemImage(keyItem)}
+                          alt={keyItem.name}
+                        />
+                        <span>
+                          {translate("CaseUse")} <strong>{keyItem.name}</strong>
+                        </span>
+                      </div>
                     )}
-                    {translate("CaseUnlockContainer")}
-                  </button>
+                    <div className="font-display flex flex-1 items-center justify-end gap-2 text-lg font-semibold">
+                      {canRoll ? (
+                        <button
+                          onClick={roll}
+                          disabled={!canRoll}
+                          className="flex h-9 cursor-default items-center gap-2 rounded-sm bg-green-700/80 uppercase text-neutral-200 drop-shadow-lg transition hover:bg-green-600 disabled:bg-green-900 disabled:text-green-600"
+                        >
+                          <span className="scale-x-[0.8]">
+                            {translate("CaseUnlockContainer")}
+                          </span>
+                        </button>
+                      ) : (
+                        <FontAwesomeIcon
+                          icon={faCircleNotch}
+                          className="h-7 animate-spin px-4 text-white"
+                        />
+                      )}
+                      <button
+                        disabled={!canRoll}
+                        className="flex h-9 cursor-default items-center gap-2 rounded-sm px-2 uppercase text-neutral-100 drop-shadow-lg transition hover:bg-neutral-500/30 hover:text-white disabled:bg-transparent disabled:text-neutral-700"
+                        onClick={onClose}
+                      >
+                        <span className="scale-x-[0.8]">
+                          {translate("CaseClose")}
+                        </span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </>
             )}
