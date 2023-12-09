@@ -3,12 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  faCircleInfo,
-  faCircleNotch,
-  faUnlock,
-  faXmark
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS_Economy,
@@ -34,8 +29,8 @@ import { playSound } from "~/utils/sound";
 import { CaseOpeningWheel } from "./case-opening-wheel";
 import { CaseSpecialItem } from "./case-special-item";
 import { CSItem } from "./cs-item";
-import { useRootContext } from "./root-context";
 import { InfoIcon } from "./info-icon";
+import { useRootContext } from "./root-context";
 
 function Layer({
   absolute,
