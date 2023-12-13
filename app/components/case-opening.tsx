@@ -31,6 +31,7 @@ import { CaseSpecialItem } from "./case-special-item";
 import { CSItem } from "./cs-item";
 import { InfoIcon } from "./info-icon";
 import { useRootContext } from "./root-context";
+import { FillSpinner } from "./fill-spinner";
 
 function Layer({
   absolute,
@@ -138,9 +139,9 @@ export function CaseOpening({
             {unlockedItem && receivedItem ? (
               <div className="flex h-full w-full items-center justify-center text-center drop-shadow">
                 <div>
-                  <div className="px-4 text-2xl font-bold">
+                  <div className="px-4 text-2xl">
                     <span
-                      className="border-b-4 pb-1 drop-shadow"
+                      className="border-b-4 pb-2 font-display font-semibold leading-10 tracking-wider drop-shadow"
                       style={{ borderColor: receivedItem.rarity }}
                     >
                       {unlockedItem.attributes.stattrak !== undefined &&
@@ -252,7 +253,7 @@ export function CaseOpening({
                   </div>
                   <div className="m-auto flex min-h-[63px] max-w-[800px] items-center justify-between border-t border-t-white/10 pt-1.5 drop-shadow">
                     {keyItem !== undefined && (
-                      <div className="font-display flex items-center gap-2 text-lg">
+                      <div className="flex items-center gap-2 font-display text-lg">
                         <img
                           className="h-14"
                           src={resolveItemImage(keyItem)}
@@ -263,7 +264,7 @@ export function CaseOpening({
                         </span>
                       </div>
                     )}
-                    <div className="font-display flex flex-1 items-center justify-end gap-2 text-lg font-semibold">
+                    <div className="flex flex-1 items-center justify-end gap-2 font-display text-lg font-semibold">
                       {canRoll ? (
                         <button
                           onClick={roll}
@@ -275,10 +276,7 @@ export function CaseOpening({
                           </span>
                         </button>
                       ) : (
-                        <FontAwesomeIcon
-                          icon={faCircleNotch}
-                          className="h-7 animate-spin px-4 text-white"
-                        />
+                        <FillSpinner className="mx-4" />
                       )}
                       <button
                         disabled={!canRoll}
