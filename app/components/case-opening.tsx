@@ -3,8 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS_Economy,
   CS_Item,
@@ -29,9 +27,9 @@ import { playSound } from "~/utils/sound";
 import { CaseOpeningWheel } from "./case-opening-wheel";
 import { CaseSpecialItem } from "./case-special-item";
 import { CSItem } from "./cs-item";
+import { FillSpinner } from "./fill-spinner";
 import { InfoIcon } from "./info-icon";
 import { useRootContext } from "./root-context";
-import { FillSpinner } from "./fill-spinner";
 
 function Layer({
   absolute,
@@ -210,26 +208,28 @@ export function CaseOpening({
                     src={resolveItemImage(caseItem)}
                   />
                 </Layer>
-                <div className="fixed left-0 top-28 h-full w-full text-center drop-shadow">
-                  <div className="font-display text-3xl font-semibold leading-10 tracking-wider">
-                    {translate("CaseUnlockContainer")}
+                <div className="flex flex-col gap-4">
+                  <div className="text-center drop-shadow">
+                    <div className="font-display text-3xl font-semibold leading-10 tracking-wider">
+                      {translate("CaseUnlockContainer")}
+                    </div>
+                    <div className="text-lg">
+                      {translate("CaseUnlock")} <strong>{caseItem.name}</strong>
+                    </div>
+                    <div className="mt-2 flex items-center justify-center gap-2">
+                      <InfoIcon />
+                      <span>{translate("CaseOnceWarn")}</span>
+                    </div>
                   </div>
-                  <div className="text-lg">
-                    {translate("CaseUnlock")} <strong>{caseItem.name}</strong>
-                  </div>
-                  <div className="mt-2 flex items-center justify-center gap-2">
-                    <InfoIcon />
-                    <span>{translate("CaseOnceWarn")}</span>
-                  </div>
+                  <CaseOpeningWheel
+                    caseItem={caseItem}
+                    hitsRef={hitsRef}
+                    isDisplaying={isDisplaying}
+                    items={items}
+                    scale={scale}
+                    targetRef={targetRef}
+                  />
                 </div>
-                <CaseOpeningWheel
-                  caseItem={caseItem}
-                  hitsRef={hitsRef}
-                  isDisplaying={isDisplaying}
-                  items={items}
-                  scale={scale}
-                  targetRef={targetRef}
-                />
                 <div className="fixed bottom-12 left-0 w-full">
                   <div
                     className="m-auto max-w-[1024px] rounded bg-gradient-to-b from-transparent to-white/20 p-2 [transition:all_cubic-bezier(0.4,0,0.2,1)_500ms]"
