@@ -4,28 +4,37 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item, CS_randomInt, CS_unlockCase } from "@ianlucas/cslib";
-import { RefObject, useState } from "react";
+import { useRef, useState } from "react";
+import { useDetectCollision } from "~/hooks/use-detect-collision";
+import { useResponsiveScale } from "~/hooks/use-responsive-scale";
+import { playSound } from "~/utils/sound";
 import { CaseOpeningWheelItems } from "./case-opening-wheel-items";
 
 export function CaseOpeningWheel({
-  scale,
-  items,
-  hitsRef,
-  targetRef,
   caseItem,
-  isDisplaying
+  isDisplaying,
+  items
 }: {
-  scale: number;
-  items: ReturnType<typeof CS_unlockCase>[];
-  hitsRef: RefObject<HTMLDivElement>;
-  targetRef: RefObject<HTMLDivElement>;
   caseItem: CS_Item;
   isDisplaying: boolean;
+  items: ReturnType<typeof CS_unlockCase>[];
 }) {
+  const targetRef = useRef<HTMLDivElement>(null);
+  const hitsRef = useRef<HTMLDivElement>(null);
+  const scale = useResponsiveScale();
   const [offset] = useState(CS_randomInt(188, 440));
   const scaleY = isDisplaying ? 1 : 0;
   // Stops at items[28] with an offset.
   const translateX = isDisplaying ? -29 * 256 + offset : 0;
+
+  useDetectCollision({
+    disabled: !isDisplaying,
+    target: targetRef,
+    hits: hitsRef,
+    then() {
+      playSound("/roll.mp3");
+    }
+  });
 
   return (
     <div style={{ transform: `scale(${scale})` }}>
