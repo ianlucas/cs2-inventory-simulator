@@ -25,6 +25,7 @@ import {
 import { resolveItemImage } from "~/utils/economy";
 import { EditorInput } from "./editor-input";
 import { useRootContext } from "./root-context";
+import { CSItemImage } from "./cs-item-image";
 
 function Layer({
   absolute,
@@ -111,10 +112,9 @@ export function RenameItem({
                   <span>{translate("RenameWarn")}</span>
                 </div>
               </div>
-              <img
+              <CSItemImage
                 className="aspect-[1.33333] max-w-[512px]"
-                draggable={false}
-                src={resolveItemImage(targetItem)}
+                item={targetItem}
               />
               <div className="flex">
                 <EditorInput

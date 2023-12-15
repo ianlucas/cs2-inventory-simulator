@@ -23,6 +23,7 @@ import { CSItemBrowser } from "./cs-item-browser";
 import { EditorInput } from "./editor-input";
 import EditorSelect from "./editor-select";
 import { Modal } from "./modal";
+import { CSItemImage } from "./cs-item-image";
 
 export function StickerPicker({
   onChange,
@@ -97,12 +98,7 @@ export function StickerPicker({
               onClick={handleClickSlot(index)}
             >
               {item !== null ? (
-                <img
-                  draggable={true}
-                  className="h-[64px] w-[85.33px]"
-                  src={item.image}
-                  alt={item.name}
-                />
+                <CSItemImage className="h-[64px] w-[85.33px]" item={item} />
               ) : (
                 <div className="flex h-[64px] w-[85.33px] items-center justify-center text-neutral-700">
                   {translate("StickerPickerNA")}

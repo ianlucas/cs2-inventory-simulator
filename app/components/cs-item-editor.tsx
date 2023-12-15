@@ -32,6 +32,7 @@ import { EditorStepRange } from "./editor-step-range";
 import { EditorToggle } from "./editor-toggle";
 import { useRootContext } from "./root-context";
 import { StickerPicker } from "./sticker-picker";
+import { CSItemImage } from "./cs-item-image";
 
 export interface CSItemEditorAttributes {
   nametag?: string;
@@ -90,11 +91,10 @@ export function CSItemEditor({
 
   return (
     <div className="m-auto w-[360px] select-none px-4 pb-6 lg:px-0">
-      <img
+      <CSItemImage
         className="m-auto h-[192px] w-[256px]"
-        src={resolveItemImage(item.id, wear)}
-        alt={item.name}
-        draggable={false}
+        item={item}
+        wear={wear}
       />
       <div
         className="mb-4 text-center font-bold"

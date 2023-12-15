@@ -9,6 +9,7 @@ import { CS_Economy, CS_Item } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
 import { getCSItemName, resolveItemImage } from "~/utils/economy";
+import { CSItemImage } from "./cs-item-image";
 
 export function CSItem({
   item,
@@ -35,11 +36,10 @@ export function CSItem({
     <div className="w-[154px]">
       <div className="relative bg-gradient-to-b from-neutral-600 to-neutral-400 p-[1px]">
         <div className="bg-gradient-to-b from-neutral-500 to-neutral-300 px-1">
-          <img
+          <CSItemImage
             className="h-[108px] w-[144px]"
-            src={resolveItemImage(item, wear)}
-            draggable={false}
-            alt={item.name}
+            item={item}
+            wear={wear}
           />
         </div>
         <div className="absolute bottom-0 left-0 flex items-center p-1">
@@ -47,11 +47,10 @@ export function CSItem({
             stickers.map(
               (sticker, index) =>
                 sticker !== null && (
-                  <img
-                    key={index}
+                  <CSItemImage
                     className="h-5"
-                    src={CS_Economy.getById(sticker).image}
-                    alt={CS_Economy.getById(sticker).name}
+                    item={CS_Economy.getById(sticker)}
+                    key={index}
                   />
                 )
             )}

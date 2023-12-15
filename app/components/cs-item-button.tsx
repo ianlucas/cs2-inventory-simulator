@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { useRef } from "react";
 import { getCSItemName, resolveItemImage } from "~/utils/economy";
 import { TextSlider } from "./text-slider";
+import { CSItemImage } from "./cs-item-image";
 
 export function CSItemButton({
   bigger,
@@ -53,15 +54,13 @@ export function CSItemButton({
           !bigger && "flex items-center"
         )}
       >
-        <img
-          key={item.image}
-          draggable={false}
+        <CSItemImage
           className={clsx(
             !bigger && "h-[63px] w-[84px]",
             bigger && "m-auto h-32"
           )}
-          src={resolveItemImage(item)}
-          alt={item.name}
+          item={item}
+          key={item.image}
         />
         <div
           className={clsx("w-0 min-w-0 flex-1 text-left", !bigger && "ml-4")}
