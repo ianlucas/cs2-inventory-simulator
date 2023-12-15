@@ -76,17 +76,17 @@ export function Inventory() {
   const isRenamingItem = renameItem !== undefined;
 
   function handleEquip(index: number, team?: CS_Team) {
-    setInventory((inventory) => inventory.equip(index, team));
+    setInventory(inventory.equip(index, team));
     sync({ type: EquipAction, index, team });
   }
 
   function handleUnequip(index: number, team?: CS_Team) {
-    setInventory((inventory) => inventory.unequip(index, team));
+    setInventory(inventory.unequip(index, team));
     sync({ type: UnequipAction, index, team });
   }
 
   function handleRemove(index: number) {
-    setInventory((inventory) => inventory.remove(index));
+    setInventory(inventory.remove(index));
     sync({ type: RemoveAction, index });
   }
 

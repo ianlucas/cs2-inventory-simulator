@@ -12,13 +12,7 @@ export function useInventory(
   const [state, setState] = useState(initialState);
   return [
     state,
-    (value: CS_Inventory | ((state: CS_Inventory) => CS_Inventory)) =>
-      setState(
-        (state) =>
-          new CS_Inventory(
-            (typeof value === "function" ? value(state) : value).getAll(),
-            state.limit
-          )
-      )
+    (value: CS_Inventory) =>
+      setState(new CS_Inventory(value.getAll(), value.limit))
   ] as const;
 }

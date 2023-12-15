@@ -66,7 +66,7 @@ export function CaseOpening({
   keyItem?: CS_Item;
   onClose(): void;
 }) {
-  const { user, setInventory } = useRootContext();
+  const { user, inventory, setInventory } = useRootContext();
   const translate = useTranslation();
   const [items, setItems] = useState<ReturnType<typeof CS_unlockCase>[]>([]);
   const [isDisplaying, setIsDisplaying] = useState(false);
@@ -101,9 +101,7 @@ export function CaseOpening({
         setIsDisplaying(true);
         setTimeout(() => {
           setUnlockedItem(unlockedItem);
-          setInventory((inventory) =>
-            inventory.unlockCase(unlockedItem, caseIndex, keyIndex)
-          );
+          setInventory(inventory.unlockCase(unlockedItem, caseIndex, keyIndex));
           playSound(`/case_awarded_${unlockedItem.rarity}.mp3`);
           setTimeout(() => {
             setRolledScale(scale);

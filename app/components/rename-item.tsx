@@ -61,7 +61,7 @@ export function RenameItem({
 }) {
   const translate = useTranslation();
   const [nametag, setNametag] = useInput("");
-  const { setInventory } = useRootContext();
+  const { inventory, setInventory } = useRootContext();
   const sync = useSync();
   const freeItems = useMemo(
     () =>
@@ -79,9 +79,7 @@ export function RenameItem({
         itemId: targetItem.id,
         nametag
       });
-      setInventory((inventory) =>
-        inventory.addWithNametag(toolIndex, targetItem.id, nametag)
-      );
+      setInventory(inventory.addWithNametag(toolIndex, targetItem.id, nametag));
     } else {
       sync({
         type: RenameItemAction,
@@ -89,9 +87,7 @@ export function RenameItem({
         targetIndex,
         nametag
       });
-      setInventory((inventory) =>
-        inventory.renameItem(toolIndex, targetIndex, nametag)
-      );
+      setInventory(inventory.renameItem(toolIndex, targetIndex, nametag));
     }
 
     onClose();

@@ -32,7 +32,7 @@ export default function Craft() {
   const sync = useSync();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<CS_Item>();
-  const { setInventory } = useRootContext();
+  const { inventory, setInventory } = useRootContext();
   const translate = useTranslation();
 
   useLockBodyScroll();
@@ -49,7 +49,7 @@ export default function Craft() {
         ...attributes
       };
       range(showQuantity(selectedItem) ? quantity : 1).forEach(() => {
-        setInventory((inventory) => inventory.add(inventoryItem));
+        setInventory(inventory.add(inventoryItem));
         sync({
           type: AddAction,
           item: inventoryItem as ExternalInventoryItemShape

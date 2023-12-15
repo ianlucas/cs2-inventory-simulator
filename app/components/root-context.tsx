@@ -32,7 +32,7 @@ const RootContext = createContext<{
   language: string;
   maxInventoryItems: number;
   requireAuth: boolean;
-  setInventory: Dispatch<SetStateAction<CS_Inventory>>;
+  setInventory(value: CS_Inventory): void;
   translation: Record<string, string | undefined>;
   user: Awaited<ReturnType<typeof findRequestUser>>;
 }>(null!);
