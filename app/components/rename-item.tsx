@@ -3,16 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faCircleInfo, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS_Item,
-  CS_NAMETAG_RE,
   CS_filterItems,
   CS_safeValidateNametag
 } from "@ianlucas/cslib";
-import clsx from "clsx";
-import { ComponentProps, useMemo } from "react";
+import { useMemo } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/hooks/use-input";
@@ -22,32 +18,12 @@ import {
   AddWithNametagAction,
   RenameItemAction
 } from "~/routes/api.action.sync._index";
-import { resolveItemImage } from "~/utils/economy";
+import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
 import { useRootContext } from "./root-context";
-import { CSItemImage } from "./cs-item-image";
-
-function Layer({
-  absolute,
-  block,
-  className,
-  ...props
-}: ComponentProps<"div"> & {
-  absolute?: boolean;
-  block?: boolean;
-}) {
-  return (
-    <div
-      {...props}
-      className={clsx(
-        absolute ? "absolute" : "fixed",
-        "left-0 top-0 h-full w-full",
-        block ? undefined : "flex items-center justify-center",
-        className
-      )}
-    />
-  );
-}
+import { UseItemButton } from "./use-item-button";
+import { UseItemFooter } from "./use-item-footer";
+import { UseItemHeader } from "./use-item-header";
 
 export function RenameItem({
   onClose,
@@ -98,55 +74,50 @@ export function RenameItem({
     <ClientOnly
       children={() =>
         createPortal(
-          <Layer
-            className={clsx("z-50 select-none bg-black/60 backdrop-blur-sm")}
-          >
+          <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
             <div>
-              <div className="text-center">
-                <div className="text-2xl">{translate("RenameUse")}</div>
-                <div className="text-lg">
-                  {translate("RenameEnterName")} {targetItem.name}
-                </div>
-                <div className="mt-2 flex items-center justify-center gap-2 text-sm">
-                  <FontAwesomeIcon icon={faCircleInfo} className="h-3" />
-                  <span>{translate("RenameWarn")}</span>
-                </div>
-              </div>
+              <UseItemHeader
+                actionDesc={translate("RenameEnterName")}
+                actionItem={targetItem.name}
+                title={translate("RenameUse")}
+                warning={translate("RenameWarn")}
+              />
               <CSItemImage
                 className="aspect-[1.33333] max-w-[512px]"
                 item={targetItem}
               />
               <div className="flex">
                 <EditorInput
-                  value={nametag}
-                  placeholder={translate("EditorNametagPlaceholder")}
-                  onChange={setNametag}
-                  pattern={CS_NAMETAG_RE}
-                  maxLength={20}
                   className="py-1 text-xl"
+                  maxLength={20}
+                  onChange={setNametag}
+                  placeholder={translate("EditorNametagPlaceholder")}
+                  validate={CS_safeValidateNametag}
+                  value={nametag}
                 />
               </div>
-              <div className="mt-4 flex justify-end gap-4">
-                <button
-                  className="flex cursor-default items-center gap-2 rounded bg-white/80 px-4 py-2 font-bold text-neutral-700 drop-shadow-lg transition hover:bg-white disabled:bg-neutral-500 disabled:text-neutral-700"
-                  onClick={onClose}
-                >
-                  <FontAwesomeIcon icon={faXmark} className="h-4" />
-                  {translate("RenameCancel")}
-                </button>
-                <button
-                  disabled={
-                    (nametag !== "" && !CS_safeValidateNametag(nametag)) ||
-                    (nametag === "" && isRenamingFreeItem)
-                  }
-                  className="flex cursor-default items-center gap-2 rounded bg-green-700/80 px-4 py-2 font-bold text-neutral-200 drop-shadow-lg transition hover:bg-green-600 disabled:bg-green-900 disabled:text-green-600"
-                  onClick={handleRename}
-                >
-                  {translate("RenameRename")}
-                </button>
-              </div>
+              <UseItemFooter
+                right={
+                  <>
+                    <UseItemButton
+                      disabled={
+                        (nametag !== "" && !CS_safeValidateNametag(nametag)) ||
+                        (nametag === "" && isRenamingFreeItem)
+                      }
+                      variant="primary"
+                      onClick={handleRename}
+                      children={translate("RenameRename")}
+                    />
+                    <UseItemButton
+                      variant="secondary"
+                      onClick={onClose}
+                      children={translate("RenameCancel")}
+                    />
+                  </>
+                }
+              />
             </div>
-          </Layer>,
+          </div>,
           document.body
         )
       }

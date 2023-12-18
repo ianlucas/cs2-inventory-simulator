@@ -11,7 +11,6 @@ import {
   CS_MAX_WEAR,
   CS_MIN_SEED,
   CS_MIN_WEAR,
-  CS_NAMETAG_RE,
   CS_WEAR_FACTOR,
   CS_hasNametag,
   CS_hasSeed,
@@ -26,13 +25,13 @@ import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
 import { useTranslation } from "~/hooks/use-translation";
-import { resolveItemImage, showQuantity } from "~/utils/economy";
+import { showQuantity } from "~/utils/economy";
+import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
 import { EditorToggle } from "./editor-toggle";
 import { useRootContext } from "./root-context";
 import { StickerPicker } from "./sticker-picker";
-import { CSItemImage } from "./cs-item-image";
 
 export interface CSItemEditorAttributes {
   nametag?: string;
@@ -117,11 +116,11 @@ export function CSItemEditor({
               {translate("EditorNametag")}
             </label>
             <EditorInput
-              value={nametag}
-              placeholder={translate("EditorNametagPlaceholder")}
-              onChange={setNametag}
-              pattern={CS_NAMETAG_RE}
               maxLength={20}
+              onChange={setNametag}
+              placeholder={translate("EditorNametagPlaceholder")}
+              validate={CS_safeValidateNametag}
+              value={nametag}
             />
           </div>
         )}

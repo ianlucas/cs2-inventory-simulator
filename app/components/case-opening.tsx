@@ -16,7 +16,7 @@ import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { CaseOpeningCase } from "./case-opening-case";
-import { CaseOpeningUnlocked } from "./case-opening-unlocked";
+import { CaseOpeningCaseUnlocked } from "./case-opening-case-unlocked";
 import { useRootContext } from "./root-context";
 
 export function CaseOpening({
@@ -73,13 +73,9 @@ export function CaseOpening({
     <ClientOnly
       children={() =>
         createPortal(
-          <div
-            className={
-              "fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm"
-            }
-          >
+          <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
             {unlockedItem ? (
-              <CaseOpeningUnlocked
+              <CaseOpeningCaseUnlocked
                 caseItem={caseItem}
                 onClose={onClose}
                 unlockedItem={unlockedItem}

@@ -5,14 +5,14 @@
 
 import { CS_Item, CS_unlockCase } from "@ianlucas/cslib";
 import { useTranslation } from "~/hooks/use-translation";
-import { CaseOpeningButton } from "./case-opening-button";
 import { CaseOpeningCaseBackground } from "./case-opening-case-background";
 import { CaseOpeningCaseContents } from "./case-opening-case-contents";
-import { CaseOpeningFooter } from "./case-opening-footer";
 import { CaseOpeningWheel } from "./case-opening-wheel";
 import { CSItemImage } from "./cs-item-image";
 import { FillSpinner } from "./fill-spinner";
-import { InfoIcon } from "./info-icon";
+import { UseItemButton } from "./use-item-button";
+import { UseItemFooter } from "./use-item-footer";
+import { UseItemHeader } from "./use-item-header";
 
 export function CaseOpeningCase({
   canUnlock,
@@ -39,18 +39,12 @@ export function CaseOpeningCase({
     <>
       <CaseOpeningCaseBackground canUnlock={canUnlock} caseItem={caseItem} />
       <div className="flex flex-col gap-4">
-        <div className="text-center drop-shadow">
-          <div className="font-display text-3xl font-semibold leading-10 tracking-wider">
-            {translate("CaseUnlockContainer")}
-          </div>
-          <div className="text-lg">
-            {translate("CaseUnlock")} <strong>{caseItem.name}</strong>
-          </div>
-          <div className="mt-2 flex items-center justify-center gap-2">
-            <InfoIcon />
-            <span>{translate("CaseOnceWarn")}</span>
-          </div>
-        </div>
+        <UseItemHeader
+          actionDesc={translate("CaseUnlock")}
+          actionItem={caseItem.name}
+          title={translate("CaseUnlockContainer")}
+          warning={translate("CaseOnceWarn")}
+        />
         <CaseOpeningWheel
           caseItem={caseItem}
           isDisplaying={isDisplaying}
@@ -62,7 +56,7 @@ export function CaseOpeningCase({
           caseItem={caseItem}
           hideCaseContents={hideCaseContents}
         />
-        <CaseOpeningFooter
+        <UseItemFooter
           left={
             keyItem !== undefined && (
               <div className="flex items-center gap-2 font-display text-lg">
@@ -76,7 +70,7 @@ export function CaseOpeningCase({
           right={
             <>
               {canUnlock ? (
-                <CaseOpeningButton
+                <UseItemButton
                   children={translate("CaseUnlockContainer")}
                   disabled={!canUnlock}
                   onClick={onUnlock}
@@ -85,7 +79,7 @@ export function CaseOpeningCase({
               ) : (
                 <FillSpinner className="mx-4" />
               )}
-              <CaseOpeningButton
+              <UseItemButton
                 children={translate("CaseClose")}
                 disabled={!canUnlock}
                 onClick={onClose}

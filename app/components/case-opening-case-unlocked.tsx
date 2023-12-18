@@ -8,11 +8,11 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "~/hooks/use-translation";
 import { playSound } from "~/utils/sound";
 import { CaseOpeningAttribute } from "./case-opening-attribute";
-import { CaseOpeningButton } from "./case-opening-button";
-import { CaseOpeningFooter } from "./case-opening-footer";
+import { UseItemButton } from "./use-item-button";
+import { UseItemFooter } from "./use-item-footer";
 import { CSItemImage } from "./cs-item-image";
 
-export function CaseOpeningUnlocked({
+export function CaseOpeningCaseUnlocked({
   caseItem,
   onClose,
   unlockedItem: { attributes, id, rarity }
@@ -57,7 +57,7 @@ export function CaseOpeningUnlocked({
           style={{ transform: `scale(${revealScale})` }}
           wear={attributes.wear}
         />
-        <CaseOpeningFooter
+        <UseItemFooter
           left={
             <div className="flex items-center gap-8">
               <CaseOpeningAttribute
@@ -71,7 +71,7 @@ export function CaseOpeningUnlocked({
             </div>
           }
           right={
-            <CaseOpeningButton
+            <UseItemButton
               children={translate("CaseClose")}
               onClick={onClose}
               variant="secondary"

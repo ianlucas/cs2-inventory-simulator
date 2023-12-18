@@ -5,7 +5,7 @@
 
 import { ReactNode } from "react";
 
-export function CaseOpeningFooter({
+export function UseItemFooter({
   left,
   right
 }: {

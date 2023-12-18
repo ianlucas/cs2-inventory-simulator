@@ -8,15 +8,19 @@ import { ComponentProps } from "react";
 
 export function EditorInput({
   pattern,
+  validate,
   ...props
-}: Omit<ComponentProps<"input">, "pattern"> & {
+}: Omit<ComponentProps<"input">, "pattern" | "value"> & {
   pattern?: RegExp;
+  validate?(value?: string): boolean;
+  value?: string;
 }) {
   const invalid =
-    pattern !== undefined &&
-    typeof props.value === "string" &&
-    props.value !== "" &&
-    pattern.exec(props.value.trim()) === null;
+    (pattern !== undefined &&
+      typeof props.value === "string" &&
+      props.value !== "" &&
+      pattern.exec(props.value.trim()) === null) ||
+    (validate !== undefined && !validate(props.value));
 
   return (
     <input

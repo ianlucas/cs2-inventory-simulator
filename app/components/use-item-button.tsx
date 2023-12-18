@@ -6,7 +6,7 @@
 import clsx from "clsx";
 import { ComponentProps } from "react";
 
-export function CaseOpeningButton({
+export function UseItemButton({
   children,
   variant,
   ...props
