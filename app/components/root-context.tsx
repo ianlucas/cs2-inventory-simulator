@@ -5,10 +5,9 @@
 
 import { CS_Inventory } from "@ianlucas/cslib";
 import {
+  ContextType,
   createContext,
-  Dispatch,
   ReactNode,
-  SetStateAction,
   useContext,
   useEffect
 } from "react";
@@ -31,6 +30,7 @@ const RootContext = createContext<{
   itemTranslation: Record<string, string | undefined>;
   language: string;
   maxInventoryItems: number;
+  nametagDefaultAllowed: number[];
   requireAuth: boolean;
   setInventory(value: CS_Inventory): void;
   translation: Record<string, string | undefined>;
@@ -46,15 +46,14 @@ export function RootProvider({
   itemTranslation,
   language,
   maxInventoryItems,
+  nametagDefaultAllowed,
   translation,
   user
-}: {
+}: Omit<
+  ContextType<typeof RootContext>,
+  "inventory" | "requireAuth" | "setInventory"
+> & {
   children: ReactNode;
-  itemTranslation: Record<string, string | undefined>;
-  language: string;
-  maxInventoryItems: number;
-  translation: Record<string, string | undefined>;
-  user: Awaited<ReturnType<typeof findRequestUser>>;
 }) {
   const [inventory, setInventory] = useInventory(
     new CS_Inventory(
@@ -102,6 +101,7 @@ export function RootProvider({
         itemTranslation,
         language,
         maxInventoryItems,
+        nametagDefaultAllowed,
         requireAuth: retrieveUserId() !== undefined,
         setInventory,
         translation,

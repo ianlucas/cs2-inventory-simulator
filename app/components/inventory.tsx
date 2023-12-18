@@ -33,7 +33,8 @@ import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
 
 export function Inventory() {
-  const { inventory, setInventory, language } = useRootContext();
+  const { inventory, setInventory, language, nametagDefaultAllowed } =
+    useRootContext();
   const translate = useTranslation();
   const sync = useSync();
 
@@ -96,9 +97,9 @@ export function Inventory() {
         item: useItem,
         index,
         items: items.filter(
-          (item) =>
-            (useItem.type === "key" && item?.item.keys?.includes(useItem.id)) ||
-            (useItem.type === "case" && useItem.keys?.includes(item.item.id))
+          ({ item }) =>
+            (useItem.type === "key" && item.keys?.includes(useItem.id)) ||
+            (useItem.type === "case" && useItem.keys?.includes(item.id))
         )
       });
     }
@@ -111,10 +112,17 @@ export function Inventory() {
   }
 
   function handleRename(index: number, useItem: CS_Item) {
+    console.log(nametagDefaultAllowed);
     return setUseItemAction({
       item: useItem,
       index,
-      items: items.filter((item) => CS_hasNametag(item.item))
+      items: items.filter(
+        ({ item }) =>
+          CS_hasNametag(item) &&
+          (!item.free ||
+            nametagDefaultAllowed.length === 0 ||
+            nametagDefaultAllowed.includes(item.id))
+      )
     });
   }
 

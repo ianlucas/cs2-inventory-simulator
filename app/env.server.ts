@@ -20,3 +20,11 @@ export const MAX_INVENTORY_ITEMS = parseInt(
   process.env.MAX_INVENTORY_ITEMS,
   10
 );
+
+export const NAMETAG_DEFAULT_ALLOWED =
+  process.env.NAMETAG_DEFAULT_ALLOWED === undefined ||
+  process.env.NAMETAG_DEFAULT_ALLOWED.trim() === ""
+    ? []
+    : process.env.NAMETAG_DEFAULT_ALLOWED.split(",").map((id) =>
+        Number(id.trim())
+      );

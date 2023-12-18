@@ -24,7 +24,7 @@ import { Header } from "./components/header";
 import { Inventory } from "./components/inventory";
 import { RootProvider } from "./components/root-context";
 import { SyncWarn } from "./components/sync-warn";
-import { MAX_INVENTORY_ITEMS } from "./env.server";
+import { MAX_INVENTORY_ITEMS, NAMETAG_DEFAULT_ALLOWED } from "./env.server";
 import styles from "./tailwind.css";
 import { getTranslations } from "./translations.server";
 
@@ -45,8 +45,9 @@ export const links: LinksFunction = () => [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   return typedjson({
-    user: await findRequestUser(request),
     maxInventoryItems: MAX_INVENTORY_ITEMS,
+    nametagDefaultAllowed: NAMETAG_DEFAULT_ALLOWED,
+    user: await findRequestUser(request),
     ...(await getTranslations(request))
   });
 }
