@@ -155,7 +155,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
           const item = CS_Economy.getById(id);
           const keyvalues: [string, any][] = [];
           if (item.type === "musickit") {
-            keyvalues.push([MUSIC_KIT_PREFIX, item.itemid]);
+            keyvalues.push([MUSIC_KIT_PREFIX, item.index]);
           }
           if (item.type === "pin") {
             keyvalues.push([PIN_PREFIX, item.def]);
@@ -197,7 +197,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               equippedT,
               equippedCT,
               "",
-              item.itemid
+              item.index
             );
           }
           if (nametag !== undefined) {
@@ -242,8 +242,8 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
           }
           if (
             ["melee", "glove", "weapon"].includes(item.type) &&
-            item.itemid !== undefined &&
-            item.itemid !== 0
+            item.index !== undefined &&
+            item.index !== 0
           ) {
             pushTeam(
               keyvalues,
@@ -251,7 +251,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               equippedT,
               equippedCT,
               `_${item.def}`,
-              item.itemid
+              item.index
             );
           }
           stickers?.forEach((sticker, slot) => {
