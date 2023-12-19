@@ -25,7 +25,12 @@ import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
 import { useTranslation } from "~/hooks/use-translation";
-import { showQuantity } from "~/utils/economy";
+import {
+  seedStringMaxLen,
+  showQuantity,
+  wearStringMaxLen,
+  wearToString
+} from "~/utils/economy";
 import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
@@ -40,13 +45,6 @@ export interface CSItemEditorAttributes {
   stattrak?: boolean;
   stickers?: (number | null)[];
   wear?: number;
-}
-
-const seedStringMaxLen = String(CS_MAX_SEED).length;
-const wearStringMaxLen = String(CS_WEAR_FACTOR).length;
-
-function wearToString(wear: number) {
-  return wear.toFixed(wearStringMaxLen - 2);
 }
 
 export function CSItemEditor({

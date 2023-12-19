@@ -37,6 +37,7 @@ import { transform } from "~/utils/inventory";
 import { ContextButton } from "./context-button";
 import { ContextDivider } from "./context-divider";
 import { CSItem } from "./cs-item";
+import { wearToString } from "~/utils/economy";
 
 export function InventoryItem({
   disableContextMenu,
@@ -262,7 +263,7 @@ export function InventoryItem({
                       <strong className="text-neutral-400">
                         {translate("InventoryItemWear")}
                       </strong>{" "}
-                      {inventoryItem.wear ?? CS_MIN_WEAR}
+                      {wearToString(inventoryItem.wear ?? CS_MIN_WEAR)}
                     </div>
                     <div className="relative h-1 w-[128px] bg-[linear-gradient(90deg,#3b818f_0,#3b818f_7%,#83b135_0,#83b135_15%,#d7be47_0,#d7be47_38%,#f08140_0,#f08140_45%,#ec4f3d_0,#ec4f3d)]">
                       <div
