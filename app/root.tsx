@@ -18,6 +18,7 @@ import {
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { ClientOnly } from "remix-utils/client-only";
 import { findRequestUser } from "./auth.server";
+import { getBackground } from "./background.server";
 import { Background } from "./components/background";
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
@@ -25,6 +26,7 @@ import { Inventory } from "./components/inventory";
 import { RootProvider } from "./components/root-context";
 import { SyncWarn } from "./components/sync-warn";
 import { MAX_INVENTORY_ITEMS, NAMETAG_DEFAULT_ALLOWED } from "./env.server";
+import { getSession } from "./session.server";
 import styles from "./tailwind.css";
 import { getTranslations } from "./translations.server";
 
@@ -44,11 +46,14 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const ipCountry = request.headers.get("CF-IPCountry");
   return typedjson({
     maxInventoryItems: MAX_INVENTORY_ITEMS,
     nametagDefaultAllowed: NAMETAG_DEFAULT_ALLOWED,
     user: await findRequestUser(request),
-    ...(await getTranslations(request))
+    ...(await getBackground(session)),
+    ...(await getTranslations(session, ipCountry))
   });
 }
 
@@ -72,7 +77,7 @@ export default function App() {
         </head>
         <body className="overflow-y-scroll bg-stone-800">
           <div
-            className="fixed left-0 top-0 -z-10 h-full w-full overflow-hidden lg:blur-lg"
+            className="fixed left-0 top-0 -z-10 h-full w-full overflow-hidden lg:blur-sm"
             id="background"
           />
           <Background />

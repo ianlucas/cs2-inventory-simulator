@@ -5,20 +5,25 @@
 
 import { prisma } from "~/db.server";
 
-export async function getUserLanguagePreference(userId: string) {
+export async function getUserPreference(
+  userId: string,
+  preference: "background" | "language"
+) {
   return (
-    (await prisma.userPreferences.findFirst({ where: { userId } }))?.language ||
-    undefined
+    (await prisma.userPreferences.findFirst({ where: { userId } }))?.[
+      preference
+    ] || undefined
   );
 }
 
-export async function setUserLanguagePreference(
+export async function setUserPreference(
   userId: string,
-  language: string
+  preference: "background" | "language",
+  value: string
 ) {
   return await prisma.userPreferences.upsert({
-    create: { language, userId },
-    update: { language },
+    create: { [preference]: value, userId },
+    update: { [preference]: value },
     where: { userId }
   });
 }

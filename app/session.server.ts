@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { createCookieSessionStorage } from "@remix-run/node";
+import { Session, createCookieSessionStorage } from "@remix-run/node";
 import { SESSION_SECRET } from "./env.server";
 
 export const sessionStorage = createCookieSessionStorage({
@@ -19,3 +19,16 @@ export const sessionStorage = createCookieSessionStorage({
 });
 
 export const { getSession, commitSession, destroySession } = sessionStorage;
+
+export function assignToSession(
+  session: Session,
+  keyValues: Record<string, string | undefined>
+) {
+  for (const [key, value] of Object.entries(keyValues)) {
+    if (value === undefined) {
+      session.unset(key);
+    } else {
+      session.set(key, value);
+    }
+  }
+}

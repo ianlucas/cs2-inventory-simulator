@@ -9,9 +9,11 @@ import { MetaFunction } from "@remix-run/node";
 import { Link, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { backgrounds } from "~/background.server";
 import { LanguageSelect } from "~/components/language-select";
 import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
+import { Select } from "~/components/select";
 import { useTranslation } from "~/hooks/use-translation";
 import { languages } from "~/translations.server";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
@@ -22,6 +24,7 @@ export const meta: MetaFunction = () => {
 
 export async function loader() {
   return typedjson({
+    backgrounds,
     languages: languages.map(({ name, countries }) => ({
       name,
       country: countries[0]
@@ -30,15 +33,20 @@ export async function loader() {
 }
 
 export default function Settings() {
+  const { backgrounds, languages } = useTypedLoaderData<typeof loader>();
+  const { background: selectedBackground, language: selectedLanguage } =
+    useRootContext();
+
+  const [language, setLanguage] = useState(selectedLanguage);
+  const [background, setBackground] = useState(selectedBackground);
+
   const translate = useTranslation();
   const submit = useSubmit();
-  const { language: selectedLanguage } = useRootContext();
-  const { languages } = useTypedLoaderData<typeof loader>();
-  const [language, setLanguage] = useState(selectedLanguage);
 
   function handleSubmit() {
     submit(
       {
+        background,
         language
       },
       {
@@ -58,15 +66,28 @@ export default function Settings() {
           </Link>
         </div>
       </div>
-      <div className="px-4">
-        <label className="font-bold text-neutral-500">
-          {translate("SettingsLanguage")}
-        </label>
-        <LanguageSelect
-          languages={languages}
-          value={language}
-          onChange={setLanguage}
-        />
+      <div className="space-y-2 px-4">
+        <div>
+          <label className="font-bold text-neutral-500">
+            {translate("SettingsLanguage")}
+          </label>
+          <LanguageSelect
+            languages={languages}
+            value={language}
+            onChange={setLanguage}
+          />
+        </div>
+        <div>
+          <label className="font-bold text-neutral-500">
+            {translate("SettingsBackground")}
+          </label>
+          <Select
+            value={background}
+            onChange={setBackground}
+            options={backgrounds}
+            children={({ label }) => label}
+          />
+        </div>
       </div>
       <div className="mt-6 flex justify-end gap-2 px-4 pb-4">
         <button

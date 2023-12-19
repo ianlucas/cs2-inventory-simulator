@@ -3,12 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { Session } from "@remix-run/node";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { z } from "zod";
-import { authenticator } from "./auth.server";
-import { getUserLanguagePreference } from "./models/user-preferences.server";
-import { commitSession, getSession } from "./session.server";
 import { brazilian } from "./translations/brazilian";
 import { english } from "./translations/english";
 
@@ -50,6 +48,10 @@ export const languages = [
   { name: "vietnamese", countries: ["vn"] }
 ];
 
+export function getAllowedLanguages() {
+  return languages.map(({ name }) => name);
+}
+
 function readItemTranslation(language: string) {
   if (itemTranslations[language]) {
     return itemTranslations[language];
@@ -72,40 +74,16 @@ function getCountryLanguage(countryCode: string) {
   );
 }
 
-export async function getTranslations(request: Request) {
-  const countryCode = request.headers.get("CF-IPCountry") || "us";
+export async function getTranslations(
+  session: Session,
+  ipCountry: string | null
+) {
+  const country = ipCountry || "us";
   const language =
-    (await getUserLanguage(request)) ||
-    getCountryLanguage(countryCode.toLowerCase());
+    session.get("language") || getCountryLanguage(country.toLowerCase());
   return {
     itemTranslation: readItemTranslation(language),
     language,
     translation: translations[language] ?? translations.english
   };
-}
-
-export async function getUserLanguage(request: Request) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const sessionLanguage = session.get("language");
-  if (sessionLanguage) {
-    return sessionLanguage;
-  }
-  const userId = await authenticator.isAuthenticated(request);
-  return userId ? await getUserLanguagePreference(userId) : undefined;
-}
-
-export async function setUserLanguage(request: Request, language?: string) {
-  const session = await getSession(request.headers.get("Cookie"));
-  if (language) {
-    session.set("language", language);
-  } else {
-    session.unset("language");
-  }
-  return {
-    "Set-Cookie": await commitSession(session)
-  };
-}
-
-export function getAllowedLanguages() {
-  return languages.map(({ name }) => name);
 }

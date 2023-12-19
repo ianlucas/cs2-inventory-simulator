@@ -73,6 +73,7 @@ export const english = {
   Model: "",
   SettingsHeader: "Settings",
   SettingsLanguage: "Language",
+  SettingsBackground: "Background",
   SettingsSave: "Save",
   CaseUnlockContainer: "Unlock Container",
   CaseUnlock: "Unlock",

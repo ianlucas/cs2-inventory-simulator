@@ -34,6 +34,7 @@ model UserCache {
 }
 
 model UserPreferences {
+  background String?
   language String?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @id

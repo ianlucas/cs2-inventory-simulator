@@ -82,38 +82,45 @@ export function Header() {
                 label={translate("HeaderAPILabel")}
                 onClick={closeMenu}
               />
-              <HeaderLink
-                to="/settings"
-                icon={faCog}
-                onClick={closeMenu}
-                label={isDesktop ? undefined : translate("HeaderSettingsLabel")}
-              />
               {user === undefined ? (
-                <HeaderLink
-                  to="sign-in"
-                  icon={faSteam}
-                  label={translate("HeaderSignInLabel")}
-                />
+                <>
+                  <HeaderLink
+                    to="/sign-in"
+                    icon={faSteam}
+                    label={translate("HeaderSignInLabel")}
+                  />
+                  <div className="flex flex-1 justify-end">
+                    <HeaderLink
+                      to="/settings"
+                      icon={faCog}
+                      onClick={closeMenu}
+                      label={translate("HeaderSettingsLabel")}
+                    />
+                  </div>
+                </>
               ) : (
                 <>
                   <HeaderLink
-                    to="sign-out"
                     icon={faRightFromBracket}
                     label={translate("HeaderSignOutLabel")}
+                    onClick={closeMenu}
+                    to="/sign-out"
                   />
-                  <div className="flex flex-1 select-none items-center justify-end gap-2 overflow-hidden">
-                    <span className="text-neutral-400">
-                      {translate("HeaderSignedInAsLabel")}
-                    </span>
-                    <span className="max-w-[256px] overflow-hidden text-ellipsis whitespace-nowrap">
-                      {user.name}
-                    </span>
-                    <img
-                      className="h-6 w-6 rounded-full"
-                      src={user.avatar}
-                      draggable={false}
-                      alt={user.name}
-                    />
+                  <div className="flex flex-1 justify-end">
+                    <HeaderLink to="/settings" onClick={closeMenu}>
+                      <span className="text-neutral-400">
+                        {translate("HeaderSignedInAsLabel")}
+                      </span>
+                      <span className="max-w-[256px] overflow-hidden text-ellipsis whitespace-nowrap">
+                        {user.name}
+                      </span>
+                      <img
+                        className="h-6 w-6 rounded-full"
+                        src={user.avatar}
+                        draggable={false}
+                        alt={user.name}
+                      />
+                    </HeaderLink>
                   </div>
                 </>
               )}

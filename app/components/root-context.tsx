@@ -26,6 +26,7 @@ import {
 } from "~/utils/user";
 
 const RootContext = createContext<{
+  background: string;
   inventory: CS_Inventory;
   itemTranslation: Record<string, string | undefined>;
   language: string;
@@ -42,6 +43,7 @@ export function useRootContext() {
 }
 
 export function RootProvider({
+  background,
   children,
   itemTranslation,
   language,
@@ -97,6 +99,7 @@ export function RootProvider({
   return (
     <RootContext.Provider
       value={{
+        background,
         inventory,
         itemTranslation,
         language,
