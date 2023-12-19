@@ -42,6 +42,13 @@ export interface CSItemEditorAttributes {
   wear?: number;
 }
 
+const seedStringMaxLen = String(CS_MAX_SEED).length;
+const wearStringMaxLen = String(CS_WEAR_FACTOR).length;
+
+function wearToString(wear: number) {
+  return wear.toFixed(wearStringMaxLen - 2);
+}
+
 export function CSItemEditor({
   item,
   onReset,
@@ -53,8 +60,10 @@ export function CSItemEditor({
 }) {
   const { maxInventoryItems, inventory } = useRootContext();
   const [stattrak, setStattrak] = useCheckbox(false);
-  const [wear, setWear] = useState(CS_MIN_WEAR);
+  const [wear, setWear] = useState(item.wearmin ?? CS_MIN_WEAR);
+  const [wearText, setWearText] = useState(wearToString(wear));
   const [seed, setSeed] = useState(1);
+  const [seedText, setSeedText] = useState(String(seed));
   const [nametag, setNametag] = useInput("");
   const [stickers, setStickers] = useState([null, null, null, null] as (
     | number
@@ -66,7 +75,7 @@ export function CSItemEditor({
   const hasSeed = CS_hasSeed(item);
   const hasWear = CS_hasWear(item);
   const hasNametag = CS_hasNametag(item);
-  const isValid =
+  const canCraft =
     CS_safeValidateWear(wear) &&
     (CS_safeValidateNametag(nametag) || nametag.length === 0) &&
     CS_safeValidateSeed(seed);
@@ -86,6 +95,48 @@ export function CSItemEditor({
       wear: hasWear && wear !== CS_MIN_WEAR ? wear : undefined,
       stattrak: hasStattrak && stattrak === true ? stattrak : undefined
     });
+  }
+
+  function handleWearTextChange({
+    target: { value: wearText }
+  }: React.ChangeEvent<HTMLInputElement>) {
+    setWearText(wearText);
+    const wear = Number(wearText);
+    if (wearText && CS_safeValidateWear(wear, item)) {
+      setWear(wear);
+    }
+  }
+
+  function handleWearTextBlur() {
+    if (!wearText || !CS_safeValidateWear(Number(wearText), item)) {
+      setWearText(wearToString(wear));
+    }
+  }
+
+  function handleWearChange(wear: number) {
+    setWear(wear);
+    setWearText(wearToString(wear));
+  }
+
+  function handleSeedTextChange({
+    target: { value: seedText }
+  }: React.ChangeEvent<HTMLInputElement>) {
+    setSeedText(seedText);
+    const seed = Number(seedText);
+    if (seedText && CS_safeValidateSeed(seed, item)) {
+      setSeed(seed);
+    }
+  }
+
+  function handleSeedTextBlur() {
+    if (!seedText || !CS_safeValidateWear(Number(seedText), item)) {
+      setSeedText(String(seed));
+    }
+  }
+
+  function handleSeedChange(seed: number) {
+    setSeed(seed);
+    setSeedText(String(seed));
   }
 
   return (
@@ -129,11 +180,22 @@ export function CSItemEditor({
             <label className="w-[76.33px] font-bold text-neutral-500">
               {translate("EditorSeed")}
             </label>
-            <span className="w-[68px]">{seed}</span>
+            <EditorInput
+              inflexible
+              unstyled
+              className="w-[68px]"
+              maxLength={seedStringMaxLen}
+              onChange={handleSeedTextChange}
+              onBlur={handleSeedTextBlur}
+              validate={(seedText) =>
+                CS_safeValidateSeed(Number(seedText), item)
+              }
+              value={seedText}
+            />
             <EditorStepRange
               className="flex-1"
               value={seed}
-              onChange={setSeed}
+              onChange={handleSeedChange}
               max={CS_MAX_SEED}
               min={CS_MIN_SEED}
               step={CS_MIN_SEED}
@@ -145,13 +207,22 @@ export function CSItemEditor({
             <label className="w-[76.33px] font-bold text-neutral-500">
               {translate("EditorWear")}
             </label>
-            <span className="w-[68px]">
-              {wear.toFixed(String(CS_WEAR_FACTOR).length - 2)}
-            </span>
+            <EditorInput
+              inflexible
+              unstyled
+              className="w-[68px]"
+              maxLength={wearStringMaxLen}
+              onChange={handleWearTextChange}
+              onBlur={handleWearTextBlur}
+              validate={(wearText) =>
+                CS_safeValidateWear(Number(wearText), item)
+              }
+              value={wearText}
+            />
             <EditorStepRange
               className="flex-1"
               value={wear}
-              onChange={setWear}
+              onChange={handleWearChange}
               max={item.wearmax ?? CS_MAX_WEAR}
               min={item.wearmin ?? CS_MIN_WEAR}
               step={CS_WEAR_FACTOR}
@@ -192,7 +263,7 @@ export function CSItemEditor({
           {translate("EditorReset")}
         </button>
         <button
-          disabled={!isValid}
+          disabled={!canCraft}
           onClick={handleSubmit}
           className="flex cursor-default items-center gap-2 rounded bg-white/80 px-4 py-2 font-bold text-neutral-700 drop-shadow-lg transition hover:bg-white disabled:bg-neutral-500 disabled:text-neutral-700"
         >

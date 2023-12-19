@@ -7,11 +7,15 @@ import clsx from "clsx";
 import { ComponentProps } from "react";
 
 export function EditorInput({
+  inflexible,
   pattern,
+  unstyled,
   validate,
   ...props
 }: Omit<ComponentProps<"input">, "pattern" | "value"> & {
+  inflexible?: boolean;
   pattern?: RegExp;
+  unstyled?: boolean;
   validate?(value?: string): boolean;
   value?: string;
 }) {
@@ -26,8 +30,10 @@ export function EditorInput({
     <input
       {...props}
       className={clsx(
-        "w-0 min-w-0 flex-1 rounded px-1 placeholder-neutral-600 outline-none",
-        invalid ? "bg-red-500/50" : "bg-black/50",
+        "placeholder-neutral-600 outline-none first-line:rounded",
+        !inflexible && "w-0 min-w-0 flex-1",
+        !unstyled && "px-1",
+        invalid ? "bg-red-500/50" : unstyled ? "bg-transparent" : "bg-black/50",
         props.className
       )}
     />
