@@ -37,6 +37,7 @@ import { EditorStepRange } from "./editor-step-range";
 import { EditorToggle } from "./editor-toggle";
 import { useRootContext } from "./root-context";
 import { StickerPicker } from "./sticker-picker";
+import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 
 export interface CSItemEditorAttributes {
   nametag?: string;
@@ -59,9 +60,7 @@ export function CSItemEditor({
   const { maxInventoryItems, inventory } = useRootContext();
   const [stattrak, setStattrak] = useCheckbox(false);
   const [wear, setWear] = useState(item.wearmin ?? CS_MIN_WEAR);
-  const [wearText, setWearText] = useState(wearToString(wear));
   const [seed, setSeed] = useState(1);
-  const [seedText, setSeedText] = useState(String(seed));
   const [nametag, setNametag] = useInput("");
   const [stickers, setStickers] = useState([null, null, null, null] as (
     | number
@@ -93,48 +92,6 @@ export function CSItemEditor({
       wear: hasWear && wear !== CS_MIN_WEAR ? wear : undefined,
       stattrak: hasStattrak && stattrak === true ? stattrak : undefined
     });
-  }
-
-  function handleWearTextChange({
-    target: { value: wearText }
-  }: React.ChangeEvent<HTMLInputElement>) {
-    setWearText(wearText);
-    const wear = Number(wearText);
-    if (wearText && CS_safeValidateWear(wear, item)) {
-      setWear(wear);
-    }
-  }
-
-  function handleWearTextBlur() {
-    if (!wearText || !CS_safeValidateWear(Number(wearText), item)) {
-      setWearText(wearToString(wear));
-    }
-  }
-
-  function handleWearChange(wear: number) {
-    setWear(wear);
-    setWearText(wearToString(wear));
-  }
-
-  function handleSeedTextChange({
-    target: { value: seedText }
-  }: React.ChangeEvent<HTMLInputElement>) {
-    setSeedText(seedText);
-    const seed = Number(seedText);
-    if (seedText && CS_safeValidateSeed(seed, item)) {
-      setSeed(seed);
-    }
-  }
-
-  function handleSeedTextBlur() {
-    if (!seedText || !CS_safeValidateWear(Number(seedText), item)) {
-      setSeedText(String(seed));
-    }
-  }
-
-  function handleSeedChange(seed: number) {
-    setSeed(seed);
-    setSeedText(String(seed));
   }
 
   return (
@@ -178,25 +135,16 @@ export function CSItemEditor({
             <label className="w-[76.33px] font-bold text-neutral-500">
               {translate("EditorSeed")}
             </label>
-            <EditorInput
-              inflexible
-              unstyled
-              className="w-[68px]"
+            <EditorStepRangeWithInput
+              inputStyles="w-[68px]"
               maxLength={seedStringMaxLen}
-              onChange={handleSeedTextChange}
-              onBlur={handleSeedTextBlur}
-              validate={(seedText) =>
-                CS_safeValidateSeed(Number(seedText), item)
-              }
-              value={seedText}
-            />
-            <EditorStepRange
-              className="flex-1"
-              value={seed}
-              onChange={handleSeedChange}
-              max={CS_MAX_SEED}
+              validate={(value) => CS_safeValidateSeed(value, item)}
+              stepRangeStyles="flex-1"
               min={CS_MIN_SEED}
+              max={CS_MAX_SEED}
               step={CS_MIN_SEED}
+              value={seed}
+              onChange={setSeed}
             />
           </div>
         )}
@@ -205,25 +153,17 @@ export function CSItemEditor({
             <label className="w-[76.33px] font-bold text-neutral-500">
               {translate("EditorWear")}
             </label>
-            <EditorInput
-              inflexible
-              unstyled
-              className="w-[68px]"
+            <EditorStepRangeWithInput
+              inputStyles="w-[68px]"
+              transform={wearToString}
               maxLength={wearStringMaxLen}
-              onChange={handleWearTextChange}
-              onBlur={handleWearTextBlur}
-              validate={(wearText) =>
-                CS_safeValidateWear(Number(wearText), item)
-              }
-              value={wearText}
-            />
-            <EditorStepRange
-              className="flex-1"
-              value={wear}
-              onChange={handleWearChange}
-              max={item.wearmax ?? CS_MAX_WEAR}
+              validate={(value) => CS_safeValidateWear(value, item)}
+              stepRangeStyles="flex-1"
               min={item.wearmin ?? CS_MIN_WEAR}
+              max={item.wearmax ?? CS_MAX_WEAR}
               step={CS_WEAR_FACTOR}
+              value={wear}
+              onChange={setWear}
             />
           </div>
         )}
