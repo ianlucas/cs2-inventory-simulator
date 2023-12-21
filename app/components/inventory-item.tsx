@@ -18,6 +18,7 @@ import {
 } from "@floating-ui/react";
 import {
   CS_hasSeed,
+  CS_hasStickers,
   CS_hasWear,
   CS_INVENTORY_EQUIPPABLE_ITEMS,
   CS_Item,
@@ -48,21 +49,25 @@ export function InventoryItem({
   item,
   model,
   name,
+  onApplySticker,
   onClick,
   onEquip,
   onRemove,
   onRename,
   onUnequip,
-  onUnlockContainer
+  onUnlockContainer,
+  ownApplicableStickers
 }: ReturnType<typeof transform> & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
+  onApplySticker?(index: number, item: CS_Item): void;
   onClick?(index: number, item: CS_Item): void;
   onEquip?(index: number, team?: CS_Team): void;
   onRemove?(index: number): void;
   onRename?(index: number, item: CS_Item): void;
   onUnequip?(index: number, team?: CS_Team): void;
   onUnlockContainer?(index: number, item: CS_Item): void;
+  ownApplicableStickers?: boolean;
 }) {
   const stubInventoryItem = index < 0;
   const translate = useTranslation();
@@ -128,6 +133,16 @@ export function InventoryItem({
   const hasModel = model || inventoryItem.stattrak !== undefined;
   const hasAttributes = hasWear || hasSeed;
   const canRename = item.type == "tool" && item.def === CS_NAMETAG_TOOL_DEF;
+  const canApplySticker =
+    ownApplicableStickers &&
+    ((CS_hasStickers(item) &&
+      (inventoryItem.stickers ?? []).filter((id) => id !== null).length < 4) ||
+      item.type === "sticker");
+  const canScrapeSticker =
+    false &&
+    CS_hasStickers(item) &&
+    (inventoryItem.stickers ?? []).filter((id) => id !== null).length > 0;
+  const canUseTools = canRename || canApplySticker || canScrapeSticker;
   const canUnlockContainer = ["case", "key"].includes(item.type);
 
   function close(callbefore: () => void) {
@@ -231,7 +246,19 @@ export function InventoryItem({
               </ContextButton>
             )}
 
-            {canRename && <ContextDivider />}
+            {canApplySticker && (
+              <ContextButton onClick={() => onApplySticker?.(index, item)}>
+                {translate("InventoryApplySticker")}
+              </ContextButton>
+            )}
+
+            {canScrapeSticker && (
+              <ContextButton onClick={() => 0}>
+                {translate("InventoryScrapeSticker")}
+              </ContextButton>
+            )}
+
+            {canUseTools && <ContextDivider />}
 
             <ContextButton onClick={close(() => onRemove?.(index))}>
               {translate("InventoryItemDelete")}

@@ -53,6 +53,8 @@ export const brazilian = {
   InventoryItemUnlockContainer: "Destrancar recipiente",
   InventoryItemRename: "Renomear",
   InventoryItemDelete: "Excluir",
+  InventoryApplySticker: "Usar adesivo",
+  InventoryScrapeSticker: "Raspar adesivo",
   ModelAgent: "Agente",
   ModelGlove: "Luva",
   ModelKnife: "Faca",
@@ -75,5 +77,9 @@ export const brazilian = {
   RenameEnterName: "Inserir novo nome para:",
   RenameWarn: "Etiquetas de Nome só podem ser usadas uma vez",
   RenameCancel: "Cancelar",
-  RenameRename: "Renomear"
+  RenameRename: "Renomear",
+  ApplyStickerUse: "Usar adesivo",
+  ApplyStickerUseOn: "Usar em",
+  ApplyStickerWarn: "Um adesivo pode ser aplicado apenas uma vez",
+  ApplyStickerCancel: "Cancelar"
 };

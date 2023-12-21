@@ -18,10 +18,11 @@ export const ApiActionSync = "/api/action/sync";
 export const AddAction = "add";
 export const AddFromCacheAction = "add-from-cache";
 export const AddWithNametagAction = "add-with-nametag";
+export const ApplyItemStickerAction = "apply-item-sticker";
 export const EquipAction = "equip";
-export const UnequipAction = "unequip";
-export const RenameItemAction = "rename-item";
 export const RemoveAction = "remove";
+export const RenameItemAction = "rename-item";
+export const UnequipAction = "unequip";
 
 export const actionShape = z
   .object({
@@ -40,6 +41,14 @@ export const actionShape = z
       toolIndex: z.number(),
       itemId: z.number(),
       nametag: z.string()
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(ApplyItemStickerAction),
+      itemIndex: z.number(),
+      stickerItemIndex: z.number(),
+      stickerIndex: z.number()
     })
   )
   .or(
@@ -93,6 +102,12 @@ export async function action({ request }: ActionFunctionArgs) {
             action.toolIndex,
             action.itemId,
             action.nametag
+          );
+        case ApplyItemStickerAction:
+          return inventory.applyItemSticker(
+            action.itemIndex,
+            action.stickerItemIndex,
+            action.stickerIndex
           );
         case EquipAction:
           return inventory.equip(action.index, action.team);

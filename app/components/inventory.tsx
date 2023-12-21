@@ -7,8 +7,8 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS_hasNametag,
+  CS_hasStickers,
   CS_Item,
-  CS_NAMETAG_TOOL_DEF,
   CS_Team
 } from "@ianlucas/cslib";
 import { ReactNode, useMemo, useState } from "react";
@@ -28,6 +28,7 @@ import {
   sortByType,
   transform
 } from "~/utils/inventory";
+import { ApplySticker } from "./apply-sticker";
 import { CaseOpening } from "./case-opening";
 import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
@@ -56,10 +57,15 @@ export function Inventory() {
     [inventory, language]
   );
 
+  const ownApplicableStickers =
+    items.filter(({ item }) => item.type === "sticker").length > 0 &&
+    items.filter(({ item }) => CS_hasStickers(item)).length > 0;
+
   const [useItemAction, setUseItemAction] = useState<{
     item: CS_Item;
     index: number;
     items: typeof items;
+    type: string;
   }>();
   const [unlockCase, setUnlockCase] = useState<{
     caseIndex: number;
@@ -72,9 +78,16 @@ export function Inventory() {
     targetItem: CS_Item;
     targetIndex: number;
   }>();
+  const [applySticker, setApplySticker] = useState<{
+    itemIndex: number;
+    item: CS_Item;
+    stickerItemIndex: number;
+    stickerItem: CS_Item;
+  }>();
   const isSelectAItem = useItemAction !== undefined;
   const isUnlockingCase = unlockCase !== undefined;
   const isRenamingItem = renameItem !== undefined;
+  const isApplyingSticker = applySticker !== undefined;
 
   function handleEquip(index: number, team?: CS_Team) {
     setInventory(inventory.equip(index, team));
@@ -94,13 +107,14 @@ export function Inventory() {
   function handleUnlockContainer(index: number, useItem: CS_Item) {
     if (useItem.keys || useItem.type === "key") {
       return setUseItemAction({
-        item: useItem,
         index,
+        item: useItem,
         items: items.filter(
           ({ item }) =>
             (useItem.type === "key" && item.keys?.includes(useItem.id)) ||
             (useItem.type === "case" && useItem.keys?.includes(item.id))
-        )
+        ),
+        type: "case-opening"
       });
     }
     if (useItem.type === "case") {
@@ -112,17 +126,31 @@ export function Inventory() {
   }
 
   function handleRename(index: number, useItem: CS_Item) {
-    console.log(nametagDefaultAllowed);
     return setUseItemAction({
-      item: useItem,
       index,
+      item: useItem,
       items: items.filter(
         ({ item }) =>
           CS_hasNametag(item) &&
           (!item.free ||
             nametagDefaultAllowed.length === 0 ||
             nametagDefaultAllowed.includes(item.id))
-      )
+      ),
+      type: "rename-item"
+    });
+  }
+
+  function handleApplySticker(index: number, useItem: CS_Item) {
+    return setUseItemAction({
+      index,
+      item: useItem,
+      items: items.filter(
+        ({ item }) =>
+          !item.free &&
+          ((useItem.type === "sticker" && CS_hasStickers(item)) ||
+            (useItem.type !== "sticker" && item.type === "sticker"))
+      ),
+      type: "apply-sticker"
     });
   }
 
@@ -132,26 +160,42 @@ export function Inventory() {
 
   function handleSelectItem(index: number, selectedItem: CS_Item) {
     if (useItemAction) {
+      const { type } = useItemAction;
       dismissUseItem();
-      if (["case", "key"].includes(useItemAction.item.type)) {
-        return setUnlockCase({
-          caseItem:
-            selectedItem.type === "case" ? selectedItem : useItemAction.item,
-          caseIndex: selectedItem.type === "case" ? index : useItemAction.index,
-          keyIndex: selectedItem.type === "key" ? index : useItemAction.index,
-          keyItem:
-            selectedItem.type === "key" ? selectedItem : useItemAction.item
-        });
-      }
-      if (
-        useItemAction.item.type === "tool" &&
-        useItemAction.item.def === CS_NAMETAG_TOOL_DEF
-      ) {
-        setRenameItem({
-          targetIndex: index,
-          targetItem: selectedItem,
-          toolIndex: useItemAction.index
-        });
+      switch (type) {
+        case "case-opening":
+          return setUnlockCase({
+            caseItem:
+              selectedItem.type === "case" ? selectedItem : useItemAction.item,
+            caseIndex:
+              selectedItem.type === "case" ? index : useItemAction.index,
+            keyIndex: selectedItem.type === "key" ? index : useItemAction.index,
+            keyItem:
+              selectedItem.type === "key" ? selectedItem : useItemAction.item
+          });
+
+        case "rename-item":
+          return setRenameItem({
+            targetIndex: index,
+            targetItem: selectedItem,
+            toolIndex: useItemAction.index
+          });
+
+        case "apply-sticker":
+          return setApplySticker({
+            item:
+              selectedItem.type !== "sticker"
+                ? selectedItem
+                : useItemAction.item,
+            itemIndex:
+              selectedItem.type !== "sticker" ? index : useItemAction.index,
+            stickerItem:
+              selectedItem.type === "sticker"
+                ? selectedItem
+                : useItemAction.item,
+            stickerItemIndex:
+              selectedItem.type === "sticker" ? index : useItemAction.index
+          });
       }
     }
   }
@@ -202,11 +246,13 @@ export function Inventory() {
                   {...item}
                   disableContextMenu={isUnlockingCase}
                   disableHover={isUnlockingCase}
+                  onApplySticker={handleApplySticker}
                   onEquip={handleEquip}
                   onRemove={handleRemove}
                   onRename={handleRename}
                   onUnequip={handleUnequip}
                   onUnlockContainer={handleUnlockContainer}
+                  ownApplicableStickers={ownApplicableStickers}
                 />
               </InventoryItemWrapper>
             ))}
@@ -216,6 +262,12 @@ export function Inventory() {
       )}
       {isRenamingItem && (
         <RenameItem {...renameItem} onClose={dismissRenameItem} />
+      )}
+      {isApplyingSticker && (
+        <ApplySticker
+          {...applySticker}
+          onClose={() => setApplySticker(undefined)}
+        />
       )}
     </>
   );
