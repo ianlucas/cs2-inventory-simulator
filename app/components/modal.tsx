@@ -7,7 +7,6 @@ import clsx from "clsx";
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { Zoom } from "react-awesome-reveal";
 
 export function Modal({
   blur,
@@ -28,16 +27,14 @@ export function Modal({
               blur && "bg-black/50 lg:bg-transparent lg:backdrop-blur-[2px]"
             )}
           >
-            <Zoom duration={200}>
-              <div
-                className={clsx(
-                  "min-h-[inherit] rounded border border-white/10 bg-neutral-900 text-white shadow-lg drop-shadow-lg lg:bg-neutral-900 lg:bg-opacity-[0.98] lg:backdrop-blur-sm",
-                  className
-                )}
-              >
-                {children}
-              </div>
-            </Zoom>
+            <div
+              className={clsx(
+                "min-h-[inherit] rounded border border-white/10 bg-neutral-900 text-white shadow-lg drop-shadow-lg lg:bg-neutral-900 lg:bg-opacity-[0.98] lg:backdrop-blur-sm",
+                className
+              )}
+            >
+              {children}
+            </div>
           </div>,
           document.body
         )

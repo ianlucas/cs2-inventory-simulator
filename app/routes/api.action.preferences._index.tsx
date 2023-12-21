@@ -10,13 +10,13 @@ import {
 } from "@remix-run/node";
 import { z } from "zod";
 import { authenticator } from "~/auth.server";
-import { getAllowedBackgrounds } from "~/background.server";
+import { getAllowedBackgrounds } from "~/preferences/background.server";
 import {
   getUserPreference,
   setUserPreference
 } from "~/models/user-preferences.server";
 import { assignToSession, commitSession, getSession } from "~/session.server";
-import { getAllowedLanguages } from "~/translations.server";
+import { getAllowedLanguages } from "~/preferences/language.server";
 
 export const ApiActionPreferencesUrl = "/api/action/preferences";
 

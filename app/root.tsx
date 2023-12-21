@@ -18,7 +18,7 @@ import {
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { ClientOnly } from "remix-utils/client-only";
 import { findRequestUser } from "./auth.server";
-import { getBackground } from "./background.server";
+import { getBackground } from "./preferences/background.server";
 import { Background } from "./components/background";
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
@@ -28,7 +28,7 @@ import { SyncWarn } from "./components/sync-warn";
 import { MAX_INVENTORY_ITEMS, NAMETAG_DEFAULT_ALLOWED } from "./env.server";
 import { getSession } from "./session.server";
 import styles from "./tailwind.css";
-import { getTranslations } from "./translations.server";
+import { getLanguage } from "./preferences/language.server";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
@@ -53,7 +53,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     nametagDefaultAllowed: NAMETAG_DEFAULT_ALLOWED,
     user: await findRequestUser(request),
     ...(await getBackground(session)),
-    ...(await getTranslations(session, ipCountry))
+    ...(await getLanguage(session, ipCountry))
   });
 }
 
@@ -64,11 +64,7 @@ export default function App() {
 
   return (
     <RootProvider {...providerProps}>
-      <html
-        lang="en"
-        onContextMenu={(event) => event.preventDefault()}
-        className="[scrollbar-gutter:stable]"
-      >
+      <html lang="en" onContextMenu={(event) => event.preventDefault()}>
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />

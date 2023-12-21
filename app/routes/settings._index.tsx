@@ -9,14 +9,15 @@ import { MetaFunction } from "@remix-run/node";
 import { Link, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
-import { backgrounds } from "~/background.server";
+import { backgrounds } from "~/preferences/background.server";
 import { LanguageSelect } from "~/components/language-select";
 import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
 import { Select } from "~/components/select";
 import { useTranslation } from "~/hooks/use-translation";
-import { languages } from "~/translations.server";
+import { languages } from "~/preferences/language.server";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
+import { ModalButton } from "~/components/modal-button";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Settings - CS2 Inventory Simulator" }];
@@ -90,13 +91,12 @@ export default function Settings() {
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-2 px-4 pb-4">
-        <button
-          className="flex cursor-default items-center gap-2 rounded bg-white/80 px-2 py-1 font-bold text-neutral-700 drop-shadow-lg transition hover:bg-white disabled:bg-neutral-500 disabled:text-neutral-700"
+        <ModalButton
+          children={translate("SettingsSave")}
+          className="px-2"
           onClick={handleSubmit}
-        >
-          <FontAwesomeIcon icon={faFloppyDisk} className="h-4" />
-          {translate("SettingsSave")}
-        </button>
+          variant="primary"
+        />
       </div>
     </Modal>
   );

@@ -7,8 +7,8 @@ import { Session } from "@remix-run/node";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { z } from "zod";
-import { brazilian } from "./translations/brazilian";
-import { english } from "./translations/english";
+import { brazilian } from "../translations/brazilian";
+import { english } from "../translations/english";
 
 const translations: Record<string, Record<string, string>> = {
   brazilian,
@@ -74,10 +74,7 @@ function getCountryLanguage(countryCode: string) {
   );
 }
 
-export async function getTranslations(
-  session: Session,
-  ipCountry: string | null
-) {
+export async function getLanguage(session: Session, ipCountry: string | null) {
   const country = ipCountry || "us";
   const language =
     session.get("language") || getCountryLanguage(country.toLowerCase());

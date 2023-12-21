@@ -8,6 +8,7 @@ import { ComponentProps } from "react";
 
 export function ModalButton({
   children,
+  className,
   variant,
   ...props
 }: ComponentProps<"button"> & {
@@ -16,6 +17,7 @@ export function ModalButton({
   return (
     <button
       className={clsx([
+        className,
         "flex h-9 cursor-default items-center gap-2 rounded-sm font-semibold uppercase drop-shadow-lg transition",
         variant === "primary" &&
           "bg-green-700/80 text-neutral-200 hover:bg-green-600 disabled:bg-green-900 disabled:text-green-600",

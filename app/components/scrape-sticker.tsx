@@ -10,7 +10,6 @@ import {
   CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
 } from "@ianlucas/cslib";
-import { useLockBodyScroll } from "@uidotdev/usehooks";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -37,8 +36,6 @@ export function ScrapeSticker({
   const { inventory, setInventory } = useRootContext();
   const sync = useSync();
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
-
-  useLockBodyScroll();
 
   const stickers = inventory.get(index)?.stickers ?? [null, null, null, null];
   const stickersWear = (

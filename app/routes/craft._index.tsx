@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Item } from "@ianlucas/cslib";
 import { MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
-import { useLockBodyScroll } from "@uidotdev/usehooks";
 import { useState } from "react";
 import {
   CSItemEditor,
@@ -17,6 +16,7 @@ import {
 import CSItemPicker from "~/components/cs-item-picker";
 import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
+import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
 import { showQuantity } from "~/utils/economy";
@@ -35,7 +35,7 @@ export default function Craft() {
   const { inventory, setInventory } = useRootContext();
   const translate = useTranslation();
 
-  useLockBodyScroll();
+  useLockScroll();
 
   function handleSubmit({
     quantity,
