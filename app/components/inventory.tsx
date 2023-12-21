@@ -32,6 +32,7 @@ import { ApplySticker } from "./apply-sticker";
 import { CaseOpening } from "./case-opening";
 import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
+import { ScrapeSticker } from "./scrape-sticker";
 
 export function Inventory() {
   const { inventory, setInventory, language, nametagDefaultAllowed } =
@@ -84,10 +85,15 @@ export function Inventory() {
     stickerItemIndex: number;
     stickerItem: CS_Item;
   }>();
+  const [scrapeSticker, setScrapeSticker] = useState<{
+    index: number;
+    item: CS_Item;
+  }>();
   const isSelectAItem = useItemAction !== undefined;
   const isUnlockingCase = unlockCase !== undefined;
   const isRenamingItem = renameItem !== undefined;
   const isApplyingSticker = applySticker !== undefined;
+  const isScrapingSticker = scrapeSticker !== undefined;
 
   function handleEquip(index: number, team?: CS_Team) {
     setInventory(inventory.equip(index, team));
@@ -154,6 +160,10 @@ export function Inventory() {
     });
   }
 
+  function handleScrapeSticker(index: number, item: CS_Item) {
+    setScrapeSticker({ index, item });
+  }
+
   function dismissUseItem() {
     setUseItemAction(undefined);
   }
@@ -200,14 +210,6 @@ export function Inventory() {
     }
   }
 
-  function dismissUnlockCase() {
-    setUnlockCase(undefined);
-  }
-
-  function dismissRenameItem() {
-    setRenameItem(undefined);
-  }
-
   return (
     <>
       {isSelectAItem && (
@@ -250,6 +252,7 @@ export function Inventory() {
                   onEquip={handleEquip}
                   onRemove={handleRemove}
                   onRename={handleRename}
+                  onScrapeSticker={handleScrapeSticker}
                   onUnequip={handleUnequip}
                   onUnlockContainer={handleUnlockContainer}
                   ownApplicableStickers={ownApplicableStickers}
@@ -258,15 +261,21 @@ export function Inventory() {
             ))}
       </div>
       {isUnlockingCase && (
-        <CaseOpening {...unlockCase} onClose={dismissUnlockCase} />
+        <CaseOpening {...unlockCase} onClose={() => setUnlockCase(undefined)} />
       )}
       {isRenamingItem && (
-        <RenameItem {...renameItem} onClose={dismissRenameItem} />
+        <RenameItem {...renameItem} onClose={() => setRenameItem(undefined)} />
       )}
       {isApplyingSticker && (
         <ApplySticker
           {...applySticker}
           onClose={() => setApplySticker(undefined)}
+        />
+      )}
+      {isScrapingSticker && (
+        <ScrapeSticker
+          {...scrapeSticker}
+          onClose={() => setScrapeSticker(undefined)}
         />
       )}
     </>

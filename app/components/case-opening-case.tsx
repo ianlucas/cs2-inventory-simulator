@@ -10,7 +10,7 @@ import { CaseOpeningCaseContents } from "./case-opening-case-contents";
 import { CaseOpeningWheel } from "./case-opening-wheel";
 import { CSItemImage } from "./cs-item-image";
 import { FillSpinner } from "./fill-spinner";
-import { UseItemButton } from "./use-item-button";
+import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -70,7 +70,7 @@ export function CaseOpeningCase({
           right={
             <>
               {canUnlock ? (
-                <UseItemButton
+                <ModalButton
                   children={translate("CaseUnlockContainer")}
                   disabled={!canUnlock}
                   onClick={onUnlock}
@@ -79,7 +79,7 @@ export function CaseOpeningCase({
               ) : (
                 <FillSpinner className="mx-4" />
               )}
-              <UseItemButton
+              <ModalButton
                 children={translate("CaseClose")}
                 disabled={!canUnlock}
                 onClick={onClose}

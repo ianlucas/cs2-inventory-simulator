@@ -21,7 +21,7 @@ import {
 import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
 import { useRootContext } from "./root-context";
-import { UseItemButton } from "./use-item-button";
+import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -99,7 +99,7 @@ export function RenameItem({
               <UseItemFooter
                 right={
                   <>
-                    <UseItemButton
+                    <ModalButton
                       disabled={
                         (nametag !== "" && !CS_safeValidateNametag(nametag)) ||
                         (nametag === "" && isRenamingFreeItem)
@@ -108,7 +108,7 @@ export function RenameItem({
                       onClick={handleRename}
                       children={translate("RenameRename")}
                     />
-                    <UseItemButton
+                    <ModalButton
                       variant="secondary"
                       onClick={onClose}
                       children={translate("RenameCancel")}

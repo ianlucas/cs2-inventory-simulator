@@ -6,7 +6,7 @@
 import clsx from "clsx";
 import { ComponentProps } from "react";
 
-export function UseItemButton({
+export function ModalButton({
   children,
   variant,
   ...props

@@ -95,6 +95,13 @@ export const english = {
   ApplyStickerUseOn: "Use on",
   ApplyStickerWarn: "A sticker can only be applied once",
   ApplyStickerCancel: "Cancel",
+  ScrapeStickerUse: "Scrape Sticker",
+  ScrapeStickerWarn: "Scrape a sticker from",
+  ScrapeStickerRemove: "Remove Sticker",
+  ScrapeStickerRemoveDesc:
+    "Scraping this sticker further will remove it from the item and it will be destroyed.",
+  ScrapeStickerCancel: "Cancel",
+  ScrapeStickerClose: "Close",
   LanguageNbrazilian: "Português do Brasil",
   LanguageNbulgarian: "Български",
   LanguageNczech: "Čeština",

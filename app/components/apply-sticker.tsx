@@ -13,9 +13,10 @@ import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
 import { CSItemImage } from "./cs-item-image";
 import { useRootContext } from "./root-context";
-import { UseItemButton } from "./use-item-button";
+import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
+import { playSound } from "~/utils/sound";
 
 export function ApplySticker({
   onClose,
@@ -54,6 +55,7 @@ export function ApplySticker({
       setInventory(
         inventory.applyItemSticker(itemIndex, stickerItemIndex, stickerIndex)
       );
+      playSound("/sounds/sticker_apply_confirm.wav");
       onClose();
     }
   }
@@ -90,7 +92,10 @@ export function ApplySticker({
                     <button
                       key={index}
                       className="group flex h-[126px] w-[168px] items-center justify-center"
-                      onClick={() => setStickerIndex(index)}
+                      onClick={() => {
+                        setStickerIndex(index);
+                        playSound("/sounds/sticker_apply.wav");
+                      }}
                     >
                       <div className="rounded-md border-2 border-white/20 p-4 px-6 transition group-hover:border-white/80">
                         <FontAwesomeIcon className="h-4" icon={faPlus} />
@@ -102,13 +107,13 @@ export function ApplySticker({
               <UseItemFooter
                 right={
                   <>
-                    <UseItemButton
+                    <ModalButton
                       children={translate("ApplyStickerUse")}
                       disabled={stickerIndex === undefined}
                       onClick={handleApplySticker}
                       variant="primary"
                     />
-                    <UseItemButton
+                    <ModalButton
                       children={translate("ApplyStickerCancel")}
                       onClick={onClose}
                       variant="secondary"

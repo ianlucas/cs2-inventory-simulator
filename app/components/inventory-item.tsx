@@ -54,6 +54,7 @@ export function InventoryItem({
   onEquip,
   onRemove,
   onRename,
+  onScrapeSticker,
   onUnequip,
   onUnlockContainer,
   ownApplicableStickers
@@ -65,6 +66,7 @@ export function InventoryItem({
   onEquip?(index: number, team?: CS_Team): void;
   onRemove?(index: number): void;
   onRename?(index: number, item: CS_Item): void;
+  onScrapeSticker?(index: number, item: CS_Item): void;
   onUnequip?(index: number, team?: CS_Team): void;
   onUnlockContainer?(index: number, item: CS_Item): void;
   ownApplicableStickers?: boolean;
@@ -139,7 +141,6 @@ export function InventoryItem({
       (inventoryItem.stickers ?? []).filter((id) => id !== null).length < 4) ||
       item.type === "sticker");
   const canScrapeSticker =
-    false &&
     CS_hasStickers(item) &&
     (inventoryItem.stickers ?? []).filter((id) => id !== null).length > 0;
   const canUseTools = canRename || canApplySticker || canScrapeSticker;
@@ -253,7 +254,7 @@ export function InventoryItem({
             )}
 
             {canScrapeSticker && (
-              <ContextButton onClick={() => 0}>
+              <ContextButton onClick={() => onScrapeSticker?.(index, item)}>
                 {translate("InventoryScrapeSticker")}
               </ContextButton>
             )}

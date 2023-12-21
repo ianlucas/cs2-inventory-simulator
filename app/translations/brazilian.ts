@@ -81,5 +81,12 @@ export const brazilian = {
   ApplyStickerUse: "Usar adesivo",
   ApplyStickerUseOn: "Usar em",
   ApplyStickerWarn: "Um adesivo pode ser aplicado apenas uma vez",
-  ApplyStickerCancel: "Cancelar"
+  ApplyStickerCancel: "Cancelar",
+  ScrapeStickerUse: "Raspar Adesivo",
+  ScrapeStickerWarn: "Remover um adesivo de",
+  ScrapeStickerRemove: "Remover adesivo",
+  ScrapeStickerRemoveDesc:
+    "Raspar este adesivo mais uma vez o removerá do item, fazendo com que seja destruído.",
+  ScrapeStickerCancel: "Cancelar",
+  ScrapeStickerClose: "Fechar"
 };

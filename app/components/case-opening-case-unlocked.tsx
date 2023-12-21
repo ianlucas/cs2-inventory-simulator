@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "~/hooks/use-translation";
 import { playSound } from "~/utils/sound";
 import { CaseOpeningAttribute } from "./case-opening-attribute";
-import { UseItemButton } from "./use-item-button";
+import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
 import { CSItemImage } from "./cs-item-image";
 
@@ -71,7 +71,7 @@ export function CaseOpeningCaseUnlocked({
             </div>
           }
           right={
-            <UseItemButton
+            <ModalButton
               children={translate("CaseClose")}
               onClick={onClose}
               variant="secondary"
