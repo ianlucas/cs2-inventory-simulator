@@ -96,42 +96,6 @@ type GetUserEquippedItemsResponse = {
 };`}
           endpoint={`${baseUrl}/api/equipped/{steamID64}.json`}
         />
-        <ApiInterface
-          method="GET"
-          name="Get User Equipped Items"
-          type="plain/text"
-          response={`{
-  // Music Kit equipped.
-  "${MUSIC_KIT_PREFIX}" "number"
-  // Pin equipped.
-  "${PIN_PREFIX}" "number"
-  // Melee equipped for T and/or CT.
-  "${MELEE_PREFIX}{CSTeam}" "number"
-  // Glove equipped for T and/or CT.
-  "${GLOVE_PREFIX}{CSTeam}" "number"
-  // Agent equipped for T and/or CT.
-  "${AGENT_PREFIX}{CSTeam}" "number"
-  // Patch for Agent equipped for T and/or CT.
-  "${AGENT_PATCH_PREFIX}{CSTeam}" "number"
-  // PaintKit equipped for T and/or CT and a weapon/melee/glove.
-  "${PAINT_PREFIX}{CSTeam}_{ItemDef}" "number"
-  // Seed equipped for a T and/or CT weapon/melee.
-  "${SEED_PREFIX}{CSTeam}_{ItemDef}" "number"
-  // Wear equipped for a T and/or CT weapon/melee/glove.
-  "${WEAR_PREFIX}{CSTeam}_{ItemDef}" "number"
-  // StatTrak count for a T and/or CT weapon/melee.
-  "${STATTRAK_PREFIX}{CSTeam}_{ItemDef}" "0 ~ 999999"
-  // Nametag equipped for a T and/or CT weapon/melee/glove.
-  "${NAMETAG_PREFIX}{CSTeam}_{ItemDef}" "string"
-  // Whether a T and/or CT weapon has stickers.
-  "${STICKER_PREFIX}{CSTeam}_{ItemDef}" "{0 | 1}"
-  // Sticker equipped for a T and/or CT weapon.
-  "${STICKER_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}" "number"
-  // Wear of an equipped sticker for a T and/or CT weapon.
-  "${STICKERWEAR_PREFIX}{CSTeam}_{ItemDef}_{StickerSlot}" "number"
-}`}
-          endpoint={`${baseUrl}/api/equipped/{steamID64}.cfg`}
-        />
       </div>
     </div>
   );
