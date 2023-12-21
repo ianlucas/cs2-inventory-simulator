@@ -55,7 +55,7 @@ export default function ApiIndex() {
   stickerswear?: (number | null)[];
   wear?: number;
 }>;`}
-          endpoint={`${baseUrl}/api/inventory/{steamID64}`}
+          endpoint={`${baseUrl}/api/inventory/{steamID64}.json`}
         />
         <ApiInterface
           method="GET"

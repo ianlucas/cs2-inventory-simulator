@@ -7,7 +7,7 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
 
-export const ApiInventoryUserIdUrl = "/api/inventory/$userId";
+export const ApiInventoryUserIdUrl = "/api/inventory/$userId.json";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const userId = z.string().parse(params.userId);
