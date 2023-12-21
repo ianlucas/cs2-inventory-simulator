@@ -12,25 +12,34 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS_Economy,
+  CS_Item,
+  CS_MAX_STICKER_WEAR,
+  CS_MIN_STICKER_WEAR,
+  CS_STICKER_WEAR_FACTOR,
   CS_getStickerCategories,
-  CS_getStickers,
-  CS_Item
+  CS_getStickers
 } from "@ianlucas/cslib";
+import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/hooks/use-input";
 import { useTranslation } from "~/hooks/use-translation";
+import { stickerWearStringMaxLen, stickerWearToString } from "~/utils/economy";
 import { CSItemBrowser } from "./cs-item-browser";
+import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
 import EditorSelect from "./editor-select";
+import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { Modal } from "./modal";
-import { CSItemImage } from "./cs-item-image";
 
 export function StickerPicker({
   onChange,
   value
 }: {
-  onChange: (value: (number | null)[]) => void;
-  value: (number | null)[];
+  onChange: (value: { ids: (number | null)[]; wears: number[] }) => void;
+  value: {
+    ids: (number | null)[];
+    wears: number[];
+  };
 }) {
   const translate = useTranslation();
 
@@ -39,6 +48,7 @@ export function StickerPicker({
   const [activeIndex, setActiveIndex] = useState(null as number | null);
   const stickers = useMemo(() => CS_getStickers(), []);
   const categories = useMemo(() => CS_getStickerCategories(), []);
+  const [wear, setWear] = useState(0);
 
   function handleClickSlot(index: number) {
     return function handleClickSlot() {
@@ -47,16 +57,26 @@ export function StickerPicker({
   }
 
   function handleAddSticker(item: CS_Item) {
-    onChange(
-      value.map((other, index) => (index === activeIndex ? item.id : other))
-    );
+    onChange({
+      ids: value.ids.map((other, index) =>
+        index === activeIndex ? item.id : other
+      ),
+      wears: value.wears.map((other, index) =>
+        index === activeIndex ? wear : other
+      )
+    });
     setActiveIndex(null);
   }
 
   function handleRemoveSticker() {
-    onChange(
-      value.map((other, index) => (index === activeIndex ? null : other))
-    );
+    onChange({
+      ids: value.ids.map((other, index) =>
+        index === activeIndex ? null : other
+      ),
+      wears: value.wears.map((other, index) =>
+        index === activeIndex ? 0 : other
+      )
+    });
     setActiveIndex(null);
   }
 
@@ -89,7 +109,7 @@ export function StickerPicker({
   return (
     <>
       <div className="flex justify-between">
-        {value.map((sticker, index) => {
+        {value.ids.map((sticker, index) => {
           const item = sticker !== null ? CS_Economy.getById(sticker) : null;
           return (
             <button
@@ -148,6 +168,32 @@ export function StickerPicker({
               <FontAwesomeIcon icon={faTrashCan} className="h-4" />
               <label>{translate("StickerPickerRemove")}</label>
             </button>
+          </div>
+          <div
+            className={clsx(
+              "m-auto w-[400px] select-none px-4 pb-6 lg:px-0",
+              filtered.length === 0 && "invisible"
+            )}
+          >
+            <div className="flex select-none items-center gap-4">
+              <label className="w-[150px] font-bold text-neutral-500">
+                {translate("EditorStickerWear")}
+              </label>
+              <EditorStepRangeWithInput
+                inputStyles="w-[68px]"
+                transform={stickerWearToString}
+                maxLength={stickerWearStringMaxLen}
+                validate={(value) =>
+                  value >= CS_MIN_STICKER_WEAR && value <= CS_MAX_STICKER_WEAR
+                }
+                stepRangeStyles="flex-1"
+                min={CS_MIN_STICKER_WEAR}
+                max={CS_MAX_STICKER_WEAR}
+                step={CS_STICKER_WEAR_FACTOR}
+                value={wear}
+                onChange={setWear}
+              />
+            </div>
           </div>
           <CSItemBrowser items={filtered} onClick={handleAddSticker} />
         </Modal>

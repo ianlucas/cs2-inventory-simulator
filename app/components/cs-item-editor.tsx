@@ -33,11 +33,10 @@ import {
 } from "~/utils/economy";
 import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
-import { EditorStepRange } from "./editor-step-range";
+import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
 import { useRootContext } from "./root-context";
 import { StickerPicker } from "./sticker-picker";
-import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 
 export interface CSItemEditorAttributes {
   nametag?: string;
@@ -45,6 +44,7 @@ export interface CSItemEditorAttributes {
   seed?: number;
   stattrak?: boolean;
   stickers?: (number | null)[];
+  stickerswear?: (number | null)[];
   wear?: number;
 }
 
@@ -62,10 +62,10 @@ export function CSItemEditor({
   const [wear, setWear] = useState(item.wearmin ?? CS_MIN_WEAR);
   const [seed, setSeed] = useState(1);
   const [nametag, setNametag] = useInput("");
-  const [stickers, setStickers] = useState([null, null, null, null] as (
-    | number
-    | null
-  )[]);
+  const [stickersAttributes, setStickersAttributes] = useState({
+    ids: [null, null, null, null] as (number | null)[],
+    wears: [0, 0, 0, 0]
+  });
   const [quantity, setQuantity] = useState(1);
   const hasStickers = CS_hasStickers(item);
   const hasStattrak = CS_hasStatTrak(item);
@@ -81,16 +81,26 @@ export function CSItemEditor({
   const translate = useTranslation();
 
   function handleSubmit() {
+    const stickers =
+      hasStickers &&
+      stickersAttributes.ids.filter((sticker) => sticker !== null).length > 0
+        ? stickersAttributes.ids
+        : undefined;
+
+    const stickerswear =
+      hasStickers &&
+      stickersAttributes.wears.filter((wear) => wear !== 0).length > 0
+        ? stickersAttributes.wears.map((wear) => (wear === 0 ? null : wear))
+        : undefined;
+
     onSubmit({
       nametag: hasNametag && nametag.length > 0 ? nametag : undefined,
       quantity,
-      stickers:
-        hasStickers && stickers.filter((sticker) => sticker !== null).length > 0
-          ? stickers
-          : undefined,
       seed: hasSeed && seed !== CS_MIN_SEED ? seed : undefined,
-      wear: hasWear && wear !== CS_MIN_WEAR ? wear : undefined,
-      stattrak: hasStattrak && stattrak === true ? stattrak : undefined
+      stattrak: hasStattrak && stattrak === true ? stattrak : undefined,
+      stickers,
+      stickerswear,
+      wear: hasWear && wear !== CS_MIN_WEAR ? wear : undefined
     });
   }
 
@@ -113,7 +123,10 @@ export function CSItemEditor({
             <label className="w-[76.33px] select-none font-bold text-neutral-500">
               {translate("EditorStickers")}
             </label>
-            <StickerPicker value={stickers} onChange={setStickers} />
+            <StickerPicker
+              value={stickersAttributes}
+              onChange={setStickersAttributes}
+            />
           </div>
         )}
         {hasNametag && (
@@ -180,14 +193,16 @@ export function CSItemEditor({
             <label className="w-[76.33px] font-bold text-neutral-500">
               {translate("EditorQuantity")}
             </label>
-            <span className="w-[68px]">{quantity}</span>
-            <EditorStepRange
-              className="flex-1"
+            <EditorStepRangeWithInput
+              inputStyles="w-[68px]"
+              maxLength={String(maxQuantity).length}
+              validate={(value) => value >= 1 && value <= maxQuantity}
+              stepRangeStyles="flex-1"
+              min={1}
+              max={maxQuantity}
+              step={1}
               value={quantity}
               onChange={setQuantity}
-              max={maxQuantity}
-              min={1}
-              step={1}
             />
           </div>
         )}

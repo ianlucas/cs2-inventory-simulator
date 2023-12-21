@@ -30,7 +30,16 @@ const inventoryItemProps = {
     .refine((seed) => seed === undefined || CS_safeValidateSeed(seed)),
   stattrak: z.literal(0).optional(),
   stickers: z.array(z.number().or(z.null())).optional(),
-  stickerswear: z.array(z.number().or(z.null())).optional(),
+  stickerswear: z
+    .array(z.number().or(z.null()))
+    .optional()
+    .transform((stickerswear) =>
+      stickerswear === undefined
+        ? undefined
+        : stickerswear.filter((wear) => wear !== null && wear !== 0).length > 0
+          ? stickerswear
+          : undefined
+    ),
   wear: z
     .number()
     .optional()

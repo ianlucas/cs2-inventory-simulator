@@ -38,6 +38,7 @@ export const brazilian = {
   EditorQuantity: "Qtd.",
   EditorReset: "Reiniciar",
   EditorCraft: "Criar",
+  EditorStickerWear: "Wear do adesivo",
   StickerPickerHeader: "Pegue um adesivo...",
   StickerPickerSearchPlaceholder: "Procurar adesivo...",
   StickerPickerFilterPlaceholder: "Filtrar por categoria...",

@@ -11,6 +11,7 @@ import {
   CS_MAX_SEED,
   CS_resolveCaseSpecialItemImage,
   CS_resolveItemImage,
+  CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
 } from "@ianlucas/cslib";
 import { ItemFiltersItem } from "./economy-item-filters";
@@ -102,7 +103,12 @@ export function resolveCaseSpecialItemImage(item: number | CS_Item) {
 
 export const seedStringMaxLen = String(CS_MAX_SEED).length;
 export const wearStringMaxLen = String(CS_WEAR_FACTOR).length;
+export const stickerWearStringMaxLen = String(CS_STICKER_WEAR_FACTOR).length;
 
 export function wearToString(wear: number) {
   return wear.toFixed(wearStringMaxLen - 2);
+}
+
+export function stickerWearToString(wear: number) {
+  return wear.toFixed(stickerWearStringMaxLen - 2);
 }

@@ -41,6 +41,7 @@ export const english = {
   EditorQuantity: "Quantity",
   EditorReset: "Reset",
   EditorCraft: "Craft",
+  EditorStickerWear: "Sticker wear",
   StickerPickerNA: "N/A",
   StickerPickerHeader: "Pick a sticker...",
   StickerPickerSearchPlaceholder: "Search sticker...",
