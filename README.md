@@ -1,4 +1,4 @@
-# [https://inventory.cstrike.app](https://inventory.cstrike.app/)
+# [inventory.cstrike.app](https://inventory.cstrike.app/)
 
 A Counter-Strike 2 **Inventory Simulator** for the web using TypeScript and Remix.
 
