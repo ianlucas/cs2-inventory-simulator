@@ -27,6 +27,7 @@ import {
 
 const RootContext = createContext<{
   background: string;
+  buildLastCommit?: string;
   inventory: CS_Inventory;
   itemTranslation: Record<string, string | undefined>;
   language: string;
@@ -44,6 +45,7 @@ export function useRootContext() {
 
 export function RootProvider({
   background,
+  buildLastCommit,
   children,
   itemTranslation,
   language,
@@ -100,6 +102,7 @@ export function RootProvider({
     <RootContext.Provider
       value={{
         background,
+        buildLastCommit,
         inventory,
         itemTranslation,
         language,

@@ -1,0 +1,33 @@
+{
+  "background_color": "#292524",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/link-images/512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/link-images/192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/link-images/192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/link-images/512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "name": "CS2 Inventory Simulator",
+  "shortname": "Inventory Sim",
+  "start_url": "index.html",
+  "orientation": "portrait",
+  "theme_color": "#292524"
+}
