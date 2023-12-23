@@ -94,8 +94,13 @@ export default function App() {
           <Meta />
           <Links />
           {seoMetaFunction(appUrl, appSiteName).map(
-            ({ name, content, property }) => (
-              <meta name={name} content={content} property={property} />
+            ({ name, content, property }, index) => (
+              <meta
+                key={index}
+                name={name}
+                content={content}
+                property={property}
+              />
             )
           )}
         </head>
