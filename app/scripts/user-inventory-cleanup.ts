@@ -23,9 +23,27 @@ export async function UserInventoryCleanup() {
       where: { id }
     });
     if (inventory) {
+      let removedStickers = false;
       const parsed = parseInventory(inventory);
-      const filtered = parsed.filter((item) => CS_Economy.itemMap.has(item.id));
-      if (parsed.length !== filtered.length) {
+      const filtered = parsed
+        // Remove non existent items.
+        .filter((item) => CS_Economy.itemMap.has(item.id))
+        // Remove stickers from c4.
+        .map((inventoryItem) => {
+          const item = CS_Economy.getById(inventoryItem.id);
+          if (item.category !== "c4") {
+            return item;
+          }
+          if (inventoryItem.stickers || inventoryItem.stickerswear) {
+            removedStickers = true;
+          }
+          return {
+            ...inventoryItem,
+            stickers: undefined,
+            stickerswear: undefined
+          };
+        });
+      if (parsed.length !== filtered.length || removedStickers) {
         count += 1;
         await prisma.user.update({
           data: { inventory: JSON.stringify(filtered) },

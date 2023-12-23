@@ -86,7 +86,7 @@ export function ScrapeSticker({
                   warningItem={item.name}
                 />
                 <CSItemImage
-                  className="aspect-[1.33333] max-w-[512px]"
+                  className="m-auto aspect-[1.33333] max-w-[512px]"
                   item={item}
                 />
                 <div className="flex justify-center">
