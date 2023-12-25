@@ -40,6 +40,9 @@ export async function handleUserCachedResponse({
       timestamp: user.syncedAt
     }
   });
+  if (cache !== null) {
+    return res(cache.body, mimeType);
+  }
   const inventory = (
     await prisma.user.findFirst({
       select: { inventory: true },
@@ -51,9 +54,7 @@ export async function handleUserCachedResponse({
       ? json(throwBody)
       : res(throwBody, mimeType);
   }
-  if (cache !== null) {
-    return res(cache.body, mimeType);
-  }
+
   const generated = generate(parseInventory(inventory));
   const body =
     mimeType === "application/json"
