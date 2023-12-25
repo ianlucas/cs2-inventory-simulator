@@ -61,7 +61,7 @@ export function Header() {
         </div>
         {(isDesktop || isMenuOpen) && (
           <div className="absolute left-0 mt-2 w-full flex-1 px-4 lg:static lg:mt-0 lg:w-auto lg:p-0">
-            <div className="rounded bg-stone-800 p-2 text-sm lg:flex lg:items-center lg:gap-4 lg:bg-transparent lg:p-0">
+            <nav className="rounded bg-stone-800 p-2 text-sm lg:flex lg:items-center lg:gap-4 lg:bg-transparent lg:p-0">
               <HeaderLink
                 to="/"
                 icon={faBoxesStacked}
@@ -124,7 +124,7 @@ export function Header() {
                   </div>
                 </>
               )}
-            </div>
+            </nav>
           </div>
         )}
       </div>
