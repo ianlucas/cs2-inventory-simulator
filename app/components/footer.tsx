@@ -11,28 +11,32 @@ export function Footer() {
   const { buildLastCommit } = useRootContext();
 
   return (
-    <div className="my-8 flex select-none items-center justify-center gap-2 text-sm text-neutral-400 drop-shadow-sm">
-      <span>&copy; 2023, CS2 Inventory Simulator.</span>
-      <a
-        href="https://github.com/ianlucas/cs2-inventory-simulator"
-        className="flex items-center gap-1 transition-all hover:text-blue-500"
-        target="_blank"
-      >
-        <FontAwesomeIcon icon={faGithub} className="h-4" />
-        Source Code
-      </a>
-      {buildLastCommit !== undefined && (
-        <>
-          &middot;
-          <a
-            className="transition-all hover:text-blue-500"
-            href={`https://github.com/ianlucas/cs2-inventory-simulator/commit/${buildLastCommit}`}
-            target="_blank"
-          >
-            {buildLastCommit.substring(0, 7)}
-          </a>
-        </>
-      )}
-    </div>
+    <footer className="my-8 select-none text-sm text-neutral-400 drop-shadow-sm">
+      <div className="text-center">
+        <span>&copy; 2023, CS2 Inventory Simulator.</span>
+      </div>
+      <div className="flex items-center justify-center gap-2">
+        <a
+          href="https://github.com/ianlucas/cs2-inventory-simulator"
+          className="flex items-center gap-1 transition-all hover:text-blue-500"
+          target="_blank"
+        >
+          <FontAwesomeIcon icon={faGithub} className="h-4" />
+          Source Code
+        </a>
+        {buildLastCommit !== undefined && (
+          <>
+            &middot;
+            <a
+              className="transition-all hover:text-blue-500"
+              href={`https://github.com/ianlucas/cs2-inventory-simulator/commit/${buildLastCommit}`}
+              target="_blank"
+            >
+              {buildLastCommit.substring(0, 7)}
+            </a>
+          </>
+        )}
+      </div>
+    </footer>
   );
 }
