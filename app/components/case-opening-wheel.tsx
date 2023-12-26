@@ -52,7 +52,7 @@ export function CaseOpeningWheel({
             />
           </div>
         </div>
-        <div className="absolute left-0 top-0 flex w-full scale-[1.15] items-center justify-center opacity-95">
+        <div className="absolute left-0 top-0 flex w-full scale-[1.128] items-center justify-center opacity-95">
           <div className="relative flex h-[496.8px] w-[1269.980px] items-center bg-black/50 [clip-path:circle(22.7%_at_50%_50%)]">
             <CaseOpeningWheelItems
               ref={hitsRef}
