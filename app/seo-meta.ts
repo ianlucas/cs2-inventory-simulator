@@ -7,7 +7,7 @@ export function seoMetaFunction(appUrl: string, appSiteName: string) {
   const appDescription =
     "Counter-Strike 2 Inventory Simulator. Craft items, open cases, and scrape stickers - organize and plan your dream inventory.";
   const appTitle = "The best free, Counter-Strike 2 Inventory Simulator";
-  const appWideImage = `${appUrl}/inventory-simulator.png`;
+  const appWideImage = `${appUrl}/images/inventory-simulator.png`;
 
   return [
     {
