@@ -270,7 +270,7 @@ export function InventoryItem({
       {!stubInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <div
-            className="z-20 rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none"
+            className="z-20 max-w-[320px] rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none"
             ref={hoverRefs.setFloating}
             style={hoverStyles}
             {...getHoverFloatingProps()}
@@ -283,6 +283,30 @@ export function InventoryItem({
               </div>
             )}
             <div className={clsx(!hasModel && "font-bold")}>{name}</div>
+            {item.teams !== undefined && (
+              <div className="my-2 flex items-center gap-4 border-b border-t border-neutral-700/70 py-1">
+                <span className="font-bold text-neutral-400">
+                  {translate("InventoryItemTeam")}
+                </span>
+                <div className="flex items-center gap-1">
+                  {item.teams.includes(CS_TEAM_CT) && (
+                    <img src="/icons/ct.svg" className="h-5" alt="CT" />
+                  )}
+                  {item.teams.includes(CS_TEAM_T) && (
+                    <img src="/icons/t.svg" className="h-5" alt="T" />
+                  )}
+                  <span>
+                    {item.teams.length === 2
+                      ? translate("InventoryItemTeamAny")
+                      : translate(
+                          `InventoryItemTeam${
+                            item.teams.includes(CS_TEAM_CT) ? "CT" : "T"
+                          }`
+                        )}
+                  </span>
+                </div>
+              </div>
+            )}
             {hasAttributes && (
               <div className="mt-2 flex flex-col gap-2">
                 {hasWear && (
