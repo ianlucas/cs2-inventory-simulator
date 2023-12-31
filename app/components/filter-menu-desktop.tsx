@@ -9,6 +9,7 @@ import { ITEM_FILTERS, ItemFiltersItem } from "~/utils/economy-item-filters";
 import { TextSlider } from "./text-slider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faSquare } from "@fortawesome/free-solid-svg-icons";
+import { FilterMenuIcon } from "./filter-menu-icon";
 
 export function FilterMenuDesktop({
   onChange,
@@ -48,15 +49,7 @@ export function FilterMenuDesktop({
             <div className="min-w-0 flex-1 whitespace-nowrap">
               <TextSlider text={translate(`Category${filter.label}`)} />
             </div>
-            <img
-              draggable={false}
-              alt={translate(`Category${filter.label}`)}
-              src={`/icons/${filter.icon}.svg`}
-              className={clsx(
-                "h-4 transition-all",
-                isIdle && "opacity-30 group-hover:opacity-50"
-              )}
-            />
+            <FilterMenuIcon icon={filter.icon} className={clsx("h-4")} />
           </button>
         );
       })}

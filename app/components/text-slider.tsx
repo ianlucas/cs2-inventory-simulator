@@ -29,7 +29,7 @@ export function TextSlider({
       const textWidth = textElement.current.scrollWidth ?? 0;
       const translation =
         goToRight && textWidth > wrapperWidth ? -(textWidth - wrapperWidth) : 0;
-      textElement.current.style.transitionProperty = "all";
+      textElement.current.style.transitionProperty = "transform";
       textElement.current.style.transitionDuration = `${duration}ms`;
       textElement.current.style.transform = `translateX(${translation}px)`;
       timeout = setTimeout(() => animate(!goToRight), duration);
