@@ -22,6 +22,7 @@ import {
   CS_hasWear,
   CS_INVENTORY_EQUIPPABLE_ITEMS,
   CS_Item,
+  CS_listCaseContents,
   CS_MAX_WEAR,
   CS_MIN_SEED,
   CS_MIN_WEAR,
@@ -305,6 +306,21 @@ export function InventoryItem({
                         )}
                   </span>
                 </div>
+              </div>
+            )}
+            {item.contents !== undefined && (
+              <div className="mt-4">
+                <div className="text-neutral-400">
+                  {translate("InventoryItemContainsOne")}
+                </div>
+                {CS_listCaseContents(item, true).map((item) => (
+                  <div style={{ color: item.rarity }}>{item.name}</div>
+                ))}
+                {item.specialcontents !== undefined && (
+                  <div className="text-yellow-300">
+                    {translate("InventoryItemRareItem")}
+                  </div>
+                )}
               </div>
             )}
             {hasAttributes && (

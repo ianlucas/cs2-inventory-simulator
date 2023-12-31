@@ -58,6 +58,8 @@ export const brazilian = {
   InventoryItemTeamAny: "Qualquer",
   InventoryItemTeamT: "Terrorista",
   InventoryItemTeamCT: "Contraterrorista",
+  InventoryItemContainsOne: "Contém um dos seguintes itens:",
+  InventoryItemRareItem: "ou um item especial e excessivamente raro!",
   InventoryApplySticker: "Usar adesivo",
   InventoryScrapeSticker: "Raspar adesivo",
   ModelAgent: "Agente",

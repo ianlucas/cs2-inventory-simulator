@@ -65,6 +65,8 @@ export const english = {
   InventoryItemTeamAny: "Any",
   InventoryItemTeamT: "Terrorist",
   InventoryItemTeamCT: "Counter-Terrorist",
+  InventoryItemContainsOne: "Contains one of the following:",
+  InventoryItemRareItem: "or an Exceedingly Rare Special Item!",
   InventoryApplySticker: "Apply Sticker",
   InventoryScrapeSticker: "Scrape Sticker",
   ModelAgent: "Agent",
