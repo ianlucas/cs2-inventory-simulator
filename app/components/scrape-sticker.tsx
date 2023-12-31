@@ -33,7 +33,7 @@ export function ScrapeSticker({
   item: CS_Item;
 }) {
   const translate = useTranslation();
-  const { inventory, setInventory } = useRootContext();
+  const { inventory, setInventory, statsForNerds } = useRootContext();
   const sync = useSync();
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
 
@@ -102,9 +102,11 @@ export function ScrapeSticker({
                           }}
                           item={CS_Economy.getById(id)}
                         />
-                        <span className="text-sm text-neutral-300">
-                          {stickersWear[index].toFixed(2)}
-                        </span>
+                        {statsForNerds && (
+                          <span className="text-sm text-neutral-300">
+                            {stickersWear[index].toFixed(2)}
+                          </span>
+                        )}
                       </button>
                     ) : null
                   )}

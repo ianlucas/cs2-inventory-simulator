@@ -3,21 +3,23 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faFloppyDisk, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MetaFunction } from "@remix-run/node";
 import { Link, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
-import { backgrounds } from "~/preferences/background.server";
+import { EditorToggle } from "~/components/editor-toggle";
 import { LanguageSelect } from "~/components/language-select";
 import { Modal } from "~/components/modal";
+import { ModalButton } from "~/components/modal-button";
 import { useRootContext } from "~/components/root-context";
 import { Select } from "~/components/select";
+import { useCheckbox } from "~/hooks/use-checkbox";
 import { useTranslation } from "~/hooks/use-translation";
+import { backgrounds } from "~/preferences/background.server";
 import { languages } from "~/preferences/language.server";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
-import { ModalButton } from "~/components/modal-button";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Settings - CS2 Inventory Simulator" }];
@@ -35,11 +37,17 @@ export async function loader() {
 
 export default function Settings() {
   const { backgrounds, languages } = useTypedLoaderData<typeof loader>();
-  const { background: selectedBackground, language: selectedLanguage } =
-    useRootContext();
+  const {
+    background: selectedBackground,
+    language: selectedLanguage,
+    statsForNerds: selectedStatsForNerds,
+    hideFreeItems: selectedHideFreeItems
+  } = useRootContext();
 
   const [language, setLanguage] = useState(selectedLanguage);
   const [background, setBackground] = useState(selectedBackground);
+  const [statsForNerds, setStatsForNerds] = useCheckbox(selectedStatsForNerds);
+  const [hideFreeItems, setHideFreeItems] = useCheckbox(selectedHideFreeItems);
 
   const translate = useTranslation();
   const submit = useSubmit();
@@ -48,7 +56,9 @@ export default function Settings() {
     submit(
       {
         background,
-        language
+        hideFreeItems,
+        language,
+        statsForNerds
       },
       {
         action: ApiActionPreferencesUrl,
@@ -88,6 +98,22 @@ export default function Settings() {
             options={backgrounds}
             children={({ label }) => label}
           />
+        </div>
+        <div>
+          <label className="font-bold text-neutral-500">
+            {translate("SettingsStatsForNerds")}
+          </label>
+          <div>
+            <EditorToggle checked={statsForNerds} onChange={setStatsForNerds} />
+          </div>
+        </div>
+        <div>
+          <label className="font-bold text-neutral-500">
+            {translate("SettingsHideFreeItems")}
+          </label>
+          <div>
+            <EditorToggle checked={hideFreeItems} onChange={setHideFreeItems} />
+          </div>
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-2 px-4 pb-4">

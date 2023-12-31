@@ -91,16 +91,18 @@ export function sortByEquipped(
   }
 }
 
-export function getFreeItemsToDisplay() {
+export function getFreeItemsToDisplay(onlyC4 = false) {
   return CS_filterItems({
     free: true
-  }).map((item, index) => ({
-    equipped: [],
-    index: -1 * (index + 1),
-    inventoryItem: { id: item.id },
-    item,
-    ...getCSItemName(item)
-  }));
+  })
+    .map((item, index) => ({
+      equipped: [],
+      index: -1 * (index + 1),
+      inventoryItem: { id: item.id },
+      item,
+      ...getCSItemName(item)
+    }))
+    .filter(({ item }) => !onlyC4 || item.category === "c4");
 }
 
 export const MUSIC_KIT_PREFIX = "mk";

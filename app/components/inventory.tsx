@@ -35,8 +35,13 @@ import { useRootContext } from "./root-context";
 import { ScrapeSticker } from "./scrape-sticker";
 
 export function Inventory() {
-  const { inventory, setInventory, language, nametagDefaultAllowed } =
-    useRootContext();
+  const {
+    inventory,
+    setInventory,
+    language,
+    nametagDefaultAllowed,
+    hideFreeItems
+  } = useRootContext();
   const translate = useTranslation();
   const sync = useSync();
 
@@ -50,12 +55,12 @@ export function Inventory() {
         .sort(sortByType)
         .sort(sortByEquipped),
       // Default Game Items
-      ...getFreeItemsToDisplay()
+      ...getFreeItemsToDisplay(hideFreeItems)
         .sort(sortByName)
         .sort(sortByType)
         .sort(sortByEquipped)
     ],
-    [inventory, language]
+    [inventory, language, hideFreeItems]
   );
 
   const ownApplicableStickers =

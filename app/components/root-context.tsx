@@ -28,6 +28,7 @@ import {
 const RootContext = createContext<{
   background: string;
   buildLastCommit?: string;
+  hideFreeItems: boolean;
   inventory: CS_Inventory;
   itemTranslation: Record<string, string | undefined>;
   language: string;
@@ -35,6 +36,7 @@ const RootContext = createContext<{
   nametagDefaultAllowed: number[];
   requireAuth: boolean;
   setInventory(value: CS_Inventory): void;
+  statsForNerds: boolean;
   translation: Record<string, string | undefined>;
   user: Awaited<ReturnType<typeof findRequestUser>>;
 }>(null!);
@@ -47,10 +49,12 @@ export function RootProvider({
   background,
   buildLastCommit,
   children,
+  hideFreeItems,
   itemTranslation,
   language,
   maxInventoryItems,
   nametagDefaultAllowed,
+  statsForNerds,
   translation,
   user
 }: Omit<
@@ -103,6 +107,7 @@ export function RootProvider({
       value={{
         background,
         buildLastCommit,
+        hideFreeItems,
         inventory,
         itemTranslation,
         language,
@@ -110,6 +115,7 @@ export function RootProvider({
         nametagDefaultAllowed,
         requireAuth: retrieveUserId() !== undefined,
         setInventory,
+        statsForNerds,
         translation,
         user
       }}

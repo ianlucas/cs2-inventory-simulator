@@ -66,6 +66,8 @@ export const brazilian = {
   SettingsHeader: "Configurações",
   SettingsLanguage: "Idioma",
   SettingsBackground: "Plano de fundo",
+  SettingsStatsForNerds: "Estatísticas para nerds",
+  SettingsHideFreeItems: "Ocultar itens gratuitos (exceto C4)",
   SettingsSave: "Salvar",
   CaseUnlockContainer: "Destrancar recipiente",
   CaseUnlock: "Destrancar",

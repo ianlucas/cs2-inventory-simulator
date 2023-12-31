@@ -25,10 +25,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (!userId) {
     return redirect("/");
   }
-  const language = await getUserPreference(userId, "language");
-  const background = await getUserPreference(userId, "background");
   const session = await getSession(request.headers.get("Cookie"));
-  assignToSession(session, { background, language });
+  assignToSession(session, {
+    background: await getUserPreference(userId, "background"),
+    hideFreeItems: await getUserPreference(userId, "hideFreeItems"),
+    language: await getUserPreference(userId, "language"),
+    statsForNerds: await getUserPreference(userId, "statsForNerds")
+  });
   return redirect("/", {
     headers: {
       "Set-Cookie": await commitSession(session)
@@ -38,19 +41,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const userId = await authenticator.isAuthenticated(request);
-  const { background, language } = z
+  const { background, language, statsForNerds, hideFreeItems } = z
     .object({
       background: z
         .string()
         .refine((background) => getAllowedBackgrounds().includes(background)),
       language: z
         .string()
-        .refine((language) => getAllowedLanguages().includes(language))
+        .refine((language) => getAllowedLanguages().includes(language)),
+      statsForNerds: z.string().transform((value) => value === "true"),
+      hideFreeItems: z.string().transform((value) => value === "true")
     })
     .parse(Object.fromEntries(await request.formData()));
   if (userId) {
     await setUserPreference(userId, "language", language);
     await setUserPreference(userId, "background", background);
+    await setUserPreference(userId, "statsForNerds", String(statsForNerds));
+    await setUserPreference(userId, "hideFreeItems", String(hideFreeItems));
   }
   const session = await getSession(request.headers.get("Cookie"));
   assignToSession(session, { background, language });

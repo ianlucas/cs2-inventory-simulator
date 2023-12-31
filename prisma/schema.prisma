@@ -35,7 +35,9 @@ model UserCache {
 
 model UserPreferences {
   background String?
+  hideFreeItems String?
   language String?
+  statsForNerds String?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @id
 }

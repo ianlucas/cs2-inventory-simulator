@@ -18,7 +18,7 @@ export function CSItemName({
   return (
     <>
       {parts.map((name, index) => (
-        <>
+        <span key={index}>
           <span
             className={clsx(
               index === 0 && HAS_KIND_FIRST.includes(type)
@@ -37,7 +37,7 @@ export function CSItemName({
           {index < parts.length - 1 && (
             <span className="text-neutral-700"> | </span>
           )}
-        </>
+        </span>
       ))}
     </>
   );

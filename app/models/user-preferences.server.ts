@@ -5,9 +5,15 @@
 
 import { prisma } from "~/db.server";
 
+type UserPreferenceKeys =
+  | "background"
+  | "language"
+  | "statsForNerds"
+  | "hideFreeItems";
+
 export async function getUserPreference(
   userId: string,
-  preference: "background" | "language"
+  preference: UserPreferenceKeys
 ) {
   return (
     (await prisma.userPreferences.findFirst({ where: { userId } }))?.[
@@ -18,7 +24,7 @@ export async function getUserPreference(
 
 export async function setUserPreference(
   userId: string,
-  preference: "background" | "language",
+  preference: UserPreferenceKeys,
   value: string
 ) {
   return await prisma.userPreferences.upsert({

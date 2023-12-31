@@ -77,6 +77,8 @@ export const english = {
   SettingsHeader: "Settings",
   SettingsLanguage: "Language",
   SettingsBackground: "Background",
+  SettingsStatsForNerds: "Stats for nerds",
+  SettingsHideFreeItems: "Hide default items (except C4)",
   SettingsSave: "Save",
   CaseUnlockContainer: "Unlock Container",
   CaseUnlock: "Unlock",

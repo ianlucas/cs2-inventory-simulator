@@ -39,6 +39,7 @@ import { seoLinksFunction } from "./seo-link";
 import { seoMetaFunction } from "./seo-meta";
 import { getSession } from "./session.server";
 import styles from "./tailwind.css";
+import { getToggleable } from "./preferences/toggleable.server";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
@@ -76,7 +77,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     nametagDefaultAllowed: NAMETAG_DEFAULT_ALLOWED,
     user: await findRequestUser(request),
     ...(await getBackground(session)),
-    ...(await getLanguage(session, ipCountry))
+    ...(await getLanguage(session, ipCountry)),
+    ...(await getToggleable(session))
   });
 }
 
