@@ -6,7 +6,7 @@
 import clsx from "clsx";
 import { ChangeEvent, ComponentProps } from "react";
 
-export default function EditorSelect({
+export function EditorSelect({
   className,
   onChange,
   options,

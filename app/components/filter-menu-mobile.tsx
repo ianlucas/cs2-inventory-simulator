@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
 import { ITEM_FILTERS, ItemFiltersItem } from "~/utils/economy-item-filters";
 
-export function FilterMenu({
+export function FilterMenuMobile({
   onChange,
   value
 }: {

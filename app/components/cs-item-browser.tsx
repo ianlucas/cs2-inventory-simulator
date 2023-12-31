@@ -10,17 +10,19 @@ import { GridList } from "./grid-list";
 export function CSItemBrowser({
   ignoreRarityColor,
   items,
+  maxItemsIntoView = 6,
   onClick
 }: {
   ignoreRarityColor?: boolean;
   items: CS_Item[];
+  maxItemsIntoView?: number;
   onClick?(item: CS_Item): void;
 }) {
   return (
     <GridList
-      className="divide-y-2 divide-neutral-800/30"
+      className="divide-y-2 divide-transparent"
       itemHeight={64}
-      maxItemsIntoView={6}
+      maxItemsIntoView={maxItemsIntoView}
     >
       {items.map((item) => (
         <CSItemButton

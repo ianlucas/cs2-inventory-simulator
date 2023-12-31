@@ -27,7 +27,7 @@ import { stickerWearStringMaxLen, stickerWearToString } from "~/utils/economy";
 import { CSItemBrowser } from "./cs-item-browser";
 import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
-import EditorSelect from "./editor-select";
+import { EditorSelect } from "./editor-select";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { Modal } from "./modal";
 

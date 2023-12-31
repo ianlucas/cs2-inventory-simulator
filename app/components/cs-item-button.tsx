@@ -43,7 +43,7 @@ export function CSItemButton({
       onClick={handleClick}
       className={clsx(
         clickable &&
-          "relative overflow-hidden border-y-2 border-transparent bg-transparent transition-all hover:bg-black/20 active:bg-black/30",
+          "relative overflow-hidden rounded border-y-2 border-transparent bg-transparent transition-all hover:bg-black/20 active:bg-black/30",
         !bigger && "block h-[64px] w-full px-2",
         bigger && "flex h-full w-full items-center justify-center"
       )}

@@ -37,6 +37,7 @@ import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
 import { useRootContext } from "./root-context";
 import { StickerPicker } from "./sticker-picker";
+import { ModalButton } from "./modal-button";
 
 export interface CSItemEditorAttributes {
   nametag?: string;
@@ -208,21 +209,29 @@ export function CSItemEditor({
         )}
       </div>
       <div className="mt-6 flex justify-center gap-2">
-        <button
+        {/* <button
           onClick={onReset}
           className="flex cursor-default items-center gap-2 rounded px-4 py-2 text-neutral-300 drop-shadow-lg hover:text-neutral-100"
-        >
-          <FontAwesomeIcon icon={faLongArrowLeft} className="h-4" />
-          {translate("EditorReset")}
-        </button>
-        <button
+        ></button> */}
+        {/* <button
           disabled={!canCraft}
           onClick={handleSubmit}
           className="flex cursor-default items-center gap-2 rounded bg-white/80 px-4 py-2 font-bold text-neutral-700 drop-shadow-lg transition hover:bg-white disabled:bg-neutral-500 disabled:text-neutral-700"
         >
           <FontAwesomeIcon icon={faBolt} className="h-4" />
-          {translate("EditorCraft")}
-        </button>
+          {}
+        </button> */}
+        <ModalButton className="px-2" variant="secondary" onClick={onReset}>
+          <FontAwesomeIcon icon={faLongArrowLeft} className="mr-2 h-4" />
+          {translate("EditorReset")}
+        </ModalButton>
+        <ModalButton
+          className="px-2"
+          variant="primary"
+          disabled={!canCraft}
+          onClick={handleSubmit}
+          children={translate("EditorCraft")}
+        />
       </div>
     </div>
   );

@@ -8,14 +8,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Item } from "@ianlucas/cslib";
 import { MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
+import clsx from "clsx";
 import { useState } from "react";
 import {
   CSItemEditor,
   CSItemEditorAttributes
 } from "~/components/cs-item-editor";
-import CSItemPicker from "~/components/cs-item-picker";
+import { CSItemPicker } from "~/components/cs-item-picker";
 import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
+import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
@@ -34,6 +36,7 @@ export default function Craft() {
   const [selectedItem, setSelectedItem] = useState<CS_Item>();
   const { inventory, setInventory } = useRootContext();
   const translate = useTranslation();
+  const isDesktop = useIsDesktop();
 
   useLockScroll();
 
@@ -59,11 +62,17 @@ export default function Craft() {
     }
   }
 
+  const isPickingItem = selectedItem === undefined;
+
   return (
-    <Modal className="w-[540px]">
+    <Modal
+      className={clsx(
+        isPickingItem ? (isDesktop ? "w-[640px]" : "w-[540px]") : "w-[420px]"
+      )}
+    >
       <div className="flex select-none items-center justify-between px-4 py-2 text-sm font-bold">
         <span className="text-neutral-400">
-          {selectedItem === undefined
+          {isPickingItem
             ? translate("CraftSelectHeader")
             : translate("CraftConfirmHeader")}
         </span>
@@ -73,7 +82,7 @@ export default function Craft() {
           </Link>
         </div>
       </div>
-      {selectedItem === undefined ? (
+      {isPickingItem ? (
         <CSItemPicker onPickItem={setSelectedItem} />
       ) : (
         <CSItemEditor
