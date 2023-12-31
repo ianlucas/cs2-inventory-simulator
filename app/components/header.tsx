@@ -38,8 +38,8 @@ export function Header() {
   return (
     <div
       className={clsx(
-        "sticky left-0 top-0 z-30 w-full drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] transition-all",
-        !isOnTop && "bg-gradient-to-b from-black/60 to-transparent"
+        "sticky left-0 top-0 z-30 w-full drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] transition-all before:absolute before:inset-0 before:-z-10 before:bg-gradient-to-b before:from-black/60 before:to-transparent before:transition-all before:content-['']",
+        isOnTop ? "before:opacity-0" : "before:opacity-1"
       )}
       ref={ref}
     >
