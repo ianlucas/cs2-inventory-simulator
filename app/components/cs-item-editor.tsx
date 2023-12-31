@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faBolt, faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS_Item,
@@ -21,6 +21,7 @@ import {
   CS_safeValidateSeed,
   CS_safeValidateWear
 } from "@ianlucas/cslib";
+import clsx from "clsx";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
@@ -32,12 +33,13 @@ import {
   wearToString
 } from "~/utils/economy";
 import { CSItemImage } from "./cs-item-image";
+import { CSItemName } from "./cs-item-name";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
+import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { StickerPicker } from "./sticker-picker";
-import { ModalButton } from "./modal-button";
 
 export interface CSItemEditorAttributes {
   nametag?: string;
@@ -113,10 +115,9 @@ export function CSItemEditor({
         wear={wear}
       />
       <div
-        className="mb-4 text-center font-bold"
-        style={{ color: item.rarity }}
+        className={clsx("mb-4 text-center", item.type === "agent" && "mt-4")}
       >
-        {item.name}
+        <CSItemName item={item} />
       </div>
       <div className="space-y-4">
         {hasStickers && (
