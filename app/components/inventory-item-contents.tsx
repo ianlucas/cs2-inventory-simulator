@@ -15,7 +15,9 @@ export function InventoryItemContents({ item }: { item: CS_Item }) {
         {translate("InventoryItemContainsOne")}
       </div>
       {CS_listCaseContents(item, true).map((item) => (
-        <div style={{ color: item.rarity }}>{item.name}</div>
+        <div key={item.id} style={{ color: item.rarity }}>
+          {item.name}
+        </div>
       ))}
       {item.specialcontents !== undefined && (
         <div className="text-yellow-300">
