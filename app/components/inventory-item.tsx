@@ -22,10 +22,6 @@ import {
   CS_hasWear,
   CS_INVENTORY_EQUIPPABLE_ITEMS,
   CS_Item,
-  CS_listCaseContents,
-  CS_MAX_WEAR,
-  CS_MIN_SEED,
-  CS_MIN_WEAR,
   CS_NAMETAG_TOOL_DEF,
   CS_Team,
   CS_TEAM_CT,
@@ -39,7 +35,11 @@ import { transform } from "~/utils/inventory";
 import { ContextButton } from "./context-button";
 import { ContextDivider } from "./context-divider";
 import { CSItem } from "./cs-item";
-import { wearToString } from "~/utils/economy";
+import { InventoryItemContents } from "./inventory-item-contents";
+import { InventoryItemName } from "./inventory-item-name";
+import { InventoryItemSeed } from "./inventory-item-seed";
+import { InventoryItemTeams } from "./inventory-item-teams";
+import { InventoryItemWear } from "./inventory-item-wear";
 
 export function InventoryItem({
   disableContextMenu,
@@ -133,7 +133,6 @@ export function InventoryItem({
   const anyEquip = canEquip || canEquipT || canEquipCT;
   const hasWear = !item.free && CS_hasWear(item);
   const hasSeed = !item.free && CS_hasSeed(item);
-  const hasModel = model || inventoryItem.stattrak !== undefined;
   const hasAttributes = hasWear || hasSeed;
   const canRename = item.type == "tool" && item.def === CS_NAMETAG_TOOL_DEF;
   const canApplySticker =
@@ -146,10 +145,12 @@ export function InventoryItem({
     (inventoryItem.stickers ?? []).filter((id) => id !== null).length > 0;
   const canUseTools = canRename || canApplySticker || canScrapeSticker;
   const canUnlockContainer = ["case", "key"].includes(item.type);
+  const hasContents = item.contents !== undefined;
+  const hasTeams = item.teams !== undefined;
 
-  function close(callbefore: () => void) {
+  function close(callBeforeClosing: () => void) {
     return function close() {
-      callbefore();
+      callBeforeClosing();
       setIsClickOpen(false);
     };
   }
@@ -276,85 +277,17 @@ export function InventoryItem({
             style={hoverStyles}
             {...getHoverFloatingProps()}
           >
-            {hasModel && (
-              <div className="font-bold">
-                {inventoryItem.stattrak !== undefined &&
-                  `${translate("InventoryItemStatTrak")} `}{" "}
-                {model}
-              </div>
-            )}
-            <div className={clsx(!hasModel && "font-bold")}>{name}</div>
-            {item.teams !== undefined && (
-              <div className="my-2 flex items-center gap-4 border-b border-t border-neutral-700/70 py-1">
-                <span className="font-bold text-neutral-400">
-                  {translate("InventoryItemTeam")}
-                </span>
-                <div className="flex items-center gap-1">
-                  {item.teams.includes(CS_TEAM_CT) && (
-                    <img src="/icons/ct.svg" className="h-5" alt="CT" />
-                  )}
-                  {item.teams.includes(CS_TEAM_T) && (
-                    <img src="/icons/t.svg" className="h-5" alt="T" />
-                  )}
-                  <span>
-                    {item.teams.length === 2
-                      ? translate("InventoryItemTeamAny")
-                      : translate(
-                          `InventoryItemTeam${
-                            item.teams.includes(CS_TEAM_CT) ? "CT" : "T"
-                          }`
-                        )}
-                  </span>
-                </div>
-              </div>
-            )}
-            {item.contents !== undefined && (
-              <div className="mt-4">
-                <div className="text-neutral-400">
-                  {translate("InventoryItemContainsOne")}
-                </div>
-                {CS_listCaseContents(item, true).map((item) => (
-                  <div style={{ color: item.rarity }}>{item.name}</div>
-                ))}
-                {item.specialcontents !== undefined && (
-                  <div className="text-yellow-300">
-                    {translate("InventoryItemRareItem")}
-                  </div>
-                )}
-              </div>
-            )}
+            <InventoryItemName
+              inventoryItem={inventoryItem}
+              model={model}
+              name={name}
+            />
+            {hasTeams && <InventoryItemTeams item={item} />}
+            {hasContents && <InventoryItemContents item={item} />}
             {hasAttributes && (
               <div className="mt-2 flex flex-col gap-2">
-                {hasWear && (
-                  <div>
-                    <div>
-                      <strong className="text-neutral-400">
-                        {translate("InventoryItemWear")}
-                      </strong>{" "}
-                      {wearToString(inventoryItem.wear ?? CS_MIN_WEAR)}
-                    </div>
-                    <div className="relative h-1 w-[128px] bg-[linear-gradient(90deg,#3b818f_0,#3b818f_7%,#83b135_0,#83b135_15%,#d7be47_0,#d7be47_38%,#f08140_0,#f08140_45%,#ec4f3d_0,#ec4f3d)]">
-                      <div
-                        className="absolute -top-0.5 h-1.5 w-[1px] bg-white"
-                        style={{
-                          left: `${
-                            ((inventoryItem.wear ?? CS_MIN_WEAR) /
-                              CS_MAX_WEAR) *
-                            100
-                          }%`
-                        }}
-                      />
-                    </div>
-                  </div>
-                )}
-                {hasSeed && (
-                  <div>
-                    <strong className="text-neutral-400">
-                      {translate("InventoryItemSeed")}
-                    </strong>{" "}
-                    {inventoryItem.seed ?? CS_MIN_SEED}
-                  </div>
-                )}
+                {hasWear && <InventoryItemWear inventoryItem={inventoryItem} />}
+                {hasSeed && <InventoryItemSeed inventoryItem={inventoryItem} />}
               </div>
             )}
           </div>
