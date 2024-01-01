@@ -3,19 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  autoUpdate,
-  flip,
-  FloatingFocusManager,
-  offset,
-  shift,
-  useDismiss,
-  useFloating,
-  useHover,
-  useInteractions,
-  useMergeRefs,
-  useRole
-} from "@floating-ui/react";
+import { FloatingFocusManager } from "@floating-ui/react";
 import {
   CS_hasSeed,
   CS_hasStickers,
@@ -28,14 +16,12 @@ import {
   CS_TEAM_T
 } from "@ianlucas/cslib";
 import clsx from "clsx";
-import { useState } from "react";
-import { useAnyClick } from "~/hooks/use-any-click";
+import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
 import { useTranslation } from "~/hooks/use-translation";
 import { transform } from "~/utils/inventory";
-import { ContextButton } from "./context-button";
-import { ContextDivider } from "./context-divider";
 import { CSItem } from "./cs-item";
 import { InventoryItemContents } from "./inventory-item-contents";
+import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemName } from "./inventory-item-name";
 import { InventoryItemSeed } from "./inventory-item-seed";
 import { InventoryItemTeams } from "./inventory-item-teams";
@@ -74,49 +60,22 @@ export function InventoryItem({
 }) {
   const stubInventoryItem = index < 0;
   const translate = useTranslation();
-  const [isClickOpen, setIsClickOpen] = useState(false);
-  const [isHoverOpen, setIsHoverOpen] = useState(false);
-
   const {
-    refs: clickRefs,
-    floatingStyles: clickStyles,
-    context: clickContext
-  } = useFloating({
-    open: isClickOpen,
-    onOpenChange: setIsClickOpen,
-    middleware: [offset(10), flip(), shift()],
-    whileElementsMounted: autoUpdate,
-    placement: "right"
-  });
-
-  const {
-    refs: hoverRefs,
-    floatingStyles: hoverStyles,
-    context: hoverContext
-  } = useFloating({
-    open: isHoverOpen,
-    onOpenChange: setIsHoverOpen,
-    middleware: [offset(10), flip(), shift()],
-    whileElementsMounted: autoUpdate,
-    placement: "right"
-  });
-
-  const click = useAnyClick(clickContext);
-  const dismiss = useDismiss(clickContext);
-  const role = useRole(clickContext);
-  const hover = useHover(hoverContext);
-
-  const {
-    getReferenceProps: getClickReferenceProps,
-    getFloatingProps: getClickFloatingProps
-  } = useInteractions([click, dismiss, role]);
-
-  const {
-    getReferenceProps: getHoverReferenceProps,
-    getFloatingProps: getHoverFloatingProps
-  } = useInteractions([hover]);
-
-  const ref = useMergeRefs([clickRefs.setReference, hoverRefs.setReference]);
+    clickContext,
+    clickRefs,
+    clickStyles,
+    getClickFloatingProps,
+    getClickReferenceProps,
+    getHoverFloatingProps,
+    getHoverReferenceProps,
+    hoverContext,
+    hoverRefs,
+    hoverStyles,
+    isClickOpen,
+    isHoverOpen,
+    ref,
+    setIsClickOpen
+  } = useInventoryItemFloating();
 
   const canEquip =
     item.teams === undefined &&
@@ -129,8 +88,6 @@ export function InventoryItem({
   const canUnequipT = inventoryItem.equippedT === true;
   const canUnequipCT = inventoryItem.equippedCT === true;
 
-  const anyUnequip = canUnequip || canUnequipT || canUnequipCT;
-  const anyEquip = canEquip || canEquipT || canEquipCT;
   const hasWear = !item.free && CS_hasWear(item);
   const hasSeed = !item.free && CS_hasSeed(item);
   const hasAttributes = hasWear || hasSeed;
@@ -143,7 +100,6 @@ export function InventoryItem({
   const canScrapeSticker =
     CS_hasStickers(item) &&
     (inventoryItem.stickers ?? []).filter((id) => id !== null).length > 0;
-  const canUseTools = canRename || canApplySticker || canScrapeSticker;
   const canUnlockContainer = ["case", "key"].includes(item.type);
   const hasContents = item.contents !== undefined;
   const hasTeams = item.teams !== undefined;
@@ -185,87 +141,83 @@ export function InventoryItem({
             style={clickStyles}
             {...getClickFloatingProps()}
           >
-            {canEquip && (
-              <ContextButton onClick={close(() => onEquip?.(index))}>
-                {translate("InventoryItemEquip")}
-              </ContextButton>
-            )}
-            {canEquipT && (
-              <ContextButton onClick={close(() => onEquip?.(index, CS_TEAM_T))}>
-                {translate("InventoryItemEquipT")}
-              </ContextButton>
-            )}
-            {canEquipCT && (
-              <ContextButton
-                onClick={close(() => onEquip?.(index, CS_TEAM_CT))}
-              >
-                {translate("InventoryItemEquipCT")}
-              </ContextButton>
-            )}
-            {canEquipCT && canEquipT && (
-              <ContextButton
-                onClick={close(() => {
-                  onEquip?.(index, CS_TEAM_CT);
-                  onEquip?.(index, CS_TEAM_T);
-                })}
-              >
-                {translate("InventoryItemEquipBothTeams")}
-              </ContextButton>
-            )}
-            {anyEquip && <ContextDivider />}
-            {canUnequip && (
-              <ContextButton onClick={close(() => onUnequip?.(index))}>
-                {translate("InventoryItemUnequip")}
-              </ContextButton>
-            )}
-            {canUnequipT && (
-              <ContextButton
-                onClick={close(() => onUnequip?.(index, CS_TEAM_T))}
-              >
-                {translate("InventoryItemUnequipT")}
-              </ContextButton>
-            )}
-            {canUnequipCT && (
-              <ContextButton
-                onClick={close(() => onUnequip?.(index, CS_TEAM_CT))}
-              >
-                {translate("InventoryItemUnequipCT")}
-              </ContextButton>
-            )}
-
-            {anyUnequip && <ContextDivider />}
-
-            {canUnlockContainer && (
-              <ContextButton onClick={() => onUnlockContainer?.(index, item)}>
-                {translate("InventoryItemUnlockContainer")}
-              </ContextButton>
-            )}
-
-            {canUnlockContainer && <ContextDivider />}
-
-            {canRename && (
-              <ContextButton onClick={() => onRename?.(index, item)}>
-                {translate("InventoryItemRename")}
-              </ContextButton>
-            )}
-
-            {canApplySticker && (
-              <ContextButton onClick={() => onApplySticker?.(index, item)}>
-                {translate("InventoryApplySticker")}
-              </ContextButton>
-            )}
-
-            {canScrapeSticker && (
-              <ContextButton onClick={() => onScrapeSticker?.(index, item)}>
-                {translate("InventoryScrapeSticker")}
-              </ContextButton>
-            )}
-
-            {canUseTools && <ContextDivider />}
-
-            <ContextButton onClick={close(() => onRemove?.(index))}>
-              {translate("InventoryItemDelete")}
-            </ContextButton>
+            <InventoryItemContextMenu
+              menu={[
+                [
+                  {
+                    condition: canEquip,
+                    label: translate("InventoryItemEquip"),
+                    onClick: close(() => onEquip?.(index))
+                  },
+                  {
+                    condition: canEquipT,
+                    label: translate("InventoryItemEquipT"),
+                    onClick: close(() => onEquip?.(index, CS_TEAM_T))
+                  },
+                  {
+                    condition: canEquipCT,
+                    label: translate("InventoryItemEquipCT"),
+                    onClick: close(() => onEquip?.(index, CS_TEAM_CT))
+                  },
+                  {
+                    condition: canEquipCT && canEquipT,
+                    label: translate("InventoryItemEquipBothTeams"),
+                    onClick: close(() => {
+                      onEquip?.(index, CS_TEAM_CT);
+                      onEquip?.(index, CS_TEAM_T);
+                    })
+                  }
+                ],
+                [
+                  {
+                    condition: canUnequip,
+                    label: translate("InventoryItemUnequip"),
+                    onClick: close(() => onUnequip?.(index))
+                  },
+                  {
+                    condition: canUnequipT,
+                    label: translate("InventoryItemUnequipT"),
+                    onClick: close(() => onUnequip?.(index, CS_TEAM_T))
+                  },
+                  {
+                    condition: canUnequipCT,
+                    label: translate("InventoryItemUnequipCT"),
+                    onClick: close(() => onUnequip?.(index, CS_TEAM_CT))
+                  }
+                ],
+                [
+                  {
+                    condition: canUnlockContainer,
+                    label: translate("InventoryItemUnlockContainer"),
+                    onClick: () => onUnlockContainer?.(index, item)
+                  }
+                ],
+                [
+                  {
+                    condition: canRename,
+                    label: translate("InventoryItemRename"),
+                    onClick: () => onRename?.(index, item)
+                  },
+                  {
+                    condition: canApplySticker,
+                    label: translate("InventoryApplySticker"),
+                    onClick: () => onApplySticker?.(index, item)
+                  },
+                  {
+                    condition: canScrapeSticker,
+                    label: translate("InventoryScrapeSticker"),
+                    onClick: () => onScrapeSticker?.(index, item)
+                  }
+                ],
+                [
+                  {
+                    condition: true,
+                    label: translate("InventoryItemDelete"),
+                    onClick: close(() => onRemove?.(index))
+                  }
+                ]
+              ]}
+            />
           </div>
         </FloatingFocusManager>
       )}
