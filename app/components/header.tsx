@@ -76,12 +76,6 @@ export function Header() {
                   onClick={closeMenu}
                 />
               )}
-              <HeaderLink
-                to="/api"
-                icon={faCode}
-                label={translate("HeaderAPILabel")}
-                onClick={closeMenu}
-              />
               {user === undefined ? (
                 <>
                   <HeaderLink

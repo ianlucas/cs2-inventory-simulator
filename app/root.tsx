@@ -85,7 +85,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function App() {
   const location = useLocation();
   const providerProps = useTypedLoaderData<typeof loader>();
-  const showInventory = location.pathname !== "/api";
 
   return (
     <RootProvider {...providerProps}>
@@ -112,9 +111,9 @@ export default function App() {
             id="background"
           />
           <Background />
-          {showInventory && <ClientOnly children={() => <SyncWarn />} />}
+          <ClientOnly children={() => <SyncWarn />} />
           <Header />
-          {showInventory && <ClientOnly children={() => <Inventory />} />}
+          <ClientOnly children={() => <Inventory />} />
           <Outlet />
           <Footer />
           <ScrollRestoration />
