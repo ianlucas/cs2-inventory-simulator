@@ -5,7 +5,7 @@
 
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
@@ -20,12 +20,14 @@ import { useTranslation } from "~/hooks/use-translation";
 import { backgrounds } from "~/preferences/background.server";
 import { languages } from "~/preferences/language.server";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
+import { middleware } from "~/http";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Settings - CS2 Inventory Simulator" }];
 };
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
+  await middleware(request);
   return typedjson({
     backgrounds,
     languages: languages.map(({ name, countries }) => ({

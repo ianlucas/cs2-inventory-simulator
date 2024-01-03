@@ -3,10 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { middleware } from "~/http";
+import { removeTrailingSlashes } from "./middlewares/remove-slashes";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  await middleware(request);
-  return redirect("/");
+export async function middleware(request: Request) {
+  await removeTrailingSlashes(request);
 }

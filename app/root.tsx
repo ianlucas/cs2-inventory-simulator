@@ -40,6 +40,7 @@ import { seoMetaFunction } from "./seo-meta";
 import { getSession } from "./session.server";
 import styles from "./tailwind.css";
 import { getToggleable } from "./preferences/toggleable.server";
+import { middleware } from "./http";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
@@ -69,6 +70,7 @@ export const meta: MetaFunction = () => [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  await middleware(request);
   const session = await getSession(request.headers.get("Cookie"));
   const ipCountry = request.headers.get("CF-IPCountry");
   return typedjson({

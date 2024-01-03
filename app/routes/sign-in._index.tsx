@@ -5,7 +5,9 @@
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { authenticator } from "~/auth.server";
+import { middleware } from "~/http";
 
-export function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
+  await middleware(request);
   return authenticator.authenticate("steam", request);
 }

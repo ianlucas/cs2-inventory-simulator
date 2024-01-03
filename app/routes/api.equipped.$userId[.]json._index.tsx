@@ -5,12 +5,14 @@
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
+import { middleware } from "~/http";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
 import { transformEquipped } from "~/utils/inventory";
 
 export const ApiEquippedUserIdJsonUrl = "/api/equipped/$userId.json";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
+  await middleware(request);
   const userId = z.string().parse(params.userId);
   return await handleUserCachedResponse({
     generate: transformEquipped,

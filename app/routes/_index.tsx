@@ -3,11 +3,17 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import type { MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { middleware } from "~/http";
 
 export const meta: MetaFunction = () => {
   return [{ title: "CS2 Inventory Simulator" }];
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  await middleware(request);
+  return null;
+}
 
 export default function Index() {
   return null;

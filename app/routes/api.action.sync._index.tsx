@@ -6,6 +6,7 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
+import { middleware } from "~/http";
 import { manipulateUserInventory } from "~/models/user.server";
 import { noContent } from "~/response.server";
 import {
@@ -91,6 +92,7 @@ export const actionShape = z
 export type ActionShape = z.infer<typeof actionShape>;
 
 export async function action({ request }: ActionFunctionArgs) {
+  await middleware(request);
   const { id: userId, inventory: rawInventory } = await requireUser(request);
   const actions = z.array(actionShape).parse(await request.json());
   let addedFromCache = false;

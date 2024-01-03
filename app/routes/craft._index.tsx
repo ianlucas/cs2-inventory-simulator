@@ -6,7 +6,7 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Item } from "@ianlucas/cslib";
-import { MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
 import { useState } from "react";
@@ -25,10 +25,16 @@ import { showQuantity } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { ExternalInventoryItemShape } from "~/utils/shapes";
 import { AddAction } from "./api.action.sync._index";
+import { middleware } from "~/http";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Craft - CS2 Inventory Simulator" }];
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  await middleware(request);
+  return null;
+}
 
 export default function Craft() {
   const sync = useSync();

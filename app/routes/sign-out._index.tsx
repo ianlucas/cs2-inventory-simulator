@@ -5,8 +5,10 @@
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { authenticator } from "~/auth.server";
+import { middleware } from "~/http";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  await middleware(request);
   return await authenticator.logout(request, {
     redirectTo: "/"
   });

@@ -8,6 +8,7 @@ import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { MAX_INVENTORY_ITEMS } from "~/env.server";
+import { middleware } from "~/http";
 import { updateUserInventory } from "~/models/user.server";
 import { parseInventory } from "~/utils/inventory";
 
@@ -18,6 +19,7 @@ export type ApiActionUnlockCaseActionData = ReturnType<
 >;
 
 export async function action({ request }: ActionFunctionArgs) {
+  await middleware(request);
   const { id: userId, inventory: rawInventory } = await requireUser(request);
   const { caseIndex, keyIndex } = z
     .object({

@@ -17,10 +17,12 @@ import {
 } from "~/models/user-preferences.server";
 import { assignToSession, commitSession, getSession } from "~/session.server";
 import { getAllowedLanguages } from "~/preferences/language.server";
+import { middleware } from "~/http";
 
 export const ApiActionPreferencesUrl = "/api/action/preferences";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  await middleware(request);
   const userId = await authenticator.isAuthenticated(request);
   if (!userId) {
     return redirect("/");
@@ -40,6 +42,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
+  await middleware(request);
   const userId = await authenticator.isAuthenticated(request);
   const { background, language, statsForNerds, hideFreeItems } = z
     .object({
