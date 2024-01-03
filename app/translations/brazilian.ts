@@ -65,6 +65,14 @@ export const brazilian = {
   InventoryItemStatTrakCount: "Vítimas confirmadas via StatTrak™",
   InventoryApplySticker: "Usar adesivo",
   InventoryScrapeSticker: "Raspar adesivo",
+  InventoryItemSwapStatTrak: "Abrir Ferramenta de Troca StatTrak™",
+  ItemSwapStatTrakUse: "Ferramenta de Troca StatTrak™",
+  ItemSwapStatTrakDesc:
+    "Este item troca as contagens StatTrak™ de dois itens do mesmo tipo.",
+  ItemSwapStatTrakWarn:
+    "Ferramentas de Troca StatTrak™ só podem ser usadas uma vezThis StatTrak™ Swap Tool can only be used once",
+  ItemSwapStatTrakAccept: "Aceitar",
+  ItemSwapStatTrakClose: "Fechar",
   ModelAgent: "Agente",
   ModelGlove: "Luva",
   ModelKnife: "Faca",

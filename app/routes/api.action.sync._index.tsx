@@ -24,6 +24,7 @@ export const EquipAction = "equip";
 export const RemoveAction = "remove";
 export const RenameItemAction = "rename-item";
 export const ScrapeItemStickerAction = "scrape-item-sticker";
+export const SwapItemsStatTrakAction = "swap-items-stattrak";
 export const UnequipAction = "unequip";
 
 export const actionShape = z
@@ -87,6 +88,14 @@ export const actionShape = z
       itemIndex: z.number(),
       stickerIndex: z.number()
     })
+  )
+  .or(
+    z.object({
+      type: z.literal(SwapItemsStatTrakAction),
+      fromIndex: z.number(),
+      toIndex: z.number(),
+      toolIndex: z.number()
+    })
   );
 
 export type ActionShape = z.infer<typeof actionShape>;
@@ -135,6 +144,12 @@ export async function action({ request }: ActionFunctionArgs) {
           return inventory.scrapeItemSticker(
             action.itemIndex,
             action.stickerIndex
+          );
+        case SwapItemsStatTrakAction:
+          return inventory.swapItemsStatTrak(
+            action.toolIndex,
+            action.fromIndex,
+            action.toIndex
           );
       }
     })

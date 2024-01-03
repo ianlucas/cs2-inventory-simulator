@@ -23,9 +23,10 @@ export function UseItemHeader({
       <div className="font-display text-3xl font-semibold leading-10 tracking-wider">
         {title}
       </div>
-      {actionDesc !== undefined && actionItem !== undefined && (
+      {actionDesc !== undefined && (
         <div className="text-lg">
-          {actionDesc} <strong>{actionItem}</strong>
+          {actionDesc}{" "}
+          {actionItem !== undefined && <strong>{actionItem}</strong>}
         </div>
       )}
       <div className="mt-2 flex items-center justify-center gap-2">

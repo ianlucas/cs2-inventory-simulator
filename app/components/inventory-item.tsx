@@ -11,6 +11,7 @@ import {
   CS_INVENTORY_EQUIPPABLE_ITEMS,
   CS_Item,
   CS_NAMETAG_TOOL_DEF,
+  CS_SWAP_STATTRAK_TOOL_DEF,
   CS_Team,
   CS_TEAM_CT,
   CS_TEAM_T
@@ -43,6 +44,7 @@ export function InventoryItem({
   onRemove,
   onRename,
   onScrapeSticker,
+  onSwapItemsStatTrak,
   onUnequip,
   onUnlockContainer,
   ownApplicableStickers
@@ -55,6 +57,7 @@ export function InventoryItem({
   onRemove?(index: number): void;
   onRename?(index: number, item: CS_Item): void;
   onScrapeSticker?(index: number, item: CS_Item): void;
+  onSwapItemsStatTrak?(index: number, item: CS_Item): void;
   onUnequip?(index: number, team?: CS_Team): void;
   onUnlockContainer?(index: number, item: CS_Item): void;
   ownApplicableStickers?: boolean;
@@ -75,7 +78,8 @@ export function InventoryItem({
     isClickOpen,
     isHoverOpen,
     ref,
-    setIsClickOpen
+    setIsClickOpen,
+    setIsHoverOpen
   } = useInventoryItemFloating();
 
   const canEquip =
@@ -93,6 +97,8 @@ export function InventoryItem({
   const hasWear = !item.free && CS_hasWear(item);
   const hasSeed = !item.free && CS_hasSeed(item);
   const hasAttributes = hasWear || hasSeed;
+  const canSwapStatTrak =
+    item.type === "tool" && item.def === CS_SWAP_STATTRAK_TOOL_DEF;
   const canRename = item.type == "tool" && item.def === CS_NAMETAG_TOOL_DEF;
   const canApplySticker =
     ownApplicableStickers &&
@@ -110,6 +116,7 @@ export function InventoryItem({
     return function close() {
       callBeforeClosing();
       setIsClickOpen(false);
+      setIsHoverOpen(false);
     };
   }
 
@@ -128,7 +135,9 @@ export function InventoryItem({
           equipped={equipped}
           nametag={inventoryItem.nametag}
           onClick={
-            onClick !== undefined ? () => onClick(index, item) : undefined
+            onClick !== undefined
+              ? close(() => onClick(index, item))
+              : undefined
           }
           stattrak={inventoryItem.stattrak}
           stickers={inventoryItem.stickers}
@@ -191,24 +200,29 @@ export function InventoryItem({
                   {
                     condition: canUnlockContainer,
                     label: translate("InventoryItemUnlockContainer"),
-                    onClick: () => onUnlockContainer?.(index, item)
+                    onClick: close(() => onUnlockContainer?.(index, item))
                   }
                 ],
                 [
                   {
                     condition: canRename,
                     label: translate("InventoryItemRename"),
-                    onClick: () => onRename?.(index, item)
+                    onClick: close(() => onRename?.(index, item))
+                  },
+                  {
+                    condition: canSwapStatTrak,
+                    label: translate("InventoryItemSwapStatTrak"),
+                    onClick: close(() => onSwapItemsStatTrak?.(index, item))
                   },
                   {
                     condition: canApplySticker,
                     label: translate("InventoryApplySticker"),
-                    onClick: () => onApplySticker?.(index, item)
+                    onClick: close(() => onApplySticker?.(index, item))
                   },
                   {
                     condition: canScrapeSticker,
                     label: translate("InventoryScrapeSticker"),
-                    onClick: () => onScrapeSticker?.(index, item)
+                    onClick: close(() => onScrapeSticker?.(index, item))
                   }
                 ],
                 [

@@ -98,7 +98,7 @@ export function getFreeItemsToDisplay(onlyC4 = false) {
     .map((item, index) => ({
       equipped: [],
       index: -1 * (index + 1),
-      inventoryItem: { id: item.id },
+      inventoryItem: { id: item.id } as CS_InventoryItem,
       item,
       ...getCSItemName(item)
     }))

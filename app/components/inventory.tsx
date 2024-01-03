@@ -33,6 +33,7 @@ import { CaseOpening } from "./case-opening";
 import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
 import { ScrapeSticker } from "./scrape-sticker";
+import { SwapItemsStatTrak } from "./swap-items-stattrak";
 
 export function Inventory() {
   const {
@@ -94,11 +95,17 @@ export function Inventory() {
     index: number;
     item: CS_Item;
   }>();
+  const [swapItemsStatTrak, setSwapItemsStatTrak] = useState<{
+    fromIndex: number;
+    toIndex?: number;
+    toolIndex: number;
+  }>();
   const isSelectAItem = useItemAction !== undefined;
   const isUnlockingCase = unlockCase !== undefined;
   const isRenamingItem = renameItem !== undefined;
   const isApplyingSticker = applySticker !== undefined;
   const isScrapingSticker = scrapeSticker !== undefined;
+  const isSwapingItemsStatTrak = swapItemsStatTrak?.toIndex !== undefined;
 
   function handleEquip(index: number, team?: CS_Team) {
     setInventory(inventory.equip(index, team));
@@ -151,6 +158,17 @@ export function Inventory() {
     });
   }
 
+  function handleSwapItemsStatTrak(index: number, useItem: CS_Item) {
+    return setUseItemAction({
+      index,
+      item: useItem,
+      items: items.filter(
+        ({ inventoryItem }) => inventoryItem.stattrak !== undefined
+      ),
+      type: "swap-stattrak"
+    });
+  }
+
   function handleApplySticker(index: number, useItem: CS_Item) {
     return setUseItemAction({
       index,
@@ -171,12 +189,17 @@ export function Inventory() {
 
   function dismissUseItem() {
     setUseItemAction(undefined);
+    setUnlockCase(undefined);
+    setRenameItem(undefined);
+    setApplySticker(undefined);
+    setScrapeSticker(undefined);
+    setSwapItemsStatTrak(undefined);
   }
 
   function handleSelectItem(index: number, selectedItem: CS_Item) {
     if (useItemAction) {
       const { type } = useItemAction;
-      dismissUseItem();
+      setUseItemAction(undefined);
       switch (type) {
         case "case-opening":
           return setUnlockCase({
@@ -211,6 +234,30 @@ export function Inventory() {
             stickerItemIndex:
               selectedItem.type === "sticker" ? index : useItemAction.index
           });
+        case "swap-stattrak":
+          if (swapItemsStatTrak?.fromIndex !== undefined) {
+            return setSwapItemsStatTrak((existing) => ({
+              ...existing!,
+              toIndex: index
+            }));
+          }
+          setSwapItemsStatTrak({
+            fromIndex: index,
+            toolIndex: useItemAction.index
+          });
+          return setUseItemAction({
+            index,
+            item: selectedItem,
+            items: items.filter(
+              ({ inventoryItem, item, index: otherIndex }) =>
+                inventoryItem.stattrak !== undefined &&
+                otherIndex !== index &&
+                selectedItem.type === item.type &&
+                (selectedItem.type === "musickit" ||
+                  selectedItem.def === item.def)
+            ),
+            type: "swap-stattrak"
+          });
       }
     }
   }
@@ -229,7 +276,7 @@ export function Inventory() {
             <strong>{translate("InventorySelectAnItem")}</strong>
             <img
               draggable={false}
-              className="h-8"
+              className="h-12"
               src={resolveItemImage(useItemAction.item)}
             />
             <span className="text-neutral-300">{useItemAction.item.name}</span>
@@ -258,6 +305,7 @@ export function Inventory() {
                   onRemove={handleRemove}
                   onRename={handleRename}
                   onScrapeSticker={handleScrapeSticker}
+                  onSwapItemsStatTrak={handleSwapItemsStatTrak}
                   onUnequip={handleUnequip}
                   onUnlockContainer={handleUnlockContainer}
                   ownApplicableStickers={ownApplicableStickers}
@@ -281,6 +329,12 @@ export function Inventory() {
         <ScrapeSticker
           {...scrapeSticker}
           onClose={() => setScrapeSticker(undefined)}
+        />
+      )}
+      {isSwapingItemsStatTrak && (
+        <SwapItemsStatTrak
+          {...(swapItemsStatTrak as Required<typeof swapItemsStatTrak>)}
+          onClose={() => setSwapItemsStatTrak(undefined)}
         />
       )}
     </>

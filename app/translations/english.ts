@@ -72,6 +72,13 @@ export const english = {
   InventoryItemStatTrakCount: "StatTrak™ Confirmed Kills:",
   InventoryApplySticker: "Apply Sticker",
   InventoryScrapeSticker: "Scrape Sticker",
+  InventoryItemSwapStatTrak: "Open StatTrak™ Swap Tool",
+  ItemSwapStatTrakUse: "StatTrak™ Swap Tool",
+  ItemSwapStatTrakDesc:
+    "This item swaps StatTrak™ values between two of the same item type.",
+  ItemSwapStatTrakWarn: "This StatTrak™ Swap Tool can only be used once",
+  ItemSwapStatTrakAccept: "Accept",
+  ItemSwapStatTrakClose: "Close",
   ModelAgent: "Agent",
   ModelGlove: "Glove",
   ModelKnife: "Knife",
