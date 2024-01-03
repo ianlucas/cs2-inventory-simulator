@@ -39,6 +39,17 @@ export async function findUniqueUser(userId: string) {
   });
 }
 
+export async function existsUser(userId: string) {
+  return (
+    (await prisma.user.findFirst({
+      select: {
+        id: true
+      },
+      where: { id: userId }
+    })) !== null
+  );
+}
+
 export async function updateUserInventory(
   userId: string,
   items: CS_InventoryItem[]

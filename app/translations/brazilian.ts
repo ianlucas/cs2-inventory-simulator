@@ -60,6 +60,9 @@ export const brazilian = {
   InventoryItemTeamCT: "Contraterrorista",
   InventoryItemContainsOne: "Contém um dos seguintes itens:",
   InventoryItemRareItem: "ou um item especial e excessivamente raro!",
+  InventoryItemStatTrakDesc:
+    "Este item possui tecnologia StatTrak™, que contabiliza certas estatísticas quando equipado.",
+  InventoryItemStatTrakCount: "Vítimas confirmadas via StatTrak™",
   InventoryApplySticker: "Usar adesivo",
   InventoryScrapeSticker: "Raspar adesivo",
   ModelAgent: "Agente",

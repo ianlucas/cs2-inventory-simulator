@@ -138,21 +138,26 @@ function pushTeam(
 export function transformEquipped(inventory: CS_InventoryItem[]) {
   return Object.fromEntries(
     inventory
+      .map((inventoryItem, index) => ({
+        ...inventoryItem,
+        index
+      }))
       .filter(
         ({ equipped, equippedCT, equippedT }) =>
           equipped || equippedCT || equippedT
       )
       .map(
         ({
-          id,
           equippedCT,
           equippedT,
+          id,
+          index,
           nametag,
-          stattrak,
-          wear,
           seed,
+          stattrak,
           stickers,
-          stickerswear
+          stickerswear,
+          wear
         }) => {
           const item = CS_Economy.getById(id);
           const keyvalues: [string, any][] = [];
@@ -238,8 +243,16 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               STATTRAK_PREFIX,
               equippedT,
               equippedCT,
-              `_${item.def}`,
+              `${item.def}`,
               stattrak
+            );
+            pushTeam(
+              keyvalues,
+              STATTRAK_PREFIX,
+              equippedT,
+              equippedCT,
+              `_${item.def}_i`,
+              index
             );
           }
           if (

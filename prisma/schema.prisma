@@ -41,3 +41,9 @@ model UserPreferences {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @id
 }
+
+model ApiCredential {
+  apiKey String @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

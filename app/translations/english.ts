@@ -67,6 +67,9 @@ export const english = {
   InventoryItemTeamCT: "Counter-Terrorist",
   InventoryItemContainsOne: "Contains one of the following:",
   InventoryItemRareItem: "or an Exceedingly Rare Special Item!",
+  InventoryItemStatTrakDesc:
+    "This item features StatTrak™ technology, which tracks certain statistics when equipped by its owner.",
+  InventoryItemStatTrakCount: "StatTrak™ Confirmed Kills:",
   InventoryApplySticker: "Apply Sticker",
   InventoryScrapeSticker: "Scrape Sticker",
   ModelAgent: "Agent",

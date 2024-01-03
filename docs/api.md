@@ -58,6 +58,8 @@ type GetUserEquippedItemsResponse = {
   ["fl_{CSTeam}_{ItemDef}"]: number | undefined;
   // StatTrak count for a T and/or CT weapon/melee.
   ["st_{CSTeam}_{ItemDef}"]: number | undefined;
+  // StatTrak inventory item index for a T and/or CT weapon/melee.
+  ["st_{CSTeam}_{ItemDef}_i"]: number | undefined;
   // Nametag equipped for a T and/or CT weapon/melee/glove.
   ["nt_{CSTeam}_{ItemDef}"]: string | undefined;
   // Whether a T and/or CT weapon has stickers.
@@ -68,3 +70,25 @@ type GetUserEquippedItemsResponse = {
   ["sf_{CSTeam}_{ItemDef}_{StickerSlot}"]: number | undefined;
 };
 ```
+
+## Increment item StatTrak
+
+```http
+POST https://inventory.cstrike.app/api/increment-item-stattrak
+```
+
+### Request
+
+```json
+{
+  "apiKey": "api key to authorize this request",
+  "userId": "steamID64",
+  "itemIndex": 0
+}
+```
+
+### Response
+
+- Returns `401` when using an invalid API Key.
+- Returns `400` when the user does not exist or item index is invalid.
+- Returns `204` when the increment was successful.

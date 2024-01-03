@@ -15,6 +15,10 @@ export const badRequest = new Response(null, {
   status: 400
 });
 
+export const unauthorized = new Response(null, {
+  status: 401
+})
+
 export function res(body: string, mimeType: string) {
   return new Response(body, {
     headers: { "Content-Type": mimeType }

@@ -26,6 +26,7 @@ import { InventoryItemName } from "./inventory-item-name";
 import { InventoryItemSeed } from "./inventory-item-seed";
 import { InventoryItemTeams } from "./inventory-item-teams";
 import { InventoryItemWear } from "./inventory-item-wear";
+import { InventoryItemStatTrak } from "./inventory-item-stattrak";
 
 export function InventoryItem({
   disableContextMenu,
@@ -88,6 +89,7 @@ export function InventoryItem({
   const canUnequipT = inventoryItem.equippedT === true;
   const canUnequipCT = inventoryItem.equippedCT === true;
 
+  const hasStatTrak = inventoryItem.stattrak !== undefined;
   const hasWear = !item.free && CS_hasWear(item);
   const hasSeed = !item.free && CS_hasSeed(item);
   const hasAttributes = hasWear || hasSeed;
@@ -235,6 +237,9 @@ export function InventoryItem({
               name={name}
             />
             {hasTeams && <InventoryItemTeams item={item} />}
+            {hasStatTrak && (
+              <InventoryItemStatTrak inventoryItem={inventoryItem} />
+            )}
             {hasContents && <InventoryItemContents item={item} />}
             {hasAttributes && (
               <div className="mt-2 flex flex-col gap-2">
