@@ -17,7 +17,10 @@ export function useCounter(from: number, to: number) {
 
     const updateCounter = () => {
       const timeElapsed = Date.now() - startTimestamp;
-      const progress = Math.min(timeElapsed / duration, 1);
+      const progress = Math.min(
+        timeElapsed / (duration === 0 ? 1 : duration),
+        1
+      );
       const interpolatedValue = from + (to - from) * progress;
 
       setCounter(Math.ceil(interpolatedValue));
