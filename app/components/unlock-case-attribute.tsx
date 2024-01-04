@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-export function CaseOpeningAttribute({
+export function UnlockCaseAttribute({
   label,
   value
 }: {

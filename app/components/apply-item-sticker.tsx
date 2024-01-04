@@ -5,20 +5,20 @@
 
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_Item } from "@ianlucas/cslib";
+import { CS_Economy } from "@ianlucas/cslib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
+import { playSound } from "~/utils/sound";
 import { CSItemImage } from "./cs-item-image";
-import { useRootContext } from "./root-context";
 import { ModalButton } from "./modal-button";
+import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
-import { playSound } from "~/utils/sound";
 
-export function ApplySticker({
+export function ApplyItemSticker({
   onClose,
   itemIndex,
   stickerItemIndex

@@ -23,7 +23,7 @@ import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
-export function ScrapeSticker({
+export function ScrapeItemSticker({
   onClose,
   index
 }: {

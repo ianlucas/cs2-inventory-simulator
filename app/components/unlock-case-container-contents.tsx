@@ -8,7 +8,7 @@ import { CSItem } from "./cs-item";
 import { CaseSpecialItem } from "./case-special-item";
 import { useTranslation } from "~/hooks/use-translation";
 
-export function CaseOpeningCaseContents({
+export function UnlockCaseContainerContents({
   caseItem,
   hideCaseContents
 }: {

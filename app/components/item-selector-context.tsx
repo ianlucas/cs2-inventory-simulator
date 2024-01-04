@@ -17,11 +17,11 @@ interface ItemSelectorContextProps {
   index: number;
   items: ReturnType<typeof transform>[];
   type:
-    | "apply-sticker"
-    | "case-opening"
+    | "apply-item-sticker"
     | "rename-item"
     | "scrape-sticker"
-    | "swap-items-stattrak";
+    | "swap-items-stattrak"
+    | "unlock-case";
 }
 
 const ItemSelectorContext = createContext<{

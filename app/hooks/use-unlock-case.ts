@@ -7,15 +7,15 @@ import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
 
-export function useUnlockContainer() {
+export function useUnlockCase() {
   const { inventory, items } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
-  const [unlockContainer, setUnlockContainer] = useState<{
+  const [unlockCase, setUnlockCase] = useState<{
     caseIndex: number;
     keyIndex?: number;
   }>();
 
-  function handleUnlockContainer(index: number) {
+  function handleUnlockCase(index: number) {
     const selectedItem = inventory.getItem(index);
     if (selectedItem.keys || selectedItem.type === "key") {
       return setItemSelector({
@@ -27,32 +27,32 @@ export function useUnlockContainer() {
             (selectedItem.type === "case" &&
               selectedItem.keys?.includes(item.id))
         ),
-        type: "case-opening"
+        type: "unlock-case"
       });
     }
     if (selectedItem.type === "case") {
-      return setUnlockContainer({
+      return setUnlockCase({
         caseIndex: index
       });
     }
   }
 
-  function handleUnlockContainerSelect(index: number) {
+  function handleUnlockCaseSelect(index: number) {
     const selectedItem = inventory.getItem(index);
-    return setUnlockContainer({
+    return setUnlockCase({
       caseIndex: selectedItem.type === "case" ? index : itemSelector!.index,
       keyIndex: selectedItem.type === "key" ? index : itemSelector!.index
     });
   }
 
-  function closeUnlockContainer() {
-    return setUnlockContainer(undefined);
+  function closeUnlockCase() {
+    return setUnlockCase(undefined);
   }
 
   return {
-    closeUnlockContainer,
-    handleUnlockContainer,
-    handleUnlockContainerSelect,
-    unlockContainer
+    closeUnlockCase,
+    handleUnlockCase,
+    handleUnlockCaseSelect,
+    unlockCase
   };
 }

@@ -5,16 +5,16 @@
 
 import { CS_Item, CS_unlockCase } from "@ianlucas/cslib";
 import { useTranslation } from "~/hooks/use-translation";
-import { CaseOpeningCaseBackground } from "./case-opening-case-background";
-import { CaseOpeningCaseContents } from "./case-opening-case-contents";
-import { CaseOpeningWheel } from "./case-opening-wheel";
+import { UnlockCaseContainerBackground } from "./unlock-case-container-background";
+import { UnlockCaseContainerContents } from "./unlock-case-container-contents";
+import { UnlockCaseWheel } from "./unlock-case-wheel";
 import { CSItemImage } from "./cs-item-image";
 import { FillSpinner } from "./fill-spinner";
 import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
-export function CaseOpeningCase({
+export function UnlockCaseContainer({
   canUnlock,
   caseItem,
   hideCaseContents,
@@ -37,7 +37,10 @@ export function CaseOpeningCase({
 
   return (
     <>
-      <CaseOpeningCaseBackground canUnlock={canUnlock} caseItem={caseItem} />
+      <UnlockCaseContainerBackground
+        canUnlock={canUnlock}
+        caseItem={caseItem}
+      />
       <div className="flex flex-col gap-4">
         <UseItemHeader
           actionDesc={translate("CaseUnlock")}
@@ -45,14 +48,14 @@ export function CaseOpeningCase({
           title={translate("CaseUnlockContainer")}
           warning={translate("CaseOnceWarn")}
         />
-        <CaseOpeningWheel
+        <UnlockCaseWheel
           caseItem={caseItem}
           isDisplaying={isDisplaying}
           items={items}
         />
       </div>
       <div className="fixed bottom-12 left-0 w-full">
-        <CaseOpeningCaseContents
+        <UnlockCaseContainerContents
           caseItem={caseItem}
           hideCaseContents={hideCaseContents}
         />

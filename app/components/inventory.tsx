@@ -6,24 +6,24 @@
 import { CS_hasStickers, CS_Item, CS_Team } from "@ianlucas/cslib";
 import { ReactNode } from "react";
 import { InventoryItem } from "~/components/inventory-item";
-import { useApplySticker } from "~/hooks/use-apply-sticker";
+import { useApplyItemSticker } from "~/hooks/use-apply-item-sticker";
 import { useRenameItem } from "~/hooks/use-rename-item";
-import { useScrapeSticker } from "~/hooks/use-scrape-sticker";
+import { useScrapeItemSticker } from "~/hooks/use-scrape-item-sticker";
 import { useSwapItemsStatTrak } from "~/hooks/use-swap-items-stattrak";
 import { useSync } from "~/hooks/use-sync";
-import { useUnlockContainer } from "~/hooks/use-unlock-container";
+import { useUnlockCase } from "~/hooks/use-unlock-case";
 import {
   EquipAction,
   RemoveAction,
   UnequipAction
 } from "~/routes/api.action.sync._index";
-import { ApplySticker } from "./apply-sticker";
-import { CaseOpening } from "./case-opening";
+import { ApplyItemSticker } from "./apply-item-sticker";
+import { UnlockCase } from "./unlock-case";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelectorContext } from "./item-selector-context";
 import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
-import { ScrapeSticker } from "./scrape-sticker";
+import { ScrapeItemSticker } from "./scrape-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 
 export function Inventory() {
@@ -36,11 +36,11 @@ export function Inventory() {
     items.filter(({ item }) => CS_hasStickers(item)).length > 0;
 
   const {
-    closeUnlockContainer,
-    handleUnlockContainer,
-    handleUnlockContainerSelect,
-    unlockContainer
-  } = useUnlockContainer();
+    closeUnlockCase,
+    handleUnlockCase,
+    handleUnlockCaseSelect,
+    unlockCase
+  } = useUnlockCase();
 
   const {
     closeRenameItem,
@@ -50,14 +50,14 @@ export function Inventory() {
   } = useRenameItem();
 
   const {
-    applySticker,
-    closeApplySticker,
-    handleApplySticker,
-    handleApplyStickerSelect
-  } = useApplySticker();
+    applyItemSticker,
+    closeApplyItemSticker,
+    handleApplyItemSticker,
+    handleApplyItemStickerSelect
+  } = useApplyItemSticker();
 
-  const { closeScrapeSticker, handleScrapeSticker, scrapeSticker } =
-    useScrapeSticker();
+  const { closeScrapeItemSticker, handleScrapeItemSticker, scrapeItemSticker } =
+    useScrapeItemSticker();
 
   const {
     closeSwapItemsStatTrak,
@@ -83,11 +83,11 @@ export function Inventory() {
 
   function dismissSelectItem() {
     setItemSelector(undefined);
-    closeUnlockContainer();
+    closeUnlockCase();
     closeSwapItemsStatTrak();
     closeRenameItem();
-    closeApplySticker();
-    closeScrapeSticker();
+    closeApplyItemSticker();
+    closeScrapeItemSticker();
   }
 
   function handleSelectItem(index: number, item: CS_Item) {
@@ -95,24 +95,24 @@ export function Inventory() {
       const { type } = itemSelector;
       setItemSelector(undefined);
       switch (type) {
-        case "case-opening":
-          return handleUnlockContainerSelect(index);
+        case "unlock-case":
+          return handleUnlockCaseSelect(index);
         case "swap-items-stattrak":
           return handleSwapItemsStatTrakSelect(index);
         case "rename-item":
           return handleRenameItemSelect(index, item);
-        case "apply-sticker":
-          return handleApplyStickerSelect(index);
+        case "apply-item-sticker":
+          return handleApplyItemStickerSelect(index);
       }
     }
   }
 
   const isSelectingAnItem = itemSelector !== undefined;
   const isSwapingItemsStatTrak = swapItemsStatTrak?.toIndex !== undefined;
-  const isUnlockingContainer = unlockContainer !== undefined;
+  const isUnlockingContainer = unlockCase !== undefined;
   const isRenamingItem = renameItem !== undefined;
-  const isApplyingSticker = applySticker !== undefined;
-  const isScrapingSticker = scrapeSticker !== undefined;
+  const isApplyingSticker = applyItemSticker !== undefined;
+  const isScrapingSticker = scrapeItemSticker !== undefined;
 
   return (
     <>
@@ -137,30 +137,36 @@ export function Inventory() {
               <InventoryItemWrapper key={item.index}>
                 <InventoryItem
                   {...item}
-                  onApplySticker={handleApplySticker}
+                  onApplySticker={handleApplyItemSticker}
                   onEquip={handleEquip}
                   onRemove={handleRemove}
                   onRename={handleRenameItem}
-                  onScrapeSticker={handleScrapeSticker}
+                  onScrapeSticker={handleScrapeItemSticker}
                   onSwapItemsStatTrak={handleSwapItemsStatTrak}
                   onUnequip={handleUnequip}
-                  onUnlockContainer={handleUnlockContainer}
+                  onUnlockContainer={handleUnlockCase}
                   ownApplicableStickers={ownApplicableStickers}
                 />
               </InventoryItemWrapper>
             ))}
       </div>
       {isUnlockingContainer && (
-        <CaseOpening {...unlockContainer} onClose={closeUnlockContainer} />
+        <UnlockCase {...unlockCase} onClose={closeUnlockCase} />
       )}
       {isRenamingItem && (
         <RenameItem {...renameItem} onClose={closeRenameItem} />
       )}
       {isApplyingSticker && (
-        <ApplySticker {...applySticker} onClose={closeApplySticker} />
+        <ApplyItemSticker
+          {...applyItemSticker}
+          onClose={closeApplyItemSticker}
+        />
       )}
       {isScrapingSticker && (
-        <ScrapeSticker {...scrapeSticker} onClose={closeScrapeSticker} />
+        <ScrapeItemSticker
+          {...scrapeItemSticker}
+          onClose={closeScrapeItemSticker}
+        />
       )}
       {isSwapingItemsStatTrak && (
         <SwapItemsStatTrak

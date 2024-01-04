@@ -8,15 +8,15 @@ import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
 
-export function useApplySticker() {
+export function useApplyItemSticker() {
   const { inventory, items } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
-  const [applySticker, setApplySticker] = useState<{
+  const [applyItemSticker, setApplyItemSticker] = useState<{
     itemIndex: number;
     stickerItemIndex: number;
   }>();
 
-  function handleApplySticker(index: number) {
+  function handleApplyItemSticker(index: number) {
     const selectedItem = inventory.getItem(index);
     return setItemSelector({
       index,
@@ -26,26 +26,26 @@ export function useApplySticker() {
           ((selectedItem.type === "sticker" && CS_hasStickers(item)) ||
             (selectedItem.type !== "sticker" && item.type === "sticker"))
       ),
-      type: "apply-sticker"
+      type: "apply-item-sticker"
     });
   }
 
-  function handleApplyStickerSelect(index: number) {
+  function handleApplyItemStickerSelect(index: number) {
     const { type } = inventory.getItem(index);
-    return setApplySticker({
+    return setApplyItemSticker({
       itemIndex: type !== "sticker" ? index : itemSelector!.index,
       stickerItemIndex: type === "sticker" ? index : itemSelector!.index
     });
   }
 
-  function closeApplySticker() {
-    return setApplySticker(undefined);
+  function closeApplyItemSticker() {
+    return setApplyItemSticker(undefined);
   }
 
   return {
-    applySticker,
-    closeApplySticker,
-    handleApplySticker,
-    handleApplyStickerSelect
+    applyItemSticker,
+    closeApplyItemSticker,
+    handleApplyItemSticker,
+    handleApplyItemStickerSelect
   };
 }

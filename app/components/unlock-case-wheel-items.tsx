@@ -6,9 +6,9 @@
 import { CS_Item, CS_unlockCase } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { ForwardedRef, forwardRef } from "react";
-import { CaseOpeningWheelItem } from "./case-opening-wheel-item";
+import { UnlockCaseWheelItem } from "./unlock-case-wheel-item";
 
-export const CaseOpeningWheelItems = forwardRef(function Items(
+export const UnlockCaseWheelItems = forwardRef(function Items(
   {
     caseItem,
     instant,
@@ -32,7 +32,7 @@ export const CaseOpeningWheelItems = forwardRef(function Items(
       style={{ transform: `translate(${translateX}px, 0)` }}
     >
       {items.map((item, index) => (
-        <CaseOpeningWheelItem
+        <UnlockCaseWheelItem
           caseItem={caseItem}
           index={index}
           key={index}

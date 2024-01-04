@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_unlockCase } from "@ianlucas/cslib";
+import { CS_unlockCase } from "@ianlucas/cslib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -15,11 +15,11 @@ import {
 import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
-import { CaseOpeningCase } from "./case-opening-case";
-import { CaseOpeningCaseUnlocked } from "./case-opening-case-unlocked";
+import { UnlockCaseContainer } from "./unlock-case-container";
+import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
 import { useRootContext } from "./root-context";
 
-export function CaseOpening({
+export function UnlockCase({
   caseIndex,
   keyIndex,
   onClose
@@ -75,13 +75,13 @@ export function CaseOpening({
         createPortal(
           <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
             {unlockedItem ? (
-              <CaseOpeningCaseUnlocked
+              <UnlockCaseContainerUnlocked
                 caseItem={caseItem}
                 onClose={onClose}
                 unlockedItem={unlockedItem}
               />
             ) : (
-              <CaseOpeningCase
+              <UnlockCaseContainer
                 canUnlock={canUnlock}
                 caseItem={caseItem}
                 hideCaseContents={hideCaseContents}

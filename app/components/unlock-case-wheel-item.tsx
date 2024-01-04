@@ -6,7 +6,7 @@
 import { CS_Economy, CS_Item, CS_unlockCase } from "@ianlucas/cslib";
 import { resolveCaseSpecialItemImage, resolveItemImage } from "~/utils/economy";
 
-export function CaseOpeningWheelItem({
+export function UnlockCaseWheelItem({
   caseItem,
   index,
   unlockedItem

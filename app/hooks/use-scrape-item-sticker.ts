@@ -5,22 +5,22 @@
 
 import { useState } from "react";
 
-export function useScrapeSticker() {
-  const [scrapeSticker, setScrapeSticker] = useState<{
+export function useScrapeItemSticker() {
+  const [scrapeItemSticker, setScrapeItemSticker] = useState<{
     index: number;
   }>();
 
-  function handleScrapeSticker(index: number) {
-    return setScrapeSticker({ index });
+  function handleScrapeItemSticker(index: number) {
+    return setScrapeItemSticker({ index });
   }
 
-  function closeScrapeSticker() {
-    return setScrapeSticker(undefined);
+  function closeScrapeItemSticker() {
+    return setScrapeItemSticker(undefined);
   }
 
   return {
-    closeScrapeSticker,
-    handleScrapeSticker,
-    scrapeSticker
+    closeScrapeItemSticker,
+    handleScrapeItemSticker,
+    scrapeItemSticker
   };
 }

@@ -7,7 +7,7 @@ import { CS_Item } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { CSItemImage } from "./cs-item-image";
 
-export function CaseOpeningCaseBackground({
+export function UnlockCaseContainerBackground({
   canUnlock,
   caseItem
 }: {

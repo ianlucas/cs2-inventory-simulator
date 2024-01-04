@@ -7,12 +7,12 @@ import { CS_Economy, CS_Item, CS_unlockCase } from "@ianlucas/cslib";
 import { useEffect, useState } from "react";
 import { useTranslation } from "~/hooks/use-translation";
 import { playSound } from "~/utils/sound";
-import { CaseOpeningAttribute } from "./case-opening-attribute";
+import { UnlockCaseAttribute } from "./unlock-case-attribute";
 import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
 import { CSItemImage } from "./cs-item-image";
 
-export function CaseOpeningCaseUnlocked({
+export function UnlockCaseContainerUnlocked({
   caseItem,
   onClose,
   unlockedItem: { attributes, id, rarity }
@@ -60,11 +60,11 @@ export function CaseOpeningCaseUnlocked({
         <UseItemFooter
           left={
             <div className="flex items-center gap-8">
-              <CaseOpeningAttribute
+              <UnlockCaseAttribute
                 label={translate("CaseWear")}
                 value={attributes.wear}
               />
-              <CaseOpeningAttribute
+              <UnlockCaseAttribute
                 label={translate("CaseSeed")}
                 value={attributes.seed}
               />
