@@ -21,15 +21,11 @@ import { useRootContext } from "./root-context";
 
 export function CaseOpening({
   caseIndex,
-  caseItem,
   keyIndex,
-  keyItem,
   onClose
 }: {
   caseIndex: number;
-  caseItem: CS_Item;
   keyIndex?: number;
-  keyItem?: CS_Item;
   onClose(): void;
 }) {
   const { user, inventory, setInventory } = useRootContext();
@@ -39,6 +35,10 @@ export function CaseOpening({
   const [unlockedItem, setUnlockedItem] =
     useState<ReturnType<typeof CS_unlockCase>>();
   const [hideCaseContents, setHideCaseContents] = useState(false);
+  const [caseItem] = useState(inventory.getItem(caseIndex));
+  const [keyItem] = useState(
+    keyIndex !== undefined ? inventory.getItem(keyIndex) : undefined
+  );
   const wait = useTimer();
 
   async function handleUnlock() {

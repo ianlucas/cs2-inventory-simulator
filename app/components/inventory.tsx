@@ -3,109 +3,68 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  CS_hasNametag,
-  CS_hasStickers,
-  CS_Item,
-  CS_Team
-} from "@ianlucas/cslib";
-import { ReactNode, useMemo, useState } from "react";
+import { CS_hasStickers, CS_Item, CS_Team } from "@ianlucas/cslib";
+import { ReactNode } from "react";
 import { InventoryItem } from "~/components/inventory-item";
+import { useApplySticker } from "~/hooks/use-apply-sticker";
+import { useRenameItem } from "~/hooks/use-rename-item";
+import { useScrapeSticker } from "~/hooks/use-scrape-sticker";
+import { useSwapItemsStatTrak } from "~/hooks/use-swap-items-stattrak";
 import { useSync } from "~/hooks/use-sync";
-import { useTranslation } from "~/hooks/use-translation";
+import { useUnlockContainer } from "~/hooks/use-unlock-container";
 import {
   EquipAction,
   RemoveAction,
   UnequipAction
 } from "~/routes/api.action.sync._index";
-import { resolveItemImage } from "~/utils/economy";
-import {
-  getFreeItemsToDisplay,
-  sortByEquipped,
-  sortByName,
-  sortByType,
-  transform
-} from "~/utils/inventory";
 import { ApplySticker } from "./apply-sticker";
 import { CaseOpening } from "./case-opening";
+import { InventorySelectedItem } from "./inventory-selected-item";
+import { useItemSelectorContext } from "./item-selector-context";
 import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
 import { ScrapeSticker } from "./scrape-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 
 export function Inventory() {
-  const {
-    inventory,
-    setInventory,
-    language,
-    nametagDefaultAllowed,
-    hideFreeItems
-  } = useRootContext();
-  const translate = useTranslation();
   const sync = useSync();
-
-  const items = useMemo(
-    () => [
-      // Inventory Items
-      ...inventory
-        .getAll()
-        .map(transform)
-        .sort(sortByName)
-        .sort(sortByType)
-        .sort(sortByEquipped),
-      // Default Game Items
-      ...getFreeItemsToDisplay(hideFreeItems)
-        .sort(sortByName)
-        .sort(sortByType)
-        .sort(sortByEquipped)
-    ],
-    [inventory, language, hideFreeItems]
-  );
+  const { inventory, items, setInventory } = useRootContext();
+  const { itemSelector, setItemSelector } = useItemSelectorContext();
 
   const ownApplicableStickers =
     items.filter(({ item }) => item.type === "sticker").length > 0 &&
     items.filter(({ item }) => CS_hasStickers(item)).length > 0;
 
-  const [useItemAction, setUseItemAction] = useState<{
-    item: CS_Item;
-    index: number;
-    items: typeof items;
-    type: string;
-  }>();
-  const [unlockCase, setUnlockCase] = useState<{
-    caseIndex: number;
-    caseItem: CS_Item;
-    keyItem?: CS_Item;
-    keyIndex?: number;
-  }>();
-  const [renameItem, setRenameItem] = useState<{
-    toolIndex: number;
-    targetItem: CS_Item;
-    targetIndex: number;
-  }>();
-  const [applySticker, setApplySticker] = useState<{
-    itemIndex: number;
-    item: CS_Item;
-    stickerItemIndex: number;
-    stickerItem: CS_Item;
-  }>();
-  const [scrapeSticker, setScrapeSticker] = useState<{
-    index: number;
-    item: CS_Item;
-  }>();
-  const [swapItemsStatTrak, setSwapItemsStatTrak] = useState<{
-    fromIndex: number;
-    toIndex?: number;
-    toolIndex: number;
-  }>();
-  const isSelectAItem = useItemAction !== undefined;
-  const isUnlockingCase = unlockCase !== undefined;
-  const isRenamingItem = renameItem !== undefined;
-  const isApplyingSticker = applySticker !== undefined;
-  const isScrapingSticker = scrapeSticker !== undefined;
-  const isSwapingItemsStatTrak = swapItemsStatTrak?.toIndex !== undefined;
+  const {
+    closeUnlockContainer,
+    handleUnlockContainer,
+    handleUnlockContainerSelect,
+    unlockContainer
+  } = useUnlockContainer();
+
+  const {
+    closeRenameItem,
+    handleRenameItem,
+    handleRenameItemSelect,
+    renameItem
+  } = useRenameItem();
+
+  const {
+    applySticker,
+    closeApplySticker,
+    handleApplySticker,
+    handleApplyStickerSelect
+  } = useApplySticker();
+
+  const { closeScrapeSticker, handleScrapeSticker, scrapeSticker } =
+    useScrapeSticker();
+
+  const {
+    closeSwapItemsStatTrak,
+    handleSwapItemsStatTrakSelect,
+    handleSwapItemsStatTrak,
+    swapItemsStatTrak
+  } = useSwapItemsStatTrak();
 
   function handleEquip(index: number, team?: CS_Team) {
     setInventory(inventory.equip(index, team));
@@ -122,170 +81,50 @@ export function Inventory() {
     sync({ type: RemoveAction, index });
   }
 
-  function handleUnlockContainer(index: number, useItem: CS_Item) {
-    if (useItem.keys || useItem.type === "key") {
-      return setUseItemAction({
-        index,
-        item: useItem,
-        items: items.filter(
-          ({ item }) =>
-            (useItem.type === "key" && item.keys?.includes(useItem.id)) ||
-            (useItem.type === "case" && useItem.keys?.includes(item.id))
-        ),
-        type: "case-opening"
-      });
-    }
-    if (useItem.type === "case") {
-      return setUnlockCase({
-        caseIndex: index,
-        caseItem: useItem
-      });
-    }
+  function dismissSelectItem() {
+    setItemSelector(undefined);
+    closeUnlockContainer();
+    closeSwapItemsStatTrak();
+    closeRenameItem();
+    closeApplySticker();
+    closeScrapeSticker();
   }
 
-  function handleRename(index: number, useItem: CS_Item) {
-    return setUseItemAction({
-      index,
-      item: useItem,
-      items: items.filter(
-        ({ item }) =>
-          CS_hasNametag(item) &&
-          (!item.free ||
-            nametagDefaultAllowed.length === 0 ||
-            nametagDefaultAllowed.includes(item.id))
-      ),
-      type: "rename-item"
-    });
-  }
-
-  function handleSwapItemsStatTrak(index: number, useItem: CS_Item) {
-    return setUseItemAction({
-      index,
-      item: useItem,
-      items: items.filter(
-        ({ inventoryItem }) => inventoryItem.stattrak !== undefined
-      ),
-      type: "swap-stattrak"
-    });
-  }
-
-  function handleApplySticker(index: number, useItem: CS_Item) {
-    return setUseItemAction({
-      index,
-      item: useItem,
-      items: items.filter(
-        ({ item }) =>
-          !item.free &&
-          ((useItem.type === "sticker" && CS_hasStickers(item)) ||
-            (useItem.type !== "sticker" && item.type === "sticker"))
-      ),
-      type: "apply-sticker"
-    });
-  }
-
-  function handleScrapeSticker(index: number, item: CS_Item) {
-    setScrapeSticker({ index, item });
-  }
-
-  function dismissUseItem() {
-    setUseItemAction(undefined);
-    setUnlockCase(undefined);
-    setRenameItem(undefined);
-    setApplySticker(undefined);
-    setScrapeSticker(undefined);
-    setSwapItemsStatTrak(undefined);
-  }
-
-  function handleSelectItem(index: number, selectedItem: CS_Item) {
-    if (useItemAction) {
-      const { type } = useItemAction;
-      setUseItemAction(undefined);
+  function handleSelectItem(index: number, item: CS_Item) {
+    if (itemSelector !== undefined) {
+      const { type } = itemSelector;
+      setItemSelector(undefined);
       switch (type) {
         case "case-opening":
-          return setUnlockCase({
-            caseItem:
-              selectedItem.type === "case" ? selectedItem : useItemAction.item,
-            caseIndex:
-              selectedItem.type === "case" ? index : useItemAction.index,
-            keyIndex: selectedItem.type === "key" ? index : useItemAction.index,
-            keyItem:
-              selectedItem.type === "key" ? selectedItem : useItemAction.item
-          });
-
+          return handleUnlockContainerSelect(index);
+        case "swap-items-stattrak":
+          return handleSwapItemsStatTrakSelect(index);
         case "rename-item":
-          return setRenameItem({
-            targetIndex: index,
-            targetItem: selectedItem,
-            toolIndex: useItemAction.index
-          });
-
+          return handleRenameItemSelect(index, item);
         case "apply-sticker":
-          return setApplySticker({
-            item:
-              selectedItem.type !== "sticker"
-                ? selectedItem
-                : useItemAction.item,
-            itemIndex:
-              selectedItem.type !== "sticker" ? index : useItemAction.index,
-            stickerItem:
-              selectedItem.type === "sticker"
-                ? selectedItem
-                : useItemAction.item,
-            stickerItemIndex:
-              selectedItem.type === "sticker" ? index : useItemAction.index
-          });
-        case "swap-stattrak":
-          if (swapItemsStatTrak?.fromIndex !== undefined) {
-            return setSwapItemsStatTrak((existing) => ({
-              ...existing!,
-              toIndex: index
-            }));
-          }
-          setSwapItemsStatTrak({
-            fromIndex: index,
-            toolIndex: useItemAction.index
-          });
-          return setUseItemAction({
-            index,
-            item: selectedItem,
-            items: items.filter(
-              ({ inventoryItem, item, index: otherIndex }) =>
-                inventoryItem.stattrak !== undefined &&
-                otherIndex !== index &&
-                selectedItem.type === item.type &&
-                (selectedItem.type === "musickit" ||
-                  selectedItem.def === item.def)
-            ),
-            type: "swap-stattrak"
-          });
+          return handleApplyStickerSelect(index);
       }
     }
   }
 
+  const isSelectingAnItem = itemSelector !== undefined;
+  const isSwapingItemsStatTrak = swapItemsStatTrak?.toIndex !== undefined;
+  const isUnlockingContainer = unlockContainer !== undefined;
+  const isRenamingItem = renameItem !== undefined;
+  const isApplyingSticker = applySticker !== undefined;
+  const isScrapingSticker = scrapeSticker !== undefined;
+
   return (
     <>
-      {isSelectAItem && (
-        <div className="m-auto w-full px-4 pb-4 text-xs drop-shadow lg:flex lg:w-[1024px] lg:items-center lg:px-0 lg:pb-0 lg:text-base">
-          <button
-            className="px-2 py-1 hover:bg-black/30 active:bg-black/70"
-            onClick={dismissUseItem}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} className="h-5" />
-          </button>
-          <div className="flex flex-1 select-none items-center justify-center gap-3">
-            <strong>{translate("InventorySelectAnItem")}</strong>
-            <img
-              draggable={false}
-              className="h-12"
-              src={resolveItemImage(useItemAction.item)}
-            />
-            <span className="text-neutral-300">{useItemAction.item.name}</span>
-          </div>
-        </div>
+      {isSelectingAnItem && (
+        <InventorySelectedItem
+          {...itemSelector}
+          onDismiss={dismissSelectItem}
+        />
       )}
       <div className="m-auto grid w-full select-none grid-cols-2 gap-2 px-2 md:grid-cols-4 lg:my-8 lg:w-[1024px] lg:grid-cols-6 lg:gap-5 lg:px-0">
-        {isSelectAItem
-          ? useItemAction.items.map((item) => (
+        {isSelectingAnItem
+          ? itemSelector.items.map((item) => (
               <InventoryItemWrapper key={item.index}>
                 <InventoryItem
                   {...item}
@@ -298,12 +137,10 @@ export function Inventory() {
               <InventoryItemWrapper key={item.index}>
                 <InventoryItem
                   {...item}
-                  disableContextMenu={isUnlockingCase}
-                  disableHover={isUnlockingCase}
                   onApplySticker={handleApplySticker}
                   onEquip={handleEquip}
                   onRemove={handleRemove}
-                  onRename={handleRename}
+                  onRename={handleRenameItem}
                   onScrapeSticker={handleScrapeSticker}
                   onSwapItemsStatTrak={handleSwapItemsStatTrak}
                   onUnequip={handleUnequip}
@@ -313,28 +150,22 @@ export function Inventory() {
               </InventoryItemWrapper>
             ))}
       </div>
-      {isUnlockingCase && (
-        <CaseOpening {...unlockCase} onClose={() => setUnlockCase(undefined)} />
+      {isUnlockingContainer && (
+        <CaseOpening {...unlockContainer} onClose={closeUnlockContainer} />
       )}
       {isRenamingItem && (
-        <RenameItem {...renameItem} onClose={() => setRenameItem(undefined)} />
+        <RenameItem {...renameItem} onClose={closeRenameItem} />
       )}
       {isApplyingSticker && (
-        <ApplySticker
-          {...applySticker}
-          onClose={() => setApplySticker(undefined)}
-        />
+        <ApplySticker {...applySticker} onClose={closeApplySticker} />
       )}
       {isScrapingSticker && (
-        <ScrapeSticker
-          {...scrapeSticker}
-          onClose={() => setScrapeSticker(undefined)}
-        />
+        <ScrapeSticker {...scrapeSticker} onClose={closeScrapeSticker} />
       )}
       {isSwapingItemsStatTrak && (
         <SwapItemsStatTrak
-          {...(swapItemsStatTrak as Required<typeof swapItemsStatTrak>)}
-          onClose={() => setSwapItemsStatTrak(undefined)}
+          {...(swapItemsStatTrak as any)}
+          onClose={closeSwapItemsStatTrak}
         />
       )}
     </>

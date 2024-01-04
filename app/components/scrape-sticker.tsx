@@ -25,21 +25,21 @@ import { UseItemHeader } from "./use-item-header";
 
 export function ScrapeSticker({
   onClose,
-  index,
-  item
+  index
 }: {
   onClose(): void;
   index: number;
-  item: CS_Item;
 }) {
   const translate = useTranslation();
   const { inventory, setInventory, statsForNerds } = useRootContext();
   const sync = useSync();
+  const [item] = useState(inventory.getItem(index));
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
 
-  const stickers = inventory.get(index)?.stickers ?? [null, null, null, null];
+  const inventoryItem = inventory.get(index);
+  const stickers = inventoryItem.stickers ?? [null, null, null, null];
   const stickersWear = (
-    inventory.get(index)?.stickerswear ?? [null, null, null, null]
+    inventoryItem.stickerswear ?? [null, null, null, null]
   ).map((wear) => (wear === null ? 0 : wear));
 
   function doScrapeSticker(stickerIndex: number) {

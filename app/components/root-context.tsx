@@ -9,13 +9,21 @@ import {
   createContext,
   ReactNode,
   useContext,
-  useEffect
+  useEffect,
+  useMemo
 } from "react";
 import type { findRequestUser } from "~/auth.server";
 import { useInventory } from "~/hooks/use-inventory";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { translateItems } from "~/utils/economy";
-import { parseInventory } from "~/utils/inventory";
+import {
+  getFreeItemsToDisplay,
+  parseInventory,
+  sortByEquipped,
+  sortByName,
+  sortByType,
+  transform
+} from "~/utils/inventory";
 import { ExternalInventoryShape } from "~/utils/shapes";
 import { sync } from "~/utils/sync";
 import {
@@ -30,6 +38,7 @@ const RootContext = createContext<{
   buildLastCommit?: string;
   hideFreeItems: boolean;
   inventory: CS_Inventory;
+  items: ReturnType<typeof transform>[];
   itemTranslation: Record<string, string | undefined>;
   language: string;
   maxInventoryItems: number;
@@ -59,7 +68,7 @@ export function RootProvider({
   user
 }: Omit<
   ContextType<typeof RootContext>,
-  "inventory" | "requireAuth" | "setInventory"
+  "inventory" | "requireAuth" | "setInventory" | "items"
 > & {
   children: ReactNode;
 }) {
@@ -102,6 +111,24 @@ export function RootProvider({
 
   translateItems(language, itemTranslation);
 
+  const items = useMemo(
+    () => [
+      // Inventory Items
+      ...inventory
+        .getAll()
+        .map(transform)
+        .sort(sortByName)
+        .sort(sortByType)
+        .sort(sortByEquipped),
+      // Default Game Items
+      ...getFreeItemsToDisplay(hideFreeItems)
+        .sort(sortByName)
+        .sort(sortByType)
+        .sort(sortByEquipped)
+    ],
+    [inventory, language, hideFreeItems]
+  );
+
   return (
     <RootContext.Provider
       value={{
@@ -109,6 +136,7 @@ export function RootProvider({
         buildLastCommit,
         hideFreeItems,
         inventory,
+        items,
         itemTranslation,
         language,
         maxInventoryItems,

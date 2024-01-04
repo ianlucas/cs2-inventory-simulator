@@ -21,23 +21,21 @@ import { playSound } from "~/utils/sound";
 export function ApplySticker({
   onClose,
   itemIndex,
-  item,
-  stickerItemIndex,
-  stickerItem
+  stickerItemIndex
 }: {
   onClose(): void;
   itemIndex: number;
-  item: CS_Item;
   stickerItemIndex: number;
-  stickerItem: CS_Item;
 }) {
   const translate = useTranslation();
   const { inventory, setInventory } = useRootContext();
   const sync = useSync();
 
   const [stickerIndex, setStickerIndex] = useState<number>();
+  const [stickerItem] = useState(inventory.getItem(stickerItemIndex));
+  const [item] = useState(inventory.getItem(itemIndex));
 
-  const stickers = inventory.get(itemIndex)?.stickers ?? [
+  const stickers = inventory.get(itemIndex).stickers ?? [
     null,
     null,
     null,

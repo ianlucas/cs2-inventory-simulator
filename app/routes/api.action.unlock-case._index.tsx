@@ -31,7 +31,7 @@ export async function action({ request }: ActionFunctionArgs) {
     parseInventory(rawInventory),
     MAX_INVENTORY_ITEMS
   );
-  const unlockedItem = CS_unlockCase(inventory.get(caseIndex)!.id);
+  const unlockedItem = CS_unlockCase(inventory.get(caseIndex).id);
   inventory.unlockCase(unlockedItem, caseIndex, keyIndex);
   await updateUserInventory(userId, inventory.getAll());
   return json(unlockedItem);
