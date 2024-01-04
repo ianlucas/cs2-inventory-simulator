@@ -28,9 +28,9 @@ export function CSItemPickerDesktop({
   const translate = useTranslation();
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-4">
       <FilterMenuDesktop onChange={handleCategoryClick} value={filter} />
-      <div className="flex-1">
+      <div className="flex-1 border-l border-white/5 pl-4">
         <div className="mb-2 flex items-center gap-2 px-6">
           <FontAwesomeIcon
             icon={faMagnifyingGlass}

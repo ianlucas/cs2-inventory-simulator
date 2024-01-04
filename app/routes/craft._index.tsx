@@ -75,7 +75,7 @@ export default function Craft() {
   return (
     <Modal
       className={clsx(
-        isPickingItem ? (isDesktop ? "w-[640px]" : "w-[540px]") : "w-[420px]"
+        isPickingItem ? (isDesktop ? "w-[700px]" : "w-[540px]") : "w-[420px]"
       )}
     >
       <div className="flex select-none items-center justify-between px-4 py-2 text-sm font-bold">
