@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_hasStickers, CS_Item, CS_Team } from "@ianlucas/cslib";
-import { ReactNode } from "react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useApplyItemSticker } from "~/hooks/use-apply-item-sticker";
 import { useRenameItem } from "~/hooks/use-rename-item";
@@ -18,13 +17,13 @@ import {
   UnequipAction
 } from "~/routes/api.action.sync._index";
 import { ApplyItemSticker } from "./apply-item-sticker";
-import { UnlockCase } from "./unlock-case";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelectorContext } from "./item-selector-context";
 import { RenameItem } from "./rename-item";
 import { useRootContext } from "./root-context";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
+import { UnlockCase } from "./unlock-case";
 
 export function Inventory() {
   const sync = useSync();
@@ -123,32 +122,31 @@ export function Inventory() {
         />
       )}
       <div className="m-auto grid w-full select-none grid-cols-2 gap-2 px-2 md:grid-cols-4 lg:my-8 lg:w-[1024px] lg:grid-cols-6 lg:gap-5 lg:px-0">
-        {isSelectingAnItem
-          ? itemSelector.items.map((item) => (
-              <InventoryItemWrapper key={item.index}>
-                <InventoryItem
-                  {...item}
-                  disableContextMenu
-                  onClick={handleSelectItem}
-                />
-              </InventoryItemWrapper>
-            ))
-          : items.map((item) => (
-              <InventoryItemWrapper key={item.index}>
-                <InventoryItem
-                  {...item}
-                  onApplySticker={handleApplyItemSticker}
-                  onEquip={handleEquip}
-                  onRemove={handleRemove}
-                  onRename={handleRenameItem}
-                  onScrapeSticker={handleScrapeItemSticker}
-                  onSwapItemsStatTrak={handleSwapItemsStatTrak}
-                  onUnequip={handleUnequip}
-                  onUnlockContainer={handleUnlockCase}
-                  ownApplicableStickers={ownApplicableStickers}
-                />
-              </InventoryItemWrapper>
-            ))}
+        {(isSelectingAnItem ? itemSelector.items : items).map((item) => (
+          <div>
+            <div className="flex h-full w-full items-center justify-center lg:block lg:h-auto lg:w-auto">
+              <InventoryItem
+                {...item}
+                {...(isSelectingAnItem
+                  ? {
+                      disableContextMenu: true,
+                      onClick: handleSelectItem
+                    }
+                  : {
+                      onApplySticker: handleApplyItemSticker,
+                      onEquip: handleEquip,
+                      onRemove: handleRemove,
+                      onRename: handleRenameItem,
+                      onScrapeSticker: handleScrapeItemSticker,
+                      onSwapItemsStatTrak: handleSwapItemsStatTrak,
+                      onUnequip: handleUnequip,
+                      onUnlockContainer: handleUnlockCase,
+                      ownApplicableStickers: ownApplicableStickers
+                    })}
+              />
+            </div>
+          </div>
+        ))}
       </div>
       {isUnlockingContainer && (
         <UnlockCase {...unlockCase} onClose={closeUnlockCase} />
@@ -175,15 +173,5 @@ export function Inventory() {
         />
       )}
     </>
-  );
-}
-
-function InventoryItemWrapper({ children }: { children: ReactNode }) {
-  return (
-    <div>
-      <div className="flex h-full w-full items-center justify-center lg:block lg:h-auto lg:w-auto">
-        {children}
-      </div>
-    </div>
   );
 }
