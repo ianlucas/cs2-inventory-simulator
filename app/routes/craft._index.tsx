@@ -40,6 +40,7 @@ export default function Craft() {
   const sync = useSync();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<CS_Item>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { inventory, setInventory } = useRootContext();
   const translate = useTranslation();
   const isDesktop = useIsDesktop();
@@ -51,7 +52,8 @@ export default function Craft() {
     stattrak,
     ...attributes
   }: CSItemEditorAttributes) {
-    if (selectedItem !== undefined) {
+    if (selectedItem !== undefined && !isSubmitting) {
+      setIsSubmitting(true);
       const inventoryItem = {
         id: selectedItem.id,
         stattrak: stattrak ? 0 : undefined,
