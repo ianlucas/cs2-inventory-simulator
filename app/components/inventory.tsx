@@ -123,7 +123,7 @@ export function Inventory() {
       )}
       <div className="m-auto grid w-full select-none grid-cols-2 gap-2 px-2 md:grid-cols-4 lg:my-8 lg:w-[1024px] lg:grid-cols-6 lg:gap-5 lg:px-0">
         {(isSelectingAnItem ? itemSelector.items : items).map((item) => (
-          <div>
+          <div key={item.index}>
             <div className="flex h-full w-full items-center justify-center lg:block lg:h-auto lg:w-auto">
               <InventoryItem
                 {...item}
