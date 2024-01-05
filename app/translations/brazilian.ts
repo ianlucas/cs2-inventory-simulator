@@ -70,7 +70,7 @@ export const brazilian = {
   ItemSwapStatTrakDesc:
     "Este item troca as contagens StatTrak™ de dois itens do mesmo tipo.",
   ItemSwapStatTrakWarn:
-    "Ferramentas de Troca StatTrak™ só podem ser usadas uma vezThis StatTrak™ Swap Tool can only be used once",
+    "Ferramentas de Troca StatTrak™ só podem ser usadas uma vez",
   ItemSwapStatTrakAccept: "Aceitar",
   ItemSwapStatTrakClose: "Fechar",
   ModelAgent: "Agente",

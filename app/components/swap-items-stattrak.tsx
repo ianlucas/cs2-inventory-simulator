@@ -69,7 +69,7 @@ export function SwapItemsStatTrak({
                 title={translate("ItemSwapStatTrakUse")}
                 warning={translate("ItemSwapStatTrakWarn")}
               />
-              <div className="mt-16 flex items-center gap-10">
+              <div className="mt-16 flex items-center justify-center gap-10">
                 {items.map(
                   ({ inventoryItem: { wear }, item, value }, index) => (
                     <div className="flex flex-col justify-center" key={index}>
