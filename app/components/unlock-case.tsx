@@ -18,6 +18,7 @@ import { playSound } from "~/utils/sound";
 import { UnlockCaseContainer } from "./unlock-case-container";
 import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
 import { useRootContext } from "./root-context";
+import { useFreeze } from "~/hooks/use-freeze";
 
 export function UnlockCase({
   caseIndex,
@@ -35,8 +36,8 @@ export function UnlockCase({
   const [unlockedItem, setUnlockedItem] =
     useState<ReturnType<typeof CS_unlockCase>>();
   const [hideCaseContents, setHideCaseContents] = useState(false);
-  const [caseItem] = useState(inventory.getItem(caseIndex));
-  const [keyItem] = useState(
+  const caseItem = useFreeze(() => inventory.getItem(caseIndex));
+  const keyItem = useFreeze(() =>
     keyIndex !== undefined ? inventory.getItem(keyIndex) : undefined
   );
   const wait = useTimer();
