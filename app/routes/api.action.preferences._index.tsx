@@ -52,18 +52,29 @@ export async function action({ request }: ActionFunctionArgs) {
       language: z
         .string()
         .refine((language) => getAllowedLanguages().includes(language)),
-      statsForNerds: z.string().transform((value) => value === "true"),
-      hideFreeItems: z.string().transform((value) => value === "true")
+      statsForNerds: z
+        .literal("true")
+        .or(z.literal("false"))
+        .transform((value) => String(value === "true")),
+      hideFreeItems: z
+        .literal("true")
+        .or(z.literal("false"))
+        .transform((value) => String(value === "true"))
     })
     .parse(Object.fromEntries(await request.formData()));
   if (userId) {
-    await setUserPreference(userId, "language", language);
     await setUserPreference(userId, "background", background);
-    await setUserPreference(userId, "statsForNerds", String(statsForNerds));
-    await setUserPreference(userId, "hideFreeItems", String(hideFreeItems));
+    await setUserPreference(userId, "hideFreeItems", hideFreeItems);
+    await setUserPreference(userId, "language", language);
+    await setUserPreference(userId, "statsForNerds", statsForNerds);
   }
   const session = await getSession(request.headers.get("Cookie"));
-  assignToSession(session, { background, language });
+  assignToSession(session, {
+    background,
+    hideFreeItems,
+    language,
+    statsForNerds
+  });
   return new Response(null, {
     status: 204,
     headers: {
