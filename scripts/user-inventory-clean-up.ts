@@ -7,7 +7,7 @@ import { CS_Economy } from "@ianlucas/cslib";
 import { prisma } from "~/db.server";
 import { parseInventory } from "~/utils/inventory";
 
-export async function UserInventoryCleanup() {
+export async function UserInventoryCleanUp() {
   console.log("[pending] user-inventory-cleanup...");
   const users = await prisma.user.findMany({
     select: {
