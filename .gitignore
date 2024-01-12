@@ -2,8 +2,9 @@
 .env
 /.cache
 /build
+/deploys
 /prisma/dev.db
 /prisma/dev.db-journal
 /public/build
-deploy.sh
+deploy.js
 node_modules
