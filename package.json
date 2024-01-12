@@ -42,6 +42,9 @@
     },
     "openid": {
       "axios": "^1.6.1"
+    },
+    "axios": {
+      "follow-redirects": ">=1.15.4"
     }
   },
   "devDependencies": {
