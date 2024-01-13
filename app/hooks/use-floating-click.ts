@@ -31,13 +31,8 @@ export interface UseClickProps {
   keyboardHandlers?: boolean;
 }
 
-/**
- * Opens or closes the floating element when clicking the reference element.
- * @see https://floating-ui.com/docs/useClick
- */
-export function useAnyClick<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
-  props: UseClickProps = {}
+export function useFloatingClick<RT extends ReferenceType = ReferenceType>(
+  context: FloatingContext<RT>
 ): ElementProps {
   const {
     open,
@@ -45,13 +40,11 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
     dataRef,
     elements: { domReference }
   } = context;
-  const {
-    enabled = true,
-    event: eventOption = "mousedown",
-    toggle = true,
-    ignoreMouse = false,
-    keyboardHandlers = true
-  } = props;
+  const enabled = true;
+  const eventOption = "mousedown";
+  const toggle = true;
+  const ignoreMouse = false;
+  const keyboardHandlers = true;
 
   const pointerTypeRef = useRef<"mouse" | "pen" | "touch">();
   const didKeyDownRef = useRef(false);
@@ -64,15 +57,12 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
         onPointerDown(event) {
           pointerTypeRef.current = event.pointerType;
         },
+
         onMouseDown(event) {
           if (
             isMouseLikePointerType(pointerTypeRef.current, true) &&
             ignoreMouse
           ) {
-            return;
-          }
-
-          if (eventOption === "click") {
             return;
           }
 
@@ -90,6 +80,7 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
             onOpenChange(true, event.nativeEvent);
           }
         },
+
         onClick(event) {
           if (eventOption === "mousedown" && pointerTypeRef.current) {
             pointerTypeRef.current = undefined;
@@ -115,6 +106,7 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
             onOpenChange(true, event.nativeEvent);
           }
         },
+
         onKeyDown(event) {
           pointerTypeRef.current = undefined;
 
@@ -140,6 +132,7 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
             }
           }
         },
+
         onKeyUp(event) {
           if (
             event.defaultPrevented ||
@@ -159,6 +152,7 @@ export function useAnyClick<RT extends ReferenceType = ReferenceType>(
             }
           }
         },
+
         onContextMenu(event) {
           event.preventDefault();
         }

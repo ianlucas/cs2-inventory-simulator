@@ -16,7 +16,7 @@ import {
   useRole
 } from "@floating-ui/react";
 import { useState } from "react";
-import { useAnyClick } from "./use-any-click";
+import { useFloatingClick } from "./use-floating-click";
 
 export function useInventoryItemFloating() {
   const [isClickOpen, setIsClickOpen] = useState(false);
@@ -46,7 +46,7 @@ export function useInventoryItemFloating() {
     placement: "right"
   });
 
-  const click = useAnyClick(clickContext);
+  const click = useFloatingClick(clickContext);
   const dismiss = useDismiss(clickContext);
   const role = useRole(clickContext);
   const hover = useHover(hoverContext);
