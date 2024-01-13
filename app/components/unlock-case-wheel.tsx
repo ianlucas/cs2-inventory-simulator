@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item, CS_randomInt, CS_unlockCase } from "@ianlucas/cslib";
-import { useRef, useState } from "react";
+import { ElementRef, useRef, useState } from "react";
 import { useDetectCollision } from "~/hooks/use-detect-collision";
 import { useResponsiveScale } from "~/hooks/use-responsive-scale";
 import { playSound } from "~/utils/sound";
@@ -19,8 +19,8 @@ export function UnlockCaseWheel({
   isDisplaying: boolean;
   items: ReturnType<typeof CS_unlockCase>[];
 }) {
-  const targetRef = useRef<HTMLDivElement>(null);
-  const hitsRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<ElementRef<"div">>(null);
+  const hitsRef = useRef<ElementRef<"div">>(null);
   const scale = useResponsiveScale();
   const [offset] = useState(CS_randomInt(188, 440));
   const scaleY = isDisplaying ? 1 : 0;

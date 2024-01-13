@@ -5,10 +5,9 @@
 
 import { CS_Item } from "@ianlucas/cslib";
 import clsx from "clsx";
-import { useRef } from "react";
-import { getCSItemName, resolveItemImage } from "~/utils/economy";
-import { TextSlider } from "./text-slider";
+import { getCSItemName } from "~/utils/economy";
 import { CSItemImage } from "./cs-item-image";
+import { TextSlider } from "./text-slider";
 
 export function CSItemButton({
   bigger,
@@ -22,8 +21,6 @@ export function CSItemButton({
   model?: string;
   onClick?(item: CS_Item): void;
 }) {
-  const ref = useRef<HTMLButtonElement>(null);
-
   function handleClick() {
     if (onClick) {
       onClick(item);
@@ -39,7 +36,6 @@ export function CSItemButton({
 
   return (
     <button
-      ref={ref}
       onClick={handleClick}
       className={clsx(
         clickable &&

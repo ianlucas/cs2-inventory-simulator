@@ -7,7 +7,6 @@ import { faSteam } from "@fortawesome/free-brands-svg-icons";
 import {
   faBarsStaggered,
   faBoxesStacked,
-  faCode,
   faCog,
   faPlus,
   faRightFromBracket,
@@ -16,7 +15,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useToggle } from "@uidotdev/usehooks";
 import clsx from "clsx";
-import { useRef } from "react";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useIsOnTop } from "~/hooks/use-is-on-top";
 import { useTranslation } from "~/hooks/use-translation";
@@ -28,7 +26,6 @@ export function Header() {
   const [isMenuOpen, toggleIsMenuOpen] = useToggle(false);
   const isDesktop = useIsDesktop();
   const translate = useTranslation();
-  const ref = useRef<HTMLDivElement>(null!);
   const isOnTop = useIsOnTop();
 
   function closeMenu() {
@@ -41,7 +38,6 @@ export function Header() {
         "sticky left-0 top-0 z-20 w-full drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] transition-all before:absolute before:inset-0 before:-z-10 before:bg-gradient-to-b before:from-black/60 before:to-transparent before:transition-all before:content-['']",
         isOnTop ? "before:opacity-0" : "before:opacity-1"
       )}
-      ref={ref}
     >
       <div className="m-auto px-4 py-4 text-white lg:flex lg:w-[1024px] lg:items-center lg:gap-8 lg:px-0">
         <div className="flex items-center justify-between">

@@ -5,6 +5,7 @@
 
 import clsx from "clsx";
 import {
+  ElementRef,
   MouseEvent,
   ReactNode,
   useEffect,
@@ -33,8 +34,8 @@ export function GridList({
   const [touchStartY, setTouchStartY] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
-  const scrollable = useRef<HTMLDivElement>(null);
-  const scrollbar = useRef<HTMLDivElement>(null);
+  const scrollable = useRef<ElementRef<"div">>(null);
+  const scrollbar = useRef<ElementRef<"div">>(null);
   const currentIndex = scrollTop / itemHeight;
   const scrollableHeight = maxItemsIntoView * itemHeight;
   const maxScrollTop = (children.length - maxItemsIntoView) * itemHeight;

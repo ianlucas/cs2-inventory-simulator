@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useEffect, useRef } from "react";
+import { ElementRef, useEffect, useRef } from "react";
 import { wait } from "~/utils/promise";
 
 export function TextSlider({
@@ -13,8 +13,8 @@ export function TextSlider({
   className?: string;
   text: string;
 }) {
-  const wrapperElement = useRef<HTMLDivElement | null>(null);
-  const textElement = useRef<HTMLDivElement | null>(null);
+  const wrapperElement = useRef<ElementRef<"div">>(null!);
+  const textElement = useRef<ElementRef<"div">>(null!);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
