@@ -58,7 +58,7 @@ function readItemTranslation(language: string) {
   }
   const path = resolve(
     process.cwd(),
-    `node_modules/@ianlucas/cslib/assets/data/items-${language}.json`
+    `node_modules/@ianlucas/cslib/assets/translations/items-${language}.json`
   );
   itemTranslations[language] = existsSync(path)
     ? z.record(z.string()).parse(JSON.parse(readFileSync(path, "utf-8")))
