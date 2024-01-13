@@ -49,10 +49,17 @@ export function useUnlockCase() {
     return setUnlockCase(undefined);
   }
 
+  function isUnlockingCase(
+    state: typeof unlockCase
+  ): state is NonNullable<typeof unlockCase> {
+    return state !== undefined;
+  }
+
   return {
     closeUnlockCase,
     handleUnlockCase,
     handleUnlockCaseSelect,
+    isUnlockingCase,
     unlockCase
   };
 }

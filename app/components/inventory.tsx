@@ -38,6 +38,7 @@ export function Inventory() {
     closeUnlockCase,
     handleUnlockCase,
     handleUnlockCaseSelect,
+    isUnlockingCase,
     unlockCase
   } = useUnlockCase();
 
@@ -45,6 +46,7 @@ export function Inventory() {
     closeRenameItem,
     handleRenameItem,
     handleRenameItemSelect,
+    isRenamingItem,
     renameItem
   } = useRenameItem();
 
@@ -52,16 +54,22 @@ export function Inventory() {
     applyItemSticker,
     closeApplyItemSticker,
     handleApplyItemSticker,
-    handleApplyItemStickerSelect
+    handleApplyItemStickerSelect,
+    isApplyingItemSticker
   } = useApplyItemSticker();
 
-  const { closeScrapeItemSticker, handleScrapeItemSticker, scrapeItemSticker } =
-    useScrapeItemSticker();
+  const {
+    closeScrapeItemSticker,
+    handleScrapeItemSticker,
+    isScrapingItemSticker,
+    scrapeItemSticker
+  } = useScrapeItemSticker();
 
   const {
     closeSwapItemsStatTrak,
-    handleSwapItemsStatTrakSelect,
     handleSwapItemsStatTrak,
+    handleSwapItemsStatTrakSelect,
+    isSwapingItemsStatTrak,
     swapItemsStatTrak
   } = useSwapItemsStatTrak();
 
@@ -107,11 +115,6 @@ export function Inventory() {
   }
 
   const isSelectingAnItem = itemSelector !== undefined;
-  const isSwapingItemsStatTrak = swapItemsStatTrak?.toIndex !== undefined;
-  const isUnlockingContainer = unlockCase !== undefined;
-  const isRenamingItem = renameItem !== undefined;
-  const isApplyingSticker = applyItemSticker !== undefined;
-  const isScrapingSticker = scrapeItemSticker !== undefined;
 
   return (
     <>
@@ -148,27 +151,27 @@ export function Inventory() {
           </div>
         ))}
       </div>
-      {isUnlockingContainer && (
+      {isUnlockingCase(unlockCase) && (
         <UnlockCase {...unlockCase} onClose={closeUnlockCase} />
       )}
-      {isRenamingItem && (
+      {isRenamingItem(renameItem) && (
         <RenameItem {...renameItem} onClose={closeRenameItem} />
       )}
-      {isApplyingSticker && (
+      {isApplyingItemSticker(applyItemSticker) && (
         <ApplyItemSticker
           {...applyItemSticker}
           onClose={closeApplyItemSticker}
         />
       )}
-      {isScrapingSticker && (
+      {isScrapingItemSticker(scrapeItemSticker) && (
         <ScrapeItemSticker
           {...scrapeItemSticker}
           onClose={closeScrapeItemSticker}
         />
       )}
-      {isSwapingItemsStatTrak && (
+      {isSwapingItemsStatTrak(swapItemsStatTrak) && (
         <SwapItemsStatTrak
-          {...(swapItemsStatTrak as any)}
+          {...swapItemsStatTrak}
           onClose={closeSwapItemsStatTrak}
         />
       )}

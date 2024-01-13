@@ -18,9 +18,16 @@ export function useScrapeItemSticker() {
     return setScrapeItemSticker(undefined);
   }
 
+  function isScrapingItemSticker(
+    state: typeof scrapeItemSticker
+  ): state is NonNullable<typeof scrapeItemSticker> {
+    return state !== undefined;
+  }
+
   return {
     closeScrapeItemSticker,
     handleScrapeItemSticker,
+    isScrapingItemSticker,
     scrapeItemSticker
   };
 }

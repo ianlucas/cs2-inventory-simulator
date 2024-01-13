@@ -56,10 +56,17 @@ export function useSwapItemsStatTrak() {
     return setSwapItemsStatTrak(undefined);
   }
 
+  function isSwapingItemsStatTrak(
+    state: typeof swapItemsStatTrak
+  ): state is Required<NonNullable<typeof swapItemsStatTrak>> {
+    return state?.toIndex !== undefined;
+  }
+
   return {
     closeSwapItemsStatTrak,
     handleSwapItemsStatTrak,
     handleSwapItemsStatTrakSelect,
+    isSwapingItemsStatTrak,
     swapItemsStatTrak
   };
 }

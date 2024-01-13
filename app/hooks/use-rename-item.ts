@@ -43,10 +43,17 @@ export function useRenameItem() {
     return setRenameItem(undefined);
   }
 
+  function isRenamingItem(
+    state: typeof renameItem
+  ): state is NonNullable<typeof renameItem> {
+    return state !== undefined;
+  }
+
   return {
     closeRenameItem,
     handleRenameItem,
     handleRenameItemSelect,
+    isRenamingItem,
     renameItem
   };
 }

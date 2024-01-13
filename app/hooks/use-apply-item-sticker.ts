@@ -42,10 +42,17 @@ export function useApplyItemSticker() {
     return setApplyItemSticker(undefined);
   }
 
+  function isApplyingItemSticker(
+    state: typeof applyItemSticker
+  ): state is NonNullable<typeof applyItemSticker> {
+    return state !== undefined;
+  }
+
   return {
     applyItemSticker,
     closeApplyItemSticker,
     handleApplyItemSticker,
-    handleApplyItemStickerSelect
+    handleApplyItemStickerSelect,
+    isApplyingItemSticker
   };
 }
