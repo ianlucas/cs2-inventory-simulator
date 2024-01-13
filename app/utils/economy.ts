@@ -17,7 +17,7 @@ import {
 import { ItemFiltersItem } from "./economy-item-filters";
 
 export const baseUrl =
-  "https://cdn.statically.io/gh/ianlucas/cslib/main/dist/images";
+  "https://cdn.statically.io/gh/ianlucas/cslib/main/assets/images";
 
 export const modelFromType = {
   agent: "Agent",
