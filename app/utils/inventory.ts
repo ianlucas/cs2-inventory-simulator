@@ -243,7 +243,7 @@ export function transformEquipped(inventory: CS_InventoryItem[]) {
               STATTRAK_PREFIX,
               equippedT,
               equippedCT,
-              `${item.def}`,
+              `_${item.def}`,
               stattrak
             );
             pushTeam(
