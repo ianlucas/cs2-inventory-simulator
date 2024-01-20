@@ -39,10 +39,11 @@ export function Splash() {
             suppressHydrationWarning
             id="splash-progress"
             style={{
-              height: "4px",
               background: "white",
               borderRadius: "2px",
-              transition: "width 500ms ease-in-out"
+              height: "4px",
+              transition: "width 500ms ease-in-out",
+              width: "0%"
             }}
           />
         </div>
