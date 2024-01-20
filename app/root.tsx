@@ -42,6 +42,7 @@ import styles from "./tailwind.css";
 import { getToggleable } from "./preferences/toggleable.server";
 import { middleware } from "./http";
 import { ItemSelectorProvider } from "./components/item-selector-context";
+import { Splash } from "./components/splash";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
@@ -109,6 +110,7 @@ export default function App() {
           )}
         </head>
         <body className="overflow-y-scroll bg-stone-800">
+          <Splash />
           <div
             className="fixed left-0 top-0 -z-10 h-full w-full overflow-hidden lg:blur-sm"
             id="background"

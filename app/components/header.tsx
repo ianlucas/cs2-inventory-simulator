@@ -20,6 +20,7 @@ import { useIsOnTop } from "~/hooks/use-is-on-top";
 import { useTranslation } from "~/hooks/use-translation";
 import { HeaderLink } from "./header-link";
 import { useRootContext } from "./root-context";
+import { Logo } from "./logo";
 
 export function Header() {
   const { user, inventory } = useRootContext();
@@ -41,10 +42,7 @@ export function Header() {
     >
       <div className="m-auto px-4 py-4 text-white lg:flex lg:w-[1024px] lg:items-center lg:gap-8 lg:px-0">
         <div className="flex items-center justify-between">
-          <div className="select-none">
-            <span className="text-sm text-neutral-300">{"cstrike / "}</span>
-            <span className="font-bold italic">Inventory Simulator</span>
-          </div>
+          <Logo />
           <button
             className="px-2 py-1 lg:hidden"
             onClick={() => toggleIsMenuOpen()}
