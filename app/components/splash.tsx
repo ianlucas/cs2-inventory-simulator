@@ -10,18 +10,18 @@ export function Splash() {
     <div
       id="splash"
       style={{
+        alignItems: "center",
+        backgroundColor: "#121212",
+        color: "white",
+        display: "flex",
+        height: "100%",
+        justifyContent: "center",
+        left: 0,
         position: "fixed",
         top: 0,
-        left: 0,
-        zIndex: 100,
+        transition: "opacity 1s ease-in-out",
         width: "100%",
-        height: "100%",
-        backgroundColor: "#121212",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "white",
-        transition: "opacity 1s ease-in-out"
+        zIndex: 100
       }}
     >
       <div
@@ -83,6 +83,7 @@ function render() {
     setTimeout(() => splash.display = "none", 1000);
   }
 }
+
 setInterval(render, 500);`
         }}
       />
