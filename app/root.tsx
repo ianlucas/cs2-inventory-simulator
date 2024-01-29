@@ -4,19 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type {
-  LinksFunction,
-  LoaderFunctionArgs,
-  MetaFunction
-} from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
-  useLocation
+  ScrollRestoration
 } from "@remix-run/react";
 
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
@@ -26,35 +21,28 @@ import { Background } from "./components/background";
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { Inventory } from "./components/inventory";
+import { ItemSelectorProvider } from "./components/item-selector-context";
 import { RootProvider } from "./components/root-context";
+import { Splash } from "./components/splash";
 import { SyncWarn } from "./components/sync-warn";
 import {
   BUILD_LAST_COMMIT,
   MAX_INVENTORY_ITEMS,
   NAMETAG_DEFAULT_ALLOWED
 } from "./env.server";
+import { middleware } from "./http";
 import { getBackground } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
-import { seoLinksFunction } from "./seo-link";
-import { seoMetaFunction } from "./seo-meta";
+import { getToggleable } from "./preferences/toggleable.server";
+import { seoLinks, seoMeta } from "./seo";
 import { getSession } from "./session.server";
 import styles from "./tailwind.css";
-import { getToggleable } from "./preferences/toggleable.server";
-import { middleware } from "./http";
-import { ItemSelectorProvider } from "./components/item-selector-context";
-import { Splash } from "./components/splash";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
 
 const displayFontUrl =
   "https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap";
-
-const { origin: appUrl, host: appSiteName } = new URL(
-  typeof process !== "undefined"
-    ? process.env.STEAM_CALLBACK_URL!
-    : window.location.origin
-);
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -64,11 +52,7 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: displayFontUrl },
   { rel: "stylesheet", href: styles },
   { rel: "manifest", href: "/app.webmanifest" },
-  ...seoLinksFunction(appUrl)
-];
-
-export const meta: MetaFunction = () => [
-  ...seoMetaFunction(appUrl, appSiteName)
+  ...seoLinks
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -87,7 +71,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function App() {
-  const location = useLocation();
   const providerProps = useTypedLoaderData<typeof loader>();
 
   return (
@@ -98,16 +81,14 @@ export default function App() {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <Meta />
           <Links />
-          {seoMetaFunction(appUrl, appSiteName).map(
-            ({ name, content, property }, index) => (
-              <meta
-                key={index}
-                name={name}
-                content={content}
-                property={property}
-              />
-            )
-          )}
+          {seoMeta.map(({ name, content, property }, index) => (
+            <meta
+              key={index}
+              name={name}
+              content={content}
+              property={property}
+            />
+          ))}
         </head>
         <body className="overflow-y-scroll bg-stone-800">
           <Splash />
