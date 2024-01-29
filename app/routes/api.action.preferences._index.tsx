@@ -17,7 +17,7 @@ import {
 } from "~/models/user-preferences.server";
 import { assignToSession, commitSession, getSession } from "~/session.server";
 import { getAllowedLanguages } from "~/preferences/language.server";
-import { middleware } from "~/http";
+import { middleware } from "~/http.server";
 
 export const ApiActionPreferencesUrl = "/api/action/preferences";
 

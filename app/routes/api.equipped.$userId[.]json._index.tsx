@@ -5,7 +5,7 @@
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
-import { middleware } from "~/http";
+import { middleware } from "~/http.server";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
 import { transformEquipped } from "~/utils/inventory";
 

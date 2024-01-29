@@ -8,7 +8,7 @@ import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { MAX_INVENTORY_ITEMS } from "~/env.server";
-import { middleware } from "~/http";
+import { middleware } from "~/http.server";
 import { updateUserInventory } from "~/models/user.server";
 import { parseInventory } from "~/utils/inventory";
 

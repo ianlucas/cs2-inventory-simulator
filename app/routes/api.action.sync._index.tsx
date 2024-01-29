@@ -6,7 +6,7 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
-import { middleware } from "~/http";
+import { middleware } from "~/http.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { noContent } from "~/response.server";
 import {

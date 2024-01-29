@@ -25,7 +25,7 @@ import { showQuantity } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { ExternalInventoryItemShape } from "~/utils/shapes";
 import { AddAction } from "./api.action.sync._index";
-import { middleware } from "~/http";
+import { middleware } from "~/http.server";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Craft - CS2 Inventory Simulator" }];

@@ -5,7 +5,7 @@
 
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
-import { middleware } from "~/http";
+import { middleware } from "~/http.server";
 import { isApiKeyValid } from "~/models/api-credential.server";
 import {
   existsUser,

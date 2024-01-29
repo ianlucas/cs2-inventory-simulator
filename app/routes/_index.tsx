@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { middleware } from "~/http";
+import { middleware } from "~/http.server";
 
 export const meta: MetaFunction = () => {
   return [{ title: "CS2 Inventory Simulator" }];

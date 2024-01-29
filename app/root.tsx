@@ -30,7 +30,7 @@ import {
   MAX_INVENTORY_ITEMS,
   NAMETAG_DEFAULT_ALLOWED
 } from "./env.server";
-import { middleware } from "./http";
+import { middleware } from "./http.server";
 import { getBackground } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
 import { getToggleable } from "./preferences/toggleable.server";

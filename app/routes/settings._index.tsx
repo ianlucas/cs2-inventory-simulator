@@ -20,7 +20,7 @@ import { useTranslation } from "~/hooks/use-translation";
 import { backgrounds } from "~/preferences/background.server";
 import { languages } from "~/preferences/language.server";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
-import { middleware } from "~/http";
+import { middleware } from "~/http.server";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Settings - CS2 Inventory Simulator" }];

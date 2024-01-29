@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { middleware } from "~/http";
+import { middleware } from "~/http.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);
