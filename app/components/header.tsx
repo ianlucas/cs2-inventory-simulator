@@ -42,7 +42,7 @@ export function Header() {
     >
       <div className="m-auto px-4 py-4 text-white lg:flex lg:w-[1024px] lg:items-center lg:gap-8 lg:px-0">
         <div className="flex items-center justify-between">
-          <Logo />
+          <Logo className="h-8" />
           <button
             className="px-2 py-1 lg:hidden"
             onClick={() => toggleIsMenuOpen()}

@@ -31,8 +31,8 @@ export function Splash() {
           filter: "drop-shadow(0 0 0.5rem rgba(0, 0, 0, 0.5))"
         }}
       >
-        <div style={{ padding: "0 0.5em 0 0.5em" }}>
-          <Logo />
+        <div style={{ padding: "0.25em 0.5em 0 0.5em" }}>
+          <Logo className="h-8" />
         </div>
         <div style={{ padding: "2px" }}>
           <div
