@@ -5,18 +5,18 @@
 
 import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
-import { ITEM_FILTERS, ItemFiltersItem } from "~/utils/economy-item-filters";
+import { ITEM_FILTERS, ItemFilter } from "~/utils/filters";
 
 export function FilterMenuMobile({
   onChange,
   value
 }: {
-  onChange(newValue: ItemFiltersItem): void;
-  value: ItemFiltersItem;
+  onChange(newValue: ItemFilter): void;
+  value: ItemFilter;
 }) {
   const translate = useTranslation();
 
-  function handleClick(filter: ItemFiltersItem) {
+  function handleClick(filter: ItemFilter) {
     return function handleClick() {
       onChange(filter);
     };

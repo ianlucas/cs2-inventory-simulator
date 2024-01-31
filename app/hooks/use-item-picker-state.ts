@@ -5,7 +5,7 @@
 
 import { useMemo, useState } from "react";
 import { useInput } from "./use-input";
-import { ITEM_FILTERS, ItemFiltersItem } from "~/utils/economy-item-filters";
+import { ITEM_FILTERS, ItemFilter } from "~/utils/filters";
 import { CS_Item } from "@ianlucas/cslib";
 import { getBaseItems, getPaidItems } from "~/utils/economy";
 
@@ -23,13 +23,13 @@ export function useItemPickerState({
     setModel(undefined);
   }
 
-  function handleCategoryClick(filter: ItemFiltersItem) {
+  function handleCategoryClick(filter: ItemFilter) {
     setFilter(filter);
     return reset();
   }
 
   function handleItemClick(item: CS_Item) {
-    if (!filter.expand || model !== undefined) {
+    if (!filter.hasModel || model !== undefined) {
       return onPickItem(item);
     }
     setQuery("");
@@ -50,7 +50,7 @@ export function useItemPickerState({
     [filter, model, query]
   );
 
-  const ignoreRarityColor = model === undefined && filter.expand;
+  const ignoreRarityColor = model === undefined && filter.hasModel;
 
   return {
     filter,

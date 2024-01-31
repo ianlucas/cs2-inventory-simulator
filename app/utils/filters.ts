@@ -8,92 +8,92 @@ export const ITEM_FILTERS = [
     label: "Pistol",
     icon: "pistol",
     category: "secondary",
-    expand: true
+    hasModel: true
   },
   {
     label: "SMG",
     icon: "smg",
     category: "smg",
-    expand: true
+    hasModel: true
   },
   {
     label: "Heavy",
     icon: "heavy",
     category: "heavy",
-    expand: true
+    hasModel: true
   },
   {
     label: "Rifle",
     icon: "rifle",
     category: "rifle",
-    expand: true
+    hasModel: true
   },
   {
     label: "Knife",
     icon: "knife",
     type: "melee" as const,
-    expand: true
+    hasModel: true
   },
   {
     label: "Glove",
     icon: "glove",
     type: "glove" as const,
-    expand: true
+    hasModel: true
   },
   {
     label: "Sticker",
     icon: "sticker",
     type: "sticker" as const,
-    expand: false
+    hasModel: false
   },
   {
     label: "Agent",
     icon: "agent",
     type: "agent" as const,
-    expand: false
+    hasModel: false
   },
   {
     label: "Patch",
     icon: "patch",
     type: "patch" as const,
-    expand: false
+    hasModel: false
   },
   {
     label: "Music Kit",
     icon: "musickit",
     type: "musickit" as const,
-    expand: false
+    hasModel: false
   },
   {
     label: "Graffiti",
     icon: "spray",
     type: "graffiti" as const,
-    expand: false
+    hasModel: false
   },
   {
     label: "Pin",
     icon: "pin",
     type: "pin" as const,
-    expand: false
+    hasModel: false
   },
   {
     label: "Case",
     icon: "case",
     type: "case" as const,
-    expand: false
+    hasModel: false
   },
   {
     label: "Key",
     icon: "key",
     type: "key" as const,
-    expand: false
+    hasModel: false
   },
   {
     label: "Tool",
     icon: "tool",
     type: "tool" as const,
-    expand: false
+    hasModel: false
   }
 ];
 
-export type ItemFiltersItem = (typeof ITEM_FILTERS)[number];
+export type ItemFilter = (typeof ITEM_FILTERS)[number];

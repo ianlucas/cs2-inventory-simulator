@@ -3,24 +3,24 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
-import { ITEM_FILTERS, ItemFiltersItem } from "~/utils/economy-item-filters";
-import { TextSlider } from "./text-slider";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight, faSquare } from "@fortawesome/free-solid-svg-icons";
+import { ITEM_FILTERS, ItemFilter } from "~/utils/filters";
 import { FilterMenuIcon } from "./filter-menu-icon";
+import { TextSlider } from "./text-slider";
 
 export function FilterMenuDesktop({
   onChange,
   value
 }: {
-  onChange(newValue: ItemFiltersItem): void;
-  value: ItemFiltersItem;
+  onChange(newValue: ItemFilter): void;
+  value: ItemFilter;
 }) {
   const translate = useTranslation();
 
-  function handleClick(filter: ItemFiltersItem) {
+  function handleClick(filter: ItemFilter) {
     return function handleClick() {
       onChange(filter);
     };
