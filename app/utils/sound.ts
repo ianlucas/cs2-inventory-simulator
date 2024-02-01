@@ -12,8 +12,7 @@ export function playSound(src: string) {
     sounds = range(8).map(() => new Audio());
   }
   sounds[index].pause();
-  sounds[index].currentTime = 0;
-  sounds[index] = new Audio(src);
+  sounds[index] = new Audio(`/sounds/${src}.wav`);
   sounds[index].play();
   index += 1;
   if (!sounds[index]) {

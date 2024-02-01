@@ -7,6 +7,7 @@ import { CS_unlockCase } from "@ianlucas/cslib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
+import { useFreeze } from "~/hooks/use-freeze";
 import { useTimer } from "~/hooks/use-timer";
 import {
   ApiActionUnlockCaseActionData,
@@ -15,10 +16,9 @@ import {
 import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
+import { useRootContext } from "./root-context";
 import { UnlockCaseContainer } from "./unlock-case-container";
 import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
-import { useRootContext } from "./root-context";
-import { useFreeze } from "~/hooks/use-freeze";
 
 export function UnlockCase({
   caseIndex,
@@ -54,7 +54,7 @@ export function UnlockCase({
           );
     wait(() => {
       setHideCaseContents(true);
-      playSound("/open.mp3");
+      playSound("case_unlock");
       wait(() => {
         setItems(
           range(32).map((_, index) =>

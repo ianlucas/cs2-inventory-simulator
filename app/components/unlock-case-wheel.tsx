@@ -32,7 +32,7 @@ export function UnlockCaseWheel({
     target: targetRef,
     hits: hitsRef,
     then() {
-      playSound("/roll.mp3");
+      playSound("case_scroll");
     }
   });
 

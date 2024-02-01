@@ -6,6 +6,7 @@
 import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
+import { playSound } from "~/utils/sound";
 
 export function useUnlockCase() {
   const { inventory, items } = useRootContext();
@@ -31,6 +32,7 @@ export function useUnlockCase() {
       });
     }
     if (selectedItem.type === "case") {
+      playSound("case_drop");
       return setUnlockCase({
         caseIndex: index
       });
@@ -38,6 +40,7 @@ export function useUnlockCase() {
   }
 
   function handleUnlockCaseSelect(index: number) {
+    playSound("case_drop");
     const selectedItem = inventory.getItem(index);
     return setUnlockCase({
       caseIndex: selectedItem.type === "case" ? index : itemSelector!.index,

@@ -53,7 +53,7 @@ export function ApplyItemSticker({
       setInventory(
         inventory.applyItemSticker(itemIndex, stickerItemIndex, stickerIndex)
       );
-      playSound("/sounds/sticker_apply_confirm.wav");
+      playSound("sticker_apply_confirm");
       onClose();
     }
   }
@@ -92,7 +92,7 @@ export function ApplyItemSticker({
                       className="group flex h-[126px] w-[168px] items-center justify-center"
                       onClick={() => {
                         setStickerIndex(index);
-                        playSound("/sounds/sticker_apply.wav");
+                        playSound("sticker_apply");
                       }}
                     >
                       <div className="rounded-md border-2 border-white/20 p-4 px-6 transition group-hover:border-white/80">

@@ -27,7 +27,7 @@ export function UnlockCaseContainerUnlocked({
   useEffect(() => {
     const idx = setTimeout(() => {
       setRevealScale(1);
-      playSound(`/case_awarded_${rarity}.mp3`);
+      playSound(`case_awarded_${rarity}`);
     }, 200);
     return () => clearTimeout(idx);
   }, []);
