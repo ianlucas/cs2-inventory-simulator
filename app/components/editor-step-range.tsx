@@ -14,11 +14,11 @@ export function EditorStepRange({
   onChange
 }: {
   className?: string;
-  min: number;
   max: number;
+  min: number;
+  onChange: (value: number) => void;
   step: number;
   value: number;
-  onChange(value: number): void;
 }) {
   return (
     <input

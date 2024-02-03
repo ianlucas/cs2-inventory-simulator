@@ -15,8 +15,8 @@ export function Select<T extends { value: string }>({
   options,
   value
 }: {
-  children?(option: T): ReactNode;
-  onChange(value: string): void;
+  children?: (option: T) => ReactNode;
+  onChange: (value: string) => void;
   options: T[];
   value: string;
 }) {

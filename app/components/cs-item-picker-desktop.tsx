@@ -14,7 +14,7 @@ import { FilterMenuDesktop } from "./filter-menu-desktop";
 export function CSItemPickerDesktop({
   onPickItem
 }: {
-  onPickItem(item: CS_Item): void;
+  onPickItem: (item: CS_Item) => void;
 }) {
   const {
     filter,

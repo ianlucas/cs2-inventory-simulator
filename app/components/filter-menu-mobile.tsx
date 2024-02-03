@@ -11,7 +11,7 @@ export function FilterMenuMobile({
   onChange,
   value
 }: {
-  onChange(newValue: ItemFilter): void;
+  onChange: (newValue: ItemFilter) => void;
   value: ItemFilter;
 }) {
   const translate = useTranslation();

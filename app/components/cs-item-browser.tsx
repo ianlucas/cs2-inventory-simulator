@@ -16,7 +16,7 @@ export function CSItemBrowser({
   ignoreRarityColor?: boolean;
   items: CS_Item[];
   maxItemsIntoView?: number;
-  onClick?(item: CS_Item): void;
+  onClick?: (item: CS_Item) => void;
 }) {
   return (
     <GridList

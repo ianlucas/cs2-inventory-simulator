@@ -23,7 +23,7 @@ export function ApplyItemSticker({
   itemIndex,
   stickerItemIndex
 }: {
-  onClose(): void;
+  onClose: () => void;
   itemIndex: number;
   stickerItemIndex: number;
 }) {

@@ -51,15 +51,15 @@ export function InventoryItem({
 }: ReturnType<typeof transform> & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
-  onApplySticker?(index: number, item: CS_Item): void;
-  onClick?(index: number, item: CS_Item): void;
-  onEquip?(index: number, team?: CS_Team): void;
-  onRemove?(index: number): void;
-  onRename?(index: number, item: CS_Item): void;
-  onScrapeSticker?(index: number, item: CS_Item): void;
-  onSwapItemsStatTrak?(index: number, item: CS_Item): void;
-  onUnequip?(index: number, team?: CS_Team): void;
-  onUnlockContainer?(index: number, item: CS_Item): void;
+  onApplySticker?: (index: number, item: CS_Item) => void;
+  onClick?: (index: number, item: CS_Item) => void;
+  onEquip?: (index: number, team?: CS_Team) => void;
+  onRemove?: (index: number) => void;
+  onRename?: (index: number, item: CS_Item) => void;
+  onScrapeSticker?: (index: number, item: CS_Item) => void;
+  onSwapItemsStatTrak?: (index: number, item: CS_Item) => void;
+  onUnequip?: (index: number, team?: CS_Team) => void;
+  onUnlockContainer?: (index: number, item: CS_Item) => void;
   ownApplicableStickers?: boolean;
 }) {
   const stubInventoryItem = index < 0;

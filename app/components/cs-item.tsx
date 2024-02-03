@@ -23,7 +23,7 @@ export function CSItem({
   item: CS_Item;
   equipped?: (string | false | undefined)[];
   nametag?: string;
-  onClick?(): void;
+  onClick?: () => void;
   stattrak?: number;
   stickers?: (number | null)[];
   wear?: number;

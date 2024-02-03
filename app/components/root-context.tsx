@@ -44,7 +44,7 @@ const RootContext = createContext<{
   maxInventoryItems: number;
   nametagDefaultAllowed: number[];
   requireAuth: boolean;
-  setInventory(value: CS_Inventory): void;
+  setInventory: (value: CS_Inventory) => void;
   statsForNerds: boolean;
   translation: Record<string, string | undefined>;
   user: Awaited<ReturnType<typeof findRequestUser>>;

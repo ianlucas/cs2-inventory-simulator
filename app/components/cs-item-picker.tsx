@@ -11,7 +11,7 @@ import { CSItemPickerMobile } from "./cs-item-picker-mobile";
 export function CSItemPicker({
   onPickItem
 }: {
-  onPickItem(item: CS_Item): void;
+  onPickItem: (item: CS_Item) => void;
 }) {
   return useIsDesktop() ? (
     <CSItemPickerDesktop onPickItem={onPickItem} />

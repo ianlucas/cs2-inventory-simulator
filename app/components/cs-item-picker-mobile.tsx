@@ -14,7 +14,7 @@ import { useTranslation } from "~/hooks/use-translation";
 export function CSItemPickerMobile({
   onPickItem
 }: {
-  onPickItem(item: CS_Item): void;
+  onPickItem: (item: CS_Item) => void;
 }) {
   const {
     filter,

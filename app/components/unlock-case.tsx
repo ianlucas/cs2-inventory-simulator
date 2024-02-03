@@ -27,7 +27,7 @@ export function UnlockCase({
 }: {
   caseIndex: number;
   keyIndex?: number;
-  onClose(): void;
+  onClose: () => void;
 }) {
   const { user, inventory, setInventory } = useRootContext();
   const [items, setItems] = useState<ReturnType<typeof CS_unlockCase>[]>([]);

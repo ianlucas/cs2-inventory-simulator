@@ -31,7 +31,7 @@ export function RenameItem({
   targetItem,
   toolIndex
 }: {
-  onClose(): void;
+  onClose: () => void;
   targetIndex: number;
   targetItem: CS_Item;
   toolIndex: number;
@@ -92,7 +92,7 @@ export function RenameItem({
                   maxLength={20}
                   onChange={setNametag}
                   placeholder={translate("EditorNametagPlaceholder")}
-                  validate={CS_safeValidateNametag}
+                  validate={(nametag) => CS_safeValidateNametag(nametag ?? "")}
                   value={nametag}
                 />
               </div>

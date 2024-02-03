@@ -27,7 +27,7 @@ export function ScrapeItemSticker({
   onClose,
   index
 }: {
-  onClose(): void;
+  onClose: () => void;
   index: number;
 }) {
   const translate = useTranslation();

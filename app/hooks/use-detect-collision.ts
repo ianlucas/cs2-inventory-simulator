@@ -14,7 +14,7 @@ export function useDetectCollision({
   disabled?: boolean;
   target: RefObject<Element>;
   hits: RefObject<Element>;
-  then(): void;
+  then: () => void;
 }) {
   useEffect(() => {
     if (target.current && hits.current && !disabled) {

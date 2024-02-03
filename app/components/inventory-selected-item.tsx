@@ -14,7 +14,7 @@ export function InventorySelectedItem({
   onDismiss
 }: {
   index: number;
-  onDismiss(): void;
+  onDismiss: () => void;
 }) {
   const { inventory } = useRootContext();
   const translate = useTranslation();

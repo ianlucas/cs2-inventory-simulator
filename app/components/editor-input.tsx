@@ -16,7 +16,7 @@ export function EditorInput({
   inflexible?: boolean;
   pattern?: RegExp;
   unstyled?: boolean;
-  validate?(value?: string): boolean;
+  validate?: (value?: string) => boolean;
   value?: string;
 }) {
   const invalid =

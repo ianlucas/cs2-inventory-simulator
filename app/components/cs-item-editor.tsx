@@ -57,8 +57,8 @@ export function CSItemEditor({
   onSubmit
 }: {
   item: CS_Item;
-  onReset(): void;
-  onSubmit(props: CSItemEditorAttributes): void;
+  onReset: () => void;
+  onSubmit: (props: CSItemEditorAttributes) => void;
 }) {
   const { maxInventoryItems, inventory } = useRootContext();
   const [stattrak, setStattrak] = useCheckbox(false);
@@ -140,7 +140,7 @@ export function CSItemEditor({
               maxLength={20}
               onChange={setNametag}
               placeholder={translate("EditorNametagPlaceholder")}
-              validate={CS_safeValidateNametag}
+              validate={(nametag) => CS_safeValidateNametag(nametag ?? "")}
               value={nametag}
             />
           </div>

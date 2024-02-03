@@ -11,7 +11,7 @@ export function TeamToggle({
   onChange,
   value
 }: {
-  onChange(newValue: CS_Team): void;
+  onChange: (newValue: CS_Team) => void;
   value: CS_Team;
 }) {
   function handleClick() {

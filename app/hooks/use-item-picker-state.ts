@@ -12,7 +12,7 @@ import { getBaseItems, getPaidItems } from "~/utils/economy";
 export function useItemPickerState({
   onPickItem
 }: {
-  onPickItem(item: CS_Item): void;
+  onPickItem: (item: CS_Item) => void;
 }) {
   const [filter, setFilter] = useState(ITEM_FILTERS[0]);
   const [model, setModel] = useState<string | undefined>();

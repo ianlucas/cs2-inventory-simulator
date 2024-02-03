@@ -23,11 +23,11 @@ export function EditorStepRangeWithInput({
   max: number;
   maxLength: number;
   min: number;
-  onChange(value: number): void;
+  onChange: (value: number) => void;
   step: number;
   stepRangeStyles: string;
-  transform?(value: number): string;
-  validate(value: number): boolean;
+  transform?: (value: number) => string;
+  validate: (value: number) => boolean;
   value: number;
 }) {
   transform = transform !== undefined ? transform : String;

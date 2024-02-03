@@ -12,7 +12,7 @@ export function InventoryItemContextMenu({
   menu: {
     label: string;
     condition?: boolean;
-    onClick?(): void;
+    onClick?: () => void;
   }[][];
 }) {
   return (

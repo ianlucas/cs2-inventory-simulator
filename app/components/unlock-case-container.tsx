@@ -30,8 +30,8 @@ export function UnlockCaseContainer({
   isDisplaying: boolean;
   items: ReturnType<typeof CS_unlockCase>[];
   keyItem?: CS_Item;
-  onClose(): void;
-  onUnlock(): void;
+  onClose: () => void;
+  onUnlock: () => void;
 }) {
   const translate = useTranslation();
 

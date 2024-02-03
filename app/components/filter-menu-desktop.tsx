@@ -15,7 +15,7 @@ export function FilterMenuDesktop({
   onChange,
   value
 }: {
-  onChange(newValue: ItemFilter): void;
+  onChange: (newValue: ItemFilter) => void;
   value: ItemFilter;
 }) {
   const translate = useTranslation();

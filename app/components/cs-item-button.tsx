@@ -19,7 +19,7 @@ export function CSItemButton({
   ignoreRarityColor?: boolean;
   item: CS_Item;
   model?: string;
-  onClick?(item: CS_Item): void;
+  onClick?: (item: CS_Item) => void;
 }) {
   function handleClick() {
     if (onClick) {

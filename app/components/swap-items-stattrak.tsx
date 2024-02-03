@@ -23,7 +23,7 @@ export function SwapItemsStatTrak({
   toolIndex
 }: {
   fromIndex: number;
-  onClose(): void;
+  onClose: () => void;
   toIndex: number;
   toolIndex: number;
 }) {

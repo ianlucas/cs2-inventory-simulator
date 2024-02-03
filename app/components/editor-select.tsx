@@ -14,7 +14,7 @@ export function EditorSelect({
   value,
   ...rest
 }: Omit<ComponentProps<"select">, "onChange"> & {
-  onChange(value: string): void;
+  onChange: (value: string) => void;
   options: string[];
   placeholder?: string;
   value: string;

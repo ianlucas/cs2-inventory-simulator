@@ -18,7 +18,7 @@ export function UnlockCaseContainerUnlocked({
   unlockedItem: { attributes, id, rarity }
 }: {
   caseItem: CS_Item;
-  onClose(): void;
+  onClose: () => void;
   unlockedItem: ReturnType<typeof CS_unlockCase>;
 }) {
   const translate = useTranslation();
