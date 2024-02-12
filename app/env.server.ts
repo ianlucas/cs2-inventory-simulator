@@ -23,6 +23,15 @@ export const MAX_INVENTORY_ITEMS = parseInt(
   10
 );
 
+invariant(
+  process.env.MAX_INVENTORY_STORAGE_UNIT_ITEMS,
+  "MAX_INVENTORY_STORAGE_UNIT_ITEMS must be set"
+);
+export const MAX_INVENTORY_STORAGE_UNIT_ITEMS = parseInt(
+  process.env.MAX_INVENTORY_STORAGE_UNIT_ITEMS,
+  10
+);
+
 export const NAMETAG_DEFAULT_ALLOWED =
   process.env.NAMETAG_DEFAULT_ALLOWED === undefined ||
   process.env.NAMETAG_DEFAULT_ALLOWED.trim() === ""

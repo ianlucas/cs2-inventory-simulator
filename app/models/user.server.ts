@@ -6,7 +6,10 @@
 import { CS_Inventory, CS_InventoryItem } from "@ianlucas/cslib";
 import SteamAPI from "steamapi";
 import { prisma } from "~/db.server";
-import { MAX_INVENTORY_ITEMS } from "~/env.server";
+import {
+  MAX_INVENTORY_ITEMS,
+  MAX_INVENTORY_STORAGE_UNIT_ITEMS
+} from "~/env.server";
 import { parseInventory } from "~/utils/inventory";
 
 export async function upsertUser(user: SteamAPI.PlayerSummary) {
@@ -68,10 +71,11 @@ export async function manipulateUserInventory(
   rawInventory: string | null,
   manipulate: (inventory: CS_Inventory) => void
 ) {
-  const inventory = new CS_Inventory(
-    parseInventory(rawInventory),
-    MAX_INVENTORY_ITEMS
-  );
+  const inventory = new CS_Inventory({
+    items: parseInventory(rawInventory),
+    limit: MAX_INVENTORY_ITEMS,
+    storageUnitLimit: MAX_INVENTORY_STORAGE_UNIT_ITEMS
+  });
   manipulate(inventory);
   return await prisma.user.update({
     data: {

@@ -9,7 +9,7 @@ import {
   CS_Item,
   CS_ITEMS,
   CS_MAX_SEED,
-  CS_resolveCaseSpecialItemImage,
+  CS_resolveCaseSpecialsImage,
   CS_resolveItemImage,
   CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
@@ -46,7 +46,11 @@ export function translateItems(
   CS_Economy.initialize(
     CS_ITEMS.map((item) => ({
       ...item,
-      name: itemTranslation[item.id] || item.name
+      name: itemTranslation[item.id] || item.name,
+      category:
+        item.category !== undefined
+          ? itemTranslation[item.category] || item.category
+          : item.category
     }))
   );
 }
@@ -98,7 +102,7 @@ export function resolveItemImage(item: number | CS_Item, wear?: number) {
 }
 
 export function resolveCaseSpecialItemImage(item: number | CS_Item) {
-  return CS_resolveCaseSpecialItemImage(baseUrl, item);
+  return CS_resolveCaseSpecialsImage(baseUrl, item);
 }
 
 export const seedStringMaxLen = String(CS_MAX_SEED).length;

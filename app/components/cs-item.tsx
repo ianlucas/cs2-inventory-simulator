@@ -5,7 +5,7 @@
 
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_Item } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item, CS_NO_STICKER } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
 import { getCSItemName, resolveItemImage } from "~/utils/economy";
@@ -25,7 +25,7 @@ export function CSItem({
   nametag?: string;
   onClick?: () => void;
   stattrak?: number;
-  stickers?: (number | null)[];
+  stickers?: number[];
   wear?: number;
 }) {
   const translate = useTranslation();
@@ -46,7 +46,7 @@ export function CSItem({
           {stickers !== undefined &&
             stickers.map(
               (sticker, index) =>
-                sticker !== null && (
+                sticker !== CS_NO_STICKER && (
                   <CSItemImage
                     className="h-5"
                     item={CS_Economy.getById(sticker)}

@@ -15,6 +15,8 @@ import {
   CS_Item,
   CS_MAX_STICKER_WEAR,
   CS_MIN_STICKER_WEAR,
+  CS_NO_STICKER,
+  CS_NO_STICKER_WEAR,
   CS_STICKER_WEAR_FACTOR,
   CS_getStickerCategories,
   CS_getStickers
@@ -35,9 +37,9 @@ export function StickerPicker({
   onChange,
   value
 }: {
-  onChange: (value: { ids: (number | null)[]; wears: number[] }) => void;
+  onChange: (value: { ids: number[]; wears: number[] }) => void;
   value: {
-    ids: (number | null)[];
+    ids: number[];
     wears: number[];
   };
 }) {
@@ -45,7 +47,7 @@ export function StickerPicker({
 
   const [category, setCategory] = useState("");
   const [search, setSearch] = useInput("");
-  const [activeIndex, setActiveIndex] = useState(null as number | null);
+  const [activeIndex, setActiveIndex] = useState<number>();
   const stickers = useMemo(() => CS_getStickers(), []);
   const categories = useMemo(() => CS_getStickerCategories(), []);
   const [wear, setWear] = useState(0);
@@ -65,23 +67,23 @@ export function StickerPicker({
         index === activeIndex ? wear : other
       )
     });
-    setActiveIndex(null);
+    setActiveIndex(undefined);
   }
 
   function handleRemoveSticker() {
     onChange({
       ids: value.ids.map((other, index) =>
-        index === activeIndex ? null : other
+        index === activeIndex ? CS_NO_STICKER : other
       ),
       wears: value.wears.map((other, index) =>
-        index === activeIndex ? 0 : other
+        index === activeIndex ? CS_NO_STICKER_WEAR : other
       )
     });
-    setActiveIndex(null);
+    setActiveIndex(undefined);
   }
 
   function handleCloseModal() {
-    setActiveIndex(null);
+    setActiveIndex(undefined);
   }
 
   const filtered = useMemo(() => {
@@ -110,14 +112,17 @@ export function StickerPicker({
     <>
       <div className="flex justify-between">
         {value.ids.map((sticker, index) => {
-          const item = sticker !== null ? CS_Economy.getById(sticker) : null;
+          const item =
+            sticker !== CS_NO_STICKER
+              ? CS_Economy.getById(sticker)
+              : CS_NO_STICKER;
           return (
             <button
               key={index}
               className="relative overflow-hidden rounded-lg bg-black/50"
               onClick={handleClickSlot(index)}
             >
-              {item !== null ? (
+              {item !== CS_NO_STICKER ? (
                 <CSItemImage className="h-[64px] w-[85.33px]" item={item} />
               ) : (
                 <div className="flex h-[64px] w-[85.33px] items-center justify-center text-neutral-700">
@@ -129,7 +134,7 @@ export function StickerPicker({
           );
         })}
       </div>
-      {activeIndex !== null && (
+      {activeIndex !== undefined && (
         <Modal className="w-[540px] pb-1" blur>
           <div className="flex select-none justify-between px-4 py-2 font-bold">
             <label className="text-sm text-neutral-400">

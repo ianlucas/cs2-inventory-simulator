@@ -19,8 +19,8 @@ type GetUserInventoryResponse = Array<{
   nametag?: string;
   seed?: number;
   stattrak?: number;
-  stickers?: (number | null)[];
-  stickerswear?: (number | null)[];
+  stickers?: number[];
+  stickerswear?: number[];
   wear?: number;
 }>;
 ```

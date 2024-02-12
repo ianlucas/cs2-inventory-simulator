@@ -42,6 +42,7 @@ const RootContext = createContext<{
   itemTranslation: Record<string, string | undefined>;
   language: string;
   maxInventoryItems: number;
+  maxInventoryStorageUnitItems: number;
   nametagDefaultAllowed: number[];
   requireAuth: boolean;
   setInventory: (value: CS_Inventory) => void;
@@ -62,6 +63,7 @@ export function RootProvider({
   itemTranslation,
   language,
   maxInventoryItems,
+  maxInventoryStorageUnitItems,
   nametagDefaultAllowed,
   statsForNerds,
   translation,
@@ -73,12 +75,13 @@ export function RootProvider({
   children: ReactNode;
 }) {
   const [inventory, setInventory] = useInventory(
-    new CS_Inventory(
-      user?.inventory
+    new CS_Inventory({
+      items: user?.inventory
         ? parseInventory(user?.inventory)
         : retrieveInventoryItems(),
-      maxInventoryItems
-    )
+      limit: maxInventoryItems,
+      storageUnitLimit: maxInventoryStorageUnitItems
+    })
   );
 
   useEffect(() => {
@@ -93,15 +96,16 @@ export function RootProvider({
         items: items as ExternalInventoryShape
       });
       setInventory(
-        new CS_Inventory(
-          items.map((item) => ({
+        new CS_Inventory({
+          items: items.map((item) => ({
             ...item,
             equipped: undefined,
             equippedCT: undefined,
             equippedT: undefined
           })),
-          maxInventoryItems
-        )
+          limit: maxInventoryItems,
+          storageUnitLimit: maxInventoryStorageUnitItems
+        })
       );
     }
     if (user !== undefined) {
@@ -140,6 +144,7 @@ export function RootProvider({
         itemTranslation,
         language,
         maxInventoryItems,
+        maxInventoryStorageUnitItems,
         nametagDefaultAllowed,
         requireAuth: retrieveUserId() !== undefined,
         setInventory,

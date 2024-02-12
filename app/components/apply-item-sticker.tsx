@@ -5,7 +5,7 @@
 
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy } from "@ianlucas/cslib";
+import { CS_Economy, CS_NO_STICKER } from "@ianlucas/cslib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -35,12 +35,7 @@ export function ApplyItemSticker({
   const [stickerItem] = useState(inventory.getItem(stickerItemIndex));
   const [item] = useState(inventory.getItem(itemIndex));
 
-  const stickers = inventory.get(itemIndex).stickers ?? [
-    null,
-    null,
-    null,
-    null
-  ];
+  const stickers = inventory.get(itemIndex).stickers ?? [0, 0, 0, 0];
 
   function handleApplySticker() {
     if (stickerIndex !== undefined) {
@@ -76,7 +71,7 @@ export function ApplyItemSticker({
               />
               <div className="flex">
                 {stickers.map((id, index) =>
-                  id !== null || index === stickerIndex ? (
+                  id !== CS_NO_STICKER || index === stickerIndex ? (
                     <CSItemImage
                       key={index}
                       className="h-[126px] w-[168px]"

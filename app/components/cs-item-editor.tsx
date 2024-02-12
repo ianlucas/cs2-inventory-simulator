@@ -11,6 +11,8 @@ import {
   CS_MAX_WEAR,
   CS_MIN_SEED,
   CS_MIN_WEAR,
+  CS_NO_STICKER,
+  CS_NO_STICKER_WEAR,
   CS_WEAR_FACTOR,
   CS_hasNametag,
   CS_hasSeed,
@@ -46,8 +48,8 @@ export interface CSItemEditorAttributes {
   quantity: number;
   seed?: number;
   stattrak?: boolean;
-  stickers?: (number | null)[];
-  stickerswear?: (number | null)[];
+  stickers?: number[];
+  stickerswear?: number[];
   wear?: number;
 }
 
@@ -66,7 +68,7 @@ export function CSItemEditor({
   const [seed, setSeed] = useState(1);
   const [nametag, setNametag] = useInput("");
   const [stickersAttributes, setStickersAttributes] = useState({
-    ids: [null, null, null, null] as (number | null)[],
+    ids: [0, 0, 0, 0],
     wears: [0, 0, 0, 0]
   });
   const [quantity, setQuantity] = useState(1);
@@ -86,14 +88,16 @@ export function CSItemEditor({
   function handleSubmit() {
     const stickers =
       hasStickers &&
-      stickersAttributes.ids.filter((sticker) => sticker !== null).length > 0
+      stickersAttributes.ids.filter((sticker) => sticker !== CS_NO_STICKER)
+        .length > 0
         ? stickersAttributes.ids
         : undefined;
 
     const stickerswear =
       hasStickers &&
-      stickersAttributes.wears.filter((wear) => wear !== 0).length > 0
-        ? stickersAttributes.wears.map((wear) => (wear === 0 ? null : wear))
+      stickersAttributes.wears.filter((wear) => wear !== CS_NO_STICKER_WEAR)
+        .length > 0
+        ? stickersAttributes.wears
         : undefined;
 
     onSubmit({
@@ -112,7 +116,7 @@ export function CSItemEditor({
       <CSItemImage
         className="m-auto h-[192px] w-[256px]"
         item={item}
-        wear={wear}
+        wear={CS_hasWear(item) ? wear : undefined}
       />
       <div
         className={clsx("mb-4 text-center", item.type === "agent" && "mt-4")}

@@ -7,6 +7,7 @@ import {
   CS_Economy,
   CS_Item,
   CS_MAX_STICKER_WEAR,
+  CS_NO_STICKER,
   CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
 } from "@ianlucas/cslib";
@@ -37,10 +38,8 @@ export function ScrapeItemSticker({
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
 
   const inventoryItem = inventory.get(index);
-  const stickers = inventoryItem.stickers ?? [null, null, null, null];
-  const stickersWear = (
-    inventoryItem.stickerswear ?? [null, null, null, null]
-  ).map((wear) => (wear === null ? 0 : wear));
+  const stickers = inventoryItem.stickers ?? [0, 0, 0, 0];
+  const stickersWear = inventoryItem.stickerswear ?? [0, 0, 0, 0];
 
   function doScrapeSticker(stickerIndex: number) {
     const scratch = Math.ceil(
@@ -91,7 +90,7 @@ export function ScrapeItemSticker({
                 />
                 <div className="flex justify-center">
                   {stickers.map((id, index) =>
-                    id !== null ? (
+                    id !== CS_NO_STICKER ? (
                       <button key={index} className="group">
                         <CSItemImage
                           className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"

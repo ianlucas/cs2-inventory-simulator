@@ -28,6 +28,7 @@ import { SyncWarn } from "./components/sync-warn";
 import {
   BUILD_LAST_COMMIT,
   MAX_INVENTORY_ITEMS,
+  MAX_INVENTORY_STORAGE_UNIT_ITEMS,
   NAMETAG_DEFAULT_ALLOWED
 } from "./env.server";
 import { middleware } from "./http.server";
@@ -62,6 +63,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return typedjson({
     buildLastCommit: BUILD_LAST_COMMIT,
     maxInventoryItems: MAX_INVENTORY_ITEMS,
+    maxInventoryStorageUnitItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS,
     nametagDefaultAllowed: NAMETAG_DEFAULT_ALLOWED,
     user: await findRequestUser(request),
     ...(await getBackground(session)),

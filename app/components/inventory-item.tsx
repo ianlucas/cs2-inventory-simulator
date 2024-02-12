@@ -11,6 +11,7 @@ import {
   CS_INVENTORY_EQUIPPABLE_ITEMS,
   CS_Item,
   CS_NAMETAG_TOOL_DEF,
+  CS_NO_STICKER,
   CS_SWAP_STATTRAK_TOOL_DEF,
   CS_Team,
   CS_TEAM_CT,
@@ -103,11 +104,13 @@ export function InventoryItem({
   const canApplySticker =
     ownApplicableStickers &&
     ((CS_hasStickers(item) &&
-      (inventoryItem.stickers ?? []).filter((id) => id !== null).length < 4) ||
+      (inventoryItem.stickers ?? []).filter((id) => id !== CS_NO_STICKER)
+        .length < 4) ||
       item.type === "sticker");
   const canScrapeSticker =
     CS_hasStickers(item) &&
-    (inventoryItem.stickers ?? []).filter((id) => id !== null).length > 0;
+    (inventoryItem.stickers ?? []).filter((id) => id !== CS_NO_STICKER).length >
+      0;
   const canUnlockContainer = ["case", "key"].includes(item.type);
   const hasContents = item.contents !== undefined;
   const hasTeams = item.teams !== undefined;

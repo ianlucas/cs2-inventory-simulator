@@ -32,7 +32,7 @@ export function UnlockCaseContainerContents({
           ...CS_listCaseContents(caseItem, true).map((item, index) => (
             <CSItem key={index} item={item} />
           )),
-          caseItem.specialcontents !== undefined && (
+          caseItem.specials !== undefined && (
             <CaseSpecialItem key={-1} caseItem={caseItem} />
           )
         ]}

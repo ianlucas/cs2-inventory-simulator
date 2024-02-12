@@ -6,6 +6,8 @@
 import {
   CS_Economy,
   CS_InventoryItem,
+  CS_NO_STICKER,
+  CS_NO_STICKER_WEAR,
   CS_TEAM_CT,
   CS_TEAM_T
 } from "@ianlucas/cslib";
@@ -175,7 +177,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             );
           }
           stickers?.forEach((sticker, slot) => {
-            if (sticker !== null) {
+            if (sticker !== CS_NO_STICKER) {
               pushTeam(
                 keyvalues,
                 STICKER_PREFIX,
@@ -192,7 +194,7 @@ export function generate(inventory: CS_InventoryItem[]) {
                 `_${item.def}_${slot}`,
                 sticker
               );
-              if (stickerswear?.[slot] !== null) {
+              if (stickerswear?.[slot] !== CS_NO_STICKER_WEAR) {
                 pushTeam(
                   keyvalues,
                   STICKERWEAR_PREFIX,

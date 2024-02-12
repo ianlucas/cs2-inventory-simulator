@@ -5,20 +5,29 @@
 
 import {
   CS_Economy,
+  CS_NO_STICKER_WEAR,
   CS_safeValidateNametag,
   CS_safeValidateSeed,
   CS_safeValidateStatTrak,
   CS_safeValidateWear
 } from "@ianlucas/cslib";
 import { z } from "zod";
+import { len } from "./number";
 
 const inventoryItemProps = {
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
-  id: z.number().refine((id) => !CS_Economy.getById(id).free),
+  id: z
+    .number()
+    .int()
+    .nonnegative()
+    .finite()
+    .safe()
+    .refine((id) => !CS_Economy.getById(id).free),
   nametag: z
     .string()
+    .max(20)
     .optional()
     .transform((nametag) => (nametag !== undefined ? nametag.trim() : nametag))
     .refine(
@@ -26,22 +35,33 @@ const inventoryItemProps = {
     ),
   seed: z
     .number()
+    .int()
+    .positive()
+    .finite()
+    .safe()
     .optional()
     .refine((seed) => seed === undefined || CS_safeValidateSeed(seed)),
   stattrak: z.literal(0).optional(),
-  stickers: z.array(z.number().or(z.null())).optional(),
+  stickers: z
+    .array(z.number().int().nonnegative().finite().safe())
+    .optional()
+    .transform((stickers) =>
+      len(stickers?.filter((sticker) => sticker !== CS_NO_STICKER_WEAR)) > 0
+        ? stickers
+        : undefined
+    ),
   stickerswear: z
-    .array(z.number().or(z.null()))
+    .array(z.number().nonnegative().finite())
     .optional()
     .transform((stickerswear) =>
-      stickerswear === undefined
-        ? undefined
-        : stickerswear.filter((wear) => wear !== null && wear !== 0).length > 0
-          ? stickerswear
-          : undefined
+      len(stickerswear?.filter((wear) => wear !== CS_NO_STICKER_WEAR)) > 0
+        ? stickerswear
+        : undefined
     ),
   wear: z
     .number()
+    .nonnegative()
+    .finite()
     .optional()
     .refine((wear) => wear === undefined || CS_safeValidateWear(wear))
 };

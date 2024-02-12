@@ -19,7 +19,7 @@ export function InventoryItemContents({ item }: { item: CS_Item }) {
           {item.name}
         </div>
       ))}
-      {item.specialcontents !== undefined && (
+      {item.specials !== undefined && (
         <div className="text-yellow-300">
           {translate("InventoryItemRareItem")}
         </div>

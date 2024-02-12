@@ -11,3 +11,7 @@ export function range(n: number, count: number = 0) {
   }
   return items;
 }
+
+export function len<T>(arr: T[] | undefined) {
+  return arr?.length ?? 0;
+}
