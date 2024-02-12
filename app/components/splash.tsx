@@ -9,6 +9,7 @@ export function Splash() {
   return (
     <div
       id="splash"
+      suppressHydrationWarning
       style={{
         alignItems: "center",
         backgroundColor: "#121212",
@@ -25,13 +26,17 @@ export function Splash() {
       }}
     >
       <div
+        suppressHydrationWarning
         style={{
           border: "1px solid #fff",
           borderRadius: "4px",
           filter: "drop-shadow(0 0 0.5rem rgba(0, 0, 0, 0.5))"
         }}
       >
-        <div style={{ padding: "0.25em 0.5em 0 0.5em" }}>
+        <div
+          suppressHydrationWarning
+          style={{ padding: "0.25em 0.5em 0 0.5em" }}
+        >
           <Logo className="h-8" />
         </div>
         <div style={{ padding: "2px" }}>
