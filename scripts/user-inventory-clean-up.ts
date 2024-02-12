@@ -9,9 +9,9 @@ import {
   CS_NO_STICKER,
   CS_NO_STICKER_WEAR
 } from "@ianlucas/cslib";
-import { basename } from "path";
 import { prisma } from "~/db.server";
 import { parseInventory } from "~/utils/inventory";
+import { len } from "~/utils/number";
 
 CS_Economy.initialize(CS_ITEMS);
 
@@ -54,7 +54,11 @@ async function main() {
           return inventoryItem;
         })
         .map((inventoryItem) => {
-          if (inventoryItem.stickers || inventoryItem.stickerswear) {
+          const isnull = <T>(value: T) => value === null;
+          if (
+            len(inventoryItem.stickers?.filter(isnull)) > 0 ||
+            len(inventoryItem.stickerswear?.filter(isnull)) > 0
+          ) {
             stickerNullToZero = true;
             return {
               ...inventoryItem,
@@ -84,6 +88,4 @@ async function main() {
   console.log(`[completed] user-inventory-clean-up (updated ${count} users).`);
 }
 
-if (basename(process.argv[1]) === "user-inventory-clean-up.ts") {
-  main();
-}
+main();
