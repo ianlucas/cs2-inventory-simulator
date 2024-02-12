@@ -16,13 +16,11 @@ import { len } from "~/utils/number";
 CS_Economy.initialize(CS_ITEMS);
 
 async function main() {
-  console.log("[running] user-inventory-clean-up...");
   const users = await prisma.user.findMany({
     select: {
       id: true
     }
   });
-  let count = 0;
   for (const { id } of users) {
     const { inventory } = await prisma.user.findUniqueOrThrow({
       select: {
@@ -77,7 +75,6 @@ async function main() {
         removedC4Stickers ||
         stickerNullToZero
       ) {
-        count += 1;
         await prisma.user.update({
           data: { inventory: JSON.stringify(filtered) },
           where: { id }
@@ -85,7 +82,6 @@ async function main() {
       }
     }
   }
-  console.log(`[completed] user-inventory-clean-up (updated ${count} users).`);
 }
 
 main();
