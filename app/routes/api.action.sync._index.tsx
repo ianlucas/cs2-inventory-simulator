@@ -20,9 +20,12 @@ export const AddAction = "add";
 export const AddFromCacheAction = "add-from-cache";
 export const AddWithNametagAction = "add-with-nametag";
 export const ApplyItemStickerAction = "apply-item-sticker";
+export const DepositToStorageUnitAction = "deposit-to-storage-unit";
 export const EquipAction = "equip";
 export const RemoveAction = "remove";
 export const RenameItemAction = "rename-item";
+export const RenameStorageUnitAction = "rename-storage-unit";
+export const RetrieveFromStorageUnitAction = "retrieve-from-storage-unit";
 export const ScrapeItemStickerAction = "scrape-item-sticker";
 export const SwapItemsStatTrakAction = "swap-items-stattrak";
 export const UnequipAction = "unequip";
@@ -41,7 +44,7 @@ export const actionShape = z
   .or(
     z.object({
       type: z.literal(AddWithNametagAction),
-      toolIndex: z.number(),
+      toolUid: z.number(),
       itemId: z.number(),
       nametag: z.string()
     })
@@ -49,52 +52,73 @@ export const actionShape = z
   .or(
     z.object({
       type: z.literal(ApplyItemStickerAction),
-      itemIndex: z.number(),
-      stickerItemIndex: z.number(),
+      targetUid: z.number(),
+      stickerUid: z.number(),
       stickerIndex: z.number()
     })
   )
   .or(
     z.object({
       type: z.literal(EquipAction),
-      index: z.number(),
+      uid: z.number(),
       team: teamShape.optional()
     })
   )
   .or(
     z.object({
       type: z.literal(UnequipAction),
-      index: z.number(),
+      uid: z.number(),
       team: teamShape.optional()
     })
   )
   .or(
     z.object({
       type: z.literal(RenameItemAction),
-      toolIndex: z.number(),
-      targetIndex: z.number(),
+      toolUid: z.number(),
+      targetUid: z.number(),
       nametag: z.string().optional()
     })
   )
   .or(
     z.object({
       type: z.literal(RemoveAction),
-      index: z.number()
+      uid: z.number()
     })
   )
   .or(
     z.object({
       type: z.literal(ScrapeItemStickerAction),
-      itemIndex: z.number(),
+      targetUid: z.number(),
       stickerIndex: z.number()
     })
   )
   .or(
     z.object({
       type: z.literal(SwapItemsStatTrakAction),
-      fromIndex: z.number(),
-      toIndex: z.number(),
-      toolIndex: z.number()
+      fromUid: z.number(),
+      toUid: z.number(),
+      toolUid: z.number()
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(RenameStorageUnitAction),
+      uid: z.number(),
+      nametag: z.string()
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(DepositToStorageUnitAction),
+      uid: z.number(),
+      depositUids: z.array(z.number())
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(RetrieveFromStorageUnitAction),
+      uid: z.number(),
+      retrieveUids: z.array(z.number())
     })
   );
 
@@ -118,38 +142,47 @@ export async function action({ request }: ActionFunctionArgs) {
           return;
         case AddWithNametagAction:
           return inventory.addWithNametag(
-            action.toolIndex,
+            action.toolUid,
             action.itemId,
             action.nametag
           );
         case ApplyItemStickerAction:
           return inventory.applyItemSticker(
-            action.itemIndex,
-            action.stickerItemIndex,
+            action.targetUid,
+            action.stickerUid,
             action.stickerIndex
           );
         case EquipAction:
-          return inventory.equip(action.index, action.team);
+          return inventory.equip(action.uid, action.team);
         case UnequipAction:
-          return inventory.unequip(action.index, action.team);
+          return inventory.unequip(action.uid, action.team);
         case RenameItemAction:
           return inventory.renameItem(
-            action.toolIndex,
-            action.targetIndex,
+            action.toolUid,
+            action.targetUid,
             action.nametag
           );
         case RemoveAction:
-          return inventory.remove(action.index);
+          return inventory.remove(action.uid);
         case ScrapeItemStickerAction:
           return inventory.scrapeItemSticker(
-            action.itemIndex,
+            action.targetUid,
             action.stickerIndex
           );
         case SwapItemsStatTrakAction:
           return inventory.swapItemsStatTrak(
-            action.toolIndex,
-            action.fromIndex,
-            action.toIndex
+            action.toolUid,
+            action.fromUid,
+            action.toUid
+          );
+        case RenameStorageUnitAction:
+          return inventory.renameStorageUnit(action.uid, action.nametag);
+        case DepositToStorageUnitAction:
+          return inventory.depositToStorageUnit(action.uid, action.depositUids);
+        case RetrieveFromStorageUnitAction:
+          return inventory.retrieveFromStorageUnit(
+            action.uid,
+            action.retrieveUids
           );
       }
     })

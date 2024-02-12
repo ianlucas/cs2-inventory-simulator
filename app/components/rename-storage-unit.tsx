@@ -3,69 +3,45 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS_Item,
-  CS_filterItems,
-  CS_safeValidateNametag
-} from "@ianlucas/cslib";
-import { useMemo } from "react";
+import { CS_Item, CS_safeValidateNametag } from "@ianlucas/cslib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/hooks/use-input";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
-import {
-  AddWithNametagAction,
-  RenameItemAction
-} from "~/routes/api.action.sync._index";
+import { RenameStorageUnitAction } from "~/routes/api.action.sync._index";
 import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
-import { useRootContext } from "./root-context";
 import { ModalButton } from "./modal-button";
+import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
-export function RenameItem({
+export function RenameStorageUnit({
   onClose,
-  targetUid,
-  targetItem,
-  toolUid
+  uid,
+  item
 }: {
   onClose: () => void;
-  targetUid: number;
-  targetItem: CS_Item;
-  toolUid: number;
+  uid: number;
+  item: CS_Item;
 }) {
   const translate = useTranslation();
-  const [nametag, setNametag] = useInput("");
   const { inventory, setInventory } = useRootContext();
   const sync = useSync();
-  const freeItems = useMemo(
-    () =>
-      CS_filterItems({
-        free: true
-      }).map((item) => item.id),
-    []
-  );
-  const isRenamingFreeItem = freeItems.includes(targetItem.id);
+
+  const defaultValue = inventory.get(uid).nametag;
+  const isStartUsingStorageUnit = defaultValue === undefined;
+  const [nametag, setNametag] = useInput(defaultValue ?? "");
+
   function handleRename() {
-    if (targetUid < 0 && isRenamingFreeItem) {
-      sync({
-        type: AddWithNametagAction,
-        toolUid: toolUid,
-        itemId: targetItem.id,
-        nametag
-      });
-      setInventory(inventory.addWithNametag(toolUid, targetItem.id, nametag));
-    } else {
-      sync({
-        type: RenameItemAction,
-        toolUid: toolUid,
-        targetUid: targetUid,
-        nametag
-      });
-      setInventory(inventory.renameItem(toolUid, targetUid, nametag));
-    }
+    sync({
+      type: RenameStorageUnitAction,
+      uid: uid,
+      nametag
+    });
+
+    setInventory(inventory.renameStorageUnit(uid, nametag));
 
     onClose();
   }
@@ -77,14 +53,18 @@ export function RenameItem({
           <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
             <div>
               <UseItemHeader
-                actionDesc={translate("RenameEnterName")}
-                actionItem={targetItem.name}
-                title={translate("RenameUse")}
-                warning={translate("RenameWarn")}
+                actionDesc={translate("RenameStorageUnitEnterName")}
+                actionItem={item.name}
+                title={translate("RenameStorageUnitUse")}
+                warning={
+                  isStartUsingStorageUnit
+                    ? translate("RenameStorageUnitFirstNameWarn")
+                    : translate("RenameStorageUnitNewNameWarn")
+                }
               />
               <CSItemImage
                 className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
-                item={targetItem}
+                item={item}
               />
               <div className="flex">
                 <EditorInput
@@ -101,8 +81,7 @@ export function RenameItem({
                   <>
                     <ModalButton
                       disabled={
-                        (nametag !== "" && !CS_safeValidateNametag(nametag)) ||
-                        (nametag === "" && isRenamingFreeItem)
+                        nametag === "" || !CS_safeValidateNametag(nametag)
                       }
                       variant="primary"
                       onClick={handleRename}

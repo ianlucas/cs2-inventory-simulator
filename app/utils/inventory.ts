@@ -18,7 +18,7 @@ export function parseInventory(inventory?: string | null) {
   }
 }
 
-export function transform(inventoryItem: CS_InventoryItem, index: number) {
+export function transform(inventoryItem: CS_InventoryItem) {
   const item = CS_Economy.getById(inventoryItem.id);
   return {
     equipped: [
@@ -26,7 +26,7 @@ export function transform(inventoryItem: CS_InventoryItem, index: number) {
       inventoryItem.equippedCT && "text-sky-300",
       inventoryItem.equippedT && "text-yellow-400"
     ],
-    index,
+    uid: inventoryItem.uid,
     inventoryItem,
     item,
     ...getCSItemName(item)
@@ -91,7 +91,7 @@ export function getFreeItemsToDisplay(onlyC4 = false) {
   })
     .map((item, index) => ({
       equipped: [],
-      index: -1 * (index + 1),
+      uid: -1 * (index + 1),
       inventoryItem: { id: item.id } as CS_InventoryItem,
       item,
       ...getCSItemName(item)

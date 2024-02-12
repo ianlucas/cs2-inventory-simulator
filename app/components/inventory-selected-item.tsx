@@ -8,17 +8,34 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "~/hooks/use-translation";
 import { resolveItemImage } from "~/utils/economy";
 import { useRootContext } from "./root-context";
+import {
+  ItemSelectorContextProps,
+  useItemSelectorContext
+} from "./item-selector-context";
+
+function getLabelToken(token?: ItemSelectorContextProps["type"]) {
+  switch (token) {
+    case "deposit-to-storage-unit":
+      return "InventorySelectItemToDeposit";
+    case "retrieve-from-storage-unit":
+      return "InventorySelectItemToRetrieve";
+    default:
+      return "InventorySelectAnItem";
+  }
+}
 
 export function InventorySelectedItem({
-  index,
+  uid,
   onDismiss
 }: {
-  index: number;
+  uid: number;
   onDismiss: () => void;
 }) {
   const { inventory } = useRootContext();
+  const { itemSelector } = useItemSelectorContext();
   const translate = useTranslation();
-  const item = inventory.getItem(index);
+  const item = inventory.getItem(uid);
+  const nametag = inventory.get(uid).nametag;
 
   return (
     <div className="m-auto w-full px-4 pb-4 text-xs drop-shadow lg:flex lg:w-[1024px] lg:items-center lg:px-0 lg:pb-0 lg:text-base">
@@ -29,9 +46,11 @@ export function InventorySelectedItem({
         <FontAwesomeIcon icon={faArrowLeft} className="h-5" />
       </button>
       <div className="flex flex-1 select-none items-center justify-center gap-3">
-        <strong>{translate("InventorySelectAnItem")}</strong>
+        <strong>{translate(getLabelToken(itemSelector?.type))}</strong>
         <img draggable={false} className="h-12" src={resolveItemImage(item)} />
-        <span className="text-neutral-300">{item.name}</span>
+        <span className="text-neutral-300">
+          {item.name} {nametag !== undefined ? `| "${nametag}"` : ""}
+        </span>
       </div>
     </div>
   );

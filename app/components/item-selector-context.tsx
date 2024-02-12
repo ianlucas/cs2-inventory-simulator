@@ -13,15 +13,17 @@ import {
 } from "react";
 import { transform } from "~/utils/inventory";
 
-interface ItemSelectorContextProps {
-  index: number;
+export interface ItemSelectorContextProps {
   items: ReturnType<typeof transform>[];
   type:
     | "apply-item-sticker"
+    | "deposit-to-storage-unit"
     | "rename-item"
+    | "retrieve-from-storage-unit"
     | "scrape-sticker"
     | "swap-items-stattrak"
     | "unlock-case";
+  uid: number;
 }
 
 const ItemSelectorContext = createContext<{

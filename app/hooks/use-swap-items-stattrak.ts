@@ -11,14 +11,14 @@ export function useSwapItemsStatTrak() {
   const { inventory, items } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [swapItemsStatTrak, setSwapItemsStatTrak] = useState<{
-    fromIndex: number;
-    toIndex?: number;
-    toolIndex: number;
+    fromUid: number;
+    toUid?: number;
+    toolUid: number;
   }>();
 
-  function handleSwapItemsStatTrak(index: number) {
+  function handleSwapItemsStatTrak(uid: number) {
     return setItemSelector({
-      index,
+      uid,
       items: items.filter(
         ({ inventoryItem }) => inventoryItem.stattrak !== undefined
       ),
@@ -26,24 +26,24 @@ export function useSwapItemsStatTrak() {
     });
   }
 
-  function handleSwapItemsStatTrakSelect(index: number) {
-    const selectedItem = inventory.getItem(index);
-    if (swapItemsStatTrak?.fromIndex !== undefined) {
+  function handleSwapItemsStatTrakSelect(uid: number) {
+    const selectedItem = inventory.getItem(uid);
+    if (swapItemsStatTrak?.fromUid !== undefined) {
       setSwapItemsStatTrak((existing) => ({
         ...existing!,
-        toIndex: index
+        toUid: uid
       }));
     } else {
       setSwapItemsStatTrak({
-        fromIndex: index,
-        toolIndex: itemSelector!.index
+        fromUid: uid,
+        toolUid: itemSelector!.uid
       });
       setItemSelector({
-        index,
+        uid: uid,
         items: items.filter(
-          ({ inventoryItem, item, index: otherIndex }) =>
+          ({ inventoryItem, item, uid: otherUid }) =>
             inventoryItem.stattrak !== undefined &&
-            otherIndex !== index &&
+            otherUid !== uid &&
             selectedItem.type === item.type &&
             (selectedItem.type === "musickit" || selectedItem.def === item.def)
         ),
@@ -59,7 +59,7 @@ export function useSwapItemsStatTrak() {
   function isSwapingItemsStatTrak(
     state: typeof swapItemsStatTrak
   ): state is Required<NonNullable<typeof swapItemsStatTrak>> {
-    return state?.toIndex !== undefined;
+    return state?.toUid !== undefined;
   }
 
   return {

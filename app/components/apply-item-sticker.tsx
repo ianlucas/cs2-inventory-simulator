@@ -20,33 +20,33 @@ import { UseItemHeader } from "./use-item-header";
 
 export function ApplyItemSticker({
   onClose,
-  itemIndex,
-  stickerItemIndex
+  targetUid,
+  stickerUid
 }: {
   onClose: () => void;
-  itemIndex: number;
-  stickerItemIndex: number;
+  targetUid: number;
+  stickerUid: number;
 }) {
   const translate = useTranslation();
   const { inventory, setInventory } = useRootContext();
   const sync = useSync();
 
   const [stickerIndex, setStickerIndex] = useState<number>();
-  const [stickerItem] = useState(inventory.getItem(stickerItemIndex));
-  const [item] = useState(inventory.getItem(itemIndex));
+  const [stickerItem] = useState(inventory.getItem(stickerUid));
+  const [item] = useState(inventory.getItem(targetUid));
 
-  const stickers = inventory.get(itemIndex).stickers ?? [0, 0, 0, 0];
+  const stickers = inventory.get(targetUid).stickers ?? [0, 0, 0, 0];
 
   function handleApplySticker() {
     if (stickerIndex !== undefined) {
       sync({
         type: "apply-item-sticker",
-        itemIndex,
+        targetUid: targetUid,
         stickerIndex,
-        stickerItemIndex
+        stickerUid: stickerUid
       });
       setInventory(
-        inventory.applyItemSticker(itemIndex, stickerItemIndex, stickerIndex)
+        inventory.applyItemSticker(targetUid, stickerUid, stickerIndex)
       );
       playSound("sticker_apply_confirm");
       onClose();

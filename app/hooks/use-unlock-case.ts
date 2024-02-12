@@ -12,15 +12,15 @@ export function useUnlockCase() {
   const { inventory, items } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [unlockCase, setUnlockCase] = useState<{
-    caseIndex: number;
-    keyIndex?: number;
+    caseUid: number;
+    keyUid?: number;
   }>();
 
-  function handleUnlockCase(index: number) {
-    const selectedItem = inventory.getItem(index);
+  function handleUnlockCase(uid: number) {
+    const selectedItem = inventory.getItem(uid);
     if (selectedItem.keys || selectedItem.type === "key") {
       return setItemSelector({
-        index,
+        uid,
         items: items.filter(
           ({ item }) =>
             (selectedItem.type === "key" &&
@@ -34,17 +34,17 @@ export function useUnlockCase() {
     if (selectedItem.type === "case") {
       playSound("case_drop");
       return setUnlockCase({
-        caseIndex: index
+        caseUid: uid
       });
     }
   }
 
-  function handleUnlockCaseSelect(index: number) {
+  function handleUnlockCaseSelect(uid: number) {
     playSound("case_drop");
-    const selectedItem = inventory.getItem(index);
+    const selectedItem = inventory.getItem(uid);
     return setUnlockCase({
-      caseIndex: selectedItem.type === "case" ? index : itemSelector!.index,
-      keyIndex: selectedItem.type === "key" ? index : itemSelector!.index
+      caseUid: selectedItem.type === "case" ? uid : itemSelector!.uid,
+      keyUid: selectedItem.type === "key" ? uid : itemSelector!.uid
     });
   }
 

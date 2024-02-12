@@ -17,15 +17,15 @@ import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
 export function SwapItemsStatTrak({
-  fromIndex,
+  fromUid: fromUid,
   onClose,
-  toIndex,
-  toolIndex
+  toUid: toUid,
+  toolUid: toolUid
 }: {
-  fromIndex: number;
+  fromUid: number;
   onClose: () => void;
-  toIndex: number;
-  toolIndex: number;
+  toUid: number;
+  toolUid: number;
 }) {
   const { inventory, setInventory } = useRootContext();
   const translate = useTranslation();
@@ -35,16 +35,16 @@ export function SwapItemsStatTrak({
   function handleAccept() {
     sync({
       type: SwapItemsStatTrakAction,
-      toolIndex,
-      fromIndex,
-      toIndex
+      toolUid: toolUid,
+      fromUid: fromUid,
+      toUid: toUid
     });
-    setInventory(inventory.swapItemsStatTrak(toolIndex, fromIndex, toIndex));
+    setInventory(inventory.swapItemsStatTrak(toolUid, fromUid, toUid));
     onClose();
   }
 
-  const toInventoryItem = inventory.get(toIndex)!;
-  const fromInventoryItem = inventory.get(fromIndex)!;
+  const toInventoryItem = inventory.get(toUid)!;
+  const fromInventoryItem = inventory.get(fromUid)!;
   const toItem = CS_Economy.getById(toInventoryItem.id)!;
   const fromItem = CS_Economy.getById(fromInventoryItem.id)!;
   const to = useCounter(toInventoryItem.stattrak!, fromInventoryItem.stattrak!);

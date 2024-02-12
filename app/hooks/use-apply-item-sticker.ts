@@ -12,14 +12,14 @@ export function useApplyItemSticker() {
   const { inventory, items } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [applyItemSticker, setApplyItemSticker] = useState<{
-    itemIndex: number;
-    stickerItemIndex: number;
+    targetUid: number;
+    stickerUid: number;
   }>();
 
-  function handleApplyItemSticker(index: number) {
-    const selectedItem = inventory.getItem(index);
+  function handleApplyItemSticker(uid: number) {
+    const selectedItem = inventory.getItem(uid);
     return setItemSelector({
-      index,
+      uid,
       items: items.filter(
         ({ item }) =>
           !item.free &&
@@ -30,11 +30,11 @@ export function useApplyItemSticker() {
     });
   }
 
-  function handleApplyItemStickerSelect(index: number) {
-    const { type } = inventory.getItem(index);
+  function handleApplyItemStickerSelect(uid: number) {
+    const { type } = inventory.getItem(uid);
     return setApplyItemSticker({
-      itemIndex: type !== "sticker" ? index : itemSelector!.index,
-      stickerItemIndex: type === "sticker" ? index : itemSelector!.index
+      targetUid: type !== "sticker" ? uid : itemSelector!.uid,
+      stickerUid: type === "sticker" ? uid : itemSelector!.uid
     });
   }
 

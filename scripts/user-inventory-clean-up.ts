@@ -6,6 +6,7 @@
 import {
   CS_Economy,
   CS_ITEMS,
+  CS_InventoryItem,
   CS_NO_STICKER,
   CS_NO_STICKER_WEAR
 } from "@ianlucas/cslib";
@@ -31,7 +32,8 @@ async function main() {
     if (inventory) {
       let removedC4Stickers = false;
       let stickerNullToZero = false;
-      const parsed = parseInventory(inventory);
+      let missingUid = false;
+      const parsed = JSON.parse(inventory) as CS_InventoryItem[];
       const filtered = parsed
         // Remove non existent items.
         .filter((item) => CS_Economy.itemMap.has(item.id))
@@ -69,11 +71,23 @@ async function main() {
             };
           }
           return inventoryItem;
+        })
+        .map((inventoryItem, index) => {
+          if (inventoryItem.uid === undefined) {
+            missingUid = true;
+
+            return {
+              ...inventoryItem,
+              uid: index
+            };
+          }
+          return inventoryItem;
         });
       if (
         parsed.length !== filtered.length ||
         removedC4Stickers ||
-        stickerNullToZero
+        stickerNullToZero ||
+        missingUid
       ) {
         await prisma.user.update({
           data: { inventory: JSON.stringify(filtered) },

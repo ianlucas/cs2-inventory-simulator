@@ -7,11 +7,11 @@ import { useState } from "react";
 
 export function useScrapeItemSticker() {
   const [scrapeItemSticker, setScrapeItemSticker] = useState<{
-    index: number;
+    uid: number;
   }>();
 
-  function handleScrapeItemSticker(index: number) {
-    return setScrapeItemSticker({ index });
+  function handleScrapeItemSticker(uid: number) {
+    return setScrapeItemSticker({ uid });
   }
 
   function closeScrapeItemSticker() {

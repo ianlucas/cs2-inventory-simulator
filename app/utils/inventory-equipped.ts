@@ -45,10 +45,6 @@ function pushTeam(
 export function generate(inventory: CS_InventoryItem[]) {
   return Object.fromEntries(
     inventory
-      .map((inventoryItem, index) => ({
-        ...inventoryItem,
-        index
-      }))
       .filter(
         ({ equipped, equippedCT, equippedT }) =>
           equipped || equippedCT || equippedT
@@ -58,12 +54,12 @@ export function generate(inventory: CS_InventoryItem[]) {
           equippedCT,
           equippedT,
           id,
-          index,
           nametag,
           seed,
           stattrak,
           stickers,
           stickerswear,
+          uid,
           wear
         }) => {
           const item = CS_Economy.getById(id);
@@ -158,8 +154,8 @@ export function generate(inventory: CS_InventoryItem[]) {
               STATTRAK_PREFIX,
               equippedT,
               equippedCT,
-              `_${item.def}_i`,
-              index
+              `_${item.def}_u`,
+              uid
             );
           }
           if (

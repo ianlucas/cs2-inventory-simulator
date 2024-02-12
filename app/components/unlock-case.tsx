@@ -21,12 +21,12 @@ import { UnlockCaseContainer } from "./unlock-case-container";
 import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
 
 export function UnlockCase({
-  caseIndex,
-  keyIndex,
+  caseUid,
+  keyUid,
   onClose
 }: {
-  caseIndex: number;
-  keyIndex?: number;
+  caseUid: number;
+  keyUid?: number;
   onClose: () => void;
 }) {
   const { user, inventory, setInventory } = useRootContext();
@@ -36,9 +36,9 @@ export function UnlockCase({
   const [unlockedItem, setUnlockedItem] =
     useState<ReturnType<typeof CS_unlockCase>>();
   const [hideCaseContents, setHideCaseContents] = useState(false);
-  const caseItem = useFreeze(() => inventory.getItem(caseIndex));
+  const caseItem = useFreeze(() => inventory.getItem(caseUid));
   const keyItem = useFreeze(() =>
-    keyIndex !== undefined ? inventory.getItem(keyIndex) : undefined
+    keyUid !== undefined ? inventory.getItem(keyUid) : undefined
   );
   const wait = useTimer();
 
@@ -50,7 +50,7 @@ export function UnlockCase({
         ? CS_unlockCase(caseItem)
         : await postJson<ApiActionUnlockCaseActionData>(
             ApiActionUnlockCaseUrl,
-            { caseIndex, keyIndex }
+            { caseIndex: caseUid, keyIndex: keyUid }
           );
     wait(() => {
       setHideCaseContents(true);
@@ -64,7 +64,7 @@ export function UnlockCase({
         setIsDisplaying(true);
         wait(() => {
           setUnlockedItem(unlockedItem);
-          setInventory(inventory.unlockCase(unlockedItem, caseIndex, keyIndex));
+          setInventory(inventory.unlockCase(unlockedItem, caseUid, keyUid));
         }, 6000);
       }, 100);
     }, 250);

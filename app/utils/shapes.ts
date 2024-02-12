@@ -78,7 +78,16 @@ export const internalInventoryShape = z.array(
       .refine(
         (stattrak) =>
           stattrak === undefined || CS_safeValidateStatTrak(stattrak)
+      ),
+    storage: z
+      .array(
+        z.object({
+          ...inventoryItemProps,
+          uid: z.number()
+        })
       )
+      .optional(),
+    uid: z.number()
   })
 );
 

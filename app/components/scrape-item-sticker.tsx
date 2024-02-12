@@ -26,18 +26,18 @@ import { UseItemHeader } from "./use-item-header";
 
 export function ScrapeItemSticker({
   onClose,
-  index
+  uid
 }: {
   onClose: () => void;
-  index: number;
+  uid: number;
 }) {
   const translate = useTranslation();
   const { inventory, setInventory, statsForNerds } = useRootContext();
   const sync = useSync();
-  const [item] = useState(inventory.getItem(index));
+  const [item] = useState(inventory.getItem(uid));
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
 
-  const inventoryItem = inventory.get(index);
+  const inventoryItem = inventory.get(uid);
   const stickers = inventoryItem.stickers ?? [0, 0, 0, 0];
   const stickersWear = inventoryItem.stickerswear ?? [0, 0, 0, 0];
 
@@ -47,10 +47,10 @@ export function ScrapeItemSticker({
     );
     sync({
       type: "scrape-item-sticker",
-      itemIndex: index,
+      targetUid: uid,
       stickerIndex
     });
-    setInventory(inventory.scrapeItemSticker(index, stickerIndex));
+    setInventory(inventory.scrapeItemSticker(uid, stickerIndex));
     playSound(`sticker_scratch${scratch}`);
   }
 

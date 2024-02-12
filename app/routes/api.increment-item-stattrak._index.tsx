@@ -24,11 +24,11 @@ export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== "POST") {
     throw notFound;
   }
-  const { apiKey, userId, itemIndex } = z
+  const { apiKey, userId, targetUid } = z
     .object({
       apiKey: z.string(),
       userId: z.string(),
-      itemIndex: z.number()
+      targetUid: z.number()
     })
     .parse(await request.json());
 
@@ -43,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
   try {
     const { inventory: rawInventory } = await findUniqueUser(userId);
     await manipulateUserInventory(userId, rawInventory, (inventory) =>
-      inventory.incrementItemStatTrak(itemIndex)
+      inventory.incrementItemStatTrak(targetUid)
     );
     return noContent;
   } catch {

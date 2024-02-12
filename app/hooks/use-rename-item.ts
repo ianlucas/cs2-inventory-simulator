@@ -12,14 +12,14 @@ export function useRenameItem() {
   const { items, nametagDefaultAllowed } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [renameItem, setRenameItem] = useState<{
-    toolIndex: number;
+    toolUid: number;
     targetItem: CS_Item;
-    targetIndex: number;
+    targetUid: number;
   }>();
 
-  function handleRenameItem(index: number) {
+  function handleRenameItem(uid: number) {
     return setItemSelector({
-      index,
+      uid,
       items: items.filter(
         ({ item }) =>
           CS_hasNametag(item) &&
@@ -31,11 +31,11 @@ export function useRenameItem() {
     });
   }
 
-  function handleRenameItemSelect(index: number, item: CS_Item) {
+  function handleRenameItemSelect(uid: number, item: CS_Item) {
     return setRenameItem({
-      targetIndex: index,
+      targetUid: uid,
       targetItem: item,
-      toolIndex: itemSelector!.index
+      toolUid: itemSelector!.uid
     });
   }
 

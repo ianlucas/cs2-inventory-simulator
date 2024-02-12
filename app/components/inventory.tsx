@@ -24,6 +24,8 @@ import { useRootContext } from "./root-context";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
+import { useStorageUnit } from "~/hooks/use-storage-unit";
+import { RenameStorageUnit } from "./rename-storage-unit";
 
 export function Inventory() {
   const sync = useSync();
@@ -51,6 +53,17 @@ export function Inventory() {
   } = useRenameItem();
 
   const {
+    closeRenameStorageUnit,
+    handleDepositToStorageUnit,
+    handleDepositToStorageUnitSelect,
+    handleRenameStorageUnit,
+    handleRetrieveFromStorageUnit,
+    handleRetrieveFromStorageUnitSelect,
+    isRenamingStorageUnit,
+    renameStorageUnit
+  } = useStorageUnit();
+
+  const {
     applyItemSticker,
     closeApplyItemSticker,
     handleApplyItemSticker,
@@ -73,19 +86,19 @@ export function Inventory() {
     swapItemsStatTrak
   } = useSwapItemsStatTrak();
 
-  function handleEquip(index: number, team?: CS_Team) {
-    setInventory(inventory.equip(index, team));
-    sync({ type: EquipAction, index, team });
+  function handleEquip(uid: number, team?: CS_Team) {
+    setInventory(inventory.equip(uid, team));
+    sync({ type: EquipAction, uid: uid, team });
   }
 
-  function handleUnequip(index: number, team?: CS_Team) {
-    setInventory(inventory.unequip(index, team));
-    sync({ type: UnequipAction, index, team });
+  function handleUnequip(uid: number, team?: CS_Team) {
+    setInventory(inventory.unequip(uid, team));
+    sync({ type: UnequipAction, uid: uid, team });
   }
 
-  function handleRemove(index: number) {
-    setInventory(inventory.remove(index));
-    sync({ type: RemoveAction, index });
+  function handleRemove(uid: number) {
+    setInventory(inventory.remove(uid));
+    sync({ type: RemoveAction, uid: uid });
   }
 
   function dismissSelectItem() {
@@ -93,23 +106,32 @@ export function Inventory() {
     closeUnlockCase();
     closeSwapItemsStatTrak();
     closeRenameItem();
+    closeRenameStorageUnit();
     closeApplyItemSticker();
     closeScrapeItemSticker();
   }
 
-  function handleSelectItem(index: number, item: CS_Item) {
+  function handleSelectItem(uid: number, item: CS_Item) {
     if (itemSelector !== undefined) {
       const { type } = itemSelector;
-      setItemSelector(undefined);
+
       switch (type) {
         case "unlock-case":
-          return handleUnlockCaseSelect(index);
+          setItemSelector(undefined);
+          return handleUnlockCaseSelect(uid);
         case "swap-items-stattrak":
-          return handleSwapItemsStatTrakSelect(index);
+          setItemSelector(undefined);
+          return handleSwapItemsStatTrakSelect(uid);
         case "rename-item":
-          return handleRenameItemSelect(index, item);
+          setItemSelector(undefined);
+          return handleRenameItemSelect(uid, item);
         case "apply-item-sticker":
-          return handleApplyItemStickerSelect(index);
+          setItemSelector(undefined);
+          return handleApplyItemStickerSelect(uid);
+        case "deposit-to-storage-unit":
+          return handleDepositToStorageUnitSelect(uid);
+        case "retrieve-from-storage-unit":
+          return handleRetrieveFromStorageUnitSelect(uid);
       }
     }
   }
@@ -126,7 +148,7 @@ export function Inventory() {
       )}
       <div className="m-auto grid w-full select-none grid-cols-2 gap-2 px-2 md:grid-cols-4 lg:my-8 lg:w-[1024px] lg:grid-cols-6 lg:gap-5 lg:px-0">
         {(isSelectingAnItem ? itemSelector.items : items).map((item) => (
-          <div key={item.index}>
+          <div key={item.uid}>
             <div className="flex h-full w-full items-center justify-center lg:block lg:h-auto lg:w-auto">
               <InventoryItem
                 {...item}
@@ -137,9 +159,12 @@ export function Inventory() {
                     }
                   : {
                       onApplySticker: handleApplyItemSticker,
+                      onDepositToStorageUnit: handleDepositToStorageUnit,
                       onEquip: handleEquip,
                       onRemove: handleRemove,
                       onRename: handleRenameItem,
+                      onRenameStorageUnit: handleRenameStorageUnit,
+                      onRetrieveFromStorageUnit: handleRetrieveFromStorageUnit,
                       onScrapeSticker: handleScrapeItemSticker,
                       onSwapItemsStatTrak: handleSwapItemsStatTrak,
                       onUnequip: handleUnequip,
@@ -156,6 +181,12 @@ export function Inventory() {
       )}
       {isRenamingItem(renameItem) && (
         <RenameItem {...renameItem} onClose={closeRenameItem} />
+      )}
+      {isRenamingStorageUnit(renameStorageUnit) && (
+        <RenameStorageUnit
+          {...renameStorageUnit}
+          onClose={closeRenameStorageUnit}
+        />
       )}
       {isApplyingItemSticker(applyItemSticker) && (
         <ApplyItemSticker

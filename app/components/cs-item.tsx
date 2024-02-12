@@ -5,7 +5,12 @@
 
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_Item, CS_NO_STICKER } from "@ianlucas/cslib";
+import {
+  CS_Economy,
+  CS_Item,
+  CS_NO_STICKER,
+  CS_STORAGE_UNIT_TOOL_DEF
+} from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
 import { getCSItemName, resolveItemImage } from "~/utils/economy";
@@ -31,6 +36,9 @@ export function CSItem({
   const translate = useTranslation();
   const { model, name } = getCSItemName(item);
   const hasModel = model || stattrak !== undefined;
+  const hasNametag = nametag !== undefined;
+  const showNameWithNametag =
+    item.type === "tool" && item.def === CS_STORAGE_UNIT_TOOL_DEF;
 
   return (
     <div className="w-[154px]">
@@ -80,8 +88,13 @@ export function CSItem({
         style={{ backgroundColor: item.rarity }}
       />
       <div className="mt-2 text-[12px] leading-3 text-white drop-shadow-[0_0_1px_rgba(0,0,0,1)]">
-        {nametag !== undefined ? (
-          <>"{nametag}"</>
+        {hasNametag ? (
+          <>
+            {showNameWithNametag && (
+              <div className="font-bold">{item.name}</div>
+            )}
+            <div>"{nametag}"</div>
+          </>
         ) : (
           <>
             {hasModel && (
