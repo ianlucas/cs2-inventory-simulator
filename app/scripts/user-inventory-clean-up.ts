@@ -5,18 +5,14 @@
 
 import {
   CS_Economy,
-  CS_ITEMS,
   CS_InventoryItem,
   CS_NO_STICKER,
   CS_NO_STICKER_WEAR
 } from "@ianlucas/cslib";
 import { prisma } from "~/db.server";
-import { parseInventory } from "~/utils/inventory";
 import { len } from "~/utils/number";
 
-CS_Economy.initialize(CS_ITEMS);
-
-async function main() {
+export async function runUserInventoryCleanUp() {
   const users = await prisma.user.findMany({
     select: {
       id: true
@@ -97,5 +93,3 @@ async function main() {
     }
   }
 }
-
-main();
