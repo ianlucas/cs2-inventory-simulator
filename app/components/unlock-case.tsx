@@ -50,7 +50,7 @@ export function UnlockCase({
         ? CS_unlockCase(caseItem)
         : await postJson<ApiActionUnlockCaseActionData>(
             ApiActionUnlockCaseUrl,
-            { caseIndex: caseUid, keyIndex: keyUid }
+            { caseUid, keyUid }
           );
     wait(() => {
       setHideCaseContents(true);
