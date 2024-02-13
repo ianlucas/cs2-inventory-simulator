@@ -10,7 +10,7 @@ import {
   CS_NO_STICKER_WEAR
 } from "@ianlucas/cslib";
 import { prisma } from "~/db.server";
-import { len } from "~/utils/number";
+import { size } from "~/utils/number";
 
 export async function runUserInventoryCleanUp() {
   const users = await prisma.user.findMany({
@@ -52,8 +52,8 @@ export async function runUserInventoryCleanUp() {
         .map((inventoryItem) => {
           const isnull = <T>(value: T) => value === null;
           if (
-            len(inventoryItem.stickers?.filter(isnull)) > 0 ||
-            len(inventoryItem.stickerswear?.filter(isnull)) > 0
+            size(inventoryItem.stickers?.filter(isnull)) > 0 ||
+            size(inventoryItem.stickerswear?.filter(isnull)) > 0
           ) {
             stickerNullToZero = true;
             return {

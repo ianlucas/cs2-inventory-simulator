@@ -12,7 +12,7 @@ import {
   CS_safeValidateWear
 } from "@ianlucas/cslib";
 import { z } from "zod";
-import { len } from "./number";
+import { size } from "./number";
 
 const inventoryItemProps = {
   equipped: z.boolean().optional(),
@@ -46,7 +46,7 @@ const inventoryItemProps = {
     .array(z.number().int().nonnegative().finite().safe())
     .optional()
     .transform((stickers) =>
-      len(stickers?.filter((sticker) => sticker !== CS_NO_STICKER_WEAR)) > 0
+      size(stickers?.filter((sticker) => sticker !== CS_NO_STICKER_WEAR)) > 0
         ? stickers
         : undefined
     ),
@@ -54,7 +54,7 @@ const inventoryItemProps = {
     .array(z.number().nonnegative().finite())
     .optional()
     .transform((stickerswear) =>
-      len(stickerswear?.filter((wear) => wear !== CS_NO_STICKER_WEAR)) > 0
+      size(stickerswear?.filter((wear) => wear !== CS_NO_STICKER_WEAR)) > 0
         ? stickerswear
         : undefined
     ),
