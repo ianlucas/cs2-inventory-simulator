@@ -14,17 +14,15 @@ import {
 import { z } from "zod";
 import { size } from "./number";
 
+export const zodNNInt = z.number().int().nonnegative().finite().safe();
+export const zodPInt = z.number().int().positive().finite().safe();
+export const zodNNFloat = z.number().nonnegative().finite();
+
 const inventoryItemProps = {
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
-  id: z
-    .number()
-    .int()
-    .nonnegative()
-    .finite()
-    .safe()
-    .refine((id) => !CS_Economy.getById(id).free),
+  id: zodNNInt.refine((id) => !CS_Economy.getById(id).free),
   nametag: z
     .string()
     .max(20)
@@ -33,17 +31,12 @@ const inventoryItemProps = {
     .refine(
       (nametag) => nametag === undefined || CS_safeValidateNametag(nametag)
     ),
-  seed: z
-    .number()
-    .int()
-    .positive()
-    .finite()
-    .safe()
+  seed: zodPInt
     .optional()
     .refine((seed) => seed === undefined || CS_safeValidateSeed(seed)),
   stattrak: z.literal(0).optional(),
   stickers: z
-    .array(z.number().int().nonnegative().finite().safe())
+    .array(zodNNInt)
     .optional()
     .transform((stickers) =>
       size(stickers?.filter((sticker) => sticker !== CS_NO_STICKER_WEAR)) > 0
@@ -51,17 +44,14 @@ const inventoryItemProps = {
         : undefined
     ),
   stickerswear: z
-    .array(z.number().nonnegative().finite())
+    .array(zodNNFloat)
     .optional()
     .transform((stickerswear) =>
       size(stickerswear?.filter((wear) => wear !== CS_NO_STICKER_WEAR)) > 0
         ? stickerswear
         : undefined
     ),
-  wear: z
-    .number()
-    .nonnegative()
-    .finite()
+  wear: zodNNFloat
     .optional()
     .refine((wear) => wear === undefined || CS_safeValidateWear(wear))
 };

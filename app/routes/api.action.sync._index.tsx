@@ -12,7 +12,8 @@ import { noContent } from "~/response.server";
 import {
   externalInventoryItemShape,
   externalInventoryShape,
-  teamShape
+  teamShape,
+  zodNNInt
 } from "~/utils/shapes";
 
 export const ApiActionSync = "/api/action/sync";
@@ -44,81 +45,81 @@ export const actionShape = z
   .or(
     z.object({
       type: z.literal(AddWithNametagAction),
-      toolUid: z.number(),
-      itemId: z.number(),
+      toolUid: zodNNInt,
+      itemId: zodNNInt,
       nametag: z.string()
     })
   )
   .or(
     z.object({
       type: z.literal(ApplyItemStickerAction),
-      targetUid: z.number(),
-      stickerUid: z.number(),
-      stickerIndex: z.number()
+      targetUid: zodNNInt,
+      stickerUid: zodNNInt,
+      stickerIndex: zodNNInt
     })
   )
   .or(
     z.object({
       type: z.literal(EquipAction),
-      uid: z.number(),
+      uid: zodNNInt,
       team: teamShape.optional()
     })
   )
   .or(
     z.object({
       type: z.literal(UnequipAction),
-      uid: z.number(),
+      uid: zodNNInt,
       team: teamShape.optional()
     })
   )
   .or(
     z.object({
       type: z.literal(RenameItemAction),
-      toolUid: z.number(),
-      targetUid: z.number(),
+      toolUid: zodNNInt,
+      targetUid: zodNNInt,
       nametag: z.string().optional()
     })
   )
   .or(
     z.object({
       type: z.literal(RemoveAction),
-      uid: z.number()
+      uid: zodNNInt
     })
   )
   .or(
     z.object({
       type: z.literal(ScrapeItemStickerAction),
-      targetUid: z.number(),
-      stickerIndex: z.number()
+      targetUid: zodNNInt,
+      stickerIndex: zodNNInt
     })
   )
   .or(
     z.object({
       type: z.literal(SwapItemsStatTrakAction),
-      fromUid: z.number(),
-      toUid: z.number(),
-      toolUid: z.number()
+      fromUid: zodNNInt,
+      toUid: zodNNInt,
+      toolUid: zodNNInt
     })
   )
   .or(
     z.object({
       type: z.literal(RenameStorageUnitAction),
-      uid: z.number(),
+      uid: zodNNInt,
       nametag: z.string()
     })
   )
   .or(
     z.object({
       type: z.literal(DepositToStorageUnitAction),
-      uid: z.number(),
-      depositUids: z.array(z.number())
+      uid: zodNNInt,
+      depositUids: z.array(zodNNInt)
     })
   )
   .or(
     z.object({
       type: z.literal(RetrieveFromStorageUnitAction),
-      uid: z.number(),
-      retrieveUids: z.array(z.number())
+      uid: zodNNInt,
+      retrieveUids: z.array(zodNNInt)
     })
   );
 

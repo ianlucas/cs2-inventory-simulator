@@ -18,6 +18,7 @@ import {
   notFound,
   unauthorized
 } from "~/response.server";
+import { zodNNInt } from "~/utils/shapes";
 
 export async function action({ request }: ActionFunctionArgs) {
   await middleware(request);
@@ -28,7 +29,7 @@ export async function action({ request }: ActionFunctionArgs) {
     .object({
       apiKey: z.string(),
       userId: z.string(),
-      targetUid: z.number()
+      targetUid: zodNNInt
     })
     .parse(await request.json());
 

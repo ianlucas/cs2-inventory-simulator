@@ -14,6 +14,7 @@ import {
 import { middleware } from "~/http.server";
 import { updateUserInventory } from "~/models/user.server";
 import { parseInventory } from "~/utils/inventory";
+import { zodNNInt } from "~/utils/shapes";
 
 export const ApiActionUnlockCaseUrl = "/api/action/unlock-case";
 
@@ -24,10 +25,10 @@ export type ApiActionUnlockCaseActionData = ReturnType<
 export async function action({ request }: ActionFunctionArgs) {
   await middleware(request);
   const { id: userId, inventory: rawInventory } = await requireUser(request);
-  const { caseIndex, keyIndex } = z
+  const { caseUid, keyUid } = z
     .object({
-      caseIndex: z.number(),
-      keyIndex: z.number().optional()
+      caseUid: zodNNInt,
+      keyUid: zodNNInt.optional()
     })
     .parse(await request.json());
   const inventory = new CS_Inventory({
@@ -35,8 +36,8 @@ export async function action({ request }: ActionFunctionArgs) {
     limit: MAX_INVENTORY_ITEMS,
     storageUnitLimit: MAX_INVENTORY_STORAGE_UNIT_ITEMS
   });
-  const unlockedItem = CS_unlockCase(inventory.get(caseIndex).id);
-  inventory.unlockCase(unlockedItem, caseIndex, keyIndex);
+  const unlockedItem = CS_unlockCase(inventory.get(caseUid).id);
+  inventory.unlockCase(unlockedItem, caseUid, keyUid);
   await updateUserInventory(userId, inventory.getAll());
   return json(unlockedItem);
 }
