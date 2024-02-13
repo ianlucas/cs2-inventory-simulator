@@ -11,6 +11,7 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
+import { ApplyItemStickerAction } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
 import { CSItemImage } from "./cs-item-image";
 import { ModalButton } from "./modal-button";
@@ -40,7 +41,7 @@ export function ApplyItemSticker({
   function handleApplySticker() {
     if (stickerIndex !== undefined) {
       sync({
-        type: "apply-item-sticker",
+        type: ApplyItemStickerAction,
         targetUid: targetUid,
         stickerIndex,
         stickerUid: stickerUid

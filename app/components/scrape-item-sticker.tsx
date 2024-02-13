@@ -5,7 +5,6 @@
 
 import {
   CS_Economy,
-  CS_Item,
   CS_MAX_STICKER_WEAR,
   CS_NO_STICKER,
   CS_STICKER_WEAR_FACTOR,
@@ -16,6 +15,7 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
+import { ScrapeItemStickerAction } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
 import { CSItemImage } from "./cs-item-image";
 import { Modal } from "./modal";
@@ -46,7 +46,7 @@ export function ScrapeItemSticker({
       (stickersWear[stickerIndex] + CS_STICKER_WEAR_FACTOR) * 5
     );
     sync({
-      type: "scrape-item-sticker",
+      type: ScrapeItemStickerAction,
       targetUid: uid,
       stickerIndex
     });

@@ -7,6 +7,10 @@ import { CS_Item, CS_STORAGE_UNIT_TOOL_DEF } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
+import {
+  DepositToStorageUnitAction,
+  RetrieveFromStorageUnitAction
+} from "~/routes/api.action.sync._index";
 import { transform } from "~/utils/inventory";
 import { useSync } from "./use-sync";
 
@@ -41,7 +45,7 @@ export function useStorageUnit() {
     }
     const depositUids = [uid];
     sync({
-      type: "deposit-to-storage-unit",
+      type: DepositToStorageUnitAction,
       uid: itemSelector.uid,
       depositUids: depositUids
     });
@@ -66,7 +70,7 @@ export function useStorageUnit() {
     }
     const retrieveUids = [uid];
     sync({
-      type: "retrieve-from-storage-unit",
+      type: RetrieveFromStorageUnitAction,
       uid: itemSelector.uid,
       retrieveUids: retrieveUids
     });
