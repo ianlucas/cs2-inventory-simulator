@@ -43,10 +43,10 @@ export function SwapItemsStatTrak({
     onClose();
   }
 
-  const toInventoryItem = inventory.get(toUid)!;
-  const fromInventoryItem = inventory.get(fromUid)!;
-  const toItem = CS_Economy.getById(toInventoryItem.id)!;
-  const fromItem = CS_Economy.getById(fromInventoryItem.id)!;
+  const toInventoryItem = inventory.get(toUid);
+  const fromInventoryItem = inventory.get(fromUid);
+  const toItem = CS_Economy.getById(toInventoryItem.id);
+  const fromItem = CS_Economy.getById(fromInventoryItem.id);
   const to = useCounter(toInventoryItem.stattrak!, fromInventoryItem.stattrak!);
   const from = useCounter(
     fromInventoryItem.stattrak!,
