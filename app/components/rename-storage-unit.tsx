@@ -19,17 +19,16 @@ import { UseItemHeader } from "./use-item-header";
 
 export function RenameStorageUnit({
   onClose,
-  uid,
-  item
+  uid
 }: {
   onClose: () => void;
   uid: number;
-  item: CS_Item;
 }) {
   const translate = useTranslation();
   const { inventory, setInventory } = useRootContext();
   const sync = useSync();
 
+  const item = inventory.getItem(uid);
   const defaultValue = inventory.get(uid).nametag;
   const isStartUsingStorageUnit = defaultValue === undefined;
   const [nametag, setNametag] = useInput(defaultValue ?? "");
@@ -85,12 +84,12 @@ export function RenameStorageUnit({
                       }
                       variant="primary"
                       onClick={handleRename}
-                      children={translate("RenameRename")}
+                      children={translate("RenameStorageUnitRename")}
                     />
                     <ModalButton
                       variant="secondary"
                       onClick={onClose}
-                      children={translate("RenameCancel")}
+                      children={translate("RenameStorageUnitClose")}
                     />
                   </>
                 }

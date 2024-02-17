@@ -28,17 +28,15 @@ import { UseItemHeader } from "./use-item-header";
 export function RenameItem({
   onClose,
   targetUid,
-  targetItem,
   toolUid
 }: {
   onClose: () => void;
   targetUid: number;
-  targetItem: CS_Item;
   toolUid: number;
 }) {
   const translate = useTranslation();
   const [nametag, setNametag] = useInput("");
-  const { inventory, setInventory } = useRootContext();
+  const { inventory, setInventory, items } = useRootContext();
   const sync = useSync();
   const freeItems = useMemo(
     () =>
@@ -47,6 +45,10 @@ export function RenameItem({
       }).map((item) => item.id),
     []
   );
+  const targetItem =
+    targetUid >= 0
+      ? inventory.getItem(targetUid)
+      : items.find(({ uid }) => uid === targetUid)!.item;
   const isRenamingFreeItem = freeItems.includes(targetItem.id);
   function handleRename() {
     if (targetUid < 0 && isRenamingFreeItem) {

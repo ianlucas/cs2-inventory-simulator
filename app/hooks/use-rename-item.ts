@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_hasNametag } from "@ianlucas/cslib";
+import { CS_hasNametag } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
@@ -13,7 +13,6 @@ export function useRenameItem() {
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [renameItem, setRenameItem] = useState<{
     toolUid: number;
-    targetItem: CS_Item;
     targetUid: number;
   }>();
 
@@ -31,10 +30,9 @@ export function useRenameItem() {
     });
   }
 
-  function handleRenameItemSelect(uid: number, item: CS_Item) {
+  function handleRenameItemSelect(uid: number) {
     return setRenameItem({
       targetUid: uid,
-      targetItem: item,
       toolUid: itemSelector!.uid
     });
   }

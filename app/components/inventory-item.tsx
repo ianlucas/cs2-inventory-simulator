@@ -57,18 +57,18 @@ export function InventoryItem({
 }: ReturnType<typeof transform> & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
-  onApplySticker?: (uid: number, item: CS_Item) => void;
-  onClick?: (uid: number, item: CS_Item) => void;
+  onApplySticker?: (uid: number) => void;
+  onClick?: (uid: number) => void;
   onDepositToStorageUnit?: (uid: number) => void;
   onEquip?: (uid: number, team?: CS_Team) => void;
   onRemove?: (uid: number) => void;
-  onRename?: (uid: number, item: CS_Item) => void;
-  onRenameStorageUnit?: (uid: number, item: CS_Item) => void;
+  onRename?: (uid: number) => void;
+  onRenameStorageUnit?: (uid: number) => void;
   onRetrieveFromStorageUnit?: (uid: number) => void;
-  onScrapeSticker?: (uid: number, item: CS_Item) => void;
-  onSwapItemsStatTrak?: (uid: number, item: CS_Item) => void;
+  onScrapeSticker?: (uid: number) => void;
+  onSwapItemsStatTrak?: (uid: number) => void;
   onUnequip?: (uid: number, team?: CS_Team) => void;
-  onUnlockContainer?: (uid: number, item: CS_Item) => void;
+  onUnlockContainer?: (uid: number) => void;
   ownApplicableStickers?: boolean;
 }) {
   const { inventory } = useRootContext();
@@ -150,7 +150,7 @@ export function InventoryItem({
           equipped={equipped}
           nametag={inventoryItem.nametag}
           onClick={
-            onClick !== undefined ? close(() => onClick(uid, item)) : undefined
+            onClick !== undefined ? close(() => onClick(uid)) : undefined
           }
           stattrak={inventoryItem.stattrak}
           stickers={inventoryItem.stickers}
@@ -213,29 +213,29 @@ export function InventoryItem({
                   {
                     condition: canUnlockContainer,
                     label: translate("InventoryItemUnlockContainer"),
-                    onClick: close(() => onUnlockContainer?.(uid, item))
+                    onClick: close(() => onUnlockContainer?.(uid))
                   }
                 ],
                 [
                   {
                     condition: canRename,
                     label: translate("InventoryItemRename"),
-                    onClick: close(() => onRename?.(uid, item))
+                    onClick: close(() => onRename?.(uid))
                   },
                   {
                     condition: canSwapStatTrak,
                     label: translate("InventoryItemSwapStatTrak"),
-                    onClick: close(() => onSwapItemsStatTrak?.(uid, item))
+                    onClick: close(() => onSwapItemsStatTrak?.(uid))
                   },
                   {
                     condition: canApplySticker,
                     label: translate("InventoryApplySticker"),
-                    onClick: close(() => onApplySticker?.(uid, item))
+                    onClick: close(() => onApplySticker?.(uid))
                   },
                   {
                     condition: canScrapeSticker,
                     label: translate("InventoryScrapeSticker"),
-                    onClick: close(() => onScrapeSticker?.(uid, item))
+                    onClick: close(() => onScrapeSticker?.(uid))
                   }
                 ],
                 [
@@ -258,7 +258,7 @@ export function InventoryItem({
                     label: hasNametag
                       ? translate("InventoryItemRenameStorageUnit")
                       : translate("InventoryItemUseStorageUnit"),
-                    onClick: close(() => onRenameStorageUnit?.(uid, item))
+                    onClick: close(() => onRenameStorageUnit?.(uid))
                   }
                 ],
                 [

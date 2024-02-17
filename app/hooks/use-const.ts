@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 
-export function useFreeze<T>(valueFactory: () => T) {
+export function useConst<T>(valueFactory: () => T) {
   const [state] = useState(() => {
     try {
       return valueFactory();

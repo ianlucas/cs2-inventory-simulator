@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_STORAGE_UNIT_TOOL_DEF } from "@ianlucas/cslib";
+import { CS_STORAGE_UNIT_TOOL_DEF } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
@@ -19,7 +19,6 @@ export function useStorageUnit() {
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const { items, inventory, setInventory } = useRootContext();
   const [renameStorageUnit, setRenameStorageUnit] = useState<{
-    item: CS_Item;
     uid: number;
   }>();
 
@@ -27,8 +26,8 @@ export function useStorageUnit() {
     !item.free &&
     (item.type !== "tool" || item.def !== CS_STORAGE_UNIT_TOOL_DEF);
 
-  function handleRenameStorageUnit(uid: number, item: CS_Item) {
-    return setRenameStorageUnit({ item, uid });
+  function handleRenameStorageUnit(uid: number) {
+    return setRenameStorageUnit({ uid });
   }
 
   function handleDepositToStorageUnit(uid: number) {

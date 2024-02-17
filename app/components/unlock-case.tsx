@@ -7,7 +7,7 @@ import { CS_unlockCase } from "@ianlucas/cslib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { useFreeze } from "~/hooks/use-freeze";
+import { useConst } from "~/hooks/use-const";
 import { useTimer } from "~/hooks/use-timer";
 import {
   ApiActionUnlockCaseActionData,
@@ -36,8 +36,8 @@ export function UnlockCase({
   const [unlockedItem, setUnlockedItem] =
     useState<ReturnType<typeof CS_unlockCase>>();
   const [hideCaseContents, setHideCaseContents] = useState(false);
-  const caseItem = useFreeze(() => inventory.getItem(caseUid));
-  const keyItem = useFreeze(() =>
+  const caseItem = useConst(() => inventory.getItem(caseUid));
+  const keyItem = useConst(() =>
     keyUid !== undefined ? inventory.getItem(keyUid) : undefined
   );
   const wait = useTimer();

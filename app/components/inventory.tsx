@@ -111,7 +111,7 @@ export function Inventory() {
     closeScrapeItemSticker();
   }
 
-  function handleSelectItem(uid: number, item: CS_Item) {
+  function handleSelectItem(uid: number) {
     if (itemSelector !== undefined) {
       const { type } = itemSelector;
 
@@ -124,7 +124,7 @@ export function Inventory() {
           return handleSwapItemsStatTrakSelect(uid);
         case "rename-item":
           setItemSelector(undefined);
-          return handleRenameItemSelect(uid, item);
+          return handleRenameItemSelect(uid);
         case "apply-item-sticker":
           setItemSelector(undefined);
           return handleApplyItemStickerSelect(uid);
