@@ -25,5 +25,8 @@ export function storeInventoryItems(value: CS_InventoryItem[]) {
 }
 
 export function retrieveInventoryItems() {
-  return parseInventory(window.localStorage.getItem("inventoryItems"));
+  if (typeof document !== "undefined") {
+    return parseInventory(window.localStorage.getItem("inventoryItems"));
+  }
+  return [];
 }
