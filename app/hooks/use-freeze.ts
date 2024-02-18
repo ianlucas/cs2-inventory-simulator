@@ -3,15 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useState } from "react";
+import { useMemo } from "react";
 
-export function useConst<T>(valueFactory: () => T) {
-  const [state] = useState(() => {
-    try {
-      return valueFactory();
-    } catch {
-      return null!;
-    }
-  });
-  return state;
+export function useFreeze<T>(factory: () => T) {
+  return useMemo(factory, []);
 }
