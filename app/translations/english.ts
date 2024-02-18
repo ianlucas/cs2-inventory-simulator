@@ -41,6 +41,8 @@ export const english = {
   EditorQuantity: "Quantity",
   EditorReset: "Reset",
   EditorCraft: "Craft",
+  EditorSave: "Save",
+  EditorCancel: "Cancel",
   EditorStickerWear: "Sticker wear",
   StickerPickerNA: "N/A",
   StickerPickerHeader: "Pick a sticker...",
@@ -79,6 +81,7 @@ export const english = {
   InventoryItemStorageUnitRetrieve: "Retrieve Items",
   InventoryItemStorageUnitDeposit: "Deposit Items",
   InventoryItemSwapStatTrak: "Open StatTrak™ Swap Tool",
+  InventoryItemEdit: "Edit",
   ItemSwapStatTrakUse: "StatTrak™ Swap Tool",
   ItemSwapStatTrakDesc:
     "This item swaps StatTrak™ values between two of the same item type.",

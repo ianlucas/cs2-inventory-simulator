@@ -54,22 +54,36 @@ export interface CSItemEditorAttributes {
 }
 
 export function CSItemEditor({
+  attributes,
   item,
   onReset,
   onSubmit
 }: {
+  attributes?: {
+    nametag?: string;
+    seed?: number;
+    stattrak?: number;
+    stickers?: number[];
+    stickerswear?: number[];
+    wear?: number;
+  };
   item: CS_Item;
   onReset: () => void;
   onSubmit: (props: CSItemEditorAttributes) => void;
 }) {
+  const translate = useTranslation();
   const { maxInventoryItems, inventory } = useRootContext();
-  const [stattrak, setStattrak] = useCheckbox(false);
-  const [wear, setWear] = useState(item.wearmin ?? CS_MIN_WEAR);
-  const [seed, setSeed] = useState(1);
-  const [nametag, setNametag] = useInput("");
+  const [stattrak, setStattrak] = useCheckbox(
+    attributes?.stattrak !== undefined ? attributes.stattrak >= 0 : false
+  );
+  const [wear, setWear] = useState(
+    attributes?.wear ?? item.wearmin ?? CS_MIN_WEAR
+  );
+  const [seed, setSeed] = useState(attributes?.seed ?? 1);
+  const [nametag, setNametag] = useInput(attributes?.nametag ?? "");
   const [stickersAttributes, setStickersAttributes] = useState({
-    ids: [0, 0, 0, 0],
-    wears: [0, 0, 0, 0]
+    ids: attributes?.stickers ?? [0, 0, 0, 0],
+    wears: attributes?.stickerswear ?? [0, 0, 0, 0]
   });
   const [quantity, setQuantity] = useState(1);
   const hasStickers = CS_hasStickers(item);
@@ -83,7 +97,7 @@ export function CSItemEditor({
     CS_safeValidateSeed(seed);
   const maxQuantity = maxInventoryItems - inventory.size();
   const hasQuantity = showQuantity(item);
-  const translate = useTranslation();
+  const isCrafting = attributes === undefined;
 
   function handleSubmit() {
     const stickers =
@@ -103,11 +117,11 @@ export function CSItemEditor({
     onSubmit({
       nametag: hasNametag && nametag.length > 0 ? nametag : undefined,
       quantity,
-      seed: hasSeed && seed !== CS_MIN_SEED ? seed : undefined,
+      seed: hasSeed && (!isCrafting || seed !== CS_MIN_SEED) ? seed : undefined,
       stattrak: hasStattrak && stattrak === true ? stattrak : undefined,
       stickers,
       stickerswear,
-      wear: hasWear && wear !== CS_MIN_WEAR ? wear : undefined
+      wear: hasWear && (!isCrafting || wear !== CS_MIN_WEAR) ? wear : undefined
     });
   }
 
@@ -214,28 +228,18 @@ export function CSItemEditor({
         )}
       </div>
       <div className="mt-6 flex justify-center gap-2">
-        {/* <button
-          onClick={onReset}
-          className="flex cursor-default items-center gap-2 rounded px-4 py-2 text-neutral-300 drop-shadow-lg hover:text-neutral-100"
-        ></button> */}
-        {/* <button
-          disabled={!canCraft}
-          onClick={handleSubmit}
-          className="flex cursor-default items-center gap-2 rounded bg-white/80 px-4 py-2 font-bold text-neutral-700 drop-shadow-lg transition hover:bg-white disabled:bg-neutral-500 disabled:text-neutral-700"
-        >
-          <FontAwesomeIcon icon={faBolt} className="h-4" />
-          {}
-        </button> */}
         <ModalButton className="px-2" variant="secondary" onClick={onReset}>
-          <FontAwesomeIcon icon={faLongArrowLeft} className="mr-2 h-4" />
-          {translate("EditorReset")}
+          {isCrafting && (
+            <FontAwesomeIcon icon={faLongArrowLeft} className="mr-2 h-4" />
+          )}
+          {translate(isCrafting ? "EditorReset" : "EditorCancel")}
         </ModalButton>
         <ModalButton
+          children={translate(isCrafting ? "EditorCraft" : "EditorSave")}
           className="px-2"
-          variant="primary"
           disabled={!canCraft}
           onClick={handleSubmit}
-          children={translate("EditorCraft")}
+          variant="primary"
         />
       </div>
     </div>

@@ -5,11 +5,12 @@
 
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Item } from "@ianlucas/cslib";
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
 import { useState } from "react";
+import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { z } from "zod";
 import {
   CSItemEditor,
   CSItemEditorAttributes
@@ -21,11 +22,10 @@ import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
+import { middleware } from "~/http.server";
 import { showQuantity } from "~/utils/economy";
 import { range } from "~/utils/number";
-import { ExternalInventoryItemShape } from "~/utils/shapes";
-import { AddAction } from "./api.action.sync._index";
-import { middleware } from "~/http.server";
+import { AddAction, EditAction } from "./api.action.sync._index";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Craft - CS2 Inventory Simulator" }];
@@ -33,15 +33,27 @@ export const meta: MetaFunction = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);
-  return null;
+  const url = new URL(request.url);
+  return typedjson({
+    uid: z
+      .string()
+      .optional()
+      .transform((uid) => (uid !== undefined ? Number(uid) : uid))
+      .parse(url.searchParams.get("uid") || undefined)
+  });
 }
 
 export default function Craft() {
+  const { uid } = useTypedLoaderData<typeof loader>();
+  const { inventory, setInventory } = useRootContext();
   const sync = useSync();
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState<CS_Item>();
+  console.log(uid);
+  const [selectedItem, setSelectedItem] = useState(
+    uid !== undefined ? inventory.getItem(uid) : undefined
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { inventory, setInventory } = useRootContext();
+
   const translate = useTranslation();
   const isDesktop = useIsDesktop();
 
@@ -52,22 +64,42 @@ export default function Craft() {
     stattrak,
     ...attributes
   }: CSItemEditorAttributes) {
-    if (selectedItem !== undefined && !isSubmitting) {
-      setIsSubmitting(true);
-      const inventoryItem = {
-        id: selectedItem.id,
-        stattrak: stattrak ? 0 : undefined,
-        ...attributes
-      };
-      range(showQuantity(selectedItem) ? quantity : 1).forEach(() => {
-        setInventory(inventory.add(inventoryItem));
-        sync({
-          type: AddAction,
-          item: inventoryItem as ExternalInventoryItemShape
-        });
+    if (isSubmitting || selectedItem === undefined) {
+      return;
+    }
+    setIsSubmitting(true);
+
+    const inventoryItem = {
+      id: selectedItem.id,
+      stattrak: stattrak ? (0 as const) : undefined,
+      ...attributes
+    };
+
+    if (uid !== undefined) {
+      setInventory(inventory.edit(uid, inventoryItem));
+      sync({
+        type: EditAction,
+        uid,
+        attributes: inventoryItem
       });
       return navigate("/");
     }
+
+    range(showQuantity(selectedItem) ? quantity : 1).forEach(() => {
+      setInventory(inventory.add(inventoryItem));
+      sync({
+        type: AddAction,
+        item: inventoryItem
+      });
+    });
+    return navigate("/");
+  }
+
+  function handleReset() {
+    if (uid !== undefined) {
+      return navigate("/");
+    }
+    return setSelectedItem(undefined);
   }
 
   const isPickingItem = selectedItem === undefined;
@@ -95,8 +127,9 @@ export default function Craft() {
       ) : (
         <CSItemEditor
           item={selectedItem}
+          attributes={uid !== undefined ? inventory.get(uid) : undefined}
           onSubmit={handleSubmit}
-          onReset={() => setSelectedItem(undefined)}
+          onReset={handleReset}
         />
       )}
     </Modal>

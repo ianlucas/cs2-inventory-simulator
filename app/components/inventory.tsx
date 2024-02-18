@@ -26,11 +26,13 @@ import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
 import { useStorageUnit } from "~/hooks/use-storage-unit";
 import { RenameStorageUnit } from "./rename-storage-unit";
+import { useNavigate } from "@remix-run/react";
 
 export function Inventory() {
   const sync = useSync();
   const { inventory, items, setInventory } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
+  const navigate = useNavigate();
 
   const ownApplicableStickers =
     items.filter(({ item }) => item.type === "sticker").length > 0 &&
@@ -101,6 +103,10 @@ export function Inventory() {
     sync({ type: RemoveAction, uid: uid });
   }
 
+  function handleEdit(uid: number) {
+    return navigate(`/craft?uid=${uid}`);
+  }
+
   function dismissSelectItem() {
     setItemSelector(undefined);
     closeUnlockCase();
@@ -160,6 +166,7 @@ export function Inventory() {
                   : {
                       onApplySticker: handleApplyItemSticker,
                       onDepositToStorageUnit: handleDepositToStorageUnit,
+                      onEdit: handleEdit,
                       onEquip: handleEquip,
                       onRemove: handleRemove,
                       onRename: handleRenameItem,

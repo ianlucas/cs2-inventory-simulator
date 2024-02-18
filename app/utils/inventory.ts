@@ -7,6 +7,9 @@ import { CS_Economy, CS_filterItems, CS_InventoryItem } from "@ianlucas/cslib";
 import { getCSItemName } from "./economy";
 import { internalInventoryShape } from "./shapes";
 
+/** @TODO It's a union of wearable, nametaggable, seedable, and stickerable arrays. */
+export const EDITABLE_INVENTORY_TYPE = ["weapon", "melee", "glove", "musickit"];
+
 export function parseInventory(inventory?: string | null) {
   if (!inventory) {
     return [];

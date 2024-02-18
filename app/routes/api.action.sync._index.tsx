@@ -22,6 +22,7 @@ export const AddFromCacheAction = "add-from-cache";
 export const AddWithNametagAction = "add-with-nametag";
 export const ApplyItemStickerAction = "apply-item-sticker";
 export const DepositToStorageUnitAction = "deposit-to-storage-unit";
+export const EditAction = "edit";
 export const EquipAction = "equip";
 export const RemoveAction = "remove";
 export const RenameItemAction = "rename-item";
@@ -121,6 +122,13 @@ export const actionShape = z
       uid: zodNNInt,
       retrieveUids: z.array(zodNNInt)
     })
+  )
+  .or(
+    z.object({
+      type: z.literal(EditAction),
+      uid: zodNNInt,
+      attributes: externalInventoryItemShape
+    })
   );
 
 export type ActionShape = z.infer<typeof actionShape>;
@@ -185,6 +193,8 @@ export async function action({ request }: ActionFunctionArgs) {
             action.uid,
             action.retrieveUids
           );
+        case EditAction:
+          return inventory.edit(action.uid, action.attributes);
       }
     })
   );

@@ -38,6 +38,8 @@ export const brazilian = {
   EditorQuantity: "Qtd.",
   EditorReset: "Reiniciar",
   EditorCraft: "Criar",
+  EditorSave: "Salvar",
+  EditorCancel: "Cancelar",
   EditorStickerWear: "Wear do adesivo",
   StickerPickerHeader: "Pegue um adesivo...",
   StickerPickerSearchPlaceholder: "Procurar adesivo...",
@@ -72,6 +74,7 @@ export const brazilian = {
   InventoryItemStorageUnitRetrieve: "Retirar itens",
   InventoryItemStorageUnitDeposit: "Guardar itens",
   InventoryItemSwapStatTrak: "Abrir Ferramenta de Troca StatTrak™",
+  InventoryItemEdit: "Editar",
   ItemSwapStatTrakUse: "Ferramenta de Troca StatTrak™",
   ItemSwapStatTrakDesc:
     "Este item troca as contagens StatTrak™ de dois itens do mesmo tipo.",

@@ -9,7 +9,6 @@ import {
   CS_hasStickers,
   CS_hasWear,
   CS_INVENTORY_EQUIPPABLE_ITEMS,
-  CS_Item,
   CS_NAMETAG_TOOL_DEF,
   CS_NO_STICKER,
   CS_STORAGE_UNIT_TOOL_DEF,
@@ -21,7 +20,7 @@ import {
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
 import { useTranslation } from "~/hooks/use-translation";
-import { transform } from "~/utils/inventory";
+import { EDITABLE_INVENTORY_TYPE, transform } from "~/utils/inventory";
 import { CSItem } from "./cs-item";
 import { InventoryItemContents } from "./inventory-item-contents";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
@@ -44,6 +43,7 @@ export function InventoryItem({
   onApplySticker,
   onClick,
   onDepositToStorageUnit,
+  onEdit,
   onEquip,
   onRemove,
   onRename,
@@ -60,6 +60,7 @@ export function InventoryItem({
   onApplySticker?: (uid: number) => void;
   onClick?: (uid: number) => void;
   onDepositToStorageUnit?: (uid: number) => void;
+  onEdit?: (uid: number) => void;
   onEquip?: (uid: number, team?: CS_Team) => void;
   onRemove?: (uid: number) => void;
   onRename?: (uid: number) => void;
@@ -126,6 +127,7 @@ export function InventoryItem({
   const hasNametag = inventoryItem.nametag !== undefined;
   const isStorageUnit =
     item.type === "tool" && item.def === CS_STORAGE_UNIT_TOOL_DEF;
+  const isEditable = EDITABLE_INVENTORY_TYPE.includes(item.type);
 
   function close(callBeforeClosing: () => void) {
     return function close() {
@@ -262,6 +264,11 @@ export function InventoryItem({
                   }
                 ],
                 [
+                  {
+                    condition: isEditable,
+                    label: translate("InventoryItemEdit"),
+                    onClick: close(() => onEdit?.(uid))
+                  },
                   {
                     condition: true,
                     label: translate("InventoryItemDelete"),
