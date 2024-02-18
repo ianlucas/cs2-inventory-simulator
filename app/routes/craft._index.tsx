@@ -48,7 +48,6 @@ export default function Craft() {
   const { inventory, setInventory } = useRootContext();
   const sync = useSync();
   const navigate = useNavigate();
-  console.log(uid);
   const [selectedItem, setSelectedItem] = useState(
     uid !== undefined ? inventory.getItem(uid) : undefined
   );
