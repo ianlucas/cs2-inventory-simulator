@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import type { CS_InventoryItem } from "@ianlucas/cslib";
+import { parseInventory } from "./inventory";
 
 export function storeUserId(value: string) {
   if (typeof document !== "undefined") {
@@ -24,10 +25,5 @@ export function storeInventoryItems(value: CS_InventoryItem[]) {
 }
 
 export function retrieveInventoryItems() {
-  try {
-    return (JSON.parse(window.localStorage.getItem("inventoryItems")!) ||
-      []) as CS_InventoryItem[];
-  } catch {
-    return [];
-  }
+  return parseInventory(window.localStorage.getItem("inventoryItems"));
 }
