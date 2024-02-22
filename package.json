@@ -3,11 +3,11 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix build",
-    "dev": "remix dev --manual",
+    "build": "remix vite:build",
+    "dev": "remix vite:dev",
     "format": "prettier . --write",
     "script": "tsx",
-    "start": "remix-serve ./build/index.js",
+    "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
     "upgrade": "npx npm-check-updates --reject \"@types/node isbot\" --target minor -u"
   },
@@ -20,7 +20,6 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@ianlucas/cslib": "^10.0.0",
     "@prisma/client": "^5.10.2",
-    "@remix-run/css-bundle": "^2.7.2",
     "@remix-run/node": "^2.7.2",
     "@remix-run/react": "^2.7.2",
     "@remix-run/serve": "^2.7.2",
@@ -59,7 +58,9 @@
     "prettier": "3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4",
+    "vite-tsconfig-paths": "^4.3.1"
   },
   "engines": {
     "node": ">=18.0.0"

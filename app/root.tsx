@@ -3,11 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -37,7 +35,7 @@ import { getLanguage } from "./preferences/language.server";
 import { getToggleable } from "./preferences/toggleable.server";
 import { seoLinks, seoMeta } from "./seo";
 import { getSession } from "./session.server";
-import styles from "./tailwind.css";
+import styles from "./tailwind.css?url";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
@@ -46,7 +44,6 @@ const displayFontUrl =
   "https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap";
 
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   { rel: "preconnect", href: "https://fonts.gstatic.com" },
   { rel: "stylesheet", href: bodyFontUrl },
@@ -112,7 +109,6 @@ export default function App() {
           <Footer />
           <ScrollRestoration />
           <Scripts />
-          <LiveReload />
         </body>
       </html>
     </RootProvider>
