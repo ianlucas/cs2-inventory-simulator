@@ -3,11 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS_Item,
-  CS_filterItems,
-  CS_safeValidateNametag
-} from "@ianlucas/cslib";
+import { CS_filterItems, CS_safeValidateNametag } from "@ianlucas/cslib";
 import { useMemo } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -20,8 +16,8 @@ import {
 } from "~/routes/api.action.sync._index";
 import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
-import { useRootContext } from "./root-context";
 import { ModalButton } from "./modal-button";
+import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 

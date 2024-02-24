@@ -3,11 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_hasStickers, CS_Item, CS_Team } from "@ianlucas/cslib";
+import { CS_hasStickers, CS_Team } from "@ianlucas/cslib";
+import { useNavigate } from "@remix-run/react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useApplyItemSticker } from "~/hooks/use-apply-item-sticker";
 import { useRenameItem } from "~/hooks/use-rename-item";
 import { useScrapeItemSticker } from "~/hooks/use-scrape-item-sticker";
+import { useStorageUnit } from "~/hooks/use-storage-unit";
 import { useSwapItemsStatTrak } from "~/hooks/use-swap-items-stattrak";
 import { useSync } from "~/hooks/use-sync";
 import { useUnlockCase } from "~/hooks/use-unlock-case";
@@ -20,13 +22,11 @@ import { ApplyItemSticker } from "./apply-item-sticker";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelectorContext } from "./item-selector-context";
 import { RenameItem } from "./rename-item";
+import { RenameStorageUnit } from "./rename-storage-unit";
 import { useRootContext } from "./root-context";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
-import { useStorageUnit } from "~/hooks/use-storage-unit";
-import { RenameStorageUnit } from "./rename-storage-unit";
-import { useNavigate } from "@remix-run/react";
 
 export function Inventory() {
   const sync = useSync();

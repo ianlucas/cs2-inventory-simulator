@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_safeValidateNametag } from "@ianlucas/cslib";
+import { CS_safeValidateNametag } from "@ianlucas/cslib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/hooks/use-input";

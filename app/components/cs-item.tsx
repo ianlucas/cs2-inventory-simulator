@@ -13,7 +13,7 @@ import {
 } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
-import { getCSItemName, resolveItemImage } from "~/utils/economy";
+import { getCSItemName } from "~/utils/economy";
 import { CSItemImage } from "./cs-item-image";
 
 export function CSItem({
