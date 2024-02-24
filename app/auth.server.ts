@@ -5,26 +5,14 @@
 
 import { redirect } from "@remix-run/node";
 import { Authenticator } from "remix-auth";
-import { SteamStrategy } from "remix-auth-steam";
 import { sessionStorage } from "~/session.server";
-import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "./env.server";
-import { findUniqueUser, upsertUser } from "./models/user.server";
 import { ApiStrategy } from "./auth-strategy-api.server";
+import { SteamStrategy } from "./auth-strategy-steam.server";
+import { findUniqueUser } from "./models/user.server";
 
 export const authenticator = new Authenticator<string>(sessionStorage);
 
-authenticator
-  .use(
-    new SteamStrategy(
-      {
-        returnURL: STEAM_CALLBACK_URL,
-        apiKey: STEAM_API_KEY
-      },
-      async (user) => await upsertUser(user)
-    ),
-    "steam"
-  )
-  .use(new ApiStrategy(), "api");
+authenticator.use(new SteamStrategy(), "steam").use(new ApiStrategy(), "api");
 
 export async function findRequestUser(request: Request) {
   const userId = await authenticator.isAuthenticated(request);
