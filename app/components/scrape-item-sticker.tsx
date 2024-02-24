@@ -106,9 +106,9 @@ export function ScrapeItemSticker({
                           item={CS_Economy.getById(id)}
                         />
                         {statsForNerds && (
-                          <span className="text-sm text-neutral-300">
-                            {stickersWear[index].toFixed(2)}
-                          </span>
+                          <div className="text-sm font-bold text-neutral-300 transition-all group-hover:scale-150">
+                            {(stickersWear[index] * 100).toFixed(0)}%
+                          </div>
                         )}
                       </button>
                     ) : null
