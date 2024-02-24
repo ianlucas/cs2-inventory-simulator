@@ -15,7 +15,9 @@ export function Footer() {
   return (
     <footer className="my-8 select-none text-sm text-neutral-400 drop-shadow-sm">
       <div className="text-center">
-        <span>&copy; 2023, CS2 Inventory Simulator.</span>
+        <span>
+          &copy; {new Date().getFullYear()} cstrike's Inventory Simulator
+        </span>
       </div>
       <div className="flex items-center justify-center gap-2">
         <a
