@@ -95,10 +95,6 @@ export default function App() {
         </head>
         <body className="overflow-y-scroll bg-stone-800">
           <Splash />
-          <div
-            className="fixed left-0 top-0 -z-10 h-full w-full overflow-hidden lg:blur-sm"
-            id="background"
-          />
           <Background />
           <ClientOnly children={() => <SyncWarn />} />
           <Header />
