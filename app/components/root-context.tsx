@@ -12,8 +12,9 @@ import {
   useEffect,
   useMemo
 } from "react";
-import type { findRequestUser } from "~/auth.server";
+import { useTypedLoaderData } from "remix-typedjson";
 import { useInventory } from "~/hooks/use-inventory";
+import { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { translateItems } from "~/utils/economy";
 import {
@@ -33,40 +34,23 @@ import {
   storeUserId
 } from "~/utils/user";
 
-const RootContext = createContext<{
-  background: string;
-  buildLastCommit?: string;
-  hideFreeItems: boolean;
-  inventory: CS_Inventory;
-  items: ReturnType<typeof transform>[];
-  itemTranslation: Record<string, string | undefined>;
-  language: string;
-  maxInventoryItems: number;
-  maxInventoryStorageUnitItems: number;
-  nametagDefaultAllowed: number[];
-  requireAuth: boolean;
-  setInventory: (value: CS_Inventory) => void;
-  statsForNerds: boolean;
-  translation: Record<string, string | undefined>;
-  user: Awaited<ReturnType<typeof findRequestUser>>;
-}>(null!);
+const RootContext = createContext<
+  {
+    inventory: CS_Inventory;
+    items: ReturnType<typeof transform>[];
+    requireAuth: boolean;
+    setInventory: (value: CS_Inventory) => void;
+  } & ReturnType<typeof useTypedLoaderData<typeof loader>>
+>(null!);
 
 export function useRootContext() {
   return useContext(RootContext);
 }
 
 export function RootProvider({
-  background,
-  buildLastCommit,
   children,
-  hideFreeItems,
-  itemTranslation,
-  language,
-  maxInventoryItems,
-  maxInventoryStorageUnitItems,
-  nametagDefaultAllowed,
-  statsForNerds,
-  translation,
+  env,
+  preferences,
   user
 }: Omit<
   ContextType<typeof RootContext>,
@@ -79,8 +63,8 @@ export function RootProvider({
       items: user?.inventory
         ? parseInventory(user?.inventory)
         : retrieveInventoryItems(),
-      limit: maxInventoryItems,
-      storageUnitLimit: maxInventoryStorageUnitItems
+      limit: env.maxInventoryItems,
+      storageUnitLimit: env.maxInventoryStorageUnitItems
     })
   );
 
@@ -103,8 +87,8 @@ export function RootProvider({
             equippedCT: undefined,
             equippedT: undefined
           })),
-          limit: maxInventoryItems,
-          storageUnitLimit: maxInventoryStorageUnitItems
+          limit: env.maxInventoryItems,
+          storageUnitLimit: env.maxInventoryStorageUnitItems
         })
       );
     }
@@ -113,7 +97,7 @@ export function RootProvider({
     }
   }, [user]);
 
-  translateItems(language, itemTranslation);
+  translateItems(preferences.language, preferences.itemTranslation);
 
   const items = useMemo(
     () => [
@@ -125,31 +109,23 @@ export function RootProvider({
         .sort(sortByType)
         .sort(sortByEquipped),
       // Default Game Items
-      ...getFreeItemsToDisplay(hideFreeItems)
+      ...getFreeItemsToDisplay(preferences.hideFreeItems)
         .sort(sortByName)
         .sort(sortByType)
         .sort(sortByEquipped)
     ],
-    [inventory, language, hideFreeItems]
+    [inventory, preferences.language, preferences.hideFreeItems]
   );
 
   return (
     <RootContext.Provider
       value={{
-        background,
-        buildLastCommit,
-        hideFreeItems,
+        env,
         inventory,
         items,
-        itemTranslation,
-        language,
-        maxInventoryItems,
-        maxInventoryStorageUnitItems,
-        nametagDefaultAllowed,
+        preferences,
         requireAuth: retrieveUserId() !== undefined,
         setInventory,
-        statsForNerds,
-        translation,
         user
       }}
     >

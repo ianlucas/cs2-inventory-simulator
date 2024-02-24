@@ -32,7 +32,11 @@ export function ScrapeItemSticker({
   uid: number;
 }) {
   const translate = useTranslation();
-  const { inventory, setInventory, statsForNerds } = useRootContext();
+  const {
+    inventory,
+    setInventory,
+    preferences: { statsForNerds }
+  } = useRootContext();
   const sync = useSync();
   const [item] = useState(inventory.getItem(uid));
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();

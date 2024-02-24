@@ -8,7 +8,9 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useRootContext } from "./root-context";
 
 export function Background() {
-  const { background } = useRootContext();
+  const {
+    preferences: { background }
+  } = useRootContext();
 
   return (
     <ClientOnly

@@ -40,10 +40,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Settings() {
   const { backgrounds, languages } = useTypedLoaderData<typeof loader>();
   const {
-    background: selectedBackground,
-    language: selectedLanguage,
-    statsForNerds: selectedStatsForNerds,
-    hideFreeItems: selectedHideFreeItems
+    preferences: {
+      background: selectedBackground,
+      language: selectedLanguage,
+      statsForNerds: selectedStatsForNerds,
+      hideFreeItems: selectedHideFreeItems
+    }
   } = useRootContext();
 
   const [language, setLanguage] = useState(selectedLanguage);

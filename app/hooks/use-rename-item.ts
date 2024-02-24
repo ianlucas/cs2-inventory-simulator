@@ -9,7 +9,10 @@ import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
 
 export function useRenameItem() {
-  const { items, nametagDefaultAllowed } = useRootContext();
+  const {
+    items,
+    env: { nametagDefaultAllowed }
+  } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [renameItem, setRenameItem] = useState<{
     toolUid: number;

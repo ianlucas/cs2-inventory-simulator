@@ -6,7 +6,9 @@
 import { useRootContext } from "~/components/root-context";
 
 export function useTranslation() {
-  const { translation } = useRootContext();
+  const {
+    preferences: { translation }
+  } = useRootContext();
   return function translate(
     token: string,
     defaultValue?: string,

@@ -58,14 +58,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const ipCountry = request.headers.get("CF-IPCountry");
   return typedjson({
-    buildLastCommit: BUILD_LAST_COMMIT,
-    maxInventoryItems: MAX_INVENTORY_ITEMS,
-    maxInventoryStorageUnitItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS,
-    nametagDefaultAllowed: NAMETAG_DEFAULT_ALLOWED,
-    user: await findRequestUser(request),
-    ...(await getBackground(session)),
-    ...(await getLanguage(session, ipCountry)),
-    ...(await getToggleable(session))
+    env: {
+      buildLastCommit: BUILD_LAST_COMMIT,
+      maxInventoryItems: MAX_INVENTORY_ITEMS,
+      maxInventoryStorageUnitItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS,
+      nametagDefaultAllowed: NAMETAG_DEFAULT_ALLOWED
+    },
+    preferences: {
+      ...(await getBackground(session)),
+      ...(await getLanguage(session, ipCountry)),
+      ...(await getToggleable(session))
+    },
+    user: await findRequestUser(request)
   });
 }
 

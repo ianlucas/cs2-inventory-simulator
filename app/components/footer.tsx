@@ -8,7 +8,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRootContext } from "./root-context";
 
 export function Footer() {
-  const { buildLastCommit } = useRootContext();
+  const {
+    env: { buildLastCommit }
+  } = useRootContext();
 
   return (
     <footer className="my-8 select-none text-sm text-neutral-400 drop-shadow-sm">
