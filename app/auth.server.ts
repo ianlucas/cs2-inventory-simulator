@@ -9,19 +9,22 @@ import { SteamStrategy } from "remix-auth-steam";
 import { sessionStorage } from "~/session.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "./env.server";
 import { findUniqueUser, upsertUser } from "./models/user.server";
+import { ApiStrategy } from "./auth-strategy-api.server";
 
 export const authenticator = new Authenticator<string>(sessionStorage);
 
-authenticator.use(
-  new SteamStrategy(
-    {
-      returnURL: STEAM_CALLBACK_URL,
-      apiKey: STEAM_API_KEY
-    },
-    async (user) => await upsertUser(user)
-  ),
-  "steam"
-);
+authenticator
+  .use(
+    new SteamStrategy(
+      {
+        returnURL: STEAM_CALLBACK_URL,
+        apiKey: STEAM_API_KEY
+      },
+      async (user) => await upsertUser(user)
+    ),
+    "steam"
+  )
+  .use(new ApiStrategy(), "api");
 
 export async function findRequestUser(request: Request) {
   const userId = await authenticator.isAuthenticated(request);

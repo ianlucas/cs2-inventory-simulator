@@ -13,6 +13,7 @@ datasource db {
 }
 
 model User {
+  authTokens ApiAuthToken[]
   avatar String
   caches UserCache[]
   createdAt DateTime @default(now())
@@ -46,4 +47,12 @@ model ApiCredential {
   apiKey String @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model ApiAuthToken {
+  apiKey String
+  createdAt DateTime @default(now())
+  token String @id @default(uuid())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }

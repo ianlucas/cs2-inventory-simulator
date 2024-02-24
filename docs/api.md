@@ -92,3 +92,36 @@ POST https://inventory.cstrike.app/api/increment-item-stattrak
 - Returns `401` when using an invalid API Key.
 - Returns `400` when the user does not exist or target uid is invalid.
 - Returns `204` when the increment was successful.
+
+## Sign-in user
+
+This is intended to be used in other first-party apps to authenticate users to Inventory Simulator. First, a POST request must be sent to `/api/sign-in` to get the user's authentication `token`, then the user must be immediately redirected to `/api/sign-in/callback?token={returned token}`.
+
+### Get user sign-in token
+
+```http
+POST https://inventory.cstrike.app/api/sign-in
+```
+
+#### Request
+
+```json
+{
+  "apiKey": "api key to authorize this request",
+  "userId": "steamID64"
+}
+```
+
+#### Response
+
+```typescript
+type GetUserSignInTokenResponse = {
+  token: string; // expires in 1 minute.
+};
+```
+
+### Sign-in user
+
+```http
+GET https://inventory.cstrike.app/api/sign-in/callback?token{token}
+```
