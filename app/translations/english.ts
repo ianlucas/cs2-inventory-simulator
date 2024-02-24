@@ -103,7 +103,7 @@ export const english = {
   SettingsLanguage: "Language",
   SettingsBackground: "Background",
   SettingsStatsForNerds: "Stats for nerds",
-  SettingsHideFreeItems: "Hide default items (except C4)",
+  SettingsHideFreeItems: "Hide default items",
   SettingsSave: "Save",
   CaseUnlockContainer: "Unlock Container",
   CaseUnlock: "Unlock",

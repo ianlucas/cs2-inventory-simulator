@@ -88,16 +88,17 @@ export function sortByEquipped(
   }
 }
 
-export function getFreeItemsToDisplay(onlyC4 = false) {
+export function getFreeItemsToDisplay(hideFreeItems = false) {
+  if (hideFreeItems) {
+    return [];
+  }
   return CS_filterItems({
     free: true
-  })
-    .map((item, index) => ({
-      equipped: [],
-      uid: -1 * (index + 1),
-      inventoryItem: { id: item.id } as CS_InventoryItem,
-      item,
-      ...getCSItemName(item)
-    }))
-    .filter(({ item }) => !onlyC4 || item.category === "c4");
+  }).map((item, index) => ({
+    equipped: [],
+    uid: -1 * (index + 1),
+    inventoryItem: { id: item.id } as CS_InventoryItem,
+    item,
+    ...getCSItemName(item)
+  }));
 }
