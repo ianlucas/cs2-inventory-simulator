@@ -11,6 +11,7 @@ import {
   useContext,
   useState
 } from "react";
+import { ClientOnly } from "remix-utils/client-only";
 import { transform } from "~/utils/inventory";
 
 export interface ItemSelectorContextProps {
@@ -41,13 +42,17 @@ export function ItemSelectorProvider({ children }: { children: ReactNode }) {
   const [itemSelector, setItemSelector] = useState<ItemSelectorContextProps>();
 
   return (
-    <ItemSelectorContext.Provider
-      value={{
-        itemSelector,
-        setItemSelector
-      }}
-    >
-      {children}
-    </ItemSelectorContext.Provider>
+    <ClientOnly
+      children={() => (
+        <ItemSelectorContext.Provider
+          value={{
+            itemSelector,
+            setItemSelector
+          }}
+        >
+          {children}
+        </ItemSelectorContext.Provider>
+      )}
+    />
   );
 }

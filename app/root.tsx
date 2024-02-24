@@ -96,15 +96,11 @@ export default function App() {
         <body className="overflow-y-scroll bg-stone-800">
           <Splash />
           <Background />
-          <ClientOnly children={() => <SyncWarn />} />
+          <SyncWarn />
           <Header />
-          <ClientOnly
-            children={() => (
-              <ItemSelectorProvider>
-                <Inventory />
-              </ItemSelectorProvider>
-            )}
-          />
+          <ItemSelectorProvider>
+            <Inventory />
+          </ItemSelectorProvider>
           <Outlet />
           <Footer />
           <ScrollRestoration />
