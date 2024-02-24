@@ -123,5 +123,5 @@ type GetUserSignInTokenResponse = {
 ### Sign-in user
 
 ```http
-GET https://inventory.cstrike.app/api/sign-in/callback?token{token}
+GET https://inventory.cstrike.app/api/sign-in/callback?token={token}
 ```
