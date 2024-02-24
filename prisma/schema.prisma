@@ -45,6 +45,7 @@ model UserPreferences {
 
 model ApiCredential {
   apiKey String @id
+  authTokens ApiAuthToken[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -52,6 +53,7 @@ model ApiCredential {
 model ApiAuthToken {
   apiKey String
   createdAt DateTime @default(now())
+  credential ApiCredential @relation(fields: [apiKey], references: [apiKey])
   token String @id @default(uuid())
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
