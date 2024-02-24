@@ -67,6 +67,7 @@ export function RenameStorageUnit({
               />
               <div className="flex">
                 <EditorInput
+                  autoFocus
                   className="py-1 text-xl"
                   maxLength={20}
                   onChange={setNametag}

@@ -90,6 +90,7 @@ export function RenameItem({
               />
               <div className="flex">
                 <EditorInput
+                  autoFocus
                   className="py-1 text-xl"
                   maxLength={20}
                   onChange={setNametag}
