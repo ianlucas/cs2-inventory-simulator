@@ -13,7 +13,7 @@ export function Background() {
   return (
     <video
       autoPlay
-      className="fixed left-0 top-0 h-screen w-screen object-cover opacity-50 saturate-200 lg:blur-sm"
+      className="fixed left-0 top-0 -z-10 h-screen w-screen object-cover opacity-50 saturate-200 lg:blur-sm"
       disablePictureInPicture={true}
       loop
       muted
