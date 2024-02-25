@@ -19,6 +19,7 @@ import {
   UnequipAction
 } from "~/routes/api.action.sync._index";
 import { ApplyItemSticker } from "./apply-item-sticker";
+import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelectorContext } from "./item-selector-context";
 import { RenameItem } from "./rename-item";
@@ -180,6 +181,7 @@ export function Inventory() {
             />
           </div>
         ))}
+        <InventoryGridPlaceholder />
       </div>
       {isUnlockingCase(unlockCase) && (
         <UnlockCase {...unlockCase} onClose={closeUnlockCase} />
