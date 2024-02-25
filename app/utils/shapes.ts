@@ -51,7 +51,6 @@ const inventoryItemProps = {
         ? stickerswear
         : undefined
     ),
-  updatedat: nonNegativeInt.optional().transform(() => undefined),
   wear: nonNegativeFloat
     .optional()
     .refine((wear) => wear === undefined || CS_safeValidateWear(wear))
