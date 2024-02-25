@@ -14,15 +14,15 @@ import {
 import { z } from "zod";
 import { size } from "./number";
 
-export const zodNNInt = z.number().int().nonnegative().finite().safe();
-export const zodPInt = z.number().int().positive().finite().safe();
-export const zodNNFloat = z.number().nonnegative().finite();
+export const nonNegativeInt = z.number().int().nonnegative().finite().safe();
+export const positiveInt = z.number().int().positive().finite().safe();
+export const nonNegativeFloat = z.number().nonnegative().finite();
 
 const inventoryItemProps = {
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
-  id: zodNNInt.refine((id) => !CS_Economy.getById(id).free),
+  id: nonNegativeInt.refine((id) => !CS_Economy.getById(id).free),
   nametag: z
     .string()
     .max(20)
@@ -31,12 +31,12 @@ const inventoryItemProps = {
     .refine(
       (nametag) => nametag === undefined || CS_safeValidateNametag(nametag)
     ),
-  seed: zodPInt
+  seed: positiveInt
     .optional()
     .refine((seed) => seed === undefined || CS_safeValidateSeed(seed)),
   stattrak: z.literal(0).optional(),
   stickers: z
-    .array(zodNNInt)
+    .array(nonNegativeInt)
     .optional()
     .transform((stickers) =>
       size(stickers?.filter((sticker) => sticker !== CS_NO_STICKER_WEAR)) > 0
@@ -44,14 +44,15 @@ const inventoryItemProps = {
         : undefined
     ),
   stickerswear: z
-    .array(zodNNFloat)
+    .array(nonNegativeFloat)
     .optional()
     .transform((stickerswear) =>
       size(stickerswear?.filter((wear) => wear !== CS_NO_STICKER_WEAR)) > 0
         ? stickerswear
         : undefined
     ),
-  wear: zodNNFloat
+  updatedat: nonNegativeInt.optional().transform(() => undefined),
+  wear: nonNegativeFloat
     .optional()
     .refine((wear) => wear === undefined || CS_safeValidateWear(wear))
 };
@@ -61,7 +62,7 @@ export const externalInventoryShape = z.array(externalInventoryItemShape);
 export const internalInventoryShape = z.array(
   z.object({
     ...inventoryItemProps,
-    id: z.number(),
+    id: nonNegativeInt,
     stattrak: z
       .number()
       .optional()
@@ -73,11 +74,11 @@ export const internalInventoryShape = z.array(
       .array(
         z.object({
           ...inventoryItemProps,
-          uid: z.number()
+          uid: nonNegativeInt
         })
       )
       .optional(),
-    uid: z.number()
+    uid: nonNegativeInt
   })
 );
 

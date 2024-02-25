@@ -3,9 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS_createInventory } from "@ianlucas/cslib";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
+import {
+  MAX_INVENTORY_ITEMS,
+  MAX_INVENTORY_STORAGE_UNIT_ITEMS
+} from "~/env.server";
 import { middleware } from "~/http.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { noContent } from "~/response.server";
@@ -13,7 +18,8 @@ import {
   externalInventoryItemShape,
   externalInventoryShape,
   teamShape,
-  zodNNInt
+  nonNegativeInt,
+  internalInventoryShape
 } from "~/utils/shapes";
 
 export const ApiActionSync = "/api/action/sync";
@@ -40,93 +46,93 @@ export const actionShape = z
   .or(
     z.object({
       type: z.literal(AddFromCacheAction),
-      items: externalInventoryShape
+      items: internalInventoryShape
     })
   )
   .or(
     z.object({
       type: z.literal(AddWithNametagAction),
-      toolUid: zodNNInt,
-      itemId: zodNNInt,
+      toolUid: nonNegativeInt,
+      itemId: nonNegativeInt,
       nametag: z.string()
     })
   )
   .or(
     z.object({
       type: z.literal(ApplyItemStickerAction),
-      targetUid: zodNNInt,
-      stickerUid: zodNNInt,
-      stickerIndex: zodNNInt
+      targetUid: nonNegativeInt,
+      stickerUid: nonNegativeInt,
+      stickerIndex: nonNegativeInt
     })
   )
   .or(
     z.object({
       type: z.literal(EquipAction),
-      uid: zodNNInt,
+      uid: nonNegativeInt,
       team: teamShape.optional()
     })
   )
   .or(
     z.object({
       type: z.literal(UnequipAction),
-      uid: zodNNInt,
+      uid: nonNegativeInt,
       team: teamShape.optional()
     })
   )
   .or(
     z.object({
       type: z.literal(RenameItemAction),
-      toolUid: zodNNInt,
-      targetUid: zodNNInt,
+      toolUid: nonNegativeInt,
+      targetUid: nonNegativeInt,
       nametag: z.string().optional()
     })
   )
   .or(
     z.object({
       type: z.literal(RemoveAction),
-      uid: zodNNInt
+      uid: nonNegativeInt
     })
   )
   .or(
     z.object({
       type: z.literal(ScrapeItemStickerAction),
-      targetUid: zodNNInt,
-      stickerIndex: zodNNInt
+      targetUid: nonNegativeInt,
+      stickerIndex: nonNegativeInt
     })
   )
   .or(
     z.object({
       type: z.literal(SwapItemsStatTrakAction),
-      fromUid: zodNNInt,
-      toUid: zodNNInt,
-      toolUid: zodNNInt
+      fromUid: nonNegativeInt,
+      toUid: nonNegativeInt,
+      toolUid: nonNegativeInt
     })
   )
   .or(
     z.object({
       type: z.literal(RenameStorageUnitAction),
-      uid: zodNNInt,
+      uid: nonNegativeInt,
       nametag: z.string()
     })
   )
   .or(
     z.object({
       type: z.literal(DepositToStorageUnitAction),
-      uid: zodNNInt,
-      depositUids: z.array(zodNNInt)
+      uid: nonNegativeInt,
+      depositUids: z.array(nonNegativeInt)
     })
   )
   .or(
     z.object({
       type: z.literal(RetrieveFromStorageUnitAction),
-      uid: zodNNInt,
-      retrieveUids: z.array(zodNNInt)
+      uid: nonNegativeInt,
+      retrieveUids: z.array(nonNegativeInt)
     })
   )
   .or(
     z.object({
       type: z.literal(EditAction),
-      uid: zodNNInt,
+      uid: nonNegativeInt,
       attributes: externalInventoryItemShape
     })
   );
@@ -145,7 +151,13 @@ export async function action({ request }: ActionFunctionArgs) {
           return inventory.add(action.item);
         case AddFromCacheAction:
           if (rawInventory === null && !addedFromCache) {
-            action.items.forEach((item) => inventory.add(item));
+            CS_createInventory({
+              items: action.items,
+              limit: MAX_INVENTORY_ITEMS,
+              storageUnitLimit: MAX_INVENTORY_STORAGE_UNIT_ITEMS
+            })
+              .getAll()
+              .forEach((item) => inventory.add(item));
             addedFromCache = true;
           }
           return;

@@ -14,7 +14,7 @@ import {
 import { middleware } from "~/http.server";
 import { updateUserInventory } from "~/models/user.server";
 import { parseInventory } from "~/utils/inventory";
-import { zodNNInt } from "~/utils/shapes";
+import { nonNegativeInt } from "~/utils/shapes";
 
 export const ApiActionUnlockCaseUrl = "/api/action/unlock-case";
 
@@ -27,8 +27,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const { id: userId, inventory: rawInventory } = await requireUser(request);
   const { caseUid, keyUid } = z
     .object({
-      caseUid: zodNNInt,
-      keyUid: zodNNInt.optional()
+      caseUid: nonNegativeInt,
+      keyUid: nonNegativeInt.optional()
     })
     .parse(await request.json());
   const inventory = new CS_Inventory({
