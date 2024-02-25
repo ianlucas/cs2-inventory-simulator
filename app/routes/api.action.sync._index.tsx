@@ -14,13 +14,11 @@ import {
 import { middleware } from "~/http.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { noContent } from "~/response.server";
+import { teamShape, nonNegativeInt } from "~/utils/shapes";
 import {
-  externalInventoryItemShape,
-  externalInventoryShape,
-  teamShape,
-  nonNegativeInt,
-  internalInventoryShape
-} from "~/utils/shapes";
+  clientInventoryItemShape,
+  syncInventoryShape
+} from "~/utils/shapes.server";
 
 export const ApiActionSync = "/api/action/sync";
 export const AddAction = "add";
@@ -38,15 +36,15 @@ export const ScrapeItemStickerAction = "scrape-item-sticker";
 export const SwapItemsStatTrakAction = "swap-items-stattrak";
 export const UnequipAction = "unequip";
 
-export const actionShape = z
+const actionShape = z
   .object({
     type: z.literal(AddAction),
-    item: externalInventoryItemShape
+    item: clientInventoryItemShape
   })
   .or(
     z.object({
       type: z.literal(AddFromCacheAction),
-      items: internalInventoryShape
+      items: syncInventoryShape
     })
   )
   .or(
@@ -133,7 +131,7 @@ export const actionShape = z
     z.object({
       type: z.literal(EditAction),
       uid: nonNegativeInt,
-      attributes: externalInventoryItemShape
+      attributes: clientInventoryItemShape
     })
   );
 

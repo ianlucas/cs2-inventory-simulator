@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_Economy,
   CS_NO_STICKER_WEAR,
   CS_safeValidateNametag,
   CS_safeValidateSeed,
@@ -18,11 +17,10 @@ export const nonNegativeInt = z.number().int().nonnegative().finite().safe();
 export const positiveInt = z.number().int().positive().finite().safe();
 export const nonNegativeFloat = z.number().nonnegative().finite();
 
-const inventoryItemProps = {
+export const baseInventoryItemProps = {
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
-  id: nonNegativeInt.refine((id) => !CS_Economy.getById(id).free),
   nametag: z
     .string()
     .max(20)
@@ -56,34 +54,25 @@ const inventoryItemProps = {
     .refine((wear) => wear === undefined || CS_safeValidateWear(wear))
 };
 
-export const externalInventoryItemShape = z.object(inventoryItemProps);
-export const externalInventoryShape = z.array(externalInventoryItemShape);
-export const internalInventoryShape = z.array(
-  z.object({
-    ...inventoryItemProps,
-    id: nonNegativeInt,
-    stattrak: z
-      .number()
-      .optional()
-      .refine(
-        (stattrak) =>
-          stattrak === undefined || CS_safeValidateStatTrak(stattrak)
-      ),
-    storage: z
-      .array(
-        z.object({
-          ...inventoryItemProps,
-          uid: nonNegativeInt
-        })
-      )
-      .optional(),
-    uid: nonNegativeInt
-  })
-);
+const baseServerInventoryItemProps = {
+  ...baseInventoryItemProps,
+  id: nonNegativeInt,
+  stattrak: z
+    .number()
+    .optional()
+    .refine(
+      (stattrak) => stattrak === undefined || CS_safeValidateStatTrak(stattrak)
+    ),
+  uid: nonNegativeInt
+};
+
+const serverInventoryItemProps = {
+  ...baseServerInventoryItemProps,
+  storage: z.array(z.object(baseServerInventoryItemProps)).optional()
+};
+
+export const serverInventoryItemShape = z.object(serverInventoryItemProps);
+
+export const serverInventoryShape = z.array(serverInventoryItemShape);
 
 export const teamShape = z.literal(0).or(z.literal(2)).or(z.literal(3));
-
-export type ExternalInventoryItemShape = z.infer<
-  typeof externalInventoryItemShape
->;
-export type ExternalInventoryShape = z.infer<typeof externalInventoryShape>;

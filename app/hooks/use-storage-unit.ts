@@ -17,13 +17,17 @@ import { useSync } from "./use-sync";
 export function useStorageUnit() {
   const sync = useSync();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
-  const { items, inventory, setInventory } = useRootContext();
+  const { env, items, inventory, setInventory } = useRootContext();
   const [renameStorageUnit, setRenameStorageUnit] = useState<{
     uid: number;
   }>();
 
-  const isDepositableItem = ({ item }: (typeof items)[number]) =>
-    !item.free &&
+  const isDepositableItem = ({
+    item,
+    inventoryItem: { nametag }
+  }: (typeof items)[number]) =>
+    (!item.free ||
+      (env.nametagDefaultAllowed.includes(item.id) && nametag !== undefined)) &&
     (item.type !== "tool" || item.def !== CS_STORAGE_UNIT_TOOL_DEF);
 
   function handleRenameStorageUnit(uid: number) {

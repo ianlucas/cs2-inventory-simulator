@@ -25,7 +25,7 @@ import {
   sortByType,
   transform
 } from "~/utils/inventory";
-import { ExternalInventoryShape } from "~/utils/shapes";
+import type { SyncInventoryShape } from "~/utils/shapes.server";
 import { sync } from "~/utils/sync";
 import {
   retrieveInventoryItems,
@@ -77,7 +77,7 @@ export function RootProvider({
     if (user !== undefined && user.inventory === null && items.length > 0) {
       sync({
         type: AddFromCacheAction,
-        items: items as ExternalInventoryShape
+        items: items as SyncInventoryShape
       });
       setInventory(
         new CS_Inventory({
