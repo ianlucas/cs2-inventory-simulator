@@ -24,6 +24,7 @@ export const ApiActionSync = "/api/action/sync";
 export const AddAction = "add";
 export const AddFromCacheAction = "add-from-cache";
 export const AddWithNametagAction = "add-with-nametag";
+export const AddWithStickerAction = "add-with-sticker";
 export const ApplyItemStickerAction = "apply-item-sticker";
 export const DepositToStorageUnitAction = "deposit-to-storage-unit";
 export const EditAction = "edit";
@@ -133,6 +134,14 @@ const actionShape = z
       uid: nonNegativeInt,
       attributes: clientInventoryItemShape
     })
+  )
+  .or(
+    z.object({
+      type: z.literal(AddWithStickerAction),
+      stickerUid: nonNegativeInt,
+      itemId: nonNegativeInt,
+      stickerIndex: nonNegativeInt
+    })
   );
 
 export type ActionShape = z.infer<typeof actionShape>;
@@ -205,6 +214,12 @@ export async function action({ request }: ActionFunctionArgs) {
           );
         case EditAction:
           return inventory.edit(action.uid, action.attributes);
+        case AddWithStickerAction:
+          return inventory.addWithSticker(
+            action.stickerUid,
+            action.itemId,
+            action.stickerIndex
+          );
       }
     })
   );

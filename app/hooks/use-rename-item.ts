@@ -9,10 +9,7 @@ import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
 
 export function useRenameItem() {
-  const {
-    items,
-    env: { nametagDefaultAllowed }
-  } = useRootContext();
+  const { items } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [renameItem, setRenameItem] = useState<{
     toolUid: number;
@@ -23,12 +20,7 @@ export function useRenameItem() {
     return setItemSelector({
       uid,
       items: items.filter(
-        ({ item }) =>
-          CS_hasNametag(item) &&
-          !CS_isStorageUnit(item) &&
-          (!item.free ||
-            nametagDefaultAllowed.length === 0 ||
-            nametagDefaultAllowed.includes(item.id))
+        ({ item }) => CS_hasNametag(item) && !CS_isStorageUnit(item)
       ),
       type: "rename-item"
     });

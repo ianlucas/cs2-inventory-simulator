@@ -4,17 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy } from "@ianlucas/cslib";
-import { baseInventoryItemProps, nonNegativeInt } from "./shapes";
-import { NAMETAG_DEFAULT_ALLOWED } from "~/env.server";
 import { z } from "zod";
+import { baseInventoryItemProps, nonNegativeInt } from "./shapes";
 
 const clientInventoryItemProps = {
-  ...baseInventoryItemProps,
-  id: nonNegativeInt.refine(
-    // UI-wise we only allow paid items and renaming specific free items, so any
-    // input coming from the user needs to be validated considering that.
-    (id) => !CS_Economy.getById(id).free || NAMETAG_DEFAULT_ALLOWED.includes(id)
-  )
+  ...baseInventoryItemProps
 };
 
 const syncInventoryItemProps = {
@@ -30,8 +24,21 @@ const syncInventoryItemProps = {
   uid: nonNegativeInt
 };
 
-function legit({ id, nametag }: { id: number; nametag?: string }) {
-  if (CS_Economy.getById(id).free && nametag === undefined) {
+function legit({
+  id,
+  nametag,
+  stickers
+}: {
+  id: number;
+  nametag?: string;
+  stickers?: number[];
+}) {
+  // Free items can be stored if they have a nametag or stickers
+  if (
+    CS_Economy.getById(id).free &&
+    nametag === undefined &&
+    stickers === undefined
+  ) {
     return false;
   }
   return true;

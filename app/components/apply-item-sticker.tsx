@@ -5,13 +5,20 @@
 
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_NO_STICKER } from "@ianlucas/cslib";
+import {
+  CS_Economy,
+  CS_INVENTORY_NO_STICKERS,
+  CS_NO_STICKER
+} from "@ianlucas/cslib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
-import { ApplyItemStickerAction } from "~/routes/api.action.sync._index";
+import {
+  AddWithStickerAction,
+  ApplyItemStickerAction
+} from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
 import { CSItemImage } from "./cs-item-image";
 import { ModalButton } from "./modal-button";
@@ -29,28 +36,47 @@ export function ApplyItemSticker({
   stickerUid: number;
 }) {
   const translate = useTranslation();
-  const { inventory, setInventory } = useRootContext();
+  const { items, inventory, setInventory } = useRootContext();
   const sync = useSync();
 
   const [stickerIndex, setStickerIndex] = useState<number>();
   const [stickerItem] = useState(inventory.getItem(stickerUid));
-  const [item] = useState(inventory.getItem(targetUid));
 
-  const stickers = inventory.get(targetUid).stickers ?? [0, 0, 0, 0];
+  const targetItem =
+    targetUid >= 0
+      ? inventory.getItem(targetUid)
+      : items.find(({ uid }) => uid === targetUid)!.item;
+  const stickers =
+    (targetUid >= 0 ? inventory.get(targetUid).stickers : undefined) ??
+    CS_INVENTORY_NO_STICKERS.slice();
 
   function handleApplySticker() {
     if (stickerIndex !== undefined) {
-      sync({
-        type: ApplyItemStickerAction,
-        targetUid: targetUid,
-        stickerIndex,
-        stickerUid: stickerUid
-      });
-      setInventory(
-        inventory.applyItemSticker(targetUid, stickerUid, stickerIndex)
-      );
-      playSound("sticker_apply_confirm");
-      onClose();
+      if (targetUid >= 0) {
+        sync({
+          type: ApplyItemStickerAction,
+          targetUid,
+          stickerIndex,
+          stickerUid
+        });
+        setInventory(
+          inventory.applyItemSticker(targetUid, stickerUid, stickerIndex)
+        );
+        playSound("sticker_apply_confirm");
+        onClose();
+      } else {
+        sync({
+          type: AddWithStickerAction,
+          stickerUid,
+          itemId: targetItem.id,
+          stickerIndex
+        });
+        setInventory(
+          inventory.addWithSticker(stickerUid, targetItem.id, stickerIndex)
+        );
+        playSound("sticker_apply_confirm");
+        onClose();
+      }
     }
   }
 
@@ -62,13 +88,13 @@ export function ApplyItemSticker({
             <div>
               <UseItemHeader
                 actionDesc={translate("ApplyStickerUseOn")}
-                actionItem={item.name}
+                actionItem={targetItem.name}
                 title={translate("ApplyStickerUse")}
                 warning={translate("ApplyStickerWarn")}
               />
               <CSItemImage
                 className="m-auto aspect-[1.33333] max-w-[512px]"
-                item={item}
+                item={targetItem}
               />
               <div className="flex">
                 {stickers.map((id, index) =>

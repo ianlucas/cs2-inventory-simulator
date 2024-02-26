@@ -22,16 +22,18 @@ export function useApplyItemSticker() {
       uid,
       items: items.filter(
         ({ item }) =>
-          !item.free &&
-          ((selectedItem.type === "sticker" && CS_hasStickers(item)) ||
-            (selectedItem.type !== "sticker" && item.type === "sticker"))
+          (selectedItem.type === "sticker" && CS_hasStickers(item)) ||
+          (selectedItem.type !== "sticker" && item.type === "sticker")
       ),
       type: "apply-item-sticker"
     });
   }
 
   function handleApplyItemStickerSelect(uid: number) {
-    const { type } = inventory.getItem(uid);
+    const { type } =
+      uid >= 0
+        ? inventory.getItem(uid)
+        : items.find(({ uid }) => uid === uid)!.item;
     return setApplyItemSticker({
       targetUid: type !== "sticker" ? uid : itemSelector!.uid,
       stickerUid: type === "sticker" ? uid : itemSelector!.uid

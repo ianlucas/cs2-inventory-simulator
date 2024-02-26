@@ -21,6 +21,7 @@ export const baseInventoryItemProps = {
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
+  id: nonNegativeInt,
   nametag: z
     .string()
     .max(20)
@@ -56,7 +57,6 @@ export const baseInventoryItemProps = {
 
 const baseServerInventoryItemProps = {
   ...baseInventoryItemProps,
-  id: nonNegativeInt,
   stattrak: z
     .number()
     .optional()

@@ -6,6 +6,8 @@
 import { faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  CS_INVENTORY_NO_STICKERS,
+  CS_INVENTORY_NO_STICKERS_WEAR,
   CS_Item,
   CS_MAX_SEED,
   CS_MAX_WEAR,
@@ -85,8 +87,8 @@ export function CSItemEditor({
   const [seed, setSeed] = useState(attributes?.seed ?? 1);
   const [nametag, setNametag] = useInput(attributes?.nametag ?? "");
   const [stickersAttributes, setStickersAttributes] = useState({
-    ids: attributes?.stickers ?? [0, 0, 0, 0],
-    wears: attributes?.stickerswear ?? [0, 0, 0, 0]
+    ids: attributes?.stickers ?? CS_INVENTORY_NO_STICKERS.slice(),
+    wears: attributes?.stickerswear ?? CS_INVENTORY_NO_STICKERS_WEAR.slice()
   });
   const [quantity, setQuantity] = useState(1);
   const hasStickers = CS_hasStickers(item);

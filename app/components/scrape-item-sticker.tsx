@@ -5,6 +5,8 @@
 
 import {
   CS_Economy,
+  CS_INVENTORY_NO_STICKERS,
+  CS_INVENTORY_NO_STICKERS_WEAR,
   CS_MAX_STICKER_WEAR,
   CS_NO_STICKER,
   CS_STICKER_WEAR_FACTOR,
@@ -42,8 +44,9 @@ export function ScrapeItemSticker({
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
 
   const inventoryItem = inventory.get(uid);
-  const stickers = inventoryItem.stickers ?? [0, 0, 0, 0];
-  const stickersWear = inventoryItem.stickerswear ?? [0, 0, 0, 0];
+  const stickers = inventoryItem.stickers ?? CS_INVENTORY_NO_STICKERS;
+  const stickersWear =
+    inventoryItem.stickerswear ?? CS_INVENTORY_NO_STICKERS_WEAR;
 
   function doScrapeSticker(stickerIndex: number) {
     const scratch = Math.ceil(
