@@ -49,6 +49,7 @@ export const english = {
   StickerPickerSearchPlaceholder: "Search sticker...",
   StickerPickerFilterPlaceholder: "Filter by category...",
   StickerPickerRemove: "Remove",
+  InventoryNoItemsToDisplay: "No items to display",
   InventorySelectAnItem: "Select an item to use with:",
   InventorySelectItemToRetrieve: "Select items to retrieve from",
   InventorySelectItemToDeposit: "Select items to move into",

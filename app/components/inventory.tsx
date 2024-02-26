@@ -28,11 +28,14 @@ import { useRootContext } from "./root-context";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
+import { InfoIcon } from "./info-icon";
+import { useTranslation } from "~/hooks/use-translation";
 
 export function Inventory() {
   const sync = useSync();
   const { inventory, items, setInventory } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
+  const translate = useTranslation();
   const navigate = useNavigate();
 
   const ownApplicableStickers =
@@ -144,6 +147,7 @@ export function Inventory() {
   }
 
   const isSelectingAnItem = itemSelector !== undefined;
+  const displayedItems = isSelectingAnItem ? itemSelector.items : items;
 
   return (
     <>
@@ -154,7 +158,7 @@ export function Inventory() {
         />
       )}
       <div className="m-auto grid w-full select-none px-2 [grid-gap:1em] [grid-template-columns:repeat(auto-fit,minmax(154px,1fr))] lg:my-8 lg:w-[1024px] lg:px-0">
-        {(isSelectingAnItem ? itemSelector.items : items).map((item) => (
+        {displayedItems.map((item) => (
           <div key={item.uid} className="flex items-start justify-center">
             <InventoryItem
               {...item}
@@ -183,6 +187,13 @@ export function Inventory() {
         ))}
         <InventoryGridPlaceholder />
       </div>
+      {displayedItems.length === 0 && (
+        <div className="m-auto flex select-none justify-center lg:w-[1024px]">
+          <div className="flex w-full items-center justify-center gap-2 bg-gradient-to-r from-transparent via-black/30 to-transparent py-1">
+            <InfoIcon /> {translate("InventoryNoItemsToDisplay")}
+          </div>
+        </div>
+      )}
       {isUnlockingCase(unlockCase) && (
         <UnlockCase {...unlockCase} onClose={closeUnlockCase} />
       )}

@@ -45,6 +45,7 @@ export const brazilian = {
   StickerPickerSearchPlaceholder: "Procurar adesivo...",
   StickerPickerFilterPlaceholder: "Filtrar por categoria...",
   StickerPickerRemove: "Excluir",
+  InventoryNoItemsToDisplay: "Nenhum item para exibir",
   InventorySelectAnItem: "Selecionar item para usar com:",
   InventorySelectItemToRetrieve: "Selecione quais itens retirar",
   InventorySelectItemToDeposit: "Selecione quais itens guardar",
