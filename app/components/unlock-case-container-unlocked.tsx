@@ -24,13 +24,10 @@ export function UnlockCaseContainerUnlocked({
   const translate = useTranslation();
   const [revealScale, setRevealScale] = useState(0);
 
-  useEffect(() => {
-    const idx = setTimeout(() => {
-      setRevealScale(1);
-      playSound(`case_awarded_${rarity}`);
-    }, 200);
-    return () => clearTimeout(idx);
-  }, []);
+  function handleLoad() {
+    setRevealScale(1);
+    playSound(`case_awarded_${rarity}`);
+  }
 
   const item = CS_Economy.getById(id);
 
@@ -55,6 +52,7 @@ export function UnlockCaseContainerUnlocked({
           className="m-auto my-4 [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
           item={item}
           style={{ transform: `scale(${revealScale})` }}
+          onLoad={handleLoad}
           wear={attributes.wear}
         />
         <UseItemFooter

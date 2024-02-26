@@ -54,7 +54,9 @@ export function UnlockCase({
           );
     wait(() => {
       setHideCaseContents(true);
-      playSound("case_unlock");
+      if (caseItem.keys !== undefined) {
+        playSound("case_unlock");
+      }
       wait(() => {
         setItems(
           range(32).map((_, index) =>

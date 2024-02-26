@@ -19,15 +19,13 @@ export function UnlockCaseContainerContents({
 
   return (
     <div
-      className="m-auto max-w-[1024px] rounded bg-gradient-to-b from-transparent to-white/20 p-2 [transition:all_cubic-bezier(0.4,0,0.2,1)_1s]"
+      className="m-auto max-w-[1024px] rounded [transition:all_cubic-bezier(0.4,0,0.2,1)_1s]"
       style={{
         transform: `translateY(${hideCaseContents ? 9999 : 0}px)`
       }}
     >
-      <h2 className="my-2 border-b border-b-white/50 pb-2">
-        {translate("CaseContainsOne")}
-      </h2>
-      <div className="flex h-[320px] flex-wrap gap-3 overflow-y-scroll">
+      <h2 className="my-2">{translate("CaseContainsOne")}</h2>
+      <div className="flex h-[320px] flex-wrap gap-3 overflow-y-scroll pb-4">
         {[
           ...CS_listCaseContents(caseItem, true).map((item, index) => (
             <CSItem key={index} item={item} />

@@ -6,6 +6,8 @@
 import { CS_Item } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { CSItemImage } from "./cs-item-image";
+import { useEffect, useState } from "react";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 export function UnlockCaseContainerBackground({
   canUnlock,
@@ -14,15 +16,32 @@ export function UnlockCaseContainerBackground({
   canUnlock: boolean;
   caseItem: CS_Item;
 }) {
+  const { width } = useWindowSize();
+  const [scale, setScale] = useState(0);
+
+  function handleLoad() {
+    if (width === null) {
+      return;
+    }
+    setScale(width >= 768 ? 2 : 1);
+  }
+
   return (
     <div
       className={clsx(
-        "fixed left-0 top-0 flex h-full w-full scale-[1] items-center justify-center transition-all md:scale-[2]",
+        "fixed left-0 top-0 flex h-full w-full items-center justify-center transition-all",
         !canUnlock && "blur-sm",
         canUnlock && "blur-[1px]"
       )}
+      style={{
+        transform: `scale(${scale})`
+      }}
     >
-      <CSItemImage className="h-[198px] w-[256px]" item={caseItem} />
+      <CSItemImage
+        className="h-[198px] w-[256px]"
+        item={caseItem}
+        onLoad={handleLoad}
+      />
     </div>
   );
 }
