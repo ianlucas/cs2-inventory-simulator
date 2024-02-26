@@ -9,13 +9,13 @@ import {
   CS_hasStickers,
   CS_hasWear,
   CS_INVENTORY_EQUIPPABLE_ITEMS,
-  CS_NAMETAG_TOOL_DEF,
+  CS_isNametagTool,
+  CS_isStorageUnitTool,
   CS_NO_STICKER,
-  CS_STORAGE_UNIT_TOOL_DEF,
-  CS_SWAP_STATTRAK_TOOL_DEF,
   CS_Team,
   CS_TEAM_CT,
-  CS_TEAM_T
+  CS_TEAM_T,
+  isStatTrakSwapTool
 } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
@@ -108,9 +108,8 @@ export function InventoryItem({
   const hasWear = !item.free && CS_hasWear(item);
   const hasSeed = !item.free && CS_hasSeed(item);
   const hasAttributes = hasWear || hasSeed;
-  const canSwapStatTrak =
-    item.type === "tool" && item.def === CS_SWAP_STATTRAK_TOOL_DEF;
-  const canRename = item.type == "tool" && item.def === CS_NAMETAG_TOOL_DEF;
+  const canSwapStatTrak = isStatTrakSwapTool(item);
+  const canRename = CS_isNametagTool(item);
   const canApplySticker =
     ownApplicableStickers &&
     ((CS_hasStickers(item) &&
@@ -125,8 +124,7 @@ export function InventoryItem({
   const hasContents = item.contents !== undefined;
   const hasTeams = item.teams !== undefined;
   const hasNametag = inventoryItem.nametag !== undefined;
-  const isStorageUnit =
-    item.type === "tool" && item.def === CS_STORAGE_UNIT_TOOL_DEF;
+  const isStorageUnit = CS_isStorageUnitTool(item);
   const isEditable = EDITABLE_INVENTORY_TYPE.includes(item.type);
 
   function close(callBeforeClosing: () => void) {

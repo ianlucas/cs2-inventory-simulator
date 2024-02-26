@@ -8,7 +8,8 @@ import {
   CS_safeValidateNametag,
   CS_safeValidateSeed,
   CS_safeValidateStatTrak,
-  CS_safeValidateWear
+  CS_safeValidateWear,
+  CS_trimNametag
 } from "@ianlucas/cslib";
 import { z } from "zod";
 import { size } from "./number";
@@ -26,13 +27,9 @@ export const baseInventoryItemProps = {
     .string()
     .max(20)
     .optional()
-    .transform((nametag) => (nametag !== undefined ? nametag.trim() : nametag))
-    .refine(
-      (nametag) => nametag === undefined || CS_safeValidateNametag(nametag)
-    ),
-  seed: positiveInt
-    .optional()
-    .refine((seed) => seed === undefined || CS_safeValidateSeed(seed)),
+    .transform((nametag) => CS_trimNametag(nametag))
+    .refine((nametag) => CS_safeValidateNametag(nametag)),
+  seed: positiveInt.optional().refine((seed) => CS_safeValidateSeed(seed)),
   stattrak: z.literal(0).optional(),
   stickers: z
     .array(nonNegativeInt)

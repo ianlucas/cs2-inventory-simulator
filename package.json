@@ -18,7 +18,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@ianlucas/cslib": "^10.2.0",
+    "@ianlucas/cslib": "^11.0.0",
     "@prisma/client": "^5.10.2",
     "@remix-run/node": "^2.7.2",
     "@remix-run/react": "^2.7.2",
@@ -52,7 +52,7 @@
   "devDependencies": {
     "@remix-run/dev": "^2.7.2",
     "@types/node": "^18.19.8",
-    "@types/react": "^18.2.58",
+    "@types/react": "^18.2.59",
     "@types/react-dom": "^18.2.19",
     "@types/steamapi": "^2.2.5",
     "prettier": "3.2.5",

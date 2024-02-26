@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_STORAGE_UNIT_TOOL_DEF } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
@@ -28,7 +27,7 @@ export function useStorageUnit() {
   }: (typeof items)[number]) =>
     (!item.free ||
       (env.nametagDefaultAllowed.includes(item.id) && nametag !== undefined)) &&
-    (item.type !== "tool" || item.def !== CS_STORAGE_UNIT_TOOL_DEF);
+    item.type !== "tool";
 
   function handleRenameStorageUnit(uid: number) {
     return setRenameStorageUnit({ uid });

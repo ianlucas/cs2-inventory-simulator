@@ -9,7 +9,7 @@ import {
   CS_Economy,
   CS_Item,
   CS_NO_STICKER,
-  CS_STORAGE_UNIT_TOOL_DEF
+  CS_isStorageUnitTool
 } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
@@ -37,8 +37,7 @@ export function CSItem({
   const { model, name } = getCSItemName(item);
   const hasModel = model || stattrak !== undefined;
   const hasNametag = nametag !== undefined;
-  const showNameWithNametag =
-    item.type === "tool" && item.def === CS_STORAGE_UNIT_TOOL_DEF;
+  const showNameWithNametag = CS_isStorageUnitTool(item);
 
   return (
     <div className="w-[154px]">
