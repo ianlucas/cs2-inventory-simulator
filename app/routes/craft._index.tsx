@@ -75,7 +75,12 @@ export default function Craft() {
     };
 
     if (uid !== undefined) {
-      setInventory(inventory.edit(uid, inventoryItem));
+      setInventory(
+        inventory.edit(uid, {
+          ...inventoryItem,
+          stattrak: stattrak ? inventory.get(uid).stattrak ?? 0 : undefined
+        })
+      );
       sync({
         type: EditAction,
         uid,

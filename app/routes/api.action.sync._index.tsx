@@ -213,7 +213,13 @@ export async function action({ request }: ActionFunctionArgs) {
             action.retrieveUids
           );
         case EditAction:
-          return inventory.edit(action.uid, action.attributes);
+          return inventory.edit(action.uid, {
+            ...action.attributes,
+            stattrak:
+              action.attributes.stattrak !== undefined
+                ? inventory.get(action.uid).stattrak ?? 0
+                : undefined
+          });
         case AddWithStickerAction:
           return inventory.addWithSticker(
             action.stickerUid,
