@@ -15,18 +15,22 @@ import {
 export const MUSIC_KIT_PREFIX = "mk";
 export const PIN_PREFIX = "pi";
 export const MELEE_PREFIX = "me_";
+export const MELEE_MODEL_PREFIX = "mem_";
 export const GLOVE_PREFIX = "gl_";
 export const AGENT_PREFIX = "ag_";
+export const AGENT_MODEL_PREFIX = "agm_";
 export const AGENT_PATCH_PREFIX = "ap_";
 export const NAMETAG_PREFIX = "nt_";
 export const SEED_PREFIX = "se_";
 export const WEAR_PREFIX = "fl_";
 export const STATTRAK_PREFIX = "st_";
+export const STATTRAK_UID_PREFIX = "stu_";
 export const PAINT_PREFIX = "pa_";
+export const PAINT_LEGACY_PREFIX = "pal_";
 export const STICKER_PREFIX = "ss_";
 export const STICKERWEAR_PREFIX = "sf_";
 
-function pushTeam(
+function add(
   keyvalues: [string, any][],
   prefix: string,
   equippedT: boolean | undefined,
@@ -71,37 +75,36 @@ export function generate(inventory: CS_InventoryItem[]) {
             keyvalues.push([PIN_PREFIX, item.def]);
           }
           if (item.type === "melee") {
-            pushTeam(
-              keyvalues,
-              MELEE_PREFIX,
-              equippedT,
-              equippedCT,
-              "",
-              item.def
-            );
+            add(keyvalues, MELEE_PREFIX, equippedT, equippedCT, "", item.def);
+            if (item.model !== undefined) {
+              add(
+                keyvalues,
+                MELEE_MODEL_PREFIX,
+                equippedT,
+                equippedCT,
+                "",
+                item.model
+              );
+            }
           }
           if (item.type === "glove") {
-            pushTeam(
-              keyvalues,
-              GLOVE_PREFIX,
-              equippedT,
-              equippedCT,
-              "",
-              item.def
-            );
+            add(keyvalues, GLOVE_PREFIX, equippedT, equippedCT, "", item.def);
           }
           if (item.type === "agent") {
-            pushTeam(
-              keyvalues,
-              AGENT_PREFIX,
-              equippedT,
-              equippedCT,
-              "",
-              item.def
-            );
+            add(keyvalues, AGENT_PREFIX, equippedT, equippedCT, "", item.def);
+            if (item.model !== undefined) {
+              add(
+                keyvalues,
+                AGENT_MODEL_PREFIX,
+                equippedT,
+                equippedCT,
+                "",
+                item.model
+              );
+            }
           }
           if (item.type === "patch") {
-            pushTeam(
+            add(
               keyvalues,
               AGENT_PATCH_PREFIX,
               equippedT,
@@ -111,7 +114,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             );
           }
           if (nametag !== undefined) {
-            pushTeam(
+            add(
               keyvalues,
               NAMETAG_PREFIX,
               equippedT,
@@ -121,7 +124,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             );
           }
           if (seed !== undefined) {
-            pushTeam(
+            add(
               keyvalues,
               SEED_PREFIX,
               equippedT,
@@ -131,7 +134,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             );
           }
           if (wear !== undefined) {
-            pushTeam(
+            add(
               keyvalues,
               WEAR_PREFIX,
               equippedT,
@@ -141,7 +144,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             );
           }
           if (stattrak !== undefined) {
-            pushTeam(
+            add(
               keyvalues,
               STATTRAK_PREFIX,
               equippedT,
@@ -149,12 +152,12 @@ export function generate(inventory: CS_InventoryItem[]) {
               `_${item.def}`,
               stattrak
             );
-            pushTeam(
+            add(
               keyvalues,
-              STATTRAK_PREFIX,
+              STATTRAK_UID_PREFIX,
               equippedT,
               equippedCT,
-              `_${item.def}_u`,
+              `_${item.def}`,
               uid
             );
           }
@@ -163,7 +166,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             item.index !== undefined &&
             item.index !== 0
           ) {
-            pushTeam(
+            add(
               keyvalues,
               PAINT_PREFIX,
               equippedT,
@@ -172,9 +175,19 @@ export function generate(inventory: CS_InventoryItem[]) {
               item.index
             );
           }
+          if (item.legacy) {
+            add(
+              keyvalues,
+              PAINT_LEGACY_PREFIX,
+              equippedT,
+              equippedCT,
+              `_${item.def}`,
+              item.legacy
+            );
+          }
           stickers?.forEach((sticker, slot) => {
             if (sticker !== CS_NO_STICKER) {
-              pushTeam(
+              add(
                 keyvalues,
                 STICKER_PREFIX,
                 equippedT,
@@ -182,7 +195,7 @@ export function generate(inventory: CS_InventoryItem[]) {
                 `_${item.def}`,
                 true
               );
-              pushTeam(
+              add(
                 keyvalues,
                 STICKER_PREFIX,
                 equippedT,
@@ -191,7 +204,7 @@ export function generate(inventory: CS_InventoryItem[]) {
                 sticker
               );
               if (stickerswear?.[slot] !== CS_NO_STICKER_WEAR) {
-                pushTeam(
+                add(
                   keyvalues,
                   STICKERWEAR_PREFIX,
                   equippedT,

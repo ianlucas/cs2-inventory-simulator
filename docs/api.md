@@ -44,14 +44,20 @@ type GetUserEquippedItemsResponse = {
   ["pi"]: number | undefined;
   // Melee equipped for T and/or CT.
   ["me_{CSTeam}"]: number | undefined;
+  // Melee's model equipped for T and/or CT.
+  ["mem_{CSTeam}"]: string | undefined;
   // Glove equipped for T and/or CT.
   ["gl_{CSTeam}"]: number | undefined;
   // Agent equipped for T and/or CT.
   ["ag_{CSTeam}"]: number | undefined;
+  // Agent's model equipped for T and/or CT.
+  ["agm_{CSTeam}"]: string | undefined;
   // Patch for Agent equipped for T and/or CT.
   ["ap_{CSTeam}"]: number | undefined;
   // PaintKit equipped for T and/or CT and a weapon/melee/glove.
   ["pa_{CSTeam}_{ItemDef}"]: number | undefined;
+  // PaintKit legacy flag equipped for T and/or CT and a weapon/melee/glove.
+  ["pal_{CSTeam}_{ItemDef}"]: boolean | undefined;
   // Seed equipped for a T and/or CT weapon/melee.
   ["se_{CSTeam}_{ItemDef}"]: number | undefined;
   // Wear equipped for a T and/or CT weapon/melee/glove.
@@ -59,7 +65,7 @@ type GetUserEquippedItemsResponse = {
   // StatTrak count for a T and/or CT weapon/melee.
   ["st_{CSTeam}_{ItemDef}"]: number | undefined;
   // StatTrak inventory item uid for a T and/or CT weapon/melee.
-  ["st_{CSTeam}_{ItemDef}_u"]: number | undefined;
+  ["stu_{CSTeam}_{ItemDef}"]: number | undefined;
   // Nametag equipped for a T and/or CT weapon/melee/glove.
   ["nt_{CSTeam}_{ItemDef}"]: string | undefined;
   // Whether a T and/or CT weapon has stickers.
