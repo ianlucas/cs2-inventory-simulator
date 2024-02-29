@@ -72,7 +72,7 @@ export default function Settings() {
   }
 
   return (
-    <Modal className="w-[540px]">
+    <Modal className="w-[420px]">
       <div className="flex select-none items-center justify-between px-4 py-2 text-sm font-bold">
         <span className="text-neutral-400">{translate("SettingsHeader")}</span>
         <div className="flex items-center">
@@ -83,7 +83,7 @@ export default function Settings() {
       </div>
       <div className="space-y-2 px-4">
         <div>
-          <label className="font-bold text-neutral-500">
+          <label className="text-neutral-500">
             {translate("SettingsLanguage")}
           </label>
           <LanguageSelect
@@ -93,7 +93,7 @@ export default function Settings() {
           />
         </div>
         <div>
-          <label className="font-bold text-neutral-500">
+          <label className="text-neutral-500">
             {translate("SettingsBackground")}
           </label>
           <Select
@@ -104,7 +104,7 @@ export default function Settings() {
           />
         </div>
         <div>
-          <label className="font-bold text-neutral-500">
+          <label className="text-neutral-500">
             {translate("SettingsStatsForNerds")}
           </label>
           <div>
@@ -112,7 +112,7 @@ export default function Settings() {
           </div>
         </div>
         <div>
-          <label className="font-bold text-neutral-500">
+          <label className="text-neutral-500">
             {translate("SettingsHideFreeItems")}
           </label>
           <div>
