@@ -146,7 +146,7 @@ export function GridList({
   return (
     <div className="relative">
       <div
-        className={clsx("touch-none overflow-hidden px-2", className)}
+        className={clsx("touch-none overflow-hidden", className)}
         style={{
           height: itemHeight * (maxItemsIntoView || 2)
         }}

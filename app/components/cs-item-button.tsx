@@ -39,20 +39,21 @@ export function CSItemButton({
       onClick={handleClick}
       className={clsx(
         clickable &&
-          "relative overflow-hidden rounded border-y-2 border-transparent bg-transparent transition-all hover:bg-black/20 active:bg-black/30",
-        !bigger && "block h-[64px] w-full px-2",
+          "relative overflow-hidden border-y-2 border-transparent bg-transparent transition-all hover:bg-black/20 active:bg-black/30",
+        !bigger && "block h-[64px] w-full pl-[2px] pr-4",
         bigger && "flex h-full w-full items-center justify-center"
       )}
     >
       <div
         className={clsx(
-          "overflow-hidden text-ellipsis whitespace-nowrap",
+          "group overflow-hidden text-ellipsis whitespace-nowrap",
           !bigger && "flex items-center"
         )}
       >
         <CSItemImage
           className={clsx(
-            !bigger && "h-[63px] w-[84px]",
+            "overflow-hidden bg-gradient-to-b from-neutral-500/10 to-neutral-300/10 group-hover:from-neutral-500 group-hover:to-neutral-300",
+            !bigger && "aspect-[1.333] w-[82px]",
             bigger && "m-auto h-32"
           )}
           item={item}

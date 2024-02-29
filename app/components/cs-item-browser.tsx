@@ -19,11 +19,7 @@ export function CSItemBrowser({
   onClick?: (item: CS_Item) => void;
 }) {
   return (
-    <GridList
-      className="divide-y-2 divide-transparent"
-      itemHeight={64}
-      maxItemsIntoView={maxItemsIntoView}
-    >
+    <GridList itemHeight={64} maxItemsIntoView={maxItemsIntoView}>
       {items.map((item) => (
         <CSItemButton
           ignoreRarityColor={ignoreRarityColor}
