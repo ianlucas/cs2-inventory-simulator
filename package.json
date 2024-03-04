@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "remix vite:build",
+    "deploy": "npx @ianlucas/deploy@latest",
     "dev": "remix vite:dev",
     "format": "prettier . --write",
     "script": "tsx",
@@ -18,7 +19,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@ianlucas/cslib": "^11.1.0",
+    "@ianlucas/cslib": "^11.2.1",
     "@prisma/client": "^5.10.2",
     "@remix-run/node": "^2.8.0",
     "@remix-run/react": "^2.8.0",
