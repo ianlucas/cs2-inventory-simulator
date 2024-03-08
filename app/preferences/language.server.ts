@@ -9,13 +9,14 @@ import { resolve } from "path";
 import { z } from "zod";
 import { brazilian } from "../translations/brazilian";
 import { english } from "../translations/english";
+import { CS_ItemTranslations } from "@ianlucas/cslib";
 
 const translations: Record<string, Record<string, string>> = {
   brazilian,
   english
 };
 
-const itemTranslations: Record<string, Record<string, string>> = {};
+const itemTranslations: CS_ItemTranslations = {};
 
 export const languages = [
   { name: "brazilian", countries: ["br"] },
@@ -61,7 +62,9 @@ function readItemTranslation(language: string) {
     `node_modules/@ianlucas/cslib/assets/translations/items-${language}.json`
   );
   itemTranslations[language] = existsSync(path)
-    ? z.record(z.string()).parse(JSON.parse(readFileSync(path, "utf-8")))
+    ? z
+        .record(z.record(z.string()))
+        .parse(JSON.parse(readFileSync(path, "utf-8")))
     : {};
   return itemTranslations[language];
 }

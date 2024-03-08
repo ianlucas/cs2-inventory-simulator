@@ -8,6 +8,7 @@ import {
   CS_filterItems,
   CS_Item,
   CS_ITEMS,
+  CS_ItemTranslations,
   CS_MAX_SEED,
   CS_resolveCaseSpecialsImage,
   CS_resolveItemImage,
@@ -34,25 +35,17 @@ export const modelFromType = {
   weapon: "Weapon"
 } as const;
 
-let currentLanguage = "";
+let currentLanguage = "english";
 export function translateItems(
   language: string,
-  itemTranslation: Record<string, string | undefined>
+  itemTranslation: CS_ItemTranslations[number]
 ) {
   if (currentLanguage === language) {
     return;
   }
   currentLanguage = language;
-  CS_Economy.initialize(
-    CS_ITEMS.map((item) => ({
-      ...item,
-      name: itemTranslation[item.id] || item.name,
-      category:
-        item.category !== undefined
-          ? itemTranslation[item.category] || item.category
-          : item.category
-    }))
-  );
+  CS_Economy.initialize(CS_ITEMS);
+  CS_Economy.applyTranslation(itemTranslation);
 }
 
 export function getCSItemName(item: CS_Item) {
