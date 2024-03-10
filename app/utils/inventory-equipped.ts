@@ -201,7 +201,7 @@ export function generate(inventory: CS_InventoryItem[]) {
                 equippedT,
                 equippedCT,
                 `_${item.def}_${slot}`,
-                sticker
+                CS_Economy.getById(sticker).index
               );
               if (stickerswear?.[slot] !== CS_NO_STICKER_WEAR) {
                 add(
