@@ -44,8 +44,6 @@ type GetUserEquippedItemsResponse = {
   ["pi"]: number | undefined;
   // Melee equipped for T and/or CT.
   ["me_{CSTeam}"]: number | undefined;
-  // Melee's model equipped for T and/or CT.
-  ["mem_{CSTeam}"]: string | undefined;
   // Glove equipped for T and/or CT.
   ["gl_{CSTeam}"]: number | undefined;
   // Agent equipped for T and/or CT.
@@ -101,7 +99,7 @@ POST https://inventory.cstrike.app/api/increment-item-stattrak
 
 ## Sign-in user
 
-This is intended to be used in other first-party apps to authenticate users to Inventory Simulator. First, a POST request must be sent to `/api/sign-in` to get the user's authentication `token`, then the user must be immediately redirected to `/api/sign-in/callback?token={returned token}`.
+This is intended to be used in other first-party apps to authenticate users to Inventory Simulator. First, a POST request must be sent to `/api/sign-in` to get the user's authentication `token`, then the user must be immediately redirected to `/api/sign-in/callback?token={token}`.
 
 ### Get user sign-in token
 
@@ -131,3 +129,7 @@ type GetUserSignInTokenResponse = {
 ```http
 GET https://inventory.cstrike.app/api/sign-in/callback?token={token}
 ```
+
+#### Response
+
+- Returns `302` redirecting to `https://inventory.cstrike.app/api/action/preferences` if the authentication was successful, otherwise to `https://inventory.cstrike.app`.

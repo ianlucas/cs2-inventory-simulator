@@ -15,7 +15,6 @@ import {
 export const MUSIC_KIT_PREFIX = "mk";
 export const PIN_PREFIX = "pi";
 export const MELEE_PREFIX = "me_";
-export const MELEE_MODEL_PREFIX = "mem_";
 export const GLOVE_PREFIX = "gl_";
 export const AGENT_PREFIX = "ag_";
 export const AGENT_MODEL_PREFIX = "agm_";
@@ -76,16 +75,6 @@ export function generate(inventory: CS_InventoryItem[]) {
           }
           if (item.type === "melee") {
             add(keyvalues, MELEE_PREFIX, equippedT, equippedCT, "", item.def);
-            if (item.model !== undefined) {
-              add(
-                keyvalues,
-                MELEE_MODEL_PREFIX,
-                equippedT,
-                equippedCT,
-                "",
-                item.model
-              );
-            }
           }
           if (item.type === "glove") {
             add(keyvalues, GLOVE_PREFIX, equippedT, equippedCT, "", item.def);
