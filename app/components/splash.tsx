@@ -113,11 +113,12 @@ export function Splash() {
   }
 
   window.g_SplashRender();
+  
+  window.onerror = (event, source, lineno, colno, error) => {
+    window.g_SplashRender();
+  };
 }
-
-window.onerror = (event, source, lineno, colno, error) => {
-  window.g_SplashRender();
-};`
+`
         }}
       />
     </div>
