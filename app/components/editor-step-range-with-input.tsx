@@ -66,8 +66,7 @@ export function EditorStepRangeWithInput({
   function handleRandomClick() {
     const value =
       type === "int" ? CS_randomInt(min, max) : CS_randomFloat(min, max);
-    onChange(value);
-    setText(transform!(value));
+    handleChange(Number(transform!(value)));
   }
 
   return (
