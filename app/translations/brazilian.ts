@@ -27,6 +27,7 @@ export const brazilian = {
   CategorySticker: "Adesivo",
   CategoryAgent: "Agente",
   CategoryPatch: "Emblema",
+  CategoryEquipment: "Equipamento",
   CategoryMusicKit: "Trilha Sonora",
   CategoryPin: "Broche",
   CategoryCase: "Recipiente",

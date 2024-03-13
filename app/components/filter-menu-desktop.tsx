@@ -27,7 +27,7 @@ export function FilterMenuDesktop({
   }
 
   return (
-    <div className="w-[160px] rounded-tr bg-black/10">
+    <div className="w-[186px] rounded-tr bg-black/10">
       {ITEM_FILTERS.map((filter, index) => {
         const isActive =
           filter.category === value.category && filter.type === value.type;

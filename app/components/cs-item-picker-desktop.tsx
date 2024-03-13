@@ -47,7 +47,7 @@ export function CSItemPickerDesktop({
           <CSItemBrowser
             ignoreRarityColor={ignoreRarityColor}
             items={items}
-            maxItemsIntoView={7}
+            maxItemsIntoView={8}
             onClick={handleItemClick}
           />
         </div>

@@ -26,6 +26,7 @@ export const english = {
   CategorySticker: "Sticker",
   CategoryAgent: "Agent",
   CategoryPatch: "Patch",
+  CategoryEquipment: "Equipment",
   CategoryMusicKit: "Music Kit",
   CategoryPin: "Pin",
   CategoryCase: "Case",

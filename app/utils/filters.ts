@@ -35,6 +35,12 @@ export const ITEM_FILTERS = [
     hasModel: true
   },
   {
+    label: "Equipment",
+    icon: "equipment",
+    category: "equipment",
+    hasModel: true
+  },
+  {
     label: "Glove",
     icon: "glove",
     type: "glove" as const,
