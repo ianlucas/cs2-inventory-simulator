@@ -3,9 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { useTranslation } from "~/hooks/use-translation";
 import { Logo } from "./logo";
 
 export function Splash() {
+  const translate = useTranslation();
+
   return (
     <div
       id="splash"
@@ -53,6 +56,11 @@ export function Splash() {
             }}
           />
         </div>
+        <noscript>
+          <div className="px-2 pb-1 text-center">
+            <strong>{translate("JavaScriptRequired")}</strong>
+          </div>
+        </noscript>
       </div>
       <style
         suppressHydrationWarning

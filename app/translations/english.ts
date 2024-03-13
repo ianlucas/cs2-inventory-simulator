@@ -4,6 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 export const english = {
+  JavaScriptRequired:
+    "JavaScript is disabled. Please enable it and refresh the page.",
   SyncWarnText:
     "You are not authenticated, your changes will not by synchronized.",
   HeaderInventoryLabel: "Inventory",
