@@ -218,7 +218,8 @@ export async function action({ request }: ActionFunctionArgs) {
             stattrak:
               action.attributes.stattrak !== undefined
                 ? inventory.get(action.uid).stattrak ?? 0
-                : undefined
+                : undefined,
+            nametag: action.attributes.nametag
           });
         case AddWithStickerAction:
           return inventory.addWithSticker(
