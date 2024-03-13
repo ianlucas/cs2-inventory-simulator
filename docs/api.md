@@ -52,6 +52,8 @@ type GetUserEquippedItemsResponse = {
   ["agm_{CSTeam}"]: string | undefined;
   // Patch for Agent equipped for T and/or CT.
   ["ap_{CSTeam}"]: number | undefined;
+  // Whether a weapon is custom for T and/or CT and a weapon/melee/glove.
+  ["cw_{CSTeam}_{ItemDef}"]: boolean | undefined;
   // PaintKit equipped for T and/or CT and a weapon/melee/glove.
   ["pa_{CSTeam}_{ItemDef}"]: number | undefined;
   // PaintKit legacy flag equipped for T and/or CT and a weapon/melee/glove.

@@ -12,22 +12,23 @@ import {
   CS_TEAM_T
 } from "@ianlucas/cslib";
 
-export const MUSIC_KIT_PREFIX = "mk";
-export const PIN_PREFIX = "pi";
-export const MELEE_PREFIX = "me_";
-export const GLOVE_PREFIX = "gl_";
-export const AGENT_PREFIX = "ag_";
 export const AGENT_MODEL_PREFIX = "agm_";
 export const AGENT_PATCH_PREFIX = "ap_";
+export const AGENT_PREFIX = "ag_";
+export const CUSTOM_WEAPON_PREFIX = "cw_";
+export const GLOVE_PREFIX = "gl_";
+export const MELEE_PREFIX = "me_";
+export const MUSIC_KIT_PREFIX = "mk";
 export const NAMETAG_PREFIX = "nt_";
+export const PAINT_LEGACY_PREFIX = "pal_";
+export const PAINT_PREFIX = "pa_";
+export const PIN_PREFIX = "pi";
 export const SEED_PREFIX = "se_";
-export const WEAR_PREFIX = "fl_";
 export const STATTRAK_PREFIX = "st_";
 export const STATTRAK_UID_PREFIX = "stu_";
-export const PAINT_PREFIX = "pa_";
-export const PAINT_LEGACY_PREFIX = "pal_";
 export const STICKER_PREFIX = "ss_";
 export const STICKERWEAR_PREFIX = "sf_";
+export const WEAR_PREFIX = "fl_";
 
 function add(
   keyvalues: [string, any][],
@@ -67,6 +68,8 @@ export function generate(inventory: CS_InventoryItem[]) {
         }) => {
           const item = CS_Economy.getById(id);
           const keyvalues: [string, any][] = [];
+          let custom = false;
+
           if (item.type === "musickit") {
             keyvalues.push([MUSIC_KIT_PREFIX, item.index]);
           }
@@ -103,6 +106,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             );
           }
           if (nametag !== undefined) {
+            custom = true;
             add(
               keyvalues,
               NAMETAG_PREFIX,
@@ -113,6 +117,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             );
           }
           if (seed !== undefined) {
+            custom = true;
             add(
               keyvalues,
               SEED_PREFIX,
@@ -123,6 +128,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             );
           }
           if (wear !== undefined) {
+            custom = true;
             add(
               keyvalues,
               WEAR_PREFIX,
@@ -133,6 +139,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             );
           }
           if (stattrak !== undefined) {
+            custom = true;
             add(
               keyvalues,
               STATTRAK_PREFIX,
@@ -155,6 +162,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             item.index !== undefined &&
             item.index !== 0
           ) {
+            custom = true;
             add(
               keyvalues,
               PAINT_PREFIX,
@@ -176,6 +184,7 @@ export function generate(inventory: CS_InventoryItem[]) {
           }
           stickers?.forEach((sticker, slot) => {
             if (sticker !== CS_NO_STICKER) {
+              custom = true;
               add(
                 keyvalues,
                 STICKER_PREFIX,
@@ -204,6 +213,16 @@ export function generate(inventory: CS_InventoryItem[]) {
               }
             }
           });
+          if (custom) {
+            add(
+              keyvalues,
+              CUSTOM_WEAPON_PREFIX,
+              equippedT,
+              equippedCT,
+              `_${item.def}`,
+              true
+            );
+          }
           return keyvalues;
         }
       )
