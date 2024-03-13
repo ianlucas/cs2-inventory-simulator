@@ -30,6 +30,7 @@ import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
 import { InfoIcon } from "./info-icon";
 import { useTranslation } from "~/hooks/use-translation";
+import { playSound } from "~/utils/sound";
 
 export function Inventory() {
   const sync = useSync();
@@ -93,16 +94,24 @@ export function Inventory() {
   } = useSwapItemsStatTrak();
 
   function handleEquip(uid: number, team?: CS_Team) {
+    console.log("ué?");
+    playSound(
+      inventory.getItem(uid).type === "musickit"
+        ? "music_equip"
+        : "inventory_item_pickup"
+    );
     setInventory(inventory.equip(uid, team));
     sync({ type: EquipAction, uid: uid, team });
   }
 
   function handleUnequip(uid: number, team?: CS_Team) {
+    playSound("inventory_item_close");
     setInventory(inventory.unequip(uid, team));
     sync({ type: UnequipAction, uid: uid, team });
   }
 
   function handleRemove(uid: number) {
+    playSound("inventory_item_close");
     setInventory(inventory.remove(uid));
     sync({ type: RemoveAction, uid: uid });
   }

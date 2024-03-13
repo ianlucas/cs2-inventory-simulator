@@ -26,7 +26,9 @@ export function UnlockCaseContainerUnlocked({
 
   function handleLoad() {
     setRevealScale(1);
-    playSound(`case_awarded_${rarity}`);
+    playSound(
+      `case_awarded_${rarity as "common" | "uncommon" | "rare" | "mythical" | "legendary" | "ancient"}`
+    );
   }
 
   const item = CS_Economy.getById(id);

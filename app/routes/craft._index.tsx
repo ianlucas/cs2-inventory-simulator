@@ -26,6 +26,7 @@ import { middleware } from "~/http.server";
 import { showQuantity } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { AddAction, EditAction } from "./api.action.sync._index";
+import { playSound } from "~/utils/sound";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Craft - CS2 Inventory Simulator" }];
@@ -66,6 +67,7 @@ export default function Craft() {
     if (isSubmitting || selectedItem === undefined) {
       return;
     }
+    playSound("inventory_new_item_accept");
     setIsSubmitting(true);
 
     const inventoryItem = {

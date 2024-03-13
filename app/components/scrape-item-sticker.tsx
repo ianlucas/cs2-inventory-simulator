@@ -58,7 +58,7 @@ export function ScrapeItemSticker({
       stickerIndex
     });
     setInventory(inventory.scrapeItemSticker(uid, stickerIndex));
-    playSound(`sticker_scratch${scratch}`);
+    playSound(`sticker_scratch${scratch as 1 | 2 | 3 | 4 | 5}`);
   }
 
   function handleScrapeSticker(stickerIndex: number) {
