@@ -40,6 +40,7 @@ export const brazilian = {
   EditorNametagPlaceholder: "Digite um nome...",
   EditorQuantity: "Quantidade",
   EditorReset: "Redefinir",
+  EditorRandom: "Aleatório",
   EditorCraft: "Criar",
   EditorSave: "Salvar",
   EditorCancel: "Cancelar",

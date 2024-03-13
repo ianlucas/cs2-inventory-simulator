@@ -186,17 +186,19 @@ export function StickerPicker({
               </label>
               <EditorStepRangeWithInput
                 inputStyles="w-[68px]"
-                transform={stickerWearToString}
+                max={CS_MAX_STICKER_WEAR}
                 maxLength={stickerWearStringMaxLen}
+                min={CS_MIN_STICKER_WEAR}
+                onChange={setWear}
+                randomizable
+                step={CS_STICKER_WEAR_FACTOR}
+                stepRangeStyles="flex-1"
+                transform={stickerWearToString}
+                type="float"
                 validate={(value) =>
                   value >= CS_MIN_STICKER_WEAR && value <= CS_MAX_STICKER_WEAR
                 }
-                stepRangeStyles="flex-1"
-                min={CS_MIN_STICKER_WEAR}
-                max={CS_MAX_STICKER_WEAR}
-                step={CS_STICKER_WEAR_FACTOR}
                 value={wear}
-                onChange={setWear}
               />
             </div>
           </div>

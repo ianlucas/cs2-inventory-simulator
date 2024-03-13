@@ -40,6 +40,7 @@ export const english = {
   EditorNametagPlaceholder: "Type a custom name...",
   EditorSeed: "Seed",
   EditorWear: "Wear",
+  EditorRandom: "Random",
   EditorStatTrak: "StatTrak™",
   EditorQuantity: "Quantity",
   EditorReset: "Reset",

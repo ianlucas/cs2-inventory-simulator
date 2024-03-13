@@ -175,14 +175,16 @@ export function CSItemEditor({
             </label>
             <EditorStepRangeWithInput
               inputStyles="w-[68px]"
-              maxLength={seedStringMaxLen}
-              validate={(value) => CS_safeValidateSeed(value, item)}
-              stepRangeStyles="flex-1"
-              min={CS_MIN_SEED}
               max={CS_MAX_SEED}
-              step={CS_MIN_SEED}
-              value={seed}
+              maxLength={seedStringMaxLen}
+              min={CS_MIN_SEED}
               onChange={setSeed}
+              randomizable
+              step={CS_MIN_SEED}
+              stepRangeStyles="flex-1"
+              type="int"
+              validate={(value) => CS_safeValidateSeed(value, item)}
+              value={seed}
             />
           </div>
         )}
@@ -193,15 +195,17 @@ export function CSItemEditor({
             </label>
             <EditorStepRangeWithInput
               inputStyles="w-[68px]"
-              transform={wearToString}
-              maxLength={wearStringMaxLen}
-              validate={(value) => CS_safeValidateWear(value, item)}
-              stepRangeStyles="flex-1"
-              min={item.wearmin ?? CS_MIN_WEAR}
               max={item.wearmax ?? CS_MAX_WEAR}
-              step={CS_WEAR_FACTOR}
-              value={wear}
+              maxLength={wearStringMaxLen}
+              min={item.wearmin ?? CS_MIN_WEAR}
               onChange={setWear}
+              randomizable
+              step={CS_WEAR_FACTOR}
+              stepRangeStyles="flex-1"
+              transform={wearToString}
+              type="float"
+              validate={(value) => CS_safeValidateWear(value, item)}
+              value={wear}
             />
           </div>
         )}
@@ -220,14 +224,15 @@ export function CSItemEditor({
             </label>
             <EditorStepRangeWithInput
               inputStyles="w-[68px]"
-              maxLength={String(maxQuantity).length}
-              validate={(value) => value >= 1 && value <= maxQuantity}
-              stepRangeStyles="flex-1"
-              min={1}
               max={maxQuantity}
-              step={1}
-              value={quantity}
+              maxLength={String(maxQuantity).length}
+              min={1}
               onChange={setQuantity}
+              step={1}
+              stepRangeStyles="flex-1"
+              type="int"
+              validate={(value) => value >= 1 && value <= maxQuantity}
+              value={quantity}
             />
           </div>
         )}
