@@ -51,11 +51,20 @@ export function useStorageUnit() {
       uid: itemSelector.uid,
       depositUids: depositUids
     });
-    setInventory(inventory.depositToStorageUnit(itemSelector.uid, depositUids));
-    return setItemSelector({
-      ...itemSelector,
-      items: itemSelector.items.filter(({ uid: otherUid }) => otherUid !== uid)
-    });
+    const canDepositItems = inventory
+      .depositToStorageUnit(itemSelector.uid, depositUids)
+      .canDepositToStorageUnit(itemSelector.uid);
+    setInventory(inventory);
+    return setItemSelector(
+      canDepositItems
+        ? {
+            ...itemSelector,
+            items: itemSelector.items.filter(
+              ({ uid: otherUid }) => otherUid !== uid
+            )
+          }
+        : undefined
+    );
   }
 
   function handleRetrieveFromStorageUnit(uid: number) {
