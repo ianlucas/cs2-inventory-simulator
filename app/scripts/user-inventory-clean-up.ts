@@ -7,12 +7,109 @@ import {
   CS_Economy,
   CS_InventoryItem,
   CS_NO_STICKER,
-  CS_NO_STICKER_WEAR
+  CS_NO_STICKER_WEAR,
+  CS_safeValidateWear
 } from "@ianlucas/cslib";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { prisma } from "~/db.server";
 import { size } from "~/utils/number";
 
+let reporting: string[] = [];
+
+function fixIssues(items: CS_InventoryItem[]) {
+  const uids = new Set<number>();
+  let fixedIssues = false;
+  return {
+    items: items
+      // Remove non-existent items.
+      .filter((item) => CS_Economy.itemMap.has(item.id))
+      .map((inventoryItem) => {
+        if (inventoryItem.uid !== undefined) {
+          uids.add(inventoryItem.uid);
+        }
+        return inventoryItem;
+      })
+      .map((inventoryItem, index) => {
+        const item = CS_Economy.getById(inventoryItem.id);
+        // Item missing uid.
+        if (inventoryItem.uid === undefined) {
+          fixedIssues = true;
+          let uid = 0;
+          while (true) {
+            if (!uids.has(uid)) {
+              inventoryItem.uid = uid;
+              uids.add(uid);
+              reporting.push(
+                `Added uid (${uid}) to inventory item located at ${index}.`
+              );
+              break;
+            }
+            uid++;
+          }
+        }
+        // Remove stickers from C4.
+        if (
+          item.category === "c4" &&
+          (inventoryItem.stickers || inventoryItem.stickerswear)
+        ) {
+          fixedIssues = true;
+          inventoryItem.stickers = undefined;
+          inventoryItem.stickerswear = undefined;
+          reporting.push(
+            `Removed stickers from C4 (uid:${inventoryItem.uid}).`
+          );
+        }
+        // Convert NULL to 0 in stickers and stickerswear.
+        const isnull = <T>(value: T) => value === null;
+        if (
+          size(inventoryItem.stickers?.filter(isnull)) > 0 ||
+          size(inventoryItem.stickerswear?.filter(isnull)) > 0
+        ) {
+          fixedIssues = true;
+          inventoryItem.stickers = inventoryItem.stickers?.map((sticker) =>
+            sticker === null ? CS_NO_STICKER : sticker
+          );
+          inventoryItem.stickerswear = inventoryItem.stickerswear?.map(
+            (stickerwear) =>
+              stickerwear === null ? CS_NO_STICKER_WEAR : stickerwear
+          );
+          reporting.push(
+            `Converted NULL to 0 in stickers and stickerswear (uid:${inventoryItem.uid}).`
+          );
+        }
+        // Revert wear to min if it's invalid.
+        if (!CS_safeValidateWear(inventoryItem.wear, item)) {
+          reporting.push(
+            `Reverted wear from ${inventoryItem.wear} to min (${item.wearmin}) (uid:${inventoryItem.uid}).`
+          );
+          fixedIssues = true;
+          inventoryItem.wear = item.wearmin;
+        }
+        // Loop through storage items.
+        if (inventoryItem.storage !== undefined) {
+          reporting.push(`--Storage unit (uid:${inventoryItem.uid})--`);
+          const { items, fixedIssues: fixedStorageIssues } = fixIssues(
+            inventoryItem.storage
+          );
+          if (fixedStorageIssues) {
+            fixedIssues = true;
+            inventoryItem.storage = items;
+            reporting.push(
+              `Fixed issues in storage (uid:${inventoryItem.uid}).`
+            );
+          }
+          reporting.push(`--End of storage unit--`);
+        }
+        return inventoryItem;
+      }),
+    fixedIssues
+  };
+}
+
 export async function runUserInventoryCleanUp() {
+  let report: string[] = [];
+  await prisma.userCache.deleteMany();
   const users = await prisma.user.findMany({
     select: {
       id: true
@@ -26,70 +123,33 @@ export async function runUserInventoryCleanUp() {
       where: { id }
     });
     if (inventory) {
-      let removedC4Stickers = false;
-      let stickerNullToZero = false;
-      let missingUid = false;
       const parsed = JSON.parse(inventory) as CS_InventoryItem[];
-      const filtered = parsed
-        // Remove non existent items.
-        .filter((item) => CS_Economy.itemMap.has(item.id))
-        // Remove stickers from c4.
-        .map((inventoryItem) => {
-          const item = CS_Economy.getById(inventoryItem.id);
-          if (item.category !== "c4") {
-            return inventoryItem;
-          }
-          if (inventoryItem.stickers || inventoryItem.stickerswear) {
-            removedC4Stickers = true;
-            return {
-              ...inventoryItem,
-              stickers: undefined,
-              stickerswear: undefined
-            };
-          }
-          return inventoryItem;
-        })
-        .map((inventoryItem) => {
-          const isnull = <T>(value: T) => value === null;
-          if (
-            size(inventoryItem.stickers?.filter(isnull)) > 0 ||
-            size(inventoryItem.stickerswear?.filter(isnull)) > 0
-          ) {
-            stickerNullToZero = true;
-            return {
-              ...inventoryItem,
-              stickers: inventoryItem.stickers?.map((sticker) =>
-                sticker === null ? CS_NO_STICKER : sticker
-              ),
-              stickerswear: inventoryItem.stickerswear?.map((stickerwear) =>
-                stickerwear === null ? CS_NO_STICKER_WEAR : stickerwear
-              )
-            };
-          }
-          return inventoryItem;
-        })
-        .map((inventoryItem, index) => {
-          if (inventoryItem.uid === undefined) {
-            missingUid = true;
-
-            return {
-              ...inventoryItem,
-              uid: index
-            };
-          }
-          return inventoryItem;
-        });
-      if (
-        parsed.length !== filtered.length ||
-        removedC4Stickers ||
-        stickerNullToZero ||
-        missingUid
-      ) {
+      const startMessage = `Cleaning up inventory for user ${id}.`;
+      reporting = [];
+      reporting.push("-".repeat(startMessage.length));
+      reporting.push(startMessage);
+      const { items, fixedIssues } = fixIssues(parsed);
+      if (fixedIssues) {
+        report = [...report, ...reporting];
         await prisma.user.update({
-          data: { inventory: JSON.stringify(filtered) },
+          data: { inventory: JSON.stringify(items) },
           where: { id }
         });
       }
     }
+  }
+
+  if (report.length > 0) {
+    const path = resolve(process.cwd(), "logs");
+
+    if (!existsSync(path)) {
+      mkdirSync(path);
+    }
+
+    writeFileSync(
+      resolve(path, `user-inventory-clean-up-${Date.now()}.txt`),
+      report.join("\n"),
+      "utf-8"
+    );
   }
 }
