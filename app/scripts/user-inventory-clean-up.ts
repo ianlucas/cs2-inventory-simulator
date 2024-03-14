@@ -8,6 +8,8 @@ import {
   CS_InventoryItem,
   CS_NO_STICKER,
   CS_NO_STICKER_WEAR,
+  CS_safeValidateSeed,
+  CS_safeValidateStatTrak,
   CS_safeValidateWear
 } from "@ianlucas/cslib";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
@@ -85,6 +87,20 @@ function fixIssues(items: CS_InventoryItem[]) {
           );
           fixedIssues = true;
           inventoryItem.wear = item.wearmin;
+        }
+        // Remove invalid seeds.
+        if (!CS_safeValidateSeed(inventoryItem.seed, item)) {
+          reporting.push(`Removed seed from item (uid:${inventoryItem.uid}).`);
+          fixedIssues = true;
+          inventoryItem.seed = undefined;
+        }
+        // Remove invalid stattraks.
+        if (!CS_safeValidateStatTrak(inventoryItem.stattrak, item)) {
+          reporting.push(
+            `Removed StatTrak from item (uid:${inventoryItem.uid}).`
+          );
+          fixedIssues = true;
+          inventoryItem.stattrak = undefined;
         }
         // Loop through storage items.
         if (inventoryItem.storage !== undefined) {
