@@ -77,9 +77,11 @@ export function generate(inventory: CS_InventoryItem[]) {
             keyvalues.push([PIN_PREFIX, item.def]);
           }
           if (item.type === "melee") {
+            custom = true;
             add(keyvalues, MELEE_PREFIX, equippedT, equippedCT, "", item.def);
           }
           if (item.type === "glove") {
+            custom = true;
             add(keyvalues, GLOVE_PREFIX, equippedT, equippedCT, "", item.def);
           }
           if (item.type === "agent") {
