@@ -99,6 +99,8 @@ export const brazilian = {
   SettingsBackground: "Plano de Fundo",
   SettingsStatsForNerds: "Estatísticas para Nerds",
   SettingsHideFreeItems: "Ocultar Itens Gratuitos",
+  SettingsRemoveAllItems: "Remover todos os itens do meu inventário",
+  SettingsConfirmRemoveAllItems: `Tem certeza de que deseja remover todos os itens do seu inventário?\n\nESSA AÇÃO NÃO PODE SER DESFEITA.`,
   SettingsSave: "Salvar",
   CaseUnlockContainer: "Destrancar recipiente",
   CaseUnlock: "Destrancar",
