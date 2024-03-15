@@ -30,6 +30,7 @@ export const DepositToStorageUnitAction = "deposit-to-storage-unit";
 export const EditAction = "edit";
 export const EquipAction = "equip";
 export const RemoveAction = "remove";
+export const RemoveAllItemsAction = "remove-all-items";
 export const RenameItemAction = "rename-item";
 export const RenameStorageUnitAction = "rename-storage-unit";
 export const RetrieveFromStorageUnitAction = "retrieve-from-storage-unit";
@@ -142,6 +143,11 @@ const actionShape = z
       itemId: nonNegativeInt,
       stickerIndex: nonNegativeInt
     })
+  )
+  .or(
+    z.object({
+      type: z.literal(RemoveAllItemsAction)
+    })
   );
 
 export type ActionShape = z.infer<typeof actionShape>;
@@ -227,6 +233,8 @@ export async function action({ request }: ActionFunctionArgs) {
             action.itemId,
             action.stickerIndex
           );
+        case RemoveAllItemsAction:
+          return inventory.removeAll();
       }
     })
   );

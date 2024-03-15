@@ -109,6 +109,8 @@ export const english = {
   SettingsBackground: "Background",
   SettingsStatsForNerds: "Stats for nerds",
   SettingsHideFreeItems: "Hide default items",
+  SettingsRemoveAllItems: "Remove all items from my inventory",
+  SettingsConfirmRemoveAllItems: `Are you sure you want to remove all items from your inventory?\n\nTHIS ACTION CANNOT BE UNDONE.`,
   SettingsSave: "Save",
   CaseUnlockContainer: "Unlock Container",
   CaseUnlock: "Unlock",
