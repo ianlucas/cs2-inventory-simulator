@@ -53,44 +53,44 @@ export function UnlockCaseContainer({
           isDisplaying={isDisplaying}
           items={items}
         />
-      </div>
-      <div className="fixed bottom-12 left-0 w-full">
-        <UnlockCaseContainerContents
-          caseItem={caseItem}
-          hideCaseContents={hideCaseContents}
-        />
-        <UseItemFooter
-          left={
-            keyItem !== undefined && (
-              <div className="flex items-center gap-2 font-display text-lg">
-                <CSItemImage className="h-14" item={keyItem} />
-                <span>
-                  {translate("CaseUse")} <strong>{keyItem.name}</strong>
-                </span>
-              </div>
-            )
-          }
-          right={
-            <>
-              {canUnlock ? (
+        <div className="relative">
+          <UnlockCaseContainerContents
+            caseItem={caseItem}
+            hideCaseContents={hideCaseContents}
+          />
+          <UseItemFooter
+            left={
+              keyItem !== undefined && (
+                <div className="flex items-center gap-2 font-display text-lg">
+                  <CSItemImage className="h-14" item={keyItem} />
+                  <span>
+                    {translate("CaseUse")} <strong>{keyItem.name}</strong>
+                  </span>
+                </div>
+              )
+            }
+            right={
+              <>
+                {canUnlock ? (
+                  <ModalButton
+                    children={translate("CaseUnlockContainer")}
+                    disabled={!canUnlock}
+                    onClick={onUnlock}
+                    variant="primary"
+                  />
+                ) : (
+                  <FillSpinner className="mx-4" />
+                )}
                 <ModalButton
-                  children={translate("CaseUnlockContainer")}
+                  children={translate("CaseClose")}
                   disabled={!canUnlock}
-                  onClick={onUnlock}
-                  variant="primary"
+                  onClick={onClose}
+                  variant="secondary"
                 />
-              ) : (
-                <FillSpinner className="mx-4" />
-              )}
-              <ModalButton
-                children={translate("CaseClose")}
-                disabled={!canUnlock}
-                onClick={onClose}
-                variant="secondary"
-              />
-            </>
-          }
-        />
+              </>
+            }
+          />
+        </div>
       </div>
     </>
   );

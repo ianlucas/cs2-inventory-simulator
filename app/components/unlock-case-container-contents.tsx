@@ -7,6 +7,7 @@ import { CS_Item, CS_listCaseContents } from "@ianlucas/cslib";
 import { CSItem } from "./cs-item";
 import { CaseSpecialItem } from "./case-special-item";
 import { useTranslation } from "~/hooks/use-translation";
+import { ElementRef, useEffect, useRef, useState } from "react";
 
 export function UnlockCaseContainerContents({
   caseItem,
@@ -15,25 +16,41 @@ export function UnlockCaseContainerContents({
   caseItem: CS_Item;
   hideCaseContents: boolean;
 }) {
+  const [translateY, setTranslateY] = useState(0);
+  const [opacity, setOpacity] = useState(0);
   const translate = useTranslation();
+  const ref = useRef<ElementRef<"div">>(null);
+
+  useEffect(() => {
+    setOpacity(1);
+    if (hideCaseContents) {
+      setTranslateY(9999);
+    } else {
+      setTranslateY(ref.current !== null ? -ref.current.clientHeight : 0);
+    }
+  }, [hideCaseContents, ref]);
 
   return (
     <div
-      className="m-auto max-w-[1024px] rounded [transition:all_cubic-bezier(0.4,0,0.2,1)_1s]"
+      className="absolute w-full -translate-y-full rounded [transition:all_cubic-bezier(0.4,0,0.2,1)_1s]"
       style={{
-        transform: `translateY(${hideCaseContents ? 9999 : 0}px)`
+        transform: `translateY(${translateY}px)`,
+        opacity
       }}
+      ref={ref}
     >
-      <h2 className="my-2">{translate("CaseContainsOne")}</h2>
-      <div className="flex h-[320px] flex-wrap gap-3 overflow-y-scroll pb-4">
-        {[
-          ...CS_listCaseContents(caseItem, true).map((item, index) => (
-            <CSItem key={index} item={item} />
-          )),
-          caseItem.specials !== undefined && (
-            <CaseSpecialItem key={-1} caseItem={caseItem} />
-          )
-        ]}
+      <div className="m-auto max-w-[1024px]">
+        <h2 className="my-2">{translate("CaseContainsOne")}</h2>
+        <div className="flex h-[320px] flex-wrap gap-3 overflow-y-scroll pb-4">
+          {[
+            ...CS_listCaseContents(caseItem, true).map((item, index) => (
+              <CSItem key={index} item={item} />
+            )),
+            caseItem.specials !== undefined && (
+              <CaseSpecialItem key={-1} caseItem={caseItem} />
+            )
+          ]}
+        </div>
       </div>
     </div>
   );
