@@ -117,18 +117,14 @@ const actionShape = z
   )
   .or(
     z.object({
-      depositUids: z
-        .array(nonNegativeInt)
-        .max(MAX_INVENTORY_STORAGE_UNIT_ITEMS),
+      depositUids: z.array(nonNegativeInt).max(1),
       type: z.literal(DepositToStorageUnitAction),
       uid: nonNegativeInt
     })
   )
   .or(
     z.object({
-      retrieveUids: z
-        .array(nonNegativeInt)
-        .max(MAX_INVENTORY_STORAGE_UNIT_ITEMS),
+      retrieveUids: z.array(nonNegativeInt).max(1),
       type: z.literal(RetrieveFromStorageUnitAction),
       uid: nonNegativeInt
     })
