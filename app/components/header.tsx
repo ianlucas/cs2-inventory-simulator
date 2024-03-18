@@ -19,8 +19,8 @@ import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useIsOnTop } from "~/hooks/use-is-on-top";
 import { useTranslation } from "~/hooks/use-translation";
 import { HeaderLink } from "./header-link";
-import { useRootContext } from "./root-context";
 import { Logo } from "./logo";
+import { useRootContext } from "./root-context";
 
 export function Header() {
   const { user, inventory } = useRootContext();
@@ -62,7 +62,7 @@ export function Header() {
                 label={translate("HeaderInventoryLabel")}
                 onClick={closeMenu}
               />
-              {!inventory.full() && (
+              {!inventory.isFull() && (
                 <HeaderLink
                   to="/craft"
                   icon={faPlus}

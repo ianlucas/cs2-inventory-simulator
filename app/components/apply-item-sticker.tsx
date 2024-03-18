@@ -5,14 +5,11 @@
 
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  CS_Economy,
-  CS_INVENTORY_NO_STICKERS,
-  CS_NO_STICKER
-} from "@ianlucas/cslib";
+import { CS_Economy, CS_INVENTORY_STICKERS, CS_NONE } from "@ianlucas/cslib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
+import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
 import {
@@ -36,19 +33,15 @@ export function ApplyItemSticker({
   stickerUid: number;
 }) {
   const translate = useTranslation();
-  const { items, inventory, setInventory } = useRootContext();
+  const { inventory, setInventory } = useRootContext();
   const sync = useSync();
 
   const [stickerIndex, setStickerIndex] = useState<number>();
-  const [stickerItem] = useState(inventory.getItem(stickerUid));
+  const { data: stickerItem } = useInventoryItem(stickerUid);
+  const { data: targetItem, stickers: initialStickers } =
+    useInventoryItem(targetUid);
 
-  const targetItem =
-    targetUid >= 0
-      ? inventory.getItem(targetUid)
-      : items.find(({ uid }) => uid === targetUid)!.item;
-  const stickers =
-    (targetUid >= 0 ? inventory.get(targetUid).stickers : undefined) ??
-    CS_INVENTORY_NO_STICKERS.slice();
+  const stickers = initialStickers ?? [...CS_INVENTORY_STICKERS];
 
   function handleApplySticker() {
     if (stickerIndex !== undefined) {
@@ -98,7 +91,7 @@ export function ApplyItemSticker({
               />
               <div className="flex">
                 {stickers.map((id, index) =>
-                  id !== CS_NO_STICKER || index === stickerIndex ? (
+                  id !== CS_NONE || index === stickerIndex ? (
                     <CSItemImage
                       key={index}
                       className="h-[126px] w-[168px]"

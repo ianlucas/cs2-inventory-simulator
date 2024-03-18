@@ -3,10 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_hasStickers } from "@ianlucas/cslib";
+import { CS_hasStickers, CS_isSticker } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
+import { countStickers } from "~/utils/inventory";
+import { size } from "~/utils/number";
 
 export function useApplyItemSticker() {
   const { inventory, items } = useRootContext();
@@ -17,23 +19,27 @@ export function useApplyItemSticker() {
   }>();
 
   function handleApplyItemSticker(uid: number) {
-    const selectedItem = inventory.getItem(uid);
+    const { data: selectedItem, stickers: selectedStickers } =
+      inventory.get(uid);
     return setItemSelector({
       uid,
       items: items.filter(
         ({ item }) =>
-          (selectedItem.type === "sticker" && CS_hasStickers(item)) ||
-          (selectedItem.type !== "sticker" && item.type === "sticker")
+          (CS_isSticker(selectedItem) &&
+            CS_hasStickers(item.data) &&
+            countStickers(item.stickers) < 4) ||
+          (!CS_isSticker(selectedItem) &&
+            countStickers(selectedStickers) < 4 &&
+            CS_isSticker(item.data))
       ),
       type: "apply-item-sticker"
     });
   }
 
   function handleApplyItemStickerSelect(uid: number) {
-    const { type } =
-      uid >= 0
-        ? inventory.getItem(uid)
-        : items.find(({ uid }) => uid === uid)!.item;
+    const {
+      data: { type }
+    } = inventory.get(uid);
     return setApplyItemSticker({
       targetUid: type !== "sticker" ? uid : itemSelector!.uid,
       stickerUid: type === "sticker" ? uid : itemSelector!.uid

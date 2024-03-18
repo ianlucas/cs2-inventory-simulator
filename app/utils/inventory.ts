@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_filterItems, CS_InventoryItem } from "@ianlucas/cslib";
+import { CS_filterItems, CS_InventoryItem, CS_NONE } from "@ianlucas/cslib";
 import { getCSItemName } from "./economy";
 import { serverInventoryShape } from "./shapes";
 
@@ -21,18 +21,16 @@ export function parseInventory(inventory?: string | null) {
   }
 }
 
-export function transform(inventoryItem: CS_InventoryItem) {
-  const item = CS_Economy.getById(inventoryItem.id);
+export function transform(item: CS_InventoryItem) {
   return {
+    ...getCSItemName(item.data),
     equipped: [
-      inventoryItem.equipped && "text-white",
-      inventoryItem.equippedCT && "text-sky-300",
-      inventoryItem.equippedT && "text-yellow-400"
+      item.equipped && "text-white",
+      item.equippedCT && "text-sky-300",
+      item.equippedT && "text-yellow-400"
     ],
-    uid: inventoryItem.uid,
-    inventoryItem,
     item,
-    ...getCSItemName(item)
+    uid: item.uid
   };
 }
 
@@ -42,7 +40,7 @@ export function sortByName(
   a: TransformedInventoryItem,
   b: TransformedInventoryItem
 ) {
-  return a.item.name.localeCompare(b.item.name);
+  return a.item.data.name.localeCompare(b.item.data.name);
 }
 
 const typeOrder = {
@@ -64,21 +62,15 @@ export function sortByType(
   a: TransformedInventoryItem,
   b: TransformedInventoryItem
 ) {
-  return typeOrder[a.item.type] - typeOrder[b.item.type];
+  return typeOrder[a.item.data.type] - typeOrder[b.item.data.type];
 }
 
 export function sortByEquipped(
   a: TransformedInventoryItem,
   b: TransformedInventoryItem
 ) {
-  const equippedA =
-    a.inventoryItem.equipped ||
-    a.inventoryItem.equippedCT ||
-    a.inventoryItem.equippedT;
-  const equippedB =
-    b.inventoryItem.equipped ||
-    b.inventoryItem.equippedCT ||
-    b.inventoryItem.equippedT;
+  const equippedA = a.item.equipped || a.item.equippedCT || a.item.equippedT;
+  const equippedB = b.item.equipped || b.item.equippedCT || b.item.equippedT;
   if (equippedA && !equippedB) {
     return -1;
   } else if (!equippedA && equippedB) {
@@ -95,10 +87,20 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
   return CS_filterItems({
     free: true
   }).map((item, index) => ({
+    ...getCSItemName(item),
     equipped: [],
-    uid: -1 * (index + 1),
-    inventoryItem: { id: item.id } as CS_InventoryItem,
-    item,
-    ...getCSItemName(item)
+    item: {
+      data: item,
+      id: item.id,
+      uid: -1 * (index + 1)
+    } satisfies CS_InventoryItem,
+    uid: -1 * (index + 1)
   }));
+}
+
+export function countStickers(stickers?: number[]) {
+  if (stickers === undefined) {
+    return 0;
+  }
+  return stickers.filter((sticker) => sticker !== CS_NONE).length;
 }

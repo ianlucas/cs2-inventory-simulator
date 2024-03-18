@@ -4,10 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  CS_BaseInventoryItem,
   CS_Economy,
-  CS_InventoryItem,
-  CS_NO_STICKER,
-  CS_NO_STICKER_WEAR,
+  CS_NONE,
   CS_safeValidateSeed,
   CS_safeValidateStatTrak,
   CS_safeValidateWear
@@ -19,13 +18,13 @@ import { size } from "~/utils/number";
 
 let reporting: string[] = [];
 
-function fixIssues(items: CS_InventoryItem[]) {
+function fixIssues(items: CS_BaseInventoryItem[]) {
   const uids = new Set<number>();
   let fixedIssues = false;
   return {
     items: items
       // Remove non-existent items.
-      .filter((item) => CS_Economy.itemMap.has(item.id))
+      .filter((item) => CS_Economy.items.has(item.id))
       .map((inventoryItem) => {
         if (inventoryItem.uid !== undefined) {
           uids.add(inventoryItem.uid);
@@ -70,11 +69,10 @@ function fixIssues(items: CS_InventoryItem[]) {
         ) {
           fixedIssues = true;
           inventoryItem.stickers = inventoryItem.stickers?.map((sticker) =>
-            sticker === null ? CS_NO_STICKER : sticker
+            sticker === null ? CS_NONE : sticker
           );
           inventoryItem.stickerswear = inventoryItem.stickerswear?.map(
-            (stickerwear) =>
-              stickerwear === null ? CS_NO_STICKER_WEAR : stickerwear
+            (stickerwear) => (stickerwear === null ? CS_NONE : stickerwear)
           );
           reporting.push(
             `Converted NULL to 0 in stickers and stickerswear (uid:${inventoryItem.uid}).`
@@ -139,7 +137,7 @@ export async function runUserInventoryCleanUp() {
       where: { id }
     });
     if (inventory) {
-      const parsed = JSON.parse(inventory) as CS_InventoryItem[];
+      const parsed = JSON.parse(inventory) as CS_BaseInventoryItem[];
       const startMessage = `Cleaning up inventory for user ${id}.`;
       reporting = [];
       reporting.push("-".repeat(startMessage.length));

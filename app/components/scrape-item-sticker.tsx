@@ -5,10 +5,10 @@
 
 import {
   CS_Economy,
-  CS_INVENTORY_NO_STICKERS,
-  CS_INVENTORY_NO_STICKERS_WEAR,
+  CS_INVENTORY_STICKERS,
+  CS_INVENTORY_STICKERS_WEAR,
   CS_MAX_STICKER_WEAR,
-  CS_NO_STICKER,
+  CS_NONE,
   CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
 } from "@ianlucas/cslib";
@@ -34,19 +34,23 @@ export function ScrapeItemSticker({
   uid: number;
 }) {
   const translate = useTranslation();
+  const sync = useSync();
   const {
     inventory,
     setInventory,
     preferences: { statsForNerds }
   } = useRootContext();
-  const sync = useSync();
-  const [item] = useState(inventory.getItem(uid));
+
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
 
-  const inventoryItem = inventory.get(uid);
-  const stickers = inventoryItem.stickers ?? CS_INVENTORY_NO_STICKERS;
-  const stickersWear =
-    inventoryItem.stickerswear ?? CS_INVENTORY_NO_STICKERS_WEAR;
+  const {
+    data: item,
+    stickers: initialStickers,
+    stickerswear: initialStickersWear
+  } = inventory.get(uid);
+
+  const stickers = initialStickers ?? CS_INVENTORY_STICKERS;
+  const stickersWear = initialStickersWear ?? CS_INVENTORY_STICKERS_WEAR;
 
   function doScrapeSticker(stickerIndex: number) {
     const scratch = Math.ceil(
@@ -97,7 +101,7 @@ export function ScrapeItemSticker({
                 />
                 <div className="flex justify-center">
                   {stickers.map((id, index) =>
-                    id !== CS_NO_STICKER ? (
+                    id !== CS_NONE ? (
                       <button key={index} className="group">
                         <CSItemImage
                           className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"

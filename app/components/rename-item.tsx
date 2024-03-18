@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/hooks/use-input";
+import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
 import {
@@ -30,10 +31,10 @@ export function RenameItem({
   targetUid: number;
   toolUid: number;
 }) {
+  const { inventory, setInventory } = useRootContext();
   const translate = useTranslation();
-  const [nametag, setNametag] = useInput("");
-  const { inventory, setInventory, items } = useRootContext();
   const sync = useSync();
+
   const freeItems = useMemo(
     () =>
       CS_filterItems({
@@ -41,11 +42,11 @@ export function RenameItem({
       }).map((item) => item.id),
     []
   );
-  const targetItem =
-    targetUid >= 0
-      ? inventory.getItem(targetUid)
-      : items.find(({ uid }) => uid === targetUid)!.item;
+  const [nametag, setNametag] = useInput("");
+
+  const { data: targetItem } = useInventoryItem(targetUid);
   const isRenamingFreeItem = freeItems.includes(targetItem.id);
+
   function handleRename() {
     if (targetUid < 0 && isRenamingFreeItem) {
       sync({

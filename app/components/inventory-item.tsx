@@ -5,17 +5,17 @@
 
 import { FloatingFocusManager } from "@floating-ui/react";
 import {
+  CS_INVENTORY_EQUIPPABLE_ITEMS,
+  CS_NONE,
+  CS_TEAM_CT,
+  CS_TEAM_T,
+  CS_Team,
   CS_hasSeed,
   CS_hasStickers,
   CS_hasWear,
-  CS_INVENTORY_EQUIPPABLE_ITEMS,
   CS_isNametagTool,
-  CS_isStorageUnitTool,
-  CS_NO_STICKER,
-  CS_Team,
-  CS_TEAM_CT,
-  CS_TEAM_T,
-  isStatTrakSwapTool
+  CS_isStatTrakSwapTool,
+  CS_isStorageUnitTool
 } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
@@ -35,8 +35,6 @@ export function InventoryItem({
   disableContextMenu,
   disableHover,
   equipped,
-  uid,
-  inventoryItem,
   item,
   model,
   name,
@@ -53,7 +51,8 @@ export function InventoryItem({
   onSwapItemsStatTrak,
   onUnequip,
   onUnlockContainer,
-  ownApplicableStickers
+  ownApplicableStickers,
+  uid
 }: ReturnType<typeof transform> & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
@@ -73,7 +72,6 @@ export function InventoryItem({
   ownApplicableStickers?: boolean;
 }) {
   const { inventory } = useRootContext();
-  const stubInventoryItem = uid < 0;
   const translate = useTranslation();
   const {
     clickContext,
@@ -93,39 +91,39 @@ export function InventoryItem({
     setIsHoverOpen
   } = useInventoryItemFloating();
 
-  const canEquip =
-    item.teams === undefined &&
-    !inventoryItem.equipped &&
-    CS_INVENTORY_EQUIPPABLE_ITEMS.includes(item.type);
-  const canEquipT = item.teams?.includes(CS_TEAM_T) && !inventoryItem.equippedT;
-  const canEquipCT =
-    item.teams?.includes(CS_TEAM_CT) && !inventoryItem.equippedCT;
-  const canUnequip = inventoryItem.equipped === true;
-  const canUnequipT = inventoryItem.equippedT === true;
-  const canUnequipCT = inventoryItem.equippedCT === true;
+  const isFreeInventoryItem = uid < 0;
+  const { data } = item;
 
-  const hasStatTrak = inventoryItem.stattrak !== undefined;
-  const hasWear = !item.free && CS_hasWear(item);
-  const hasSeed = !item.free && CS_hasSeed(item);
+  const canEquip =
+    data.teams === undefined &&
+    !item.equipped &&
+    CS_INVENTORY_EQUIPPABLE_ITEMS.includes(data.type);
+  const canEquipT = data.teams?.includes(CS_TEAM_T) && !item.equippedT;
+  const canEquipCT = data.teams?.includes(CS_TEAM_CT) && !item.equippedCT;
+  const canUnequip = item.equipped === true;
+  const canUnequipT = item.equippedT === true;
+  const canUnequipCT = item.equippedCT === true;
+
+  const hasStatTrak = item.stattrak !== undefined;
+  const hasWear = !data.free && CS_hasWear(data);
+  const hasSeed = !data.free && CS_hasSeed(data);
   const hasAttributes = hasWear || hasSeed;
-  const canSwapStatTrak = isStatTrakSwapTool(item);
-  const canRename = CS_isNametagTool(item);
+  const canSwapStatTrak = CS_isStatTrakSwapTool(data);
+  const canRename = CS_isNametagTool(data);
   const canApplySticker =
     ownApplicableStickers &&
-    ((CS_hasStickers(item) &&
-      (inventoryItem.stickers ?? []).filter((id) => id !== CS_NO_STICKER)
-        .length < 4) ||
-      item.type === "sticker");
+    ((CS_hasStickers(data) &&
+      (item.stickers ?? []).filter((id) => id !== CS_NONE).length < 4) ||
+      data.type === "sticker");
   const canScrapeSticker =
-    CS_hasStickers(item) &&
-    (inventoryItem.stickers ?? []).filter((id) => id !== CS_NO_STICKER).length >
-      0;
-  const canUnlockContainer = ["case", "key"].includes(item.type);
-  const hasContents = item.contents !== undefined;
-  const hasTeams = item.teams !== undefined;
-  const hasNametag = inventoryItem.nametag !== undefined;
-  const isStorageUnit = CS_isStorageUnitTool(item);
-  const isEditable = EDITABLE_INVENTORY_TYPE.includes(item.type);
+    CS_hasStickers(data) &&
+    (item.stickers ?? []).filter((id) => id !== CS_NONE).length > 0;
+  const canUnlockContainer = ["case", "key"].includes(data.type);
+  const hasContents = data.contents !== undefined;
+  const hasTeams = data.teams !== undefined;
+  const hasNametag = item.nametag !== undefined;
+  const isStorageUnit = CS_isStorageUnitTool(data);
+  const isEditable = EDITABLE_INVENTORY_TYPE.includes(data.type);
 
   function close(callBeforeClosing: () => void) {
     return function close() {
@@ -146,18 +144,18 @@ export function InventoryItem({
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
         <CSItem
-          item={item}
+          item={data}
           equipped={equipped}
-          nametag={inventoryItem.nametag}
+          nametag={item.nametag}
           onClick={
             onClick !== undefined ? close(() => onClick(uid)) : undefined
           }
-          stattrak={inventoryItem.stattrak}
-          stickers={inventoryItem.stickers}
-          wear={inventoryItem.wear}
+          stattrak={item.stattrak}
+          stickers={item.stickers}
+          wear={item.wear}
         />
       </div>
-      {!stubInventoryItem && !disableContextMenu && isClickOpen && (
+      {!isFreeInventoryItem && !disableContextMenu && isClickOpen && (
         <FloatingFocusManager context={clickContext} modal={false}>
           <div
             className="z-10 w-[192px] rounded bg-neutral-800 py-2 text-sm text-white outline-none"
@@ -242,8 +240,7 @@ export function InventoryItem({
                   {
                     condition:
                       isStorageUnit &&
-                      inventory.hasItemsInStorageUnit(uid) &&
-                      !inventory.full(),
+                      inventory.canRetrieveFromStorageUnit(uid),
                     label: translate("InventoryItemStorageUnitRetrieve"),
                     onClick: close(() => onRetrieveFromStorageUnit?.(uid))
                   },
@@ -280,7 +277,7 @@ export function InventoryItem({
           </div>
         </FloatingFocusManager>
       )}
-      {!stubInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
+      {!isFreeInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <div
             className="z-20 max-w-[320px] rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none"
@@ -288,20 +285,14 @@ export function InventoryItem({
             style={hoverStyles}
             {...getHoverFloatingProps()}
           >
-            <InventoryItemName
-              inventoryItem={inventoryItem}
-              model={model}
-              name={name}
-            />
-            {hasTeams && <InventoryItemTeams item={item} />}
-            {hasStatTrak && (
-              <InventoryItemStatTrak inventoryItem={inventoryItem} />
-            )}
-            {hasContents && <InventoryItemContents item={item} />}
+            <InventoryItemName inventoryItem={item} model={model} name={name} />
+            {hasTeams && <InventoryItemTeams item={item.data} />}
+            {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
+            {hasContents && <InventoryItemContents item={item.data} />}
             {hasAttributes && (
               <div className="mt-2 flex flex-col gap-2">
-                {hasWear && <InventoryItemWear inventoryItem={inventoryItem} />}
-                {hasSeed && <InventoryItemSeed inventoryItem={inventoryItem} />}
+                {hasWear && <InventoryItemWear inventoryItem={item} />}
+                {hasSeed && <InventoryItemSeed inventoryItem={item} />}
               </div>
             )}
           </div>

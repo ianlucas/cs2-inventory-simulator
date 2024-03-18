@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS_Economy,
   CS_Item,
-  CS_NO_STICKER,
+  CS_NONE,
   CS_isStorageUnitTool
 } from "@ianlucas/cslib";
 import clsx from "clsx";
@@ -53,7 +53,7 @@ export function CSItem({
           {stickers !== undefined &&
             stickers.map(
               (sticker, index) =>
-                sticker !== CS_NO_STICKER && (
+                sticker !== CS_NONE && (
                   <CSItemImage
                     className="h-5"
                     item={CS_Economy.getById(sticker)}

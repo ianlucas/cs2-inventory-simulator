@@ -6,15 +6,14 @@
 import { faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  CS_INVENTORY_NO_STICKERS,
-  CS_INVENTORY_NO_STICKERS_WEAR,
+  CS_INVENTORY_STICKERS,
+  CS_INVENTORY_STICKERS_WEAR,
   CS_Item,
   CS_MAX_SEED,
   CS_MAX_WEAR,
   CS_MIN_SEED,
   CS_MIN_WEAR,
-  CS_NO_STICKER,
-  CS_NO_STICKER_WEAR,
+  CS_NONE,
   CS_WEAR_FACTOR,
   CS_hasNametag,
   CS_hasSeed,
@@ -87,8 +86,8 @@ export function CSItemEditor({
   const [seed, setSeed] = useState(attributes?.seed ?? 1);
   const [nametag, setNametag] = useInput(attributes?.nametag ?? "");
   const [stickersAttributes, setStickersAttributes] = useState({
-    ids: attributes?.stickers ?? CS_INVENTORY_NO_STICKERS.slice(),
-    wears: attributes?.stickerswear ?? CS_INVENTORY_NO_STICKERS_WEAR.slice()
+    ids: attributes?.stickers ?? [...CS_INVENTORY_STICKERS],
+    wears: attributes?.stickerswear ?? [...CS_INVENTORY_STICKERS_WEAR]
   });
   const [quantity, setQuantity] = useState(1);
   const hasStickers = CS_hasStickers(item);
@@ -107,15 +106,13 @@ export function CSItemEditor({
   function handleSubmit() {
     const stickers =
       hasStickers &&
-      stickersAttributes.ids.filter((sticker) => sticker !== CS_NO_STICKER)
-        .length > 0
+      stickersAttributes.ids.filter((sticker) => sticker !== CS_NONE).length > 0
         ? stickersAttributes.ids
         : undefined;
 
     const stickerswear =
       hasStickers &&
-      stickersAttributes.wears.filter((wear) => wear !== CS_NO_STICKER_WEAR)
-        .length > 0
+      stickersAttributes.wears.filter((wear) => wear !== CS_NONE).length > 0
         ? stickersAttributes.wears
         : undefined;
 

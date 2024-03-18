@@ -33,11 +33,11 @@ export async function action({ request }: ActionFunctionArgs) {
     .parse(await request.json());
   const inventory = new CS_Inventory({
     items: parseInventory(rawInventory),
-    limit: MAX_INVENTORY_ITEMS,
-    storageUnitLimit: MAX_INVENTORY_STORAGE_UNIT_ITEMS
+    maxItems: MAX_INVENTORY_ITEMS,
+    storageUnitMaxItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS
   });
   const unlockedItem = CS_unlockCase(inventory.get(caseUid).id);
   inventory.unlockCase(unlockedItem, caseUid, keyUid);
-  await updateUserInventory(userId, inventory.getAll());
+  await updateUserInventory(userId, inventory.export());
   return json(unlockedItem);
 }

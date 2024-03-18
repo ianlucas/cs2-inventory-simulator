@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS_isCase, CS_isKey } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
@@ -17,16 +18,16 @@ export function useUnlockCase() {
   }>();
 
   function handleUnlockCase(uid: number) {
-    const selectedItem = inventory.getItem(uid);
+    const selectedItem = inventory.get(uid).data;
     if (selectedItem.keys || selectedItem.type === "key") {
       return setItemSelector({
         uid,
         items: items.filter(
           ({ item }) =>
-            (selectedItem.type === "key" &&
-              item.keys?.includes(selectedItem.id)) ||
-            (selectedItem.type === "case" &&
-              selectedItem.keys?.includes(item.id))
+            (CS_isKey(selectedItem) &&
+              item.data.keys?.includes(selectedItem.id)) ||
+            (CS_isCase(selectedItem) &&
+              selectedItem.keys?.includes(item.data.id))
         ),
         type: "unlock-case"
       });
@@ -41,7 +42,7 @@ export function useUnlockCase() {
 
   function handleUnlockCaseSelect(uid: number) {
     playSound("case_drop");
-    const selectedItem = inventory.getItem(uid);
+    const { data: selectedItem } = inventory.get(uid);
     return setUnlockCase({
       caseUid: selectedItem.type === "case" ? uid : itemSelector!.uid,
       keyUid: selectedItem.type === "key" ? uid : itemSelector!.uid

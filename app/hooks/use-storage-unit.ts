@@ -22,12 +22,11 @@ export function useStorageUnit() {
   }>();
 
   const isDepositableItem = ({
-    item,
-    inventoryItem: { nametag }
+    item: { data, nametag }
   }: (typeof items)[number]) =>
-    (!item.free ||
-      (env.nametagDefaultAllowed.includes(item.id) && nametag !== undefined)) &&
-    item.type !== "tool";
+    (!data.free ||
+      (env.nametagDefaultAllowed.includes(data.id) && nametag !== undefined)) &&
+    data.type !== "tool";
 
   function handleRenameStorageUnit(uid: number) {
     return setRenameStorageUnit({ uid });
@@ -85,9 +84,9 @@ export function useStorageUnit() {
       uid: itemSelector.uid,
       retrieveUids: retrieveUids
     });
-    const canRetrieveItems = !inventory
+    const canRetrieveItems = inventory
       .retrieveFromStorageUnit(itemSelector.uid, retrieveUids)
-      .full();
+      .canRetrieveFromStorageUnit(itemSelector.uid);
     setInventory(inventory);
     return setItemSelector(
       canRetrieveItems

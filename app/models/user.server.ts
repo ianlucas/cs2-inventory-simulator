@@ -3,7 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory, CS_InventoryItem } from "@ianlucas/cslib";
+import {
+  CS_BaseInventoryItem,
+  CS_Inventory,
+  CS_InventoryItem
+} from "@ianlucas/cslib";
 import SteamAPI from "steamapi";
 import { prisma } from "~/db.server";
 import {
@@ -55,7 +59,7 @@ export async function existsUser(userId: string) {
 
 export async function updateUserInventory(
   userId: string,
-  items: CS_InventoryItem[]
+  items: CS_BaseInventoryItem[]
 ) {
   return await prisma.user.update({
     data: {
@@ -73,14 +77,14 @@ export async function manipulateUserInventory(
 ) {
   const inventory = new CS_Inventory({
     items: parseInventory(rawInventory),
-    limit: MAX_INVENTORY_ITEMS,
-    storageUnitLimit: MAX_INVENTORY_STORAGE_UNIT_ITEMS
+    maxItems: MAX_INVENTORY_ITEMS,
+    storageUnitMaxItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS
   });
   manipulate(inventory);
   return await prisma.user.update({
     data: {
       syncedAt: new Date(),
-      inventory: JSON.stringify(inventory.getAll())
+      inventory: JSON.stringify(inventory.export())
     },
     where: { id: userId }
   });

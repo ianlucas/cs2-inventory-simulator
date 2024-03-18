@@ -25,8 +25,8 @@ import { useTranslation } from "~/hooks/use-translation";
 import { middleware } from "~/http.server";
 import { showQuantity } from "~/utils/economy";
 import { range } from "~/utils/number";
-import { AddAction, EditAction } from "./api.action.sync._index";
 import { playSound } from "~/utils/sound";
+import { AddAction, EditAction } from "./api.action.sync._index";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Craft - CS2 Inventory Simulator" }];
@@ -50,7 +50,7 @@ export default function Craft() {
   const sync = useSync();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(
-    uid !== undefined ? inventory.getItem(uid) : undefined
+    uid !== undefined ? inventory.get(uid).data : undefined
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 

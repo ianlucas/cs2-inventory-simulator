@@ -44,7 +44,7 @@ export function translateItems(
     return;
   }
   currentLanguage = language;
-  CS_Economy.initialize(CS_ITEMS);
+  CS_Economy.use(CS_ITEMS);
   CS_Economy.applyTranslation(itemTranslation);
 }
 

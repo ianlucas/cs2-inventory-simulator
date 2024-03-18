@@ -15,7 +15,7 @@ import { runUserInventoryCleanUp } from "./scripts/user-inventory-clean-up";
 
 const ABORT_DELAY = 5_000;
 
-CS_Economy.initialize(CS_ITEMS);
+CS_Economy.use(CS_ITEMS);
 runUserInventoryCleanUp();
 
 export default function handleRequest(

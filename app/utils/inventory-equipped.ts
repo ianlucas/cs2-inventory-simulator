@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  CS_BaseInventoryItem,
   CS_Economy,
   CS_InventoryItem,
-  CS_NO_STICKER,
-  CS_NO_STICKER_WEAR,
+  CS_NONE,
   CS_TEAM_CT,
   CS_TEAM_T
 } from "@ianlucas/cslib";
@@ -46,7 +46,7 @@ function add(
     .forEach((team) => keyvalues.push([`${prefix}${team}${suffix}`, value]));
 }
 
-export function generate(inventory: CS_InventoryItem[]) {
+export function generate(inventory: CS_BaseInventoryItem[]) {
   return Object.fromEntries(
     inventory
       .filter(
@@ -185,7 +185,7 @@ export function generate(inventory: CS_InventoryItem[]) {
             );
           }
           stickers?.forEach((sticker, slot) => {
-            if (sticker !== CS_NO_STICKER) {
+            if (sticker !== CS_NONE) {
               custom = true;
               add(
                 keyvalues,
@@ -203,7 +203,7 @@ export function generate(inventory: CS_InventoryItem[]) {
                 `_${item.def}_${slot}`,
                 CS_Economy.getById(sticker).index
               );
-              if (stickerswear?.[slot] !== CS_NO_STICKER_WEAR) {
+              if (stickerswear?.[slot] !== CS_NONE) {
                 add(
                   keyvalues,
                   STICKERWEAR_PREFIX,

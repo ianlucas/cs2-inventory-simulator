@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_hasStickers, CS_Team } from "@ianlucas/cslib";
+import { CS_hasStickers, CS_isSticker, CS_Team } from "@ianlucas/cslib";
 import { useNavigate } from "@remix-run/react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useApplyItemSticker } from "~/hooks/use-apply-item-sticker";
@@ -12,13 +12,16 @@ import { useScrapeItemSticker } from "~/hooks/use-scrape-item-sticker";
 import { useStorageUnit } from "~/hooks/use-storage-unit";
 import { useSwapItemsStatTrak } from "~/hooks/use-swap-items-stattrak";
 import { useSync } from "~/hooks/use-sync";
+import { useTranslation } from "~/hooks/use-translation";
 import { useUnlockCase } from "~/hooks/use-unlock-case";
 import {
   EquipAction,
   RemoveAction,
   UnequipAction
 } from "~/routes/api.action.sync._index";
+import { playSound } from "~/utils/sound";
 import { ApplyItemSticker } from "./apply-item-sticker";
+import { InfoIcon } from "./info-icon";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelectorContext } from "./item-selector-context";
@@ -28,9 +31,6 @@ import { useRootContext } from "./root-context";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
-import { InfoIcon } from "./info-icon";
-import { useTranslation } from "~/hooks/use-translation";
-import { playSound } from "~/utils/sound";
 
 export function Inventory() {
   const sync = useSync();
@@ -40,8 +40,8 @@ export function Inventory() {
   const navigate = useNavigate();
 
   const ownApplicableStickers =
-    items.filter(({ item }) => item.type === "sticker").length > 0 &&
-    items.filter(({ item }) => CS_hasStickers(item)).length > 0;
+    items.filter(({ item }) => CS_isSticker(item.data)).length > 0 &&
+    items.filter(({ item }) => CS_hasStickers(item.data)).length > 0;
 
   const {
     closeUnlockCase,
@@ -94,9 +94,8 @@ export function Inventory() {
   } = useSwapItemsStatTrak();
 
   function handleEquip(uid: number, team?: CS_Team) {
-    console.log("ué?");
     playSound(
-      inventory.getItem(uid).type === "musickit"
+      inventory.get(uid).data.type === "musickit"
         ? "music_equip"
         : "inventory_item_pickup"
     );

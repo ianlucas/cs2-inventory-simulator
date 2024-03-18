@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_InventoryItem } from "@ianlucas/cslib";
+import { CS_BaseInventoryItem } from "@ianlucas/cslib";
 import { json } from "@remix-run/node";
 import { z } from "zod";
 import { prisma } from "~/db.server";
@@ -17,7 +17,7 @@ export async function handleUserCachedResponse({
   url,
   userId
 }: {
-  generate: (inventory: CS_InventoryItem[]) => any;
+  generate: (inventory: CS_BaseInventoryItem[]) => any;
   throwBody: any;
   mimeType: string;
   url: string;
@@ -54,7 +54,6 @@ export async function handleUserCachedResponse({
       ? json(throwBody)
       : res(throwBody, mimeType);
   }
-
   const generated = generate(parseInventory(inventory));
   const body =
     mimeType === "application/json"

@@ -15,8 +15,7 @@ import {
   CS_Item,
   CS_MAX_STICKER_WEAR,
   CS_MIN_STICKER_WEAR,
-  CS_NO_STICKER,
-  CS_NO_STICKER_WEAR,
+  CS_NONE,
   CS_STICKER_WEAR_FACTOR,
   CS_getStickerCategories,
   CS_getStickers
@@ -73,10 +72,10 @@ export function StickerPicker({
   function handleRemoveSticker() {
     onChange({
       ids: value.ids.map((other, index) =>
-        index === activeIndex ? CS_NO_STICKER : other
+        index === activeIndex ? CS_NONE : other
       ),
       wears: value.wears.map((other, index) =>
-        index === activeIndex ? CS_NO_STICKER_WEAR : other
+        index === activeIndex ? CS_NONE : other
       )
     });
     setActiveIndex(undefined);
@@ -113,16 +112,14 @@ export function StickerPicker({
       <div className="flex justify-between">
         {value.ids.map((sticker, index) => {
           const item =
-            sticker !== CS_NO_STICKER
-              ? CS_Economy.getById(sticker)
-              : CS_NO_STICKER;
+            sticker !== CS_NONE ? CS_Economy.getById(sticker) : CS_NONE;
           return (
             <button
               key={index}
               className="relative overflow-hidden rounded-lg bg-black/50"
               onClick={handleClickSlot(index)}
             >
-              {item !== CS_NO_STICKER ? (
+              {item !== CS_NONE ? (
                 <CSItemImage className="h-[64px] w-[85.33px]" item={item} />
               ) : (
                 <div className="flex h-[64px] w-[85.33px] items-center justify-center text-neutral-700">

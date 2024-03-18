@@ -34,8 +34,8 @@ export function InventorySelectedItem({
   const { inventory } = useRootContext();
   const { itemSelector } = useItemSelectorContext();
   const translate = useTranslation();
-  const item = inventory.getItem(uid);
-  const nametag = inventory.get(uid).nametag;
+
+  const { data: item, nametag } = inventory.get(uid);
 
   return (
     <div className="m-auto w-full px-4 pb-4 text-xs drop-shadow lg:flex lg:w-[1024px] lg:items-center lg:px-0 lg:pb-0 lg:text-base">

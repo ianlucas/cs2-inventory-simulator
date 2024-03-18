@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_NO_STICKER_WEAR,
+  CS_NONE,
   CS_safeValidateNametag,
   CS_safeValidateSeed,
   CS_safeValidateStatTrak,
@@ -35,7 +35,7 @@ export const baseInventoryItemProps = {
     .array(nonNegativeInt)
     .optional()
     .transform((stickers) =>
-      size(stickers?.filter((sticker) => sticker !== CS_NO_STICKER_WEAR)) > 0
+      size(stickers?.filter((sticker) => sticker !== CS_NONE)) > 0
         ? stickers
         : undefined
     ),
@@ -43,7 +43,7 @@ export const baseInventoryItemProps = {
     .array(nonNegativeFloat)
     .optional()
     .transform((stickerswear) =>
-      size(stickerswear?.filter((wear) => wear !== CS_NO_STICKER_WEAR)) > 0
+      size(stickerswear?.filter((wear) => wear !== CS_NONE)) > 0
         ? stickerswear
         : undefined
     ),

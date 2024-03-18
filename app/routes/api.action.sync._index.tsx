@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_createInventory } from "@ianlucas/cslib";
+import { CS_Inventory } from "@ianlucas/cslib";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
@@ -164,13 +164,15 @@ export async function action({ request }: ActionFunctionArgs) {
           return inventory.add(action.item);
         case AddFromCacheAction:
           if (rawInventory === null && !addedFromCache) {
-            CS_createInventory({
-              items: action.items,
-              limit: MAX_INVENTORY_ITEMS,
-              storageUnitLimit: MAX_INVENTORY_STORAGE_UNIT_ITEMS
-            })
-              .getAll()
-              .forEach((item) => inventory.add(item));
+            try {
+              new CS_Inventory({
+                items: action.items,
+                maxItems: MAX_INVENTORY_ITEMS,
+                storageUnitMaxItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS
+              })
+                .export()
+                .forEach((item) => inventory.add(item));
+            } catch {}
             addedFromCache = true;
           }
           return;

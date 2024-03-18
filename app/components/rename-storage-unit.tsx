@@ -16,6 +16,7 @@ import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
+import { useInventoryItem } from "~/hooks/use-inventory-item";
 
 export function RenameStorageUnit({
   onClose,
@@ -28,8 +29,7 @@ export function RenameStorageUnit({
   const { inventory, setInventory } = useRootContext();
   const sync = useSync();
 
-  const item = inventory.getItem(uid);
-  const defaultValue = inventory.get(uid).nametag;
+  const { data: item, nametag: defaultValue } = useInventoryItem(uid);
   const isStartUsingStorageUnit = defaultValue === undefined;
   const [nametag, setNametag] = useInput(defaultValue ?? "");
 
@@ -39,9 +39,7 @@ export function RenameStorageUnit({
       uid: uid,
       nametag
     });
-
     setInventory(inventory.renameStorageUnit(uid, nametag));
-
     onClose();
   }
 
