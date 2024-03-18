@@ -19,9 +19,7 @@ export function useSwapItemsStatTrak() {
   function handleSwapItemsStatTrak(uid: number) {
     return setItemSelector({
       uid,
-      items: items.filter(
-        ({ item: inventoryItem }) => inventoryItem.stattrak !== undefined
-      ),
+      items: items.filter(({ item }) => item.stattrak !== undefined),
       type: "swap-items-stattrak"
     });
   }
