@@ -6,3 +6,7 @@
 import invariant from "tiny-invariant";
 
 export const assert: typeof invariant = invariant;
+
+export function fail(message: string): never {
+  throw new Error(message);
+}

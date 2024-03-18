@@ -12,6 +12,7 @@ import {
 } from "~/routes/api.action.sync._index";
 import { transform } from "~/utils/inventory";
 import { useSync } from "./use-sync";
+import { assert } from "~/utils/misc";
 
 export function useStorageUnit() {
   const sync = useSync();
@@ -41,9 +42,7 @@ export function useStorageUnit() {
   }
 
   function handleDepositToStorageUnitSelect(uid: number) {
-    if (itemSelector === undefined) {
-      throw new Error("unexpected state when depositing item");
-    }
+    assert(itemSelector, "Unexpected state when depositing item.");
     const depositUids = [uid];
     sync({
       type: DepositToStorageUnitAction,
@@ -75,9 +74,7 @@ export function useStorageUnit() {
   }
 
   function handleRetrieveFromStorageUnitSelect(uid: number) {
-    if (itemSelector === undefined) {
-      throw new Error("unexpected state when retrieving item");
-    }
+    assert(itemSelector, "Unexpected state when retrieving item.");
     const retrieveUids = [uid];
     sync({
       type: RetrieveFromStorageUnitAction,

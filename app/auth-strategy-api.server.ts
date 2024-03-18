@@ -14,6 +14,7 @@ import {
 import SteamAPI from "steamapi";
 import { STEAM_API_KEY } from "./env.server";
 import { upsertUser } from "./models/user.server";
+import { fail } from "./utils/misc";
 
 export class ApiStrategy extends Strategy<string, string> {
   name = "api";
@@ -38,12 +39,12 @@ export class ApiStrategy extends Strategy<string, string> {
       const { exists, userId, valid } = await getAuthTokenDetails(token);
 
       if (!exists) {
-        throw new Error("invalid token");
+        fail("Invalid token.");
       }
 
       if (!valid) {
         await clearExpiredAuthTokens(userId);
-        throw new Error("expired token");
+        fail("Expired token.");
       }
 
       await clearAuthTokens(userId);
