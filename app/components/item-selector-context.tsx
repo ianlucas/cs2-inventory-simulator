@@ -9,9 +9,12 @@ import {
   SetStateAction,
   createContext,
   useContext,
+  useEffect,
   useState
 } from "react";
 import { ClientOnly } from "remix-utils/client-only";
+import { useScrollTopHandler } from "~/hooks/use-scroll-top-handler";
+import { useWatch } from "~/hooks/use-watch";
 import { transform } from "~/utils/inventory";
 
 export interface ItemSelectorContextProps {
@@ -40,6 +43,7 @@ export function useItemSelectorContext() {
 
 export function ItemSelectorProvider({ children }: { children: ReactNode }) {
   const [itemSelector, setItemSelector] = useState<ItemSelectorContextProps>();
+  useScrollTopHandler(itemSelector);
 
   return (
     <ClientOnly
