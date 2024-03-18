@@ -241,7 +241,9 @@ export function InventoryItem({
                 [
                   {
                     condition:
-                      isStorageUnit && inventory.hasItemsInStorageUnit(uid),
+                      isStorageUnit &&
+                      inventory.hasItemsInStorageUnit(uid) &&
+                      !inventory.full(),
                     label: translate("InventoryItemStorageUnitRetrieve"),
                     onClick: close(() => onRetrieveFromStorageUnit?.(uid))
                   },

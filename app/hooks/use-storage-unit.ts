@@ -85,13 +85,20 @@ export function useStorageUnit() {
       uid: itemSelector.uid,
       retrieveUids: retrieveUids
     });
-    setInventory(
-      inventory.retrieveFromStorageUnit(itemSelector.uid, retrieveUids)
+    const canRetrieveItems = !inventory
+      .retrieveFromStorageUnit(itemSelector.uid, retrieveUids)
+      .full();
+    setInventory(inventory);
+    return setItemSelector(
+      canRetrieveItems
+        ? {
+            ...itemSelector,
+            items: itemSelector.items.filter(
+              ({ uid: otherUid }) => otherUid !== uid
+            )
+          }
+        : undefined
     );
-    return setItemSelector({
-      ...itemSelector,
-      items: itemSelector.items.filter(({ uid: otherUid }) => otherUid !== uid)
-    });
   }
 
   function closeRenameStorageUnit() {
