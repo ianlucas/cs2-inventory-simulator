@@ -58,3 +58,9 @@ model ApiAuthToken {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }
+
+model Rule {
+  name String @id @unique
+  type String @default("string")
+  value String
+}

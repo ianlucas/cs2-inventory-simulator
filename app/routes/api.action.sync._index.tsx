@@ -7,11 +7,8 @@ import { CS_Inventory } from "@ianlucas/cslib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
-import {
-  MAX_INVENTORY_ITEMS,
-  MAX_INVENTORY_STORAGE_UNIT_ITEMS
-} from "~/env.server";
 import { middleware } from "~/http.server";
+import { getRule } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
@@ -164,6 +161,8 @@ export async function action({ request }: ActionFunctionArgs) {
     })
     .parse(await request.json());
   let addedFromCache = false;
+  const maxItems = await getRule("InventoryMaxItems");
+  const storageUnitMaxItems = await getRule("InventoryStorageUnitMaxItems");
   const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
     userId,
     rawInventory,
@@ -178,8 +177,8 @@ export async function action({ request }: ActionFunctionArgs) {
               try {
                 new CS_Inventory({
                   items: action.items,
-                  maxItems: MAX_INVENTORY_ITEMS,
-                  storageUnitMaxItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS
+                  maxItems,
+                  storageUnitMaxItems
                 })
                   .export()
                   .forEach((item) => inventory.add(item));

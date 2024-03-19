@@ -23,10 +23,9 @@ export function useStorageUnit() {
   }>();
 
   const isDepositableItem = ({
-    item: { data, nametag }
+    item: { data, nametag, stickers }
   }: (typeof items)[number]) =>
-    (!data.free ||
-      (env.nametagDefaultAllowed.includes(data.id) && nametag !== undefined)) &&
+    (!data.free || nametag !== undefined || stickers !== undefined) &&
     data.type !== "tool";
 
   function handleRenameStorageUnit(uid: number) {

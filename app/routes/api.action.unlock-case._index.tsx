@@ -7,11 +7,8 @@ import { CS_Inventory, CS_unlockCase } from "@ianlucas/cslib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
-import {
-  MAX_INVENTORY_ITEMS,
-  MAX_INVENTORY_STORAGE_UNIT_ITEMS
-} from "~/env.server";
 import { middleware } from "~/http.server";
+import { getRule } from "~/models/rule.server";
 import { updateUserInventory } from "~/models/user.server";
 import { conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
@@ -42,8 +39,8 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   const inventory = new CS_Inventory({
     items: parseInventory(rawInventory),
-    maxItems: MAX_INVENTORY_ITEMS,
-    storageUnitMaxItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS
+    maxItems: await getRule("InventoryMaxItems"),
+    storageUnitMaxItems: await getRule("InventoryStorageUnitMaxItems")
   });
   const unlockedItem = CS_unlockCase(inventory.get(caseUid).id);
   inventory.unlockCase(unlockedItem, caseUid, keyUid);

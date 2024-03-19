@@ -74,7 +74,7 @@ export function CSItemEditor({
 }) {
   const translate = useTranslation();
   const {
-    env: { maxInventoryItems },
+    env: { inventoryMaxItems: maxInventoryItems },
     inventory
   } = useRootContext();
   const [stattrak, setStattrak] = useCheckbox(

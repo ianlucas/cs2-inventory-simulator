@@ -23,17 +23,13 @@ import { RootProvider } from "./components/root-context";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
-import {
-  BUILD_LAST_COMMIT,
-  MAX_INVENTORY_ITEMS,
-  MAX_INVENTORY_STORAGE_UNIT_ITEMS,
-  NAMETAG_DEFAULT_ALLOWED
-} from "./env.server";
+import { BUILD_LAST_COMMIT } from "./env.server";
 import { middleware } from "./http.server";
+import { getRule } from "./models/rule.server";
 import { getBackground } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
 import { getToggleable } from "./preferences/toggleable.server";
-import { seoLinks, seoMeta } from "./seo";
+import { getSeoLinks, getSeoMeta } from "./seo";
 import { getSession } from "./session.server";
 import styles from "./tailwind.css?url";
 
@@ -49,20 +45,24 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: bodyFontUrl },
   { rel: "stylesheet", href: displayFontUrl },
   { rel: "stylesheet", href: styles },
-  { rel: "manifest", href: "/app.webmanifest" },
-  ...seoLinks
+  { rel: "manifest", href: "/app.webmanifest" }
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);
   const session = await getSession(request.headers.get("Cookie"));
   const ipCountry = request.headers.get("CF-IPCountry");
+  const { origin: appUrl, host: appSiteName } = new URL(
+    await getRule("SteamCallbackUrl")
+  );
   return typedjson({
     env: {
+      meta: { appUrl, appSiteName },
       buildLastCommit: BUILD_LAST_COMMIT,
-      maxInventoryItems: MAX_INVENTORY_ITEMS,
-      maxInventoryStorageUnitItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS,
-      nametagDefaultAllowed: NAMETAG_DEFAULT_ALLOWED
+      inventoryMaxItems: await getRule("InventoryMaxItems"),
+      inventoryStorageUnitMaxItems: await getRule(
+        "InventoryStorageUnitMaxItems"
+      )
     },
     preferences: {
       ...(await getBackground(session)),
@@ -75,22 +75,24 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function App() {
   const providerProps = useTypedLoaderData<typeof loader>();
+  const { meta } = providerProps.env;
 
   return (
     <RootProvider {...providerProps}>
-      <html lang="en" onContextMenu={(event) => event.preventDefault()}>
+      <html
+        lang={providerProps.preferences.lang}
+        onContextMenu={(event) => event.preventDefault()}
+      >
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <Meta />
           <Links />
-          {seoMeta.map(({ name, content, property }, index) => (
-            <meta
-              key={index}
-              name={name}
-              content={content}
-              property={property}
-            />
+          {getSeoLinks(meta).map((attributes, index) => (
+            <link key={index} {...attributes} />
+          ))}
+          {getSeoMeta(meta).map((attributes, index) => (
+            <meta key={index} {...attributes} />
           ))}
         </head>
         <body className="overflow-y-scroll bg-stone-800">

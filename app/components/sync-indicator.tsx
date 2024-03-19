@@ -46,8 +46,8 @@ export function SyncIndicator() {
       setInventory(
         new CS_Inventory({
           items: parseInventory(inventory),
-          maxItems: env.maxInventoryItems,
-          storageUnitMaxItems: env.maxInventoryStorageUnitItems
+          maxItems: env.inventoryMaxItems,
+          storageUnitMaxItems: env.inventoryStorageUnitMaxItems
         })
       );
       syncState.syncedAt = syncedAt;

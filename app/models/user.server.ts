@@ -5,12 +5,9 @@
 
 import { CS_BaseInventoryItem, CS_Inventory } from "@ianlucas/cslib";
 import { prisma } from "~/db.server";
-import {
-  MAX_INVENTORY_ITEMS,
-  MAX_INVENTORY_STORAGE_UNIT_ITEMS
-} from "~/env.server";
 import { conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
+import { getRule } from "./rule.server";
 
 export async function upsertUser(user: {
   avatar: { medium: string };
@@ -86,8 +83,8 @@ export async function manipulateUserInventory({
 }) {
   const inventory = new CS_Inventory({
     items: parseInventory(rawInventory),
-    maxItems: MAX_INVENTORY_ITEMS,
-    storageUnitMaxItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS
+    maxItems: await getRule("InventoryMaxItems"),
+    storageUnitMaxItems: await getRule("InventoryStorageUnitMaxItems")
   });
   manipulate(inventory);
   if (syncedAt !== undefined) {

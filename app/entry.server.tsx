@@ -12,18 +12,19 @@ import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import { runUserInventoryCleanUp } from "./scripts/user-inventory-clean-up";
+import { setupRules } from "./models/rule.server";
 
 const ABORT_DELAY = 5_000;
 
 CS_Economy.use(CS_ITEMS);
-runUserInventoryCleanUp();
+setupRules().then(() => runUserInventoryCleanUp());
 
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  loadContext: AppLoadContext
+  _: AppLoadContext
 ) {
   return isbot(request.headers.get("user-agent"))
     ? handleBotRequest(

@@ -12,9 +12,9 @@ import {
   getAuthTokenDetails
 } from "./models/api-auth-token.server";
 import SteamAPI, { UserSummary } from "steamapi";
-import { STEAM_API_KEY } from "./env.server";
 import { upsertUser } from "./models/user.server";
 import { fail } from "./utils/misc";
+import { getRule } from "./models/rule.server";
 
 export class ApiStrategy extends Strategy<string, string> {
   name = "api";
@@ -23,7 +23,7 @@ export class ApiStrategy extends Strategy<string, string> {
     super(
       async (userId: string) =>
         await upsertUser(
-          (await new SteamAPI(STEAM_API_KEY).getUserSummary(
+          (await new SteamAPI(await getRule("SteamApiKey")).getUserSummary(
             userId
           )) as UserSummary
         )

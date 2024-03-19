@@ -63,8 +63,8 @@ export function RootProvider({
       items: user?.inventory
         ? parseInventory(user?.inventory)
         : retrieveInventoryItems(),
-      maxItems: env.maxInventoryItems,
-      storageUnitMaxItems: env.maxInventoryStorageUnitItems
+      maxItems: env.inventoryMaxItems,
+      storageUnitMaxItems: env.inventoryStorageUnitMaxItems
     })
   );
 
@@ -87,8 +87,8 @@ export function RootProvider({
             equippedCT: undefined,
             equippedT: undefined
           })),
-          maxItems: env.maxInventoryItems,
-          storageUnitMaxItems: env.maxInventoryStorageUnitItems
+          maxItems: env.inventoryMaxItems,
+          storageUnitMaxItems: env.inventoryStorageUnitMaxItems
         })
       );
     }
