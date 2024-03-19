@@ -5,7 +5,7 @@
 
 import { CS_BaseInventoryItem, CS_Inventory } from "@ianlucas/cslib";
 import { prisma } from "~/db.server";
-import { conflict } from "~/response.server";
+import { badRequest, conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
 import { getRule } from "./rule.server";
 
@@ -86,7 +86,11 @@ export async function manipulateUserInventory({
     maxItems: await getRule("InventoryMaxItems"),
     storageUnitMaxItems: await getRule("InventoryStorageUnitMaxItems")
   });
-  manipulate(inventory);
+  try {
+    manipulate(inventory);
+  } catch {
+    throw badRequest;
+  }
   if (syncedAt !== undefined) {
     const { syncedAt: currentSyncedAt } = await prisma.user.findUniqueOrThrow({
       select: { syncedAt: true },
