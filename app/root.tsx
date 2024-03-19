@@ -56,7 +56,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     await getRule("SteamCallbackUrl")
   );
   return typedjson({
-    env: {
+    rules: {
       meta: { appUrl, appSiteName },
       buildLastCommit: BUILD_LAST_COMMIT,
       inventoryMaxItems: await getRule("InventoryMaxItems"),
@@ -75,7 +75,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function App() {
   const providerProps = useTypedLoaderData<typeof loader>();
-  const { meta } = providerProps.env;
+  const { meta } = providerProps.rules;
 
   return (
     <RootProvider {...providerProps}>

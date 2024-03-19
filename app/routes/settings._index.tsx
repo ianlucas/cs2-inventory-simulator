@@ -3,11 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  faTrash,
-  faTrashCan,
-  faXmark
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useNavigate, useSubmit } from "@remix-run/react";
@@ -20,12 +16,12 @@ import { ModalButton } from "~/components/modal-button";
 import { useRootContext } from "~/components/root-context";
 import { Select } from "~/components/select";
 import { useCheckbox } from "~/hooks/use-checkbox";
+import { useSync } from "~/hooks/use-sync";
 import { useTranslation } from "~/hooks/use-translation";
+import { middleware } from "~/http.server";
 import { backgrounds } from "~/preferences/background.server";
 import { languages } from "~/preferences/language.server";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
-import { middleware } from "~/http.server";
-import { useSync } from "~/hooks/use-sync";
 import { RemoveAllItemsAction } from "./api.action.sync._index";
 
 export const meta: MetaFunction = () => {

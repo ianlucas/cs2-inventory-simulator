@@ -49,8 +49,8 @@ export function useRootContext() {
 
 export function RootProvider({
   children,
-  env,
   preferences,
+  rules,
   user
 }: Omit<
   ContextType<typeof RootContext>,
@@ -63,8 +63,8 @@ export function RootProvider({
       items: user?.inventory
         ? parseInventory(user?.inventory)
         : retrieveInventoryItems(),
-      maxItems: env.inventoryMaxItems,
-      storageUnitMaxItems: env.inventoryStorageUnitMaxItems
+      maxItems: rules.inventoryMaxItems,
+      storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
     })
   );
 
@@ -87,8 +87,8 @@ export function RootProvider({
             equippedCT: undefined,
             equippedT: undefined
           })),
-          maxItems: env.inventoryMaxItems,
-          storageUnitMaxItems: env.inventoryStorageUnitMaxItems
+          maxItems: rules.inventoryMaxItems,
+          storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
         })
       );
     }
@@ -121,7 +121,7 @@ export function RootProvider({
   return (
     <RootContext.Provider
       value={{
-        env,
+        rules: rules,
         inventory,
         items,
         preferences,

@@ -22,7 +22,7 @@ import { useRootContext } from "./root-context";
 
 export function SyncIndicator() {
   const translate = useTranslation();
-  const { setInventory, env } = useRootContext();
+  const { setInventory, rules } = useRootContext();
   const [opacity, setOpacity] = useState(0);
   const [showSyncFailModal, setShowSyncFailModal] = useState(false);
   const [disableContinueButton, setDisableContinueButton] = useState(false);
@@ -46,8 +46,8 @@ export function SyncIndicator() {
       setInventory(
         new CS_Inventory({
           items: parseInventory(inventory),
-          maxItems: env.inventoryMaxItems,
-          storageUnitMaxItems: env.inventoryStorageUnitMaxItems
+          maxItems: rules.inventoryMaxItems,
+          storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
         })
       );
       syncState.syncedAt = syncedAt;

@@ -74,7 +74,7 @@ export function CSItemEditor({
 }) {
   const translate = useTranslation();
   const {
-    env: { inventoryMaxItems: maxInventoryItems },
+    rules: { inventoryMaxItems },
     inventory
   } = useRootContext();
   const [stattrak, setStattrak] = useCheckbox(
@@ -99,7 +99,7 @@ export function CSItemEditor({
     CS_safeValidateWear(wear) &&
     (CS_safeValidateNametag(nametag) || nametag.length === 0) &&
     CS_safeValidateSeed(seed);
-  const maxQuantity = maxInventoryItems - inventory.size();
+  const maxQuantity = inventoryMaxItems - inventory.size();
   const hasQuantity = showQuantity(item);
   const isCrafting = attributes === undefined;
 

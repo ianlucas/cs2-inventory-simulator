@@ -9,7 +9,7 @@ import { useRootContext } from "./root-context";
 
 export function Footer() {
   const {
-    env: { buildLastCommit }
+    rules: { buildLastCommit }
   } = useRootContext();
 
   return (

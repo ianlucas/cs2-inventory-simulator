@@ -17,7 +17,7 @@ import { assert } from "~/utils/misc";
 export function useStorageUnit() {
   const sync = useSync();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
-  const { env, items, inventory, setInventory } = useRootContext();
+  const { items, inventory, setInventory } = useRootContext();
   const [renameStorageUnit, setRenameStorageUnit] = useState<{
     uid: number;
   }>();
