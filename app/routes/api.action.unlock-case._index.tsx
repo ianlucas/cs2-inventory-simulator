@@ -13,8 +13,9 @@ import {
 } from "~/env.server";
 import { middleware } from "~/http.server";
 import { updateUserInventory } from "~/models/user.server";
+import { conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
-import { nonNegativeInt } from "~/utils/shapes";
+import { nonNegativeInt, positiveInt } from "~/utils/shapes";
 
 export const ApiActionUnlockCaseUrl = "/api/action/unlock-case";
 
@@ -24,13 +25,21 @@ export type ApiActionUnlockCaseActionData = ReturnType<
 
 export async function action({ request }: ActionFunctionArgs) {
   await middleware(request);
-  const { id: userId, inventory: rawInventory } = await requireUser(request);
-  const { caseUid, keyUid } = z
+  const {
+    id: userId,
+    inventory: rawInventory,
+    syncedAt: currentSyncedAt
+  } = await requireUser(request);
+  const { caseUid, keyUid, syncedAt } = z
     .object({
+      syncedAt: positiveInt,
       caseUid: nonNegativeInt,
       keyUid: nonNegativeInt.optional()
     })
     .parse(await request.json());
+  if (syncedAt !== currentSyncedAt.getTime()) {
+    throw conflict;
+  }
   const inventory = new CS_Inventory({
     items: parseInventory(rawInventory),
     maxItems: MAX_INVENTORY_ITEMS,
@@ -38,6 +47,12 @@ export async function action({ request }: ActionFunctionArgs) {
   });
   const unlockedItem = CS_unlockCase(inventory.get(caseUid).id);
   inventory.unlockCase(unlockedItem, caseUid, keyUid);
-  await updateUserInventory(userId, inventory.export());
-  return json(unlockedItem);
+  const { syncedAt: responseSyncedAt } = await updateUserInventory(
+    userId,
+    inventory.export()
+  );
+  return json({
+    unlockedItem,
+    syncedAt: responseSyncedAt.getTime()
+  });
 }

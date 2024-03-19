@@ -3,12 +3,29 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ActionShape, ApiActionSync } from "~/routes/api.action.sync._index";
+import { useActionData } from "@remix-run/react";
+import {
+  ActionShape,
+  ApiActionSync,
+  action
+} from "~/routes/api.action.sync._index";
+import { postJson } from "./fetch";
+import { fail } from "./misc";
 
 const queue: ActionShape[] = [];
 
-export async function sync(data: ActionShape) {
+export const syncState = { syncedAt: 0 };
+export const syncEvents = new (class SyncEvents extends EventTarget {})();
+
+export function sync(data: ActionShape) {
   queue.push(data);
+}
+
+export function dispatchSyncFail() {
+  while (queue[0]) {
+    queue.pop();
+  }
+  syncEvents.dispatchEvent(new Event("syncfail"));
 }
 
 async function doSync() {
@@ -16,13 +33,24 @@ async function doSync() {
   while (queue[0]) {
     actions.push(queue.shift()!);
   }
+  syncEvents.dispatchEvent(new Event("syncstart"));
   if (actions.length > 0) {
-    await fetch(ApiActionSync, {
-      method: "POST",
-      body: JSON.stringify(actions)
-    });
+    try {
+      const response = await postJson<
+        ReturnType<typeof useActionData<typeof action>>
+      >(ApiActionSync, {
+        actions,
+        syncedAt: syncState.syncedAt
+      });
+      if (typeof response?.syncedAt !== "number") {
+        fail("Sync error.");
+      }
+      syncState.syncedAt = response.syncedAt;
+    } catch {
+      dispatchSyncFail();
+    }
   }
-
+  syncEvents.dispatchEvent(new Event("syncend"));
   setTimeout(doSync, 1000 / 3);
 }
 

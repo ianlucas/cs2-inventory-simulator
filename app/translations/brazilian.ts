@@ -11,6 +11,9 @@ export const brazilian = {
     "JavaScript está desativado. Por favor, habilite-o e atualize a página.",
   SyncWarnText:
     "Você não está autenticado, suas mudanças não serão sincronizadas.",
+  SyncErrorTitle: "Erro de sincronização",
+  SyncErrorDesc: "Não foi possível sincronizar as suas mudanças.",
+  SyncErrorContinue: "Tentar novamente",
   HeaderInventoryLabel: "Inventário",
   HeaderCraftLabel: "Criar Item",
   HeaderSettingsLabel: "Configurações",

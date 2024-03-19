@@ -43,9 +43,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
   try {
     const { inventory: rawInventory } = await findUniqueUser(userId);
-    await manipulateUserInventory(userId, rawInventory, (inventory) =>
-      inventory.incrementItemStatTrak(targetUid)
-    );
+    await manipulateUserInventory({
+      userId,
+      rawInventory,
+      manipulate(inventory) {
+        inventory.incrementItemStatTrak(targetUid);
+      }
+    });
     return noContent;
   } catch {
     return badRequest;

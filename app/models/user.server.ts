@@ -8,12 +8,15 @@ import {
   CS_Inventory,
   CS_InventoryItem
 } from "@ianlucas/cslib";
+import { json } from "@remix-run/node";
+import { fail } from "assert";
 import SteamAPI from "steamapi";
 import { prisma } from "~/db.server";
 import {
   MAX_INVENTORY_ITEMS,
   MAX_INVENTORY_STORAGE_UNIT_ITEMS
 } from "~/env.server";
+import { conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
 
 export async function upsertUser(user: SteamAPI.PlayerSummary) {
@@ -62,6 +65,9 @@ export async function updateUserInventory(
   items: CS_BaseInventoryItem[]
 ) {
   return await prisma.user.update({
+    select: {
+      syncedAt: true
+    },
     data: {
       inventory: JSON.stringify(items),
       syncedAt: new Date()
@@ -70,18 +76,36 @@ export async function updateUserInventory(
   });
 }
 
-export async function manipulateUserInventory(
-  userId: string,
-  rawInventory: string | null,
-  manipulate: (inventory: CS_Inventory) => void
-) {
+export async function manipulateUserInventory({
+  manipulate,
+  rawInventory,
+  syncedAt,
+  userId
+}: {
+  manipulate: (inventory: CS_Inventory) => void;
+  rawInventory: string | null;
+  syncedAt?: number;
+  userId: string;
+}) {
   const inventory = new CS_Inventory({
     items: parseInventory(rawInventory),
     maxItems: MAX_INVENTORY_ITEMS,
     storageUnitMaxItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS
   });
   manipulate(inventory);
+  if (syncedAt !== undefined) {
+    const { syncedAt: currentSyncedAt } = await prisma.user.findUniqueOrThrow({
+      select: { syncedAt: true },
+      where: { id: userId }
+    });
+    if (syncedAt !== currentSyncedAt.getTime()) {
+      throw conflict;
+    }
+  }
   return await prisma.user.update({
+    select: {
+      syncedAt: true
+    },
     data: {
       syncedAt: new Date(),
       inventory: JSON.stringify(inventory.export())

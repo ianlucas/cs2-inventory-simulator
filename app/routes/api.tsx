@@ -3,15 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useRootContext } from "~/components/root-context";
-import { ActionShape } from "~/routes/api.action.sync._index";
-import { sync } from "~/utils/sync";
+import { json } from "@remix-run/node";
 
-export function useSync() {
-  const { user } = useRootContext();
-  return async function useSync(data: ActionShape) {
-    if (user !== undefined) {
-      sync(data);
+export function loader() {
+  return json(
+    {
+      message:
+        "Resource not found, please refer to https://github.com/ianlucas/cs2-inventory-simulator/blob/main/docs/api.md."
+    },
+    {
+      status: 404
     }
-  };
+  );
 }

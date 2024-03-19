@@ -13,3 +13,8 @@ export async function postJson<T>(url: string, body: any) {
   });
   return (await response.json()) as T;
 }
+
+export async function getJson<T>(url: string) {
+  const response = await fetch(url);
+  return (await response.json()) as T;
+}

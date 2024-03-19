@@ -26,7 +26,7 @@ import {
   transform
 } from "~/utils/inventory";
 import type { SyncInventoryShape } from "~/utils/shapes.server";
-import { sync } from "~/utils/sync";
+import { sync, syncState } from "~/utils/sync";
 import {
   retrieveInventoryItems,
   retrieveUserId,
@@ -94,6 +94,7 @@ export function RootProvider({
     }
     if (user !== undefined) {
       storeUserId(user.id);
+      syncState.syncedAt = user.syncedAt.getTime();
     }
   }, [user]);
 

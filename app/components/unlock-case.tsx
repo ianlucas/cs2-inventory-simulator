@@ -7,7 +7,10 @@ import { CS_unlockCase } from "@ianlucas/cslib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { useFreeze } from "~/hooks/use-freeze";
+import {
+  useInventoryItem,
+  useTryInventoryItem
+} from "~/hooks/use-inventory-item";
 import { useTimer } from "~/hooks/use-timer";
 import {
   ApiActionUnlockCaseActionData,
@@ -16,13 +19,21 @@ import {
 import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
+import { dispatchSyncFail, syncState } from "~/utils/sync";
 import { useRootContext } from "./root-context";
 import { UnlockCaseContainer } from "./unlock-case-container";
 import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
-import {
-  useInventoryItem,
-  useTryInventoryItem
-} from "~/hooks/use-inventory-item";
+
+async function unlockCase(caseUid: number, keyUid?: number) {
+  const { unlockedItem, syncedAt } =
+    await postJson<ApiActionUnlockCaseActionData>(ApiActionUnlockCaseUrl, {
+      syncedAt: syncState.syncedAt,
+      caseUid,
+      keyUid
+    });
+  syncState.syncedAt = syncedAt;
+  return unlockedItem;
+}
 
 export function UnlockCase({
   caseUid,
@@ -45,33 +56,35 @@ export function UnlockCase({
   const wait = useTimer();
 
   async function handleUnlock() {
-    setIsDisplaying(false);
-    setCanUnlock(false);
-    const unlockedItem =
-      user === undefined
-        ? CS_unlockCase(caseItem)
-        : await postJson<ApiActionUnlockCaseActionData>(
-            ApiActionUnlockCaseUrl,
-            { caseUid, keyUid }
-          );
-    wait(() => {
-      setHideCaseContents(true);
-      if (caseItem.keys !== undefined) {
-        playSound("case_unlock");
-      }
+    try {
+      setIsDisplaying(false);
+      setCanUnlock(false);
+      const unlockedItem =
+        user === undefined
+          ? CS_unlockCase(caseItem)
+          : await unlockCase(caseUid, keyUid);
       wait(() => {
-        setItems(
-          range(32).map((_, index) =>
-            index === 28 ? unlockedItem : CS_unlockCase(caseItem)
-          )
-        );
-        setIsDisplaying(true);
+        setHideCaseContents(true);
+        if (caseItem.keys !== undefined) {
+          playSound("case_unlock");
+        }
         wait(() => {
-          setUnlockedItem(unlockedItem);
-          setInventory(inventory.unlockCase(unlockedItem, caseUid, keyUid));
-        }, 6000);
-      }, 100);
-    }, 250);
+          setItems(
+            range(32).map((_, index) =>
+              index === 28 ? unlockedItem : CS_unlockCase(caseItem)
+            )
+          );
+          setIsDisplaying(true);
+          wait(() => {
+            setUnlockedItem(unlockedItem);
+            setInventory(inventory.unlockCase(unlockedItem, caseUid, keyUid));
+          }, 6000);
+        }, 100);
+      }, 250);
+    } catch {
+      dispatchSyncFail();
+      onClose();
+    }
   }
 
   return (

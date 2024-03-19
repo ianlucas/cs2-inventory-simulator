@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Inventory } from "@ianlucas/cslib";
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import {
@@ -13,8 +13,7 @@ import {
 } from "~/env.server";
 import { middleware } from "~/http.server";
 import { manipulateUserInventory } from "~/models/user.server";
-import { noContent } from "~/response.server";
-import { teamShape, nonNegativeInt } from "~/utils/shapes";
+import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
   clientInventoryItemShape,
   syncInventoryShape
@@ -155,90 +154,103 @@ export type ActionShape = z.infer<typeof actionShape>;
 export async function action({ request }: ActionFunctionArgs) {
   await middleware(request);
   const { id: userId, inventory: rawInventory } = await requireUser(request);
-  const actions = z.array(actionShape).parse(await request.json());
-  let addedFromCache = false;
-  await manipulateUserInventory(userId, rawInventory, (inventory) =>
-    actions.forEach((action) => {
-      switch (action.type) {
-        case AddAction:
-          return inventory.add(action.item);
-        case AddFromCacheAction:
-          if (rawInventory === null && !addedFromCache) {
-            try {
-              new CS_Inventory({
-                items: action.items,
-                maxItems: MAX_INVENTORY_ITEMS,
-                storageUnitMaxItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS
-              })
-                .export()
-                .forEach((item) => inventory.add(item));
-            } catch {}
-            addedFromCache = true;
-          }
-          return;
-        case AddWithNametagAction:
-          return inventory.addWithNametag(
-            action.toolUid,
-            action.itemId,
-            action.nametag
-          );
-        case ApplyItemStickerAction:
-          return inventory.applyItemSticker(
-            action.targetUid,
-            action.stickerUid,
-            action.stickerIndex
-          );
-        case EquipAction:
-          return inventory.equip(action.uid, action.team);
-        case UnequipAction:
-          return inventory.unequip(action.uid, action.team);
-        case RenameItemAction:
-          return inventory.renameItem(
-            action.toolUid,
-            action.targetUid,
-            action.nametag
-          );
-        case RemoveAction:
-          return inventory.remove(action.uid);
-        case ScrapeItemStickerAction:
-          return inventory.scrapeItemSticker(
-            action.targetUid,
-            action.stickerIndex
-          );
-        case SwapItemsStatTrakAction:
-          return inventory.swapItemsStatTrak(
-            action.toolUid,
-            action.fromUid,
-            action.toUid
-          );
-        case RenameStorageUnitAction:
-          return inventory.renameStorageUnit(action.uid, action.nametag);
-        case DepositToStorageUnitAction:
-          return inventory.depositToStorageUnit(action.uid, action.depositUids);
-        case RetrieveFromStorageUnitAction:
-          return inventory.retrieveFromStorageUnit(
-            action.uid,
-            action.retrieveUids
-          );
-        case EditAction:
-          return inventory.edit(action.uid, {
-            ...action.attributes,
-            stattrak:
-              action.attributes.stattrak !== undefined
-                ? inventory.get(action.uid).stattrak ?? 0
-                : undefined,
-            nametag: action.attributes.nametag
-          });
-        case AddWithStickerAction:
-          return inventory.addWithSticker(
-            action.stickerUid,
-            action.itemId,
-            action.stickerIndex
-          );
-        case RemoveAllItemsAction:
-          return inventory.removeAll();
-      }
+  const { syncedAt, actions } = z
+    .object({
+      syncedAt: z.number(),
+      actions: z.array(actionShape)
     })
-  );
-  return noContent;
+    .parse(await request.json());
+  let addedFromCache = false;
+  const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
+    userId,
+    rawInventory,
+    syncedAt,
+    manipulate(inventory) {
+      actions.forEach((action) => {
+        switch (action.type) {
+          case AddAction:
+            return inventory.add(action.item);
+          case AddFromCacheAction:
+            if (rawInventory === null && !addedFromCache) {
+              try {
+                new CS_Inventory({
+                  items: action.items,
+                  maxItems: MAX_INVENTORY_ITEMS,
+                  storageUnitMaxItems: MAX_INVENTORY_STORAGE_UNIT_ITEMS
+                })
+                  .export()
+                  .forEach((item) => inventory.add(item));
+              } catch {}
+              addedFromCache = true;
+            }
+            return;
+          case AddWithNametagAction:
+            return inventory.addWithNametag(
+              action.toolUid,
+              action.itemId,
+              action.nametag
+            );
+          case ApplyItemStickerAction:
+            return inventory.applyItemSticker(
+              action.targetUid,
+              action.stickerUid,
+              action.stickerIndex
+            );
+          case EquipAction:
+            return inventory.equip(action.uid, action.team);
+          case UnequipAction:
+            return inventory.unequip(action.uid, action.team);
+          case RenameItemAction:
+            return inventory.renameItem(
+              action.toolUid,
+              action.targetUid,
+              action.nametag
+            );
+          case RemoveAction:
+            return inventory.remove(action.uid);
+          case ScrapeItemStickerAction:
+            return inventory.scrapeItemSticker(
+              action.targetUid,
+              action.stickerIndex
+            );
+          case SwapItemsStatTrakAction:
+            return inventory.swapItemsStatTrak(
+              action.toolUid,
+              action.fromUid,
+              action.toUid
+            );
+          case RenameStorageUnitAction:
+            return inventory.renameStorageUnit(action.uid, action.nametag);
+          case DepositToStorageUnitAction:
+            return inventory.depositToStorageUnit(
+              action.uid,
+              action.depositUids
+            );
+          case RetrieveFromStorageUnitAction:
+            return inventory.retrieveFromStorageUnit(
+              action.uid,
+              action.retrieveUids
+            );
+          case EditAction:
+            return inventory.edit(action.uid, {
+              ...action.attributes,
+              stattrak:
+                action.attributes.stattrak !== undefined
+                  ? inventory.get(action.uid).stattrak ?? 0
+                  : undefined,
+              nametag: action.attributes.nametag
+            });
+          case AddWithStickerAction:
+            return inventory.addWithSticker(
+              action.stickerUid,
+              action.itemId,
+              action.stickerIndex
+            );
+          case RemoveAllItemsAction:
+            return inventory.removeAll();
+        }
+      });
+    }
+  });
+  return json({ syncedAt: responseSyncedAt.getTime() });
 }

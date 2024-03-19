@@ -11,11 +11,13 @@ import { ClientOnly } from "remix-utils/client-only";
 export function Modal({
   blur,
   className,
-  children
+  children,
+  fixed
 }: {
   blur?: boolean;
   className?: string;
   children: ReactNode;
+  fixed?: boolean;
 }) {
   return (
     <ClientOnly
@@ -23,7 +25,8 @@ export function Modal({
         createPortal(
           <div
             className={clsx(
-              "absolute left-0 top-0 z-50 flex min-h-full w-full items-center justify-center",
+              fixed ? "fixed" : "absolute",
+              "left-0 top-0 z-50 flex min-h-full w-full items-center justify-center",
               blur && "bg-black/50 lg:bg-transparent lg:backdrop-blur-[2px]"
             )}
           >

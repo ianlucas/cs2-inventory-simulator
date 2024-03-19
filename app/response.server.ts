@@ -17,7 +17,11 @@ export const badRequest = new Response(null, {
 
 export const unauthorized = new Response(null, {
   status: 401
-})
+});
+
+export const conflict = new Response(null, {
+  status: 409
+});
 
 export function res(body: string, mimeType: string) {
   return new Response(body, {

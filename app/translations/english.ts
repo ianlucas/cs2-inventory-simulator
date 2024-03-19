@@ -8,6 +8,9 @@ export const english = {
     "JavaScript is disabled. Please enable it and refresh the page.",
   SyncWarnText:
     "You are not authenticated, your changes will not by synchronized.",
+  SyncErrorTitle: "Sync Error",
+  SyncErrorDesc: "An error occurred while syncing your changes.",
+  SyncErrorContinue: "Try again",
   HeaderInventoryLabel: "Inventory",
   HeaderCraftLabel: "Craft Item",
   HeaderAPILabel: "API",

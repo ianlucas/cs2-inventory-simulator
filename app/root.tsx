@@ -21,6 +21,7 @@ import { Inventory } from "./components/inventory";
 import { ItemSelectorProvider } from "./components/item-selector-context";
 import { RootProvider } from "./components/root-context";
 import { Splash } from "./components/splash";
+import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
 import {
   BUILD_LAST_COMMIT,
@@ -102,6 +103,7 @@ export default function App() {
           </ItemSelectorProvider>
           <Outlet />
           <Footer />
+          <SyncIndicator />
           <ScrollRestoration />
           <Scripts />
         </body>
