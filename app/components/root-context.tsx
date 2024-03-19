@@ -69,7 +69,7 @@ export function RootProvider({
   );
 
   useEffect(() => {
-    storeInventoryItems(inventory.getAll());
+    storeInventoryItems(inventory.export());
   }, [inventory]);
 
   useEffect(() => {
