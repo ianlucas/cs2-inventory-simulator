@@ -20,6 +20,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@ianlucas/cslib": "^12.1.1",
+    "@ianlucas/remix-auth-steam": "^2.0.2",
     "@prisma/client": "^5.11.0",
     "@remix-run/node": "^2.8.1",
     "@remix-run/react": "^2.8.1",
@@ -31,31 +32,18 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "remix-auth": "^3.6.0",
-    "remix-auth-steam": "^1.0.4",
     "remix-typedjson": "^0.4.1",
     "remix-utils": "^7.5.0",
+    "steamapi": "^3.0.8",
     "tiny-invariant": "^1.3.3",
     "tsx": "^4.7.1",
     "zod": "^3.22.4"
-  },
-  "overrides": {
-    "remix-auth-steam": {
-      "remix-auth": "^3.6.0",
-      "@remix-run/server-runtime": "2.0.1"
-    },
-    "openid": {
-      "axios": "^1.6.8"
-    },
-    "axios": {
-      "follow-redirects": "^1.15.6"
-    }
   },
   "devDependencies": {
     "@remix-run/dev": "^2.8.1",
     "@types/node": "^18.19.8",
     "@types/react": "^18.2.67",
     "@types/react-dom": "^18.2.22",
-    "@types/steamapi": "^2.2.5",
     "prettier": "3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.12",
     "tailwindcss": "^3.4.1",

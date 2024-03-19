@@ -3,14 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS_BaseInventoryItem,
-  CS_Inventory,
-  CS_InventoryItem
-} from "@ianlucas/cslib";
-import { json } from "@remix-run/node";
-import { fail } from "assert";
-import SteamAPI from "steamapi";
+import { CS_BaseInventoryItem, CS_Inventory } from "@ianlucas/cslib";
 import { prisma } from "~/db.server";
 import {
   MAX_INVENTORY_ITEMS,
@@ -19,7 +12,11 @@ import {
 import { conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
 
-export async function upsertUser(user: SteamAPI.PlayerSummary) {
+export async function upsertUser(user: {
+  avatar: { medium: string };
+  nickname: string;
+  steamID: string;
+}) {
   const data = {
     avatar: user.avatar.medium,
     name: user.nickname

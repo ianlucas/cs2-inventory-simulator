@@ -11,7 +11,7 @@ import {
   clearExpiredAuthTokens,
   getAuthTokenDetails
 } from "./models/api-auth-token.server";
-import SteamAPI from "steamapi";
+import SteamAPI, { UserSummary } from "steamapi";
 import { STEAM_API_KEY } from "./env.server";
 import { upsertUser } from "./models/user.server";
 import { fail } from "./utils/misc";
@@ -23,7 +23,9 @@ export class ApiStrategy extends Strategy<string, string> {
     super(
       async (userId: string) =>
         await upsertUser(
-          await new SteamAPI(STEAM_API_KEY).getUserSummary(userId)
+          (await new SteamAPI(STEAM_API_KEY).getUserSummary(
+            userId
+          )) as UserSummary
         )
     );
   }
