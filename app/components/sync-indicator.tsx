@@ -4,12 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Inventory } from "@ianlucas/cslib";
-import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useTranslation } from "~/hooks/use-translation";
-import { ApiActionResync, loader } from "~/routes/api.action.resync._index";
+import {
+  ApiActionResyncData,
+  ApiActionResyncUrl
+} from "~/routes/api.action.resync._index";
 import { getJson } from "~/utils/fetch";
 import { parseInventory } from "~/utils/inventory";
 import { syncEvents, syncState } from "~/utils/sync";
@@ -40,9 +42,7 @@ export function SyncIndicator() {
       setDisableContinueButton(true);
       setShowSyncFailModal(true);
       const { syncedAt, inventory } =
-        await getJson<ReturnType<typeof useLoaderData<typeof loader>>>(
-          ApiActionResync
-        );
+        await getJson<ApiActionResyncData>(ApiActionResyncUrl);
       setInventory(
         new CS_Inventory({
           items: parseInventory(inventory),

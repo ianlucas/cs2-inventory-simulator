@@ -19,7 +19,7 @@ import {
   syncInventoryShape
 } from "~/utils/shapes.server";
 
-export const ApiActionSync = "/api/action/sync";
+export const ApiActionSyncUrl = "/api/action/sync";
 export const AddAction = "add";
 export const AddFromCacheAction = "add-from-cache";
 export const AddWithNametagAction = "add-with-nametag";
@@ -150,6 +150,9 @@ const actionShape = z
   );
 
 export type ActionShape = z.infer<typeof actionShape>;
+export type ApiActionSyncData = ReturnType<
+  Awaited<ReturnType<typeof action>>["json"]
+>;
 
 export async function action({ request }: ActionFunctionArgs) {
   await middleware(request);

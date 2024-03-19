@@ -8,7 +8,10 @@ import { typedjson } from "remix-typedjson";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
 
-export const ApiActionResync = "/api/action/resync";
+export const ApiActionResyncUrl = "/api/action/resync";
+export type ApiActionResyncData = ReturnType<
+  Awaited<ReturnType<typeof loader>>["json"]
+>;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);

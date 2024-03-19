@@ -3,11 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useActionData } from "@remix-run/react";
 import {
   ActionShape,
-  ApiActionSync,
-  action
+  ApiActionSyncData,
+  ApiActionSyncUrl
 } from "~/routes/api.action.sync._index";
 import { postJson } from "./fetch";
 import { fail } from "./misc";
@@ -36,9 +35,7 @@ async function doSync() {
   syncEvents.dispatchEvent(new Event("syncstart"));
   if (actions.length > 0) {
     try {
-      const response = await postJson<
-        ReturnType<typeof useActionData<typeof action>>
-      >(ApiActionSync, {
+      const response = await postJson<ApiActionSyncData>(ApiActionSyncUrl, {
         actions,
         syncedAt: syncState.syncedAt
       });
