@@ -176,9 +176,10 @@ export async function action({ request }: ActionFunctionArgs) {
               try {
                 new CS_Inventory({
                   items: action.items,
-                  maxItems: await getRule("InventoryMaxItems"),
+                  maxItems: await getRule("InventoryMaxItems", userId),
                   storageUnitMaxItems: await getRule(
-                    "InventoryStorageUnitMaxItems"
+                    "InventoryStorageUnitMaxItems",
+                    userId
                   )
                 })
                   .export()
@@ -237,7 +238,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.retrieveFromStorageUnit(action.uid, action.retrieveUids);
             break;
           case EditAction:
-            await expectRule("InventoryItemAllowEdit", true);
+            await expectRule("InventoryItemAllowEdit", true, userId);
             inventory.edit(action.uid, {
               ...action.attributes,
               stattrak:

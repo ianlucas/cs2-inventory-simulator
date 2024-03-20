@@ -39,8 +39,8 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   const inventory = new CS_Inventory({
     items: parseInventory(rawInventory),
-    maxItems: await getRule("InventoryMaxItems"),
-    storageUnitMaxItems: await getRule("InventoryStorageUnitMaxItems")
+    maxItems: await getRule("InventoryMaxItems", userId),
+    storageUnitMaxItems: await getRule("InventoryStorageUnitMaxItems", userId)
   });
   const unlockedItem = CS_unlockCase(inventory.get(caseUid).id);
   inventory.unlockCase(unlockedItem, caseUid, keyUid);

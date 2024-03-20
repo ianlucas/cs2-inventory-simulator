@@ -51,6 +51,7 @@ export const links: LinksFunction = () => [
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);
   const session = await getSession(request.headers.get("Cookie"));
+  const user = await findRequestUser(request);
   const ipCountry = request.headers.get("CF-IPCountry");
   const { origin: appUrl, host: appSiteName } = new URL(
     await getRule("SteamCallbackUrl")
@@ -58,10 +59,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return typedjson({
     rules: {
       buildLastCommit: BUILD_LAST_COMMIT,
-      inventoryItemAllowEdit: await getRule("InventoryItemAllowEdit"),
-      inventoryMaxItems: await getRule("InventoryMaxItems"),
+      inventoryItemAllowEdit: await getRule("InventoryItemAllowEdit", user?.id),
+      inventoryMaxItems: await getRule("InventoryMaxItems", user?.id),
       inventoryStorageUnitMaxItems: await getRule(
-        "InventoryStorageUnitMaxItems"
+        "InventoryStorageUnitMaxItems",
+        user?.id
       ),
       meta: { appUrl, appSiteName }
     },
@@ -70,7 +72,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ...(await getLanguage(session, ipCountry)),
       ...(await getToggleable(session))
     },
-    user: await findRequestUser(request)
+    user
   });
 }
 

@@ -20,13 +20,36 @@ export type StringRuleNames = (typeof stringRulesNames)[number];
 export type RuleNames = BooleanRuleNames | NumberRuleNames | StringRuleNames;
 export type RuleTypes = "string" | "boolean" | "number";
 
-export function getRule(name: BooleanRuleNames): Promise<boolean>;
-export function getRule(name: StringRuleNames): Promise<string>;
-export function getRule(name: NumberRuleNames): Promise<number>;
-export async function getRule(name: RuleNames) {
-  const { value } = await prisma.rule.findUniqueOrThrow({
-    where: { name }
-  });
+export function getRule(
+  name: BooleanRuleNames,
+  userId?: string
+): Promise<boolean>;
+export function getRule(
+  name: StringRuleNames,
+  userId?: string
+): Promise<string>;
+export function getRule(
+  name: NumberRuleNames,
+  userId?: string
+): Promise<number>;
+export async function getRule(name: RuleNames, userId?: string) {
+  let value: string | undefined = undefined;
+  if (userId !== undefined) {
+    const overwrite = await prisma.ruleOverwrite.findUnique({
+      where: { name_userId: { name, userId } }
+    });
+    if (overwrite !== null) {
+      value = overwrite.value;
+    }
+  }
+  if (value === undefined) {
+    value = (
+      await prisma.rule.findUniqueOrThrow({
+        select: { value: true },
+        where: { name }
+      })
+    ).value;
+  }
   if (booleanRulesNames.includes(name as BooleanRuleNames)) {
     return value === "true";
   }
@@ -39,8 +62,15 @@ export async function getRule(name: RuleNames) {
   fail("Rule not found or has invalid type.");
 }
 
-export async function expectRule(name: BooleanRuleNames, toBe: boolean) {
-  assert((await getRule(name)) === toBe, `Rule ${name} is not ${toBe}`);
+export async function expectRule(
+  name: BooleanRuleNames,
+  toBe: boolean,
+  forUser?: string
+) {
+  assert(
+    (await getRule(name, forUser)) === toBe,
+    `Rule ${name} is not ${toBe}`
+  );
 }
 
 export async function setRule(
