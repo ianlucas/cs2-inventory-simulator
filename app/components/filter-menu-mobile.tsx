@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import clsx from "clsx";
+import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
 import { useTranslation } from "~/hooks/use-translation";
 import { ITEM_FILTERS, ItemFilter } from "~/utils/filters";
 
@@ -14,6 +15,7 @@ export function FilterMenuMobile({
   onChange: (newValue: ItemFilter) => void;
   value: ItemFilter;
 }) {
+  const filter = useCraftFilterRules();
   const translate = useTranslation();
 
   function handleClick(filter: ItemFilter) {
@@ -24,7 +26,7 @@ export function FilterMenuMobile({
 
   return (
     <div className="flex flex-wrap gap-1 px-2">
-      {ITEM_FILTERS.map((filter, index) => (
+      {ITEM_FILTERS.filter(filter).map((filter, index) => (
         <button
           key={index}
           className={clsx(

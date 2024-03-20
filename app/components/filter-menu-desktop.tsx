@@ -6,6 +6,7 @@
 import { faSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
+import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
 import { useTranslation } from "~/hooks/use-translation";
 import { ITEM_FILTERS, ItemFilter } from "~/utils/filters";
 import { FilterMenuIcon } from "./filter-menu-icon";
@@ -18,6 +19,7 @@ export function FilterMenuDesktop({
   onChange: (newValue: ItemFilter) => void;
   value: ItemFilter;
 }) {
+  const filter = useCraftFilterRules();
   const translate = useTranslation();
 
   function handleClick(filter: ItemFilter) {
@@ -28,7 +30,7 @@ export function FilterMenuDesktop({
 
   return (
     <div className="w-[186px] rounded-tr bg-black/10">
-      {ITEM_FILTERS.map((filter, index) => {
+      {ITEM_FILTERS.filter(filter).map((filter, index) => {
         const isActive =
           filter.category === value.category && filter.type === value.type;
         const isIdle = !isActive;

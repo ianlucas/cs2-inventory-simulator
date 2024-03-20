@@ -8,12 +8,14 @@ import { useInput } from "./use-input";
 import { ITEM_FILTERS, ItemFilter } from "~/utils/filters";
 import { CS_Item } from "@ianlucas/cslib";
 import { getBaseItems, getPaidItems } from "~/utils/economy";
+import { useCraftItemRules } from "./use-craft-item-rules";
 
 export function useItemPickerState({
   onPickItem
 }: {
   onPickItem: (item: CS_Item) => void;
 }) {
+  const itemFilter = useCraftItemRules();
   const [filter, setFilter] = useState(ITEM_FILTERS[0]);
   const [model, setModel] = useState<string | undefined>();
   const [query, setQuery] = useInput("");
@@ -45,6 +47,7 @@ export function useItemPickerState({
           }
           return name.toLowerCase().includes(query.toLowerCase());
         })
+        .filter(itemFilter)
         .sort((a, b) => a.name.localeCompare(b.name)),
     [filter, model, query]
   );

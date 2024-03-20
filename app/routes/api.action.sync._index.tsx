@@ -3,12 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory } from "@ianlucas/cslib";
+import { CS_Economy, CS_Inventory, CS_Item } from "@ianlucas/cslib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
-import { expectRule, getRule } from "~/models/rule.server";
+import {
+  expectRule,
+  expectRuleNotContain,
+  getRule
+} from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
@@ -151,6 +155,20 @@ export type ApiActionSyncData = ReturnType<
   Awaited<ReturnType<typeof action>>["json"]
 >;
 
+async function enforceCraftRules(idOrItem: number | CS_Item) {
+  const { category, type, model, id } = CS_Economy.get(idOrItem);
+  await expectRuleNotContain("CraftHideId", id);
+  if (category !== undefined) {
+    await expectRuleNotContain("CraftHideCategory", category);
+  }
+  if (type !== undefined) {
+    await expectRuleNotContain("CraftHideType", type);
+  }
+  if (model !== undefined) {
+    await expectRuleNotContain("CraftHideModel", model);
+  }
+}
+
 export async function action({ request }: ActionFunctionArgs) {
   await middleware(request);
   const { id: userId, inventory: rawInventory } = await requireUser(request);
@@ -169,26 +187,29 @@ export async function action({ request }: ActionFunctionArgs) {
       for (const action of actions) {
         switch (action.type) {
           case AddAction:
+            await enforceCraftRules(action.item.id);
             inventory.add(action.item);
             break;
           case AddFromCacheAction:
             if (rawInventory === null && !addedFromCache) {
               try {
-                new CS_Inventory({
+                for (const item of new CS_Inventory({
                   items: action.items,
                   maxItems: await getRule("InventoryMaxItems", userId),
                   storageUnitMaxItems: await getRule(
                     "InventoryStorageUnitMaxItems",
                     userId
                   )
-                })
-                  .export()
-                  .forEach((item) => inventory.add(item));
+                }).export()) {
+                  await enforceCraftRules(item.id);
+                  inventory.add(item);
+                }
               } catch {}
               addedFromCache = true;
             }
             break;
           case AddWithNametagAction:
+            await enforceCraftRules(action.itemId);
             inventory.addWithNametag(
               action.toolUid,
               action.itemId,
@@ -249,6 +270,7 @@ export async function action({ request }: ActionFunctionArgs) {
             });
             break;
           case AddWithStickerAction:
+            await enforceCraftRules(action.itemId);
             inventory.addWithSticker(
               action.stickerUid,
               action.itemId,

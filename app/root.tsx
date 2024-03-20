@@ -59,6 +59,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return typedjson({
     rules: {
       buildLastCommit: BUILD_LAST_COMMIT,
+      craftHideCategory: await getRule("CraftHideCategory", user?.id),
+      craftHideType: await getRule("CraftHideType", user?.id),
+      craftHideModel: await getRule("CraftHideModel", user?.id),
+      craftHideId: await getRule("CraftHideId", user?.id),
       inventoryItemAllowEdit: await getRule("InventoryItemAllowEdit", user?.id),
       inventoryMaxItems: await getRule("InventoryMaxItems", user?.id),
       inventoryStorageUnitMaxItems: await getRule(

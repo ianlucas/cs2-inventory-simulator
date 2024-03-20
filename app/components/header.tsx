@@ -15,15 +15,18 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useToggle } from "@uidotdev/usehooks";
 import clsx from "clsx";
+import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useIsOnTop } from "~/hooks/use-is-on-top";
 import { useTranslation } from "~/hooks/use-translation";
+import { ITEM_FILTERS } from "~/utils/filters";
 import { HeaderLink } from "./header-link";
 import { Logo } from "./logo";
 import { useRootContext } from "./root-context";
 
 export function Header() {
   const { user, inventory } = useRootContext();
+  const craftFilter = useCraftFilterRules();
   const [isMenuOpen, toggleIsMenuOpen] = useToggle(false);
   const isDesktop = useIsDesktop();
   const translate = useTranslation();
@@ -32,6 +35,9 @@ export function Header() {
   function closeMenu() {
     toggleIsMenuOpen(false);
   }
+
+  const canCraft =
+    !inventory.isFull() && ITEM_FILTERS.filter(craftFilter).length > 0;
 
   return (
     <div
@@ -62,7 +68,7 @@ export function Header() {
                 label={translate("HeaderInventoryLabel")}
                 onClick={closeMenu}
               />
-              {!inventory.isFull() && (
+              {canCraft && (
                 <HeaderLink
                   to="/craft"
                   icon={faPlus}
