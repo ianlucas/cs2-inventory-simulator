@@ -8,7 +8,7 @@ import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
-import { getRule } from "~/models/rule.server";
+import { expectRule, getRule } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
@@ -161,80 +161,84 @@ export async function action({ request }: ActionFunctionArgs) {
     })
     .parse(await request.json());
   let addedFromCache = false;
-  const maxItems = await getRule("InventoryMaxItems");
-  const storageUnitMaxItems = await getRule("InventoryStorageUnitMaxItems");
   const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
     userId,
     rawInventory,
     syncedAt,
-    manipulate(inventory) {
-      actions.forEach((action) => {
+    async manipulate(inventory) {
+      for (const action of actions) {
         switch (action.type) {
           case AddAction:
-            return inventory.add(action.item);
+            inventory.add(action.item);
+            break;
           case AddFromCacheAction:
             if (rawInventory === null && !addedFromCache) {
               try {
                 new CS_Inventory({
                   items: action.items,
-                  maxItems,
-                  storageUnitMaxItems
+                  maxItems: await getRule("InventoryMaxItems"),
+                  storageUnitMaxItems: await getRule(
+                    "InventoryStorageUnitMaxItems"
+                  )
                 })
                   .export()
                   .forEach((item) => inventory.add(item));
               } catch {}
               addedFromCache = true;
             }
-            return;
+            break;
           case AddWithNametagAction:
-            return inventory.addWithNametag(
+            inventory.addWithNametag(
               action.toolUid,
               action.itemId,
               action.nametag
             );
+            break;
           case ApplyItemStickerAction:
-            return inventory.applyItemSticker(
+            inventory.applyItemSticker(
               action.targetUid,
               action.stickerUid,
               action.stickerIndex
             );
+            break;
           case EquipAction:
-            return inventory.equip(action.uid, action.team);
+            inventory.equip(action.uid, action.team);
+            break;
           case UnequipAction:
-            return inventory.unequip(action.uid, action.team);
+            inventory.unequip(action.uid, action.team);
+            break;
           case RenameItemAction:
-            return inventory.renameItem(
+            inventory.renameItem(
               action.toolUid,
               action.targetUid,
               action.nametag
             );
+            break;
           case RemoveAction:
-            return inventory.remove(action.uid);
+            inventory.remove(action.uid);
+            break;
           case ScrapeItemStickerAction:
-            return inventory.scrapeItemSticker(
-              action.targetUid,
-              action.stickerIndex
-            );
+            inventory.scrapeItemSticker(action.targetUid, action.stickerIndex);
+            break;
           case SwapItemsStatTrakAction:
-            return inventory.swapItemsStatTrak(
+            inventory.swapItemsStatTrak(
               action.toolUid,
               action.fromUid,
               action.toUid
             );
+            break;
           case RenameStorageUnitAction:
-            return inventory.renameStorageUnit(action.uid, action.nametag);
+            inventory.renameStorageUnit(action.uid, action.nametag);
+            break;
           case DepositToStorageUnitAction:
-            return inventory.depositToStorageUnit(
-              action.uid,
-              action.depositUids
-            );
+            inventory.depositToStorageUnit(action.uid, action.depositUids);
+            break;
           case RetrieveFromStorageUnitAction:
-            return inventory.retrieveFromStorageUnit(
-              action.uid,
-              action.retrieveUids
-            );
+            inventory.retrieveFromStorageUnit(action.uid, action.retrieveUids);
+            break;
           case EditAction:
-            return inventory.edit(action.uid, {
+            await expectRule("InventoryItemAllowEdit", true);
+            inventory.edit(action.uid, {
               ...action.attributes,
               stattrak:
                 action.attributes.stattrak !== undefined
@@ -242,16 +246,19 @@ export async function action({ request }: ActionFunctionArgs) {
                   : undefined,
               nametag: action.attributes.nametag
             });
+            break;
           case AddWithStickerAction:
-            return inventory.addWithSticker(
+            inventory.addWithSticker(
               action.stickerUid,
               action.itemId,
               action.stickerIndex
             );
+            break;
           case RemoveAllItemsAction:
-            return inventory.removeAll();
+            inventory.removeAll();
+            break;
         }
-      });
+      }
     }
   });
   return json({ syncedAt: responseSyncedAt.getTime() });

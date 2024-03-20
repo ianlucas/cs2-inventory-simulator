@@ -5,32 +5,42 @@
 
 import { prisma } from "~/db.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "~/env.server";
-import { fail } from "~/utils/misc";
+import { assert, fail } from "~/utils/misc";
 
+const booleanRulesNames = ["InventoryItemAllowEdit"] as const;
 const numberRulesNames = [
   "InventoryMaxItems",
   "InventoryStorageUnitMaxItems"
 ] as const;
 const stringRulesNames = ["SteamApiKey", "SteamCallbackUrl"] as const;
 
+export type BooleanRuleNames = (typeof booleanRulesNames)[number];
 export type NumberRuleNames = (typeof numberRulesNames)[number];
 export type StringRuleNames = (typeof stringRulesNames)[number];
-export type RuleNames = NumberRuleNames | StringRuleNames;
+export type RuleNames = BooleanRuleNames | NumberRuleNames | StringRuleNames;
 export type RuleTypes = "string" | "boolean" | "number";
 
+export function getRule(name: BooleanRuleNames): Promise<boolean>;
 export function getRule(name: StringRuleNames): Promise<string>;
 export function getRule(name: NumberRuleNames): Promise<number>;
 export async function getRule(name: RuleNames) {
-  const rule = await prisma.rule.findUniqueOrThrow({
+  const { value } = await prisma.rule.findUniqueOrThrow({
     where: { name }
   });
+  if (booleanRulesNames.includes(name as BooleanRuleNames)) {
+    return value === "true";
+  }
   if (numberRulesNames.includes(name as NumberRuleNames)) {
-    return Number(rule.value);
+    return Number(value);
   }
   if (stringRulesNames.includes(name as StringRuleNames)) {
-    return rule.value;
+    return value;
   }
-  fail("Rule not found.");
+  fail("Rule not found or has invalid type.");
+}
+
+export async function expectRule(name: BooleanRuleNames, toBe: boolean) {
+  assert((await getRule(name)) === toBe, `Rule ${name} is not ${toBe}`);
 }
 
 export async function setRule(
@@ -90,5 +100,10 @@ export async function setupRules() {
     name: "SteamCallbackUrl",
     type: "string",
     value: STEAM_CALLBACK_URL ?? "http://localhost/sign-in/steam/callback"
+  });
+  await addRule({
+    name: "InventoryItemAllowEdit",
+    type: "boolean",
+    value: "false"
   });
 }

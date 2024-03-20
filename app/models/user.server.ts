@@ -76,7 +76,9 @@ export async function manipulateUserInventory({
   syncedAt,
   userId
 }: {
-  manipulate: (inventory: CS_Inventory) => void;
+  manipulate:
+    | ((inventory: CS_Inventory) => void)
+    | ((inventory: CS_Inventory) => Promise<void>);
   rawInventory: string | null;
   syncedAt?: number;
   userId: string;
@@ -87,7 +89,7 @@ export async function manipulateUserInventory({
     storageUnitMaxItems: await getRule("InventoryStorageUnitMaxItems")
   });
   try {
-    manipulate(inventory);
+    await manipulate(inventory);
   } catch {
     throw badRequest;
   }

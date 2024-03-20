@@ -71,7 +71,7 @@ export function InventoryItem({
   onUnlockContainer?: (uid: number) => void;
   ownApplicableStickers?: boolean;
 }) {
-  const { inventory } = useRootContext();
+  const { inventory, rules } = useRootContext();
   const translate = useTranslation();
   const {
     clickContext,
@@ -262,7 +262,7 @@ export function InventoryItem({
                 ],
                 [
                   {
-                    condition: isEditable,
+                    condition: rules.inventoryItemAllowEdit && isEditable,
                     label: translate("InventoryItemEdit"),
                     onClick: close(() => onEdit?.(uid))
                   },

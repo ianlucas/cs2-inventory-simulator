@@ -57,12 +57,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
   return typedjson({
     rules: {
-      meta: { appUrl, appSiteName },
       buildLastCommit: BUILD_LAST_COMMIT,
+      inventoryItemAllowEdit: await getRule("InventoryItemAllowEdit"),
       inventoryMaxItems: await getRule("InventoryMaxItems"),
       inventoryStorageUnitMaxItems: await getRule(
         "InventoryStorageUnitMaxItems"
-      )
+      ),
+      meta: { appUrl, appSiteName }
     },
     preferences: {
       ...(await getBackground(session)),
