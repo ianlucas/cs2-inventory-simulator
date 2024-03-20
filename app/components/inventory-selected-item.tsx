@@ -19,6 +19,8 @@ function getLabelToken(token?: ItemSelectorContextProps["type"]) {
       return "InventorySelectItemToDeposit";
     case "retrieve-from-storage-unit":
       return "InventorySelectItemToRetrieve";
+    case "inspect-storage-unit":
+      return "InventorySelectInspectContents";
     default:
       return "InventorySelectAnItem";
   }

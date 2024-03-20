@@ -9,19 +9,19 @@ import {
   SetStateAction,
   createContext,
   useContext,
-  useEffect,
   useState
 } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import { useScrollTopHandler } from "~/hooks/use-scroll-top-handler";
-import { useWatch } from "~/hooks/use-watch";
 import { transform } from "~/utils/inventory";
 
 export interface ItemSelectorContextProps {
   items: ReturnType<typeof transform>[];
+  readOnly?: boolean;
   type:
     | "apply-item-sticker"
     | "deposit-to-storage-unit"
+    | "inspect-storage-unit"
     | "rename-item"
     | "retrieve-from-storage-unit"
     | "scrape-sticker"

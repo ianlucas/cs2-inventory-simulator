@@ -63,6 +63,7 @@ export function Inventory() {
     closeRenameStorageUnit,
     handleDepositToStorageUnit,
     handleDepositToStorageUnitSelect,
+    handleInspectStorageUnit,
     handleRenameStorageUnit,
     handleRetrieveFromStorageUnit,
     handleRetrieveFromStorageUnitSelect,
@@ -173,13 +174,16 @@ export function Inventory() {
               {...(isSelectingAnItem
                 ? {
                     disableContextMenu: true,
-                    onClick: handleSelectItem
+                    onClick: itemSelector?.readOnly
+                      ? undefined
+                      : handleSelectItem
                   }
                 : {
                     onApplySticker: handleApplyItemSticker,
                     onDepositToStorageUnit: handleDepositToStorageUnit,
                     onEdit: handleEdit,
                     onEquip: handleEquip,
+                    onInspectStorageUnit: handleInspectStorageUnit,
                     onRemove: handleRemove,
                     onRename: handleRenameItem,
                     onRenameStorageUnit: handleRenameStorageUnit,

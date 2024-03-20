@@ -32,6 +32,15 @@ export function useStorageUnit() {
     return setRenameStorageUnit({ uid });
   }
 
+  function handleInspectStorageUnit(uid: number) {
+    return setItemSelector({
+      items: inventory.getStorageUnitItems(uid).map(transform),
+      readOnly: true,
+      type: "inspect-storage-unit",
+      uid
+    });
+  }
+
   function handleDepositToStorageUnit(uid: number) {
     return setItemSelector({
       uid: uid,
@@ -110,6 +119,7 @@ export function useStorageUnit() {
     closeRenameStorageUnit,
     handleDepositToStorageUnit,
     handleDepositToStorageUnitSelect,
+    handleInspectStorageUnit,
     handleRenameStorageUnit,
     handleRetrieveFromStorageUnit,
     handleRetrieveFromStorageUnitSelect,

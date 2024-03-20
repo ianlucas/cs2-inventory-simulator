@@ -43,6 +43,7 @@ export function InventoryItem({
   onDepositToStorageUnit,
   onEdit,
   onEquip,
+  onInspectStorageUnit,
   onRemove,
   onRename,
   onRenameStorageUnit,
@@ -61,6 +62,7 @@ export function InventoryItem({
   onDepositToStorageUnit?: (uid: number) => void;
   onEdit?: (uid: number) => void;
   onEquip?: (uid: number, team?: CS_Team) => void;
+  onInspectStorageUnit?: (uid: number) => void;
   onRemove?: (uid: number) => void;
   onRename?: (uid: number) => void;
   onRenameStorageUnit?: (uid: number) => void;
@@ -234,6 +236,14 @@ export function InventoryItem({
                     condition: canScrapeSticker,
                     label: translate("InventoryScrapeSticker"),
                     onClick: close(() => onScrapeSticker?.(uid))
+                  }
+                ],
+                [
+                  {
+                    condition:
+                      isStorageUnit && inventory.isStorageUnitFilled(uid),
+                    label: translate("InventoryItemStorageUnitInspect"),
+                    onClick: close(() => onInspectStorageUnit?.(uid))
                   }
                 ],
                 [
