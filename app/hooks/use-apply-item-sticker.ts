@@ -8,7 +8,6 @@ import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
 import { countStickers } from "~/utils/inventory";
-import { size } from "~/utils/number";
 
 export function useApplyItemSticker() {
   const { inventory, items } = useRootContext();

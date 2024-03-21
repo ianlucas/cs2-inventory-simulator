@@ -11,8 +11,8 @@ import {
   RetrieveFromStorageUnitAction
 } from "~/routes/api.action.sync._index";
 import { transform } from "~/utils/inventory";
-import { useSync } from "./use-sync";
 import { assert } from "~/utils/misc";
+import { useSync } from "./use-sync";
 
 export function useStorageUnit() {
   const sync = useSync();

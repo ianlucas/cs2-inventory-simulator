@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import "dotenv/config";
-import invariant from "tiny-invariant";
-import { resolve } from "path";
 import { existsSync, readFileSync } from "fs";
+import { resolve } from "path";
+import invariant from "tiny-invariant";
 
 invariant(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 export const SESSION_SECRET = process.env.SESSION_SECRET;

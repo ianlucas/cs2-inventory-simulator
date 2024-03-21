@@ -3,13 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS_ItemTranslations } from "@ianlucas/cslib";
 import { Session } from "@remix-run/node";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { z } from "zod";
 import { brazilian } from "../translations/brazilian";
 import { english } from "../translations/english";
-import { CS_ItemTranslations } from "@ianlucas/cslib";
 
 const translations: Record<string, Record<string, string>> = {
   brazilian,

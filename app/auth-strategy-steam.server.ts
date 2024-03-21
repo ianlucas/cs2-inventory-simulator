@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { SteamStrategy as SteamStrategyBase } from "@ianlucas/remix-auth-steam";
-import { upsertUser } from "./models/user.server";
 import { getRule } from "./models/rule.server";
+import { upsertUser } from "./models/user.server";
 
 export class SteamStrategy extends SteamStrategyBase<string> {
   constructor() {

@@ -5,16 +5,16 @@
 
 import { SessionStorage } from "@remix-run/server-runtime";
 import { AuthenticateOptions, Strategy } from "remix-auth";
+import SteamAPI, { UserSummary } from "steamapi";
 import { z } from "zod";
 import {
   clearAuthTokens,
   clearExpiredAuthTokens,
   getAuthTokenDetails
 } from "./models/api-auth-token.server";
-import SteamAPI, { UserSummary } from "steamapi";
+import { getRule } from "./models/rule.server";
 import { upsertUser } from "./models/user.server";
 import { fail } from "./utils/misc";
-import { getRule } from "./models/rule.server";
 
 export class ApiStrategy extends Strategy<string, string> {
   name = "api";

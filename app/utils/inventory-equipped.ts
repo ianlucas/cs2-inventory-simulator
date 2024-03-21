@@ -6,7 +6,6 @@
 import {
   CS_BaseInventoryItem,
   CS_Economy,
-  CS_InventoryItem,
   CS_NONE,
   CS_TEAM_CT,
   CS_TEAM_T
