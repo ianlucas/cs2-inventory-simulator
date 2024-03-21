@@ -19,7 +19,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@ianlucas/cslib": "^12.1.1",
+    "@ianlucas/cslib": "^12.2.1",
     "@ianlucas/remix-auth-steam": "^2.0.2",
     "@prisma/client": "^5.11.0",
     "@remix-run/node": "^2.8.1",
@@ -47,8 +47,8 @@
     "prettier": "3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.12",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.4.2",
-    "vite": "^5.1.6",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.2",
     "vite-tsconfig-paths": "^4.3.2"
   },
   "engines": {
