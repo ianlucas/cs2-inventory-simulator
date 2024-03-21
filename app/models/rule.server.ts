@@ -90,7 +90,11 @@ export async function getRule(name: RuleNames, userId?: string) {
     return value.split(";").map((value) => value.trim());
   }
   if (numberArrayRulesNames.includes(name as NumberArrayRuleNames)) {
-    return value.split(";").map((value) => Number(value.trim()));
+    return value
+      .split(";")
+      .map((value) => value.trim())
+      .filter((value) => value !== "")
+      .map(Number);
   }
   fail("Rule not found or has invalid type.");
 }
