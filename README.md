@@ -26,7 +26,7 @@ Please be sure to add the following prefixes in the title when opening an issue:
 - [BUG] for issues you have found within the core functionality.
 - [Q] for questions you may have about the project.
 - [REQ] for requesting a feature not currently implemented.
-  - [REQ/RULE] for requesting a rule (#19) to be implemented.
+  - [REQ/RULE] for requesting a rule ([#19](https://github.com/ianlucas/cs2-inventory-simulator/issues/19)) to be implemented.
 
 ## Development
 
