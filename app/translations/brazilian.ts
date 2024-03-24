@@ -102,6 +102,7 @@ export const brazilian = {
   SettingsHeader: "Configurações",
   SettingsLanguage: "Idioma",
   SettingsBackground: "Plano de Fundo",
+  SettingsBackgroundRandom: "Aleatório",
   SettingsStatsForNerds: "Estatísticas para Nerds",
   SettingsHideFreeItems: "Ocultar Itens Gratuitos",
   SettingsRemoveAllItems: "Remover todos os itens do meu inventário",

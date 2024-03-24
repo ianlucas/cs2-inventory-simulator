@@ -112,6 +112,7 @@ export const english = {
   SettingsHeader: "Settings",
   SettingsLanguage: "Language",
   SettingsBackground: "Background",
+  SettingsBackgroundRandom: "Random",
   SettingsStatsForNerds: "Stats for nerds",
   SettingsHideFreeItems: "Hide default items",
   SettingsRemoveAllItems: "Remove all items from my inventory",

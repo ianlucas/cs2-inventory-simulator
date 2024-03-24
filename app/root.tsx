@@ -26,7 +26,10 @@ import { SyncWarn } from "./components/sync-warn";
 import { BUILD_LAST_COMMIT } from "./env.server";
 import { middleware } from "./http.server";
 import { getRule } from "./models/rule.server";
-import { getBackground } from "./preferences/background.server";
+import {
+  getBackground,
+  getCurrentBackground
+} from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
 import { getToggleable } from "./preferences/toggleable.server";
 import { getSeoLinks, getSeoMeta } from "./seo";
@@ -73,6 +76,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
     preferences: {
       ...(await getBackground(session)),
+      ...(await getCurrentBackground(session)),
       ...(await getLanguage(session, ipCountry)),
       ...(await getToggleable(session))
     },

@@ -30,9 +30,18 @@ export function getAllowedBackgrounds() {
   return backgrounds.map(({ value }) => value);
 }
 
+export function getSessionBackground(session: Session) {
+  return session.get("background") as string | null;
+}
+
 export async function getBackground(session: Session) {
   return {
-    background:
-      (session.get("background") as string) || random(backgrounds).value
+    background: getSessionBackground(session) || random(backgrounds).value
+  };
+}
+
+export async function getCurrentBackground(session: Session) {
+  return {
+    currentBackground: getSessionBackground(session)
   };
 }

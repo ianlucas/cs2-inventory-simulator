@@ -25,7 +25,7 @@ export async function getUserPreference(
 export async function setUserPreference(
   userId: string,
   preference: UserPreferenceKeys,
-  value: string
+  value: string | null
 ) {
   return await prisma.userPreferences.upsert({
     create: { [preference]: value, userId },

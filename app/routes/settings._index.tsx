@@ -45,10 +45,10 @@ export default function Settings() {
     inventory,
     setInventory,
     preferences: {
-      background: selectedBackground,
+      currentBackground: selectedBackground,
+      hideFreeItems: selectedHideFreeItems,
       language: selectedLanguage,
-      statsForNerds: selectedStatsForNerds,
-      hideFreeItems: selectedHideFreeItems
+      statsForNerds: selectedStatsForNerds
     }
   } = useRootContext();
   const sync = useSync();
@@ -112,9 +112,12 @@ export default function Settings() {
             {translate("SettingsBackground")}
           </label>
           <Select
-            value={background}
+            value={background ?? ""}
             onChange={setBackground}
-            options={backgrounds}
+            options={backgrounds.concat({
+              label: translate("SettingsBackgroundRandom"),
+              value: ""
+            })}
             children={({ label }) => label}
           />
         </div>

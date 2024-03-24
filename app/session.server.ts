@@ -22,7 +22,7 @@ export const { getSession, commitSession, destroySession } = sessionStorage;
 
 export function assignToSession(
   session: Session,
-  keyValues: Record<string, string | undefined>
+  keyValues: Record<string, string | undefined | null>
 ) {
   for (const [key, value] of Object.entries(keyValues)) {
     if (value === undefined) {

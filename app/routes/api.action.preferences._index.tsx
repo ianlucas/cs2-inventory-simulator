@@ -10,14 +10,14 @@ import {
 } from "@remix-run/node";
 import { z } from "zod";
 import { authenticator } from "~/auth.server";
-import { getAllowedBackgrounds } from "~/preferences/background.server";
+import { middleware } from "~/http.server";
 import {
   getUserPreference,
   setUserPreference
 } from "~/models/user-preferences.server";
-import { assignToSession, commitSession, getSession } from "~/session.server";
+import { getAllowedBackgrounds } from "~/preferences/background.server";
 import { getAllowedLanguages } from "~/preferences/language.server";
-import { middleware } from "~/http.server";
+import { assignToSession, commitSession, getSession } from "~/session.server";
 
 export const ApiActionPreferencesUrl = "/api/action/preferences";
 
@@ -48,7 +48,11 @@ export async function action({ request }: ActionFunctionArgs) {
     .object({
       background: z
         .string()
-        .refine((background) => getAllowedBackgrounds().includes(background)),
+        .refine(
+          (background) =>
+            background === "" || getAllowedBackgrounds().includes(background)
+        )
+        .transform((background) => (background === "" ? null : background)),
       language: z
         .string()
         .refine((language) => getAllowedLanguages().includes(language)),
