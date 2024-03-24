@@ -87,7 +87,10 @@ export async function getRule(name: RuleNames, userId?: string) {
     return value;
   }
   if (stringArrayRulesName.includes(name as StringArrayRuleNames)) {
-    return value.split(";").map((value) => value.trim());
+    return value
+      .split(";")
+      .map((value) => value.trim())
+      .filter((value) => value !== "");
   }
   if (numberArrayRulesNames.includes(name as NumberArrayRuleNames)) {
     return value
