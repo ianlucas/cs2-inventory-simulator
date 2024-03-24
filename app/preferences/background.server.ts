@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { Session } from "@remix-run/node";
+import { random } from "~/utils/misc";
 
 export const defaultBackground = "sirocco_night";
 
@@ -19,7 +20,6 @@ export const backgrounds = [
   { label: "Guard", value: "guard" },
   { label: "Mutiny", value: "mutiny" },
   { label: "Nuke", value: "nuke" },
-  { label: "Search", value: "search" },
   { label: "Sirocco Night", value: "sirocco_night" },
   { label: "Sirocco", value: "sirocco" },
   { label: "Swamp", value: "swamp" },
@@ -32,6 +32,7 @@ export function getAllowedBackgrounds() {
 
 export async function getBackground(session: Session) {
   return {
-    background: session.get("background") || defaultBackground
+    background:
+      (session.get("background") as string) || random(backgrounds).value
   };
 }

@@ -10,3 +10,7 @@ export const assert: typeof invariant = invariant;
 export function fail(message: string): never {
   throw new Error(message);
 }
+
+export function random<T>(array: T[]): T {
+  return array[Math.floor(Math.random() * array.length)];
+}
