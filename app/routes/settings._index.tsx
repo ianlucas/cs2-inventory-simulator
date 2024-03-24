@@ -54,7 +54,7 @@ export default function Settings() {
   const sync = useSync();
 
   const [language, setLanguage] = useState(selectedLanguage);
-  const [background, setBackground] = useState(selectedBackground);
+  const [background, setBackground] = useState(selectedBackground ?? "");
   const [statsForNerds, setStatsForNerds] = useCheckbox(selectedStatsForNerds);
   const [hideFreeItems, setHideFreeItems] = useCheckbox(selectedHideFreeItems);
 
