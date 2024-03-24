@@ -6,7 +6,7 @@ A Counter-Strike 2 **Inventory Simulator** for the web using TypeScript and Remi
 
 <img src="https://raw.githubusercontent.com/ianlucas/cs2-inventory-simulator/main/screenshot2.png" alt="Inventory Simulator case opening" title="CS2 Inventory Simulator" />
 
-## Feature Overview
+## Features
 
 - **Authentication is optional:** most features work without authentication.
 - **Steam authentication:** enables Steam players to sync their inventories.
@@ -19,21 +19,10 @@ A Counter-Strike 2 **Inventory Simulator** for the web using TypeScript and Remi
 - **API for developers:** fetch a user inventory and equipped items by using HTTP endpoints.
 - **Partial support for mobile devices**
 
-## Reporting Issues and Feature Requests
+## Issues
 
 Please be sure to add the following prefixes in the title when opening an issue:
 
 - [BUG] for issues you have found within the core functionality.
-- [Q] for questions you may have about the project.
 - [REQ] for requesting a feature not currently implemented.
   - [REQ/RULE] for requesting a rule ([#19](https://github.com/ianlucas/cs2-inventory-simulator/issues/19)) to be implemented.
-
-## Development
-
-From your terminal:
-
-```sh
-npm run dev
-```
-
-This starts your app in development mode, rebuilding assets on file changes.
