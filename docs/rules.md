@@ -68,4 +68,4 @@ CS2 Inventory Simulator can be configured during runtime using rules. They can b
 
 ## Rule overwriting
 
-A rule can be overwritten when a recorded is added to `RuleOverwrite` table with the user and rule name and the value the application should see.
+A rule can be overwritten when a record is added to `RuleOverwrite` table with the user and rule name and the value the application should see.
