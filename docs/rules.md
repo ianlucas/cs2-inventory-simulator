@@ -9,7 +9,8 @@ CS2 Inventory Simulator can be configured during runtime using rules. They can b
 - Description: Steam API Key to be used to get players information.
 - Type: `string`
 
-> [!CAUTION] You need a valid Steam API Key for the authentication to work.
+> [!CAUTION]
+> You need a valid Steam API Key for the authentication to work.
 
 ### `SteamCallbackUrl`
 
@@ -17,7 +18,8 @@ CS2 Inventory Simulator can be configured during runtime using rules. They can b
 - Type: `string`
 - Expected value: `https://your.domain/sign-in/steam/callback`
 
-> [!CAUTION] You need to setup this URL for the authentication to work.
+> [!CAUTION]
+> You need to setup this URL for the authentication to work.
 
 ### `InventoryMaxItems`
 
@@ -37,7 +39,8 @@ CS2 Inventory Simulator can be configured during runtime using rules. They can b
 - Type: `boolean`
 - Default: `false`
 
-> [!WARNING] You can get all the possible items and their attributes [here](https://raw.githubusercontent.com/ianlucas/cslib/main/assets/data/items.json).
+> [!WARNING] 
+> You can get all the possible items and their attributes [here](https://raw.githubusercontent.com/ianlucas/cslib/main/assets/data/items.json).
 
 ### `CraftHideCategory`
 
