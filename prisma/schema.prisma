@@ -21,7 +21,7 @@ model User {
   inventory String?
   name String
   overwrites RuleOverwrite[]
-  preferences UserPreferences?
+  preferences UserPreference?
   syncedAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -35,7 +35,7 @@ model UserCache {
   userId String
 }
 
-model UserPreferences {
+model UserPreference {
   background String?
   hideFreeItems String?
   language String?

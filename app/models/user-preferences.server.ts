@@ -16,7 +16,7 @@ export async function getUserPreference(
   preference: UserPreferenceKeys
 ) {
   return (
-    (await prisma.userPreferences.findFirst({ where: { userId } }))?.[
+    (await prisma.userPreference.findFirst({ where: { userId } }))?.[
       preference
     ] || undefined
   );
@@ -27,7 +27,7 @@ export async function setUserPreference(
   preference: UserPreferenceKeys,
   value: string | null
 ) {
-  return await prisma.userPreferences.upsert({
+  return await prisma.userPreference.upsert({
     create: { [preference]: value, userId },
     update: { [preference]: value },
     where: { userId }
