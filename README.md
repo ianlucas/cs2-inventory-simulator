@@ -19,10 +19,10 @@ A Counter-Strike 2 **Inventory Simulator** for the web using TypeScript and Remi
 - **API for developers:** fetch a user inventory and equipped items by using HTTP endpoints.
 - **Partial support for mobile devices**
 
-## Issues
+## Bugs and Feature Requests
 
 Please be sure to add the following prefixes in the title when opening an issue:
 
 - [BUG] for issues you have found within the core functionality.
 - [REQ] for requesting a feature not currently implemented.
-  - [REQ/RULE] for requesting a rule ([#19](https://github.com/ianlucas/cs2-inventory-simulator/issues/19)) to be implemented.
+- [REQ/RULE] for requesting [a rule](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/docs/rules.md) to be implemented.
