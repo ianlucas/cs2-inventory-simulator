@@ -155,17 +155,17 @@ export type ApiActionSyncData = ReturnType<
   Awaited<ReturnType<typeof action>>["json"]
 >;
 
-async function enforceCraftRules(idOrItem: number | CS_Item) {
+async function enforceCraftRules(idOrItem: number | CS_Item, userId: string) {
   const { category, type, model, id } = CS_Economy.get(idOrItem);
-  await expectRuleNotContain("CraftHideId", id);
+  await expectRuleNotContain("CraftHideId", id, userId);
   if (category !== undefined) {
-    await expectRuleNotContain("CraftHideCategory", category);
+    await expectRuleNotContain("CraftHideCategory", category, userId);
   }
   if (type !== undefined) {
-    await expectRuleNotContain("CraftHideType", type);
+    await expectRuleNotContain("CraftHideType", type, userId);
   }
   if (model !== undefined) {
-    await expectRuleNotContain("CraftHideModel", model);
+    await expectRuleNotContain("CraftHideModel", model, userId);
   }
 }
 
@@ -187,7 +187,7 @@ export async function action({ request }: ActionFunctionArgs) {
       for (const action of actions) {
         switch (action.type) {
           case AddAction:
-            await enforceCraftRules(action.item.id);
+            await enforceCraftRules(action.item.id, userId);
             inventory.add(action.item);
             break;
           case AddFromCacheAction:
@@ -201,7 +201,7 @@ export async function action({ request }: ActionFunctionArgs) {
                     userId
                   )
                 }).export()) {
-                  await enforceCraftRules(item.id);
+                  await enforceCraftRules(item.id, userId);
                   inventory.add(item);
                 }
               } catch {}
@@ -209,7 +209,7 @@ export async function action({ request }: ActionFunctionArgs) {
             }
             break;
           case AddWithNametagAction:
-            await enforceCraftRules(action.itemId);
+            await enforceCraftRules(action.itemId, userId);
             inventory.addWithNametag(
               action.toolUid,
               action.itemId,
@@ -270,7 +270,7 @@ export async function action({ request }: ActionFunctionArgs) {
             });
             break;
           case AddWithStickerAction:
-            await enforceCraftRules(action.itemId);
+            await enforceCraftRules(action.itemId, userId);
             inventory.addWithSticker(
               action.stickerUid,
               action.itemId,
