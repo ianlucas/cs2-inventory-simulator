@@ -20,7 +20,7 @@ export async function alert({
   const root = createRoot(document.createElement("div"));
   root.render(
     createPortal(
-      <Modal className="w-[550px]">
+      <Modal className="w-[550px]" fixed>
         <div className="px-4 py-2 text-sm font-bold">
           <span className="text-neutral-400">{titleText}</span>
         </div>
