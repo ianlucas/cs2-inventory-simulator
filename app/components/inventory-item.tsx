@@ -21,6 +21,7 @@ import clsx from "clsx";
 import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
 import { useTranslation } from "~/hooks/use-translation";
 import { EDITABLE_INVENTORY_TYPE, transform } from "~/utils/inventory";
+import { format } from "~/utils/number";
 import { CSItem } from "./cs-item";
 import { InventoryItemContents } from "./inventory-item-contents";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
@@ -29,6 +30,7 @@ import { InventoryItemSeed } from "./inventory-item-seed";
 import { InventoryItemStatTrak } from "./inventory-item-stattrak";
 import { InventoryItemTeams } from "./inventory-item-teams";
 import { InventoryItemWear } from "./inventory-item-wear";
+import { alert } from "./modal-generic";
 import { useRootContext } from "./root-context";
 
 export function InventoryItem({
@@ -241,9 +243,28 @@ export function InventoryItem({
                 [
                   {
                     condition:
-                      isStorageUnit && inventory.isStorageUnitFilled(uid),
+                      isStorageUnit &&
+                      (inventory.canDepositToStorageUnit(uid) ||
+                        inventory.canRetrieveFromStorageUnit(uid)),
                     label: translate("InventoryItemStorageUnitInspect"),
-                    onClick: close(() => onInspectStorageUnit?.(uid))
+                    onClick: close(() => {
+                      if (inventory.getStorageUnitSize(uid) === 0) {
+                        return alert({
+                          bodyText: translate(
+                            "InventoryItemStorageUnitEmptyBody",
+                            format(rules.inventoryStorageUnitMaxItems)
+                          ),
+                          closeText: translate(
+                            "InventoryItemStorageUnitEmptyClose"
+                          ),
+                          titleText: translate(
+                            "InventoryItemStorageUnitEmptyTitle"
+                          )
+                        });
+                      }
+
+                      onInspectStorageUnit?.(uid);
+                    })
                   }
                 ],
                 [

@@ -99,7 +99,7 @@ export function CSItem({
             {hasModel && (
               <div className="font-bold">
                 {stattrak !== undefined && "StatTrak™ "}
-                {translate(`Model${model}`, model)}
+                {translate(`Model${model}`) || model}
               </div>
             )}
             <div className={clsx(!hasModel && "font-bold")}>{name}</div>

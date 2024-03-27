@@ -9,15 +9,11 @@ export function useTranslation() {
   const {
     preferences: { translation }
   } = useRootContext();
-  return function translate(
-    token: string,
-    defaultValue?: string,
-    ...values: string[]
-  ) {
+  return function translate(token: string, ...values: string[]) {
     token = token.replace(/\s/g, "");
     const value = translation[token];
     if (value === undefined) {
-      return defaultValue || "???";
+      return "";
     }
     return value.replace(/\{(\d+)\}/g, (_, index) => values[Number(index) - 1]);
   };

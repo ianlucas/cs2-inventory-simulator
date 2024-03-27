@@ -15,3 +15,11 @@ export function range(n: number, count: number = 0) {
 export function size<T>(arr: T[] | undefined) {
   return arr?.length ?? 0;
 }
+
+export function format(n: number) {
+  try {
+    return new Intl.NumberFormat().format(n);
+  } catch {
+    return n.toString();
+  }
+}

@@ -83,6 +83,9 @@ export const brazilian = {
   InventoryItemStorageUnitInspect: "Inspecionar",
   InventoryItemStorageUnitRetrieve: "Retirar itens",
   InventoryItemStorageUnitDeposit: "Guardar itens",
+  InventoryItemStorageUnitEmptyTitle: "Unidade de armazenamento vazia",
+  InventoryItemStorageUnitEmptyBody:
+    "Esta unidade de armazenamento permite armazenar até {1} itens além da capacidade do seu inventário. A unidade de armazenamento selecionada está vazia. A qualquer momento, é possível mover itens do seu inventário para a unidade, retirá-los dela ou usá-la para organizar as suas coleções.",
   InventoryItemSwapStatTrak: "Abrir Ferramenta de Troca StatTrak™",
   InventoryItemEdit: "Editar",
   ItemSwapStatTrakUse: "Ferramenta de Troca StatTrak™",

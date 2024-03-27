@@ -90,6 +90,10 @@ export const english = {
   InventoryItemStorageUnitInspect: "Inspect",
   InventoryItemStorageUnitRetrieve: "Retrieve Items",
   InventoryItemStorageUnitDeposit: "Deposit Items",
+  InventoryItemStorageUnitEmptyTitle: "Empty Storage Unit",
+  InventoryItemStorageUnitEmptyBody:
+    "This Storage Unit allows you to store up to {1} of your surplus items which would otherwise exceed inventory limit. The selected Storage Unit is currently empty. At any time you can move items from your inventory into this Storage Unit, retrieve items back into your inventory, or you can just use it to organize your collectibles.",
+  InventoryItemStorageUnitEmptyClose: "OK",
   InventoryItemSwapStatTrak: "Open StatTrak™ Swap Tool",
   InventoryItemEdit: "Edit",
   ItemSwapStatTrakUse: "StatTrak™ Swap Tool",
