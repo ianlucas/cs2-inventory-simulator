@@ -4,14 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useRootContext } from "~/components/root-context";
-import { ItemFilter } from "~/utils/filters";
+import { CraftItemFilter } from "~/utils/craft-filters";
 
 export function useCraftFilterRules() {
   const {
     rules: { craftHideCategory, craftHideType }
   } = useRootContext();
 
-  return function filter({ category, type }: ItemFilter) {
+  return function filter({ category, type }: CraftItemFilter) {
     if (category !== undefined && craftHideCategory.includes(category)) {
       return false;
     }

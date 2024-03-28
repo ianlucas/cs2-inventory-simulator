@@ -5,8 +5,8 @@
 
 import { CS_Item } from "@ianlucas/cslib";
 import { useMemo, useState } from "react";
+import { CRAFT_ITEM_FILTERS, CraftItemFilter } from "~/utils/craft-filters";
 import { getBaseItems, getPaidItems } from "~/utils/economy";
-import { ITEM_FILTERS, ItemFilter } from "~/utils/filters";
 import { useCraftItemRules } from "./use-craft-item-rules";
 import { useInput } from "./use-input";
 
@@ -16,7 +16,7 @@ export function useItemPickerState({
   onPickItem: (item: CS_Item) => void;
 }) {
   const itemFilter = useCraftItemRules();
-  const [filter, setFilter] = useState(ITEM_FILTERS[0]);
+  const [filter, setFilter] = useState(CRAFT_ITEM_FILTERS[0]);
   const [model, setModel] = useState<string | undefined>();
   const [query, setQuery] = useInput("");
 
@@ -25,7 +25,7 @@ export function useItemPickerState({
     setModel(undefined);
   }
 
-  function handleCategoryClick(filter: ItemFilter) {
+  function handleCategoryClick(filter: CraftItemFilter) {
     setFilter(filter);
     return reset();
   }

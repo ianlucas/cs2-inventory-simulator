@@ -19,7 +19,7 @@ import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useIsOnTop } from "~/hooks/use-is-on-top";
 import { useTranslation } from "~/hooks/use-translation";
-import { ITEM_FILTERS } from "~/utils/filters";
+import { CRAFT_ITEM_FILTERS } from "~/utils/craft-filters";
 import { HeaderLink } from "./header-link";
 import { Logo } from "./logo";
 import { useRootContext } from "./root-context";
@@ -37,7 +37,7 @@ export function Header() {
   }
 
   const canCraft =
-    !inventory.isFull() && ITEM_FILTERS.filter(craftFilter).length > 0;
+    !inventory.isFull() && CRAFT_ITEM_FILTERS.filter(craftFilter).length > 0;
 
   return (
     <div

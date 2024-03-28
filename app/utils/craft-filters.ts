@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-export const ITEM_FILTERS = [
+export const CRAFT_ITEM_FILTERS = [
   {
     label: "Pistol",
     icon: "pistol",
@@ -102,4 +102,4 @@ export const ITEM_FILTERS = [
   }
 ];
 
-export type ItemFilter = (typeof ITEM_FILTERS)[number];
+export type CraftItemFilter = (typeof CRAFT_ITEM_FILTERS)[number];

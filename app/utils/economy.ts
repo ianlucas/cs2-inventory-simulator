@@ -15,7 +15,7 @@ import {
   CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
 } from "@ianlucas/cslib";
-import { ItemFilter } from "./filters";
+import { CraftItemFilter } from "./craft-filters";
 
 export const baseUrl =
   "https://cdn.statically.io/gh/ianlucas/cslib/main/assets/images";
@@ -68,7 +68,7 @@ export function getCSItemName(item: CS_Item) {
   };
 }
 
-export function getBaseItems({ category, hasModel, type }: ItemFilter) {
+export function getBaseItems({ category, hasModel, type }: CraftItemFilter) {
   return CS_filterItems({
     category,
     type,
@@ -80,7 +80,7 @@ export function getBaseItems({ category, hasModel, type }: ItemFilter) {
   );
 }
 
-export function getPaidItems({ type }: ItemFilter, model: string) {
+export function getPaidItems({ type }: CraftItemFilter, model: string) {
   return CS_filterItems({
     model
   }).filter(({ base }) => type === "melee" || !base);

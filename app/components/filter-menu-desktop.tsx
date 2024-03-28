@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
 import { useTranslation } from "~/hooks/use-translation";
-import { ITEM_FILTERS, ItemFilter } from "~/utils/filters";
+import { CRAFT_ITEM_FILTERS, CraftItemFilter } from "~/utils/craft-filters";
 import { FilterMenuIcon } from "./filter-menu-icon";
 import { TextSlider } from "./text-slider";
 
@@ -16,13 +16,13 @@ export function FilterMenuDesktop({
   onChange,
   value
 }: {
-  onChange: (newValue: ItemFilter) => void;
-  value: ItemFilter;
+  onChange: (newValue: CraftItemFilter) => void;
+  value: CraftItemFilter;
 }) {
   const filter = useCraftFilterRules();
   const translate = useTranslation();
 
-  function handleClick(filter: ItemFilter) {
+  function handleClick(filter: CraftItemFilter) {
     return function handleClick() {
       onChange(filter);
     };
@@ -30,7 +30,7 @@ export function FilterMenuDesktop({
 
   return (
     <div className="w-[186px] rounded-tr bg-black/10">
-      {ITEM_FILTERS.filter(filter).map((filter, index) => {
+      {CRAFT_ITEM_FILTERS.filter(filter).map((filter, index) => {
         const isActive =
           filter.category === value.category && filter.type === value.type;
         const isIdle = !isActive;
