@@ -41,10 +41,8 @@ export function translateItems(
   itemTranslation: CS_ItemTranslations[number]
 ) {
   if (currentLanguage === language) {
-    console.log(`${currentLanguage}=${language}`);
     return;
   }
-  console.log(`${currentLanguage}!=${language}`);
   currentLanguage = language;
   CS_Economy.use(CS_ITEMS);
   CS_Economy.applyTranslation(itemTranslation);
