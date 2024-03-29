@@ -41,8 +41,10 @@ export function translateItems(
   itemTranslation: CS_ItemTranslations[number]
 ) {
   if (currentLanguage === language) {
+    console.log(`${currentLanguage}=${language}`);
     return;
   }
+  console.log(`${currentLanguage}!=${language}`);
   currentLanguage = language;
   CS_Economy.use(CS_ITEMS);
   CS_Economy.applyTranslation(itemTranslation);
@@ -108,4 +110,24 @@ export function wearToString(wear: number) {
 
 export function stickerWearToString(wear: number) {
   return wear.toFixed(stickerWearStringMaxLen - 2);
+}
+
+export function isWeaponCase(item: CS_Item) {
+  // We need to check this way because `category` is affected by translation.
+  return item.category === CS_Economy.getById(9129).category;
+}
+
+export function isStickerCapsule(item: CS_Item) {
+  // We need to check this way because `category` is affected by translation.
+  return item.category === CS_Economy.getById(9134).category;
+}
+
+export function isGraffitiBox(item: CS_Item) {
+  // We need to check this way because `category` is affected by translation.
+  return item.category === CS_Economy.getById(11234).category;
+}
+
+export function isSouvenirCase(item: CS_Item) {
+  // We need to check this way because `category` is affected by translation.
+  return item.category === CS_Economy.getById(9147).category;
 }

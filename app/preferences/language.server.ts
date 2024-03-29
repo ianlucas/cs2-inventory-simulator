@@ -87,7 +87,9 @@ function getLangFromLanguage(name: string) {
 
 export async function getLanguage(session: Session, ipCountry: string | null) {
   const country = (ipCountry || "us").toLowerCase();
-  const language = session.get("language") || getLanguageFromCountry(country);
+  const language =
+    (session.get("language") as string | null | undefined) ||
+    getLanguageFromCountry(country);
   return {
     itemTranslation: readItemTranslation(language),
     lang: getLangFromLanguage(language),

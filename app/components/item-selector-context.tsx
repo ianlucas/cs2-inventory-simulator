@@ -12,7 +12,7 @@ import {
   useState
 } from "react";
 import { ClientOnly } from "remix-utils/client-only";
-import { useScrollTopHandler } from "~/hooks/use-scroll-top-handler";
+import { useWatch } from "~/hooks/use-watch";
 import { transform } from "~/utils/inventory";
 
 export interface ItemSelectorContextProps {
@@ -41,9 +41,20 @@ export function useItemSelectorContext() {
   return useContext(ItemSelectorContext);
 }
 
+export function useItemSelectorScrollTopHandler<T>(dependency: T) {
+  useWatch((oldState, newState) => {
+    if (
+      (oldState === undefined && newState !== undefined) ||
+      (oldState !== undefined && newState === undefined)
+    ) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, dependency);
+}
+
 export function ItemSelectorProvider({ children }: { children: ReactNode }) {
   const [itemSelector, setItemSelector] = useState<ItemSelectorContextProps>();
-  useScrollTopHandler(itemSelector);
+  useItemSelectorScrollTopHandler(itemSelector);
 
   return (
     <ClientOnly
