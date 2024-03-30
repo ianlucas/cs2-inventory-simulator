@@ -94,7 +94,10 @@ export function InventoryFilter() {
             className="min-w-[200px]"
             noMaxHeight
             onChange={setSorter}
-            options={INVENTORY_SORTERS}
+            options={INVENTORY_SORTERS.map(({ label, value }) => ({
+              label: translate(`InventoryFilter${label}`),
+              value
+            }))}
             value={sorter}
           />
         </div>

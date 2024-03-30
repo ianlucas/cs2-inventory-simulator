@@ -37,6 +37,7 @@ model UserCache {
 
 model UserPreference {
   background String?
+  hideFilters String?
   hideFreeItems String?
   language String?
   statsForNerds String?

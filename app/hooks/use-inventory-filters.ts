@@ -35,6 +35,16 @@ export function useInventoryFiltersScrollTopHandler<T>(dependency: T) {
   }, dependency);
 }
 
+export function sortItemsByEquipped(
+  inventory: ReturnType<typeof transform>[],
+  free: ReturnType<typeof transform>[]
+) {
+  return [
+    ...inventory.sort(sortByName).sort(sortByType).sort(sortByEquipped),
+    ...free.sort(sortByName).sort(sortByType).sort(sortByEquipped)
+  ];
+}
+
 export function useInventoryFilters() {
   const [search, setSearch] = useStorageInput("inventoryFilterSearch", "");
   const [sorter, setSorter] = useStorageState(
@@ -159,10 +169,7 @@ export function useInventoryFilters() {
   ) {
     switch (sorter) {
       case "equipped":
-        return [
-          ...inventory.sort(sortByName).sort(sortByType).sort(sortByEquipped),
-          ...free.sort(sortByName).sort(sortByType).sort(sortByEquipped)
-        ];
+        return sortItemsByEquipped(inventory, free);
       case "newest":
         return [
           ...inventory.sort(sortByNewest),

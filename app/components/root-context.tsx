@@ -14,7 +14,10 @@ import {
 } from "react";
 import { useTypedLoaderData } from "remix-typedjson";
 import { useInventory } from "~/hooks/use-inventory";
-import { useInventoryFilters } from "~/hooks/use-inventory-filters";
+import {
+  sortItemsByEquipped,
+  useInventoryFilters
+} from "~/hooks/use-inventory-filters";
 import { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { translateItems } from "~/utils/economy";
@@ -108,13 +111,20 @@ export function RootProvider({
 
   const items = useMemo(
     () =>
-      inventoryFilters.sortItems(
+      (preferences.hideFilters
+        ? sortItemsByEquipped
+        : inventoryFilters.sortItems)(
         // Inventory Items
         inventory.getAll().map(transform),
         // Default Game Items
         getFreeItemsToDisplay(preferences.hideFreeItems)
       ),
-    [inventory, preferences.hideFreeItems, inventoryFilters.sortItems]
+    [
+      inventory,
+      preferences.hideFreeItems,
+      preferences.hideFilters,
+      inventoryFilters.sortItems
+    ]
   );
 
   return (

@@ -9,7 +9,8 @@ type UserPreferenceKeys =
   | "background"
   | "language"
   | "statsForNerds"
-  | "hideFreeItems";
+  | "hideFreeItems"
+  | "hideFilters";
 
 export async function getUserPreference(
   userId: string,

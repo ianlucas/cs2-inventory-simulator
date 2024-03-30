@@ -8,6 +8,7 @@ import { Session } from "@remix-run/node";
 export async function getToggleable(session: Session) {
   return {
     statsForNerds: session.get("statsForNerds") === "true" || false,
-    hideFreeItems: session.get("hideFreeItems") === "true" || false
+    hideFreeItems: session.get("hideFreeItems") === "true" || false,
+    hideFilters: session.get("hideFilters") === "true" || false
   };
 }

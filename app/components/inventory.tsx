@@ -37,9 +37,10 @@ export function Inventory() {
   const sync = useSync();
   const {
     inventory,
+    inventoryFilters: { filterItems },
     items,
-    setInventory,
-    inventoryFilters: { filterItems }
+    preferences: { hideFilters },
+    setInventory
   } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const translate = useTranslation();
@@ -164,11 +165,13 @@ export function Inventory() {
   const isSelectingAnItem = itemSelector !== undefined;
   const displayedItems = isSelectingAnItem
     ? itemSelector.items
-    : items.filter(filterItems);
+    : hideFilters
+      ? items
+      : items.filter(filterItems);
 
   return (
     <>
-      {!isSelectingAnItem && <InventoryFilter />}
+      {!hideFilters && !isSelectingAnItem && <InventoryFilter />}
       {isSelectingAnItem && (
         <InventorySelectedItem
           {...itemSelector}

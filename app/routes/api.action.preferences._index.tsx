@@ -32,7 +32,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     background: await getUserPreference(userId, "background"),
     hideFreeItems: await getUserPreference(userId, "hideFreeItems"),
     language: await getUserPreference(userId, "language"),
-    statsForNerds: await getUserPreference(userId, "statsForNerds")
+    statsForNerds: await getUserPreference(userId, "statsForNerds"),
+    hideFilters: await getUserPreference(userId, "hideFilters")
   });
   return redirect("/", {
     headers: {
@@ -44,7 +45,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   await middleware(request);
   const userId = await authenticator.isAuthenticated(request);
-  const { background, language, statsForNerds, hideFreeItems } = z
+  const { background, language, statsForNerds, hideFilters, hideFreeItems } = z
     .object({
       background: z
         .string()
@@ -63,11 +64,16 @@ export async function action({ request }: ActionFunctionArgs) {
       hideFreeItems: z
         .literal("true")
         .or(z.literal("false"))
+        .transform((value) => String(value === "true")),
+      hideFilters: z
+        .literal("true")
+        .or(z.literal("false"))
         .transform((value) => String(value === "true"))
     })
     .parse(Object.fromEntries(await request.formData()));
   if (userId) {
     await setUserPreference(userId, "background", background);
+    await setUserPreference(userId, "hideFilters", hideFilters);
     await setUserPreference(userId, "hideFreeItems", hideFreeItems);
     await setUserPreference(userId, "language", language);
     await setUserPreference(userId, "statsForNerds", statsForNerds);
@@ -75,6 +81,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   assignToSession(session, {
     background,
+    hideFilters,
     hideFreeItems,
     language,
     statsForNerds

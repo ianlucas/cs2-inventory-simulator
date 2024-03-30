@@ -46,6 +46,7 @@ export default function Settings() {
     setInventory,
     preferences: {
       currentBackground: selectedBackground,
+      hideFilters: selectedHideFilters,
       hideFreeItems: selectedHideFreeItems,
       language: selectedLanguage,
       statsForNerds: selectedStatsForNerds
@@ -53,10 +54,11 @@ export default function Settings() {
   } = useRootContext();
   const sync = useSync();
 
-  const [language, setLanguage] = useState(selectedLanguage);
   const [background, setBackground] = useState(selectedBackground ?? "");
-  const [statsForNerds, setStatsForNerds] = useCheckbox(selectedStatsForNerds);
+  const [hideFilters, setHideFilters] = useCheckbox(selectedHideFilters);
   const [hideFreeItems, setHideFreeItems] = useCheckbox(selectedHideFreeItems);
+  const [language, setLanguage] = useState(selectedLanguage);
+  const [statsForNerds, setStatsForNerds] = useCheckbox(selectedStatsForNerds);
 
   const translate = useTranslation();
   const submit = useSubmit();
@@ -67,6 +69,7 @@ export default function Settings() {
       {
         background,
         hideFreeItems,
+        hideFilters,
         language,
         statsForNerds
       },
@@ -135,6 +138,14 @@ export default function Settings() {
           </label>
           <div>
             <EditorToggle checked={hideFreeItems} onChange={setHideFreeItems} />
+          </div>
+        </div>
+        <div>
+          <label className="text-neutral-500">
+            {translate("SettingsHideFilters")}
+          </label>
+          <div>
+            <EditorToggle checked={hideFilters} onChange={setHideFilters} />
           </div>
         </div>
       </div>
