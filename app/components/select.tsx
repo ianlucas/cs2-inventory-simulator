@@ -11,11 +11,15 @@ import { ReactNode, useState } from "react";
 
 export function Select<T extends { value: string }>({
   children,
+  className,
+  noMaxHeight,
   onChange,
   options,
   value
 }: {
   children?: (option: T) => ReactNode;
+  className?: string;
+  noMaxHeight?: boolean;
   onChange: (value: string) => void;
   options: T[];
   value: string;
@@ -30,7 +34,10 @@ export function Select<T extends { value: string }>({
   return (
     <div className="relative">
       <button
-        className="flex min-w-[253px] cursor-default items-center gap-2 rounded bg-black/20 px-2 py-1 hover:bg-black/40"
+        className={clsx(
+          "flex cursor-default items-center gap-2 rounded bg-black/20 px-2 py-1 hover:bg-black/40",
+          className ?? "min-w-[253px]"
+        )}
         onClick={() => setIsOpen(true)}
       >
         <div className="flex flex-1 items-center gap-2">
@@ -40,7 +47,11 @@ export function Select<T extends { value: string }>({
       </button>
       {isOpen && (
         <div
-          className="absolute left-0 z-10 max-h-[128px] min-w-[253px] overflow-y-scroll bg-neutral-800"
+          className={clsx(
+            "absolute left-0 z-10 bg-neutral-800",
+            className ?? "min-w-[253px]",
+            !noMaxHeight && "max-h-[128px] overflow-y-scroll"
+          )}
           ref={ref as any}
         >
           {options.map((option) => {
@@ -49,7 +60,7 @@ export function Select<T extends { value: string }>({
                 key={option.value}
                 className={clsx(
                   "flex w-full cursor-default items-center gap-2 px-2 py-1 transition-all",
-                  value === option.value && "bg-white/50",
+                  value === option.value && "bg-neutral-600/50",
                   value !== option.value && "hover:bg-black/30"
                 )}
                 onClick={() => {

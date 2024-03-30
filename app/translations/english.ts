@@ -86,6 +86,7 @@ export const english = {
   InventoryFilterSouvenirCases: "Souvenir Cases",
   InventoryFilterTools: "Tools",
   InventoryFilterMedals: "Medals",
+  InventoryFilterSearch: "Type search here",
   InventoryItemEquip: "Equip",
   InventoryItemEquipT: "Equip T",
   InventoryItemEquipCT: "Equip CT",

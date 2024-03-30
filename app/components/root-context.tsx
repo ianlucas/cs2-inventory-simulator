@@ -21,9 +21,6 @@ import { translateItems } from "~/utils/economy";
 import {
   getFreeItemsToDisplay,
   parseInventory,
-  sortByEquipped,
-  sortByName,
-  sortByType,
   transform
 } from "~/utils/inventory";
 import type { SyncInventoryShape } from "~/utils/shapes.server";
@@ -110,21 +107,14 @@ export function RootProvider({
   }, [preferences.language]);
 
   const items = useMemo(
-    () => [
-      // Inventory Items
-      ...inventory
-        .getAll()
-        .map(transform)
-        .sort(sortByName)
-        .sort(sortByType)
-        .sort(sortByEquipped),
-      // Default Game Items
-      ...getFreeItemsToDisplay(preferences.hideFreeItems)
-        .sort(sortByName)
-        .sort(sortByType)
-        .sort(sortByEquipped)
-    ],
-    [inventory, preferences.hideFreeItems]
+    () =>
+      inventoryFilters.sortItems(
+        // Inventory Items
+        inventory.getAll().map(transform),
+        // Default Game Items
+        getFreeItemsToDisplay(preferences.hideFreeItems)
+      ),
+    [inventory, preferences.hideFreeItems, inventoryFilters.sortItems]
   );
 
   return (

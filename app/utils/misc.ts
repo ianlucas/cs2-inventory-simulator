@@ -14,3 +14,11 @@ export function fail(message: string): never {
 export function random<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
+
+export function safeParseJson(json: string): any {
+  try {
+    return JSON.parse(json);
+  } catch {
+    return undefined;
+  }
+}

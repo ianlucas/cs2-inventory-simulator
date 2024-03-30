@@ -3,13 +3,21 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import {
+  faArrowDownWideShort,
+  faMagnifyingGlass
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import clsx from "clsx";
 import { useTranslation } from "~/hooks/use-translation";
 import {
   INVENTORY_PRIMARY_FILTERS,
-  INVENTORY_SECONDARY_FILTERS
+  INVENTORY_SECONDARY_FILTERS,
+  INVENTORY_SORTERS
 } from "~/utils/inventory-filters";
 import { InventoryFilterButton } from "./inventory-filter-button";
 import { useRootContext } from "./root-context";
+import { Select } from "./select";
 
 export function InventoryFilter() {
   const translate = useTranslation();
@@ -18,7 +26,11 @@ export function InventoryFilter() {
       handleClickPrimary,
       handleClickSecondary,
       primary,
-      secondaries
+      search,
+      secondaries,
+      setSearch,
+      setSorter,
+      sorter
     }
   } = useRootContext();
 
@@ -56,6 +68,36 @@ export function InventoryFilter() {
             shadowless
           />
         ))}
+      </div>
+      <div className="m-auto flex w-[1024px] items-center py-1.5">
+        <div className="flex-1">
+          <div className="group flex w-[320px] items-center gap-4">
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="text-white" />
+            <input
+              className={clsx(
+                "flex-1 border-b-2 border-white bg-transparent placeholder-neutral-400 outline-none transition-all",
+                search.length === 0 && "opacity-0 group-hover:opacity-100"
+              )}
+              onChange={setSearch}
+              placeholder={translate("InventoryFilterSearch")}
+              value={search}
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <FontAwesomeIcon
+            className="h-4 text-white"
+            icon={faArrowDownWideShort}
+          />
+          <Select
+            children={({ label }) => <span className="text-sm">{label}</span>}
+            className="min-w-[200px]"
+            noMaxHeight
+            onChange={setSorter}
+            options={INVENTORY_SORTERS}
+            value={sorter}
+          />
+        </div>
       </div>
     </div>
   );

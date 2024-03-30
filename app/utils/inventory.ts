@@ -3,7 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_filterItems, CS_InventoryItem, CS_NONE } from "@ianlucas/cslib";
+import {
+  CS_filterItems,
+  CS_InventoryItem,
+  CS_NONE,
+  CS_RARITY_COLORS,
+  CS_RARITY_ORDER
+} from "@ianlucas/cslib";
 import { getCSItemName } from "./economy";
 import { serverInventoryShape } from "./shapes";
 
@@ -78,6 +84,32 @@ export function sortByEquipped(
   } else {
     return 0;
   }
+}
+
+export function sortByNewest(
+  a: TransformedInventoryItem,
+  b: TransformedInventoryItem
+) {
+  return (b.item.updatedat ?? 0) - (a.item.updatedat ?? 0);
+}
+
+export function sortByQuality(
+  a: TransformedInventoryItem,
+  b: TransformedInventoryItem
+) {
+  return (
+    CS_RARITY_ORDER.indexOf(CS_RARITY_COLORS[b.item.data.rarity] as any) -
+    CS_RARITY_ORDER.indexOf(CS_RARITY_COLORS[a.item.data.rarity] as any)
+  );
+}
+
+export function sortByCollection(
+  a: TransformedInventoryItem,
+  b: TransformedInventoryItem
+) {
+  return (b.item.data.collectionname ?? "").localeCompare(
+    a.item.data.collectionname ?? ""
+  );
 }
 
 export function getFreeItemsToDisplay(hideFreeItems = false) {

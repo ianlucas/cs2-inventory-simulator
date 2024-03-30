@@ -3,18 +3,28 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useState } from "react";
 import {
   isGraffitiBox,
   isSouvenirCase,
   isStickerCapsule,
   isWeaponCase
 } from "~/utils/economy";
-import { transform } from "~/utils/inventory";
+import {
+  sortByCollection,
+  sortByEquipped,
+  sortByName,
+  sortByNewest,
+  sortByQuality,
+  sortByType,
+  transform
+} from "~/utils/inventory";
 import {
   INVENTORY_PRIMARY_FILTERS,
-  INVENTORY_SECONDARY_FILTERS
+  INVENTORY_SECONDARY_FILTERS,
+  INVENTORY_SORTERS
 } from "~/utils/inventory-filters";
+import { useStorageInput } from "./use-storage-input";
+import { useStorageState } from "./use-storage-state";
 import { useWatch } from "./use-watch";
 
 export function useInventoryFiltersScrollTopHandler<T>(dependency: T) {
@@ -26,8 +36,14 @@ export function useInventoryFiltersScrollTopHandler<T>(dependency: T) {
 }
 
 export function useInventoryFilters() {
-  const [primary, setPrimary] = useState(0);
-  const [secondaries, setSecondaries] = useState(
+  const [search, setSearch] = useStorageInput("inventoryFilterSearch", "");
+  const [sorter, setSorter] = useStorageState(
+    "inventoryFilterSorter",
+    INVENTORY_SORTERS[0].value
+  );
+  const [primary, setPrimary] = useStorageState("inventoryFilterPrimary", 0);
+  const [secondaries, setSecondaries] = useStorageState(
+    "inventoryFilterSecondaries",
     INVENTORY_PRIMARY_FILTERS.map(() => 0)
   );
 
@@ -56,6 +72,18 @@ export function useInventoryFilters() {
   }
 
   function filterItems({ item }: ReturnType<typeof transform>) {
+    if (search.length > 0) {
+      const searchLower = search.toLowerCase();
+      const nameLower = item.data.name.toLowerCase();
+      const nametagLower = item.nametag?.toLowerCase() ?? "";
+      if (nameLower.includes(searchLower)) {
+        return true;
+      }
+      if (item.nametag !== undefined && nametagLower.includes(searchLower)) {
+        return true;
+      }
+      return false;
+    }
     switch (primaryAsString) {
       case "Everything":
         return true;
@@ -125,11 +153,46 @@ export function useInventoryFilters() {
     return false;
   }
 
+  function sortItems(
+    inventory: ReturnType<typeof transform>[],
+    free: ReturnType<typeof transform>[]
+  ) {
+    switch (sorter) {
+      case "equipped":
+        return [
+          ...inventory.sort(sortByName).sort(sortByType).sort(sortByEquipped),
+          ...free.sort(sortByName).sort(sortByType).sort(sortByEquipped)
+        ];
+      case "newest":
+        return [
+          ...inventory.sort(sortByNewest),
+          ...free.sort(sortByName).sort(sortByType).sort(sortByEquipped)
+        ];
+      case "quality":
+        return [...inventory, ...free]
+          .sort(sortByName)
+          .sort(sortByType)
+          .sort(sortByQuality);
+      case "alphabetical":
+        return [...inventory, ...free].sort(sortByName);
+      case "type":
+        return [...inventory, ...free].sort(sortByType);
+      case "collection":
+        return [...inventory.sort(sortByType).sort(sortByCollection), ...free];
+    }
+    return [];
+  }
+
   return {
     filterItems,
     handleClickPrimary,
     handleClickSecondary,
     primary,
-    secondaries
+    search,
+    secondaries,
+    setSearch,
+    setSorter,
+    sorter,
+    sortItems
   };
 }

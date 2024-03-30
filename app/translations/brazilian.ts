@@ -77,6 +77,7 @@ export const brazilian = {
   InventoryFilterSouvenirCases: "Pacotes de Lembranças",
   InventoryFilterTools: "Ferramentas",
   InventoryFilterMedals: "Medalhas",
+  InvnetoryFilterSearch: "Buscar",
   InventoryNoItemsToDisplay: "Nenhum item para exibir",
   InventorySelectAnItem: "Selecionar item para usar com:",
   InventorySelectItemToRetrieve: "Selecione quais itens retirar",

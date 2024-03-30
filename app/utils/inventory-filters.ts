@@ -35,3 +35,12 @@ export const INVENTORY_SECONDARY_FILTERS = {
   ],
   Display: ["All", "Medals", "MusicKits"]
 } as const;
+
+export const INVENTORY_SORTERS = [
+  { value: "equipped", label: "Equipped" },
+  { value: "newest", label: "Newest" },
+  { value: "quality", label: "Quality" },
+  { value: "alphabetical", label: "Alphabetical" },
+  { value: "type", label: "Type" },
+  { value: "collection", label: "Collection" }
+];
