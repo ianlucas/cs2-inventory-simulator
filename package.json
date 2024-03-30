@@ -13,7 +13,7 @@
     "upgrade": "npx npm-check-updates --reject \"@types/node isbot\" --target minor -u"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.26.9",
+    "@floating-ui/react": "^0.26.10",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-brands-svg-icons": "^6.5.1",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
@@ -42,13 +42,13 @@
   "devDependencies": {
     "@remix-run/dev": "^2.8.1",
     "@types/node": "^18.19.8",
-    "@types/react": "^18.2.69",
-    "@types/react-dom": "^18.2.22",
+    "@types/react": "^18.2.73",
+    "@types/react-dom": "^18.2.23",
     "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.12",
-    "tailwindcss": "^3.4.1",
+    "prettier-plugin-tailwindcss": "^0.5.13",
+    "tailwindcss": "^3.4.3",
     "typescript": "^5.4.3",
-    "vite": "^5.2.6",
+    "vite": "^5.2.7",
     "vite-tsconfig-paths": "^4.3.2"
   },
   "engines": {
