@@ -40,7 +40,8 @@ export function transform(item: CS_InventoryItem) {
   };
 }
 
-type TransformedInventoryItem = ReturnType<typeof transform>;
+export type TransformedInventoryItem = ReturnType<typeof transform>;
+export type TransformedInventoryItems = TransformedInventoryItem[];
 
 export function sortByName(
   a: TransformedInventoryItem,

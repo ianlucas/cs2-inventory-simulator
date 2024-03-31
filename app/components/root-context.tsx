@@ -24,7 +24,8 @@ import { translateItems } from "~/utils/economy";
 import {
   getFreeItemsToDisplay,
   parseInventory,
-  transform
+  transform,
+  TransformedInventoryItems
 } from "~/utils/inventory";
 import type { SyncInventoryShape } from "~/utils/shapes.server";
 import { sync, syncState } from "~/utils/sync";
@@ -39,7 +40,7 @@ const RootContext = createContext<
   {
     inventory: CS_Inventory;
     inventoryFilters: ReturnType<typeof useInventoryFilters>;
-    items: ReturnType<typeof transform>[];
+    items: TransformedInventoryItems;
     requireAuth: boolean;
     setInventory: (value: CS_Inventory) => void;
   } & ReturnType<typeof useTypedLoaderData<typeof loader>>
@@ -56,7 +57,7 @@ export function RootProvider({
   user
 }: Omit<
   ContextType<typeof RootContext>,
-  "inventory" | "requireAuth" | "setInventory" | "items"
+  "inventory" | "inventoryFilters" | "items" | "requireAuth" | "setInventory"
 > & {
   children: ReactNode;
 }) {

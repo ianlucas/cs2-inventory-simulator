@@ -20,7 +20,10 @@ import {
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
 import { useTranslation } from "~/hooks/use-translation";
-import { EDITABLE_INVENTORY_TYPE, transform } from "~/utils/inventory";
+import {
+  EDITABLE_INVENTORY_TYPE,
+  TransformedInventoryItem
+} from "~/utils/inventory";
 import { format } from "~/utils/number";
 import { CSItem } from "./cs-item";
 import { InventoryItemContents } from "./inventory-item-contents";
@@ -56,7 +59,7 @@ export function InventoryItem({
   onUnlockContainer,
   ownApplicableStickers,
   uid
-}: ReturnType<typeof transform> & {
+}: TransformedInventoryItem & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
   onApplySticker?: (uid: number) => void;

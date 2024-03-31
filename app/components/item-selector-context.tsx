@@ -13,10 +13,10 @@ import {
 } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import { useWatch } from "~/hooks/use-watch";
-import { transform } from "~/utils/inventory";
+import { TransformedInventoryItems } from "~/utils/inventory";
 
 export interface ItemSelectorContextProps {
-  items: ReturnType<typeof transform>[];
+  items: TransformedInventoryItems;
   readOnly?: boolean;
   type:
     | "apply-item-sticker"

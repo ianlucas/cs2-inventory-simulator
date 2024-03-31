@@ -10,13 +10,14 @@ import {
   isWeaponCase
 } from "~/utils/economy";
 import {
+  TransformedInventoryItem,
+  TransformedInventoryItems,
   sortByCollection,
   sortByEquipped,
   sortByName,
   sortByNewest,
   sortByQuality,
-  sortByType,
-  transform
+  sortByType
 } from "~/utils/inventory";
 import {
   INVENTORY_PRIMARY_FILTERS,
@@ -36,8 +37,8 @@ export function useInventoryFiltersScrollTopHandler<T>(dependency: T) {
 }
 
 export function sortItemsByEquipped(
-  inventory: ReturnType<typeof transform>[],
-  free: ReturnType<typeof transform>[]
+  inventory: TransformedInventoryItems,
+  free: TransformedInventoryItems
 ) {
   return [
     ...inventory.sort(sortByName).sort(sortByType).sort(sortByEquipped),
@@ -81,7 +82,7 @@ export function useInventoryFilters() {
     };
   }
 
-  function filterItems({ item }: ReturnType<typeof transform>) {
+  function filterItems({ item }: TransformedInventoryItem) {
     if (search.length > 0) {
       const searchLower = search.toLowerCase();
       const nameLower = item.data.name.toLowerCase();
@@ -164,8 +165,8 @@ export function useInventoryFilters() {
   }
 
   function sortItems(
-    inventory: ReturnType<typeof transform>[],
-    free: ReturnType<typeof transform>[]
+    inventory: TransformedInventoryItems,
+    free: TransformedInventoryItems
   ) {
     switch (sorter) {
       case "equipped":
