@@ -40,7 +40,7 @@ export function InventoryFilter() {
 
   return (
     <div className="sticky left-0 top-16 z-20 hidden backdrop-blur lg:block">
-      <div className="flex w-full items-center justify-center gap-2 bg-black/40 py-2">
+      <div className="mx-auto flex w-[1024px] items-center justify-center gap-2 rounded-t bg-black/30 py-2">
         {INVENTORY_PRIMARY_FILTERS.map((value, index) => (
           <InventoryFilterButton
             active={index === primary}
@@ -52,7 +52,7 @@ export function InventoryFilter() {
         ))}
       </div>
       <div
-        className="flex w-full items-center justify-center gap-2 overflow-hidden bg-gradient-to-b from-black/20 to-transparent transition-all"
+        className="mx-auto flex w-[1024px] items-center justify-center gap-2 overflow-hidden bg-gradient-to-b from-black/20 to-transparent transition-all"
         style={{
           height: hasSecondaryFilters ? 40 : 0,
           paddingTop: hasSecondaryFilters ? "0.375rem" : 0,
