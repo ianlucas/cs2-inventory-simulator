@@ -75,7 +75,8 @@ export function InventoryFilter() {
             <input
               className={clsx(
                 "flex-1 border-b-2 border-white bg-transparent placeholder-neutral-400 outline-none transition-all",
-                search.length === 0 && "opacity-0 group-hover:opacity-100"
+                search.length === 0 &&
+                  "opacity-0 focus:opacity-100 group-hover:opacity-100"
               )}
               onChange={setSearch}
               placeholder={translate("InventoryFilterSearch")}
