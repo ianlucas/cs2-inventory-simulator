@@ -17,7 +17,6 @@ import { useRootContext } from "~/components/root-context";
 import { Select } from "~/components/select";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useSync } from "~/hooks/use-sync";
-import { useTranslation } from "~/hooks/use-translation";
 import { middleware } from "~/http.server";
 import { backgrounds } from "~/preferences/background.server";
 import { languages } from "~/preferences/language.server";
@@ -50,7 +49,8 @@ export default function Settings() {
       hideFreeItems: selectedHideFreeItems,
       language: selectedLanguage,
       statsForNerds: selectedStatsForNerds
-    }
+    },
+    translations: { translate }
   } = useRootContext();
   const sync = useSync();
 
@@ -60,7 +60,6 @@ export default function Settings() {
   const [language, setLanguage] = useState(selectedLanguage);
   const [statsForNerds, setStatsForNerds] = useCheckbox(selectedStatsForNerds);
 
-  const translate = useTranslation();
   const submit = useSubmit();
   const navigate = useNavigate();
 

@@ -11,7 +11,6 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { useSync } from "~/hooks/use-sync";
-import { useTranslation } from "~/hooks/use-translation";
 import {
   AddWithStickerAction,
   ApplyItemStickerAction
@@ -32,8 +31,11 @@ export function ApplyItemSticker({
   targetUid: number;
   stickerUid: number;
 }) {
-  const translate = useTranslation();
-  const { inventory, setInventory } = useRootContext();
+  const {
+    inventory,
+    setInventory,
+    translations: { translate }
+  } = useRootContext();
   const sync = useSync();
 
   const [stickerIndex, setStickerIndex] = useState<number>();

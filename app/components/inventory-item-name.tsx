@@ -5,7 +5,7 @@
 
 import { CS_InventoryItem } from "@ianlucas/cslib";
 import clsx from "clsx";
-import { useTranslation } from "~/hooks/use-translation";
+import { useRootContext } from "./root-context";
 
 export function InventoryItemName({
   inventoryItem: { stattrak },
@@ -16,7 +16,9 @@ export function InventoryItemName({
   model: string;
   name: string;
 }) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
   const hasModel = model || stattrak !== undefined;
 
   return (

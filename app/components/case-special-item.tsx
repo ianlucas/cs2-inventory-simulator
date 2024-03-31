@@ -4,12 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item } from "@ianlucas/cslib";
-import { useTranslation } from "~/hooks/use-translation";
 import { resolveCaseSpecialItemImage } from "~/utils/economy";
 import { CSItem } from "./cs-item";
+import { useRootContext } from "./root-context";
 
 export function CaseSpecialItem({ caseItem }: { caseItem: CS_Item }) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
+
   return (
     <CSItem
       item={{

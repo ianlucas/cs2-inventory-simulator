@@ -18,18 +18,20 @@ import clsx from "clsx";
 import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useIsOnTop } from "~/hooks/use-is-on-top";
-import { useTranslation } from "~/hooks/use-translation";
 import { CRAFT_ITEM_FILTERS } from "~/utils/craft-filters";
 import { HeaderLink } from "./header-link";
 import { Logo } from "./logo";
 import { useRootContext } from "./root-context";
 
 export function Header() {
-  const { user, inventory } = useRootContext();
+  const {
+    user,
+    inventory,
+    translations: { translate }
+  } = useRootContext();
   const craftFilter = useCraftFilterRules();
   const [isMenuOpen, toggleIsMenuOpen] = useToggle(false);
   const isDesktop = useIsDesktop();
-  const translate = useTranslation();
   const isOnTop = useIsOnTop();
 
   function closeMenu() {

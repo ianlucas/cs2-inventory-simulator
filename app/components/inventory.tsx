@@ -12,7 +12,6 @@ import { useScrapeItemSticker } from "~/hooks/use-scrape-item-sticker";
 import { useStorageUnit } from "~/hooks/use-storage-unit";
 import { useSwapItemsStatTrak } from "~/hooks/use-swap-items-stattrak";
 import { useSync } from "~/hooks/use-sync";
-import { useTranslation } from "~/hooks/use-translation";
 import { useUnlockCase } from "~/hooks/use-unlock-case";
 import {
   EquipAction,
@@ -40,10 +39,10 @@ export function Inventory() {
     inventoryFilters: { filterItems },
     items,
     preferences: { hideFilters },
-    setInventory
+    setInventory,
+    translations: { translate }
   } = useRootContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
-  const translate = useTranslation();
   const navigate = useNavigate();
 
   const ownApplicableStickers =

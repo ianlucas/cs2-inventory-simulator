@@ -12,9 +12,9 @@ import {
   CS_isStorageUnitTool
 } from "@ianlucas/cslib";
 import clsx from "clsx";
-import { useTranslation } from "~/hooks/use-translation";
 import { getCSItemName } from "~/utils/economy";
 import { CSItemImage } from "./cs-item-image";
+import { useRootContext } from "./root-context";
 
 export function CSItem({
   item,
@@ -33,7 +33,9 @@ export function CSItem({
   stickers?: number[];
   wear?: number;
 }) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
   const { model, name } = getCSItemName(item);
   const hasModel = model || stattrak !== undefined;
   const hasNametag = nametag !== undefined;

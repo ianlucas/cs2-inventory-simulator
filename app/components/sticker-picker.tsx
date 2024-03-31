@@ -23,7 +23,6 @@ import {
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/hooks/use-input";
-import { useTranslation } from "~/hooks/use-translation";
 import { stickerWearStringMaxLen, stickerWearToString } from "~/utils/economy";
 import { CSItemBrowser } from "./cs-item-browser";
 import { CSItemImage } from "./cs-item-image";
@@ -31,6 +30,7 @@ import { EditorInput } from "./editor-input";
 import { EditorSelect } from "./editor-select";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { Modal } from "./modal";
+import { useRootContext } from "./root-context";
 
 export function StickerPicker({
   onChange,
@@ -42,7 +42,9 @@ export function StickerPicker({
     wears: number[];
   };
 }) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   const [category, setCategory] = useState("");
   const [search, setSearch] = useInput("");

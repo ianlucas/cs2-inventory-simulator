@@ -3,11 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useTranslation } from "~/hooks/use-translation";
 import { Logo } from "./logo";
+import { useRootContext } from "./root-context";
 
 export function Splash() {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   return (
     <div

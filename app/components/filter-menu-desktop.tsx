@@ -7,9 +7,9 @@ import { faSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
-import { useTranslation } from "~/hooks/use-translation";
 import { CRAFT_ITEM_FILTERS, CraftItemFilter } from "~/utils/craft-filters";
 import { FilterMenuIcon } from "./filter-menu-icon";
+import { useRootContext } from "./root-context";
 import { TextSlider } from "./text-slider";
 
 export function FilterMenuDesktop({
@@ -20,7 +20,9 @@ export function FilterMenuDesktop({
   value: CraftItemFilter;
 }) {
   const filter = useCraftFilterRules();
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   function handleClick(filter: CraftItemFilter) {
     return function handleClick() {

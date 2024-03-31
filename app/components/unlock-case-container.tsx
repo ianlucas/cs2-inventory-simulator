@@ -4,13 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item, CS_unlockCase } from "@ianlucas/cslib";
-import { useTranslation } from "~/hooks/use-translation";
-import { UnlockCaseContainerBackground } from "./unlock-case-container-background";
-import { UnlockCaseContainerContents } from "./unlock-case-container-contents";
-import { UnlockCaseWheel } from "./unlock-case-wheel";
 import { CSItemImage } from "./cs-item-image";
 import { FillSpinner } from "./fill-spinner";
 import { ModalButton } from "./modal-button";
+import { useRootContext } from "./root-context";
+import { UnlockCaseContainerBackground } from "./unlock-case-container-background";
+import { UnlockCaseContainerContents } from "./unlock-case-container-contents";
+import { UnlockCaseWheel } from "./unlock-case-wheel";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -33,7 +33,9 @@ export function UnlockCaseContainer({
   onClose: () => void;
   onUnlock: () => void;
 }) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   return (
     <>

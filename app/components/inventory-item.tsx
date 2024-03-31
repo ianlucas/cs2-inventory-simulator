@@ -19,7 +19,6 @@ import {
 } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
-import { useTranslation } from "~/hooks/use-translation";
 import {
   EDITABLE_INVENTORY_TYPE,
   TransformedInventoryItem
@@ -78,8 +77,12 @@ export function InventoryItem({
   onUnlockContainer?: (uid: number) => void;
   ownApplicableStickers?: boolean;
 }) {
-  const { inventory, rules } = useRootContext();
-  const translate = useTranslation();
+  const {
+    inventory,
+    rules,
+    translations: { translate }
+  } = useRootContext();
+
   const {
     clickContext,
     clickRefs,

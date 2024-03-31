@@ -28,7 +28,6 @@ import clsx from "clsx";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
-import { useTranslation } from "~/hooks/use-translation";
 import {
   seedStringMaxLen,
   showQuantity,
@@ -72,10 +71,10 @@ export function CSItemEditor({
   onReset: () => void;
   onSubmit: (props: CSItemEditorAttributes) => void;
 }) {
-  const translate = useTranslation();
   const {
     rules: { inventoryMaxItems },
-    inventory
+    inventory,
+    translations: { translate }
   } = useRootContext();
   const [stattrak, setStattrak] = useCheckbox(
     attributes?.stattrak !== undefined ? attributes.stattrak >= 0 : false

@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useTranslation } from "~/hooks/use-translation";
-import { Select } from "./select";
 import { ComponentProps } from "react";
+import { useRootContext } from "./root-context";
+import { Select } from "./select";
 
 export function LanguageSelect({
   languages,
@@ -17,7 +17,10 @@ export function LanguageSelect({
     country: string;
   }[];
 } & Omit<ComponentProps<typeof Select>, "children" | "options">) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
+
   return (
     <Select
       value={value}

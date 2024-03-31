@@ -8,8 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Item } from "@ianlucas/cslib";
 import { CSItemBrowser } from "~/components/cs-item-browser";
 import { useItemPickerState } from "~/hooks/use-item-picker-state";
-import { useTranslation } from "~/hooks/use-translation";
 import { FilterMenuDesktop } from "./filter-menu-desktop";
+import { useRootContext } from "./root-context";
 
 export function CSItemPickerDesktop({
   onPickItem
@@ -25,7 +25,9 @@ export function CSItemPickerDesktop({
     query,
     setQuery
   } = useItemPickerState({ onPickItem });
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   return (
     <div className="flex gap-2">

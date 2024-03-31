@@ -23,6 +23,7 @@ import { RootProvider } from "./components/root-context";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
+import { TranslationScript } from "./components/translation-script";
 import { BUILD_LAST_COMMIT } from "./env.server";
 import { middleware } from "./http.server";
 import { getRule } from "./models/rule.server";
@@ -35,6 +36,7 @@ import { getToggleable } from "./preferences/toggleable.server";
 import { getSeoLinks, getSeoMeta } from "./seo";
 import { getSession } from "./session.server";
 import styles from "./tailwind.css?url";
+import { getTranslationChecksum } from "./translation.server";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
@@ -60,6 +62,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     await getRule("SteamCallbackUrl")
   );
   return typedjson({
+    translations: {
+      checksum: getTranslationChecksum()
+    },
     rules: {
       buildLastCommit: BUILD_LAST_COMMIT,
       craftHideCategory: await getRule("CraftHideCategory", user?.id),
@@ -118,6 +123,7 @@ export default function App() {
           <Footer />
           <SyncIndicator />
           <ScrollRestoration />
+          <TranslationScript />
           <Scripts />
         </body>
       </html>

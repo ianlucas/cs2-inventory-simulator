@@ -5,8 +5,8 @@
 
 import clsx from "clsx";
 import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
-import { useTranslation } from "~/hooks/use-translation";
 import { CRAFT_ITEM_FILTERS, CraftItemFilter } from "~/utils/craft-filters";
+import { useRootContext } from "./root-context";
 
 export function FilterMenuMobile({
   onChange,
@@ -16,7 +16,9 @@ export function FilterMenuMobile({
   value: CraftItemFilter;
 }) {
   const filter = useCraftFilterRules();
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   function handleClick(filter: CraftItemFilter) {
     return function handleClick() {

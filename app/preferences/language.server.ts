@@ -3,20 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_ItemTranslations } from "@ianlucas/cslib";
 import { Session } from "@remix-run/node";
-import { existsSync, readFileSync } from "fs";
-import { resolve } from "path";
-import { z } from "zod";
-import { brazilian } from "../translations/brazilian";
-import { english } from "../translations/english";
-
-const translations: Record<string, Record<string, string>> = {
-  brazilian,
-  english
-};
-
-const itemTranslations: CS_ItemTranslations = {};
 
 export const languages = [
   { name: "brazilian", countries: ["br"], lang: "pt-BR" },
@@ -53,22 +40,6 @@ export function getAllowedLanguages() {
   return languages.map(({ name }) => name);
 }
 
-function readItemTranslation(language: string) {
-  if (itemTranslations[language]) {
-    return itemTranslations[language];
-  }
-  const path = resolve(
-    process.cwd(),
-    `node_modules/@ianlucas/cslib/assets/translations/items-${language}.json`
-  );
-  itemTranslations[language] = existsSync(path)
-    ? z
-        .record(z.record(z.string()))
-        .parse(JSON.parse(readFileSync(path, "utf-8")))
-    : {};
-  return itemTranslations[language];
-}
-
 function getLanguageFromCountry(countryCode: string) {
   return (
     languages.find(({ countries }) => {
@@ -91,9 +62,7 @@ export async function getLanguage(session: Session, ipCountry: string | null) {
     (session.get("language") as string | null | undefined) ||
     getLanguageFromCountry(country);
   return {
-    itemTranslation: readItemTranslation(language),
     lang: getLangFromLanguage(language),
-    language,
-    translation: translations[language] ?? translations.english
+    language
   };
 }

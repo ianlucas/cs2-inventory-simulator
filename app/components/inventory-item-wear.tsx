@@ -4,15 +4,17 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_InventoryItem, CS_MAX_WEAR, CS_MIN_WEAR } from "@ianlucas/cslib";
-import { useTranslation } from "~/hooks/use-translation";
 import { wearToString } from "~/utils/economy";
+import { useRootContext } from "./root-context";
 
 export function InventoryItemWear({
   inventoryItem: { wear }
 }: {
   inventoryItem: CS_InventoryItem;
 }) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
   const left = `${((wear ?? CS_MIN_WEAR) / CS_MAX_WEAR) * 100}%`;
 
   return (

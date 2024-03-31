@@ -18,6 +18,7 @@ import {
   sortItemsByEquipped,
   useInventoryFilters
 } from "~/hooks/use-inventory-filters";
+import { useTranslation } from "~/hooks/use-translation";
 import { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { translateItems } from "~/utils/economy";
@@ -43,6 +44,7 @@ const RootContext = createContext<
     items: TransformedInventoryItems;
     requireAuth: boolean;
     setInventory: (value: CS_Inventory) => void;
+    translations: ReturnType<typeof useTranslation>;
   } & ReturnType<typeof useTypedLoaderData<typeof loader>>
 >(null!);
 
@@ -53,13 +55,22 @@ export function useRootContext() {
 export function RootProvider({
   children,
   preferences,
+  translations: { checksum },
   rules,
   user
 }: Omit<
   ContextType<typeof RootContext>,
-  "inventory" | "inventoryFilters" | "items" | "requireAuth" | "setInventory"
+  | "inventory"
+  | "inventoryFilters"
+  | "items"
+  | "requireAuth"
+  | "setInventory"
+  | "translations"
 > & {
   children: ReactNode;
+  translations: {
+    checksum: string;
+  };
 }) {
   const inventorySpec = {
     items: user?.inventory
@@ -74,6 +85,10 @@ export function RootProvider({
   );
 
   const inventoryFilters = useInventoryFilters();
+  const translations = useTranslation({
+    checksum,
+    language: preferences.language
+  });
 
   useEffect(() => {
     storeInventoryItems(inventory.export());
@@ -106,9 +121,9 @@ export function RootProvider({
   }, [user]);
 
   useEffect(() => {
-    translateItems(preferences.language, preferences.itemTranslation);
+    translateItems(translations.itemsTranslation);
     setInventory(new CS_Inventory(inventorySpec));
-  }, [preferences.language]);
+  }, [translations.itemsTranslation]);
 
   const items = useMemo(
     () =>
@@ -138,6 +153,7 @@ export function RootProvider({
         requireAuth: retrieveUserId() !== undefined,
         rules,
         setInventory,
+        translations,
         user
       }}
     >

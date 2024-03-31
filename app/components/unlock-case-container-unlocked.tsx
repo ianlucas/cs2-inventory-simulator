@@ -4,13 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy, CS_Item, CS_unlockCase } from "@ianlucas/cslib";
-import { useEffect, useState } from "react";
-import { useTranslation } from "~/hooks/use-translation";
+import { useState } from "react";
 import { playSound } from "~/utils/sound";
-import { UnlockCaseAttribute } from "./unlock-case-attribute";
-import { ModalButton } from "./modal-button";
-import { UseItemFooter } from "./use-item-footer";
 import { CSItemImage } from "./cs-item-image";
+import { ModalButton } from "./modal-button";
+import { useRootContext } from "./root-context";
+import { UnlockCaseAttribute } from "./unlock-case-attribute";
+import { UseItemFooter } from "./use-item-footer";
 
 export function UnlockCaseContainerUnlocked({
   caseItem,
@@ -21,7 +21,9 @@ export function UnlockCaseContainerUnlocked({
   onClose: () => void;
   unlockedItem: ReturnType<typeof CS_unlockCase>;
 }) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
   const [revealScale, setRevealScale] = useState(0);
 
   function handleLoad() {

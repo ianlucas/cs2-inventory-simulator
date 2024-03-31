@@ -4,10 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
-import { useTranslation } from "~/hooks/use-translation";
+import { useRootContext } from "./root-context";
 
 export function InventoryItemTeams({ item: { teams } }: { item: CS_Item }) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   const hasCT = teams?.includes(CS_TEAM_CT);
   const hasT = teams?.includes(CS_TEAM_T);

@@ -11,13 +11,15 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
-import { runUserInventoryCleanUp } from "./scripts/user-inventory-clean-up";
 import { setupRules } from "./models/rule.server";
+import { runUserInventoryCleanUp } from "./scripts/user-inventory-clean-up";
+import { setupTranslation } from "./translation.server";
 
 const ABORT_DELAY = 5_000;
 
 CS_Economy.use(CS_ITEMS);
 setupRules().then(() => runUserInventoryCleanUp());
+setupTranslation();
 
 export default function handleRequest(
   request: Request,

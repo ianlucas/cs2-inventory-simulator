@@ -16,7 +16,6 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useSync } from "~/hooks/use-sync";
-import { useTranslation } from "~/hooks/use-translation";
 import { ScrapeItemStickerAction } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
 import { CSItemImage } from "./cs-item-image";
@@ -33,13 +32,14 @@ export function ScrapeItemSticker({
   onClose: () => void;
   uid: number;
 }) {
-  const translate = useTranslation();
-  const sync = useSync();
   const {
     inventory,
     setInventory,
-    preferences: { statsForNerds }
+    preferences: { statsForNerds },
+    translations: { translate }
   } = useRootContext();
+
+  const sync = useSync();
 
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
 

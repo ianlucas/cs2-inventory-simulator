@@ -9,7 +9,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
-import { useTranslation } from "~/hooks/use-translation";
 import {
   INVENTORY_PRIMARY_FILTERS,
   INVENTORY_SECONDARY_FILTERS,
@@ -20,7 +19,6 @@ import { useRootContext } from "./root-context";
 import { Select } from "./select";
 
 export function InventoryFilter() {
-  const translate = useTranslation();
   const {
     inventoryFilters: {
       handleClickPrimary,
@@ -31,7 +29,8 @@ export function InventoryFilter() {
       setSearch,
       setSorter,
       sorter
-    }
+    },
+    translations: { translate }
   } = useRootContext();
 
   const secondaryFilters =

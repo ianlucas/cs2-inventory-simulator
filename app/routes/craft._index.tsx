@@ -21,7 +21,6 @@ import { useRootContext } from "~/components/root-context";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
-import { useTranslation } from "~/hooks/use-translation";
 import { middleware } from "~/http.server";
 import { showQuantity } from "~/utils/economy";
 import { range } from "~/utils/number";
@@ -46,7 +45,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Craft() {
   const { uid } = useTypedLoaderData<typeof loader>();
-  const { inventory, setInventory } = useRootContext();
+  const {
+    inventory,
+    setInventory,
+    translations: { translate }
+  } = useRootContext();
   const sync = useSync();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(
@@ -54,7 +57,6 @@ export default function Craft() {
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const translate = useTranslation();
   const isDesktop = useIsDesktop();
 
   useLockScroll();

@@ -7,7 +7,6 @@ import { CS_Inventory } from "@ianlucas/cslib";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { useTranslation } from "~/hooks/use-translation";
 import {
   ApiActionResyncData,
   ApiActionResyncUrl
@@ -21,8 +20,11 @@ import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 
 export function SyncIndicator() {
-  const translate = useTranslation();
-  const { setInventory, rules } = useRootContext();
+  const {
+    setInventory,
+    rules,
+    translations: { translate }
+  } = useRootContext();
   const [opacity, setOpacity] = useState(0);
   const [showSyncFailModal, setShowSyncFailModal] = useState(false);
   const [disableContinueButton, setDisableContinueButton] = useState(false);

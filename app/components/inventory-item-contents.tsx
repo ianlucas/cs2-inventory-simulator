@@ -4,10 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item, CS_listCaseContents } from "@ianlucas/cslib";
-import { useTranslation } from "~/hooks/use-translation";
+import { useRootContext } from "./root-context";
 
 export function InventoryItemContents({ item }: { item: CS_Item }) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   return (
     <div className="mt-4">

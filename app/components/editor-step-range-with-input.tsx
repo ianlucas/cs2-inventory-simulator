@@ -3,13 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faRandom } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CS_randomFloat, CS_randomInt } from "@ianlucas/cslib";
 import { useState } from "react";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRandom } from "@fortawesome/free-solid-svg-icons";
-import { CS_randomFloat, CS_randomInt } from "@ianlucas/cslib";
-import { useTranslation } from "~/hooks/use-translation";
+import { useRootContext } from "./root-context";
 
 export function EditorStepRangeWithInput({
   inputStyles,
@@ -40,7 +40,9 @@ export function EditorStepRangeWithInput({
 }) {
   transform = transform !== undefined ? transform : String;
   const [text, setText] = useState(transform(value));
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   function handleTextChange({
     target: { value: text }

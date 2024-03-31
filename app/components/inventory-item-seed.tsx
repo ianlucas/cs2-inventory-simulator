@@ -4,14 +4,16 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_InventoryItem, CS_MIN_SEED } from "@ianlucas/cslib";
-import { useTranslation } from "~/hooks/use-translation";
+import { useRootContext } from "./root-context";
 
 export function InventoryItemSeed({
   inventoryItem: { seed }
 }: {
   inventoryItem: CS_InventoryItem;
 }) {
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   return (
     <div>

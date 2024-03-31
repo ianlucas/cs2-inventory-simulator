@@ -9,7 +9,7 @@ import { CS_Item } from "@ianlucas/cslib";
 import { CSItemBrowser } from "~/components/cs-item-browser";
 import { FilterMenuMobile } from "~/components/filter-menu-mobile";
 import { useItemPickerState } from "~/hooks/use-item-picker-state";
-import { useTranslation } from "~/hooks/use-translation";
+import { useRootContext } from "./root-context";
 
 export function CSItemPickerMobile({
   onPickItem
@@ -25,7 +25,9 @@ export function CSItemPickerMobile({
     query,
     setQuery
   } = useItemPickerState({ onPickItem });
-  const translate = useTranslation();
+  const {
+    translations: { translate }
+  } = useRootContext();
 
   return (
     <>

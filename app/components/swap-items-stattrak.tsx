@@ -8,7 +8,6 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useCounter } from "~/hooks/use-counter";
 import { useSync } from "~/hooks/use-sync";
-import { useTranslation } from "~/hooks/use-translation";
 import { SwapItemsStatTrakAction } from "~/routes/api.action.sync._index";
 import { CSItemImage } from "./cs-item-image";
 import { ModalButton } from "./modal-button";
@@ -27,8 +26,11 @@ export function SwapItemsStatTrak({
   toUid: number;
   toolUid: number;
 }) {
-  const { inventory, setInventory } = useRootContext();
-  const translate = useTranslation();
+  const {
+    inventory,
+    setInventory,
+    translations: { translate }
+  } = useRootContext();
 
   const sync = useSync();
 

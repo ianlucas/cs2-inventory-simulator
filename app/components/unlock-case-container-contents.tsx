@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item, CS_listCaseContents } from "@ianlucas/cslib";
-import { CSItem } from "./cs-item";
-import { CaseSpecialItem } from "./case-special-item";
-import { useTranslation } from "~/hooks/use-translation";
 import { ElementRef, useEffect, useRef, useState } from "react";
+import { CaseSpecialItem } from "./case-special-item";
+import { CSItem } from "./cs-item";
+import { useRootContext } from "./root-context";
 
 export function UnlockCaseContainerContents({
   caseItem,
@@ -16,9 +16,13 @@ export function UnlockCaseContainerContents({
   caseItem: CS_Item;
   hideCaseContents: boolean;
 }) {
+  const {
+    translations: { translate }
+  } = useRootContext();
+
   const [translateY, setTranslateY] = useState(0);
   const [opacity, setOpacity] = useState(0);
-  const translate = useTranslation();
+
   const ref = useRef<ElementRef<"div">>(null);
 
   useEffect(() => {

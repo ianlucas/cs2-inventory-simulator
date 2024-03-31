@@ -10,7 +10,6 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/hooks/use-input";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { useSync } from "~/hooks/use-sync";
-import { useTranslation } from "~/hooks/use-translation";
 import {
   AddWithNametagAction,
   RenameItemAction
@@ -31,8 +30,11 @@ export function RenameItem({
   targetUid: number;
   toolUid: number;
 }) {
-  const { inventory, setInventory } = useRootContext();
-  const translate = useTranslation();
+  const {
+    inventory,
+    setInventory,
+    translations: { translate }
+  } = useRootContext();
   const sync = useSync();
 
   const freeItems = useMemo(

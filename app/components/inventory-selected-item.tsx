@@ -5,13 +5,12 @@
 
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useTranslation } from "~/hooks/use-translation";
 import { resolveItemImage } from "~/utils/economy";
-import { useRootContext } from "./root-context";
 import {
   ItemSelectorContextProps,
   useItemSelectorContext
 } from "./item-selector-context";
+import { useRootContext } from "./root-context";
 
 function getLabelToken(token?: ItemSelectorContextProps["type"]) {
   switch (token) {
@@ -33,9 +32,11 @@ export function InventorySelectedItem({
   uid: number;
   onDismiss: () => void;
 }) {
-  const { inventory } = useRootContext();
+  const {
+    inventory,
+    translations: { translate }
+  } = useRootContext();
   const { itemSelector } = useItemSelectorContext();
-  const translate = useTranslation();
 
   const { data: item, nametag } = inventory.get(uid);
 

@@ -35,15 +35,7 @@ export const modelFromType = {
   weapon: "Weapon"
 } as const;
 
-let currentLanguage = "english";
-export function translateItems(
-  language: string,
-  itemTranslation: CS_ItemTranslations[number]
-) {
-  if (currentLanguage === language) {
-    return;
-  }
-  currentLanguage = language;
+export function translateItems(itemTranslation: CS_ItemTranslations[number]) {
   CS_Economy.use(CS_ITEMS);
   CS_Economy.applyTranslation(itemTranslation);
 }

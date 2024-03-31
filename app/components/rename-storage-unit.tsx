@@ -7,8 +7,8 @@ import { CS_safeValidateNametag } from "@ianlucas/cslib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/hooks/use-input";
+import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { useSync } from "~/hooks/use-sync";
-import { useTranslation } from "~/hooks/use-translation";
 import { RenameStorageUnitAction } from "~/routes/api.action.sync._index";
 import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
@@ -16,7 +16,6 @@ import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
-import { useInventoryItem } from "~/hooks/use-inventory-item";
 
 export function RenameStorageUnit({
   onClose,
@@ -25,8 +24,11 @@ export function RenameStorageUnit({
   onClose: () => void;
   uid: number;
 }) {
-  const translate = useTranslation();
-  const { inventory, setInventory } = useRootContext();
+  const {
+    inventory,
+    setInventory,
+    translations: { translate }
+  } = useRootContext();
   const sync = useSync();
 
   const { data: item, nametag: defaultValue } = useInventoryItem(uid);
