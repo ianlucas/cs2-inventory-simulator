@@ -115,8 +115,8 @@ export default function App() {
           <Splash />
           <Background />
           <SyncWarn />
-          <Header />
           <ItemSelectorProvider>
+            <Header />
             <Inventory />
           </ItemSelectorProvider>
           <Outlet />

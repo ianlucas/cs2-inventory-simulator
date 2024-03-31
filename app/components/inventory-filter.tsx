@@ -38,8 +38,8 @@ export function InventoryFilter() {
   const hasSecondaryFilters = secondaryFilters !== undefined;
 
   return (
-    <div className="sticky left-0 top-16 z-20 hidden backdrop-blur lg:block">
-      <div className="mx-auto flex w-[1024px] items-center justify-center gap-2 rounded-t bg-black/30 py-2">
+    <div className="hidden lg:block">
+      <div className="mx-auto flex w-[1024px] items-center justify-center gap-2 rounded-t bg-neutral-900/30 py-2">
         {INVENTORY_PRIMARY_FILTERS.map((value, index) => (
           <InventoryFilterButton
             active={index === primary}

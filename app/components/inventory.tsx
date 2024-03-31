@@ -21,7 +21,6 @@ import {
 import { playSound } from "~/utils/sound";
 import { ApplyItemSticker } from "./apply-item-sticker";
 import { InfoIcon } from "./info-icon";
-import { InventoryFilter } from "./inventory-filter";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelectorContext } from "./item-selector-context";
@@ -170,7 +169,6 @@ export function Inventory() {
 
   return (
     <>
-      {!hideFilters && !isSelectingAnItem && <InventoryFilter />}
       {isSelectingAnItem && (
         <InventorySelectedItem
           {...itemSelector}
