@@ -3,11 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { SteamStrategy as SteamStrategyBase } from "@ianlucas/remix-auth-steam";
+import { SteamStrategy as BaseSteamStrategy } from "@ianlucas/remix-auth-steam";
 import { getRule } from "./models/rule.server";
 import { upsertUser } from "./models/user.server";
 
-export class SteamStrategy extends SteamStrategyBase<string> {
+export class SteamStrategy extends BaseSteamStrategy<string> {
   constructor() {
     super(
       async () => ({
