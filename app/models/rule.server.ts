@@ -128,19 +128,14 @@ export async function getRules<Names extends RuleNames>(
   names: Names[],
   userId?: string
 ): Promise<LowercaseKeys<{ [name in Names]: RuleTypeMap[name] }>> {
-  const rules: Partial<LowercaseKeys<{ [name in Names]: RuleTypeMap[name] }>> =
-    {};
-
-  await Promise.all(
-    names.map(async (name) => {
-      const value = await getRule(name, userId);
-      rules[
-        (name.charAt(0).toLowerCase() + name.slice(1)) as keyof typeof rules
-      ] = value as any;
-    })
-  );
-
-  return rules as any;
+  return Object.fromEntries(
+    await Promise.all(
+      names.map(async (name) => [
+        name.charAt(0).toLowerCase() + name.slice(1),
+        await getRule(name, userId)
+      ])
+    )
+  ) as LowercaseKeys<{ [name in Names]: RuleTypeMap[name] }>;
 }
 
 export async function expectRule(
