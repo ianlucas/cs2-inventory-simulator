@@ -5,12 +5,7 @@
 
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  CS_Economy,
-  CS_Item,
-  CS_NONE,
-  CS_isStorageUnitTool
-} from "@ianlucas/cslib";
+import { CS_Economy, CS_Item, CS_NONE } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { getCSItemName } from "~/utils/economy";
 import { CSItemImage } from "./cs-item-image";
@@ -39,7 +34,7 @@ export function CSItem({
   const { model, name } = getCSItemName(item);
   const hasModel = model || stattrak !== undefined;
   const hasNametag = nametag !== undefined;
-  const showNameWithNametag = CS_isStorageUnitTool(item);
+  const showNameWithNametag = CS_Economy.isStorageUnitTool(item);
 
   return (
     <div className="w-[154px]">

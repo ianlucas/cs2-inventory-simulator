@@ -5,17 +5,12 @@
 
 import { FloatingFocusManager } from "@floating-ui/react";
 import {
+  CS_Economy,
   CS_INVENTORY_EQUIPPABLE_ITEMS,
   CS_NONE,
   CS_TEAM_CT,
   CS_TEAM_T,
-  CS_Team,
-  CS_hasSeed,
-  CS_hasStickers,
-  CS_hasWear,
-  CS_isNametagTool,
-  CS_isStatTrakSwapTool,
-  CS_isStorageUnitTool
+  CS_Team
 } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
@@ -115,24 +110,24 @@ export function InventoryItem({
   const canUnequipCT = item.equippedCT === true;
 
   const hasStatTrak = item.stattrak !== undefined;
-  const hasWear = !data.free && CS_hasWear(data);
-  const hasSeed = !data.free && CS_hasSeed(data);
+  const hasWear = !data.free && CS_Economy.hasWear(data);
+  const hasSeed = !data.free && CS_Economy.hasSeed(data);
   const hasAttributes = hasWear || hasSeed;
-  const canSwapStatTrak = CS_isStatTrakSwapTool(data);
-  const canRename = CS_isNametagTool(data);
+  const canSwapStatTrak = CS_Economy.isStatTrakSwapTool(data);
+  const canRename = CS_Economy.isNametagTool(data);
   const canApplySticker =
     ownApplicableStickers &&
-    ((CS_hasStickers(data) &&
+    ((CS_Economy.hasStickers(data) &&
       (item.stickers ?? []).filter((id) => id !== CS_NONE).length < 4) ||
       data.type === "sticker");
   const canScrapeSticker =
-    CS_hasStickers(data) &&
+    CS_Economy.hasStickers(data) &&
     (item.stickers ?? []).filter((id) => id !== CS_NONE).length > 0;
   const canUnlockContainer = ["case", "key"].includes(data.type);
   const hasContents = data.contents !== undefined;
   const hasTeams = data.teams !== undefined;
   const hasNametag = item.nametag !== undefined;
-  const isStorageUnit = CS_isStorageUnitTool(data);
+  const isStorageUnit = CS_Economy.isStorageUnitTool(data);
   const isEditable = EDITABLE_INVENTORY_TYPE.includes(data.type);
 
   function close(callBeforeClosing: () => void) {

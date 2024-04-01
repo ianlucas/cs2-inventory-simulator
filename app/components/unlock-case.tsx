@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_unlockCase } from "@ianlucas/cslib";
+import { CS_Economy } from "@ianlucas/cslib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -45,11 +45,13 @@ export function UnlockCase({
   onClose: () => void;
 }) {
   const { user, inventory, setInventory } = useRootContext();
-  const [items, setItems] = useState<ReturnType<typeof CS_unlockCase>[]>([]);
+  const [items, setItems] = useState<
+    ReturnType<typeof CS_Economy.unlockCase>[]
+  >([]);
   const [isDisplaying, setIsDisplaying] = useState(false);
   const [canUnlock, setCanUnlock] = useState(true);
   const [unlockedItem, setUnlockedItem] =
-    useState<ReturnType<typeof CS_unlockCase>>();
+    useState<ReturnType<typeof CS_Economy.unlockCase>>();
   const [hideCaseContents, setHideCaseContents] = useState(false);
   const { data: caseItem } = useInventoryItem(caseUid);
   const keyItem = useTryInventoryItem(keyUid)?.data;
@@ -61,7 +63,7 @@ export function UnlockCase({
       setCanUnlock(false);
       const unlockedItem =
         user === undefined
-          ? CS_unlockCase(caseItem)
+          ? CS_Economy.unlockCase(caseItem)
           : await unlockCase(caseUid, keyUid);
       wait(() => {
         setHideCaseContents(true);
@@ -71,7 +73,7 @@ export function UnlockCase({
         wait(() => {
           setItems(
             range(32).map((_, index) =>
-              index === 28 ? unlockedItem : CS_unlockCase(caseItem)
+              index === 28 ? unlockedItem : CS_Economy.unlockCase(caseItem)
             )
           );
           setIsDisplaying(true);

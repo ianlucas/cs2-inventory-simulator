@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_isCase, CS_isKey } from "@ianlucas/cslib";
+import { CS_Economy } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
@@ -24,9 +24,9 @@ export function useUnlockCase() {
         uid,
         items: items.filter(
           ({ item }) =>
-            (CS_isKey(selectedItem) &&
+            (CS_Economy.isKey(selectedItem) &&
               item.data.keys?.includes(selectedItem.id)) ||
-            (CS_isCase(selectedItem) &&
+            (CS_Economy.isCase(selectedItem) &&
               selectedItem.keys?.includes(item.data.id))
         ),
         type: "unlock-case"

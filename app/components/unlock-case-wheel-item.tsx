@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item, CS_unlockCase } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item } from "@ianlucas/cslib";
 import { resolveCaseSpecialItemImage, resolveItemImage } from "~/utils/economy";
 
 export function UnlockCaseWheelItem({
@@ -13,7 +13,7 @@ export function UnlockCaseWheelItem({
 }: {
   caseItem: CS_Item;
   index: number;
-  unlockedItem: ReturnType<typeof CS_unlockCase>;
+  unlockedItem: ReturnType<typeof CS_Economy.unlockCase>;
 }) {
   const item = CS_Economy.getById(unlockedItem.id);
 

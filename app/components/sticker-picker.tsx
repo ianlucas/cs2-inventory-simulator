@@ -16,9 +16,7 @@ import {
   CS_MAX_STICKER_WEAR,
   CS_MIN_STICKER_WEAR,
   CS_NONE,
-  CS_STICKER_WEAR_FACTOR,
-  CS_getStickerCategories,
-  CS_getStickers
+  CS_STICKER_WEAR_FACTOR
 } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
@@ -49,8 +47,8 @@ export function StickerPicker({
   const [category, setCategory] = useState("");
   const [search, setSearch] = useInput("");
   const [activeIndex, setActiveIndex] = useState<number>();
-  const stickers = useMemo(() => CS_getStickers(), []);
-  const categories = useMemo(() => CS_getStickerCategories(), []);
+  const stickers = useMemo(() => CS_Economy.getStickers(), []);
+  const categories = useMemo(() => CS_Economy.getStickerCategories(), []);
   const [wear, setWear] = useState(0);
 
   function handleClickSlot(index: number) {

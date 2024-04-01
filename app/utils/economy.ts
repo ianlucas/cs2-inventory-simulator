@@ -5,13 +5,10 @@
 
 import {
   CS_Economy,
-  CS_filterItems,
   CS_Item,
   CS_ITEMS,
   CS_ItemTranslations,
   CS_MAX_SEED,
-  CS_resolveCaseSpecialsImage,
-  CS_resolveItemImage,
   CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
 } from "@ianlucas/cslib";
@@ -61,7 +58,7 @@ export function getCSItemName(item: CS_Item) {
 }
 
 export function getBaseItems({ category, hasModel, type }: CraftItemFilter) {
-  return CS_filterItems({
+  return CS_Economy.filterItems({
     category,
     type,
     base: hasModel ? true : undefined
@@ -73,7 +70,7 @@ export function getBaseItems({ category, hasModel, type }: CraftItemFilter) {
 }
 
 export function getPaidItems({ type }: CraftItemFilter, model: string) {
-  return CS_filterItems({
+  return CS_Economy.filterItems({
     model
   }).filter(({ base }) => type === "melee" || !base);
 }
@@ -83,11 +80,11 @@ export function showQuantity(item: CS_Item) {
 }
 
 export function resolveItemImage(item: number | CS_Item, wear?: number) {
-  return CS_resolveItemImage(baseUrl, item, wear);
+  return CS_Economy.resolveItemImage(baseUrl, item, wear);
 }
 
 export function resolveCaseSpecialItemImage(item: number | CS_Item) {
-  return CS_resolveCaseSpecialsImage(baseUrl, item);
+  return CS_Economy.resolveCaseSpecialsImage(baseUrl, item);
 }
 
 export const seedStringMaxLen = String(CS_MAX_SEED).length;

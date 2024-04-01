@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_filterItems, CS_safeValidateNametag } from "@ianlucas/cslib";
+import { CS_Economy } from "@ianlucas/cslib";
 import { useMemo } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -39,7 +39,7 @@ export function RenameItem({
 
   const freeItems = useMemo(
     () =>
-      CS_filterItems({
+      CS_Economy.filterItems({
         free: true
       }).map((item) => item.id),
     []
@@ -94,7 +94,9 @@ export function RenameItem({
                   maxLength={20}
                   onChange={setNametag}
                   placeholder={translate("EditorNametagPlaceholder")}
-                  validate={(nametag) => CS_safeValidateNametag(nametag ?? "")}
+                  validate={(nametag) =>
+                    CS_Economy.safeValidateNametag(nametag ?? "")
+                  }
                   value={nametag}
                 />
               </div>
@@ -103,7 +105,8 @@ export function RenameItem({
                   <>
                     <ModalButton
                       disabled={
-                        (nametag !== "" && !CS_safeValidateNametag(nametag)) ||
+                        (nametag !== "" &&
+                          !CS_Economy.safeValidateNametag(nametag)) ||
                         (nametag === "" && isRenamingFreeItem)
                       }
                       variant="primary"

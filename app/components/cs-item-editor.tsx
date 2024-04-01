@@ -6,6 +6,7 @@
 import { faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  CS_Economy,
   CS_INVENTORY_STICKERS,
   CS_INVENTORY_STICKERS_WEAR,
   CS_Item,
@@ -14,15 +15,7 @@ import {
   CS_MIN_SEED,
   CS_MIN_WEAR,
   CS_NONE,
-  CS_WEAR_FACTOR,
-  CS_hasNametag,
-  CS_hasSeed,
-  CS_hasStatTrak,
-  CS_hasStickers,
-  CS_hasWear,
-  CS_safeValidateNametag,
-  CS_safeValidateSeed,
-  CS_safeValidateWear
+  CS_WEAR_FACTOR
 } from "@ianlucas/cslib";
 import clsx from "clsx";
 import { useState } from "react";
@@ -89,15 +82,15 @@ export function CSItemEditor({
     wears: attributes?.stickerswear ?? [...CS_INVENTORY_STICKERS_WEAR]
   });
   const [quantity, setQuantity] = useState(1);
-  const hasStickers = CS_hasStickers(item);
-  const hasStattrak = CS_hasStatTrak(item);
-  const hasSeed = CS_hasSeed(item);
-  const hasWear = CS_hasWear(item);
-  const hasNametag = CS_hasNametag(item);
+  const hasStickers = CS_Economy.hasStickers(item);
+  const hasStattrak = CS_Economy.hasStatTrak(item);
+  const hasSeed = CS_Economy.hasSeed(item);
+  const hasWear = CS_Economy.hasWear(item);
+  const hasNametag = CS_Economy.hasNametag(item);
   const canCraft =
-    CS_safeValidateWear(wear) &&
-    (CS_safeValidateNametag(nametag) || nametag.length === 0) &&
-    CS_safeValidateSeed(seed);
+    CS_Economy.safeValidateWear(wear) &&
+    (CS_Economy.safeValidateNametag(nametag) || nametag.length === 0) &&
+    CS_Economy.safeValidateSeed(seed);
   const maxQuantity = inventoryMaxItems - inventory.size();
   const hasQuantity = showQuantity(item);
   const isCrafting = attributes === undefined;
@@ -131,7 +124,7 @@ export function CSItemEditor({
       <CSItemImage
         className="m-auto h-[192px] w-[256px]"
         item={item}
-        wear={CS_hasWear(item) ? wear : undefined}
+        wear={CS_Economy.hasWear(item) ? wear : undefined}
       />
       <div
         className={clsx("mb-4 text-center", item.type === "agent" && "mt-4")}
@@ -159,7 +152,9 @@ export function CSItemEditor({
               maxLength={20}
               onChange={setNametag}
               placeholder={translate("EditorNametagPlaceholder")}
-              validate={(nametag) => CS_safeValidateNametag(nametag ?? "")}
+              validate={(nametag) =>
+                CS_Economy.safeValidateNametag(nametag ?? "")
+              }
               value={nametag}
             />
           </div>
@@ -179,7 +174,7 @@ export function CSItemEditor({
               step={CS_MIN_SEED}
               stepRangeStyles="flex-1"
               type="int"
-              validate={(value) => CS_safeValidateSeed(value, item)}
+              validate={(value) => CS_Economy.safeValidateSeed(value, item)}
               value={seed}
             />
           </div>
@@ -200,7 +195,7 @@ export function CSItemEditor({
               stepRangeStyles="flex-1"
               transform={wearToString}
               type="float"
-              validate={(value) => CS_safeValidateWear(value, item)}
+              validate={(value) => CS_Economy.safeValidateWear(value, item)}
               value={wear}
             />
           </div>

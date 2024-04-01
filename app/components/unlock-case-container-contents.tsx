@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_listCaseContents } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item } from "@ianlucas/cslib";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { CaseSpecialItem } from "./case-special-item";
 import { CSItem } from "./cs-item";
@@ -47,9 +47,9 @@ export function UnlockCaseContainerContents({
         <h2 className="my-2">{translate("CaseContainsOne")}</h2>
         <div className="flex h-[320px] flex-wrap gap-3 overflow-y-scroll pb-4">
           {[
-            ...CS_listCaseContents(caseItem, true).map((item, index) => (
-              <CSItem key={index} item={item} />
-            )),
+            ...CS_Economy.listCaseContents(caseItem, true).map(
+              (item, index) => <CSItem key={index} item={item} />
+            ),
             caseItem.specials !== undefined && (
               <CaseSpecialItem key={-1} caseItem={caseItem} />
             )

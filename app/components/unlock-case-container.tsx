@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_unlockCase } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item } from "@ianlucas/cslib";
 import { CSItemImage } from "./cs-item-image";
 import { FillSpinner } from "./fill-spinner";
 import { ModalButton } from "./modal-button";
@@ -28,7 +28,7 @@ export function UnlockCaseContainer({
   caseItem: CS_Item;
   hideCaseContents: boolean;
   isDisplaying: boolean;
-  items: ReturnType<typeof CS_unlockCase>[];
+  items: ReturnType<typeof CS_Economy.unlockCase>[];
   keyItem?: CS_Item;
   onClose: () => void;
   onUnlock: () => void;

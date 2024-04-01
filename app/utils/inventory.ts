@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_filterItems,
+  CS_Economy,
   CS_InventoryItem,
   CS_NONE,
   CS_RARITY_COLORS,
@@ -117,7 +117,7 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
   if (hideFreeItems) {
     return [];
   }
-  return CS_filterItems({
+  return CS_Economy.filterItems({
     free: true
   }).map((item, index) => ({
     ...getCSItemName(item),

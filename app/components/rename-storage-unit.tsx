@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_safeValidateNametag } from "@ianlucas/cslib";
+import { CS_Economy } from "@ianlucas/cslib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/hooks/use-input";
@@ -72,7 +72,9 @@ export function RenameStorageUnit({
                   maxLength={20}
                   onChange={setNametag}
                   placeholder={translate("EditorNametagPlaceholder")}
-                  validate={(nametag) => CS_safeValidateNametag(nametag ?? "")}
+                  validate={(nametag) =>
+                    CS_Economy.safeValidateNametag(nametag ?? "")
+                  }
                   value={nametag}
                 />
               </div>
@@ -81,7 +83,8 @@ export function RenameStorageUnit({
                   <>
                     <ModalButton
                       disabled={
-                        nametag === "" || !CS_safeValidateNametag(nametag)
+                        nametag === "" ||
+                        !CS_Economy.safeValidateNametag(nametag)
                       }
                       variant="primary"
                       onClick={handleRename}

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item, CS_unlockCase } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item } from "@ianlucas/cslib";
 import { useState } from "react";
 import { playSound } from "~/utils/sound";
 import { CSItemImage } from "./cs-item-image";
@@ -19,7 +19,7 @@ export function UnlockCaseContainerUnlocked({
 }: {
   caseItem: CS_Item;
   onClose: () => void;
-  unlockedItem: ReturnType<typeof CS_unlockCase>;
+  unlockedItem: ReturnType<typeof CS_Economy.unlockCase>;
 }) {
   const {
     translations: { translate }

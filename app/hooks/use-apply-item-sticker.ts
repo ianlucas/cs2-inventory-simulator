@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_hasStickers, CS_isSticker } from "@ianlucas/cslib";
+import { CS_Economy } from "@ianlucas/cslib";
 import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
@@ -24,12 +24,12 @@ export function useApplyItemSticker() {
       uid,
       items: items.filter(
         ({ item }) =>
-          (CS_isSticker(selectedItem) &&
-            CS_hasStickers(item.data) &&
+          (CS_Economy.isSticker(selectedItem) &&
+            CS_Economy.hasStickers(item.data) &&
             countStickers(item.stickers) < 4) ||
-          (!CS_isSticker(selectedItem) &&
+          (!CS_Economy.isSticker(selectedItem) &&
             countStickers(selectedStickers) < 4 &&
-            CS_isSticker(item.data))
+            CS_Economy.isSticker(item.data))
       ),
       type: "apply-item-sticker"
     });

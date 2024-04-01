@@ -3,14 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS_BaseInventoryItem,
-  CS_Economy,
-  CS_NONE,
-  CS_safeValidateSeed,
-  CS_safeValidateStatTrak,
-  CS_safeValidateWear
-} from "@ianlucas/cslib";
+import { CS_BaseInventoryItem, CS_Economy, CS_NONE } from "@ianlucas/cslib";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { prisma } from "~/db.server";
@@ -79,7 +72,7 @@ function fixIssues(items: CS_BaseInventoryItem[]) {
           );
         }
         // Revert wear to min if it's invalid.
-        if (!CS_safeValidateWear(inventoryItem.wear, item)) {
+        if (!CS_Economy.safeValidateWear(inventoryItem.wear, item)) {
           reporting.push(
             `Reverted wear from ${inventoryItem.wear} to min (${item.wearmin}) (uid:${inventoryItem.uid}).`
           );
@@ -87,13 +80,13 @@ function fixIssues(items: CS_BaseInventoryItem[]) {
           inventoryItem.wear = item.wearmin;
         }
         // Remove invalid seeds.
-        if (!CS_safeValidateSeed(inventoryItem.seed, item)) {
+        if (!CS_Economy.safeValidateSeed(inventoryItem.seed, item)) {
           reporting.push(`Removed seed from item (uid:${inventoryItem.uid}).`);
           fixedIssues = true;
           inventoryItem.seed = undefined;
         }
         // Remove invalid stattraks.
-        if (!CS_safeValidateStatTrak(inventoryItem.stattrak, item)) {
+        if (!CS_Economy.safeValidateStatTrak(inventoryItem.stattrak, item)) {
           reporting.push(
             `Removed StatTrak from item (uid:${inventoryItem.uid}).`
           );

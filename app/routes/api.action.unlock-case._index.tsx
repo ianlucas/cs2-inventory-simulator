@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory, CS_unlockCase } from "@ianlucas/cslib";
+import { CS_Economy, CS_Inventory } from "@ianlucas/cslib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
@@ -42,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
     maxItems: await getRule("InventoryMaxItems", userId),
     storageUnitMaxItems: await getRule("InventoryStorageUnitMaxItems", userId)
   });
-  const unlockedItem = CS_unlockCase(inventory.get(caseUid).id);
+  const unlockedItem = CS_Economy.unlockCase(inventory.get(caseUid).id);
   inventory.unlockCase(unlockedItem, caseUid, keyUid);
   const { syncedAt: responseSyncedAt } = await updateUserInventory(
     userId,

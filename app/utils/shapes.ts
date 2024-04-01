@@ -3,14 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS_NONE,
-  CS_safeValidateNametag,
-  CS_safeValidateSeed,
-  CS_safeValidateStatTrak,
-  CS_safeValidateWear,
-  CS_trimNametag
-} from "@ianlucas/cslib";
+import { CS_Economy, CS_NONE } from "@ianlucas/cslib";
 import { z } from "zod";
 import { size } from "./number";
 
@@ -27,9 +20,11 @@ export const baseInventoryItemProps = {
     .string()
     .max(20)
     .optional()
-    .transform((nametag) => CS_trimNametag(nametag))
-    .refine((nametag) => CS_safeValidateNametag(nametag)),
-  seed: positiveInt.optional().refine((seed) => CS_safeValidateSeed(seed)),
+    .transform((nametag) => CS_Economy.trimNametag(nametag))
+    .refine((nametag) => CS_Economy.safeValidateNametag(nametag)),
+  seed: positiveInt
+    .optional()
+    .refine((seed) => CS_Economy.safeValidateSeed(seed)),
   stattrak: z.literal(0).optional(),
   stickers: z
     .array(nonNegativeInt)
@@ -49,7 +44,7 @@ export const baseInventoryItemProps = {
     ),
   wear: nonNegativeFloat
     .optional()
-    .refine((wear) => wear === undefined || CS_safeValidateWear(wear))
+    .refine((wear) => wear === undefined || CS_Economy.safeValidateWear(wear))
 };
 
 const baseServerInventoryItemProps = {
@@ -58,7 +53,8 @@ const baseServerInventoryItemProps = {
     .number()
     .optional()
     .refine(
-      (stattrak) => stattrak === undefined || CS_safeValidateStatTrak(stattrak)
+      (stattrak) =>
+        stattrak === undefined || CS_Economy.safeValidateStatTrak(stattrak)
     ),
   uid: nonNegativeInt
 };

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_hasStickers, CS_isSticker, CS_Team } from "@ianlucas/cslib";
+import { CS_Economy, CS_Team } from "@ianlucas/cslib";
 import { useNavigate } from "@remix-run/react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useApplyItemSticker } from "~/hooks/use-apply-item-sticker";
@@ -45,8 +45,8 @@ export function Inventory() {
   const navigate = useNavigate();
 
   const ownApplicableStickers =
-    items.filter(({ item }) => CS_isSticker(item.data)).length > 0 &&
-    items.filter(({ item }) => CS_hasStickers(item.data)).length > 0;
+    items.filter(({ item }) => CS_Economy.isSticker(item.data)).length > 0 &&
+    items.filter(({ item }) => CS_Economy.hasStickers(item.data)).length > 0;
 
   const {
     closeUnlockCase,

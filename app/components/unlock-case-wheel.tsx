@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_randomInt, CS_unlockCase } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item, CS_randomInt } from "@ianlucas/cslib";
 import { ElementRef, useRef, useState } from "react";
 import { useDetectCollision } from "~/hooks/use-detect-collision";
 import { useResponsiveScale } from "~/hooks/use-responsive-scale";
@@ -17,7 +17,7 @@ export function UnlockCaseWheel({
 }: {
   caseItem: CS_Item;
   isDisplaying: boolean;
-  items: ReturnType<typeof CS_unlockCase>[];
+  items: ReturnType<typeof CS_Economy.unlockCase>[];
 }) {
   const targetRef = useRef<ElementRef<"div">>(null);
   const hitsRef = useRef<ElementRef<"div">>(null);
