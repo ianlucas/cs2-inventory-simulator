@@ -68,8 +68,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   const session = await getSession(request.headers.get("Cookie"));
   assignToSession(session, preferences);
-  return new Response(null, {
-    status: 204,
+  return redirect("/", {
     headers: {
       "Set-Cookie": await commitSession(session)
     }
