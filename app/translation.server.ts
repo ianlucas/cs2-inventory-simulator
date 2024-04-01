@@ -18,7 +18,7 @@ declare global {
   var itemsTranslations: CS_ItemTranslations;
 
   interface Window {
-    systemTranslation: Record<string, string>;
+    systemTranslation: SystemTranslations[string];
     itemsTranslation: CS_ItemTranslations[string];
   }
 }
