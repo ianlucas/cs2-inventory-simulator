@@ -6,7 +6,6 @@
 import {
   CS_Economy,
   CS_Item,
-  CS_ITEMS,
   CS_ItemTranslations,
   CS_MAX_SEED,
   CS_STICKER_WEAR_FACTOR,
@@ -33,7 +32,6 @@ export const modelFromType = {
 } as const;
 
 export function translateItems(itemTranslation: CS_ItemTranslations[number]) {
-  CS_Economy.use(CS_ITEMS);
   CS_Economy.applyTranslation(itemTranslation);
 }
 
