@@ -40,6 +40,10 @@ export function getAllowedLanguages() {
   return languages.map(({ name }) => name);
 }
 
+export function isValidLanguage(language: string) {
+  return getAllowedLanguages().includes(language);
+}
+
 function getLanguageFromCountry(countryCode: string) {
   return (
     languages.find(({ countries }) => {

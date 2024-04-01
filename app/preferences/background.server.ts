@@ -30,6 +30,17 @@ export function getAllowedBackgrounds() {
   return backgrounds.map(({ value }) => value);
 }
 
+export function isValidBackground(background: string) {
+  if (background.length === 0) {
+    return true;
+  }
+  return getAllowedBackgrounds().includes(background);
+}
+
+export function transformBackground(background: string) {
+  return background === "" ? null : background;
+}
+
 export function getSessionBackground(session: Session) {
   return session.get("background") as string | null;
 }
