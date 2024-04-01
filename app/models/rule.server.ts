@@ -59,6 +59,10 @@ export function getRule(
   name: NumberArrayRuleNames,
   userId?: string
 ): Promise<number[]>;
+export function getRule(
+  name: RuleNames,
+  userId?: string
+): Promise<boolean | string | number | string[] | number[]>;
 export async function getRule(name: RuleNames, userId?: string) {
   let value: string | undefined = undefined;
   if (userId !== undefined) {
@@ -100,6 +104,43 @@ export async function getRule(name: RuleNames, userId?: string) {
       .map(Number);
   }
   fail("Rule not found or has invalid type.");
+}
+
+type RuleTypeMap = {
+  [name in RuleNames]: name extends BooleanRuleNames
+    ? boolean
+    : name extends StringRuleNames
+      ? string
+      : name extends NumberRuleNames
+        ? number
+        : name extends StringArrayRuleNames
+          ? string[]
+          : name extends NumberArrayRuleNames
+            ? number[]
+            : never;
+};
+
+type LowercaseKeys<T extends Record<string, any>> = {
+  [K in keyof T as `${Uncapitalize<string & K>}`]: T[K];
+};
+
+export async function getRules<Names extends RuleNames>(
+  names: Names[],
+  userId?: string
+): Promise<LowercaseKeys<{ [name in Names]: RuleTypeMap[name] }>> {
+  const rules: Partial<LowercaseKeys<{ [name in Names]: RuleTypeMap[name] }>> =
+    {};
+
+  await Promise.all(
+    names.map(async (name) => {
+      const value = await getRule(name, userId);
+      rules[
+        (name.charAt(0).toLowerCase() + name.slice(1)) as keyof typeof rules
+      ] = value as any;
+    })
+  );
+
+  return rules as any;
 }
 
 export async function expectRule(

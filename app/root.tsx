@@ -26,7 +26,7 @@ import { SyncWarn } from "./components/sync-warn";
 import { TranslationScript } from "./components/translation-script";
 import { BUILD_LAST_COMMIT } from "./env.server";
 import { middleware } from "./http.server";
-import { getRule } from "./models/rule.server";
+import { getRule, getRules } from "./models/rule.server";
 import {
   getBackground,
   getCurrentBackground
@@ -66,17 +66,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
       checksum: getTranslationChecksum()
     },
     rules: {
-      buildLastCommit: BUILD_LAST_COMMIT,
-      craftHideCategory: await getRule("CraftHideCategory", user?.id),
-      craftHideType: await getRule("CraftHideType", user?.id),
-      craftHideModel: await getRule("CraftHideModel", user?.id),
-      craftHideId: await getRule("CraftHideId", user?.id),
-      inventoryItemAllowEdit: await getRule("InventoryItemAllowEdit", user?.id),
-      inventoryMaxItems: await getRule("InventoryMaxItems", user?.id),
-      inventoryStorageUnitMaxItems: await getRule(
-        "InventoryStorageUnitMaxItems",
+      ...(await getRules(
+        [
+          "CraftHideCategory",
+          "CraftHideType",
+          "CraftHideModel",
+          "CraftHideId",
+          "InventoryItemAllowEdit",
+          "InventoryMaxItems",
+          "InventoryStorageUnitMaxItems"
+        ],
         user?.id
-      ),
+      )),
+      buildLastCommit: BUILD_LAST_COMMIT,
       meta: { appUrl, appSiteName }
     },
     preferences: {
