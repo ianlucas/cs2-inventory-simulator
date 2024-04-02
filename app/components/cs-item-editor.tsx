@@ -88,9 +88,9 @@ export function CSItemEditor({
   const hasWear = CS_Economy.hasWear(item);
   const hasNametag = CS_Economy.hasNametag(item);
   const canCraft =
-    CS_Economy.safeValidateWear(wear) &&
-    (CS_Economy.safeValidateNametag(nametag) || nametag.length === 0) &&
-    CS_Economy.safeValidateSeed(seed);
+    CS_Economy.safeValidateWear(wear, item) &&
+    (CS_Economy.safeValidateNametag(nametag, item) || nametag.length === 0) &&
+    CS_Economy.safeValidateSeed(seed, item);
   const maxQuantity = inventoryMaxItems - inventory.size();
   const hasQuantity = showQuantity(item);
   const isCrafting = attributes === undefined;

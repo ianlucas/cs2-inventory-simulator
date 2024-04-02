@@ -6,7 +6,15 @@
 import { CS_Item } from "@ianlucas/cslib";
 import clsx from "clsx";
 
-const HAS_KIND_FIRST = ["weapon", "melee", "glove"];
+const HAS_KIND_FIRST = [
+  "weapon",
+  "melee",
+  "glove",
+  "musickit",
+  "sticker",
+  "graffiti",
+  "patch"
+];
 
 export function CSItemName({
   item: { name, type, rarity }

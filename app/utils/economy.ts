@@ -20,13 +20,13 @@ export const modelFromType = {
   agent: "Agent",
   case: "",
   glove: "Glove",
-  graffiti: "Graffiti",
+  graffiti: "",
   key: "",
   melee: "Knife",
-  musickit: "Music Kit",
-  patch: "Patch",
+  musickit: "",
+  patch: "",
   pin: "",
-  sticker: "Sticker",
+  sticker: "",
   tool: "",
   weapon: "Weapon"
 } as const;
@@ -42,10 +42,20 @@ export function getCSItemName(item: CS_Item) {
       name: item.name
     };
   }
-  if (["weapon", "melee", "glove"].includes(item.type)) {
-    const [weaponName, ...paintName] = item.name.split("|");
+  if (
+    [
+      "weapon",
+      "melee",
+      "glove",
+      "musickit",
+      "sticker",
+      "graffiti",
+      "patch"
+    ].includes(item.type)
+  ) {
+    const [model, ...paintName] = item.name.split("|");
     return {
-      model: (item.type === "melee" ? "★ " : "") + weaponName.trim(),
+      model: (item.type === "melee" ? "★ " : "") + model.trim(),
       name: paintName.join("|")
     };
   }
