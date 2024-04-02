@@ -7,10 +7,9 @@
     "deploy": "npx @ianlucas/deploy@latest",
     "dev": "remix vite:dev",
     "format": "prettier . --write",
-    "script": "tsx",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
-    "upgrade": "npx npm-check-updates --reject \"@types/node isbot\" --target minor -u"
+    "upgrade": "npx npm-check-updates@latest --reject \"@types/node isbot\" --target minor -u"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.10",
