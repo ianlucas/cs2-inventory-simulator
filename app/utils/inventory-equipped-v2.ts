@@ -24,15 +24,11 @@ interface BaseEconItem {
 interface WeaponEconItem extends BaseEconItem {
   nametag: string;
   stattrak: number;
-  stickers: {
+  stickers?: {
     slot: number;
     wear: number;
     def: number;
   }[];
-}
-
-interface KnifeEconItem extends BaseEconItem {
-  stattrak: number;
 }
 
 interface AgentItem {
@@ -41,7 +37,7 @@ interface AgentItem {
 }
 
 export function generate(inventory: CS_BaseInventoryItem[]) {
-  const knives: Record<number, KnifeEconItem> = {};
+  const knives: Record<number, WeaponEconItem> = {};
   const gloves: Record<number, BaseEconItem> = {};
   const tWeapons: Record<number, WeaponEconItem> = {};
   const ctWeapons: Record<number, WeaponEconItem> = {};
@@ -77,6 +73,7 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
           assert(data.def);
           knives[team] = {
             def: data.def,
+            nametag: item.nametag ?? "",
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
             stattrak: item.stattrak ?? -1,
