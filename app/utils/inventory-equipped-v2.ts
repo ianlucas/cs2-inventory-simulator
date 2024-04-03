@@ -22,6 +22,7 @@ interface BaseEconItem {
 }
 
 interface WeaponEconItem extends BaseEconItem {
+  legacy?: boolean;
   nametag: string;
   stattrak: number;
   stickers?: {
@@ -95,6 +96,7 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
           const weapon = team === CS_TEAM_CT ? ctWeapons : tWeapons;
           weapon[data.def] = {
             def: data.def,
+            legacy: data.legacy,
             nametag: item.nametag ?? "",
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
