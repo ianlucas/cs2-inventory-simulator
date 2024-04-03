@@ -87,10 +87,13 @@ export function CSItemEditor({
   const hasSeed = CS_Economy.hasSeed(item);
   const hasWear = CS_Economy.hasWear(item);
   const hasNametag = CS_Economy.hasNametag(item);
-  const canCraft =
-    CS_Economy.safeValidateWear(wear, item) &&
-    (CS_Economy.safeValidateNametag(nametag, item) || nametag.length === 0) &&
-    CS_Economy.safeValidateSeed(seed, item);
+  const isWearValid = !hasWear || CS_Economy.safeValidateWear(wear);
+  const isNametagValid =
+    !hasNametag ||
+    CS_Economy.safeValidateNametag(nametag) ||
+    nametag.length === 0;
+  const isSeedValid = !hasSeed || CS_Economy.safeValidateSeed(seed);
+  const canCraft = isWearValid && isNametagValid && isSeedValid;
   const maxQuantity = inventoryMaxItems - inventory.size();
   const hasQuantity = showQuantity(item);
   const isCrafting = attributes === undefined;
