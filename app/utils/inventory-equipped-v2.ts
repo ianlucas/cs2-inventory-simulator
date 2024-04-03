@@ -11,6 +11,7 @@ import {
   CS_TEAM_CT,
   CS_TEAM_T
 } from "@ianlucas/cslib";
+import { assert } from "./misc";
 import { range } from "./number";
 
 interface BaseEconItem {
@@ -61,11 +62,10 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
         continue;
       }
       const data = CS_Economy.getById(item.id);
-      if (data.type === "patch") {
-        // This is handled by agent clause.
-        continue;
-      }
       switch (data.type) {
+        case "patch":
+          // Handled by "agents".
+          break;
         case "musickit":
           musicKit = data.index;
           break;
@@ -73,8 +73,10 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
           pin = data.def;
           break;
         case "melee":
-          knives[team!] = {
-            def: data.def!,
+          assert(team);
+          assert(data.def);
+          knives[team] = {
+            def: data.def,
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
             stattrak: item.stattrak ?? -1,
@@ -82,17 +84,20 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
           };
           break;
         case "glove":
-          gloves[team!] = {
-            def: data.def!,
+          assert(team);
+          assert(data.def);
+          gloves[team] = {
+            def: data.def,
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
             wear: item.wear ?? data.wearmin ?? 0
           };
           break;
         case "weapon":
+          assert(data.def);
           const weapon = team === CS_TEAM_CT ? ctWeapons : tWeapons;
-          weapon[data.def!] = {
-            def: data.def!,
+          weapon[data.def] = {
+            def: data.def,
             nametag: item.nametag ?? "",
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
@@ -102,22 +107,26 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
                 slot: index,
                 wear: item.stickerswear?.[index] ?? 0,
                 def:
-                  sticker !== CS_NONE ? CS_Economy.getById(sticker).index! : 0
+                  sticker !== CS_NONE
+                    ? CS_Economy.getById(sticker).index ?? 0
+                    : 0
               })
             ),
             wear: item.wear ?? data.wearmin ?? 0
           };
           break;
         case "agent":
+          assert(team);
+          assert(data.model);
           const patch = inventory.find(
             (item) =>
               CS_Economy.getById(item.id).type === "patch" &&
               item[team === CS_TEAM_CT ? "equippedCT" : "equippedT"]
           );
-          agents[team!] = {
-            model: data.model!,
+          agents[team] = {
+            model: data.model,
             patches: range(5).map(() =>
-              patch !== undefined ? CS_Economy.getById(patch.id).index! : 0
+              patch !== undefined ? CS_Economy.getById(patch.id).index ?? 0 : 0
             )
           };
           break;
