@@ -22,10 +22,10 @@ interface BaseEconItem {
 }
 
 interface WeaponEconItem extends BaseEconItem {
-  legacy?: boolean;
+  legacy: boolean;
   nametag: string;
   stattrak: number;
-  stickers?: {
+  stickers: {
     slot: number;
     wear: number;
     def: number;
@@ -74,10 +74,12 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
           assert(data.def);
           knives[team] = {
             def: data.def,
+            legacy: false,
             nametag: item.nametag ?? "",
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
             stattrak: item.stattrak ?? -1,
+            stickers: [],
             wear: item.wear ?? data.wearmin ?? 0
           };
           break;
@@ -96,7 +98,7 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
           const weapon = team === CS_TEAM_CT ? ctWeapons : tWeapons;
           weapon[data.def] = {
             def: data.def,
-            legacy: data.legacy,
+            legacy: data.legacy ?? false,
             nametag: item.nametag ?? "",
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
