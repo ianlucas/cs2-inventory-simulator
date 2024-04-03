@@ -31,6 +31,8 @@ export const modelFromType = {
   weapon: "Weapon"
 } as const;
 
+export const typeWithFreeItems = ["musickit", "tool"];
+
 export function translateItems(itemTranslation: CS_ItemTranslations[number]) {
   CS_Economy.applyTranslation(itemTranslation);
 }
@@ -73,7 +75,8 @@ export function getBaseItems({ category, hasModel, type }: CraftItemFilter) {
   }).filter(
     ({ free }) =>
       (hasModel && type === undefined ? free : !free) ||
-      (!hasModel && (type !== "musickit" || !free))
+      // @TODO test if simply !hasModel && !free is enough
+      (!hasModel && (!typeWithFreeItems.includes(type!) || !free))
   );
 }
 
