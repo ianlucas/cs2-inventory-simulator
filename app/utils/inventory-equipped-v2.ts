@@ -26,10 +26,11 @@ interface WeaponEconItem extends BaseEconItem {
   nametag: string;
   stattrak: number;
   stickers: {
+    def: number;
     slot: number;
     wear: number;
-    def: number;
   }[];
+  uid: number;
 }
 
 interface AgentItem {
@@ -80,6 +81,7 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
             seed: item.seed ?? 1,
             stattrak: item.stattrak ?? -1,
             stickers: [],
+            uid: item.uid,
             wear: item.wear ?? data.wearmin ?? 0
           };
           break;
@@ -113,6 +115,7 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
                     : 0
               })
             ),
+            uid: item.uid,
             wear: item.wear ?? data.wearmin ?? 0
           };
           break;
