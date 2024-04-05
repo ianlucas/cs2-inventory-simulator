@@ -1,6 +1,6 @@
 # API for Developers
 
-CS2 Inventory Simulator exposes a couple of endpoints to be used in other applications. There is currently no read quota for the endpoints.
+CS2 Inventory Simulator exposes a couple of endpoints to be used in other applications.
 
 ## Get user inventory
 
@@ -28,56 +28,48 @@ type GetUserInventoryResponse = Array<{
 ## Get user equipped items
 
 ```http
-GET https://inventory.cstrike.app/api/equipped/{steamID64}.json
+GET https://inventory.cstrike.app/api/equipped/v2/{steamID64}.json
 ```
 
 ### Response
 
 ```typescript
-type CSTeam = 2 /* T */ | 3 /* CT */;
-type ItemDef = number;
-type StickerSlot = 0 | 1 | 2 | 3;
+interface BaseEconItem {
+  def: number;
+  paint: number;
+  seed: number;
+  wear: number;
+}
+interface WeaponEconItem extends BaseEconItem {
+  legacy: boolean;
+  nametag: string;
+  stattrak: number;
+  stickers: {
+    def: number;
+    slot: number;
+    wear: number;
+  }[];
+  uid: number;
+}
+interface AgentItem {
+  model: string;
+  patches: number[];
+}
 type GetUserEquippedItemsResponse = {
-  // Music Kit equipped.
-  ["mk"]: number | undefined;
-  // Pin equipped.
-  ["pi"]: number | undefined;
-  // Melee equipped for T and/or CT.
-  ["me_{CSTeam}"]: number | undefined;
-  // Glove equipped for T and/or CT.
-  ["gl_{CSTeam}"]: number | undefined;
-  // Agent equipped for T and/or CT.
-  ["ag_{CSTeam}"]: number | undefined;
-  // Agent's model equipped for T and/or CT.
-  ["agm_{CSTeam}"]: string | undefined;
-  // Patch for Agent equipped for T and/or CT.
-  ["ap_{CSTeam}"]: number | undefined;
-  // Whether a weapon is custom for T and/or CT and a weapon/melee/glove.
-  ["cw_{CSTeam}_{ItemDef}"]: boolean | undefined;
-  // PaintKit equipped for T and/or CT and a weapon/melee/glove.
-  ["pa_{CSTeam}_{ItemDef}"]: number | undefined;
-  // PaintKit legacy flag equipped for T and/or CT and a weapon/melee/glove.
-  ["pal_{CSTeam}_{ItemDef}"]: boolean | undefined;
-  // Seed equipped for a T and/or CT weapon/melee.
-  ["se_{CSTeam}_{ItemDef}"]: number | undefined;
-  // Wear equipped for a T and/or CT weapon/melee/glove.
-  ["fl_{CSTeam}_{ItemDef}"]: number | undefined;
-  // StatTrak count for a T and/or CT weapon/melee.
-  ["st_{CSTeam}_{ItemDef}"]: number | undefined;
-  // StatTrak inventory item uid for a T and/or CT weapon/melee.
-  ["stu_{CSTeam}_{ItemDef}"]: number | undefined;
-  // Nametag equipped for a T and/or CT weapon/melee/glove.
-  ["nt_{CSTeam}_{ItemDef}"]: string | undefined;
-  // Whether a T and/or CT weapon has stickers.
-  ["ss_{CSTeam}_{ItemDef}"]: boolean | undefined;
-  // Sticker equipped for a T and/or CT weapon.
-  ["ss_{CSTeam}_{ItemDef}_{StickerSlot}"]: number | undefined;
-  // Wear of an equipped sticker for a T and/or CT weapon.
-  ["sf_{CSTeam}_{ItemDef}_{StickerSlot}"]: number | undefined;
+  agents: Record<number, AgentItem>;
+  ctWeapons: Record<number, WeaponEconItem>;
+  gloves: Record<number, BaseEconItem>;
+  knives: Record<number, WeaponEconItem>;
+  musicKit?: number;
+  pin?: number;
+  tWeapons: Record<number, WeaponEconItem>;
 };
 ```
 
 ## Increment item StatTrak
+
+> [!IMPORTANT]  
+> API key must have `api` or `stattrak_increment` scope.
 
 ```http
 POST https://inventory.cstrike.app/api/increment-item-stattrak
@@ -100,6 +92,9 @@ POST https://inventory.cstrike.app/api/increment-item-stattrak
 - Returns `204` when the increment was successful.
 
 ## Sign-in user
+
+> [!IMPORTANT]  
+> API key must have `api` or `auth` scope.
 
 This is intended to be used in other first-party apps to authenticate users to Inventory Simulator. First, a POST request must be sent to `/api/sign-in` to get the user's authentication `token`, then the user must be immediately redirected to `/api/sign-in/callback?token={token}`.
 
