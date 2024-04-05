@@ -22,7 +22,7 @@ import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
 import { middleware } from "~/http.server";
-import { showQuantity } from "~/utils/economy";
+import { isItemCountable } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { AddAction, EditAction } from "./api.action.sync._index";
@@ -93,7 +93,7 @@ export default function Craft() {
       return navigate("/");
     }
 
-    range(showQuantity(selectedItem) ? quantity : 1).forEach(() => {
+    range(isItemCountable(selectedItem) ? quantity : 1).forEach(() => {
       setInventory(inventory.add(inventoryItem));
       sync({
         type: AddAction,

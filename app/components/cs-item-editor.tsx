@@ -22,8 +22,8 @@ import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useInput } from "~/hooks/use-input";
 import {
+  isItemCountable,
   seedStringMaxLen,
-  showQuantity,
   wearStringMaxLen,
   wearToString
 } from "~/utils/economy";
@@ -95,7 +95,7 @@ export function CSItemEditor({
   const isSeedValid = !hasSeed || CS_Economy.safeValidateSeed(seed);
   const canCraft = isWearValid && isNametagValid && isSeedValid;
   const maxQuantity = inventoryMaxItems - inventory.size();
-  const hasQuantity = showQuantity(item);
+  const hasQuantity = isItemCountable(item);
   const isCrafting = attributes === undefined;
 
   function handleSubmit() {
