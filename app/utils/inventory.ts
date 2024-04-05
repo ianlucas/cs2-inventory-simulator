@@ -10,7 +10,7 @@ import {
   CS_RARITY_COLORS,
   CS_RARITY_ORDER
 } from "@ianlucas/cslib";
-import { getCSItemName } from "./economy";
+import { getItemName } from "./economy";
 import { serverInventoryShape } from "./shapes";
 
 export const UNLOCKABLE_ITEM_TYPE = ["case", "key"];
@@ -40,7 +40,7 @@ export function parseInventory(inventory?: string | null) {
 
 export function transform(item: CS_InventoryItem) {
   return {
-    ...getCSItemName(item.data),
+    ...getItemName(item.data),
     equipped: [
       item.equipped && "text-white",
       item.equippedCT && "text-sky-300",
@@ -131,7 +131,7 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
   return CS_Economy.filterItems({
     free: true
   }).map((item, index) => ({
-    ...getCSItemName(item),
+    ...getItemName(item),
     equipped: [],
     item: {
       data: item,

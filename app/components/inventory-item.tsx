@@ -55,6 +55,7 @@ export function InventoryItem({
   onUnequip,
   onUnlockContainer,
   ownApplicableStickers,
+  quality,
   uid
 }: TransformedInventoryItem & {
   disableContextMenu?: boolean;
@@ -329,7 +330,12 @@ export function InventoryItem({
             style={hoverStyles}
             {...getHoverFloatingProps()}
           >
-            <InventoryItemName inventoryItem={item} model={model} name={name} />
+            <InventoryItemName
+              inventoryItem={item}
+              model={model}
+              name={name}
+              quality={quality}
+            />
             {hasTeams && <InventoryItemTeams item={item.data} />}
             {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
             {hasContents && <InventoryItemContents item={item.data} />}

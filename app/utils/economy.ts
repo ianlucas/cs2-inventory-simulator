@@ -47,7 +47,7 @@ export function translateItems(itemTranslation: CS_ItemTranslations[number]) {
   CS_Economy.applyTranslation(itemTranslation);
 }
 
-export function getCSItemName(item: CS_Item) {
+export function getItemName(item: CS_Item) {
   if (item.free && !FREE_MODEL_IN_NAME_TYPES.includes(item.type)) {
     return {
       model: "",
@@ -57,8 +57,9 @@ export function getCSItemName(item: CS_Item) {
   if (MODEL_IN_NAME_ITEM_TYPES.includes(item.type)) {
     const [model, ...paintName] = item.name.split("|");
     return {
-      model: (item.type === "melee" ? "★ " : "") + model.trim(),
-      name: paintName.join("|")
+      model: model.trim(),
+      name: paintName.join("|"),
+      quality: item.type === "melee" ? "★ " : ""
     };
   }
   return {

@@ -5,7 +5,7 @@
 
 import { CS_Item } from "@ianlucas/cslib";
 import clsx from "clsx";
-import { getCSItemName } from "~/utils/economy";
+import { getItemName } from "~/utils/economy";
 import { CSItemImage } from "./cs-item-image";
 import { TextSlider } from "./text-slider";
 
@@ -27,7 +27,7 @@ export function CSItemButton({
     }
   }
 
-  const { model, name } = getCSItemName(item);
+  const { model, name, quality } = getItemName(item);
   const clickable = onClick !== undefined;
   const showAltname =
     item.altname !== undefined &&
@@ -63,7 +63,7 @@ export function CSItemButton({
           className={clsx("w-0 min-w-0 flex-1 text-left", !bigger && "ml-4")}
         >
           <div style={{ color: ignoreRarityColor ? undefined : item.rarity }}>
-            <TextSlider text={name || model} />
+            <TextSlider text={name || quality + model} />
           </div>
           {showAltname && item.altname !== undefined && (
             <TextSlider className="text-neutral-400" text={item.altname} />

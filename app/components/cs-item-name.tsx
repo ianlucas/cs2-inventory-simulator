@@ -22,6 +22,7 @@ export function CSItemName({
   item: CS_Item;
 }) {
   const parts = name.split("|");
+  console.log(parts);
 
   return (
     <>
@@ -29,13 +30,15 @@ export function CSItemName({
         <span key={index}>
           <span
             className={clsx(
-              index === 0 && HAS_KIND_FIRST.includes(type)
+              index === 0 && HAS_KIND_FIRST.includes(type) && parts.length > 1
                 ? "text-neutral-400"
                 : "font-bold"
             )}
             style={{
               color:
-                index !== 0 || !HAS_KIND_FIRST.includes(type)
+                index !== 0 ||
+                !HAS_KIND_FIRST.includes(type) ||
+                parts.length === 1
                   ? rarity
                   : undefined
             }}

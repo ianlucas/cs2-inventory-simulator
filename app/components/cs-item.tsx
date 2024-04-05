@@ -7,7 +7,7 @@ import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Economy, CS_Item, CS_NONE } from "@ianlucas/cslib";
 import clsx from "clsx";
-import { getCSItemName } from "~/utils/economy";
+import { getItemName } from "~/utils/economy";
 import { CSItemImage } from "./cs-item-image";
 import { useRootContext } from "./root-context";
 
@@ -31,7 +31,7 @@ export function CSItem({
   const {
     translations: { translate }
   } = useRootContext();
-  const { model, name } = getCSItemName(item);
+  const { model, name, quality } = getItemName(item);
   const hasModel = model || stattrak !== undefined;
   const hasNametag = nametag !== undefined;
   const showNameWithNametag = CS_Economy.isStorageUnitTool(item);
@@ -95,6 +95,7 @@ export function CSItem({
           <>
             {hasModel && (
               <div className="font-bold">
+                {quality}
                 {stattrak !== undefined && "StatTrak™ "}
                 {translate(`Model${model}`) || model}
               </div>

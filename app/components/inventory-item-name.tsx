@@ -10,11 +10,13 @@ import { useRootContext } from "./root-context";
 export function InventoryItemName({
   inventoryItem: { stattrak },
   model,
-  name
+  name,
+  quality
 }: {
   inventoryItem: CS_InventoryItem;
   model: string;
   name: string;
+  quality?: string;
 }) {
   const {
     translations: { translate }
@@ -25,7 +27,9 @@ export function InventoryItemName({
     <>
       {hasModel && (
         <div className="font-bold">
-          {stattrak !== undefined && `${translate("InventoryItemStatTrak")} `}{" "}
+          {quality}
+          {stattrak !== undefined &&
+            `${translate("InventoryItemStatTrak")} `}{" "}
           {model}
         </div>
       )}
