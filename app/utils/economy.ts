@@ -59,7 +59,7 @@ export function getItemName(item: CS_Item) {
     return {
       model: model.trim(),
       name: paintName.join("|"),
-      quality: item.type === "melee" ? "★ " : ""
+      quality: item.type === "melee" ? "★ " : undefined
     };
   }
   return {
