@@ -48,6 +48,7 @@ model UserPreference {
 model ApiCredential {
   apiKey String @id
   authTokens ApiAuthToken[]
+  comment String?
   createdAt DateTime @default(now())
   scope String?
   updatedAt DateTime @updatedAt
