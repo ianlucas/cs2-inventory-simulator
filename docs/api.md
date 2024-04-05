@@ -104,7 +104,7 @@ POST https://inventory.cstrike.app/api/sign-in
 #### Request
 
 > [!IMPORTANT]  
-> API key must have `api` or `auth` scope.
+> API key must have `api` or `api_auth` scope.
 
 ```typescript
 type GetSignIn = {

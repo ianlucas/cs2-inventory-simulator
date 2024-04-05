@@ -6,7 +6,7 @@
 import { prisma } from "~/db.server";
 
 export const API_SCOPE = "api";
-export const AUTH_SCOPE = "auth";
+export const API_AUTH_SCOPE = "api_auth";
 export const STATTRAK_INCREMENT_SCOPE = "stattrak_increment";
 
 export async function isApiKeyValid(apiKey: string, scope?: string[]) {

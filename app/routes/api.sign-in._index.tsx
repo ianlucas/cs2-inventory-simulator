@@ -8,8 +8,8 @@ import { z } from "zod";
 import { middleware } from "~/http.server";
 import { generateAuthToken } from "~/models/api-auth-token.server";
 import {
+  API_AUTH_SCOPE,
   API_SCOPE,
-  AUTH_SCOPE,
   isApiKeyValid
 } from "~/models/api-credential.server";
 import { existsUser } from "~/models/user.server";
@@ -27,7 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
     })
     .parse(await request.json());
 
-  if (!(await isApiKeyValid(apiKey, [API_SCOPE, AUTH_SCOPE]))) {
+  if (!(await isApiKeyValid(apiKey, [API_SCOPE, API_AUTH_SCOPE]))) {
     throw unauthorized;
   }
 
