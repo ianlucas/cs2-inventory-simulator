@@ -68,21 +68,21 @@ type GetUserEquippedItemsResponse = {
 
 ## Increment item StatTrak
 
-> [!IMPORTANT]  
-> API key must have `api` or `stattrak_increment` scope.
-
 ```http
 POST https://inventory.cstrike.app/api/increment-item-stattrak
 ```
 
 ### Request
 
-```json
-{
-  "apiKey": "api key to authorize this request",
-  "userId": "steamID64",
-  "targetUid": 0
-}
+> [!IMPORTANT]  
+> API key must have `api` or `stattrak_increment` scope.
+
+```typescript
+type PostIncrementItemStatTrak = {
+  apiKey: string;
+  targetUid: number;
+  userId: string;
+};
 ```
 
 ### Response
@@ -92,9 +92,6 @@ POST https://inventory.cstrike.app/api/increment-item-stattrak
 - Returns `204` when the increment was successful.
 
 ## Sign-in user
-
-> [!IMPORTANT]  
-> API key must have `api` or `auth` scope.
 
 This is intended to be used in other first-party apps to authenticate users to Inventory Simulator. First, a POST request must be sent to `/api/sign-in` to get the user's authentication `token`, then the user must be immediately redirected to `/api/sign-in/callback?token={token}`.
 
@@ -106,11 +103,14 @@ POST https://inventory.cstrike.app/api/sign-in
 
 #### Request
 
-```json
-{
-  "apiKey": "api key to authorize this request",
-  "userId": "steamID64"
-}
+> [!IMPORTANT]  
+> API key must have `api` or `auth` scope.
+
+```typescript
+type GetSignIn = {
+  apiKey: string;
+  userId: string;
+};
 ```
 
 #### Response
