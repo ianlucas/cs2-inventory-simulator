@@ -15,8 +15,10 @@ import {
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
 import {
-  EDITABLE_INVENTORY_TYPE,
-  TransformedInventoryItem
+  EDITABLE_ITEM_TYPE,
+  INSPECTABLE_ITEM_TYPE,
+  TransformedInventoryItem,
+  UNLOCKABLE_ITEM_TYPE
 } from "~/utils/inventory";
 import { format } from "~/utils/number";
 import { CSItem } from "./cs-item";
@@ -42,6 +44,7 @@ export function InventoryItem({
   onDepositToStorageUnit,
   onEdit,
   onEquip,
+  onInspectItem,
   onInspectStorageUnit,
   onRemove,
   onRename,
@@ -61,6 +64,7 @@ export function InventoryItem({
   onDepositToStorageUnit?: (uid: number) => void;
   onEdit?: (uid: number) => void;
   onEquip?: (uid: number, team?: CS_Team) => void;
+  onInspectItem?: (uid: number) => void;
   onInspectStorageUnit?: (uid: number) => void;
   onRemove?: (uid: number) => void;
   onRename?: (uid: number) => void;
@@ -123,12 +127,13 @@ export function InventoryItem({
   const canScrapeSticker =
     CS_Economy.hasStickers(data) &&
     (item.stickers ?? []).filter((id) => id !== CS_NONE).length > 0;
-  const canUnlockContainer = ["case", "key"].includes(data.type);
+  const canUnlockContainer = UNLOCKABLE_ITEM_TYPE.includes(data.type);
   const hasContents = data.contents !== undefined;
   const hasTeams = data.teams !== undefined;
   const hasNametag = item.nametag !== undefined;
   const isStorageUnit = CS_Economy.isStorageUnitTool(data);
-  const isEditable = EDITABLE_INVENTORY_TYPE.includes(data.type);
+  const isEditable = EDITABLE_ITEM_TYPE.includes(data.type);
+  const canInspect = INSPECTABLE_ITEM_TYPE.includes(data.type);
 
   function close(callBeforeClosing: () => void) {
     return function close() {
@@ -170,6 +175,13 @@ export function InventoryItem({
           >
             <InventoryItemContextMenu
               menu={[
+                [
+                  {
+                    condition: canInspect,
+                    label: translate("InventoryItemInspect"),
+                    onClick: close(() => onInspectItem?.(uid))
+                  }
+                ],
                 [
                   {
                     condition: canEquip,

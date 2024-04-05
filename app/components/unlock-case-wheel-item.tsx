@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy, CS_Item } from "@ianlucas/cslib";
-import { resolveCaseSpecialItemImage, resolveItemImage } from "~/utils/economy";
+import { resolveCaseSpecialsImage, resolveItemImage } from "~/utils/economy";
 
 export function UnlockCaseWheelItem({
   caseItem,
@@ -34,7 +34,7 @@ export function UnlockCaseWheelItem({
         className="absolute left-0 top-0 h-full w-full"
         src={
           unlockedItem.special
-            ? resolveCaseSpecialItemImage(caseItem)
+            ? resolveCaseSpecialsImage(caseItem)
             : resolveItemImage(item)
         }
       />

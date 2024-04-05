@@ -94,8 +94,12 @@ export function resolveItemImage(item: number | CS_Item, wear?: number) {
   return CS_Economy.resolveItemImage(baseUrl, item, wear);
 }
 
-export function resolveCaseSpecialItemImage(item: number | CS_Item) {
+export function resolveCaseSpecialsImage(item: number | CS_Item) {
   return CS_Economy.resolveCaseSpecialsImage(baseUrl, item);
+}
+
+export function resolveCollectionImage(item: number | CS_Item) {
+  return CS_Economy.resolveCollectionImage(baseUrl, item);
 }
 
 export const seedStringMaxLen = String(CS_MAX_SEED).length;

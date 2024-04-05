@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item } from "@ianlucas/cslib";
-import { resolveCaseSpecialItemImage } from "~/utils/economy";
+import { resolveCaseSpecialsImage } from "~/utils/economy";
 import { CSItem } from "./cs-item";
 import { useRootContext } from "./root-context";
 
@@ -18,7 +18,7 @@ export function CaseSpecialItem({ caseItem }: { caseItem: CS_Item }) {
       item={{
         id: -1,
         name: translate("CaseRareItem"),
-        image: resolveCaseSpecialItemImage(caseItem),
+        image: resolveCaseSpecialsImage(caseItem),
         type: "weapon",
         category: "weapon",
         rarity: "#e4ae39"

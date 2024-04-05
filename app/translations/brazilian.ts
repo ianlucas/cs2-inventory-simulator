@@ -120,6 +120,7 @@ export const brazilian = {
     "Esta unidade de armazenamento permite armazenar até {1} itens além da capacidade do seu inventário. A unidade de armazenamento selecionada está vazia. A qualquer momento, é possível mover itens do seu inventário para a unidade, retirá-los dela ou usá-la para organizar as suas coleções.",
   InventoryItemSwapStatTrak: "Abrir Ferramenta de Troca StatTrak™",
   InventoryItemEdit: "Editar",
+  InventoryItemInspect: "Inspecionar",
   ItemSwapStatTrakUse: "Ferramenta de Troca StatTrak™",
   ItemSwapStatTrakDesc:
     "Este item troca as contagens StatTrak™ de dois itens do mesmo tipo.",
@@ -127,6 +128,7 @@ export const brazilian = {
     "Ferramentas de Troca StatTrak™ só podem ser usadas uma vez",
   ItemSwapStatTrakAccept: "Aceitar",
   ItemSwapStatTrakClose: "Fechar",
+  InspectClose: "Fechar",
   ModelAgent: "Agente",
   ModelGlove: "Luva",
   ModelKnife: "Faca",

@@ -7,6 +7,7 @@ import { CS_Economy, CS_Team } from "@ianlucas/cslib";
 import { useNavigate } from "@remix-run/react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useApplyItemSticker } from "~/hooks/use-apply-item-sticker";
+import { useInspectItem } from "~/hooks/use-inspect-item";
 import { useRenameItem } from "~/hooks/use-rename-item";
 import { useScrapeItemSticker } from "~/hooks/use-scrape-item-sticker";
 import { useStorageUnit } from "~/hooks/use-storage-unit";
@@ -21,6 +22,7 @@ import {
 import { playSound } from "~/utils/sound";
 import { ApplyItemSticker } from "./apply-item-sticker";
 import { InfoIcon } from "./info-icon";
+import { InspectItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelectorContext } from "./item-selector-context";
@@ -99,6 +101,9 @@ export function Inventory() {
     swapItemsStatTrak
   } = useSwapItemsStatTrak();
 
+  const { closeInspectItem, handleInspectItem, inspectItem, isInspectingItem } =
+    useInspectItem();
+
   function handleEquip(uid: number, team?: CS_Team) {
     playSound(
       inventory.get(uid).data.type === "musickit"
@@ -133,6 +138,7 @@ export function Inventory() {
     closeRenameStorageUnit();
     closeApplyItemSticker();
     closeScrapeItemSticker();
+    closeInspectItem();
   }
 
   function handleSelectItem(uid: number) {
@@ -192,6 +198,7 @@ export function Inventory() {
                     onDepositToStorageUnit: handleDepositToStorageUnit,
                     onEdit: handleEdit,
                     onEquip: handleEquip,
+                    onInspectItem: handleInspectItem,
                     onInspectStorageUnit: handleInspectStorageUnit,
                     onRemove: handleRemove,
                     onRename: handleRenameItem,
@@ -244,6 +251,9 @@ export function Inventory() {
           {...swapItemsStatTrak}
           onClose={closeSwapItemsStatTrak}
         />
+      )}
+      {isInspectingItem(inspectItem) && (
+        <InspectItem {...inspectItem} onClose={closeInspectItem} />
       )}
     </>
   );

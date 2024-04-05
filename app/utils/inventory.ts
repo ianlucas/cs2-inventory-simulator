@@ -13,8 +13,19 @@ import {
 import { getCSItemName } from "./economy";
 import { serverInventoryShape } from "./shapes";
 
-/** @TODO It's a union of wearable, nametaggable, seedable, and stickerable arrays. */
-export const EDITABLE_INVENTORY_TYPE = ["weapon", "melee", "glove", "musickit"];
+export const UNLOCKABLE_ITEM_TYPE = ["case", "key"];
+export const EDITABLE_ITEM_TYPE = ["weapon", "melee", "glove", "musickit"];
+export const INSPECTABLE_ITEM_TYPE = [
+  "case",
+  "glove",
+  "graffiti",
+  "melee",
+  "musickit",
+  "patch",
+  "pin",
+  "sticker",
+  "weapon"
+];
 
 export function parseInventory(inventory?: string | null) {
   if (!inventory) {
