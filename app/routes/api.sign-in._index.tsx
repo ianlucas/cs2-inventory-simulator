@@ -7,7 +7,11 @@ import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { middleware } from "~/http.server";
 import { generateAuthToken } from "~/models/api-auth-token.server";
-import { isApiKeyValid } from "~/models/api-credential.server";
+import {
+  API_SCOPE,
+  AUTH_SCOPE,
+  isApiKeyValid
+} from "~/models/api-credential.server";
 import { existsUser } from "~/models/user.server";
 import { badRequest, notFound, unauthorized } from "~/response.server";
 
@@ -23,7 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
     })
     .parse(await request.json());
 
-  if (!(await isApiKeyValid(apiKey))) {
+  if (!(await isApiKeyValid(apiKey, [API_SCOPE, AUTH_SCOPE]))) {
     throw unauthorized;
   }
 

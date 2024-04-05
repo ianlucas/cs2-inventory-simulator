@@ -6,7 +6,11 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { middleware } from "~/http.server";
-import { isApiKeyValid } from "~/models/api-credential.server";
+import {
+  API_SCOPE,
+  STATTRAK_INCREMENT_SCOPE,
+  isApiKeyValid
+} from "~/models/api-credential.server";
 import {
   existsUser,
   findUniqueUser,
@@ -33,7 +37,7 @@ export async function action({ request }: ActionFunctionArgs) {
     })
     .parse(await request.json());
 
-  if (!(await isApiKeyValid(apiKey))) {
+  if (!(await isApiKeyValid(apiKey, [API_SCOPE, STATTRAK_INCREMENT_SCOPE]))) {
     throw unauthorized;
   }
 

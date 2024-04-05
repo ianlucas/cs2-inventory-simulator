@@ -49,6 +49,7 @@ model ApiCredential {
   apiKey String @id
   authTokens ApiAuthToken[]
   createdAt DateTime @default(now())
+  scope String?
   updatedAt DateTime @updatedAt
 }
 
