@@ -27,8 +27,8 @@ import {
   wearStringMaxLen,
   wearToString
 } from "~/utils/economy";
+import { CSItemEditorName } from "./cs-item-editor-name";
 import { CSItemImage } from "./cs-item-image";
-import { CSItemName } from "./cs-item-name";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
@@ -132,7 +132,7 @@ export function CSItemEditor({
       <div
         className={clsx("mb-4 text-center", item.type === "agent" && "mt-4")}
       >
-        <CSItemName item={item} />
+        <CSItemEditorName item={item} />
       </div>
       <div className="space-y-4">
         {hasStickers && (

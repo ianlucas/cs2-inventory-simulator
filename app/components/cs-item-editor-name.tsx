@@ -16,7 +16,7 @@ const HAS_KIND_FIRST = [
   "patch"
 ];
 
-export function CSItemName({
+export function CSItemEditorName({
   item: { name, type, rarity }
 }: {
   item: CS_Item;
