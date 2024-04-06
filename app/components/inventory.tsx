@@ -218,7 +218,8 @@ export function Inventory() {
       {displayedItems.length === 0 && (
         <div className="m-auto flex select-none justify-center lg:w-[1024px]">
           <div className="flex w-full items-center justify-center gap-2 bg-gradient-to-r from-transparent via-black/30 to-transparent py-1">
-            <InfoIcon /> {translate("InventoryNoItemsToDisplay")}
+            <InfoIcon className="h-4" />
+            {translate("InventoryNoItemsToDisplay")}
           </div>
         </div>
       )}

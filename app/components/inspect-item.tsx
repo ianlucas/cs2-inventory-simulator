@@ -3,12 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_NONE } from "@ianlucas/cslib";
+import { FloatingFocusManager } from "@floating-ui/react";
+import { CS_Economy, CS_MIN_SEED, CS_MIN_WEAR, CS_NONE } from "@ianlucas/cslib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
+import { useInspectFloating } from "~/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
+import { getItemName, wearToString } from "~/utils/economy";
 import { CSItemCollectionImage } from "./cs-item-collection-image";
 import { CSItemImage } from "./cs-item-image";
+import { InfoIcon } from "./info-icon";
 import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
@@ -21,10 +25,30 @@ export function InspectItem({
   uid: number;
 }) {
   const {
+    preferences: { statsForNerds },
     translations: { translate }
   } = useRootContext();
 
-  const { stickers, stickerswear, data: item, wear } = useInventoryItem(uid);
+  const {
+    data: item,
+    seed,
+    stattrak,
+    stickers,
+    stickerswear,
+    wear
+  } = useInventoryItem(uid);
+  const {
+    getHoverFloatingProps,
+    getHoverReferenceProps,
+    hoverContext,
+    hoverRefs,
+    hoverStyles,
+    isHoverOpen,
+    ref
+  } = useInspectFloating();
+
+  const hasHover = CS_Economy.hasSeed(item) && CS_Economy.hasWear(item);
+  const { model, name, quality } = getItemName(item);
 
   return (
     <ClientOnly
@@ -41,7 +65,12 @@ export function InspectItem({
                     <CSItemCollectionImage className="h-16" item={item} />
                   )}
                   <div className="font-display">
-                    <div className="text-3xl">{item.name}</div>
+                    <div className="text-3xl">
+                      {quality}
+                      {stattrak !== undefined &&
+                        `${translate("InventoryItemStatTrak")} `}{" "}
+                      {model} | {name}
+                    </div>
                     {item.collectionname !== undefined && (
                       <div className="-mt-2 text-neutral-300">
                         {item.collectionname}
@@ -60,21 +89,40 @@ export function InspectItem({
                   <div className="absolute bottom-0 left-0 flex items-center justify-center">
                     {stickers?.map((sticker, index) =>
                       sticker === CS_NONE ? null : (
-                        <CSItemImage
-                          key={index}
-                          className="m-auto my-8 aspect-[1.33333] w-[128px]"
-                          item={CS_Economy.getById(sticker)}
-                          style={{
-                            filter: `grayscale(${stickerswear?.[index] ?? 0})`,
-                            opacity: `${1 - (stickerswear?.[index] ?? 0)}`
-                          }}
-                        />
+                        <span className="inline-block" key={index}>
+                          <CSItemImage
+                            className="aspect-[1.33333] w-[128px]"
+                            item={CS_Economy.getById(sticker)}
+                            style={{
+                              filter: `grayscale(${stickerswear?.[index] ?? 0})`,
+                              opacity: `${1 - (stickerswear?.[index] ?? 0)}`
+                            }}
+                          />
+                          {statsForNerds && (
+                            <div className="text-sm font-bold text-neutral-300 transition-all group-hover:scale-150">
+                              {((stickerswear?.[index] ?? 0) * 100).toFixed(0)}%
+                            </div>
+                          )}
+                        </span>
                       )
                     )}
                   </div>
                 </div>
               </div>
               <UseItemFooter
+                left={
+                  <>
+                    {hasHover && (
+                      <ModalButton
+                        variant="secondary"
+                        forwardRef={ref}
+                        {...getHoverReferenceProps()}
+                      >
+                        <InfoIcon className="h-6" />
+                      </ModalButton>
+                    )}
+                  </>
+                }
                 right={
                   <>
                     <ModalButton
@@ -86,6 +134,35 @@ export function InspectItem({
                 }
               />
             </div>
+            {hasHover && isHoverOpen && (
+              <FloatingFocusManager context={hoverContext} modal={false}>
+                <div
+                  className="z-20 max-w-[320px] space-y-3 rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none"
+                  ref={hoverRefs.setFloating}
+                  style={hoverStyles}
+                  {...getHoverFloatingProps()}
+                >
+                  <div>
+                    <strong>
+                      {translate("InventoryItemInspectFinishCatalog")}:
+                    </strong>{" "}
+                    {item.index}
+                  </div>
+                  <div>
+                    <strong>
+                      {translate("InventoryItemInspectPatternTemplate")}:
+                    </strong>{" "}
+                    {seed ?? CS_MIN_SEED}
+                  </div>
+                  <div>
+                    <strong>
+                      {translate("InventoryItemInspectWearRating")}:
+                    </strong>{" "}
+                    {wearToString(wear ?? item.wearmin ?? CS_MIN_WEAR)}
+                  </div>
+                </div>
+              </FloatingFocusManager>
+            )}
           </div>,
           document.body
         )

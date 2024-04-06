@@ -30,7 +30,7 @@ export function UseItemHeader({
         </div>
       )}
       <div className="mt-2 flex items-center justify-center gap-2">
-        <InfoIcon />
+        <InfoIcon className="h-4" />
         <span>{warning}</span>
         {warningItem !== undefined && <strong>{warningItem}</strong>}
       </div>

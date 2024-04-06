@@ -3,11 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_InventoryItem, CS_MIN_SEED } from "@ianlucas/cslib";
+import { CS_InventoryItem } from "@ianlucas/cslib";
 import { useRootContext } from "./root-context";
 
 export function InventoryItemSeed({
-  inventoryItem: { seed }
+  inventoryItem: { seed, data }
 }: {
   inventoryItem: CS_InventoryItem;
 }) {
@@ -20,7 +20,7 @@ export function InventoryItemSeed({
       <strong className="text-neutral-400">
         {translate("InventoryItemSeed")}
       </strong>{" "}
-      {seed ?? CS_MIN_SEED}
+      {seed ?? data.wearmin}
     </div>
   );
 }

@@ -122,6 +122,9 @@ export const brazilian = {
   InventoryItemSwapStatTrak: "Abrir Ferramenta de Troca StatTrak™",
   InventoryItemEdit: "Editar",
   InventoryItemInspect: "Inspecionar",
+  InventoryItemInspectFinishCatalog: "Catálogo de revestimentos",
+  InventoryItemInspectPatternTemplate: "Estilo do padrão",
+  InventoryItemInspectWearRating: "Nível de desgaste",
   ItemSwapStatTrakUse: "Ferramenta de Troca StatTrak™",
   ItemSwapStatTrakDesc:
     "Este item troca as contagens StatTrak™ de dois itens do mesmo tipo.",

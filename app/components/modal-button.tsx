@@ -9,9 +9,11 @@ import { ComponentProps } from "react";
 export function ModalButton({
   children,
   className,
+  forwardRef,
   variant,
   ...props
 }: ComponentProps<"button"> & {
+  forwardRef?: typeof props.ref;
   variant: "primary" | "secondary";
 }) {
   return (
@@ -25,6 +27,7 @@ export function ModalButton({
           "text-neutral-100 hover:bg-neutral-500/30 hover:text-white disabled:bg-transparent disabled:text-neutral-700"
       ])}
       {...props}
+      ref={forwardRef}
     >
       {children}
     </button>

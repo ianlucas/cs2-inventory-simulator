@@ -129,6 +129,9 @@ export const english = {
   InventoryItemSwapStatTrak: "Open StatTrak™ Swap Tool",
   InventoryItemEdit: "Edit",
   InventoryItemInspect: "Inspect",
+  InventoryItemInspectFinishCatalog: "Finish Catalog",
+  InventoryItemInspectPatternTemplate: "Pattern Template",
+  InventoryItemInspectWearRating: "Wear Rating",
   ItemSwapStatTrakUse: "StatTrak™ Swap Tool",
   ItemSwapStatTrakDesc:
     "This item swaps StatTrak™ values between two of the same item type.",
