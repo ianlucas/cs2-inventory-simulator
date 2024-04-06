@@ -22,7 +22,6 @@ export function CSItemName({
   item: CS_Item;
 }) {
   const parts = name.split("|");
-  console.log(parts);
 
   return (
     <>
