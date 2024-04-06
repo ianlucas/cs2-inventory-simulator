@@ -11,7 +11,7 @@ GET https://inventory.cstrike.app/api/inventory/{steamID64}.json
 ### Response
 
 ```typescript
-type GetUserInventoryResponse = Array<{
+type GetUserInventoryResponse = {
   equipped?: boolean;
   equippedCT?: boolean;
   equippedT?: boolean;
@@ -22,7 +22,7 @@ type GetUserInventoryResponse = Array<{
   stickers?: number[];
   stickerswear?: number[];
   wear?: number;
-}>;
+}[];
 ```
 
 ## Get user equipped items
@@ -78,7 +78,7 @@ POST https://inventory.cstrike.app/api/increment-item-stattrak
 > API key must have `api` or `stattrak_increment` scope.
 
 ```typescript
-type PostIncrementItemStatTrak = {
+type PostIncrementItemStatTrakRequest = {
   apiKey: string;
   targetUid: number;
   userId: string;
@@ -107,7 +107,7 @@ POST https://inventory.cstrike.app/api/sign-in
 > API key must have `api` or `api_auth` scope.
 
 ```typescript
-type GetSignIn = {
+type GetUserSignInTokenRequest = {
   apiKey: string;
   userId: string;
 };
