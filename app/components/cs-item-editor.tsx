@@ -232,7 +232,7 @@ export function CSItemEditor({
         )}
       </div>
       <div className="mt-6 flex justify-center gap-2">
-        <ModalButton className="px-2" variant="secondary" onClick={onReset}>
+        <ModalButton variant="secondary" onClick={onReset}>
           {isCrafting && (
             <FontAwesomeIcon icon={faLongArrowLeft} className="mr-2 h-4" />
           )}
@@ -240,7 +240,6 @@ export function CSItemEditor({
         </ModalButton>
         <ModalButton
           children={translate(isCrafting ? "EditorCraft" : "EditorSave")}
-          className="px-2"
           disabled={!canCraft}
           onClick={handleSubmit}
           variant="primary"

@@ -91,7 +91,7 @@ export function SyncIndicator() {
                     variant="primary"
                     children={
                       disableContinueButton ? (
-                        <span className="inline-block px-2">
+                        <span className="inline-block">
                           <FillSpinner />
                         </span>
                       ) : (

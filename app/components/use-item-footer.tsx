@@ -15,7 +15,7 @@ export function UseItemFooter({
   return (
     <div className="m-auto flex min-h-[63px] max-w-[800px] items-center justify-between border-t border-t-white/10 pt-1.5 drop-shadow">
       {left}
-      <div className="flex flex-1 items-center justify-end gap-2 font-display text-lg">
+      <div className="flex flex-1 items-center justify-end gap-2 text-lg">
         {right}
       </div>
     </div>

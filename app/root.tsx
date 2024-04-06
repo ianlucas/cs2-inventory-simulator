@@ -39,7 +39,7 @@ import styles from "./tailwind.css?url";
 import { getTranslationChecksum } from "./translation.server";
 
 const bodyFontUrl =
-  "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,800;1,700&display=swap";
+  "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wdth,wght@0,62.5..100,400..800;1,62.5..100,400..800&display=swap";
 
 const displayFontUrl =
   "https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap";

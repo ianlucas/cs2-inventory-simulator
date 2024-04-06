@@ -162,7 +162,6 @@ export default function Settings() {
       <div className="mt-6 flex justify-end gap-2 px-4 pb-4">
         <ModalButton
           children={translate("SettingsSave")}
-          className="px-2"
           onClick={handleSubmit}
           variant="primary"
         />
