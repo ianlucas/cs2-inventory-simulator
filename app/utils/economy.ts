@@ -58,7 +58,8 @@ export function getItemName(item: CS_Item) {
   if (item.free && !FREE_MODEL_IN_NAME_TYPES.includes(item.type)) {
     return {
       model: "",
-      name: item.name
+      name: item.name,
+      quality: ""
     };
   }
   if (MODEL_IN_NAME_ITEM_TYPES.includes(item.type)) {
@@ -66,12 +67,13 @@ export function getItemName(item: CS_Item) {
     return {
       model: model.trim(),
       name: paintName.join("|"),
-      quality: item.type === "melee" ? "★ " : undefined
+      quality: item.type === "melee" ? "★ " : ""
     };
   }
   return {
     model: modelFromType[item.type],
-    name: item.name
+    name: item.name,
+    quality: ""
   };
 }
 
