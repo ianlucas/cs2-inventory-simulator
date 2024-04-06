@@ -17,6 +17,7 @@ model User {
   avatar String
   caches UserCache[]
   createdAt DateTime @default(now())
+  groups UserGroup[]
   id String @id @unique
   inventory String?
   name String
@@ -57,24 +58,49 @@ model ApiCredential {
 model ApiAuthToken {
   apiKey String
   createdAt DateTime @default(now())
-  credential ApiCredential @relation(fields: [apiKey], references: [apiKey])
+  credential ApiCredential @relation(fields: [apiKey], references: [apiKey], onDelete: Cascade)
   token String @id @default(uuid())
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }
 
 model Rule {
+  groupOverwrites GroupRule[]
   name String @id @unique
-  userOverwrites UserRule[]
   type String @default("string")
+  userOverwrites UserRule[]
   value String
 }
 
 model UserRule {
   @@id([name, userId])
   name String
-  rule Rule @relation(fields: [name], references: [name])
-  user User @relation(fields: [userId], references: [id])
+  rule Rule @relation(fields: [name], references: [name], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
+  value String
+}
+
+model Group {
+  id String @id
+  overwrites GroupRule[]
+  priority Int @default(0)
+  users UserGroup[]
+}
+
+model UserGroup {
+  @@id([groupId, userId])
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+}
+
+model GroupRule {
+  @@id([groupId, name])
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String
+  name String
+  rule Rule @relation(fields: [name], references: [name], onDelete: Cascade)
   value String
 }

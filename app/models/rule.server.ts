@@ -39,6 +39,40 @@ export type RuleTypes =
   | "string-array"
   | "number-array";
 
+export async function getUserRuleOverwrite(userId: string, name: string) {
+  return (
+    await prisma.userRule.findUnique({
+      select: { value: true },
+      where: { name_userId: { userId, name } }
+    })
+  )?.value;
+}
+
+export async function getUserGroupRuleOverwrite(userId: string, name: string) {
+  const group = await prisma.userGroup.findFirst({
+    select: {
+      group: {
+        select: {
+          overwrites: {
+            select: { value: true },
+            where: { name }
+          }
+        }
+      }
+    },
+    where: { userId },
+    orderBy: {
+      group: {
+        priority: "desc"
+      }
+    }
+  });
+  if (group === null) {
+    return undefined;
+  }
+  return group?.group?.overwrites?.[0]?.value;
+}
+
 export function getRule(
   name: BooleanRuleNames,
   userId?: string
@@ -66,12 +100,9 @@ export function getRule(
 export async function getRule(name: RuleNames, userId?: string) {
   let value: string | undefined = undefined;
   if (userId !== undefined) {
-    const overwrite = await prisma.ruleOverwrite.findUnique({
-      where: { name_userId: { name, userId } }
-    });
-    if (overwrite !== null) {
-      value = overwrite.value;
-    }
+    value =
+      (await getUserRuleOverwrite(userId, name)) ??
+      (await getUserGroupRuleOverwrite(userId, name));
   }
   if (value === undefined) {
     value = (
