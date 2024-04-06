@@ -20,7 +20,7 @@ model User {
   id String @id @unique
   inventory String?
   name String
-  overwrites RuleOverwrite[]
+  overwrites UserRule[]
   preferences UserPreference?
   syncedAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -65,12 +65,12 @@ model ApiAuthToken {
 
 model Rule {
   name String @id @unique
-  overwrites RuleOverwrite[]
+  userOverwrites UserRule[]
   type String @default("string")
   value String
 }
 
-model RuleOverwrite {
+model UserRule {
   @@id([name, userId])
   name String
   rule Rule @relation(fields: [name], references: [name])
