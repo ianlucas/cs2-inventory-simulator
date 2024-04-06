@@ -31,7 +31,14 @@ export const modelFromType = {
   weapon: "Weapon"
 } as const;
 
-export const COUNTABLE_ITEM_TYPES = ["case", "key", "sticker", "tool"];
+export const COUNTABLE_ITEM_TYPES = [
+  "case",
+  "graffiti",
+  "key",
+  "patch",
+  "sticker",
+  "tool"
+];
 export const FREE_MODEL_IN_NAME_TYPES = ["musickit"];
 export const MODEL_IN_NAME_ITEM_TYPES = [
   "glove",
