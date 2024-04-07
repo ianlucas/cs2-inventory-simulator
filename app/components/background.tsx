@@ -3,12 +3,17 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { useMemo } from "react";
 import { useRootContext } from "./root-context";
 
 export function Background() {
   const {
-    preferences: { background }
+    preferences: { background: serverBackground, currentBackground }
   } = useRootContext();
+
+  const background = useMemo(() => {
+    return serverBackground;
+  }, [currentBackground]);
 
   return (
     <video
