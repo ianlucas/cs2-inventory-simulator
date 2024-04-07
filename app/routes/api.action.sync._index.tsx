@@ -275,6 +275,7 @@ export async function action({ request }: ActionFunctionArgs) {
             );
             break;
           case ApplyItemStickerAction:
+            await expectRule("InventoryItemAllowApplySticker", true, userId);
             inventory.applyItemSticker(
               action.targetUid,
               action.stickerUid,
@@ -298,6 +299,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.remove(action.uid);
             break;
           case ScrapeItemStickerAction:
+            await expectRule("InventoryItemAllowScrapeSticker", true, userId);
             inventory.scrapeItemSticker(action.targetUid, action.stickerIndex);
             break;
           case SwapItemsStatTrakAction:

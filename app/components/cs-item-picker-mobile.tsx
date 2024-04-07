@@ -17,6 +17,7 @@ export function CSItemPickerMobile({
   onPickItem: (item: CS_Item) => void;
 }) {
   const {
+    categories,
     filter,
     handleCategoryClick,
     handleItemClick,
@@ -31,7 +32,11 @@ export function CSItemPickerMobile({
 
   return (
     <>
-      <FilterMenuMobile value={filter} onChange={handleCategoryClick} />
+      <FilterMenuMobile
+        categories={categories}
+        onChange={handleCategoryClick}
+        value={filter}
+      />
       <div className="my-2 flex items-center gap-2 px-4">
         <FontAwesomeIcon
           icon={faMagnifyingGlass}

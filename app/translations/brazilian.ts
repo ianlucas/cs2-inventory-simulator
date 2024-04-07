@@ -48,6 +48,7 @@ export const brazilian = {
   EditorSave: "Salvar",
   EditorCancel: "Cancelar",
   EditorStickerWear: "Desgaste",
+  GridItemNoItemsToDisplay: "Nenhum item para exibir",
   StickerPickerHeader: "Escolha um adesivo...",
   StickerPickerSearchPlaceholder: "Procurar adesivo...",
   StickerPickerFilterPlaceholder: "Filtrar por categoria...",

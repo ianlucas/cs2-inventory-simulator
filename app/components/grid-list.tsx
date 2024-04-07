@@ -14,6 +14,8 @@ import {
   WheelEvent
 } from "react";
 import { range } from "~/utils/number";
+import { InfoIcon } from "./info-icon";
+import { useRootContext } from "./root-context";
 
 export function GridList({
   children,
@@ -28,6 +30,10 @@ export function GridList({
   itemHeight: number;
   maxItemsIntoView?: number;
 }) {
+  const {
+    translations: { translate }
+  } = useRootContext();
+
   const [scrollbarHeight, setScrollbarHeight] = useState(0);
   const [scrollbarTop, setScrollbarTop] = useState(0);
   const [scrollTop, setScrollTop] = useState(0);
@@ -150,12 +156,21 @@ export function GridList({
         style={{
           height: itemHeight * (maxItemsIntoView || 2)
         }}
+        onTouchEnd={handleTouchEnd}
+        onTouchMove={handleTouchMove}
+        onTouchStart={handleTouchStart}
         onWheel={handleWheel}
         ref={scrollable}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
+        {children.length === 0 && (
+          <div
+            className="flex select-none items-center justify-center gap-2 bg-gradient-to-r from-transparent via-black/30 to-transparent"
+            style={{ height: itemHeight }}
+          >
+            <InfoIcon className="h-4" />
+            {translate("GridItemNoItemsToDisplay")}
+          </div>
+        )}
         {range(maxItemsIntoView).map((index) => children[currentIndex + index])}
       </div>
       <div

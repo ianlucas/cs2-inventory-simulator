@@ -79,7 +79,16 @@ export function InventoryItem({
 }) {
   const {
     inventory,
-    rules,
+    rules: {
+      editHideCategory,
+      editHideId,
+      editHideModel,
+      editHideType,
+      inventoryItemAllowApplySticker,
+      inventoryItemAllowEdit,
+      inventoryItemAllowScrapeSticker,
+      inventoryStorageUnitMaxItems
+    },
     translations: { translate }
   } = useRootContext();
 
@@ -121,11 +130,13 @@ export function InventoryItem({
   const canSwapStatTrak = CS_Economy.isStatTrakSwapTool(data);
   const canRename = CS_Economy.isNametagTool(data);
   const canApplySticker =
+    inventoryItemAllowApplySticker &&
     ownApplicableStickers &&
     ((CS_Economy.hasStickers(data) &&
       (item.stickers ?? []).filter((id) => id !== CS_NONE).length < 4) ||
       data.type === "sticker");
   const canScrapeSticker =
+    inventoryItemAllowScrapeSticker &&
     CS_Economy.hasStickers(data) &&
     (item.stickers ?? []).filter((id) => id !== CS_NONE).length > 0;
   const canUnlockContainer = UNLOCKABLE_ITEM_TYPE.includes(data.type);
@@ -136,13 +147,13 @@ export function InventoryItem({
   const isEditable = EDITABLE_ITEM_TYPE.includes(data.type);
   const canInspect = INSPECTABLE_ITEM_TYPE.includes(data.type);
   const canEdit =
-    rules.inventoryItemAllowEdit &&
+    inventoryItemAllowEdit &&
     isEditable &&
     (data.category === undefined ||
-      !rules.editHideCategory.includes(data.category)) &&
-    (data.type === undefined || !rules.editHideType.includes(data.type)) &&
-    (data.model === undefined || !rules.editHideModel.includes(data.model)) &&
-    !rules.editHideId.includes(data.id);
+      !editHideCategory.includes(data.category)) &&
+    (data.type === undefined || !editHideType.includes(data.type)) &&
+    (data.model === undefined || !editHideModel.includes(data.model)) &&
+    !editHideId.includes(data.id);
 
   function close(callBeforeClosing: () => void) {
     return function close() {
@@ -274,7 +285,7 @@ export function InventoryItem({
                         return alert({
                           bodyText: translate(
                             "InventoryItemStorageUnitEmptyBody",
-                            format(rules.inventoryStorageUnitMaxItems)
+                            format(inventoryStorageUnitMaxItems)
                           ),
                           closeText: translate(
                             "InventoryItemStorageUnitEmptyClose"

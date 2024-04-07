@@ -4,18 +4,18 @@
  *--------------------------------------------------------------------------------------------*/
 
 import clsx from "clsx";
-import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
-import { CRAFT_ITEM_FILTERS, CraftItemFilter } from "~/utils/craft-filters";
+import { CraftItemFilter } from "~/utils/craft-filters";
 import { useRootContext } from "./root-context";
 
 export function FilterMenuMobile({
+  categories,
   onChange,
   value
 }: {
+  categories: CraftItemFilter[];
   onChange: (newValue: CraftItemFilter) => void;
   value: CraftItemFilter;
 }) {
-  const filter = useCraftFilterRules();
   const {
     translations: { translate }
   } = useRootContext();
@@ -28,7 +28,7 @@ export function FilterMenuMobile({
 
   return (
     <div className="flex flex-wrap gap-1 px-2">
-      {CRAFT_ITEM_FILTERS.filter(filter).map((filter, index) => (
+      {categories.map((filter, index) => (
         <button
           key={index}
           className={clsx(

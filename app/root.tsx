@@ -69,14 +69,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ...(await getRules(
         [
           "CraftHideCategory",
-          "CraftHideType",
-          "CraftHideModel",
           "CraftHideId",
+          "CraftHideModel",
+          "CraftHideType",
           "EditHideCategory",
-          "EditHideType",
-          "EditHideModel",
           "EditHideId",
+          "EditHideModel",
+          "EditHideType",
+          "InventoryItemAllowApplySticker",
           "InventoryItemAllowEdit",
+          "InventoryItemAllowScrapeSticker",
           "InventoryMaxItems",
           "InventoryStorageUnitMaxItems"
         ],

@@ -51,6 +51,7 @@ export const english = {
   EditorSave: "Save",
   EditorCancel: "Cancel",
   EditorStickerWear: "Sticker wear",
+  GridItemNoItemsToDisplay: "No items to display",
   StickerPickerNA: "N/A",
   StickerPickerHeader: "Pick a sticker...",
   StickerPickerSearchPlaceholder: "Search sticker...",

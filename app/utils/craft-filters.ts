@@ -5,100 +5,110 @@
 
 export const CRAFT_ITEM_FILTERS = [
   {
-    label: "Pistol",
-    icon: "pistol",
     category: "secondary",
-    hasModel: true
+    hasModel: true,
+    icon: "pistol",
+    isFree: true,
+    label: "Pistol",
+    type: "weapon" as const
   },
   {
-    label: "SMG",
-    icon: "smg",
     category: "smg",
-    hasModel: true
+    hasModel: true,
+    icon: "smg",
+    isFree: true,
+    label: "SMG",
+    type: "weapon" as const
   },
   {
-    label: "Heavy",
-    icon: "heavy",
     category: "heavy",
-    hasModel: true
+    hasModel: true,
+    isFree: true,
+    icon: "heavy",
+    label: "Heavy",
+    type: "weapon" as const
   },
   {
-    label: "Rifle",
-    icon: "rifle",
     category: "rifle",
-    hasModel: true
+    hasModel: true,
+    isFree: true,
+    icon: "rifle",
+    label: "Rifle",
+    type: "weapon" as const
   },
   {
-    label: "Knife",
+    hasModel: true,
     icon: "knife",
-    type: "melee" as const,
-    hasModel: true
+    label: "Knife",
+    type: "melee" as const
   },
   {
-    label: "Equipment",
-    icon: "equipment",
     category: "equipment",
-    hasModel: true
+    hasModel: true,
+    icon: "equipment",
+    isFree: true,
+    label: "Equipment",
+    type: "weapon" as const
   },
   {
-    label: "Glove",
+    hasModel: true,
     icon: "glove",
-    type: "glove" as const,
-    hasModel: true
+    label: "Glove",
+    type: "glove" as const
   },
   {
-    label: "Sticker",
+    hasModel: false,
     icon: "sticker",
-    type: "sticker" as const,
-    hasModel: false
+    label: "Sticker",
+    type: "sticker" as const
   },
   {
-    label: "Agent",
+    hasModel: false,
     icon: "agent",
-    type: "agent" as const,
-    hasModel: false
+    label: "Agent",
+    type: "agent" as const
   },
   {
-    label: "Patch",
+    hasModel: false,
     icon: "patch",
-    type: "patch" as const,
-    hasModel: false
+    label: "Patch",
+    type: "patch" as const
   },
   {
-    label: "Music Kit",
+    hasModel: false,
     icon: "musickit",
-    type: "musickit" as const,
-    hasModel: false
+    label: "Music Kit",
+    type: "musickit" as const
   },
   {
-    label: "Graffiti",
+    hasModel: false,
     icon: "spray",
-    type: "graffiti" as const,
-    hasModel: false
+    label: "Graffiti",
+    type: "graffiti" as const
   },
   {
-    label: "Pin",
+    hasModel: false,
     icon: "pin",
-    type: "pin" as const,
-    hasModel: false
+    label: "Pin",
+    type: "pin" as const
   },
   {
-    label: "Case",
+    hasModel: false,
     icon: "case",
-    type: "case" as const,
-    hasModel: false
+    label: "Case",
+    type: "case" as const
   },
   {
-    label: "Key",
+    hasModel: false,
     icon: "key",
-    type: "key" as const,
-    hasModel: false
+    label: "Key",
+    type: "key" as const
   },
   {
-    label: "Tool",
+    hasModel: false,
     icon: "tool",
-    type: "tool" as const,
-    hasModel: false
+    label: "Tool",
+    type: "tool" as const
   }
 ];
 

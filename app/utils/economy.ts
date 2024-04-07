@@ -77,14 +77,18 @@ export function getItemName(item: CS_Item) {
   };
 }
 
-export function getBaseItems({ category, hasModel, type }: CraftItemFilter) {
+export function getBaseItems({
+  category,
+  hasModel,
+  type,
+  isFree
+}: CraftItemFilter) {
   return CS_Economy.filterItems({
     category,
     type,
     base: hasModel ? true : undefined
   }).filter(
-    ({ free }) =>
-      (hasModel && type === undefined ? free : !free) || (!hasModel && !free)
+    ({ free }) => (hasModel && isFree ? free : !free) || (!hasModel && !free)
   );
 }
 

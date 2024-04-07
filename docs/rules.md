@@ -39,6 +39,18 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 - **Type:** `boolean`
 - **Default:** `false`
 
+### `InventoryItemAllowApplySticker`
+
+- Indicates whether the user can apply sticker to an inventory item.
+- **Type:** `boolean`
+- **Default:** `true`
+
+### `InventoryItemAllowScrapeSticker`
+
+- Indicates whether the user can scrape sticker in an inventory item.
+- **Type:** `boolean`
+- **Default:** `true`
+
 > [!WARNING]  
 > You can find all possible items and their attributes [here](https://raw.githubusercontent.com/ianlucas/cslib/main/assets/data/items.json).
 

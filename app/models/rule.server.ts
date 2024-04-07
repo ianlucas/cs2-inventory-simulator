@@ -8,7 +8,11 @@ import { prisma } from "~/db.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "~/env.server";
 import { assert, fail } from "~/utils/misc";
 
-const booleanRulesNames = ["InventoryItemAllowEdit"] as const;
+const booleanRulesNames = [
+  "InventoryItemAllowApplySticker",
+  "InventoryItemAllowEdit",
+  "InventoryItemAllowScrapeSticker"
+] as const;
 const numberRulesNames = [
   "InventoryMaxItems",
   "InventoryStorageUnitMaxItems"
@@ -332,5 +336,15 @@ export async function setupRules() {
     name: "EditHideId",
     type: "number-array",
     input: []
+  });
+  await addRule({
+    name: "InventoryItemAllowApplySticker",
+    type: "boolean",
+    input: true
+  });
+  await addRule({
+    name: "InventoryItemAllowScrapeSticker",
+    type: "boolean",
+    input: true
   });
 }

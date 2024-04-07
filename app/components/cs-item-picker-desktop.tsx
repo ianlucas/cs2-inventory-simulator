@@ -17,6 +17,7 @@ export function CSItemPickerDesktop({
   onPickItem: (item: CS_Item) => void;
 }) {
   const {
+    categories,
     filter,
     handleCategoryClick,
     handleItemClick,
@@ -31,7 +32,11 @@ export function CSItemPickerDesktop({
 
   return (
     <div className="flex gap-2">
-      <FilterMenuDesktop onChange={handleCategoryClick} value={filter} />
+      <FilterMenuDesktop
+        categories={categories}
+        onChange={handleCategoryClick}
+        value={filter}
+      />
       <div className="flex-1">
         <div className="mb-2 flex items-center gap-2 px-6">
           <FontAwesomeIcon
