@@ -49,28 +49,26 @@ export async function getUserRuleOverwrite(userId: string, name: string) {
 }
 
 export async function getUserGroupRuleOverwrite(userId: string, name: string) {
-  const group = await prisma.userGroup.findFirst({
-    select: {
-      group: {
-        select: {
-          overwrites: {
-            select: { value: true },
-            where: { name }
+  return (
+    await prisma.userGroup.findFirst({
+      select: {
+        group: {
+          select: {
+            overwrites: {
+              select: { value: true },
+              where: { name }
+            }
           }
         }
+      },
+      where: { userId },
+      orderBy: {
+        group: {
+          priority: "desc"
+        }
       }
-    },
-    where: { userId },
-    orderBy: {
-      group: {
-        priority: "desc"
-      }
-    }
-  });
-  if (group === null) {
-    return undefined;
-  }
-  return group?.group?.overwrites?.[0]?.value;
+    })
+  )?.group?.overwrites?.[0]?.value;
 }
 
 export function getRule(
