@@ -51,6 +51,12 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 - **Type:** `boolean`
 - **Default:** `true`
 
+### `InventoryItemAllowUnlockContainer`
+
+- Indicates whether the user can unlock a container inventory item.
+- **Type:** `boolean`
+- **Default:** `true`
+
 > [!WARNING]  
 > You can find all possible items and their attributes [here](https://raw.githubusercontent.com/ianlucas/cslib/main/assets/data/items.json).
 

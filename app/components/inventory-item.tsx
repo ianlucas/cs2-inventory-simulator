@@ -87,6 +87,7 @@ export function InventoryItem({
       inventoryItemAllowApplySticker,
       inventoryItemAllowEdit,
       inventoryItemAllowScrapeSticker,
+      inventoryItemAllowUnlockContainer,
       inventoryStorageUnitMaxItems
     },
     translations: { translate }
@@ -139,7 +140,9 @@ export function InventoryItem({
     inventoryItemAllowScrapeSticker &&
     CS_Economy.hasStickers(data) &&
     (item.stickers ?? []).filter((id) => id !== CS_NONE).length > 0;
-  const canUnlockContainer = UNLOCKABLE_ITEM_TYPE.includes(data.type);
+  const canUnlockContainer =
+    inventoryItemAllowUnlockContainer &&
+    UNLOCKABLE_ITEM_TYPE.includes(data.type);
   const hasContents = data.contents !== undefined;
   const hasTeams = data.teams !== undefined;
   const hasNametag = item.nametag !== undefined;

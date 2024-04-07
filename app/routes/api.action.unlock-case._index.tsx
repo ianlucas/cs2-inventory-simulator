@@ -8,7 +8,7 @@ import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
-import { getRule } from "~/models/rule.server";
+import { expectRule, getRule } from "~/models/rule.server";
 import { updateUserInventory } from "~/models/user.server";
 import { conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
@@ -27,6 +27,7 @@ export async function action({ request }: ActionFunctionArgs) {
     inventory: rawInventory,
     syncedAt: currentSyncedAt
   } = await requireUser(request);
+  await expectRule("InventoryItemAllowUnlockContainer", true, userId);
   const { caseUid, keyUid, syncedAt } = z
     .object({
       syncedAt: positiveInt,

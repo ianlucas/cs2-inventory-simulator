@@ -21,7 +21,8 @@ const booleanRulesNames = [
   "EditAllowWear",
   "InventoryItemAllowApplySticker",
   "InventoryItemAllowEdit",
-  "InventoryItemAllowScrapeSticker"
+  "InventoryItemAllowScrapeSticker",
+  "InventoryItemAllowUnlockContainer"
 ] as const;
 const numberRulesNames = [
   "InventoryMaxItems",
@@ -354,6 +355,11 @@ export async function setupRules() {
   });
   await addRule({
     name: "InventoryItemAllowScrapeSticker",
+    type: "boolean",
+    input: true
+  });
+  await addRule({
+    name: "InventoryItemAllowUnlockContainer",
     type: "boolean",
     input: true
   });
