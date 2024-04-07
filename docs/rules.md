@@ -68,4 +68,10 @@ The CS2 Inventory Simulator can be configured at runtime using rules. These rule
 
 ## Rule overwriting
 
-A rule can be overwritten by adding a record to the `RuleOverwrite` table with the user's SteamID64, the rule name, and the value the application should consider instead.
+There are two ways to overwrite rules: by adding records to `GroupRole` and `UserRule` tables. Users can be grouped by creating a record on `Group` table, and then associating each user to a group on `UserGroup`.
+
+1. If the system finds a rule for a user in `UserRule`, that rule will be enforced.
+2. If the system finds a rule for a group the user is in, on `GroupRule` table, that rule will enforced. If the user is associated to multiple groups, the rule for the group with the higher `priority` will be enforced.
+
+> [!TIP]  
+> For example, consider `admin` and `vip` groups - if a user is associated to both, you'd make sure `admin`'s `priority` is higher than `vip`'s.
