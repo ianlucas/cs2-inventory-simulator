@@ -68,10 +68,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
     rules: {
       ...(await getRules(
         [
+          "CraftAllowNametag",
+          "CraftAllowSeed",
+          "CraftAllowStatTrak",
+          "CraftAllowStickers",
+          "CraftAllowWear",
           "CraftHideCategory",
           "CraftHideId",
           "CraftHideModel",
           "CraftHideType",
+          "EditAllowNametag",
+          "EditAllowSeed",
+          "EditAllowStatTrak",
+          "EditAllowStickers",
+          "EditAllowWear",
           "EditHideCategory",
           "EditHideId",
           "EditHideModel",

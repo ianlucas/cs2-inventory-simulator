@@ -179,17 +179,29 @@ async function enforceCraftRulesForItem(
 }
 
 async function enforceCraftRulesForInventoryItem(
-  item: Partial<CS_BaseInventoryItem>,
+  { stickers, stattrak, wear, seed, nametag }: Partial<CS_BaseInventoryItem>,
   userId: string
 ) {
-  const { stickers } = item;
   if (stickers !== undefined) {
+    await expectRule("CraftAllowStickers", true, userId);
     await expectRuleNotContain("CraftHideType", "sticker", userId);
     for (const sticker of stickers) {
       if (sticker !== CS_NONE) {
         await enforceCraftRulesForItem(sticker, userId);
       }
     }
+  }
+  if (stattrak !== undefined) {
+    await expectRule("CraftAllowStatTrak", true, userId);
+  }
+  if (wear !== undefined) {
+    await expectRule("CraftAllowWear", true, userId);
+  }
+  if (seed !== undefined) {
+    await expectRule("CraftAllowSeed", true, userId);
+  }
+  if (nametag !== undefined) {
+    await expectRule("CraftAllowNametag", true, userId);
   }
 }
 
@@ -211,17 +223,29 @@ async function enforceEditRulesForItem(
 }
 
 async function enforceEditRulesForInventoryItem(
-  attributes: Partial<CS_BaseInventoryItem>,
+  { stickers, stattrak, wear, seed, nametag }: Partial<CS_BaseInventoryItem>,
   userId: string
 ) {
-  const { stickers } = attributes;
   if (stickers !== undefined) {
+    await expectRule("EditAllowStickers", true, userId);
     await expectRuleNotContain("EditHideType", "sticker", userId);
     for (const sticker of stickers) {
       if (sticker !== CS_NONE) {
         await enforceEditRulesForItem(sticker, userId);
       }
     }
+  }
+  if (stattrak !== undefined) {
+    await expectRule("EditAllowStatTrak", true, userId);
+  }
+  if (wear !== undefined) {
+    await expectRule("EditAllowWear", true, userId);
+  }
+  if (seed !== undefined) {
+    await expectRule("EditAllowSeed", true, userId);
+  }
+  if (nametag !== undefined) {
+    await expectRule("EditAllowNametag", true, userId);
   }
 }
 

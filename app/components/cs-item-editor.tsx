@@ -65,7 +65,21 @@ export function CSItemEditor({
   onSubmit: (props: CSItemEditorAttributes) => void;
 }) {
   const {
-    rules: { inventoryMaxItems, craftHideType, editHideType },
+    rules: {
+      craftAllowNametag,
+      craftAllowSeed,
+      craftAllowStatTrak,
+      craftAllowStickers,
+      craftAllowWear,
+      craftHideType,
+      editAllowNametag,
+      editAllowSeed,
+      editAllowStatTrak,
+      editAllowStickers,
+      editAllowWear,
+      editHideType,
+      inventoryMaxItems
+    },
     inventory,
     translations: { translate }
   } = useRootContext();
@@ -84,13 +98,21 @@ export function CSItemEditor({
   const [quantity, setQuantity] = useState(1);
   const isCrafting = attributes === undefined;
   const hasStickers =
+    (isCrafting ? craftAllowStickers : editAllowStickers) &&
     CS_Economy.hasStickers(item) &&
-    (!isCrafting || !craftHideType.includes("sticker")) &&
-    (isCrafting || !editHideType.includes("sticker"));
-  const hasStattrak = CS_Economy.hasStatTrak(item);
-  const hasSeed = CS_Economy.hasSeed(item);
-  const hasWear = CS_Economy.hasWear(item);
-  const hasNametag = CS_Economy.hasNametag(item);
+    (isCrafting
+      ? !craftHideType.includes("sticker")
+      : !editHideType.includes("sticker"));
+  const hasStattrak =
+    (isCrafting ? craftAllowStatTrak : editAllowStatTrak) &&
+    CS_Economy.hasStatTrak(item);
+  const hasSeed =
+    (isCrafting ? craftAllowSeed : editAllowSeed) && CS_Economy.hasSeed(item);
+  const hasWear =
+    (isCrafting ? craftAllowWear : editAllowWear) && CS_Economy.hasWear(item);
+  const hasNametag =
+    (isCrafting ? craftAllowNametag : editAllowNametag) &&
+    CS_Economy.hasNametag(item);
   const isWearValid = !hasWear || CS_Economy.safeValidateWear(wear);
   const isNametagValid =
     !hasNametag ||
