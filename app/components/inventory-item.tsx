@@ -135,6 +135,14 @@ export function InventoryItem({
   const isStorageUnit = CS_Economy.isStorageUnitTool(data);
   const isEditable = EDITABLE_ITEM_TYPE.includes(data.type);
   const canInspect = INSPECTABLE_ITEM_TYPE.includes(data.type);
+  const canEdit =
+    rules.inventoryItemAllowEdit &&
+    isEditable &&
+    (data.category === undefined ||
+      !rules.editHideCategory.includes(data.category)) &&
+    (data.type === undefined || !rules.editHideType.includes(data.type)) &&
+    (data.model === undefined || !rules.editHideModel.includes(data.model)) &&
+    !rules.editHideId.includes(data.id);
 
   function close(callBeforeClosing: () => void) {
     return function close() {
@@ -307,7 +315,7 @@ export function InventoryItem({
                 ],
                 [
                   {
-                    condition: rules.inventoryItemAllowEdit && isEditable,
+                    condition: canEdit,
                     label: translate("InventoryItemEdit"),
                     onClick: close(() => onEdit?.(uid))
                   },

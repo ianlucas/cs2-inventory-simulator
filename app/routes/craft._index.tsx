@@ -23,6 +23,7 @@ import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
 import { middleware } from "~/http.server";
 import { isItemCountable } from "~/utils/economy";
+import { deleteEmptyProps } from "~/utils/misc";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { AddAction, EditAction } from "./api.action.sync._index";
@@ -79,6 +80,7 @@ export default function Craft() {
     };
 
     if (uid !== undefined) {
+      deleteEmptyProps(inventoryItem);
       setInventory(
         inventory.edit(uid, {
           ...inventoryItem,

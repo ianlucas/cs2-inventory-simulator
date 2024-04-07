@@ -66,6 +66,30 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 - **Type:** `number-array`
 - **Usage example:** `307` (Users won't be able to craft AWP | Dragon Lore.)
 
+### `EditHideCategory`
+
+- Determines whether to hide a category from being editable.
+- **Type:** `string-array`
+- **Usage example:** `secondary;rifle` (Users won't be able to edit secondary and rifle items.)
+
+### `EditHideType`
+
+- Determines whether to hide a type from being editable.
+- **Type:** `string-array`
+- **Usage example:** `sticker;weapon` (Users won't be able to edit sticker and weapon items.)
+
+### `EditHideModel`
+
+- Determines whether to hide a model from being editable.
+- **Type:** `string-array`
+- **Usage example:** `knife_flip;bayonet` (Users won't be able to edit flip and bayonet knives.)
+
+### `EditHideId`
+
+- Determines whether to hide an item from being editable.
+- **Type:** `number-array`
+- **Usage example:** `307` (Users won't be able to edit AWP | Dragon Lore.)
+
 ## Rule overwriting
 
 There are two ways to overwrite rules: by adding records to `GroupRole` and `UserRule` tables. Users can be grouped by creating a record on `Group` table, and then associating each user to a group on `UserGroup`.

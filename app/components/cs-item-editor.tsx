@@ -65,7 +65,7 @@ export function CSItemEditor({
   onSubmit: (props: CSItemEditorAttributes) => void;
 }) {
   const {
-    rules: { inventoryMaxItems },
+    rules: { inventoryMaxItems, craftHideType, editHideType },
     inventory,
     translations: { translate }
   } = useRootContext();
@@ -82,7 +82,11 @@ export function CSItemEditor({
     wears: attributes?.stickerswear ?? [...CS_INVENTORY_STICKERS_WEAR]
   });
   const [quantity, setQuantity] = useState(1);
-  const hasStickers = CS_Economy.hasStickers(item);
+  const isCrafting = attributes === undefined;
+  const hasStickers =
+    CS_Economy.hasStickers(item) &&
+    (!isCrafting || !craftHideType.includes("sticker")) &&
+    (isCrafting || !editHideType.includes("sticker"));
   const hasStattrak = CS_Economy.hasStatTrak(item);
   const hasSeed = CS_Economy.hasSeed(item);
   const hasWear = CS_Economy.hasWear(item);
@@ -96,7 +100,6 @@ export function CSItemEditor({
   const canCraft = isWearValid && isNametagValid && isSeedValid;
   const maxQuantity = inventoryMaxItems - inventory.size();
   const hasQuantity = isItemCountable(item);
-  const isCrafting = attributes === undefined;
 
   function handleSubmit() {
     const stickers =
@@ -141,6 +144,7 @@ export function CSItemEditor({
               {translate("EditorStickers")}
             </label>
             <StickerPicker
+              isCrafting={isCrafting}
               value={stickersAttributes}
               onChange={setStickersAttributes}
             />

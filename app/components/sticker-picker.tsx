@@ -31,9 +31,11 @@ import { Modal } from "./modal";
 import { useRootContext } from "./root-context";
 
 export function StickerPicker({
+  isCrafting,
   onChange,
   value
 }: {
+  isCrafting: boolean;
   onChange: (value: { ids: number[]; wears: number[] }) => void;
   value: {
     ids: number[];
@@ -41,6 +43,7 @@ export function StickerPicker({
   };
 }) {
   const {
+    rules: { craftHideId, craftHideCategory, editHideId, editHideCategory },
     translations: { translate }
   } = useRootContext();
 
@@ -88,6 +91,26 @@ export function StickerPicker({
   const filtered = useMemo(() => {
     const words = search.split(" ").map((word) => word.toLowerCase());
     return stickers.filter((item) => {
+      if (isCrafting && craftHideId.includes(item.id)) {
+        return false;
+      }
+      if (
+        isCrafting &&
+        item.category !== undefined &&
+        craftHideCategory.includes(item.category)
+      ) {
+        return false;
+      }
+      if (!isCrafting && editHideId.includes(item.id)) {
+        return false;
+      }
+      if (
+        !isCrafting &&
+        item.category !== undefined &&
+        editHideCategory.includes(item.category)
+      ) {
+        return false;
+      }
       if (search.length === 0) {
         return item.category === category;
       }

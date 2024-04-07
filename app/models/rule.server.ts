@@ -13,12 +13,15 @@ const numberRulesNames = [
   "InventoryMaxItems",
   "InventoryStorageUnitMaxItems"
 ] as const;
-const numberArrayRulesNames = ["CraftHideId"] as const;
+const numberArrayRulesNames = ["CraftHideId", "EditHideId"] as const;
 const stringRulesNames = ["SteamApiKey", "SteamCallbackUrl"] as const;
 const stringArrayRulesName = [
   "CraftHideCategory",
   "CraftHideType",
-  "CraftHideModel"
+  "CraftHideModel",
+  "EditHideCategory",
+  "EditHideType",
+  "EditHideModel"
 ] as const;
 
 export type BooleanRuleNames = (typeof booleanRulesNames)[number];
@@ -307,6 +310,26 @@ export async function setupRules() {
   });
   await addRule({
     name: "CraftHideId",
+    type: "number-array",
+    input: []
+  });
+  await addRule({
+    name: "EditHideCategory",
+    type: "string-array",
+    input: []
+  });
+  await addRule({
+    name: "EditHideType",
+    type: "string-array",
+    input: []
+  });
+  await addRule({
+    name: "EditHideModel",
+    type: "string-array",
+    input: []
+  });
+  await addRule({
+    name: "EditHideId",
     type: "number-array",
     input: []
   });

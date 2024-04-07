@@ -3,7 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Inventory, CS_Item } from "@ianlucas/cslib";
+import {
+  CS_BaseInventoryItem,
+  CS_Economy,
+  CS_Inventory,
+  CS_Item,
+  CS_NONE
+} from "@ianlucas/cslib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
@@ -155,7 +161,10 @@ export type ApiActionSyncData = ReturnType<
   Awaited<ReturnType<typeof action>>["json"]
 >;
 
-async function enforceCraftRules(idOrItem: number | CS_Item, userId: string) {
+async function enforceCraftRulesForItem(
+  idOrItem: number | CS_Item,
+  userId: string
+) {
   const { category, type, model, id } = CS_Economy.get(idOrItem);
   await expectRuleNotContain("CraftHideId", id, userId);
   if (category !== undefined) {
@@ -166,6 +175,53 @@ async function enforceCraftRules(idOrItem: number | CS_Item, userId: string) {
   }
   if (model !== undefined) {
     await expectRuleNotContain("CraftHideModel", model, userId);
+  }
+}
+
+async function enforceCraftRulesForInventoryItem(
+  item: Partial<CS_BaseInventoryItem>,
+  userId: string
+) {
+  const { stickers } = item;
+  if (stickers !== undefined) {
+    await expectRuleNotContain("CraftHideType", "sticker", userId);
+    for (const sticker of stickers) {
+      if (sticker !== CS_NONE) {
+        await enforceCraftRulesForItem(sticker, userId);
+      }
+    }
+  }
+}
+
+async function enforceEditRulesForItem(
+  idOrItem: number | CS_Item,
+  userId: string
+) {
+  const { category, type, model, id } = CS_Economy.get(idOrItem);
+  await expectRuleNotContain("EditHideId", id, userId);
+  if (category !== undefined) {
+    await expectRuleNotContain("EditHideCategory", category, userId);
+  }
+  if (type !== undefined) {
+    await expectRuleNotContain("EditHideType", type, userId);
+  }
+  if (model !== undefined) {
+    await expectRuleNotContain("EditHideModel", model, userId);
+  }
+}
+
+async function enforceEditRulesForInventoryItem(
+  attributes: Partial<CS_BaseInventoryItem>,
+  userId: string
+) {
+  const { stickers } = attributes;
+  if (stickers !== undefined) {
+    await expectRuleNotContain("EditHideType", "sticker", userId);
+    for (const sticker of stickers) {
+      if (sticker !== CS_NONE) {
+        await enforceEditRulesForItem(sticker, userId);
+      }
+    }
   }
 }
 
@@ -187,7 +243,8 @@ export async function action({ request }: ActionFunctionArgs) {
       for (const action of actions) {
         switch (action.type) {
           case AddAction:
-            await enforceCraftRules(action.item.id, userId);
+            await enforceCraftRulesForInventoryItem(action.item, userId);
+            await enforceCraftRulesForItem(action.item.id, userId);
             inventory.add(action.item);
             break;
           case AddFromCacheAction:
@@ -201,7 +258,8 @@ export async function action({ request }: ActionFunctionArgs) {
                     userId
                   )
                 }).export()) {
-                  await enforceCraftRules(item.id, userId);
+                  await enforceCraftRulesForInventoryItem(item, userId);
+                  await enforceCraftRulesForItem(item.id, userId);
                   inventory.add(item);
                 }
               } catch {}
@@ -209,7 +267,7 @@ export async function action({ request }: ActionFunctionArgs) {
             }
             break;
           case AddWithNametagAction:
-            await enforceCraftRules(action.itemId, userId);
+            await enforceCraftRulesForItem(action.itemId, userId);
             inventory.addWithNametag(
               action.toolUid,
               action.itemId,
@@ -260,6 +318,8 @@ export async function action({ request }: ActionFunctionArgs) {
             break;
           case EditAction:
             await expectRule("InventoryItemAllowEdit", true, userId);
+            await enforceEditRulesForItem(action.attributes.id, userId);
+            await enforceEditRulesForInventoryItem(action.attributes, userId);
             inventory.edit(action.uid, {
               ...action.attributes,
               stattrak:
@@ -270,7 +330,7 @@ export async function action({ request }: ActionFunctionArgs) {
             });
             break;
           case AddWithStickerAction:
-            await enforceCraftRules(action.itemId, userId);
+            await enforceCraftRulesForItem(action.itemId, userId);
             inventory.addWithSticker(
               action.stickerUid,
               action.itemId,

@@ -72,6 +72,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
           "CraftHideType",
           "CraftHideModel",
           "CraftHideId",
+          "EditHideCategory",
+          "EditHideType",
+          "EditHideModel",
+          "EditHideId",
           "InventoryItemAllowEdit",
           "InventoryMaxItems",
           "InventoryStorageUnitMaxItems"

@@ -22,3 +22,11 @@ export function safeParseJson(json: string): any {
     return undefined;
   }
 }
+
+export function deleteEmptyProps(obj: any) {
+  for (const key of Object.keys(obj)) {
+    if (obj[key] === undefined) {
+      delete obj[key];
+    }
+  }
+}
