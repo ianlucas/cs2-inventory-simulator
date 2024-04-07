@@ -68,7 +68,7 @@ export async function getUserGroupRuleOverwrite(userId: string, name: string) {
         }
       }
     })
-  )?.group?.overwrites?.[0]?.value;
+  )?.group.overwrites[0].value;
 }
 
 export function getRule(
