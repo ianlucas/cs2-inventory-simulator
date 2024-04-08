@@ -85,8 +85,8 @@ export async function manipulateUserInventory({
 }) {
   const inventory = new CS_Inventory({
     items: parseInventory(rawInventory),
-    maxItems: await getRule("InventoryMaxItems", userId),
-    storageUnitMaxItems: await getRule("InventoryStorageUnitMaxItems", userId)
+    maxItems: await getRule("inventoryMaxItems", userId),
+    storageUnitMaxItems: await getRule("inventoryStorageUnitMaxItems", userId)
   });
   try {
     await manipulate(inventory);

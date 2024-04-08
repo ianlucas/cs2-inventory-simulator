@@ -11,8 +11,8 @@ export class SteamStrategy extends BaseSteamStrategy<string> {
   constructor() {
     super(
       async () => ({
-        returnURL: await getRule("SteamCallbackUrl"),
-        apiKey: await getRule("SteamApiKey")
+        returnURL: await getRule("steamCallbackUrl"),
+        apiKey: await getRule("steamApiKey")
       }),
       async (user) => await upsertUser(user)
     );

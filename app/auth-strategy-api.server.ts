@@ -23,7 +23,7 @@ export class ApiStrategy extends Strategy<string, string> {
     super(
       async (userId: string) =>
         await upsertUser(
-          (await new SteamAPI(await getRule("SteamApiKey")).getUserSummary(
+          (await new SteamAPI(await getRule("steamApiKey")).getUserSummary(
             userId
           )) as UserSummary
         )

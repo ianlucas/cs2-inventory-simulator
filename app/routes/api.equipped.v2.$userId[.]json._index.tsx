@@ -17,7 +17,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const userId = z.string().parse(params.userId);
   const { inventoryItemEquipHideModel, inventoryItemEquipHideType } =
     await getRules(
-      ["InventoryItemEquipHideModel", "InventoryItemEquipHideType"],
+      ["inventoryItemEquipHideModel", "inventoryItemEquipHideType"],
       userId
     );
   const args = [inventoryItemEquipHideModel, inventoryItemEquipHideType].join(

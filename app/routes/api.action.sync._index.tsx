@@ -166,15 +166,15 @@ async function enforceCraftRulesForItem(
   userId: string
 ) {
   const { category, type, model, id } = CS_Economy.get(idOrItem);
-  await expectRuleNotContain("CraftHideId", id, userId);
+  await expectRuleNotContain("craftHideId", id, userId);
   if (category !== undefined) {
-    await expectRuleNotContain("CraftHideCategory", category, userId);
+    await expectRuleNotContain("craftHideCategory", category, userId);
   }
   if (type !== undefined) {
-    await expectRuleNotContain("CraftHideType", type, userId);
+    await expectRuleNotContain("craftHideType", type, userId);
   }
   if (model !== undefined) {
-    await expectRuleNotContain("CraftHideModel", model, userId);
+    await expectRuleNotContain("craftHideModel", model, userId);
   }
 }
 
@@ -183,8 +183,8 @@ async function enforceCraftRulesForInventoryItem(
   userId: string
 ) {
   if (stickers !== undefined) {
-    await expectRule("CraftAllowStickers", true, userId);
-    await expectRuleNotContain("CraftHideType", "sticker", userId);
+    await expectRule("craftAllowStickers", true, userId);
+    await expectRuleNotContain("craftHideType", "sticker", userId);
     for (const sticker of stickers) {
       if (sticker !== CS_NONE) {
         await enforceCraftRulesForItem(sticker, userId);
@@ -192,16 +192,16 @@ async function enforceCraftRulesForInventoryItem(
     }
   }
   if (stattrak !== undefined) {
-    await expectRule("CraftAllowStatTrak", true, userId);
+    await expectRule("craftAllowStatTrak", true, userId);
   }
   if (wear !== undefined) {
-    await expectRule("CraftAllowWear", true, userId);
+    await expectRule("craftAllowWear", true, userId);
   }
   if (seed !== undefined) {
-    await expectRule("CraftAllowSeed", true, userId);
+    await expectRule("craftAllowSeed", true, userId);
   }
   if (nametag !== undefined) {
-    await expectRule("CraftAllowNametag", true, userId);
+    await expectRule("craftAllowNametag", true, userId);
   }
 }
 
@@ -210,15 +210,15 @@ async function enforceEditRulesForItem(
   userId: string
 ) {
   const { category, type, model, id } = CS_Economy.get(idOrItem);
-  await expectRuleNotContain("EditHideId", id, userId);
+  await expectRuleNotContain("editHideId", id, userId);
   if (category !== undefined) {
-    await expectRuleNotContain("EditHideCategory", category, userId);
+    await expectRuleNotContain("editHideCategory", category, userId);
   }
   if (type !== undefined) {
-    await expectRuleNotContain("EditHideType", type, userId);
+    await expectRuleNotContain("editHideType", type, userId);
   }
   if (model !== undefined) {
-    await expectRuleNotContain("EditHideModel", model, userId);
+    await expectRuleNotContain("editHideModel", model, userId);
   }
 }
 
@@ -227,8 +227,8 @@ async function enforceEditRulesForInventoryItem(
   userId: string
 ) {
   if (stickers !== undefined) {
-    await expectRule("EditAllowStickers", true, userId);
-    await expectRuleNotContain("EditHideType", "sticker", userId);
+    await expectRule("editAllowStickers", true, userId);
+    await expectRuleNotContain("editHideType", "sticker", userId);
     for (const sticker of stickers) {
       if (sticker !== CS_NONE) {
         await enforceEditRulesForItem(sticker, userId);
@@ -236,16 +236,16 @@ async function enforceEditRulesForInventoryItem(
     }
   }
   if (stattrak !== undefined) {
-    await expectRule("EditAllowStatTrak", true, userId);
+    await expectRule("editAllowStatTrak", true, userId);
   }
   if (wear !== undefined) {
-    await expectRule("EditAllowWear", true, userId);
+    await expectRule("editAllowWear", true, userId);
   }
   if (seed !== undefined) {
-    await expectRule("EditAllowSeed", true, userId);
+    await expectRule("editAllowSeed", true, userId);
   }
   if (nametag !== undefined) {
-    await expectRule("EditAllowNametag", true, userId);
+    await expectRule("editAllowNametag", true, userId);
   }
 }
 
@@ -276,9 +276,9 @@ export async function action({ request }: ActionFunctionArgs) {
               try {
                 for (const item of new CS_Inventory({
                   items: action.items,
-                  maxItems: await getRule("InventoryMaxItems", userId),
+                  maxItems: await getRule("inventoryMaxItems", userId),
                   storageUnitMaxItems: await getRule(
-                    "InventoryStorageUnitMaxItems",
+                    "inventoryStorageUnitMaxItems",
                     userId
                   )
                 }).export()) {
@@ -299,7 +299,7 @@ export async function action({ request }: ActionFunctionArgs) {
             );
             break;
           case ApplyItemStickerAction:
-            await expectRule("InventoryItemAllowApplySticker", true, userId);
+            await expectRule("inventoryItemAllowApplySticker", true, userId);
             inventory.applyItemSticker(
               action.targetUid,
               action.stickerUid,
@@ -323,7 +323,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.remove(action.uid);
             break;
           case ScrapeItemStickerAction:
-            await expectRule("InventoryItemAllowScrapeSticker", true, userId);
+            await expectRule("inventoryItemAllowScrapeSticker", true, userId);
             inventory.scrapeItemSticker(action.targetUid, action.stickerIndex);
             break;
           case SwapItemsStatTrakAction:
@@ -343,7 +343,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.retrieveFromStorageUnit(action.uid, action.retrieveUids);
             break;
           case EditAction:
-            await expectRule("InventoryItemAllowEdit", true, userId);
+            await expectRule("inventoryItemAllowEdit", true, userId);
             await enforceEditRulesForItem(action.attributes.id, userId);
             await enforceEditRulesForInventoryItem(action.attributes, userId);
             inventory.edit(action.uid, {

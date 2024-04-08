@@ -9,36 +9,36 @@ import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "~/env.server";
 import { assert, fail } from "~/utils/misc";
 
 const booleanRulesNames = [
-  "CraftAllowNametag",
-  "CraftAllowSeed",
-  "CraftAllowStatTrak",
-  "CraftAllowStickers",
-  "CraftAllowWear",
-  "EditAllowNametag",
-  "EditAllowSeed",
-  "EditAllowStatTrak",
-  "EditAllowStickers",
-  "EditAllowWear",
-  "InventoryItemAllowApplySticker",
-  "InventoryItemAllowEdit",
-  "InventoryItemAllowScrapeSticker",
-  "InventoryItemAllowUnlockContainer"
+  "craftAllowNametag",
+  "craftAllowSeed",
+  "craftAllowStatTrak",
+  "craftAllowStickers",
+  "craftAllowWear",
+  "editAllowNametag",
+  "editAllowSeed",
+  "editAllowStatTrak",
+  "editAllowStickers",
+  "editAllowWear",
+  "inventoryItemAllowApplySticker",
+  "inventoryItemAllowEdit",
+  "inventoryItemAllowScrapeSticker",
+  "inventoryItemAllowUnlockContainer"
 ] as const;
 const numberRulesNames = [
-  "InventoryMaxItems",
-  "InventoryStorageUnitMaxItems"
+  "inventoryMaxItems",
+  "inventoryStorageUnitMaxItems"
 ] as const;
-const numberArrayRulesNames = ["CraftHideId", "EditHideId"] as const;
-const stringRulesNames = ["SteamApiKey", "SteamCallbackUrl"] as const;
+const numberArrayRulesNames = ["craftHideId", "editHideId"] as const;
+const stringRulesNames = ["steamApiKey", "steamCallbackUrl"] as const;
 const stringArrayRulesName = [
-  "CraftHideCategory",
-  "CraftHideModel",
-  "CraftHideType",
-  "EditHideCategory",
-  "EditHideModel",
-  "EditHideType",
-  "InventoryItemEquipHideModel",
-  "InventoryItemEquipHideType"
+  "craftHideCategory",
+  "craftHideModel",
+  "craftHideType",
+  "editHideCategory",
+  "editHideModel",
+  "editHideType",
+  "inventoryItemEquipHideModel",
+  "inventoryItemEquipHideType"
 ] as const;
 
 export type BooleanRuleNames = (typeof booleanRulesNames)[number];
@@ -169,22 +169,15 @@ type RuleTypeMap = {
             : never;
 };
 
-type LowercaseKeys<T extends Record<string, any>> = {
-  [K in keyof T as `${Uncapitalize<string & K>}`]: T[K];
-};
-
 export async function getRules<Names extends RuleNames>(
   names: Names[],
   userId?: string
-): Promise<LowercaseKeys<{ [name in Names]: RuleTypeMap[name] }>> {
+) {
   return Object.fromEntries(
     await Promise.all(
-      names.map(async (name) => [
-        name.charAt(0).toLowerCase() + name.slice(1),
-        await getRule(name, userId)
-      ])
+      names.map(async (name) => [name, await getRule(name, userId)])
     )
-  ) as LowercaseKeys<{ [name in Names]: RuleTypeMap[name] }>;
+  ) as { [name in Names]: RuleTypeMap[name] };
 }
 
 export async function expectRule(
@@ -286,142 +279,142 @@ export async function addRule(data: {
 
 export async function setupRules() {
   await addRule({
-    name: "InventoryMaxItems",
+    name: "inventoryMaxItems",
     type: "number",
     input: 256
   });
   await addRule({
-    name: "InventoryStorageUnitMaxItems",
+    name: "inventoryStorageUnitMaxItems",
     type: "number",
     input: 32
   });
   await addRule({
-    name: "SteamApiKey",
+    name: "steamApiKey",
     type: "string",
     input: STEAM_API_KEY ?? "YOUR_STEAM_API_KEY_GOES_HERE"
   });
   await addRule({
-    name: "SteamCallbackUrl",
+    name: "steamCallbackUrl",
     type: "string",
     input: STEAM_CALLBACK_URL ?? "http://localhost/sign-in/steam/callback"
   });
   await addRule({
-    name: "InventoryItemAllowEdit",
+    name: "inventoryItemAllowEdit",
     type: "boolean",
     input: false
   });
   await addRule({
-    name: "CraftHideCategory",
+    name: "craftHideCategory",
     type: "string-array",
     input: []
   });
   await addRule({
-    name: "CraftHideType",
+    name: "craftHideType",
     type: "string-array",
     input: []
   });
   await addRule({
-    name: "CraftHideModel",
+    name: "craftHideModel",
     type: "string-array",
     input: []
   });
   await addRule({
-    name: "CraftHideId",
+    name: "craftHideId",
     type: "number-array",
     input: []
   });
   await addRule({
-    name: "EditHideCategory",
+    name: "editHideCategory",
     type: "string-array",
     input: []
   });
   await addRule({
-    name: "EditHideType",
+    name: "editHideType",
     type: "string-array",
     input: []
   });
   await addRule({
-    name: "EditHideModel",
+    name: "editHideModel",
     type: "string-array",
     input: []
   });
   await addRule({
-    name: "EditHideId",
+    name: "editHideId",
     type: "number-array",
     input: []
   });
   await addRule({
-    name: "InventoryItemAllowApplySticker",
+    name: "inventoryItemAllowApplySticker",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "InventoryItemAllowScrapeSticker",
+    name: "inventoryItemAllowScrapeSticker",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "InventoryItemEquipHideType",
+    name: "inventoryItemEquipHideType",
     type: "string-array",
     input: []
   });
   await addRule({
-    name: "InventoryItemEquipHideModel",
+    name: "inventoryItemEquipHideModel",
     type: "string-array",
     input: []
   });
   await addRule({
-    name: "InventoryItemAllowUnlockContainer",
+    name: "inventoryItemAllowUnlockContainer",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "CraftAllowNametag",
+    name: "craftAllowNametag",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "CraftAllowSeed",
+    name: "craftAllowSeed",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "CraftAllowWear",
+    name: "craftAllowWear",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "CraftAllowStatTrak",
+    name: "craftAllowStatTrak",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "CraftAllowStickers",
+    name: "craftAllowStickers",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "EditAllowNametag",
+    name: "editAllowNametag",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "EditAllowSeed",
+    name: "editAllowSeed",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "EditAllowWear",
+    name: "editAllowWear",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "EditAllowStatTrak",
+    name: "editAllowStatTrak",
     type: "boolean",
     input: true
   });
   await addRule({
-    name: "EditAllowStickers",
+    name: "editAllowStickers",
     type: "boolean",
     input: true
   });

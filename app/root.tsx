@@ -59,7 +59,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const user = await findRequestUser(request);
   const ipCountry = request.headers.get("CF-IPCountry");
   const { origin: appUrl, host: appSiteName } = new URL(
-    await getRule("SteamCallbackUrl")
+    await getRule("steamCallbackUrl")
   );
   return typedjson({
     translations: {
@@ -68,32 +68,32 @@ export async function loader({ request }: LoaderFunctionArgs) {
     rules: {
       ...(await getRules(
         [
-          "CraftAllowNametag",
-          "CraftAllowSeed",
-          "CraftAllowStatTrak",
-          "CraftAllowStickers",
-          "CraftAllowWear",
-          "CraftHideCategory",
-          "CraftHideId",
-          "CraftHideModel",
-          "CraftHideType",
-          "EditAllowNametag",
-          "EditAllowSeed",
-          "EditAllowStatTrak",
-          "EditAllowStickers",
-          "EditAllowWear",
-          "EditHideCategory",
-          "EditHideId",
-          "EditHideModel",
-          "EditHideType",
-          "InventoryItemAllowApplySticker",
-          "InventoryItemAllowEdit",
-          "InventoryItemAllowScrapeSticker",
-          "InventoryItemAllowUnlockContainer",
-          "InventoryItemEquipHideModel",
-          "InventoryItemEquipHideType",
-          "InventoryMaxItems",
-          "InventoryStorageUnitMaxItems"
+          "craftAllowNametag",
+          "craftAllowSeed",
+          "craftAllowStatTrak",
+          "craftAllowStickers",
+          "craftAllowWear",
+          "craftHideCategory",
+          "craftHideId",
+          "craftHideModel",
+          "craftHideType",
+          "editAllowNametag",
+          "editAllowSeed",
+          "editAllowStatTrak",
+          "editAllowStickers",
+          "editAllowWear",
+          "editHideCategory",
+          "editHideId",
+          "editHideModel",
+          "editHideType",
+          "inventoryItemAllowApplySticker",
+          "inventoryItemAllowEdit",
+          "inventoryItemAllowScrapeSticker",
+          "inventoryItemAllowUnlockContainer",
+          "inventoryItemEquipHideModel",
+          "inventoryItemEquipHideType",
+          "inventoryMaxItems",
+          "inventoryStorageUnitMaxItems"
         ],
         user?.id
       )),
