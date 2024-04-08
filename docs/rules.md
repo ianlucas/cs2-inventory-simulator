@@ -2,9 +2,12 @@
 
 CS2 Inventory Simulator can be configured at runtime using rules. These rules can modify various behaviors of the app, such as enabling users to edit items and adding new ones. Each rule that can be altered is stored in the Rule table.
 
+> [!WARNING]  
+> You can find all possible items and their attributes [here](https://raw.githubusercontent.com/ianlucas/cslib/main/assets/data/items.json).
+
 ## Current rules
 
-### `SteamApiKey`
+### `steamApiKey`
 
 - Steam API Key is used to retrieve user information from Steam.
 - **Type:** `string`
@@ -12,7 +15,7 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 > [!CAUTION]  
 > Authentication requires a valid Steam API Key.
 
-### `SteamCallbackUrl`
+### `steamCallbackUrl`
 
 - This URL is called to validate the user's authentication on Steam.
 - **Type:** `string`
@@ -21,148 +24,157 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 > [!CAUTION]  
 > You need to setup this URL for the authentication to work.
 
-### `InventoryMaxItems`
+### `inventoryMaxItems`
 
 - The maximum number of items a user can add to the inventory.
 - **Type:** `number`
 - **Default:** `256`
 
-### `InventoryStorageUnitMaxItems`
+### `inventoryStorageUnitMaxItems`
 
 - The maximum number of items a storage unit can store.
 - **Type:** `number`
 - **Default:** `32`
 
-### `InventoryItemAllowEdit`
+### `inventoryItemAllowEdit`
 
 - Indicates whether the user can edit an inventory item.
 - **Type:** `boolean`
 - **Default:** `false`
 
-### `InventoryItemAllowApplySticker`
+### `inventoryItemAllowApplySticker`
 
 - Indicates whether the user can apply sticker to an inventory item.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `InventoryItemAllowScrapeSticker`
+### `inventoryItemAllowScrapeSticker`
 
 - Indicates whether the user can scrape sticker in an inventory item.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `InventoryItemAllowUnlockContainer`
+### `inventoryItemAllowUnlockContainer`
 
 - Indicates whether the user can unlock a container inventory item.
 - **Type:** `boolean`
 - **Default:** `true`
 
-> [!WARNING]  
-> You can find all possible items and their attributes [here](https://raw.githubusercontent.com/ianlucas/cslib/main/assets/data/items.json).
+### `inventoryItemEquipHideModel`
 
-### `CraftHideCategory`
+- Determines whether to disallow an item model from being equipped by the user.
+- **Type:** `string-array`
+- **Usage example:** `knife_flip;bayonet` (Users won't be able to equip flip and bayonet knives.)
+
+### `inventoryItemEquipHideType`
+
+- Determines whether to disallow an item type from being equipped by the user.
+- **Type:** `string-array`
+- **Usage example:** `agent;weapon` (Users won't be able to equip agent and weapon items.)
+
+### `craftHideCategory`
 
 - Determines whether to hide a category when crafting an item. This also prevents the item from being added by the user.
 - **Type:** `string-array`
 - **Usage example:** `secondary;rifle` (Users won't be able to craft secondary and rifle items.)
 
-### `CraftHideType`
+### `craftHideType`
 
 - Determines whether to hide a type when crafting an item. This also prevents the item from being added by the user.
 - **Type:** `string-array`
 - **Usage example:** `agent;case` (Users won't be able to craft agent and case items.)
 
-### `CraftHideModel`
+### `craftHideModel`
 
 - Determines whether to hide a model when crafting an item. This also prevents the item from being added by the user.
 - **Type:** `string-array`
 - **Usage example:** `knife_flip;bayonet` (Users won't be able to craft flip and bayonet knives.)
 
-### `CraftHideId`
+### `craftHideId`
 
 - Determines whether to hide an item when crafting. This also prevents the item from being added by the user.
 - **Type:** `number-array`
 - **Usage example:** `307` (Users won't be able to craft AWP | Dragon Lore.)
 
-### `CraftAllowNametag`
+### `craftAllowNametag`
 
 - Indicates whether the user can define Name tag when crafting.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `CraftAllowSeed`
+### `craftAllowSeed`
 
 - Indicates whether the user can define Seed when crafting.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `CraftAllowStatTrak`
+### `craftAllowStatTrak`
 
 - Indicates whether the user can define StatTrak when crafting.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `CraftAllowStickers`
+### `craftAllowStickers`
 
 - Indicates whether the user can define Stickers when crafting.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `CraftAllowWear`
+### `craftAllowWear`
 
 - Indicates whether the user can define Wear when crafting.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `EditHideCategory`
+### `editHideCategory`
 
 - Determines whether to hide a category from being editable.
 - **Type:** `string-array`
 - **Usage example:** `secondary;rifle` (Users won't be able to edit secondary and rifle items.)
 
-### `EditHideType`
+### `editHideType`
 
 - Determines whether to hide a type from being editable.
 - **Type:** `string-array`
 - **Usage example:** `sticker;weapon` (Users won't be able to edit sticker and weapon items.)
 
-### `EditHideModel`
+### `editHideModel`
 
 - Determines whether to hide a model from being editable.
 - **Type:** `string-array`
 - **Usage example:** `knife_flip;bayonet` (Users won't be able to edit flip and bayonet knives.)
 
-### `EditHideId`
+### `editHideId`
 
 - Determines whether to hide an item from being editable.
 - **Type:** `number-array`
 - **Usage example:** `307` (Users won't be able to edit AWP | Dragon Lore.)
 
-### `EditAllowNametag`
+### `editAllowNametag`
 
 - Indicates whether the user can define Name tag when editing.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `EditAllowSeed`
+### `editAllowSeed`
 
 - Indicates whether the user can define Seed when editing.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `EditAllowStatTrak`
+### `editAllowStatTrak`
 
 - Indicates whether the user can define StatTrak when editing.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `EditAllowStickers`
+### `editAllowStickers`
 
 - Indicates whether the user can define Stickers when editing.
 - **Type:** `boolean`
 - **Default:** `true`
 
-### `EditAllowWear`
+### `editAllowWear`
 
 - Indicates whether the user can define Wear when editing.
 - **Type:** `boolean`
