@@ -121,6 +121,7 @@ export function InventoryItem({
       !inventoryItemEquipHideModel.includes(item.data.model)) &&
     !inventoryItemEquipHideType.includes(item.data.type);
   const canEquip =
+    isEquippable &&
     data.teams === undefined &&
     !item.equipped &&
     CS_INVENTORY_EQUIPPABLE_ITEMS.includes(data.type);
