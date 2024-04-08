@@ -88,6 +88,8 @@ export function InventoryItem({
       inventoryItemAllowEdit,
       inventoryItemAllowScrapeSticker,
       inventoryItemAllowUnlockContainer,
+      inventoryItemEquipHideModel,
+      inventoryItemEquipHideType,
       inventoryStorageUnitMaxItems
     },
     translations: { translate }
@@ -114,15 +116,21 @@ export function InventoryItem({
   const isFreeInventoryItem = uid < 0;
   const { data } = item;
 
+  const isEquippable =
+    (item.data.model === undefined ||
+      !inventoryItemEquipHideModel.includes(item.data.model)) &&
+    !inventoryItemEquipHideType.includes(item.data.type);
   const canEquip =
     data.teams === undefined &&
     !item.equipped &&
     CS_INVENTORY_EQUIPPABLE_ITEMS.includes(data.type);
-  const canEquipT = data.teams?.includes(CS_TEAM_T) && !item.equippedT;
-  const canEquipCT = data.teams?.includes(CS_TEAM_CT) && !item.equippedCT;
-  const canUnequip = item.equipped === true;
-  const canUnequipT = item.equippedT === true;
-  const canUnequipCT = item.equippedCT === true;
+  const canEquipT =
+    isEquippable && data.teams?.includes(CS_TEAM_T) && !item.equippedT;
+  const canEquipCT =
+    isEquippable && data.teams?.includes(CS_TEAM_CT) && !item.equippedCT;
+  const canUnequip = isEquippable && item.equipped === true;
+  const canUnequipT = isEquippable && item.equippedT === true;
+  const canUnequipCT = isEquippable && item.equippedCT === true;
 
   const hasStatTrak = item.stattrak !== undefined;
   const hasWear = !data.free && CS_Economy.hasWear(data);

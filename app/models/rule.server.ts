@@ -32,11 +32,13 @@ const numberArrayRulesNames = ["CraftHideId", "EditHideId"] as const;
 const stringRulesNames = ["SteamApiKey", "SteamCallbackUrl"] as const;
 const stringArrayRulesName = [
   "CraftHideCategory",
-  "CraftHideType",
   "CraftHideModel",
+  "CraftHideType",
   "EditHideCategory",
+  "EditHideModel",
   "EditHideType",
-  "EditHideModel"
+  "InventoryItemEquipHideModel",
+  "InventoryItemEquipHideType"
 ] as const;
 
 export type BooleanRuleNames = (typeof booleanRulesNames)[number];
@@ -357,6 +359,16 @@ export async function setupRules() {
     name: "InventoryItemAllowScrapeSticker",
     type: "boolean",
     input: true
+  });
+  await addRule({
+    name: "InventoryItemEquipHideType",
+    type: "string-array",
+    input: []
+  });
+  await addRule({
+    name: "InventoryItemEquipHideModel",
+    type: "string-array",
+    input: []
   });
   await addRule({
     name: "InventoryItemAllowUnlockContainer",

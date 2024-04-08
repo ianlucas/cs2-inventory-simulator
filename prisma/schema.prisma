@@ -29,6 +29,7 @@ model User {
 
 model UserCache {
   @@id([url, userId])
+  args String?
   body String
   timestamp DateTime
   url String

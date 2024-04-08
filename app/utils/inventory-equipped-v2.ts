@@ -38,7 +38,13 @@ interface AgentItem {
   patches: number[];
 }
 
-export function generate(inventory: CS_BaseInventoryItem[]) {
+export async function generate(
+  inventory: CS_BaseInventoryItem[],
+  nonEquippable = {
+    models: [] as string[],
+    types: [] as string[]
+  }
+) {
   const knives: Record<number, WeaponEconItem> = {};
   const gloves: Record<number, BaseEconItem> = {};
   const tWeapons: Record<number, WeaponEconItem> = {};
@@ -49,6 +55,17 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
   let musicKit: number | undefined;
 
   for (const item of inventory) {
+    const data = CS_Economy.getById(item.id);
+
+    const isEquippable =
+      (data.model === undefined ||
+        !nonEquippable.models.includes(data.model)) &&
+      !nonEquippable.types.includes(data.type);
+
+    if (!isEquippable) {
+      continue;
+    }
+
     for (const team of teams) {
       if (team === undefined && !item.equipped) {
         continue;
@@ -59,7 +76,6 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
       if (team === CS_TEAM_T && !item.equippedT) {
         continue;
       }
-      const data = CS_Economy.getById(item.id);
       switch (data.type) {
         case "patch":
           // Handled by "agents".

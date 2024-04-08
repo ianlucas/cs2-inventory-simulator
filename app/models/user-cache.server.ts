@@ -11,13 +11,17 @@ import { res } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
 
 export async function handleUserCachedResponse({
+  args,
   generate,
   throwBody,
   mimeType,
   url,
   userId
 }: {
-  generate: (inventory: CS_BaseInventoryItem[]) => any;
+  args: string | null;
+  generate:
+    | ((inventory: CS_BaseInventoryItem[], userId: string) => any)
+    | ((inventory: CS_BaseInventoryItem[], userId: string) => Promise<any>);
   throwBody: any;
   mimeType: string;
   url: string;
@@ -35,6 +39,7 @@ export async function handleUserCachedResponse({
   const cache = await prisma.userCache.findFirst({
     select: { body: true },
     where: {
+      args,
       url,
       userId,
       timestamp: user.syncedAt
@@ -54,19 +59,21 @@ export async function handleUserCachedResponse({
       ? json(throwBody)
       : res(throwBody, mimeType);
   }
-  const generated = generate(parseInventory(inventory));
+  const generated = await generate(parseInventory(inventory), userId);
   const body =
     mimeType === "application/json"
       ? JSON.stringify(generated)
       : z.string().parse(generated);
   await prisma.userCache.upsert({
     create: {
+      args,
       body,
       timestamp: user.syncedAt,
       url,
       userId
     },
     update: {
+      args,
       body,
       timestamp: user.syncedAt
     },

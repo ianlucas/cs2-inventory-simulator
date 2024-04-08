@@ -131,7 +131,12 @@ export function RootProvider({
         ? sortItemsByEquipped
         : inventoryFilters.sortItems)(
         // Inventory Items
-        inventory.getAll().map(transform),
+        inventory.getAll().map((item) =>
+          transform(item, {
+            models: rules.inventoryItemEquipHideModel,
+            types: rules.inventoryItemEquipHideType
+          })
+        ),
         // Default Game Items
         getFreeItemsToDisplay(preferences.hideFreeItems)
       ),
@@ -139,6 +144,8 @@ export function RootProvider({
       inventory,
       preferences.hideFreeItems,
       preferences.hideFilters,
+      rules.inventoryItemEquipHideModel,
+      rules.inventoryItemEquipHideType,
       inventoryFilters.sortItems
     ]
   );

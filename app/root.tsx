@@ -90,6 +90,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
           "InventoryItemAllowEdit",
           "InventoryItemAllowScrapeSticker",
           "InventoryItemAllowUnlockContainer",
+          "InventoryItemEquipHideModel",
+          "InventoryItemEquipHideType",
           "InventoryMaxItems",
           "InventoryStorageUnitMaxItems"
         ],

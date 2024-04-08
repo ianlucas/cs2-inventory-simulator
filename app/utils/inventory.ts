@@ -38,7 +38,24 @@ export function parseInventory(inventory?: string | null) {
   }
 }
 
-export function transform(item: CS_InventoryItem) {
+export function transform(
+  item: CS_InventoryItem,
+  nonEquippable = {
+    models: [] as string[],
+    types: [] as string[]
+  }
+) {
+  const isEquippable =
+    (item.data.model === undefined ||
+      !nonEquippable.models.includes(item.data.model)) &&
+    !nonEquippable.types.includes(item.data.type);
+
+  if (!isEquippable) {
+    item.equipped = undefined;
+    item.equippedCT = undefined;
+    item.equippedT = undefined;
+  }
+
   return {
     ...getItemName(item.data),
     equipped: [

@@ -14,6 +14,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   await middleware(request);
   const userId = z.string().parse(params.userId);
   return await handleUserCachedResponse({
+    args: null,
     generate(inventory) {
       return inventory;
     },

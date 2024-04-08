@@ -6,6 +6,7 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { middleware } from "~/http.server";
+import { getRules } from "~/models/rule.server";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
 import { generate } from "~/utils/inventory-equipped-v2";
 
@@ -14,8 +15,22 @@ export const ApiEquippedUserIdJsonUrl = "/api/equipped/v2/$userId.json";
 export async function loader({ params, request }: LoaderFunctionArgs) {
   await middleware(request);
   const userId = z.string().parse(params.userId);
+  const { inventoryItemEquipHideModel, inventoryItemEquipHideType } =
+    await getRules(
+      ["InventoryItemEquipHideModel", "InventoryItemEquipHideType"],
+      userId
+    );
+  const args = [inventoryItemEquipHideModel, inventoryItemEquipHideType].join(
+    ";"
+  );
   return await handleUserCachedResponse({
-    generate,
+    args,
+    generate(item) {
+      return generate(item, {
+        models: inventoryItemEquipHideModel,
+        types: inventoryItemEquipHideType
+      });
+    },
     mimeType: "application/json",
     throwBody: {},
     url: ApiEquippedUserIdJsonUrl,
