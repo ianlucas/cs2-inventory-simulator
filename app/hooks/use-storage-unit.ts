@@ -34,7 +34,7 @@ export function useStorageUnit() {
 
   function handleInspectStorageUnit(uid: number) {
     return setItemSelector({
-      items: inventory.getStorageUnitItems(uid).map(transform),
+      items: inventory.getStorageUnitItems(uid).map((item) => transform(item)),
       readOnly: true,
       type: "inspect-storage-unit",
       uid
@@ -76,7 +76,7 @@ export function useStorageUnit() {
   function handleRetrieveFromStorageUnit(uid: number) {
     return setItemSelector({
       uid,
-      items: inventory.getStorageUnitItems(uid).map(transform),
+      items: inventory.getStorageUnitItems(uid).map((item) => transform(item)),
       type: "retrieve-from-storage-unit"
     });
   }
