@@ -15,7 +15,8 @@ export function useTranslation({
   function getSystemTranslation() {
     return (
       (typeof global !== "undefined"
-        ? global.$systemTranslations[language]
+        ? global.$systemTranslations[language] ??
+          global.$systemTranslations.english
         : window.$systemTranslation) ?? {}
     );
   }
