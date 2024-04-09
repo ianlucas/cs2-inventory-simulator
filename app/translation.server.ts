@@ -14,8 +14,8 @@ import { english } from "~/translations/english";
 export type SystemTranslations = Record<string, Record<string, string>>;
 
 declare global {
-  var systemTranslations: SystemTranslations;
-  var itemsTranslations: CS_ItemTranslations;
+  var $systemTranslations: SystemTranslations;
+  var $itemsTranslations: CS_ItemTranslations;
 
   interface Window {
     $systemTranslation: SystemTranslations[string];
@@ -40,12 +40,12 @@ function readItemTranslations() {
 }
 
 export function setupTranslation() {
-  global.systemTranslations = {
+  global.$systemTranslations = {
     brazilian,
     english
   };
 
-  global.itemsTranslations = readItemTranslations();
+  global.$itemsTranslations = readItemTranslations();
 }
 
 let checksum: string | undefined;
@@ -56,8 +56,8 @@ export function getTranslationChecksum() {
   checksum = createHash("sha256")
     .update(
       "v2" +
-        JSON.stringify(global.systemTranslations) +
-        JSON.stringify(global.itemsTranslations)
+        JSON.stringify(global.$systemTranslations) +
+        JSON.stringify(global.$itemsTranslations)
     )
     .digest("hex")
     .substring(0, 7);

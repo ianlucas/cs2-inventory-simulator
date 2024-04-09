@@ -13,15 +13,19 @@ export function useTranslation({
   checksum: string;
 }) {
   function getSystemTranslation() {
-    return typeof global !== "undefined"
-      ? global.systemTranslations[language]
-      : window.$systemTranslation;
+    return (
+      (typeof global !== "undefined"
+        ? global.$systemTranslations[language]
+        : window.$systemTranslation) ?? {}
+    );
   }
 
   function getItemsTranslation() {
-    return typeof global !== "undefined"
-      ? global.itemsTranslations[language]
-      : window.$itemsTranslation;
+    return (
+      (typeof global !== "undefined"
+        ? global.$itemsTranslations[language]
+        : window.$itemsTranslation) ?? {}
+    );
   }
 
   const [systemTranslation, setSystemTranslation] = useState(
