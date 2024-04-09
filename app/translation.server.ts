@@ -18,8 +18,8 @@ declare global {
   var itemsTranslations: CS_ItemTranslations;
 
   interface Window {
-    systemTranslation: SystemTranslations[string];
-    itemsTranslation: CS_ItemTranslations[string];
+    $systemTranslation: SystemTranslations[string];
+    $itemsTranslation: CS_ItemTranslations[string];
   }
 }
 
@@ -55,7 +55,8 @@ export function getTranslationChecksum() {
   }
   checksum = createHash("sha256")
     .update(
-      JSON.stringify(global.systemTranslations) +
+      "v2" +
+        JSON.stringify(global.systemTranslations) +
         JSON.stringify(global.itemsTranslations)
     )
     .digest("hex")

@@ -14,8 +14,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
       .transform((value) => value.split(".")[0].trim())
       .parse(params.language);
     return new Response(
-      `window.systemTranslation = ${JSON.stringify(global.systemTranslations[language] ?? global.systemTranslations.english)};
-  window.itemsTranslation = ${JSON.stringify(global.itemsTranslations[language] ?? global.itemsTranslations.english)};
+      `window.$systemTranslation = ${JSON.stringify(global.systemTranslations[language] ?? global.systemTranslations.english)};
+  window.$itemsTranslation = ${JSON.stringify(global.itemsTranslations[language] ?? global.itemsTranslations.english)};
   window.dispatchEvent(new Event("translation-loaded"));`,
       {
         headers: {

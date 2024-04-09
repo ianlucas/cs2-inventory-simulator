@@ -15,13 +15,13 @@ export function useTranslation({
   function getSystemTranslation() {
     return typeof global !== "undefined"
       ? global.systemTranslations[language]
-      : window.systemTranslation;
+      : window.$systemTranslation;
   }
 
   function getItemsTranslation() {
     return typeof global !== "undefined"
       ? global.itemsTranslations[language]
-      : window.itemsTranslation;
+      : window.$itemsTranslation;
   }
 
   const [systemTranslation, setSystemTranslation] = useState(
