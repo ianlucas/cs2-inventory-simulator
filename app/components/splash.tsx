@@ -75,60 +75,53 @@ export function Splash() {
       <script
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: `if (!window.g_SplashInitialized) {
-  window.g_SplashInitialized = true;
-  window.g_SplashN = 0;
-  window.g_SplashLoaded = false;
-  window.g_SplashErrors = [];
+          __html: `if (!window.$splashInit) {
+  window.$splashInit = true;
+  window.$splashN = 0;
+  window.$splashLoaded = document.readyState === 'complete';
 
-  if (document.readyState === 'complete') {
-    window.g_SplashLoaded = true;
-  } else {
-    window.addEventListener('load', () => {
-      window.g_SplashLoaded = true;
-    });
-  }
+  window.addEventListener('load', () => {
+    window.$splashLoaded = true;
+  });
 
-  window.g_SplashRender = function () {
-    const splash = document.getElementById("splash");
-    const progress = document.getElementById("splash-progress");
-    if (splash.display === "none") {
+  window.$splashRender = function () {
+    const splash = document.getElementById('splash');
+    const progress = document.getElementById('splash-progress');
+    if (splash.display === 'none') {
       return;
     }
-    if (window.g_SplashLoaded) {
-      window.g_SplashN = 1;
+    if (window.$splashLoaded) {
+      window.$splashN = 1;
     } else {
-      let amount = 0;
-      if (window.g_SplashN >= 0 && window.g_SplashN < 0.2) { amount = 0.1; }
-      else if (window.g_SplashN >= 0.2 && window.g_SplashN < 0.5) { amount = 0.04; }
-      else if (window.g_SplashN >= 0.5 && window.g_SplashN < 0.8) { amount = 0.02; }
-      else if (window.g_SplashN >= 0.8 && window.g_SplashN < 0.99) { amount = 0.005; }
-      window.g_SplashN = Math.min(window.g_SplashN + amount, 0.994);
+      const thresholds = [0.2, 0.5, 0.8, 0.99];
+      const amounts = [0.1, 0.04, 0.02, 0.005];
+      const amount =
+        amounts.find((a, i) => window.$splashN < thresholds[i]) || 0;
+      window.$splashN = Math.min(window.$splashN + amount, 0.994);
     }
-    if (window.g_SplashN >= 1) {
-      setTimeout(window.g_SplashEnd, 1000);
+    if (window.$splashN >= 1) {
+      setTimeout(window.$splashEnd, 1000);
     } else {
-      progress.style.width = window.g_SplashN * 100 + "%";
-      setTimeout(window.g_SplashRender, 500);
+      progress.style.width = window.$splashN * 100 + '%';
+      setTimeout(window.$splashRender, 500);
     }
-  }
-
-  window.g_SplashEnd = function () {
-    const splash = document.getElementById("splash");
-    const progress = document.getElementById("splash-progress");
-    progress.style.width = window.g_SplashN * 100 + "%";
-    splash.style.opacity = 0;
-    splash.style.pointerEvents = "none";
-    setTimeout(() => splash.display = "none", 1000);
-  }
-
-  window.g_SplashRender();
-  
-  window.onerror = (event, source, lineno, colno, error) => {
-    window.g_SplashRender();
   };
-}
-`
+
+  window.$splashEnd = function () {
+    const splash = document.getElementById('splash');
+    const progress = document.getElementById('splash-progress');
+    progress.style.width = window.$splashN * 100 + '%';
+    splash.style.opacity = 0;
+    splash.style.pointerEvents = 'none';
+    setTimeout(() => (splash.display = 'none'), 1000);
+  };
+
+  window.$splashRender();
+
+  window.onerror = () => {
+    window.$splashRender();
+  };
+}`
         }}
       />
     </div>
