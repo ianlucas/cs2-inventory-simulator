@@ -32,7 +32,13 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       });
     },
     mimeType: "application/json",
-    throwBody: {},
+    throwBody: {
+      agents: {},
+      ctWeapons: {},
+      gloves: {},
+      knives: {},
+      tWeapons: {}
+    },
     url: ApiEquippedUserIdJsonUrl,
     userId
   });
