@@ -8,9 +8,9 @@ import { z } from "zod";
 import { middleware } from "~/http.server";
 import { getRules } from "~/models/rule.server";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
-import { generate } from "~/utils/inventory-equipped-v2";
+import { generate } from "~/utils/inventory-equipped-v3";
 
-export const ApiEquippedV2UserIdJsonUrl = "/api/equipped/v2/$userId.json";
+export const ApiEquippedV3UserIdJsonUrl = "/api/equipped/v3/$userId.json";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   await middleware(request);
@@ -33,7 +33,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     },
     mimeType: "application/json",
     throwBody: {},
-    url: ApiEquippedV2UserIdJsonUrl,
+    url: ApiEquippedV3UserIdJsonUrl,
     userId
   });
 }

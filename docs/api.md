@@ -28,7 +28,7 @@ type GetUserInventoryResponse = {
 ## Get user equipped items
 
 ```http
-GET https://inventory.cstrike.app/api/equipped/v2/{steamID64}.json
+GET https://inventory.cstrike.app/api/equipped/v3/{steamID64}.json
 ```
 
 ### Response
@@ -55,12 +55,17 @@ interface AgentItem {
   model: string;
   patches: number[];
 }
+interface MusicKitItem {
+  def: number;
+  stattrak: number;
+  uid: number;
+}
 type GetUserEquippedItemsResponse = {
   agents: Record<number, AgentItem>;
   ctWeapons: Record<number, WeaponEconItem>;
   gloves: Record<number, BaseEconItem>;
   knives: Record<number, WeaponEconItem>;
-  musicKit?: number;
+  musicKit?: MusicKitItem;
   pin?: number;
   tWeapons: Record<number, WeaponEconItem>;
 };
