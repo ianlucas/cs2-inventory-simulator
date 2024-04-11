@@ -4,8 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 export const english = {
-  JavaScriptRequired:
-    "JavaScript is disabled. Please enable it and refresh the page.",
+  JavaScriptRequired: "Please turn on JavaScript and refresh the page.",
   SyncWarnText:
     "You are not authenticated, your changes will not by synchronized.",
   SyncErrorTitle: "Sync Error",

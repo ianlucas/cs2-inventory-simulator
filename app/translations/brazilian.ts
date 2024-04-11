@@ -7,8 +7,7 @@ import { english } from "./english";
 
 export const brazilian = {
   ...english,
-  JavaScriptRequired:
-    "JavaScript está desativado. Por favor, habilite-o e atualize a página.",
+  JavaScriptRequired: "Por favor, habilite o JavaScript e atualize a página.",
   SyncWarnText:
     "Você não está autenticado, suas mudanças não serão sincronizadas.",
   SyncErrorTitle: "Erro de sincronização",
