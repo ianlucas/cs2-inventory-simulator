@@ -16,7 +16,7 @@ import {
   CS_MIN_WEAR,
   CS_NONE,
   CS_WEAR_FACTOR
-} from "@ianlucas/cslib";
+} from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useState } from "react";
 import { useCheckbox } from "~/hooks/use-checkbox";

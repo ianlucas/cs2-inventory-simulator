@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cslib";
+import { CS_Item } from "@ianlucas/cs2-lib";
 import { resolveCaseSpecialsImage } from "~/utils/economy";
 import { CSItem } from "./cs-item";
 import { useRootContext } from "./root-context";

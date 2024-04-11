@@ -10,7 +10,7 @@ import {
   CS_MAX_SEED,
   CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
-} from "@ianlucas/cslib";
+} from "@ianlucas/cs2-lib";
 import { CraftItemFilter } from "./craft-filters";
 
 export const assetBaseUrl =

@@ -17,7 +17,7 @@ import {
   CS_MIN_STICKER_WEAR,
   CS_NONE,
   CS_STICKER_WEAR_FACTOR
-} from "@ianlucas/cslib";
+} from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/hooks/use-input";

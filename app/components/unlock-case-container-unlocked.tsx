@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { playSound } from "~/utils/sound";
 import { CSItemImage } from "./cs-item-image";

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import type { CS_BaseInventoryItem } from "@ianlucas/cslib";
+import type { CS_BaseInventoryItem } from "@ianlucas/cs2-lib";
 import { parseInventory } from "./inventory";
 
 export function storeUserId(value: string) {

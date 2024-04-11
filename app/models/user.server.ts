@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_BaseInventoryItem, CS_Inventory } from "@ianlucas/cslib";
+import { CS_BaseInventoryItem, CS_Inventory } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { badRequest, conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";

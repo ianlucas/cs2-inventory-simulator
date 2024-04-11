@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_BaseInventoryItem, CS_Economy, CS_NONE } from "@ianlucas/cslib";
+import { CS_BaseInventoryItem, CS_Economy, CS_NONE } from "@ianlucas/cs2-lib";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { prisma } from "~/db.server";

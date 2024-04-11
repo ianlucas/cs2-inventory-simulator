@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_InventoryItem } from "@ianlucas/cslib";
+import { CS_InventoryItem } from "@ianlucas/cs2-lib";
 import { useRootContext } from "./root-context";
 
 export function InventoryItemStatTrak({

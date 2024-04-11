@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_ITEMS } from "@ianlucas/cslib";
+import { CS_Economy, CS_ITEMS } from "@ianlucas/cs2-lib";
 import { RemixBrowser } from "@remix-run/react";
-import { startTransition, StrictMode } from "react";
+import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
 
 CS_Economy.use(CS_ITEMS);

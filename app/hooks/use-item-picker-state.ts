@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cslib";
+import { CS_Item } from "@ianlucas/cs2-lib";
 import { useMemo, useState } from "react";
 import { CRAFT_ITEM_FILTERS, CraftItemFilter } from "~/utils/craft-filters";
 import { getBaseItems, getPaidItems } from "~/utils/economy";

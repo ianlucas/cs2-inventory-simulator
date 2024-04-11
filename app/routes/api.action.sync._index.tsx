@@ -9,7 +9,7 @@ import {
   CS_Inventory,
   CS_Item,
   CS_NONE
-} from "@ianlucas/cslib";
+} from "@ianlucas/cs2-lib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";

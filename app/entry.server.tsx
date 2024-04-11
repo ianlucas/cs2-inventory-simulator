@@ -5,7 +5,7 @@
 
 import { PassThrough } from "node:stream";
 
-import { CS_Economy, CS_ITEMS } from "@ianlucas/cslib";
+import { CS_Economy, CS_ITEMS } from "@ianlucas/cs2-lib";
 import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";

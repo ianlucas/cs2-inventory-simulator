@@ -4,7 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { FloatingFocusManager } from "@floating-ui/react";
-import { CS_Economy, CS_MIN_SEED, CS_MIN_WEAR, CS_NONE } from "@ianlucas/cslib";
+import {
+  CS_Economy,
+  CS_MIN_SEED,
+  CS_MIN_WEAR,
+  CS_NONE
+} from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/hooks/use-inspect-floating";

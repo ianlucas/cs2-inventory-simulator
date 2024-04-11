@@ -5,7 +5,7 @@
 
 import { faRotate } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_getTeamLabel, CS_Team, CS_toggleTeam } from "@ianlucas/cslib";
+import { CS_getTeamLabel, CS_Team, CS_toggleTeam } from "@ianlucas/cs2-lib";
 
 export function TeamToggle({
   onChange,

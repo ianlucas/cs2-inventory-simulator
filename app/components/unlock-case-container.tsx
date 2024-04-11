@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { CSItemImage } from "./cs-item-image";
 import { FillSpinner } from "./fill-spinner";
 import { ModalButton } from "./modal-button";

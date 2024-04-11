@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item, CS_randomInt } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item, CS_randomInt } from "@ianlucas/cs2-lib";
 import { ElementRef, useRef, useState } from "react";
 import { useDetectCollision } from "~/hooks/use-detect-collision";
 import { useResponsiveScale } from "~/hooks/use-responsive-scale";

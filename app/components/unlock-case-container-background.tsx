@@ -3,11 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cslib";
-import clsx from "clsx";
-import { CSItemImage } from "./cs-item-image";
-import { useEffect, useState } from "react";
+import { CS_Item } from "@ianlucas/cs2-lib";
 import { useWindowSize } from "@uidotdev/usehooks";
+import clsx from "clsx";
+import { useState } from "react";
+import { CSItemImage } from "./cs-item-image";
 
 export function UnlockCaseContainerBackground({
   canUnlock,

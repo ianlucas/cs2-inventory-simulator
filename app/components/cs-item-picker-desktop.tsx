@@ -5,7 +5,7 @@
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Item } from "@ianlucas/cslib";
+import { CS_Item } from "@ianlucas/cs2-lib";
 import { CSItemBrowser } from "~/components/cs-item-browser";
 import { useItemPickerState } from "~/hooks/use-item-picker-state";
 import { FilterMenuDesktop } from "./filter-menu-desktop";

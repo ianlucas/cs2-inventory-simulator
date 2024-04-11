@@ -5,7 +5,7 @@
 
 import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_randomFloat, CS_randomInt } from "@ianlucas/cslib";
+import { CS_randomFloat, CS_randomInt } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";

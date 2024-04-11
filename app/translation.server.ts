@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_ItemTranslations } from "@ianlucas/cslib";
+import { CS_ItemTranslations } from "@ianlucas/cs2-lib";
 import { createHash } from "crypto";
 import { readFileSync, readdirSync } from "fs";
 import { resolve } from "path";
@@ -27,7 +27,7 @@ function readItemTranslations() {
   const itemsTranslations: CS_ItemTranslations = {};
   const directory = resolve(
     process.cwd(),
-    "node_modules/@ianlucas/cslib/assets/translations"
+    "node_modules/@ianlucas/cs2-lib/assets/translations"
   );
   const files = readdirSync(directory);
   for (const file of files) {

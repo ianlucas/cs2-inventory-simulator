@@ -11,7 +11,7 @@ import {
   CS_TEAM_CT,
   CS_TEAM_T,
   CS_Team
-} from "@ianlucas/cslib";
+} from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
 import {

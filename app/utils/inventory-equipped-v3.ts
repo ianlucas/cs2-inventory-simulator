@@ -10,7 +10,7 @@ import {
   CS_NONE,
   CS_TEAM_CT,
   CS_TEAM_T
-} from "@ianlucas/cslib";
+} from "@ianlucas/cs2-lib";
 import { assert } from "./misc";
 import { range } from "./number";
 

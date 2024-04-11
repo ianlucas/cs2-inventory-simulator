@@ -9,7 +9,7 @@ import {
   CS_NONE,
   CS_RARITY_COLORS,
   CS_RARITY_ORDER
-} from "@ianlucas/cslib";
+} from "@ianlucas/cs2-lib";
 import { getItemName } from "./economy";
 import { serverInventoryShape } from "./shapes";
 

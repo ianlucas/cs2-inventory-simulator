@@ -9,7 +9,7 @@ import {
   CS_NONE,
   CS_TEAM_CT,
   CS_TEAM_T
-} from "@ianlucas/cslib";
+} from "@ianlucas/cs2-lib";
 
 export const AGENT_MODEL_PREFIX = "agm_";
 export const AGENT_PATCH_PREFIX = "ap_";

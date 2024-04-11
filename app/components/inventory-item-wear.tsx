@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_InventoryItem, CS_MAX_WEAR, CS_MIN_WEAR } from "@ianlucas/cslib";
+import { CS_InventoryItem, CS_MAX_WEAR, CS_MIN_WEAR } from "@ianlucas/cs2-lib";
 import { wearToString } from "~/utils/economy";
 import { useRootContext } from "./root-context";
 

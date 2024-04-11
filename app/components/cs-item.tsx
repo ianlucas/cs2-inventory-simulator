@@ -5,7 +5,7 @@
 
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_Item, CS_NONE } from "@ianlucas/cslib";
+import { CS_Economy, CS_Item, CS_NONE } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { getItemName } from "~/utils/economy";
 import { CSItemImage } from "./cs-item-image";

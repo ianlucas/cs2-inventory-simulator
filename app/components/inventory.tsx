@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Team } from "@ianlucas/cslib";
+import { CS_Economy, CS_Team } from "@ianlucas/cs2-lib";
 import { useNavigate } from "@remix-run/react";
 import { InventoryItem } from "~/components/inventory-item";
 import { useApplyItemSticker } from "~/hooks/use-apply-item-sticker";

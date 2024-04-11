@@ -11,7 +11,7 @@ import {
   CS_NONE,
   CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
-} from "@ianlucas/cslib";
+} from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";

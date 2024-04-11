@@ -5,7 +5,7 @@
 
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_INVENTORY_STICKERS, CS_NONE } from "@ianlucas/cslib";
+import { CS_Economy, CS_INVENTORY_STICKERS, CS_NONE } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cslib";
+import { CS_Item, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cs2-lib";
 import { useRootContext } from "./root-context";
 
 export function InventoryItemTeams({ item: { teams } }: { item: CS_Item }) {

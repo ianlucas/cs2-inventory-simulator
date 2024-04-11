@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cslib";
+import { CS_Economy } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useCounter } from "~/hooks/use-counter";

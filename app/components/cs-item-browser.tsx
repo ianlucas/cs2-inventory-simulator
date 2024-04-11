@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cslib";
+import { CS_Item } from "@ianlucas/cs2-lib";
 import { CSItemButton } from "./cs-item-button";
 import { GridList } from "./grid-list";
 
