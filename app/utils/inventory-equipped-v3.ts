@@ -36,6 +36,7 @@ interface WeaponEconItem extends BaseEconItem {
 interface AgentItem {
   model: string;
   patches: number[];
+  vofemale: boolean;
   voprefix: string;
 }
 
@@ -161,6 +162,7 @@ export async function generate(
             patches: range(5).map(() =>
               patch !== undefined ? CS_Economy.getById(patch.id).index ?? 0 : 0
             ),
+            vofemale: data.vofemale ?? false,
             voprefix: data.voprefix
           };
           break;
