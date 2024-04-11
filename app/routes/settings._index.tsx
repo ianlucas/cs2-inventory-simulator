@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useNavigate, useSubmit } from "@remix-run/react";
 import { useState } from "react";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { EditorToggle } from "~/components/editor-toggle";
 import { LanguageSelect } from "~/components/language-select";
 import { Modal } from "~/components/modal";
@@ -16,10 +15,10 @@ import { ModalButton } from "~/components/modal-button";
 import { useRootContext } from "~/components/root-context";
 import { Select } from "~/components/select";
 import { backgrounds } from "~/data/backgrounds";
+import { languages } from "~/data/languages";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useSync } from "~/hooks/use-sync";
 import { middleware } from "~/http.server";
-import { languages } from "~/preferences/language.server";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
 import { RemoveAllItemsAction } from "./api.action.sync._index";
 
@@ -29,16 +28,10 @@ export const meta: MetaFunction = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);
-  return typedjson({
-    languages: languages.map(({ name, countries }) => ({
-      name,
-      country: countries[0]
-    }))
-  });
+  return null;
 }
 
 export default function Settings() {
-  const { languages } = useTypedLoaderData<typeof loader>();
   const {
     inventory,
     setInventory,
@@ -103,7 +96,10 @@ export default function Settings() {
             {translate("SettingsLanguage")}
           </label>
           <LanguageSelect
-            languages={languages}
+            languages={languages.map(({ name, countries }) => ({
+              name,
+              country: countries[0]
+            }))}
             value={language}
             onChange={setLanguage}
           />
