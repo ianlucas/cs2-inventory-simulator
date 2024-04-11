@@ -58,6 +58,7 @@ interface WeaponEconItem extends BaseEconItem {
 interface AgentItem {
   model: string;
   patches: number[];
+  vofallback: boolean;
   vofemale: boolean;
   voprefix: string;
 }
