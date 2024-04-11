@@ -36,6 +36,7 @@ interface WeaponEconItem extends BaseEconItem {
 interface AgentItem {
   model: string;
   patches: number[];
+  voprefix: string;
 }
 
 interface MusicKitItem {
@@ -149,6 +150,7 @@ export async function generate(
         case "agent":
           assert(team);
           assert(data.model);
+          assert(data.voprefix);
           const patch = inventory.find(
             (item) =>
               CS_Economy.getById(item.id).type === "patch" &&
@@ -158,7 +160,8 @@ export async function generate(
             model: data.model,
             patches: range(5).map(() =>
               patch !== undefined ? CS_Economy.getById(patch.id).index ?? 0 : 0
-            )
+            ),
+            voprefix: data.voprefix
           };
           break;
       }

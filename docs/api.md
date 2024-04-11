@@ -12,6 +12,7 @@ GET https://inventory.cstrike.app/api/inventory/{steamID64}.json
 
 ```typescript
 type GetUserInventoryResponse = {
+  caseid?: number;
   equipped?: boolean;
   equippedCT?: boolean;
   equippedT?: boolean;
@@ -21,6 +22,9 @@ type GetUserInventoryResponse = {
   stattrak?: number;
   stickers?: number[];
   stickerswear?: number[];
+  storage?: CS_BaseInventoryItem[];
+  uid: number;
+  updatedat?: number;
   wear?: number;
 }[];
 ```
@@ -54,6 +58,7 @@ interface WeaponEconItem extends BaseEconItem {
 interface AgentItem {
   model: string;
   patches: number[];
+  voprefix: string;
 }
 interface MusicKitItem {
   def: number;
