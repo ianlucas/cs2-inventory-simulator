@@ -28,8 +28,7 @@ import { BUILD_LAST_COMMIT } from "./env.server";
 import { middleware } from "./http.server";
 import { getRule, getRules } from "./models/rule.server";
 import {
-  getBackground,
-  getCurrentBackground
+  getBackground
 } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
 import { getToggleable } from "./preferences/toggleable.server";
@@ -102,7 +101,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
     preferences: {
       ...(await getBackground(session)),
-      ...(await getCurrentBackground(session)),
       ...(await getLanguage(session, ipCountry)),
       ...(await getToggleable(session))
     },

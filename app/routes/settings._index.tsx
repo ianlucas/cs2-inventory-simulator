@@ -15,10 +15,10 @@ import { Modal } from "~/components/modal";
 import { ModalButton } from "~/components/modal-button";
 import { useRootContext } from "~/components/root-context";
 import { Select } from "~/components/select";
+import { backgrounds } from "~/data/backgrounds";
 import { useCheckbox } from "~/hooks/use-checkbox";
 import { useSync } from "~/hooks/use-sync";
 import { middleware } from "~/http.server";
-import { backgrounds } from "~/preferences/background.server";
 import { languages } from "~/preferences/language.server";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
 import { RemoveAllItemsAction } from "./api.action.sync._index";
@@ -30,7 +30,6 @@ export const meta: MetaFunction = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);
   return typedjson({
-    backgrounds,
     languages: languages.map(({ name, countries }) => ({
       name,
       country: countries[0]
@@ -39,12 +38,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Settings() {
-  const { backgrounds, languages } = useTypedLoaderData<typeof loader>();
+  const { languages } = useTypedLoaderData<typeof loader>();
   const {
     inventory,
     setInventory,
     preferences: {
-      currentBackground: selectedBackground,
+      background: selectedBackground,
       hideFilters: selectedHideFilters,
       hideFreeItems: selectedHideFreeItems,
       language: selectedLanguage,
