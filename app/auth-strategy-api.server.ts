@@ -50,27 +50,16 @@ export class ApiStrategy extends Strategy<string, string> {
       }
 
       await clearAuthTokens(userId);
-      return await this.success(
+
+      return this.success(
         await this.verify(userId),
         request,
         sessionStorage,
         options
       );
     } catch (error) {
-      if (error instanceof Response) {
-        throw error;
-      }
-      if (error instanceof Error) {
-        return await this.failure(
-          error.message,
-          request,
-          sessionStorage,
-          options,
-          error
-        );
-      }
-      return await this.failure(
-        "unknown error",
+      return this.failure(
+        (error as Error)?.message ?? "An error occurred.",
         request,
         sessionStorage,
         options,
