@@ -14,7 +14,7 @@ import {
 import { CraftItemFilter } from "./craft-filters";
 
 export const assetBaseUrl =
-  "https://cdn.statically.io/gh/ianlucas/cslib/main/assets/images";
+  "https://cdn.statically.io/gh/ianlucas/cs2-lib/main/assets/images";
 
 export const modelFromType = {
   agent: "Agent",
