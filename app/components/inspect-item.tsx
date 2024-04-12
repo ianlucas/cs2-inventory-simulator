@@ -14,6 +14,7 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
+import { useItemNameString } from "~/hooks/use-item-name-string";
 import { getItemName, wearToString } from "~/utils/economy";
 import { CSItemCollectionImage } from "./cs-item-collection-image";
 import { CSItemImage } from "./cs-item-image";
@@ -53,7 +54,10 @@ export function InspectItem({
   } = useInspectFloating();
 
   const hasHover = CS_Economy.hasSeed(item) && CS_Economy.hasWear(item);
-  const { model, name, quality } = getItemName(item);
+  const name = useItemNameString({
+    ...getItemName(item),
+    stattrak: stattrak !== undefined
+  });
 
   return (
     <ClientOnly
@@ -63,19 +67,14 @@ export function InspectItem({
             <div className="m-auto lg:w-[1024px]">
               <div className="flex items-center justify-center">
                 <div
-                  className="flex items-center justify-center gap-4 border-b-4 px-1 pb-2"
+                  className="flex items-center justify-center gap-2 border-b-4 px-1 pb-2"
                   style={{ borderColor: item.rarity }}
                 >
                   {item.collection !== undefined && (
                     <CSItemCollectionImage className="h-16" item={item} />
                   )}
                   <div className="font-display">
-                    <div className="text-3xl">
-                      {quality}
-                      {stattrak !== undefined &&
-                        `${translate("InventoryItemStatTrak")} `}{" "}
-                      {model} | {name}
-                    </div>
+                    <div className="text-3xl">{name}</div>
                     {item.collectionname !== undefined && (
                       <div className="-mt-2 text-neutral-300">
                         {item.collectionname}
