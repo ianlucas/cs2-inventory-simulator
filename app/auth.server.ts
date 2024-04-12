@@ -6,9 +6,9 @@
 import { redirect } from "@remix-run/node";
 import { Authenticator } from "remix-auth";
 import { sessionStorage } from "~/session.server";
-import { ApiStrategy } from "./auth-strategy-api.server";
-import { SteamStrategy } from "./auth-strategy-steam.server";
+import { ApiStrategy } from "./api-strategy.server";
 import { findUniqueUser } from "./models/user.server";
+import { SteamStrategy } from "./steam-strategy.server";
 
 export const authenticator = new Authenticator<string>(sessionStorage);
 
