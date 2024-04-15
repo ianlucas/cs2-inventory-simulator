@@ -14,6 +14,7 @@ import {
   AddWithNametagAction,
   RenameItemAction
 } from "~/routes/api.action.sync._index";
+import { getItemNameString } from "~/utils/inventory";
 import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
 import { ModalButton } from "./modal-button";
@@ -46,7 +47,8 @@ export function RenameItem({
   );
   const [nametag, setNametag] = useInput("");
 
-  const { data: targetItem } = useInventoryItem(targetUid);
+  const inventoryItem = useInventoryItem(targetUid);
+  const { data: targetItem } = inventoryItem;
   const isRenamingFreeItem = freeItems.includes(targetItem.id);
 
   function handleRename() {
@@ -79,7 +81,7 @@ export function RenameItem({
             <div>
               <UseItemHeader
                 actionDesc={translate("RenameEnterName")}
-                actionItem={targetItem.name}
+                actionItem={getItemNameString(inventoryItem)}
                 title={translate("RenameUse")}
                 warning={translate("RenameWarn")}
               />

@@ -153,9 +153,9 @@ export function useInventoryFilters() {
       case "Display":
         switch (secondaryAsString) {
           case "All":
-            return ["pin", "musickit"].includes(item.data.type);
+            return ["collectible", "musickit"].includes(item.data.type);
           case "Medals":
-            return item.data.type === "pin";
+            return item.data.type === "collectible";
           case "MusicKits":
             return item.data.type === "musickit";
         }

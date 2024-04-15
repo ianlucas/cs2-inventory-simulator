@@ -10,6 +10,7 @@ import { useInput } from "~/hooks/use-input";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { useSync } from "~/hooks/use-sync";
 import { RenameStorageUnitAction } from "~/routes/api.action.sync._index";
+import { getItemNameString } from "~/utils/inventory";
 import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
 import { ModalButton } from "./modal-button";
@@ -53,7 +54,7 @@ export function RenameStorageUnit({
             <div>
               <UseItemHeader
                 actionDesc={translate("RenameStorageUnitEnterName")}
-                actionItem={item.name}
+                actionItem={getItemNameString(item)}
                 title={translate("RenameStorageUnitUse")}
                 warning={
                   isStartUsingStorageUnit

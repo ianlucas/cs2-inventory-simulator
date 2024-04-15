@@ -60,7 +60,7 @@ export async function generate(
   const ctWeapons: Record<number, WeaponEconItem> = {};
   const agents: Record<number, AgentItem> = {};
   const teams = [undefined, CS_TEAM_CT, CS_TEAM_T];
-  let pin: number | undefined;
+  let collectible: number | undefined;
   let musicKit: MusicKitItem | undefined;
 
   for (const item of inventory) {
@@ -97,8 +97,8 @@ export async function generate(
             uid: item.uid
           };
           break;
-        case "pin":
-          pin = data.def;
+        case "collectible":
+          collectible = data.def;
           break;
         case "melee":
           assert(team);
@@ -178,7 +178,7 @@ export async function generate(
     gloves,
     knives,
     musicKit,
-    pin,
+    pin: collectible,
     tWeapons
   };
 }

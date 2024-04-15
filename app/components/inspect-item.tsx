@@ -14,8 +14,8 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
-import { useItemNameString } from "~/hooks/use-item-name-string";
-import { getItemName, wearToString } from "~/utils/economy";
+import { wearToString } from "~/utils/economy";
+import { getItemNameString } from "~/utils/inventory";
 import { CSItemCollectionImage } from "./cs-item-collection-image";
 import { CSItemImage } from "./cs-item-image";
 import { InfoIcon } from "./info-icon";
@@ -35,14 +35,8 @@ export function InspectItem({
     translations: { translate }
   } = useRootContext();
 
-  const {
-    data: item,
-    seed,
-    stattrak,
-    stickers,
-    stickerswear,
-    wear
-  } = useInventoryItem(uid);
+  const inventoryItem = useInventoryItem(uid);
+  const { data: item, seed, stickers, stickerswear, wear } = inventoryItem;
   const {
     getHoverFloatingProps,
     getHoverReferenceProps,
@@ -54,10 +48,7 @@ export function InspectItem({
   } = useInspectFloating();
 
   const hasHover = CS_Economy.hasSeed(item) && CS_Economy.hasWear(item);
-  const name = useItemNameString({
-    ...getItemName(item),
-    stattrak: stattrak !== undefined
-  });
+  const name = getItemNameString(inventoryItem);
 
   return (
     <ClientOnly
@@ -70,7 +61,7 @@ export function InspectItem({
                   className="flex items-center justify-center gap-2 border-b-4 px-1 pb-2"
                   style={{ borderColor: item.rarity }}
                 >
-                  {item.collection !== undefined && (
+                  {item.collectionid !== undefined && (
                     <CSItemCollectionImage className="h-16" item={item} />
                   )}
                   <div className="font-display">

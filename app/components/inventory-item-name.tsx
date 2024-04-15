@@ -4,36 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_InventoryItem } from "@ianlucas/cs2-lib";
-import clsx from "clsx";
-import { useRootContext } from "./root-context";
+import { getItemNameString } from "~/utils/inventory";
 
 export function InventoryItemName({
-  inventoryItem: { stattrak },
-  model,
-  name,
-  quality
+  inventoryItem
 }: {
   inventoryItem: CS_InventoryItem;
-  model: string;
-  name: string;
-  quality?: string;
 }) {
-  const {
-    translations: { translate }
-  } = useRootContext();
-  const hasModel = model || stattrak !== undefined;
-
-  return (
-    <>
-      {hasModel && (
-        <div className="font-bold">
-          {quality}
-          {stattrak !== undefined &&
-            `${translate("InventoryItemStatTrak")} `}{" "}
-          {model}
-        </div>
-      )}
-      <div className={clsx(!hasModel && "font-bold")}>{name}</div>
-    </>
-  );
+  const name = getItemNameString(inventoryItem);
+  return <div className="font-bold">{name}</div>;
 }

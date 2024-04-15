@@ -15,6 +15,7 @@ import {
   AddWithStickerAction,
   ApplyItemStickerAction
 } from "~/routes/api.action.sync._index";
+import { getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
 import { CSItemImage } from "./cs-item-image";
 import { ModalButton } from "./modal-button";
@@ -40,9 +41,8 @@ export function ApplyItemSticker({
 
   const [stickerIndex, setStickerIndex] = useState<number>();
   const { data: stickerItem } = useInventoryItem(stickerUid);
-  const { data: targetItem, stickers: initialStickers } =
-    useInventoryItem(targetUid);
-
+  const targetInventoryItem = useInventoryItem(targetUid);
+  const { data: targetItem, stickers: initialStickers } = targetInventoryItem;
   const stickers = initialStickers ?? [...CS_INVENTORY_STICKERS];
 
   function handleApplySticker() {
@@ -83,7 +83,7 @@ export function ApplyItemSticker({
             <div>
               <UseItemHeader
                 actionDesc={translate("ApplyStickerUseOn")}
-                actionItem={targetItem.name}
+                actionItem={getItemNameString(targetInventoryItem)}
                 title={translate("ApplyStickerUse")}
                 warning={translate("ApplyStickerWarn")}
               />

@@ -4,7 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item } from "@ianlucas/cs2-lib";
-import clsx from "clsx";
+import { getItemName } from "~/utils/inventory";
+import { has } from "~/utils/misc";
 
 const HAS_KIND_FIRST = [
   "weapon",
@@ -16,39 +17,41 @@ const HAS_KIND_FIRST = [
   "patch"
 ];
 
-export function CSItemEditorName({
-  item: { name, type, rarity }
-}: {
-  item: CS_Item;
-}) {
-  const parts = name.split("|");
+export function CSItemEditorName({ item }: { item: CS_Item }) {
+  const { type, rarity } = item;
+  const [model, name] = getItemName(item, "editor-name");
 
   return (
-    <>
-      {parts.map((name, index) => (
-        <span key={index}>
+    <div className="bg-gradient-to-r from-transparent via-black/30 to-transparent">
+      {has(model) && <div className="text-sm text-neutral-400">{model}</div>}
+      <div className="-mt-2 font-bold" style={{ color: rarity }}>
+        {name}
+      </div>
+    </div>
+  );
+  /*
+      {names.map((name, index) => (
+        <span key={index} className="leading-3">
           <span
             className={clsx(
-              index === 0 && HAS_KIND_FIRST.includes(type) && parts.length > 1
-                ? "text-neutral-400"
+              index === 0 && HAS_KIND_FIRST.includes(type) && names.length > 1
+                ? "text-sm text-neutral-400"
                 : "font-bold"
             )}
             style={{
               color:
                 index !== 0 ||
                 !HAS_KIND_FIRST.includes(type) ||
-                parts.length === 1
+                names.length === 1
                   ? rarity
                   : undefined
             }}
           >
             {name}
           </span>
-          {index < parts.length - 1 && (
-            <span className="text-neutral-700"> | </span>
-          )}
+          {index < names.length - 1 && <br />}
         </span>
       ))}
     </>
-  );
+  );*/
 }

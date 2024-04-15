@@ -21,7 +21,7 @@ import {
   UNLOCKABLE_ITEM_TYPE
 } from "~/utils/inventory";
 import { format } from "~/utils/number";
-import { CSItem } from "./cs-item";
+import { CSItemTile } from "./cs-item-tile";
 import { InventoryItemContents } from "./inventory-item-contents";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemName } from "./inventory-item-name";
@@ -37,8 +37,6 @@ export function InventoryItem({
   disableHover,
   equipped,
   item,
-  model,
-  name,
   onApplySticker,
   onClick,
   onDepositToStorageUnit,
@@ -55,7 +53,6 @@ export function InventoryItem({
   onUnequip,
   onUnlockContainer,
   ownApplicableStickers,
-  quality,
   uid
 }: TransformedInventoryItem & {
   disableContextMenu?: boolean;
@@ -185,16 +182,12 @@ export function InventoryItem({
         ref={ref}
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
-        <CSItem
-          item={data}
+        <CSItemTile
           equipped={equipped}
-          nametag={item.nametag}
+          item={item}
           onClick={
             onClick !== undefined ? close(() => onClick(uid)) : undefined
           }
-          stattrak={item.stattrak}
-          stickers={item.stickers}
-          wear={item.wear}
         />
       </div>
       {!isFreeInventoryItem && !disableContextMenu && isClickOpen && (
@@ -361,12 +354,7 @@ export function InventoryItem({
             style={hoverStyles}
             {...getHoverFloatingProps()}
           >
-            <InventoryItemName
-              inventoryItem={item}
-              model={model}
-              name={name}
-              quality={quality}
-            />
+            <InventoryItemName inventoryItem={item} />
             {hasTeams && <InventoryItemTeams item={item.data} />}
             {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
             {hasContents && <InventoryItemContents item={item.data} />}

@@ -72,7 +72,7 @@ export function generate(inventory: CS_BaseInventoryItem[]) {
           if (item.type === "musickit") {
             keyvalues.push([MUSIC_KIT_PREFIX, item.index]);
           }
-          if (item.type === "pin") {
+          if (item.type === "collectible") {
             keyvalues.push([PIN_PREFIX, item.def]);
           }
           if (item.type === "melee") {

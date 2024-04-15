@@ -5,36 +5,33 @@
 
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_Item, CS_NONE } from "@ianlucas/cs2-lib";
+import {
+  CS_Economy,
+  CS_InventoryItem,
+  CS_Item,
+  CS_NONE
+} from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { getItemName } from "~/utils/economy";
+import {
+  getItemName,
+  resolveCSItem,
+  resolveInventoryItem
+} from "~/utils/inventory";
+import { has } from "~/utils/misc";
 import { CSItemImage } from "./cs-item-image";
-import { useRootContext } from "./root-context";
 
-export function CSItem({
-  item,
+export function CSItemTile({
   equipped,
-  nametag,
-  onClick,
-  stattrak,
-  stickers,
-  wear
+  item,
+  onClick
 }: {
-  item: CS_Item;
   equipped?: (string | false | undefined)[];
-  nametag?: string;
+  item: CS_Item | CS_InventoryItem;
   onClick?: () => void;
-  stattrak?: number;
-  stickers?: number[];
-  wear?: number;
 }) {
-  const {
-    translations: { translate }
-  } = useRootContext();
-  const { model, name, quality } = getItemName(item);
-  const hasModel = model || stattrak !== undefined;
-  const hasNametag = nametag !== undefined;
-  const showNameWithNametag = CS_Economy.isStorageUnitTool(item);
+  const inventoryItem = resolveInventoryItem(item);
+  const data = resolveCSItem(item);
+  const [model, name] = getItemName(item, "inventory-name");
 
   return (
     <div className="w-[154px]">
@@ -42,13 +39,13 @@ export function CSItem({
         <div className="bg-gradient-to-b from-neutral-500 to-neutral-300 px-1">
           <CSItemImage
             className="h-[108px] w-[144px]"
-            item={item}
-            wear={wear}
+            item={data}
+            wear={inventoryItem?.wear}
           />
         </div>
         <div className="absolute bottom-0 left-0 flex items-center p-1">
-          {stickers !== undefined &&
-            stickers.map(
+          {inventoryItem?.stickers !== undefined &&
+            inventoryItem.stickers.map(
               (sticker, index) =>
                 sticker !== CS_NONE && (
                   <CSItemImage
@@ -81,28 +78,11 @@ export function CSItem({
       </div>
       <div
         className="h-1 shadow shadow-black/50"
-        style={{ backgroundColor: item.rarity }}
+        style={{ backgroundColor: data.rarity }}
       />
       <div className="mt-2 text-[12px] leading-3 text-white drop-shadow-[0_0_1px_rgba(0,0,0,1)]">
-        {hasNametag ? (
-          <>
-            {showNameWithNametag && (
-              <div className="font-bold">{item.name}</div>
-            )}
-            <div>"{nametag}"</div>
-          </>
-        ) : (
-          <>
-            {hasModel && (
-              <div className="font-bold">
-                {quality}
-                {stattrak !== undefined && "StatTrak™ "}
-                {translate(`Model${model}`) || model}
-              </div>
-            )}
-            <div className={clsx(!hasModel && "font-bold")}>{name}</div>
-          </>
-        )}
+        {has(model) && <div className="font-bold">{model}</div>}
+        {has(name) && <div>{name}</div>}
       </div>
     </div>
   );

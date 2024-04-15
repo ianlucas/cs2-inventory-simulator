@@ -16,21 +16,6 @@ import { CraftItemFilter } from "./craft-filters";
 export const assetBaseUrl =
   "https://cdn.statically.io/gh/ianlucas/cs2-lib/main/assets/images";
 
-export const modelFromType = {
-  agent: "Agent",
-  case: "",
-  glove: "",
-  graffiti: "",
-  key: "",
-  melee: "",
-  musickit: "",
-  patch: "",
-  pin: "",
-  sticker: "",
-  tool: "",
-  weapon: "Weapon"
-} as const;
-
 export const COUNTABLE_ITEM_TYPES = [
   "case",
   "graffiti",
@@ -40,41 +25,9 @@ export const COUNTABLE_ITEM_TYPES = [
   "tool"
 ];
 export const FREE_MODEL_IN_NAME_TYPES = ["musickit"];
-export const MODEL_IN_NAME_ITEM_TYPES = [
-  "glove",
-  "graffiti",
-  "melee",
-  "musickit",
-  "patch",
-  "sticker",
-  "weapon"
-];
 
 export function translateItems(itemTranslation: CS_ItemTranslations[number]) {
   CS_Economy.applyTranslation(itemTranslation);
-}
-
-export function getItemName(item: CS_Item) {
-  if (item.free && !FREE_MODEL_IN_NAME_TYPES.includes(item.type)) {
-    return {
-      model: "",
-      name: item.name,
-      quality: ""
-    };
-  }
-  if (MODEL_IN_NAME_ITEM_TYPES.includes(item.type)) {
-    const [model, ...paintName] = item.name.split("|");
-    return {
-      model: model.trim(),
-      name: paintName.join("|"),
-      quality: item.type === "melee" ? "★ " : ""
-    };
-  }
-  return {
-    model: modelFromType[item.type],
-    name: item.name,
-    quality: ""
-  };
 }
 
 export function getBaseItems({

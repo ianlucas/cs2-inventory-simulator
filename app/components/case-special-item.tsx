@@ -5,7 +5,7 @@
 
 import { CS_Item } from "@ianlucas/cs2-lib";
 import { resolveCaseSpecialsImage } from "~/utils/economy";
-import { CSItem } from "./cs-item";
+import { CSItemTile } from "./cs-item-tile";
 import { useRootContext } from "./root-context";
 
 export function CaseSpecialItem({ caseItem }: { caseItem: CS_Item }) {
@@ -14,9 +14,9 @@ export function CaseSpecialItem({ caseItem }: { caseItem: CS_Item }) {
   } = useRootContext();
 
   return (
-    <CSItem
+    <CSItemTile
       item={{
-        id: -1,
+        id: caseItem.id,
         name: translate("CaseRareItem"),
         image: resolveCaseSpecialsImage(caseItem),
         type: "weapon",

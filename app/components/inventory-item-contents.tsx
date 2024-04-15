@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
+import { getItemNameString } from "~/utils/inventory";
 import { useRootContext } from "./root-context";
 
 export function InventoryItemContents({ item }: { item: CS_Item }) {
@@ -18,7 +19,7 @@ export function InventoryItemContents({ item }: { item: CS_Item }) {
       </div>
       {CS_Economy.listCaseContents(item, true).map((item) => (
         <div key={item.id} style={{ color: item.rarity }}>
-          {item.name}
+          {getItemNameString(item, "case-contents-name")}
         </div>
       ))}
       {item.specials !== undefined && (

@@ -88,9 +88,9 @@ export const CRAFT_ITEM_FILTERS = [
   },
   {
     hasModel: false,
-    icon: "pin",
-    label: "Pin",
-    type: "pin" as const
+    icon: "collectible",
+    label: "Collectible",
+    type: "collectible" as const
   },
   {
     hasModel: false,

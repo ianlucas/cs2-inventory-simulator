@@ -17,6 +17,7 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useSync } from "~/hooks/use-sync";
 import { ScrapeItemStickerAction } from "~/routes/api.action.sync._index";
+import { getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
 import { CSItemImage } from "./cs-item-image";
 import { Modal } from "./modal";
@@ -43,11 +44,12 @@ export function ScrapeItemSticker({
 
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
 
+  const inventoryItem = inventory.get(uid);
   const {
     data: item,
     stickers: initialStickers,
     stickerswear: initialStickersWear
-  } = inventory.get(uid);
+  } = inventoryItem;
 
   const stickers = initialStickers ?? CS_INVENTORY_STICKERS;
   const stickersWear = initialStickersWear ?? CS_INVENTORY_STICKERS_WEAR;
@@ -93,7 +95,7 @@ export function ScrapeItemSticker({
                 <UseItemHeader
                   title={translate("ScrapeStickerUse")}
                   warning={translate("ScrapeStickerWarn")}
-                  warningItem={item.name}
+                  warningItem={getItemNameString(inventoryItem)}
                 />
                 <CSItemImage
                   className="m-auto aspect-[1.33333] max-w-[512px]"
