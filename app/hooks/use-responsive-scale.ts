@@ -26,7 +26,7 @@ export function useResponsiveScale() {
     if (size.width) {
       setScale(getRatio(size.width));
     }
-  }, [size]);
+  }, [size.width]);
 
   return scale;
 }

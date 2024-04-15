@@ -23,7 +23,7 @@ export function TranslationScript() {
     return () => {
       document.body.removeChild(script);
     };
-  }, [language]);
+  }, [checksum, language]);
 
   if (isInitialized) {
     return null;

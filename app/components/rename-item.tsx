@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy } from "@ianlucas/cs2-lib";
-import { useMemo } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
+import { useFreeze } from "~/hooks/use-freeze";
 import { useInput } from "~/hooks/use-input";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { useSync } from "~/hooks/use-sync";
@@ -38,12 +38,10 @@ export function RenameItem({
   } = useRootContext();
   const sync = useSync();
 
-  const freeItems = useMemo(
-    () =>
-      CS_Economy.filterItems({
-        free: true
-      }).map((item) => item.id),
-    []
+  const freeItems = useFreeze(() =>
+    CS_Economy.filterItems({
+      free: true
+    }).map((item) => item.id)
   );
   const [nametag, setNametag] = useInput("");
 
