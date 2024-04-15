@@ -160,7 +160,7 @@ export function useFloatingClick<RT extends ReferenceType = ReferenceType>(
     };
   }, [
     enabled,
-    dataRef,
+    dataRef.current,
     eventOption,
     ignoreMouse,
     keyboardHandlers,
