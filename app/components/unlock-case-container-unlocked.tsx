@@ -59,6 +59,7 @@ export function UnlockCaseContainerUnlocked({
           wear={attributes.wear}
         />
         <UseItemFooter
+          className="min-w-[1024px]"
           left={
             <div className="flex items-center gap-8">
               <UnlockCaseAttribute
