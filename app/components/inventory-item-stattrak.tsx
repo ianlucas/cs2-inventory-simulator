@@ -7,7 +7,7 @@ import { CS_InventoryItem } from "@ianlucas/cs2-lib";
 import { useRootContext } from "./root-context";
 
 export function InventoryItemStatTrak({
-  inventoryItem: { stattrak }
+  inventoryItem: { data, stattrak }
 }: {
   inventoryItem: CS_InventoryItem;
 }) {
@@ -17,11 +17,16 @@ export function InventoryItemStatTrak({
 
   return (
     <div>
-      <div className="text-blue-300">
+      <div className="mt-2 text-blue-300">
         {translate("InventoryItemStatTrakDesc")}
       </div>
       <div className="mt-2 text-orange-400">
-        {translate("InventoryItemStatTrakCount")} {stattrak}
+        {translate(
+          data.type === "musickit"
+            ? "InventoryItemMVPStatTrakCount"
+            : "InventoryItemStatTrakCount"
+        )}{" "}
+        {stattrak}
       </div>
     </div>
   );

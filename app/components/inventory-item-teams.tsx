@@ -16,7 +16,7 @@ export function InventoryItemTeams({ item: { teams } }: { item: CS_Item }) {
   const hasAny = teams?.length === 2;
 
   return (
-    <div className="my-2 flex items-center gap-4 border-b border-t border-neutral-700/70 py-1">
+    <div className="mt-2 flex items-center gap-4 border-b border-t border-neutral-700/70 py-1">
       <span className="font-bold text-neutral-400">
         {translate("InventoryItemTeam")}
       </span>

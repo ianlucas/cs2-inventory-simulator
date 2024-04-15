@@ -89,6 +89,7 @@ export function InventoryItem({
       inventoryItemEquipHideType,
       inventoryStorageUnitMaxItems
     },
+    preferences: { statsForNerds },
     translations: { translate }
   } = useRootContext();
 
@@ -349,7 +350,7 @@ export function InventoryItem({
       {!isFreeInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <div
-            className="z-20 max-w-[320px] rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none"
+            className="z-20 w-[440px] rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none"
             ref={hoverRefs.setFloating}
             style={hoverStyles}
             {...getHoverFloatingProps()}
@@ -358,7 +359,7 @@ export function InventoryItem({
             {hasTeams && <InventoryItemTeams item={item.data} />}
             {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
             {hasContents && <InventoryItemContents item={item.data} />}
-            {hasAttributes && (
+            {statsForNerds && hasAttributes && (
               <div className="mt-2 flex flex-col gap-2">
                 {hasWear && <InventoryItemWear inventoryItem={item} />}
                 {hasSeed && <InventoryItemSeed inventoryItem={item} />}

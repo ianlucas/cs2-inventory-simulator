@@ -115,6 +115,7 @@ export const english = {
   InventoryItemStatTrakDesc:
     "This item features StatTrak™ technology, which tracks certain statistics when equipped by its owner.",
   InventoryItemStatTrakCount: "StatTrak™ Confirmed Kills:",
+  InventoryItemMVPStatTrakCount: "StatTrak™ Official Competitive MVPs:",
   InventoryApplySticker: "Apply Sticker",
   InventoryScrapeSticker: "Scrape Sticker",
   InventoryItemUseStorageUnit: "Start Using This Unit",

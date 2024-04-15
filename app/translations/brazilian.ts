@@ -108,7 +108,9 @@ export const brazilian = {
   InventoryItemRareItem: "ou um item especial e extremamente raro!",
   InventoryItemStatTrakDesc:
     "Este item possui a tecnologia StatTrak™, que registra certas estatísticas quando equipado.",
-  InventoryItemStatTrakCount: "Vítimas confirmadas via StatTrak™",
+  InventoryItemStatTrakCount: "Vítimas confirmadas via StatTrak™:",
+  InventoryItemMVPStatTrakCount:
+    "★ em partidas competitivas oficiais via StatTrak™:",
   InventoryApplySticker: "Aplicar adesivo",
   InventoryScrapeSticker: "Raspar adesivo",
   InventoryItemUseStorageUnit: "Começar a usar unidade",
