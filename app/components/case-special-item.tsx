@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item } from "@ianlucas/cs2-lib";
-import { resolveCaseSpecialsImage } from "~/utils/economy";
+import { createFakeItem, resolveCaseSpecialsImage } from "~/utils/economy";
 import { CSItemTile } from "./cs-item-tile";
 import { useRootContext } from "./root-context";
 
@@ -15,14 +15,11 @@ export function CaseSpecialItem({ caseItem }: { caseItem: CS_Item }) {
 
   return (
     <CSItemTile
-      item={{
-        id: caseItem.id,
-        name: translate("CaseRareItem"),
+      item={createFakeItem(caseItem, {
+        name: `Container | ${translate("CaseRareItem")}`,
         image: resolveCaseSpecialsImage(caseItem),
-        type: "weapon",
-        category: "weapon",
         rarity: "#e4ae39"
-      }}
+      })}
     />
   );
 }

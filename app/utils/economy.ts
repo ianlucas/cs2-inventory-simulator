@@ -98,3 +98,13 @@ export function isSouvenirCase(item: CS_Item) {
   // We need to check this way because `category` is affected by translation.
   return item.category === CS_Economy.getById(9147).category;
 }
+
+export function createFakeItem(
+  baseItem: CS_Item,
+  attributes: Partial<CS_Item>
+) {
+  return {
+    ...baseItem,
+    ...attributes
+  } satisfies CS_Item;
+}

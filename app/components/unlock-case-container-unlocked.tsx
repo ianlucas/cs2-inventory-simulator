@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_InventoryItem, CS_Item } from "@ianlucas/cs2-lib";
+import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { getItemNameString } from "~/utils/inventory";
+import { createFakeInventoryItem, getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
 import { CSItemImage } from "./cs-item-image";
 import { ModalButton } from "./modal-button";
@@ -44,12 +44,7 @@ export function UnlockCaseContainerUnlocked({
             className="border-b-4 pb-2 font-display font-semibold leading-10 tracking-wider drop-shadow"
             style={{ borderColor: item.rarity }}
           >
-            {getItemNameString({
-              ...attributes,
-              data: item,
-              id,
-              uid: -1
-            } satisfies CS_InventoryItem)}
+            {getItemNameString(createFakeInventoryItem(item, attributes))}
           </span>
         </div>
         <div className="mt-4 flex items-center justify-center gap-2 text-sm">

@@ -141,6 +141,18 @@ export function sortByCollection(
   );
 }
 
+export function createFakeInventoryItem(
+  data: CS_Item,
+  item?: Partial<CS_InventoryItem>
+) {
+  return {
+    data,
+    id: data.id,
+    uid: -1,
+    ...item
+  } satisfies CS_InventoryItem;
+}
+
 export function getFreeItemsToDisplay(hideFreeItems = false) {
   if (hideFreeItems) {
     return [];
@@ -149,11 +161,9 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
     free: true
   }).map((item, index) => ({
     equipped: [],
-    item: {
-      data: item,
-      id: item.id,
+    item: createFakeInventoryItem(item, {
       uid: -1 * (index + 1)
-    } satisfies CS_InventoryItem,
+    }),
     uid: -1 * (index + 1)
   }));
 }
