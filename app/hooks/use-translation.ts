@@ -51,9 +51,7 @@ export function useTranslation({
       setSystemTranslation(getSystemTranslation());
       setItemsTranslation(getItemsTranslation());
     }
-
     window.addEventListener("translation-loaded", handleTranslationLoaded);
-
     return () => {
       window.removeEventListener("translation-loaded", handleTranslationLoaded);
     };
