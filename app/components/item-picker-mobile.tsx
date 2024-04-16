@@ -9,7 +9,7 @@ import { CS_Item } from "@ianlucas/cs2-lib";
 import { ItemBrowser } from "~/components/item-browser";
 import { ItemPickerFilterMobile } from "~/components/item-picker-filter-mobile";
 import { useItemPickerState } from "~/hooks/use-item-picker-state";
-import { useAppContext } from "./app-context";
+import { useTranslate } from "./app-context";
 
 export function ItemPickerMobile({
   onPickItem
@@ -26,9 +26,7 @@ export function ItemPickerMobile({
     query,
     setQuery
   } = useItemPickerState({ onPickItem });
-  const {
-    translations: { translate }
-  } = useAppContext();
+  const translate = useTranslate();
 
   return (
     <>

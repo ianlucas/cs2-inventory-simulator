@@ -4,16 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_InventoryItem } from "@ianlucas/cs2-lib";
-import { useAppContext } from "./app-context";
+import { useTranslate } from "./app-context";
 
 export function InventoryItemStatTrak({
   inventoryItem: { data, stattrak }
 }: {
   inventoryItem: CS_InventoryItem;
 }) {
-  const {
-    translations: { translate }
-  } = useAppContext();
+  const translate = useTranslate();
 
   return (
     <div>

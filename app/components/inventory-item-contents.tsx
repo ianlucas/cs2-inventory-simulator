@@ -5,12 +5,10 @@
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { getItemNameString } from "~/utils/inventory";
-import { useAppContext } from "./app-context";
+import { useTranslate } from "./app-context";
 
 export function InventoryItemContents({ item }: { item: CS_Item }) {
-  const {
-    translations: { translate }
-  } = useAppContext();
+  const translate = useTranslate();
 
   return (
     <div className="mt-4">

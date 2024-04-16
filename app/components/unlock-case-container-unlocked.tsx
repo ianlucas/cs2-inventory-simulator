@@ -7,7 +7,7 @@ import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createFakeInventoryItem, getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
-import { useAppContext } from "./app-context";
+import { useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { UnlockCaseAttribute } from "./unlock-case-attribute";
@@ -22,9 +22,7 @@ export function UnlockCaseContainerUnlocked({
   onClose: () => void;
   unlockedItem: ReturnType<typeof CS_Economy.unlockCase>;
 }) {
-  const {
-    translations: { translate }
-  } = useAppContext();
+  const translate = useTranslate();
   const [revealScale, setRevealScale] = useState(0);
 
   function handleLoad() {

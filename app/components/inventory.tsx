@@ -20,7 +20,7 @@ import {
   UnequipAction
 } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
-import { useAppContext } from "./app-context";
+import { useAppContext, useTranslate } from "./app-context";
 import { ApplyItemSticker } from "./apply-item-sticker";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
@@ -40,9 +40,9 @@ export function Inventory() {
     inventoryFilters: { filterItems },
     items,
     preferences: { hideFilters },
-    setInventory,
-    translations: { translate }
+    setInventory
   } = useAppContext();
+  const translate = useTranslate();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const navigate = useNavigate();
 

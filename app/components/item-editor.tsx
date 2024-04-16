@@ -27,7 +27,7 @@ import {
   wearStringMaxLen,
   wearToString
 } from "~/utils/economy";
-import { useAppContext } from "./app-context";
+import { useAppContext, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
@@ -80,9 +80,9 @@ export function ItemEditor({
       editHideType,
       inventoryMaxItems
     },
-    inventory,
-    translations: { translate }
+    inventory
   } = useAppContext();
+  const translate = useTranslate();
   const [stattrak, setStattrak] = useCheckbox(
     attributes?.stattrak !== undefined ? attributes.stattrak >= 0 : false
   );

@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useNavigate, useSubmit } from "@remix-run/react";
 import { useState } from "react";
-import { useAppContext } from "~/components/app-context";
+import { useAppContext, useTranslate } from "~/components/app-context";
 import { EditorToggle } from "~/components/editor-toggle";
 import { LanguageSelect } from "~/components/language-select";
 import { Modal } from "~/components/modal";
@@ -41,9 +41,9 @@ export default function Settings() {
       hideFreeItems: selectedHideFreeItems,
       language: selectedLanguage,
       statsForNerds: selectedStatsForNerds
-    },
-    translations: { translate }
+    }
   } = useAppContext();
+  const translate = useTranslate();
   const sync = useSync();
 
   const [background, setBackground] = useState(selectedBackground ?? "");

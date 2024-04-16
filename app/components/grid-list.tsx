@@ -14,7 +14,7 @@ import {
   WheelEvent
 } from "react";
 import { range } from "~/utils/number";
-import { useAppContext } from "./app-context";
+import { useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
 
 export function GridList({
@@ -30,9 +30,7 @@ export function GridList({
   itemHeight: number;
   maxItemsIntoView?: number;
 }) {
-  const {
-    translations: { translate }
-  } = useAppContext();
+  const translate = useTranslate();
 
   const [scrollbarHeight, setScrollbarHeight] = useState(0);
   const [scrollbarTop, setScrollbarTop] = useState(0);

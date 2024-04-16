@@ -7,7 +7,7 @@ import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_randomFloat, CS_randomInt } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { useAppContext } from "./app-context";
+import { useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
 
@@ -40,9 +40,7 @@ export function EditorStepRangeWithInput({
 }) {
   transform = transform !== undefined ? transform : String;
   const [text, setText] = useState(transform(value));
-  const {
-    translations: { translate }
-  } = useAppContext();
+  const translate = useTranslate();
 
   function handleTextChange({
     target: { value: text }

@@ -5,13 +5,11 @@
 
 import { CS_Item } from "@ianlucas/cs2-lib";
 import { createFakeItem, resolveCaseSpecialsImage } from "~/utils/economy";
-import { useAppContext } from "./app-context";
+import { useTranslate } from "./app-context";
 import { InventoryItemTile } from "./inventory-item-tile";
 
 export function InventoryItemSpecialTile({ caseItem }: { caseItem: CS_Item }) {
-  const {
-    translations: { translate }
-  } = useAppContext();
+  const translate = useTranslate();
 
   return (
     <InventoryItemTile

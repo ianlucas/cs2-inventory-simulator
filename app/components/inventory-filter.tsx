@@ -14,7 +14,7 @@ import {
   INVENTORY_SECONDARY_FILTERS,
   INVENTORY_SORTERS
 } from "~/utils/inventory-filters";
-import { useAppContext } from "./app-context";
+import { useAppContext, useTranslate } from "./app-context";
 import { InventoryFilterButton } from "./inventory-filter-button";
 import { Select } from "./select";
 
@@ -29,10 +29,9 @@ export function InventoryFilter() {
       setSearch,
       setSorter,
       sorter
-    },
-    translations: { translate }
+    }
   } = useAppContext();
-
+  const translate = useTranslate();
   const secondaryFilters =
     INVENTORY_SECONDARY_FILTERS[INVENTORY_PRIMARY_FILTERS[primary]];
   const hasSecondaryFilters = secondaryFilters !== undefined;

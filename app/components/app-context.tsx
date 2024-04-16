@@ -51,6 +51,10 @@ export function useAppContext() {
   return useContext(AppContext);
 }
 
+export function useTranslate() {
+  return useAppContext().translations.translate;
+}
+
 export function AppProvider({
   children,
   preferences,

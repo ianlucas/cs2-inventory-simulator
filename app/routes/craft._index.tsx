@@ -11,7 +11,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { z } from "zod";
-import { useAppContext } from "~/components/app-context";
+import { useAppContext, useTranslate } from "~/components/app-context";
 import { ItemEditor, ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
 import { Modal } from "~/components/modal";
@@ -43,11 +43,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Craft() {
   const { uid } = useTypedLoaderData<typeof loader>();
-  const {
-    inventory,
-    setInventory,
-    translations: { translate }
-  } = useAppContext();
+  const { inventory, setInventory } = useAppContext();
+  const translate = useTranslate();
   const sync = useSync();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(

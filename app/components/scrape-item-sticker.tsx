@@ -19,7 +19,7 @@ import { useSync } from "~/hooks/use-sync";
 import { ScrapeItemStickerAction } from "~/routes/api.action.sync._index";
 import { getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
-import { useAppContext } from "./app-context";
+import { useAppContext, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { Modal } from "./modal";
 import { ModalButton } from "./modal-button";
@@ -36,10 +36,10 @@ export function ScrapeItemSticker({
   const {
     inventory,
     setInventory,
-    preferences: { statsForNerds },
-    translations: { translate }
+    preferences: { statsForNerds }
   } = useAppContext();
 
+  const translate = useTranslate();
   const sync = useSync();
 
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();

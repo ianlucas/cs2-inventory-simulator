@@ -21,7 +21,7 @@ import {
 } from "~/utils/inventory";
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
-import { useAppContext } from "./app-context";
+import { useAppContext, useTranslate } from "./app-context";
 import { InventoryItemContents } from "./inventory-item-contents";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemName } from "./inventory-item-name";
@@ -89,9 +89,9 @@ export function InventoryItem({
       inventoryItemEquipHideType,
       inventoryStorageUnitMaxItems
     },
-    preferences: { statsForNerds },
-    translations: { translate }
+    preferences: { statsForNerds }
   } = useAppContext();
+  const translate = useTranslate();
 
   const {
     clickContext,

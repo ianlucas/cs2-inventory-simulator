@@ -5,7 +5,7 @@
 
 import clsx from "clsx";
 import { EconomyItemFilter } from "~/utils/economy-filters";
-import { useAppContext } from "./app-context";
+import { useTranslate } from "./app-context";
 
 export function ItemPickerFilterMobile({
   categories,
@@ -16,9 +16,7 @@ export function ItemPickerFilterMobile({
   onChange: (newValue: EconomyItemFilter) => void;
   value: EconomyItemFilter;
 }) {
-  const {
-    translations: { translate }
-  } = useAppContext();
+  const translate = useTranslate();
 
   function handleClick(filter: EconomyItemFilter) {
     return function handleClick() {

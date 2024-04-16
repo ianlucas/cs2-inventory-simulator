@@ -5,7 +5,7 @@
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { getItemNameString } from "~/utils/inventory";
-import { useAppContext } from "./app-context";
+import { useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -34,9 +34,7 @@ export function UnlockCaseContainer({
   onClose: () => void;
   onUnlock: () => void;
 }) {
-  const {
-    translations: { translate }
-  } = useAppContext();
+  const translate = useTranslate();
 
   return (
     <>

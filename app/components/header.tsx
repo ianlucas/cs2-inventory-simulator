@@ -19,7 +19,7 @@ import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useIsOnTop } from "~/hooks/use-is-on-top";
 import { ECONOMY_ITEM_FILTERS } from "~/utils/economy-filters";
-import { useAppContext } from "./app-context";
+import { useAppContext, useTranslate } from "./app-context";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
 import { useItemSelectorContext } from "./item-selector-context";
@@ -29,9 +29,9 @@ export function Header() {
   const {
     user,
     inventory,
-    preferences: { hideFilters },
-    translations: { translate }
+    preferences: { hideFilters }
   } = useAppContext();
+  const translate = useTranslate();
   const { itemSelector } = useItemSelectorContext();
   const craftFilter = useCraftFilterRules();
   const [isMenuOpen, toggleIsMenuOpen] = useToggle(false);
