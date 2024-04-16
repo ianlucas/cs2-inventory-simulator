@@ -13,11 +13,11 @@ import {
   useMemo
 } from "react";
 import { useTypedLoaderData } from "remix-typedjson";
-import { useInventory } from "~/hooks/use-inventory";
 import {
   sortItemsByEquipped,
   useInventoryFilters
 } from "~/hooks/use-inventory-filters";
+import { useInventoryState } from "~/hooks/use-inventory-state";
 import { useTranslation } from "~/hooks/use-translation";
 import type { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
@@ -59,6 +59,11 @@ export function useRules() {
   return useAppContext().rules;
 }
 
+export function useInventory() {
+  const { inventory, setInventory } = useAppContext();
+  return [inventory, setInventory] as const;
+}
+
 export function AppProvider({
   children,
   preferences,
@@ -86,7 +91,7 @@ export function AppProvider({
     maxItems: rules.inventoryMaxItems,
     storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
   };
-  const [inventory, setInventory] = useInventory(
+  const [inventory, setInventory] = useInventoryState(
     new CS_Inventory(inventorySpec)
   );
   const inventoryFilters = useInventoryFilters();

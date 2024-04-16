@@ -8,7 +8,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useNavigate, useSubmit } from "@remix-run/react";
 import { useState } from "react";
-import { useAppContext, useTranslate } from "~/components/app-context";
+import {
+  useAppContext,
+  useInventory,
+  useTranslate
+} from "~/components/app-context";
 import { EditorToggle } from "~/components/editor-toggle";
 import { LanguageSelect } from "~/components/language-select";
 import { Modal } from "~/components/modal";
@@ -33,8 +37,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Settings() {
   const {
-    inventory,
-    setInventory,
     preferences: {
       background: selectedBackground,
       hideFilters: selectedHideFilters,
@@ -43,6 +45,7 @@ export default function Settings() {
       statsForNerds: selectedStatsForNerds
     }
   } = useAppContext();
+  const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
   const sync = useSync();
 

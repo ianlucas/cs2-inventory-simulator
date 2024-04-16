@@ -11,7 +11,7 @@ import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { useSync } from "~/hooks/use-sync";
 import { RenameStorageUnitAction } from "~/routes/api.action.sync._index";
 import { getItemNameString } from "~/utils/inventory";
-import { useAppContext, useTranslate } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -25,7 +25,7 @@ export function RenameStorageUnit({
   onClose: () => void;
   uid: number;
 }) {
-  const { inventory, setInventory } = useAppContext();
+  const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
   const sync = useSync();
 

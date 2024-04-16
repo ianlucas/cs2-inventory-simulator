@@ -6,7 +6,7 @@
 import { CS_Inventory } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 
-export function useInventory(
+export function useInventoryState(
   initialState: CS_Inventory | (() => CS_Inventory)
 ) {
   const [state, setState] = useState(initialState);

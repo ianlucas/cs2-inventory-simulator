@@ -14,15 +14,15 @@ import {
 import { sync } from "~/sync";
 import { getJson } from "~/utils/fetch";
 import { parseInventory } from "~/utils/inventory";
-import { useAppContext, useRules, useTranslate } from "./app-context";
+import { useInventory, useRules, useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { Modal } from "./modal";
 import { ModalButton } from "./modal-button";
 
 export function SyncIndicator() {
   const translate = useTranslate();
-  const { setInventory } = useAppContext();
   const { inventoryMaxItems, inventoryStorageUnitMaxItems } = useRules();
+  const [, setInventory] = useInventory();
   const [opacity, setOpacity] = useState(0);
   const [showSyncErrorModal, setShowSyncErrorModal] = useState(false);
   const [disableContinueButton, setDisableContinueButton] = useState(false);
