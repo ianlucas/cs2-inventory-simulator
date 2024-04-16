@@ -72,6 +72,10 @@ export function useUser() {
   return useAppContext().user;
 }
 
+export function useInventoryItems() {
+  return useAppContext().items;
+}
+
 export function AppProvider({
   children,
   preferences,

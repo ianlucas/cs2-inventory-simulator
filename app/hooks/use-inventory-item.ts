@@ -3,12 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useAppContext } from "~/components/app-context";
+import { useInventory, useInventoryItems } from "~/components/app-context";
 import { assert } from "~/utils/misc";
 import { useFreeze } from "./use-freeze";
 
 export function useInventoryItem(uid: number) {
-  const { inventory, items } = useAppContext();
+  const [inventory] = useInventory();
+  const items = useInventoryItems();
   const item = useFreeze(() => {
     if (uid < 0) {
       const item = items.find(

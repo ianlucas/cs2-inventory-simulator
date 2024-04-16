@@ -23,6 +23,7 @@ import { playSound } from "~/utils/sound";
 import {
   useAppContext,
   useInventory,
+  useInventoryItems,
   usePreferences,
   useTranslate
 } from "./app-context";
@@ -41,9 +42,9 @@ import { UnlockCase } from "./unlock-case";
 export function Inventory() {
   const sync = useSync();
   const {
-    inventoryFilters: { filterItems },
-    items
+    inventoryFilters: { filterItems }
   } = useAppContext();
+  const items = useInventoryItems();
   const { hideFilters } = usePreferences();
   const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
