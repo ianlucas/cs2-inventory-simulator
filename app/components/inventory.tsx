@@ -20,7 +20,12 @@ import {
   UnequipAction
 } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
-import { useAppContext, useInventory, useTranslate } from "./app-context";
+import {
+  useAppContext,
+  useInventory,
+  usePreferences,
+  useTranslate
+} from "./app-context";
 import { ApplyItemSticker } from "./apply-item-sticker";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
@@ -37,9 +42,9 @@ export function Inventory() {
   const sync = useSync();
   const {
     inventoryFilters: { filterItems },
-    items,
-    preferences: { hideFilters }
+    items
   } = useAppContext();
+  const { hideFilters } = usePreferences();
   const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
   const { itemSelector, setItemSelector } = useItemSelectorContext();

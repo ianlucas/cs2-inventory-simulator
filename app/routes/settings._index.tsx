@@ -9,8 +9,8 @@ import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useNavigate, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import {
-  useAppContext,
   useInventory,
+  usePreferences,
   useTranslate
 } from "~/components/app-context";
 import { EditorToggle } from "~/components/editor-toggle";
@@ -37,14 +37,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Settings() {
   const {
-    preferences: {
-      background: selectedBackground,
-      hideFilters: selectedHideFilters,
-      hideFreeItems: selectedHideFreeItems,
-      language: selectedLanguage,
-      statsForNerds: selectedStatsForNerds
-    }
-  } = useAppContext();
+    background: selectedBackground,
+    hideFilters: selectedHideFilters,
+    hideFreeItems: selectedHideFreeItems,
+    language: selectedLanguage,
+    statsForNerds: selectedStatsForNerds
+  } = usePreferences();
   const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
   const sync = useSync();

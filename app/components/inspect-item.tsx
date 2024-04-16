@@ -16,7 +16,7 @@ import { useInspectFloating } from "~/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { wearToString } from "~/utils/economy";
 import { getItemNameString } from "~/utils/inventory";
-import { useAppContext, useTranslate } from "./app-context";
+import { usePreferences, useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
 import { ItemCollectionImage } from "./item-collection-image";
 import { ItemImage } from "./item-image";
@@ -30,9 +30,7 @@ export function InspectItem({
   onClose: () => void;
   uid: number;
 }) {
-  const {
-    preferences: { statsForNerds }
-  } = useAppContext();
+  const { statsForNerds } = usePreferences();
   const translate = useTranslate();
   const inventoryItem = useInventoryItem(uid);
   const { data: item, seed, stickers, stickerswear, wear } = inventoryItem;

@@ -19,18 +19,21 @@ import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useIsOnTop } from "~/hooks/use-is-on-top";
 import { ECONOMY_ITEM_FILTERS } from "~/utils/economy-filters";
-import { useAppContext, useTranslate } from "./app-context";
+import {
+  useAppContext,
+  useInventory,
+  usePreferences,
+  useTranslate
+} from "./app-context";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
 import { useItemSelectorContext } from "./item-selector-context";
 import { Logo } from "./logo";
 
 export function Header() {
-  const {
-    user,
-    inventory,
-    preferences: { hideFilters }
-  } = useAppContext();
+  const { user } = useAppContext();
+  const [inventory] = useInventory();
+  const { hideFilters } = usePreferences();
   const translate = useTranslate();
   const { itemSelector } = useItemSelectorContext();
   const craftFilter = useCraftFilterRules();

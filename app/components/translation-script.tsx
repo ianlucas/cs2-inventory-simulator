@@ -4,14 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
-import { useAppContext } from "./app-context";
+import { useAppContext, usePreferences } from "./app-context";
 
 export function TranslationScript() {
   const {
-    preferences: { language },
     translation: { checksum }
   } = useAppContext();
-
+  const { language } = usePreferences();
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {

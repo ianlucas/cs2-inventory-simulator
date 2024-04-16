@@ -21,7 +21,12 @@ import {
 } from "~/utils/inventory";
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
-import { useAppContext, useRules, useTranslate } from "./app-context";
+import {
+  useInventory,
+  usePreferences,
+  useRules,
+  useTranslate
+} from "./app-context";
 import { InventoryItemContents } from "./inventory-item-contents";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemName } from "./inventory-item-name";
@@ -74,10 +79,7 @@ export function InventoryItem({
   onUnlockContainer?: (uid: number) => void;
   ownApplicableStickers?: boolean;
 }) {
-  const {
-    inventory,
-    preferences: { statsForNerds }
-  } = useAppContext();
+  const translate = useTranslate();
   const {
     editHideCategory,
     editHideId,
@@ -91,7 +93,8 @@ export function InventoryItem({
     inventoryItemEquipHideType,
     inventoryStorageUnitMaxItems
   } = useRules();
-  const translate = useTranslate();
+  const { statsForNerds } = usePreferences();
+  const [inventory] = useInventory();
 
   const {
     clickContext,

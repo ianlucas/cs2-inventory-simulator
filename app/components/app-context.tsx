@@ -59,6 +59,10 @@ export function useRules() {
   return useAppContext().rules;
 }
 
+export function usePreferences() {
+  return useAppContext().preferences;
+}
+
 export function useInventory() {
   const { inventory, setInventory } = useAppContext();
   return [inventory, setInventory] as const;
