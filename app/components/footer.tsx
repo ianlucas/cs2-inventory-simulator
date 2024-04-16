@@ -5,12 +5,10 @@
 
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAppContext } from "./app-context";
+import { useRules } from "./app-context";
 
 export function Footer() {
-  const {
-    rules: { buildLastCommit }
-  } = useAppContext();
+  const { buildLastCommit } = useRules();
 
   return (
     <footer className="my-8 select-none text-sm text-neutral-400 drop-shadow-sm">

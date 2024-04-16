@@ -4,12 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item } from "@ianlucas/cs2-lib";
-import { useAppContext } from "~/components/app-context";
+import { useRules } from "~/components/app-context";
 
 export function useCraftItemRules() {
-  const {
-    rules: { craftHideCategory, craftHideType, craftHideModel, craftHideId }
-  } = useAppContext();
+  const { craftHideCategory, craftHideType, craftHideModel, craftHideId } =
+    useRules();
 
   return function filter({ category, id, type, model }: CS_Item) {
     if (category !== undefined && craftHideCategory.includes(category)) {

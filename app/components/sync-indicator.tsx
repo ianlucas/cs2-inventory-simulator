@@ -14,14 +14,15 @@ import {
 import { sync } from "~/sync";
 import { getJson } from "~/utils/fetch";
 import { parseInventory } from "~/utils/inventory";
-import { useAppContext, useTranslate } from "./app-context";
+import { useAppContext, useRules, useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { Modal } from "./modal";
 import { ModalButton } from "./modal-button";
 
 export function SyncIndicator() {
-  const { setInventory, rules } = useAppContext();
   const translate = useTranslate();
+  const { setInventory } = useAppContext();
+  const { inventoryMaxItems, inventoryStorageUnitMaxItems } = useRules();
   const [opacity, setOpacity] = useState(0);
   const [showSyncErrorModal, setShowSyncErrorModal] = useState(false);
   const [disableContinueButton, setDisableContinueButton] = useState(false);
@@ -45,8 +46,8 @@ export function SyncIndicator() {
       setInventory(
         new CS_Inventory({
           items: parseInventory(inventory),
-          maxItems: rules.inventoryMaxItems,
-          storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
+          maxItems: inventoryMaxItems,
+          storageUnitMaxItems: inventoryStorageUnitMaxItems
         })
       );
       sync.syncedAt = syncedAt;

@@ -21,7 +21,7 @@ import {
 } from "~/utils/inventory";
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
-import { useAppContext, useTranslate } from "./app-context";
+import { useAppContext, useRules, useTranslate } from "./app-context";
 import { InventoryItemContents } from "./inventory-item-contents";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemName } from "./inventory-item-name";
@@ -76,21 +76,21 @@ export function InventoryItem({
 }) {
   const {
     inventory,
-    rules: {
-      editHideCategory,
-      editHideId,
-      editHideModel,
-      editHideType,
-      inventoryItemAllowApplySticker,
-      inventoryItemAllowEdit,
-      inventoryItemAllowScrapeSticker,
-      inventoryItemAllowUnlockContainer,
-      inventoryItemEquipHideModel,
-      inventoryItemEquipHideType,
-      inventoryStorageUnitMaxItems
-    },
     preferences: { statsForNerds }
   } = useAppContext();
+  const {
+    editHideCategory,
+    editHideId,
+    editHideModel,
+    editHideType,
+    inventoryItemAllowApplySticker,
+    inventoryItemAllowEdit,
+    inventoryItemAllowScrapeSticker,
+    inventoryItemAllowUnlockContainer,
+    inventoryItemEquipHideModel,
+    inventoryItemEquipHideType,
+    inventoryStorageUnitMaxItems
+  } = useRules();
   const translate = useTranslate();
 
   const {

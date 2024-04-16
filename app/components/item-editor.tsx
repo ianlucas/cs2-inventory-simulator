@@ -27,7 +27,7 @@ import {
   wearStringMaxLen,
   wearToString
 } from "~/utils/economy";
-import { useAppContext, useTranslate } from "./app-context";
+import { useAppContext, useRules, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
@@ -64,24 +64,22 @@ export function ItemEditor({
   onReset: () => void;
   onSubmit: (props: ItemEditorAttributes) => void;
 }) {
+  const { inventory } = useAppContext();
   const {
-    rules: {
-      craftAllowNametag,
-      craftAllowSeed,
-      craftAllowStatTrak,
-      craftAllowStickers,
-      craftAllowWear,
-      craftHideType,
-      editAllowNametag,
-      editAllowSeed,
-      editAllowStatTrak,
-      editAllowStickers,
-      editAllowWear,
-      editHideType,
-      inventoryMaxItems
-    },
-    inventory
-  } = useAppContext();
+    craftAllowNametag,
+    craftAllowSeed,
+    craftAllowStatTrak,
+    craftAllowStickers,
+    craftAllowWear,
+    craftHideType,
+    editAllowNametag,
+    editAllowSeed,
+    editAllowStatTrak,
+    editAllowStickers,
+    editAllowWear,
+    editHideType,
+    inventoryMaxItems
+  } = useRules();
   const translate = useTranslate();
   const [stattrak, setStattrak] = useCheckbox(
     attributes?.stattrak !== undefined ? attributes.stattrak >= 0 : false
