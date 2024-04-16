@@ -113,3 +113,13 @@ export function sortByCollection(
     a.item.data.collectionname ?? ""
   );
 }
+
+export function sortItemsByEquipped(
+  inventory: TransformedInventoryItems,
+  free: TransformedInventoryItems
+) {
+  return [
+    ...inventory.sort(sortByName).sort(sortByType).sort(sortByEquipped),
+    ...free.sort(sortByName).sort(sortByType).sort(sortByEquipped)
+  ];
+}

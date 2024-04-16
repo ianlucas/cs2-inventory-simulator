@@ -17,7 +17,8 @@ import {
   sortByName,
   sortByNewest,
   sortByQuality,
-  sortByType
+  sortByType,
+  sortItemsByEquipped
 } from "~/utils/inventory-transform";
 import { useStorageInput } from "./use-storage-input";
 import { useStorageState } from "./use-storage-state";
@@ -29,16 +30,6 @@ export function useInventoryFiltersScrollTopHandler<T>(dependency: T) {
       window.scrollTo({ top: 0 });
     }
   }, dependency);
-}
-
-export function sortItemsByEquipped(
-  inventory: TransformedInventoryItems,
-  free: TransformedInventoryItems
-) {
-  return [
-    ...inventory.sort(sortByName).sort(sortByType).sort(sortByEquipped),
-    ...free.sort(sortByName).sort(sortByType).sort(sortByEquipped)
-  ];
 }
 
 export function useInventoryFilters() {
