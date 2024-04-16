@@ -21,8 +21,8 @@ import {
 } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
 import {
-  useAppContext,
   useInventory,
+  useInventoryFilter,
   useInventoryItems,
   usePreferences,
   useTranslate
@@ -40,14 +40,12 @@ import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
 
 export function Inventory() {
+  const translate = useTranslate();
   const sync = useSync();
-  const {
-    inventoryFilters: { filterItems }
-  } = useAppContext();
   const items = useInventoryItems();
+  const { filterItems } = useInventoryFilter();
   const { hideFilters } = usePreferences();
   const [inventory, setInventory] = useInventory();
-  const translate = useTranslate();
   const [itemSelector, setItemSelector] = useItemSelector();
   const navigate = useNavigate();
 

@@ -13,10 +13,7 @@ import {
   useMemo
 } from "react";
 import { useTypedLoaderData } from "remix-typedjson";
-import {
-  sortItemsByEquipped,
-  useInventoryFilters
-} from "~/hooks/use-inventory-filters";
+import { useInventoryFilters } from "~/hooks/use-inventory-filters";
 import { useInventoryState } from "~/hooks/use-inventory-state";
 import { useTranslation } from "~/hooks/use-translation";
 import type { loader } from "~/root";
@@ -25,6 +22,7 @@ import { pushToSync, sync } from "~/sync";
 import { translateItems } from "~/utils/economy";
 import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
 import {
+  sortItemsByEquipped,
   transform,
   TransformedInventoryItems
 } from "~/utils/inventory-transform";
@@ -74,6 +72,14 @@ export function useUser() {
 
 export function useInventoryItems() {
   return useAppContext().items;
+}
+
+export function useInventoryFilter() {
+  return useAppContext().inventoryFilters;
+}
+
+export function useTranslationChecksum() {
+  return useAppContext().translation.checksum;
 }
 
 export function AppProvider({
