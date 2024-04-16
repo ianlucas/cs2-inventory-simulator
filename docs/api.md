@@ -10,7 +10,7 @@ GET https://inventory.cstrike.app/api/inventory/{steamID64}.json
 
 ### Response
 
-- Returns `200` with the following `application/json` body:
+- Returns `200` (`application/json`):
 
   ```typescript
   type GetUserInventoryResponse = {
@@ -39,7 +39,7 @@ GET https://inventory.cstrike.app/api/equipped/v3/{steamID64}.json
 
 ### Response
 
-- Returns `200` with the following `application/json` body:
+- Returns `200` (`application/json`):
 
   ```typescript
   interface BaseEconItem {
@@ -72,13 +72,13 @@ GET https://inventory.cstrike.app/api/equipped/v3/{steamID64}.json
     uid: number;
   }
   type GetUserEquippedItemsResponse = {
-    agents: Record<number, AgentItem>;
-    ctWeapons: Record<number, WeaponEconItem>;
-    gloves: Record<number, BaseEconItem>;
-    knives: Record<number, WeaponEconItem>;
+    agents?: Record<number, AgentItem>;
+    ctWeapons?: Record<number, WeaponEconItem>;
+    gloves?: Record<number, BaseEconItem>;
+    knives?: Record<number, WeaponEconItem>;
     musicKit?: MusicKitItem;
     pin?: number;
-    tWeapons: Record<number, WeaponEconItem>;
+    tWeapons?: Record<number, WeaponEconItem>;
   };
   ```
 
@@ -103,7 +103,7 @@ type PostIncrementItemStatTrakRequest = {
 
 ### Response
 
-- Returns `401` when using an invalid API Key.
+- Returns `401` when using an invalid API key.
 - Returns `400` when the user does not exist or target uid is invalid.
 - Returns `204` when the increment was successful.
 
@@ -131,9 +131,9 @@ type GetUserSignInTokenRequest = {
 
 #### Response
 
-- Returns `401` when using an invalid API Key.
+- Returns `401` when using an invalid API key.
 - Returns `400` when the user does not exist.
-- Returns `200` when a token is generated with the following `application/json` body:
+- Returns `200` (`application/json`) when a token is generated:
 
   ```typescript
   type GetUserSignInTokenResponse = {
