@@ -3,12 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  isGraffitiBox,
-  isSouvenirCase,
-  isStickerCapsule,
-  isWeaponCase
-} from "~/utils/economy";
+import { CS_Economy } from "@ianlucas/cs2-lib";
 import {
   INVENTORY_PRIMARY_FILTERS,
   INVENTORY_SECONDARY_FILTERS,
@@ -139,13 +134,13 @@ export function useInventoryFilters() {
           case "All":
             return ["case", "tool"].includes(item.data.type);
           case "WeaponCases":
-            return isWeaponCase(item.data);
+            return CS_Economy.isWeaponCase(item.data);
           case "StickerCapsules":
-            return isStickerCapsule(item.data);
+            return CS_Economy.isStickerCapsule(item.data);
           case "GraffitiBoxes":
-            return isGraffitiBox(item.data);
+            return CS_Economy.isGraffitiBox(item.data);
           case "SouvenirCases":
-            return isSouvenirCase(item.data);
+            return CS_Economy.isSouvenirCase(item.data);
           case "Tools":
             return item.data.type === "tool";
         }
