@@ -68,6 +68,10 @@ export function useInventory() {
   return [inventory, setInventory] as const;
 }
 
+export function useUser() {
+  return useAppContext().user;
+}
+
 export function AppProvider({
   children,
   preferences,

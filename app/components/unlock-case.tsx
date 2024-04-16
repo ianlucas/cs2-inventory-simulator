@@ -20,7 +20,7 @@ import { dispatchSyncError, sync } from "~/sync";
 import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
-import { useAppContext, useInventory } from "./app-context";
+import { useInventory, useUser } from "./app-context";
 import { UnlockCaseContainer } from "./unlock-case-container";
 import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
 
@@ -44,7 +44,7 @@ export function UnlockCase({
   keyUid?: number;
   onClose: () => void;
 }) {
-  const { user } = useAppContext();
+  const user = useUser();
   const [inventory, setInventory] = useInventory();
   const [items, setItems] = useState<
     ReturnType<typeof CS_Economy.unlockCase>[]

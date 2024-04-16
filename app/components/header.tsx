@@ -20,10 +20,10 @@ import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useIsOnTop } from "~/hooks/use-is-on-top";
 import { ECONOMY_ITEM_FILTERS } from "~/utils/economy-filters";
 import {
-  useAppContext,
   useInventory,
   usePreferences,
-  useTranslate
+  useTranslate,
+  useUser
 } from "./app-context";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
@@ -31,7 +31,7 @@ import { useItemSelectorContext } from "./item-selector-context";
 import { Logo } from "./logo";
 
 export function Header() {
-  const { user } = useAppContext();
+  const user = useUser();
   const [inventory] = useInventory();
   const { hideFilters } = usePreferences();
   const translate = useTranslate();
