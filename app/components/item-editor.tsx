@@ -27,16 +27,16 @@ import {
   wearStringMaxLen,
   wearToString
 } from "~/utils/economy";
-import { CSItemEditorName } from "./cs-item-editor-name";
-import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
+import { ItemEditorName } from "./item-editor-name";
+import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { StickerPicker } from "./sticker-picker";
 
-export interface CSItemEditorAttributes {
+export interface ItemEditorAttributes {
   nametag?: string;
   quantity: number;
   seed?: number;
@@ -46,7 +46,7 @@ export interface CSItemEditorAttributes {
   wear?: number;
 }
 
-export function CSItemEditor({
+export function ItemEditor({
   attributes,
   item,
   onReset,
@@ -62,7 +62,7 @@ export function CSItemEditor({
   };
   item: CS_Item;
   onReset: () => void;
-  onSubmit: (props: CSItemEditorAttributes) => void;
+  onSubmit: (props: ItemEditorAttributes) => void;
 }) {
   const {
     rules: {
@@ -149,7 +149,7 @@ export function CSItemEditor({
 
   return (
     <div className="m-auto w-[360px] select-none px-4 pb-6 lg:px-0">
-      <CSItemImage
+      <ItemImage
         className="m-auto h-[192px] w-[256px]"
         item={item}
         wear={CS_Economy.hasWear(item) ? wear : undefined}
@@ -157,7 +157,7 @@ export function CSItemEditor({
       <div
         className={clsx("mb-4 text-center", item.type === "agent" && "mt-4")}
       >
-        <CSItemEditorName item={item} />
+        <ItemEditorName item={item} />
       </div>
       <div className="space-y-4">
         {hasStickers && (

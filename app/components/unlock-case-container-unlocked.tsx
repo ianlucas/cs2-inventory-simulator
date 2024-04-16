@@ -7,7 +7,7 @@ import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createFakeInventoryItem, getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
-import { CSItemImage } from "./cs-item-image";
+import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { UnlockCaseAttribute } from "./unlock-case-attribute";
@@ -48,10 +48,10 @@ export function UnlockCaseContainerUnlocked({
           </span>
         </div>
         <div className="mt-4 flex items-center justify-center gap-2 text-sm">
-          <CSItemImage className="h-8" item={caseItem} />
+          <ItemImage className="h-8" item={caseItem} />
           <span>{getItemNameString(caseItem)}</span>
         </div>
-        <CSItemImage
+        <ItemImage
           className="m-auto my-4 [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
           item={item}
           style={{ transform: `scale(${revealScale})` }}

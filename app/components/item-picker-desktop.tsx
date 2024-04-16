@@ -6,12 +6,12 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Item } from "@ianlucas/cs2-lib";
-import { CSItemBrowser } from "~/components/cs-item-browser";
+import { ItemBrowser } from "~/components/item-browser";
 import { useItemPickerState } from "~/hooks/use-item-picker-state";
-import { FilterMenuDesktop } from "./filter-menu-desktop";
+import { ItemPickerFilterDesktop } from "./item-picker-filter-desktop";
 import { useRootContext } from "./root-context";
 
-export function CSItemPickerDesktop({
+export function ItemPickerDesktop({
   onPickItem
 }: {
   onPickItem: (item: CS_Item) => void;
@@ -32,7 +32,7 @@ export function CSItemPickerDesktop({
 
   return (
     <div className="flex gap-2">
-      <FilterMenuDesktop
+      <ItemPickerFilterDesktop
         categories={categories}
         onChange={handleCategoryClick}
         value={filter}
@@ -51,7 +51,7 @@ export function CSItemPickerDesktop({
           />
         </div>
         <div className="pb-2 pt-1">
-          <CSItemBrowser
+          <ItemBrowser
             ignoreRarityColor={ignoreRarityColor}
             items={items}
             maxItemsIntoView={8}

@@ -18,9 +18,9 @@ import {
   resolveInventoryItem
 } from "~/utils/inventory";
 import { has } from "~/utils/misc";
-import { CSItemImage } from "./cs-item-image";
+import { ItemImage } from "./item-image";
 
-export function CSItemTile({
+export function InventoryItemTile({
   equipped,
   item,
   onClick
@@ -37,7 +37,7 @@ export function CSItemTile({
     <div className="w-[154px]">
       <div className="relative bg-gradient-to-b from-neutral-600 to-neutral-400 p-[1px]">
         <div className="bg-gradient-to-b from-neutral-500 to-neutral-300 px-1">
-          <CSItemImage
+          <ItemImage
             className="h-[108px] w-[144px]"
             item={data}
             wear={inventoryItem?.wear}
@@ -48,7 +48,7 @@ export function CSItemTile({
             inventoryItem.stickers.map(
               (sticker, index) =>
                 sticker !== CS_NONE && (
-                  <CSItemImage
+                  <ItemImage
                     className="h-5"
                     item={CS_Economy.getById(sticker)}
                     key={index}

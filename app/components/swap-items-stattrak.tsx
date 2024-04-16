@@ -9,7 +9,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useCounter } from "~/hooks/use-counter";
 import { useSync } from "~/hooks/use-sync";
 import { SwapItemsStatTrakAction } from "~/routes/api.action.sync._index";
-import { CSItemImage } from "./cs-item-image";
+import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
@@ -75,7 +75,7 @@ export function SwapItemsStatTrak({
                 {items.map(
                   ({ inventoryItem: { wear }, item, value }, index) => (
                     <div className="flex flex-col justify-center" key={index}>
-                      <CSItemImage
+                      <ItemImage
                         className="aspect-[1.33333] max-w-[256px]"
                         item={item}
                         wear={wear}

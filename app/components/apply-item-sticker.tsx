@@ -17,7 +17,7 @@ import {
 } from "~/routes/api.action.sync._index";
 import { getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
-import { CSItemImage } from "./cs-item-image";
+import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
@@ -87,14 +87,14 @@ export function ApplyItemSticker({
                 title={translate("ApplyStickerUse")}
                 warning={translate("ApplyStickerWarn")}
               />
-              <CSItemImage
+              <ItemImage
                 className="m-auto aspect-[1.33333] max-w-[512px]"
                 item={targetItem}
               />
               <div className="flex">
                 {stickers.map((id, index) =>
                   id !== CS_NONE || index === stickerIndex ? (
-                    <CSItemImage
+                    <ItemImage
                       key={index}
                       className="h-[126px] w-[168px]"
                       item={

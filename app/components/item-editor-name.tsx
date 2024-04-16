@@ -17,7 +17,7 @@ const HAS_KIND_FIRST = [
   "patch"
 ];
 
-export function CSItemEditorName({ item }: { item: CS_Item }) {
+export function ItemEditorName({ item }: { item: CS_Item }) {
   const { type, rarity } = item;
   const [model, name] = getItemName(item, "editor-name");
 

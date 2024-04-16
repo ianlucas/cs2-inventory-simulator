@@ -5,16 +5,16 @@
 
 import { CS_Item } from "@ianlucas/cs2-lib";
 import { createFakeItem, resolveCaseSpecialsImage } from "~/utils/economy";
-import { CSItemTile } from "./cs-item-tile";
+import { InventoryItemTile } from "./inventory-item-tile";
 import { useRootContext } from "./root-context";
 
-export function CaseSpecialItem({ caseItem }: { caseItem: CS_Item }) {
+export function InventoryItemSpecialTile({ caseItem }: { caseItem: CS_Item }) {
   const {
     translations: { translate }
   } = useRootContext();
 
   return (
-    <CSItemTile
+    <InventoryItemTile
       item={createFakeItem(caseItem, {
         name: `Container | ${translate("CaseRareItem")}`,
         image: resolveCaseSpecialsImage(caseItem),

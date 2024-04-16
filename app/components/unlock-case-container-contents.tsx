@@ -5,8 +5,8 @@
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { ElementRef, useEffect, useRef, useState } from "react";
-import { CaseSpecialItem } from "./case-special-item";
-import { CSItemTile } from "./cs-item-tile";
+import { InventoryItemSpecialTile } from "./inventory-item-special-tile";
+import { InventoryItemTile } from "./inventory-item-tile";
 import { useRootContext } from "./root-context";
 
 export function UnlockCaseContainerContents({
@@ -48,10 +48,10 @@ export function UnlockCaseContainerContents({
         <div className="flex h-[320px] flex-wrap gap-3 overflow-y-scroll pb-4">
           {[
             ...CS_Economy.listCaseContents(caseItem, true).map(
-              (item, index) => <CSItemTile key={index} item={item} />
+              (item, index) => <InventoryItemTile key={index} item={item} />
             ),
             caseItem.specials !== undefined && (
-              <CaseSpecialItem key={-1} caseItem={caseItem} />
+              <InventoryItemSpecialTile key={-1} caseItem={caseItem} />
             )
           ]}
         </div>

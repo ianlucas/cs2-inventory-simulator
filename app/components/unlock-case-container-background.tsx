@@ -7,7 +7,7 @@ import { CS_Item } from "@ianlucas/cs2-lib";
 import { useWindowSize } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useState } from "react";
-import { CSItemImage } from "./cs-item-image";
+import { ItemImage } from "./item-image";
 
 export function UnlockCaseContainerBackground({
   canUnlock,
@@ -37,7 +37,7 @@ export function UnlockCaseContainerBackground({
         transform: `scale(${scale})`
       }}
     >
-      <CSItemImage
+      <ItemImage
         className="h-[198px] w-[256px]"
         item={caseItem}
         onLoad={handleLoad}

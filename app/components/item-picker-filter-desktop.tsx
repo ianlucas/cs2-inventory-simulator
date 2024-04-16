@@ -7,11 +7,11 @@ import { faSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { EconomyItemFilter } from "~/utils/economy-filters";
-import { FilterMenuIcon } from "./filter-menu-icon";
+import { ItemPickerFilterIcon } from "./item-picker-filter-icon";
 import { useRootContext } from "./root-context";
 import { TextSlider } from "./text-slider";
 
-export function FilterMenuDesktop({
+export function ItemPickerFilterDesktop({
   categories,
   onChange,
   value
@@ -53,7 +53,7 @@ export function FilterMenuDesktop({
             <div className="min-w-0 flex-1 whitespace-nowrap">
               <TextSlider text={translate(`Category${filter.label}`)} />
             </div>
-            <FilterMenuIcon icon={filter.icon} className={clsx("h-4")} />
+            <ItemPickerFilterIcon icon={filter.icon} className={clsx("h-4")} />
           </button>
         );
       })}

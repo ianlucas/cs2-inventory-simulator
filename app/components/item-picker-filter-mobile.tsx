@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { EconomyItemFilter } from "~/utils/economy-filters";
 import { useRootContext } from "./root-context";
 
-export function FilterMenuMobile({
+export function ItemPickerFilterMobile({
   categories,
   onChange,
   value

@@ -16,9 +16,9 @@ import { useInspectFloating } from "~/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { wearToString } from "~/utils/economy";
 import { getItemNameString } from "~/utils/inventory";
-import { CSItemCollectionImage } from "./cs-item-collection-image";
-import { CSItemImage } from "./cs-item-image";
 import { InfoIcon } from "./info-icon";
+import { ItemCollectionImage } from "./item-collection-image";
+import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
@@ -62,7 +62,7 @@ export function InspectItem({
                   style={{ borderColor: item.rarity }}
                 >
                   {item.collectionid !== undefined && (
-                    <CSItemCollectionImage className="h-16" item={item} />
+                    <ItemCollectionImage className="h-16" item={item} />
                   )}
                   <div className="font-display">
                     <div className="text-3xl">{name}</div>
@@ -76,7 +76,7 @@ export function InspectItem({
               </div>
               <div className="text-center">
                 <div className="relative mx-auto inline-block">
-                  <CSItemImage
+                  <ItemImage
                     className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
                     item={item}
                     wear={wear}
@@ -85,7 +85,7 @@ export function InspectItem({
                     {stickers?.map((sticker, index) =>
                       sticker === CS_NONE ? null : (
                         <span className="inline-block" key={index}>
-                          <CSItemImage
+                          <ItemImage
                             className="aspect-[1.33333] w-[128px]"
                             item={CS_Economy.getById(sticker)}
                             style={{

@@ -5,7 +5,7 @@
 
 import { ComponentProps } from "react";
 
-export function FilterMenuIcon({
+export function ItemPickerFilterIcon({
   icon,
   ...props
 }: ComponentProps<"svg"> & { icon: string }) {

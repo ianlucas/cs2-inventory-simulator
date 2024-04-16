@@ -19,7 +19,7 @@ import { useSync } from "~/hooks/use-sync";
 import { ScrapeItemStickerAction } from "~/routes/api.action.sync._index";
 import { getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
-import { CSItemImage } from "./cs-item-image";
+import { ItemImage } from "./item-image";
 import { Modal } from "./modal";
 import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
@@ -97,7 +97,7 @@ export function ScrapeItemSticker({
                   warning={translate("ScrapeStickerWarn")}
                   warningItem={getItemNameString(inventoryItem)}
                 />
-                <CSItemImage
+                <ItemImage
                   className="m-auto aspect-[1.33333] max-w-[512px]"
                   item={item}
                 />
@@ -105,7 +105,7 @@ export function ScrapeItemSticker({
                   {stickers.map((id, index) =>
                     id !== CS_NONE ? (
                       <button key={index} className="group">
-                        <CSItemImage
+                        <ItemImage
                           className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
                           onClick={() => handleScrapeSticker(index)}
                           style={{

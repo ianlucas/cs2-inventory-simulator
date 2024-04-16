@@ -5,8 +5,8 @@
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { getItemNameString } from "~/utils/inventory";
-import { CSItemImage } from "./cs-item-image";
 import { FillSpinner } from "./fill-spinner";
+import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { UnlockCaseContainerBackground } from "./unlock-case-container-background";
@@ -66,7 +66,7 @@ export function UnlockCaseContainer({
             left={
               keyItem !== undefined && (
                 <div className="flex items-center gap-2 font-display text-lg">
-                  <CSItemImage className="h-14" item={keyItem} />
+                  <ItemImage className="h-14" item={keyItem} />
                   <span>
                     {translate("CaseUse")}{" "}
                     <strong>{getItemNameString(keyItem)}</strong>

@@ -11,11 +11,8 @@ import clsx from "clsx";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { z } from "zod";
-import {
-  CSItemEditor,
-  CSItemEditorAttributes
-} from "~/components/cs-item-editor";
-import { CSItemPicker } from "~/components/cs-item-picker";
+import { ItemEditor, ItemEditorAttributes } from "~/components/item-editor";
+import { ItemPicker } from "~/components/item-picker";
 import { Modal } from "~/components/modal";
 import { useRootContext } from "~/components/root-context";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
@@ -66,7 +63,7 @@ export default function Craft() {
     quantity,
     stattrak,
     ...attributes
-  }: CSItemEditorAttributes) {
+  }: ItemEditorAttributes) {
     if (isSubmitting || selectedItem === undefined) {
       return;
     }
@@ -133,9 +130,9 @@ export default function Craft() {
         </div>
       </div>
       {isPickingItem ? (
-        <CSItemPicker onPickItem={setSelectedItem} />
+        <ItemPicker onPickItem={setSelectedItem} />
       ) : (
-        <CSItemEditor
+        <ItemEditor
           item={selectedItem}
           attributes={uid !== undefined ? inventory.get(uid) : undefined}
           onSubmit={handleSubmit}

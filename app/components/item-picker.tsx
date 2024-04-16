@@ -5,17 +5,17 @@
 
 import { CS_Item } from "@ianlucas/cs2-lib";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
-import { CSItemPickerDesktop } from "./cs-item-picker-desktop";
-import { CSItemPickerMobile } from "./cs-item-picker-mobile";
+import { ItemPickerDesktop } from "./item-picker-desktop";
+import { ItemPickerMobile } from "./item-picker-mobile";
 
-export function CSItemPicker({
+export function ItemPicker({
   onPickItem
 }: {
   onPickItem: (item: CS_Item) => void;
 }) {
   return useIsDesktop() ? (
-    <CSItemPickerDesktop onPickItem={onPickItem} />
+    <ItemPickerDesktop onPickItem={onPickItem} />
   ) : (
-    <CSItemPickerMobile onPickItem={onPickItem} />
+    <ItemPickerMobile onPickItem={onPickItem} />
   );
 }

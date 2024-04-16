@@ -5,19 +5,21 @@
 
 import { CS_Item } from "@ianlucas/cs2-lib";
 import { ComponentProps } from "react";
-import { resolveCollectionImage } from "~/utils/economy";
+import { resolveItemImage } from "~/utils/economy";
 
-export function CSItemCollectionImage({
+export function ItemImage({
   item,
+  wear,
   ...props
 }: ComponentProps<"img"> & {
   item: CS_Item;
+  wear?: number;
 }) {
   return (
     <img
       alt={item.name}
       draggable={false}
-      src={resolveCollectionImage(item)}
+      src={resolveItemImage(item, wear)}
       {...props}
     />
   );

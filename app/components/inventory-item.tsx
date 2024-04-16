@@ -21,13 +21,13 @@ import {
 } from "~/utils/inventory";
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
-import { CSItemTile } from "./cs-item-tile";
 import { InventoryItemContents } from "./inventory-item-contents";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemName } from "./inventory-item-name";
 import { InventoryItemSeed } from "./inventory-item-seed";
 import { InventoryItemStatTrak } from "./inventory-item-stattrak";
 import { InventoryItemTeams } from "./inventory-item-teams";
+import { InventoryItemTile } from "./inventory-item-tile";
 import { InventoryItemWear } from "./inventory-item-wear";
 import { alert } from "./modal-generic";
 import { useRootContext } from "./root-context";
@@ -183,7 +183,7 @@ export function InventoryItem({
         ref={ref}
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
-        <CSItemTile
+        <InventoryItemTile
           equipped={equipped}
           item={item}
           onClick={

@@ -6,10 +6,10 @@
 import { CS_Item } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { getItemName } from "~/utils/inventory";
-import { CSItemImage } from "./cs-item-image";
+import { ItemImage } from "./item-image";
 import { TextSlider } from "./text-slider";
 
-export function CSItemButton({
+export function ItemButton({
   bigger,
   ignoreRarityColor,
   item,
@@ -49,7 +49,7 @@ export function CSItemButton({
           !bigger && "flex items-center"
         )}
       >
-        <CSItemImage
+        <ItemImage
           className={clsx(
             "overflow-hidden bg-gradient-to-b from-neutral-500/10 to-neutral-300/10 group-hover:from-neutral-500 group-hover:to-neutral-300",
             !bigger && "aspect-[1.333] w-[82px]",

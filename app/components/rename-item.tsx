@@ -15,8 +15,8 @@ import {
   RenameItemAction
 } from "~/routes/api.action.sync._index";
 import { getItemNameString } from "~/utils/inventory";
-import { CSItemImage } from "./cs-item-image";
 import { EditorInput } from "./editor-input";
+import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
@@ -83,7 +83,7 @@ export function RenameItem({
                 title={translate("RenameUse")}
                 warning={translate("RenameWarn")}
               />
-              <CSItemImage
+              <ItemImage
                 className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
                 item={targetItem}
               />

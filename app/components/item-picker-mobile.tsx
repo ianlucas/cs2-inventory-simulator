@@ -6,12 +6,12 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Item } from "@ianlucas/cs2-lib";
-import { CSItemBrowser } from "~/components/cs-item-browser";
-import { FilterMenuMobile } from "~/components/filter-menu-mobile";
+import { ItemBrowser } from "~/components/item-browser";
+import { ItemPickerFilterMobile } from "~/components/item-picker-filter-mobile";
 import { useItemPickerState } from "~/hooks/use-item-picker-state";
 import { useRootContext } from "./root-context";
 
-export function CSItemPickerMobile({
+export function ItemPickerMobile({
   onPickItem
 }: {
   onPickItem: (item: CS_Item) => void;
@@ -32,7 +32,7 @@ export function CSItemPickerMobile({
 
   return (
     <>
-      <FilterMenuMobile
+      <ItemPickerFilterMobile
         categories={categories}
         onChange={handleCategoryClick}
         value={filter}
@@ -50,7 +50,7 @@ export function CSItemPickerMobile({
         />
       </div>
       <div className="pb-2 pt-1">
-        <CSItemBrowser
+        <ItemBrowser
           items={items}
           onClick={handleItemClick}
           ignoreRarityColor={ignoreRarityColor}
