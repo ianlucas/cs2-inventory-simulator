@@ -21,6 +21,7 @@ import {
 import { useTranslation } from "~/hooks/use-translation";
 import { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
+import { pushToSync, sync } from "~/sync";
 import { translateItems } from "~/utils/economy";
 import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
 import {
@@ -28,7 +29,6 @@ import {
   TransformedInventoryItems
 } from "~/utils/inventory-transform";
 import type { SyncInventoryShape } from "~/utils/shapes.server";
-import { sync, syncState } from "~/utils/sync";
 import {
   retrieveInventoryItems,
   retrieveUserId,
@@ -96,7 +96,7 @@ export function RootProvider({
   useEffect(() => {
     const items = retrieveInventoryItems();
     if (user !== undefined && user.inventory === null && items.length > 0) {
-      sync({
+      pushToSync({
         type: AddFromCacheAction,
         items: items as SyncInventoryShape
       });
@@ -115,7 +115,7 @@ export function RootProvider({
     }
     if (user !== undefined) {
       storeUserId(user.id);
-      syncState.syncedAt = user.syncedAt.getTime();
+      sync.syncedAt = user.syncedAt.getTime();
     }
   }, [user]);
 

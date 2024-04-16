@@ -5,13 +5,13 @@
 
 import { useRootContext } from "~/components/root-context";
 import { ActionShape } from "~/routes/api.action.sync._index";
-import { sync } from "~/utils/sync";
+import { pushToSync } from "~/sync";
 
 export function useSync() {
   const { user } = useRootContext();
   return async function useSync(data: ActionShape) {
     if (user !== undefined) {
-      sync(data);
+      pushToSync(data);
     }
   };
 }

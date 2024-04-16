@@ -8,46 +8,46 @@ import {
   ApiActionSyncData,
   ApiActionSyncUrl
 } from "~/routes/api.action.sync._index";
-import { postJson } from "./fetch";
-import { fail } from "./misc";
+import { postJson } from "./utils/fetch";
+import { fail } from "./utils/misc";
 
-const queue: ActionShape[] = [];
+export const sync = new (class Sync extends EventTarget {
+  syncedAt = 0;
+  queue: ActionShape[] = [];
+})();
 
-export const syncState = { syncedAt: 0 };
-export const syncEvents = new (class SyncEvents extends EventTarget {})();
-
-export function sync(data: ActionShape) {
-  queue.push(data);
+export function pushToSync(data: ActionShape) {
+  sync.queue.push(data);
 }
 
-export function dispatchSyncFail() {
-  while (queue[0]) {
-    queue.pop();
+export function dispatchSyncError() {
+  while (sync.queue[0]) {
+    sync.queue.pop();
   }
-  syncEvents.dispatchEvent(new Event("syncfail"));
+  sync.dispatchEvent(new Event("syncerror"));
 }
 
 async function doSync() {
-  let actions = [] as typeof queue;
-  while (queue[0]) {
-    actions.push(queue.shift()!);
+  let actions = [] as typeof sync.queue;
+  while (sync.queue[0]) {
+    actions.push(sync.queue.shift()!);
   }
-  syncEvents.dispatchEvent(new Event("syncstart"));
+  sync.dispatchEvent(new Event("syncstart"));
   if (actions.length > 0) {
     try {
       const response = await postJson<ApiActionSyncData>(ApiActionSyncUrl, {
         actions,
-        syncedAt: syncState.syncedAt
+        syncedAt: sync.syncedAt
       });
       if (typeof response?.syncedAt !== "number") {
         fail("Sync error.");
       }
-      syncState.syncedAt = response.syncedAt;
+      sync.syncedAt = response.syncedAt;
     } catch {
-      dispatchSyncFail();
+      dispatchSyncError();
     }
   }
-  syncEvents.dispatchEvent(new Event("syncend"));
+  sync.dispatchEvent(new Event("syncend"));
   setTimeout(doSync, 1000 / 3);
 }
 

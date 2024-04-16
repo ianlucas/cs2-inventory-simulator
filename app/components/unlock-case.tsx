@@ -16,10 +16,10 @@ import {
   ApiActionUnlockCaseActionData,
   ApiActionUnlockCaseUrl
 } from "~/routes/api.action.unlock-case._index";
+import { dispatchSyncError, sync } from "~/sync";
 import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
-import { dispatchSyncFail, syncState } from "~/utils/sync";
 import { useRootContext } from "./root-context";
 import { UnlockCaseContainer } from "./unlock-case-container";
 import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
@@ -27,11 +27,11 @@ import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
 async function unlockCase(caseUid: number, keyUid?: number) {
   const { unlockedItem, syncedAt } =
     await postJson<ApiActionUnlockCaseActionData>(ApiActionUnlockCaseUrl, {
-      syncedAt: syncState.syncedAt,
+      syncedAt: sync.syncedAt,
       caseUid,
       keyUid
     });
-  syncState.syncedAt = syncedAt;
+  sync.syncedAt = syncedAt;
   return unlockedItem;
 }
 
@@ -84,7 +84,7 @@ export function UnlockCase({
         }, 100);
       }, 250);
     } catch {
-      dispatchSyncFail();
+      dispatchSyncError();
       onClose();
     }
   }
