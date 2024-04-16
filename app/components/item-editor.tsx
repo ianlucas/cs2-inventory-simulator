@@ -27,7 +27,7 @@ import {
   wearStringMaxLen,
   wearToString
 } from "~/utils/economy";
-import { useAppContext, useRules, useTranslate } from "./app-context";
+import { useInventory, useRules, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
@@ -64,7 +64,7 @@ export function ItemEditor({
   onReset: () => void;
   onSubmit: (props: ItemEditorAttributes) => void;
 }) {
-  const { inventory } = useAppContext();
+  const [inventory] = useInventory();
   const {
     craftAllowNametag,
     craftAllowSeed,

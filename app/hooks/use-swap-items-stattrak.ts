@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useState } from "react";
-import { useAppContext, useInventoryItems } from "~/components/app-context";
+import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 
 export function useSwapItemsStatTrak() {
-  const { inventory } = useAppContext();
+  const [inventory] = useInventory();
   const items = useInventoryItems();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [swapItemsStatTrak, setSwapItemsStatTrak] = useState<{

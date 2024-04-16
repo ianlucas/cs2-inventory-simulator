@@ -7,7 +7,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { resolveItemImage } from "~/utils/economy";
 import { getItemNameString } from "~/utils/inventory";
-import { useAppContext, useTranslate } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import {
   ItemSelectorContextProps,
   useItemSelectorContext
@@ -33,7 +33,7 @@ export function InventorySelectedItem({
   uid: number;
   onDismiss: () => void;
 }) {
-  const { inventory } = useAppContext();
+  const [inventory] = useInventory();
   const translate = useTranslate();
   const { itemSelector } = useItemSelectorContext();
   const item = inventory.get(uid);
