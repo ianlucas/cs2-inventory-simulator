@@ -17,9 +17,9 @@ import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
 import {
   EDITABLE_ITEM_TYPE,
   INSPECTABLE_ITEM_TYPE,
-  TransformedInventoryItem,
   UNLOCKABLE_ITEM_TYPE
 } from "~/utils/inventory";
+import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
 import { CSItemTile } from "./cs-item-tile";
 import { InventoryItemContents } from "./inventory-item-contents";

@@ -10,7 +10,7 @@ import {
   DepositToStorageUnitAction,
   RetrieveFromStorageUnitAction
 } from "~/routes/api.action.sync._index";
-import { transform } from "~/utils/inventory";
+import { transform } from "~/utils/inventory-transform";
 import { assert } from "~/utils/misc";
 import { useSync } from "./use-sync";
 

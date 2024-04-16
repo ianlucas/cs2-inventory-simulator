@@ -7,7 +7,7 @@ import { CS_Economy } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useItemSelectorContext } from "~/components/item-selector-context";
 import { useRootContext } from "~/components/root-context";
-import { countStickers } from "~/utils/inventory";
+import { getStickerCount } from "~/utils/inventory";
 
 export function useApplyItemSticker() {
   const { inventory, items } = useRootContext();
@@ -26,9 +26,9 @@ export function useApplyItemSticker() {
         ({ item }) =>
           (CS_Economy.isSticker(selectedItem) &&
             CS_Economy.hasStickers(item.data) &&
-            countStickers(item.stickers) < 4) ||
+            getStickerCount(item.stickers) < 4) ||
           (!CS_Economy.isSticker(selectedItem) &&
-            countStickers(selectedStickers) < 4 &&
+            getStickerCount(selectedStickers) < 4 &&
             CS_Economy.isSticker(item.data))
       ),
       type: "apply-item-sticker"

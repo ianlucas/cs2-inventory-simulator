@@ -10,6 +10,11 @@ import {
   isWeaponCase
 } from "~/utils/economy";
 import {
+  INVENTORY_PRIMARY_FILTERS,
+  INVENTORY_SECONDARY_FILTERS,
+  INVENTORY_SORTERS
+} from "~/utils/inventory-filters";
+import {
   TransformedInventoryItem,
   TransformedInventoryItems,
   sortByCollection,
@@ -18,12 +23,7 @@ import {
   sortByNewest,
   sortByQuality,
   sortByType
-} from "~/utils/inventory";
-import {
-  INVENTORY_PRIMARY_FILTERS,
-  INVENTORY_SECONDARY_FILTERS,
-  INVENTORY_SORTERS
-} from "~/utils/inventory-filters";
+} from "~/utils/inventory-transform";
 import { useStorageInput } from "./use-storage-input";
 import { useStorageState } from "./use-storage-state";
 import { useWatch } from "./use-watch";

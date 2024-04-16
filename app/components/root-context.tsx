@@ -22,12 +22,11 @@ import { useTranslation } from "~/hooks/use-translation";
 import { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { translateItems } from "~/utils/economy";
+import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
 import {
-  getFreeItemsToDisplay,
-  parseInventory,
   transform,
   TransformedInventoryItems
-} from "~/utils/inventory";
+} from "~/utils/inventory-transform";
 import type { SyncInventoryShape } from "~/utils/shapes.server";
 import { sync, syncState } from "~/utils/sync";
 import {
