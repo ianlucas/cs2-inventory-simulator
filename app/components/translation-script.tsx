@@ -9,7 +9,7 @@ import { useAppContext } from "./app-context";
 export function TranslationScript() {
   const {
     preferences: { language },
-    translations: { checksum }
+    translation: { checksum }
   } = useAppContext();
 
   const [isInitialized, setIsInitialized] = useState(false);

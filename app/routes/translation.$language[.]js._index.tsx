@@ -16,7 +16,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return new Response(
       `window.$systemTranslation = ${JSON.stringify(global.$systemTranslations[language] ?? global.$systemTranslations.english)};
   window.$itemsTranslation = ${JSON.stringify(global.$itemsTranslations[language] ?? global.$itemsTranslations.english)};
-  window.dispatchEvent(new Event("translation-loaded"));`,
+  window.dispatchEvent(new Event("translationloaded"));`,
       {
         headers: {
           "Content-Type": "application/javascript; charset=utf-8",

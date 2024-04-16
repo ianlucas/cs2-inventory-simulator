@@ -55,7 +55,7 @@ export function getTranslationChecksum() {
   }
   checksum = createHash("sha256")
     .update(
-      "v2" +
+      "v3" +
         JSON.stringify(global.$systemTranslations) +
         JSON.stringify(global.$itemsTranslations)
     )

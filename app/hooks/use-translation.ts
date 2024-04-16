@@ -29,17 +29,13 @@ export function useTranslation({
     );
   }
 
-  const [systemTranslation, setSystemTranslation] = useState(
-    getSystemTranslation()
-  );
+  const [system, setSystem] = useState(getSystemTranslation());
 
-  const [itemsTranslation, setItemsTranslation] = useState(
-    getItemsTranslation()
-  );
+  const [items, setItems] = useState(getItemsTranslation());
 
   function translate(token: string, ...values: string[]) {
     token = token.replace(/\s/g, "");
-    const value = systemTranslation[token];
+    const value = system[token];
     if (value === undefined) {
       return "";
     }
@@ -48,14 +44,14 @@ export function useTranslation({
 
   useEffect(() => {
     function handleTranslationLoaded() {
-      setSystemTranslation(getSystemTranslation());
-      setItemsTranslation(getItemsTranslation());
+      setSystem(getSystemTranslation());
+      setItems(getItemsTranslation());
     }
-    window.addEventListener("translation-loaded", handleTranslationLoaded);
+    window.addEventListener("translationloaded", handleTranslationLoaded);
     return () => {
-      window.removeEventListener("translation-loaded", handleTranslationLoaded);
+      window.removeEventListener("translationloaded", handleTranslationLoaded);
     };
   }, []);
 
-  return { systemTranslation, itemsTranslation, translate, checksum };
+  return { system, items, translate, checksum };
 }

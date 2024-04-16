@@ -59,7 +59,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     await getRule("steamCallbackUrl")
   );
   return typedjson({
-    translations: {
+    translation: {
       checksum: getTranslationChecksum()
     },
     rules: {
@@ -107,13 +107,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function App() {
-  const providerProps = useTypedLoaderData<typeof loader>();
-  const { meta } = providerProps.rules;
+  const appProps = useTypedLoaderData<typeof loader>();
+  const { meta } = appProps.rules;
 
   return (
-    <AppProvider {...providerProps}>
+    <AppProvider {...appProps}>
       <html
-        lang={providerProps.preferences.lang}
+        lang={appProps.preferences.lang}
         onContextMenu={(event) => event.preventDefault()}
       >
         <head>

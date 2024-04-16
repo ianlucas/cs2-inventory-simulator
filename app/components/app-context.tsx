@@ -43,7 +43,7 @@ const AppContext = createContext<
     items: TransformedInventoryItems;
     requireAuth: boolean;
     setInventory: (value: CS_Inventory) => void;
-    translations: ReturnType<typeof useTranslation>;
+    translation: ReturnType<typeof useTranslation>;
   } & ReturnType<typeof useTypedLoaderData<typeof loader>>
 >(null!);
 
@@ -52,13 +52,13 @@ export function useAppContext() {
 }
 
 export function useTranslate() {
-  return useAppContext().translations.translate;
+  return useAppContext().translation.translate;
 }
 
 export function AppProvider({
   children,
   preferences,
-  translations: { checksum },
+  translation: { checksum },
   rules,
   user
 }: Omit<
@@ -68,10 +68,10 @@ export function AppProvider({
   | "items"
   | "requireAuth"
   | "setInventory"
-  | "translations"
+  | "translation"
 > & {
   children: ReactNode;
-  translations: {
+  translation: {
     checksum: string;
   };
 }) {
@@ -82,13 +82,11 @@ export function AppProvider({
     maxItems: rules.inventoryMaxItems,
     storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
   };
-
   const [inventory, setInventory] = useInventory(
     new CS_Inventory(inventorySpec)
   );
-
   const inventoryFilters = useInventoryFilters();
-  const translations = useTranslation({
+  const translation = useTranslation({
     checksum,
     language: preferences.language
   });
@@ -124,9 +122,9 @@ export function AppProvider({
   }, [user]);
 
   useEffect(() => {
-    translateItems(translations.itemsTranslation);
+    translateItems(translation.items);
     setInventory(new CS_Inventory(inventorySpec));
-  }, [translations.itemsTranslation]);
+  }, [translation.items]);
 
   const items = useMemo(
     () =>
@@ -163,7 +161,7 @@ export function AppProvider({
         requireAuth: retrieveUserId() !== undefined,
         rules,
         setInventory,
-        translations,
+        translation,
         user
       }}
     >
