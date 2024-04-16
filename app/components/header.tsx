@@ -27,7 +27,7 @@ import {
 } from "./app-context";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
-import { useItemSelectorContext } from "./item-selector-context";
+import { useItemSelector } from "./item-selector-context";
 import { Logo } from "./logo";
 
 export function Header() {
@@ -35,7 +35,7 @@ export function Header() {
   const [inventory] = useInventory();
   const { hideFilters } = usePreferences();
   const translate = useTranslate();
-  const { itemSelector } = useItemSelectorContext();
+  const [itemSelector] = useItemSelector();
   const craftFilter = useCraftFilterRules();
   const [isMenuOpen, toggleIsMenuOpen] = useToggle(false);
   const isDesktop = useIsDesktop();

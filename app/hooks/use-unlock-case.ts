@@ -6,13 +6,13 @@
 import { CS_Economy } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
-import { useItemSelectorContext } from "~/components/item-selector-context";
+import { useItemSelector } from "~/components/item-selector-context";
 import { playSound } from "~/utils/sound";
 
 export function useUnlockCase() {
   const [inventory] = useInventory();
   const items = useInventoryItems();
-  const { itemSelector, setItemSelector } = useItemSelectorContext();
+  const [itemSelector, setItemSelector] = useItemSelector();
   const [unlockCase, setUnlockCase] = useState<{
     caseUid: number;
     keyUid?: number;

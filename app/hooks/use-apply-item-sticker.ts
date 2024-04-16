@@ -6,13 +6,13 @@
 import { CS_Economy } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
-import { useItemSelectorContext } from "~/components/item-selector-context";
+import { useItemSelector } from "~/components/item-selector-context";
 import { getStickerCount } from "~/utils/inventory";
 
 export function useApplyItemSticker() {
   const items = useInventoryItems();
   const [inventory] = useInventory();
-  const { itemSelector, setItemSelector } = useItemSelectorContext();
+  const [itemSelector, setItemSelector] = useItemSelector();
   const [applyItemSticker, setApplyItemSticker] = useState<{
     targetUid: number;
     stickerUid: number;

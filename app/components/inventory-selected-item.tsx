@@ -10,7 +10,7 @@ import { getItemNameString } from "~/utils/inventory";
 import { useInventory, useTranslate } from "./app-context";
 import {
   ItemSelectorContextProps,
-  useItemSelectorContext
+  useItemSelector
 } from "./item-selector-context";
 
 function getLabelToken(token?: ItemSelectorContextProps["type"]) {
@@ -33,9 +33,9 @@ export function InventorySelectedItem({
   uid: number;
   onDismiss: () => void;
 }) {
-  const [inventory] = useInventory();
   const translate = useTranslate();
-  const { itemSelector } = useItemSelectorContext();
+  const [inventory] = useInventory();
+  const [itemSelector] = useItemSelector();
   const item = inventory.get(uid);
   const name = getItemNameString(item, "inventory-name");
 

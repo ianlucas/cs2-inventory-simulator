@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
-import { useItemSelectorContext } from "~/components/item-selector-context";
+import { useItemSelector } from "~/components/item-selector-context";
 import {
   DepositToStorageUnitAction,
   RetrieveFromStorageUnitAction
@@ -16,7 +16,7 @@ import { useSync } from "./use-sync";
 
 export function useStorageUnit() {
   const sync = useSync();
-  const { itemSelector, setItemSelector } = useItemSelectorContext();
+  const [itemSelector, setItemSelector] = useItemSelector();
   const items = useInventoryItems();
   const [inventory, setInventory] = useInventory();
   const [renameStorageUnit, setRenameStorageUnit] = useState<{

@@ -41,6 +41,11 @@ export function useItemSelectorContext() {
   return useContext(ItemSelectorContext);
 }
 
+export function useItemSelector() {
+  const { itemSelector, setItemSelector } = useItemSelectorContext();
+  return [itemSelector, setItemSelector] as const;
+}
+
 export function useItemSelectorScrollTopHandler<T>(dependency: T) {
   useWatch((oldState, newState) => {
     if (

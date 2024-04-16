@@ -32,7 +32,7 @@ import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
 import { InventorySelectedItem } from "./inventory-selected-item";
-import { useItemSelectorContext } from "./item-selector-context";
+import { useItemSelector } from "./item-selector-context";
 import { RenameItem } from "./rename-item";
 import { RenameStorageUnit } from "./rename-storage-unit";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
@@ -48,7 +48,7 @@ export function Inventory() {
   const { hideFilters } = usePreferences();
   const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
-  const { itemSelector, setItemSelector } = useItemSelectorContext();
+  const [itemSelector, setItemSelector] = useItemSelector();
   const navigate = useNavigate();
 
   const ownApplicableStickers =

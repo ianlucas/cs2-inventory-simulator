@@ -6,11 +6,11 @@
 import { CS_Economy } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventoryItems } from "~/components/app-context";
-import { useItemSelectorContext } from "~/components/item-selector-context";
+import { useItemSelector } from "~/components/item-selector-context";
 
 export function useRenameItem() {
   const items = useInventoryItems();
-  const { itemSelector, setItemSelector } = useItemSelectorContext();
+  const [itemSelector, setItemSelector] = useItemSelector();
   const [renameItem, setRenameItem] = useState<{
     toolUid: number;
     targetUid: number;

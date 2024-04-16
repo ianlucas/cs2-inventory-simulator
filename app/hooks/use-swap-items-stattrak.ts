@@ -5,12 +5,12 @@
 
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
-import { useItemSelectorContext } from "~/components/item-selector-context";
+import { useItemSelector } from "~/components/item-selector-context";
 
 export function useSwapItemsStatTrak() {
   const [inventory] = useInventory();
   const items = useInventoryItems();
-  const { itemSelector, setItemSelector } = useItemSelectorContext();
+  const [itemSelector, setItemSelector] = useItemSelector();
   const [swapItemsStatTrak, setSwapItemsStatTrak] = useState<{
     fromUid: number;
     toUid?: number;
