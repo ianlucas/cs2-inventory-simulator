@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useState } from "react";
+import { useAppContext } from "~/components/app-context";
 import { useItemSelectorContext } from "~/components/item-selector-context";
-import { useRootContext } from "~/components/root-context";
 import {
   DepositToStorageUnitAction,
   RetrieveFromStorageUnitAction
@@ -17,7 +17,7 @@ import { useSync } from "./use-sync";
 export function useStorageUnit() {
   const sync = useSync();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
-  const { items, inventory, setInventory } = useRootContext();
+  const { items, inventory, setInventory } = useAppContext();
   const [renameStorageUnit, setRenameStorageUnit] = useState<{
     uid: number;
   }>();

@@ -19,11 +19,11 @@ import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useIsOnTop } from "~/hooks/use-is-on-top";
 import { ECONOMY_ITEM_FILTERS } from "~/utils/economy-filters";
+import { useAppContext } from "./app-context";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
 import { useItemSelectorContext } from "./item-selector-context";
 import { Logo } from "./logo";
-import { useRootContext } from "./root-context";
 
 export function Header() {
   const {
@@ -31,7 +31,7 @@ export function Header() {
     inventory,
     preferences: { hideFilters },
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const { itemSelector } = useItemSelectorContext();
   const craftFilter = useCraftFilterRules();
   const [isMenuOpen, toggleIsMenuOpen] = useToggle(false);

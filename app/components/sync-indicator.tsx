@@ -14,17 +14,17 @@ import {
 import { sync } from "~/sync";
 import { getJson } from "~/utils/fetch";
 import { parseInventory } from "~/utils/inventory";
+import { useAppContext } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { Modal } from "./modal";
 import { ModalButton } from "./modal-button";
-import { useRootContext } from "./root-context";
 
 export function SyncIndicator() {
   const {
     setInventory,
     rules,
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const [opacity, setOpacity] = useState(0);
   const [showSyncErrorModal, setShowSyncErrorModal] = useState(false);
   const [disableContinueButton, setDisableContinueButton] = useState(false);

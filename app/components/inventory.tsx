@@ -20,6 +20,7 @@ import {
   UnequipAction
 } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
+import { useAppContext } from "./app-context";
 import { ApplyItemSticker } from "./apply-item-sticker";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
@@ -28,7 +29,6 @@ import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelectorContext } from "./item-selector-context";
 import { RenameItem } from "./rename-item";
 import { RenameStorageUnit } from "./rename-storage-unit";
-import { useRootContext } from "./root-context";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
@@ -42,7 +42,7 @@ export function Inventory() {
     preferences: { hideFilters },
     setInventory,
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const navigate = useNavigate();
 

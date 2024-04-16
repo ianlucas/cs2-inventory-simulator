@@ -7,8 +7,8 @@ import { faSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { EconomyItemFilter } from "~/utils/economy-filters";
+import { useAppContext } from "./app-context";
 import { ItemPickerFilterIcon } from "./item-picker-filter-icon";
-import { useRootContext } from "./root-context";
 import { TextSlider } from "./text-slider";
 
 export function ItemPickerFilterDesktop({
@@ -22,7 +22,7 @@ export function ItemPickerFilterDesktop({
 }) {
   const {
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   function handleClick(filter: EconomyItemFilter) {
     return function handleClick() {

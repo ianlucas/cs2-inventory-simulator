@@ -7,13 +7,13 @@ import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ClientOnly } from "remix-utils/client-only";
 import { retrieveUserId } from "~/utils/user";
-import { useRootContext } from "./root-context";
+import { useAppContext } from "./app-context";
 
 export function SyncWarn() {
   const {
     user,
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   return (
     <ClientOnly

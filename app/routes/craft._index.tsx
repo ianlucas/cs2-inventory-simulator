@@ -11,10 +11,10 @@ import clsx from "clsx";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { z } from "zod";
+import { useAppContext } from "~/components/app-context";
 import { ItemEditor, ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
 import { Modal } from "~/components/modal";
-import { useRootContext } from "~/components/root-context";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useLockScroll } from "~/hooks/use-lock-scroll";
 import { useSync } from "~/hooks/use-sync";
@@ -47,7 +47,7 @@ export default function Craft() {
     inventory,
     setInventory,
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const sync = useSync();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(

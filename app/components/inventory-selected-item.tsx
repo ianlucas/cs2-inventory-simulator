@@ -7,11 +7,11 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { resolveItemImage } from "~/utils/economy";
 import { getItemNameString } from "~/utils/inventory";
+import { useAppContext } from "./app-context";
 import {
   ItemSelectorContextProps,
   useItemSelectorContext
 } from "./item-selector-context";
-import { useRootContext } from "./root-context";
 
 function getLabelToken(token?: ItemSelectorContextProps["type"]) {
   switch (token) {
@@ -36,7 +36,7 @@ export function InventorySelectedItem({
   const {
     inventory,
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const { itemSelector } = useItemSelectorContext();
   const item = inventory.get(uid);
   const name = getItemNameString(item, "inventory-name");

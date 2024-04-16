@@ -5,12 +5,12 @@
 
 import { CS_Economy } from "@ianlucas/cs2-lib";
 import { useState } from "react";
+import { useAppContext } from "~/components/app-context";
 import { useItemSelectorContext } from "~/components/item-selector-context";
-import { useRootContext } from "~/components/root-context";
 import { playSound } from "~/utils/sound";
 
 export function useUnlockCase() {
-  const { inventory, items } = useRootContext();
+  const { inventory, items } = useAppContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [unlockCase, setUnlockCase] = useState<{
     caseUid: number;

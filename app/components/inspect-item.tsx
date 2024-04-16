@@ -16,11 +16,11 @@ import { useInspectFloating } from "~/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { wearToString } from "~/utils/economy";
 import { getItemNameString } from "~/utils/inventory";
+import { useAppContext } from "./app-context";
 import { InfoIcon } from "./info-icon";
 import { ItemCollectionImage } from "./item-collection-image";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
-import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 
 export function InspectItem({
@@ -33,7 +33,7 @@ export function InspectItem({
   const {
     preferences: { statsForNerds },
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   const inventoryItem = useInventoryItem(uid);
   const { data: item, seed, stickers, stickerswear, wear } = inventoryItem;

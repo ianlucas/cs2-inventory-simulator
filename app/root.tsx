@@ -14,12 +14,12 @@ import {
 
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { findRequestUser } from "./auth.server";
+import { AppProvider } from "./components/app-context";
 import { Background } from "./components/background";
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { Inventory } from "./components/inventory";
 import { ItemSelectorProvider } from "./components/item-selector-context";
-import { RootProvider } from "./components/root-context";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
@@ -27,9 +27,7 @@ import { TranslationScript } from "./components/translation-script";
 import { BUILD_LAST_COMMIT } from "./env.server";
 import { middleware } from "./http.server";
 import { getRule, getRules } from "./models/rule.server";
-import {
-  getBackground
-} from "./preferences/background.server";
+import { getBackground } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
 import { getToggleable } from "./preferences/toggleable.server";
 import { getSeoLinks, getSeoMeta } from "./seo";
@@ -113,7 +111,7 @@ export default function App() {
   const { meta } = providerProps.rules;
 
   return (
-    <RootProvider {...providerProps}>
+    <AppProvider {...providerProps}>
       <html
         lang={providerProps.preferences.lang}
         onContextMenu={(event) => event.preventDefault()}
@@ -146,6 +144,6 @@ export default function App() {
           <Scripts />
         </body>
       </html>
-    </RootProvider>
+    </AppProvider>
   );
 }

@@ -4,12 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cs2-lib";
-import { useRootContext } from "./root-context";
+import { useAppContext } from "./app-context";
 
 export function InventoryItemTeams({ item: { teams } }: { item: CS_Item }) {
   const {
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   const hasCT = teams?.includes(CS_TEAM_CT);
   const hasT = teams?.includes(CS_TEAM_T);

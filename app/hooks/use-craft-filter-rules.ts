@@ -3,13 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useRootContext } from "~/components/root-context";
+import { useAppContext } from "~/components/app-context";
 import { EconomyItemFilter } from "~/utils/economy-filters";
 
 export function useCraftFilterRules() {
   const {
     rules: { craftHideCategory, craftHideType }
-  } = useRootContext();
+  } = useAppContext();
 
   return function filter({ category, type }: EconomyItemFilter) {
     if (category !== undefined && craftHideCategory.includes(category)) {

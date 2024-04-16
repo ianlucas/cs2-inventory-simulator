@@ -5,9 +5,9 @@
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { ElementRef, useEffect, useRef, useState } from "react";
+import { useAppContext } from "./app-context";
 import { InventoryItemSpecialTile } from "./inventory-item-special-tile";
 import { InventoryItemTile } from "./inventory-item-tile";
-import { useRootContext } from "./root-context";
 
 export function UnlockCaseContainerContents({
   caseItem,
@@ -18,7 +18,7 @@ export function UnlockCaseContainerContents({
 }) {
   const {
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   const [translateY, setTranslateY] = useState(0);
   const [opacity, setOpacity] = useState(0);

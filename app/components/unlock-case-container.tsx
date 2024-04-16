@@ -5,10 +5,10 @@
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { getItemNameString } from "~/utils/inventory";
+import { useAppContext } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
-import { useRootContext } from "./root-context";
 import { UnlockCaseContainerBackground } from "./unlock-case-container-background";
 import { UnlockCaseContainerContents } from "./unlock-case-container-contents";
 import { UnlockCaseWheel } from "./unlock-case-wheel";
@@ -36,7 +36,7 @@ export function UnlockCaseContainer({
 }) {
   const {
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   return (
     <>

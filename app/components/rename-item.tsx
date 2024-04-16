@@ -15,10 +15,10 @@ import {
   RenameItemAction
 } from "~/routes/api.action.sync._index";
 import { getItemNameString } from "~/utils/inventory";
+import { useAppContext } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
-import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -35,7 +35,7 @@ export function RenameItem({
     inventory,
     setInventory,
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const sync = useSync();
 
   const freeItems = useFreeze(() =>

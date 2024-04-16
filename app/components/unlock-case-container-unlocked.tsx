@@ -7,9 +7,9 @@ import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createFakeInventoryItem, getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
+import { useAppContext } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
-import { useRootContext } from "./root-context";
 import { UnlockCaseAttribute } from "./unlock-case-attribute";
 import { UseItemFooter } from "./use-item-footer";
 
@@ -24,7 +24,7 @@ export function UnlockCaseContainerUnlocked({
 }) {
   const {
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const [revealScale, setRevealScale] = useState(0);
 
   function handleLoad() {

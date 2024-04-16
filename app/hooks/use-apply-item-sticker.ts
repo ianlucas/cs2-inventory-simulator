@@ -5,12 +5,12 @@
 
 import { CS_Economy } from "@ianlucas/cs2-lib";
 import { useState } from "react";
+import { useAppContext } from "~/components/app-context";
 import { useItemSelectorContext } from "~/components/item-selector-context";
-import { useRootContext } from "~/components/root-context";
 import { getStickerCount } from "~/utils/inventory";
 
 export function useApplyItemSticker() {
-  const { inventory, items } = useRootContext();
+  const { inventory, items } = useAppContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [applyItemSticker, setApplyItemSticker] = useState<{
     targetUid: number;

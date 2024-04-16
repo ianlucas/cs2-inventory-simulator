@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_InventoryItem } from "@ianlucas/cs2-lib";
-import { useRootContext } from "./root-context";
+import { useAppContext } from "./app-context";
 
 export function InventoryItemStatTrak({
   inventoryItem: { data, stattrak }
@@ -13,7 +13,7 @@ export function InventoryItemStatTrak({
 }) {
   const {
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   return (
     <div>

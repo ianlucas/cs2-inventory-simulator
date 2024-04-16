@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useState } from "react";
+import { useAppContext } from "~/components/app-context";
 import { useItemSelectorContext } from "~/components/item-selector-context";
-import { useRootContext } from "~/components/root-context";
 
 export function useSwapItemsStatTrak() {
-  const { inventory, items } = useRootContext();
+  const { inventory, items } = useAppContext();
   const { itemSelector, setItemSelector } = useItemSelectorContext();
   const [swapItemsStatTrak, setSwapItemsStatTrak] = useState<{
     fromUid: number;

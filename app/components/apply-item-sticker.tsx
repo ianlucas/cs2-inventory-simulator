@@ -17,9 +17,9 @@ import {
 } from "~/routes/api.action.sync._index";
 import { getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
+import { useAppContext } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
-import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -36,7 +36,7 @@ export function ApplyItemSticker({
     inventory,
     setInventory,
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const sync = useSync();
 
   const [stickerIndex, setStickerIndex] = useState<number>();

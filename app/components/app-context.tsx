@@ -19,7 +19,7 @@ import {
   useInventoryFilters
 } from "~/hooks/use-inventory-filters";
 import { useTranslation } from "~/hooks/use-translation";
-import { loader } from "~/root";
+import type { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { pushToSync, sync } from "~/sync";
 import { translateItems } from "~/utils/economy";
@@ -36,7 +36,7 @@ import {
   storeUserId
 } from "~/utils/user";
 
-const RootContext = createContext<
+const AppContext = createContext<
   {
     inventory: CS_Inventory;
     inventoryFilters: ReturnType<typeof useInventoryFilters>;
@@ -47,18 +47,18 @@ const RootContext = createContext<
   } & ReturnType<typeof useTypedLoaderData<typeof loader>>
 >(null!);
 
-export function useRootContext() {
-  return useContext(RootContext);
+export function useAppContext() {
+  return useContext(AppContext);
 }
 
-export function RootProvider({
+export function AppProvider({
   children,
   preferences,
   translations: { checksum },
   rules,
   user
 }: Omit<
-  ContextType<typeof RootContext>,
+  ContextType<typeof AppContext>,
   | "inventory"
   | "inventoryFilters"
   | "items"
@@ -150,7 +150,7 @@ export function RootProvider({
   );
 
   return (
-    <RootContext.Provider
+    <AppContext.Provider
       value={{
         inventory,
         inventoryFilters,
@@ -164,6 +164,6 @@ export function RootProvider({
       }}
     >
       {children}
-    </RootContext.Provider>
+    </AppContext.Provider>
   );
 }

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_InventoryItem, CS_MIN_SEED } from "@ianlucas/cs2-lib";
-import { useRootContext } from "./root-context";
+import { useAppContext } from "./app-context";
 
 export function InventoryItemSeed({
   inventoryItem: { seed }
@@ -13,7 +13,7 @@ export function InventoryItemSeed({
 }) {
   const {
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   return (
     <div>

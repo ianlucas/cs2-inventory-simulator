@@ -11,10 +11,10 @@ import { useInventoryItem } from "~/hooks/use-inventory-item";
 import { useSync } from "~/hooks/use-sync";
 import { RenameStorageUnitAction } from "~/routes/api.action.sync._index";
 import { getItemNameString } from "~/utils/inventory";
+import { useAppContext } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
-import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -29,7 +29,7 @@ export function RenameStorageUnit({
     inventory,
     setInventory,
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const sync = useSync();
 
   const { data: item, nametag: defaultValue } = useInventoryItem(uid);

@@ -22,13 +22,13 @@ import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/hooks/use-input";
 import { stickerWearStringMaxLen, stickerWearToString } from "~/utils/economy";
+import { useAppContext } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorSelect } from "./editor-select";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { ItemBrowser } from "./item-browser";
 import { ItemImage } from "./item-image";
 import { Modal } from "./modal";
-import { useRootContext } from "./root-context";
 
 export function StickerPicker({
   isCrafting,
@@ -45,7 +45,7 @@ export function StickerPicker({
   const {
     rules: { craftHideId, craftHideCategory, editHideId, editHideCategory },
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   const [category, setCategory] = useState("");
   const [search, setSearch] = useInput("");

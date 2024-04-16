@@ -9,9 +9,9 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useCounter } from "~/hooks/use-counter";
 import { useSync } from "~/hooks/use-sync";
 import { SwapItemsStatTrakAction } from "~/routes/api.action.sync._index";
+import { useAppContext } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
-import { useRootContext } from "./root-context";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -30,7 +30,7 @@ export function SwapItemsStatTrak({
     inventory,
     setInventory,
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   const sync = useSync();
 

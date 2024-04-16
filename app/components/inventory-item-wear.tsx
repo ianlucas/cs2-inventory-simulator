@@ -5,7 +5,7 @@
 
 import { CS_InventoryItem, CS_MAX_WEAR, CS_MIN_WEAR } from "@ianlucas/cs2-lib";
 import { wearToString } from "~/utils/economy";
-import { useRootContext } from "./root-context";
+import { useAppContext } from "./app-context";
 
 export function InventoryItemWear({
   inventoryItem: {
@@ -17,7 +17,7 @@ export function InventoryItemWear({
 }) {
   const {
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const left = `${((wear ?? CS_MIN_WEAR) / CS_MAX_WEAR) * 100}%`;
 
   return (

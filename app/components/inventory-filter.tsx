@@ -14,8 +14,8 @@ import {
   INVENTORY_SECONDARY_FILTERS,
   INVENTORY_SORTERS
 } from "~/utils/inventory-filters";
+import { useAppContext } from "./app-context";
 import { InventoryFilterButton } from "./inventory-filter-button";
-import { useRootContext } from "./root-context";
 import { Select } from "./select";
 
 export function InventoryFilter() {
@@ -31,7 +31,7 @@ export function InventoryFilter() {
       sorter
     },
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
 
   const secondaryFilters =
     INVENTORY_SECONDARY_FILTERS[INVENTORY_PRIMARY_FILTERS[primary]];

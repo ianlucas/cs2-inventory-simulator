@@ -27,13 +27,13 @@ import {
   wearStringMaxLen,
   wearToString
 } from "~/utils/economy";
+import { useAppContext } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
 import { ItemEditorName } from "./item-editor-name";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
-import { useRootContext } from "./root-context";
 import { StickerPicker } from "./sticker-picker";
 
 export interface ItemEditorAttributes {
@@ -82,7 +82,7 @@ export function ItemEditor({
     },
     inventory,
     translations: { translate }
-  } = useRootContext();
+  } = useAppContext();
   const [stattrak, setStattrak] = useCheckbox(
     attributes?.stattrak !== undefined ? attributes.stattrak >= 0 : false
   );
