@@ -18,7 +18,7 @@ import clsx from "clsx";
 import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
 import { useIsDesktop } from "~/hooks/use-is-desktop";
 import { useIsOnTop } from "~/hooks/use-is-on-top";
-import { CRAFT_ITEM_FILTERS } from "~/utils/craft-filters";
+import { ECONOMY_ITEM_FILTERS } from "~/utils/economy-filters";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
 import { useItemSelectorContext } from "./item-selector-context";
@@ -43,7 +43,7 @@ export function Header() {
   }
 
   const canCraft =
-    !inventory.isFull() && CRAFT_ITEM_FILTERS.filter(craftFilter).length > 0;
+    !inventory.isFull() && ECONOMY_ITEM_FILTERS.filter(craftFilter).length > 0;
 
   const isSelectingAnItem = itemSelector !== undefined;
 

@@ -5,8 +5,12 @@
 
 import { CS_Item } from "@ianlucas/cs2-lib";
 import { useMemo, useState } from "react";
-import { CRAFT_ITEM_FILTERS, CraftItemFilter } from "~/utils/craft-filters";
-import { getBaseItems, getPaidItems } from "~/utils/economy";
+import {
+  ECONOMY_ITEM_FILTERS,
+  EconomyItemFilter,
+  getBaseItems,
+  getPaidItems
+} from "~/utils/economy-filters";
 import { useCraftFilterRules } from "./use-craft-filter-rules";
 import { useCraftItemRules } from "./use-craft-item-rules";
 import { useInput } from "./use-input";
@@ -18,7 +22,7 @@ export function useItemPickerState({
 }) {
   const itemFilter = useCraftItemRules();
   const categoryFilter = useCraftFilterRules();
-  const categories = CRAFT_ITEM_FILTERS.filter(categoryFilter);
+  const categories = ECONOMY_ITEM_FILTERS.filter(categoryFilter);
   const [filter, setFilter] = useState(categories[0]);
   const [model, setModel] = useState<string | undefined>();
   const [query, setQuery] = useInput("");
@@ -28,7 +32,7 @@ export function useItemPickerState({
     setModel(undefined);
   }
 
-  function handleFilterClick(filter: CraftItemFilter) {
+  function handleFilterClick(filter: EconomyItemFilter) {
     setFilter(filter);
     return reset();
   }

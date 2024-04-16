@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import clsx from "clsx";
-import { CraftItemFilter } from "~/utils/craft-filters";
+import { EconomyItemFilter } from "~/utils/economy-filters";
 import { useRootContext } from "./root-context";
 
 export function FilterMenuMobile({
@@ -12,15 +12,15 @@ export function FilterMenuMobile({
   onChange,
   value
 }: {
-  categories: CraftItemFilter[];
-  onChange: (newValue: CraftItemFilter) => void;
-  value: CraftItemFilter;
+  categories: EconomyItemFilter[];
+  onChange: (newValue: EconomyItemFilter) => void;
+  value: EconomyItemFilter;
 }) {
   const {
     translations: { translate }
   } = useRootContext();
 
-  function handleClick(filter: CraftItemFilter) {
+  function handleClick(filter: EconomyItemFilter) {
     return function handleClick() {
       onChange(filter);
     };

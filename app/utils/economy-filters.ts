@@ -3,7 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-export const CRAFT_ITEM_FILTERS = [
+import { CS_Economy } from "@ianlucas/cs2-lib";
+
+export const ECONOMY_ITEM_FILTERS = [
   {
     category: "secondary",
     hasModel: true,
@@ -112,4 +114,25 @@ export const CRAFT_ITEM_FILTERS = [
   }
 ];
 
-export type CraftItemFilter = (typeof CRAFT_ITEM_FILTERS)[number];
+export type EconomyItemFilter = (typeof ECONOMY_ITEM_FILTERS)[number];
+
+export function getBaseItems({
+  category,
+  hasModel,
+  type,
+  isFree
+}: EconomyItemFilter) {
+  return CS_Economy.filterItems({
+    category,
+    type,
+    base: hasModel ? true : undefined
+  }).filter(
+    ({ free }) => (hasModel && isFree ? free : !free) || (!hasModel && !free)
+  );
+}
+
+export function getPaidItems({ type }: EconomyItemFilter, model: string) {
+  return CS_Economy.filterItems({
+    model
+  }).filter(({ base }) => type === "melee" || !base);
+}

@@ -11,7 +11,6 @@ import {
   CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
 } from "@ianlucas/cs2-lib";
-import { CraftItemFilter } from "./craft-filters";
 
 export const assetBaseUrl =
   "https://cdn.statically.io/gh/ianlucas/cs2-lib/main/assets/images";
@@ -28,27 +27,6 @@ export const FREE_MODEL_IN_NAME_TYPES = ["musickit"];
 
 export function translateItems(itemTranslation: CS_ItemTranslations[number]) {
   CS_Economy.applyTranslation(itemTranslation);
-}
-
-export function getBaseItems({
-  category,
-  hasModel,
-  type,
-  isFree
-}: CraftItemFilter) {
-  return CS_Economy.filterItems({
-    category,
-    type,
-    base: hasModel ? true : undefined
-  }).filter(
-    ({ free }) => (hasModel && isFree ? free : !free) || (!hasModel && !free)
-  );
-}
-
-export function getPaidItems({ type }: CraftItemFilter, model: string) {
-  return CS_Economy.filterItems({
-    model
-  }).filter(({ base }) => type === "melee" || !base);
 }
 
 export function isItemCountable(item: CS_Item) {

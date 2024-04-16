@@ -6,7 +6,7 @@
 import { faSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
-import { CraftItemFilter } from "~/utils/craft-filters";
+import { EconomyItemFilter } from "~/utils/economy-filters";
 import { FilterMenuIcon } from "./filter-menu-icon";
 import { useRootContext } from "./root-context";
 import { TextSlider } from "./text-slider";
@@ -16,15 +16,15 @@ export function FilterMenuDesktop({
   onChange,
   value
 }: {
-  categories: CraftItemFilter[];
-  onChange: (newValue: CraftItemFilter) => void;
-  value: CraftItemFilter;
+  categories: EconomyItemFilter[];
+  onChange: (newValue: EconomyItemFilter) => void;
+  value: EconomyItemFilter;
 }) {
   const {
     translations: { translate }
   } = useRootContext();
 
-  function handleClick(filter: CraftItemFilter) {
+  function handleClick(filter: EconomyItemFilter) {
     return function handleClick() {
       onChange(filter);
     };
