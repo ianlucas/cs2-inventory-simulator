@@ -13,7 +13,7 @@ import {
   useMemo
 } from "react";
 import { useTypedLoaderData } from "remix-typedjson";
-import { useInventoryFilters } from "~/hooks/use-inventory-filters";
+import { useInventoryFilterState } from "~/hooks/use-inventory-filter-state";
 import { useInventoryState } from "~/hooks/use-inventory-state";
 import { useTranslation } from "~/hooks/use-translation";
 import type { loader } from "~/root";
@@ -37,7 +37,7 @@ import {
 const AppContext = createContext<
   {
     inventory: CS_Inventory;
-    inventoryFilters: ReturnType<typeof useInventoryFilters>;
+    inventoryFilter: ReturnType<typeof useInventoryFilterState>;
     items: TransformedInventoryItems;
     requireAuth: boolean;
     setInventory: (value: CS_Inventory) => void;
@@ -75,7 +75,7 @@ export function useInventoryItems() {
 }
 
 export function useInventoryFilter() {
-  return useAppContext().inventoryFilters;
+  return useAppContext().inventoryFilter;
 }
 
 export function useTranslationChecksum() {
@@ -112,7 +112,7 @@ export function AppProvider({
   const [inventory, setInventory] = useInventoryState(
     new CS_Inventory(inventorySpec)
   );
-  const inventoryFilters = useInventoryFilters();
+  const inventoryFilter = useInventoryFilterState();
   const translation = useTranslation({
     checksum,
     language: preferences.language
@@ -157,7 +157,7 @@ export function AppProvider({
     () =>
       (preferences.hideFilters
         ? sortItemsByEquipped
-        : inventoryFilters.sortItems)(
+        : inventoryFilter.sortItems)(
         // Inventory Items
         inventory.getAll().map((item) =>
           transform(item, {
@@ -174,7 +174,7 @@ export function AppProvider({
       preferences.hideFilters,
       rules.inventoryItemEquipHideModel,
       rules.inventoryItemEquipHideType,
-      inventoryFilters.sortItems
+      inventoryFilter.sortItems
     ]
   );
 
@@ -182,7 +182,7 @@ export function AppProvider({
     <AppContext.Provider
       value={{
         inventory,
-        inventoryFilters,
+        inventoryFilter,
         items,
         preferences,
         requireAuth: retrieveUserId() !== undefined,

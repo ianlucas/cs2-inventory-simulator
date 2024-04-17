@@ -24,45 +24,48 @@ import { useStorageInput } from "./use-storage-input";
 import { useStorageState } from "./use-storage-state";
 import { useWatch } from "./use-watch";
 
-export function useInventoryFiltersScrollTopHandler<T>(dependency: T) {
-  useWatch((oldState, newState) => {
+export function useScrollToTopOnChange<T>(dependency: T) {
+  return useWatch((oldState, newState) => {
     if (oldState !== newState) {
       window.scrollTo({ top: 0 });
     }
   }, dependency);
 }
 
-export function useInventoryFilters() {
+export function useInventoryFilterState() {
   const [search, setSearch] = useStorageInput("inventoryFilterSearch", "");
   const [sorter, setSorter] = useStorageState(
     "inventoryFilterSorter",
     INVENTORY_SORTERS[0].value
   );
-  const [primary, setPrimary] = useStorageState("inventoryFilterPrimary", 0);
-  const [secondaries, setSecondaries] = useStorageState(
+  const [primaryIndex, setPrimaryIndex] = useStorageState(
+    "inventoryFilterPrimary",
+    0
+  );
+  const [secondaryIndexes, setSecondaryIndexes] = useStorageState(
     "inventoryFilterSecondaries",
     INVENTORY_PRIMARY_FILTERS.map(() => 0)
   );
 
-  useInventoryFiltersScrollTopHandler(primary);
-  useInventoryFiltersScrollTopHandler(secondaries);
+  useScrollToTopOnChange(primaryIndex);
+  useScrollToTopOnChange(secondaryIndexes);
 
-  const secondary = secondaries[primary];
-  const primaryAsString = INVENTORY_PRIMARY_FILTERS[primary];
-  const secondaryAsString =
-    INVENTORY_SECONDARY_FILTERS[primaryAsString]?.[secondary];
+  const secondaryIndex = secondaryIndexes[primaryIndex];
+  const primaryFilter = INVENTORY_PRIMARY_FILTERS[primaryIndex];
+  const secondaryFilter =
+    INVENTORY_SECONDARY_FILTERS[primaryFilter]?.[secondaryIndex];
 
-  function handleClickPrimary(index: number) {
-    return function handleClickPrimary() {
-      setPrimary(index);
+  function handlePrimaryClick(index: number) {
+    return function handlePrimaryClick() {
+      setPrimaryIndex(index);
     };
   }
 
-  function handleClickSecondary(secondaryIndex: number) {
-    return function handleClickSecondary() {
-      setSecondaries((current) =>
+  function handleSecondaryClick(secondaryIndex: number) {
+    return function handleSecondaryClick() {
+      setSecondaryIndexes((current) =>
         current.map((value, index) =>
-          index === primary ? secondaryIndex : value
+          index === primaryIndex ? secondaryIndex : value
         )
       );
     };
@@ -81,11 +84,11 @@ export function useInventoryFilters() {
       }
       return false;
     }
-    switch (primaryAsString) {
+    switch (primaryFilter) {
       case "Everything":
         return true;
       case "Equipment":
-        switch (secondaryAsString) {
+        switch (secondaryFilter) {
           case "AllEquipment":
             return ["weapon", "agent", "glove", "melee", "musickit"].includes(
               item.data.type
@@ -109,7 +112,7 @@ export function useInventoryFilters() {
         }
         break;
       case "GraphicArt":
-        switch (secondaryAsString) {
+        switch (secondaryFilter) {
           case "AllGraphicArt":
             return ["patch", "sticker", "graffiti"].includes(item.data.type);
           case "Patches":
@@ -121,7 +124,7 @@ export function useInventoryFilters() {
         }
         break;
       case "Containers":
-        switch (secondaryAsString) {
+        switch (secondaryFilter) {
           case "All":
             return ["case", "tool"].includes(item.data.type);
           case "WeaponCases":
@@ -137,7 +140,7 @@ export function useInventoryFilters() {
         }
         break;
       case "Display":
-        switch (secondaryAsString) {
+        switch (secondaryFilter) {
           case "All":
             return ["collectible", "musickit"].includes(item.data.type);
           case "Medals":
@@ -179,11 +182,11 @@ export function useInventoryFilters() {
 
   return {
     filterItems,
-    handleClickPrimary,
-    handleClickSecondary,
-    primary,
+    handlePrimaryClick,
+    handleSecondaryClick,
+    primaryIndex,
     search,
-    secondaries,
+    secondaryIndexes,
     setSearch,
     setSorter,
     sorter,
