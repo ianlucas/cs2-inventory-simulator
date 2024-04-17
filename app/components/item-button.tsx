@@ -5,7 +5,7 @@
 
 import { CS_Item } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { getItemName } from "~/utils/inventory";
+import { useNameItem } from "~/hooks/use-name-item";
 import { ItemImage } from "./item-image";
 import { TextSlider } from "./text-slider";
 
@@ -20,18 +20,19 @@ export function ItemButton({
   item: CS_Item;
   onClick?: (item: CS_Item) => void;
 }) {
-  function handleClick() {
-    if (onClick) {
-      onClick(item);
-    }
-  }
-
-  const [name] = getItemName(item, "craft-name");
+  const nameItem = useNameItem();
+  const [name] = nameItem(item, "craft-name");
   const clickable = onClick !== undefined;
   const showAltname =
     item.altname !== undefined &&
     (item.altname.includes("Collectible") ||
       item.altname.includes("Commodity"));
+
+  function handleClick() {
+    if (onClick) {
+      onClick(item);
+    }
+  }
 
   return (
     <button

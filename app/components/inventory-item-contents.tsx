@@ -4,11 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
-import { getItemNameString } from "~/utils/inventory";
+import { useNameItemString } from "~/hooks/use-name-item";
 import { useTranslate } from "./app-context";
 
 export function InventoryItemContents({ item }: { item: CS_Item }) {
   const translate = useTranslate();
+  const nameItemString = useNameItemString();
 
   return (
     <div className="mt-4">
@@ -17,7 +18,7 @@ export function InventoryItemContents({ item }: { item: CS_Item }) {
       </div>
       {CS_Economy.listCaseContents(item, true).map((item) => (
         <div key={item.id} style={{ color: item.rarity }}>
-          {getItemNameString(item, "case-contents-name")}
+          {nameItemString(item, "case-contents-name")}
         </div>
       ))}
       {item.specials !== undefined && (

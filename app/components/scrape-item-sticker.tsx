@@ -15,9 +15,9 @@ import {
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
+import { useNameItemString } from "~/hooks/use-name-item";
 import { useSync } from "~/hooks/use-sync";
 import { ScrapeItemStickerAction } from "~/routes/api.action.sync._index";
-import { getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
 import { useInventory, usePreferences, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -33,6 +33,7 @@ export function ScrapeItemSticker({
   onClose: () => void;
   uid: number;
 }) {
+  const nameItemString = useNameItemString();
   const { statsForNerds } = usePreferences();
   const [inventory, setInventory] = useInventory();
 
@@ -74,7 +75,7 @@ export function ScrapeItemSticker({
 
   function handleConfirmScrape() {
     if (confirmScrapeIndex !== undefined) {
-      // We do twice because wear 0 is probably invisible in-game.  If this
+      // We do twice because wear 0 is probably invisible in-game. If this
       // doesn't hold true, we'll need to change this.
       doScrapeSticker(confirmScrapeIndex);
       doScrapeSticker(confirmScrapeIndex);
@@ -92,7 +93,7 @@ export function ScrapeItemSticker({
                 <UseItemHeader
                   title={translate("ScrapeStickerUse")}
                   warning={translate("ScrapeStickerWarn")}
-                  warningItem={getItemNameString(inventoryItem)}
+                  warningItem={nameItemString(inventoryItem)}
                 />
                 <ItemImage
                   className="m-auto aspect-[1.33333] max-w-[512px]"

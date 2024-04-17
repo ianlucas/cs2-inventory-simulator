@@ -10,12 +10,12 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
+import { useNameItemString } from "~/hooks/use-name-item";
 import { useSync } from "~/hooks/use-sync";
 import {
   AddWithStickerAction,
   ApplyItemStickerAction
 } from "~/routes/api.action.sync._index";
-import { getItemNameString } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
 import { useInventory, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -35,6 +35,7 @@ export function ApplyItemSticker({
   const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
   const sync = useSync();
+  const nameItemString = useNameItemString();
 
   const [stickerIndex, setStickerIndex] = useState<number>();
   const { data: stickerItem } = useInventoryItem(stickerUid);
@@ -80,7 +81,7 @@ export function ApplyItemSticker({
             <div>
               <UseItemHeader
                 actionDesc={translate("ApplyStickerUseOn")}
-                actionItem={getItemNameString(targetInventoryItem)}
+                actionItem={nameItemString(targetInventoryItem)}
                 title={translate("ApplyStickerUse")}
                 warning={translate("ApplyStickerWarn")}
               />

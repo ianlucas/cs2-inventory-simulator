@@ -14,8 +14,8 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
+import { useNameItemString } from "~/hooks/use-name-item";
 import { wearToString } from "~/utils/economy";
-import { getItemNameString } from "~/utils/inventory";
 import { usePreferences, useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
 import { ItemCollectionImage } from "./item-collection-image";
@@ -30,9 +30,10 @@ export function InspectItem({
   onClose: () => void;
   uid: number;
 }) {
-  const { statsForNerds } = usePreferences();
   const translate = useTranslate();
+  const nameItemString = useNameItemString();
   const inventoryItem = useInventoryItem(uid);
+  const { statsForNerds } = usePreferences();
   const { data: item, seed, stickers, stickerswear, wear } = inventoryItem;
   const {
     getHoverFloatingProps,
@@ -45,7 +46,6 @@ export function InspectItem({
   } = useInspectFloating();
 
   const hasHover = CS_Economy.hasSeed(item) && CS_Economy.hasWear(item);
-  const name = getItemNameString(inventoryItem);
 
   return (
     <ClientOnly
@@ -62,7 +62,9 @@ export function InspectItem({
                     <ItemCollectionImage className="h-16" item={item} />
                   )}
                   <div className="font-display">
-                    <div className="text-3xl">{name}</div>
+                    <div className="text-3xl">
+                      {nameItemString(inventoryItem)}
+                    </div>
                     {item.collectionname !== undefined && (
                       <div className="-mt-2 text-neutral-300">
                         {item.collectionname}

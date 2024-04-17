@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
-import { getItemNameString } from "~/utils/inventory";
+import { useNameItemString } from "~/hooks/use-name-item";
 import { useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { ItemImage } from "./item-image";
@@ -35,6 +35,7 @@ export function UnlockCaseContainer({
   onUnlock: () => void;
 }) {
   const translate = useTranslate();
+  const nameItemString = useNameItemString();
 
   return (
     <>
@@ -45,7 +46,7 @@ export function UnlockCaseContainer({
       <div className="flex flex-col gap-4">
         <UseItemHeader
           actionDesc={translate("CaseUnlock")}
-          actionItem={getItemNameString(caseItem)}
+          actionItem={nameItemString(caseItem)}
           title={translate("CaseUnlockContainer")}
           warning={translate("CaseOnceWarn")}
         />
@@ -67,7 +68,7 @@ export function UnlockCaseContainer({
                   <ItemImage className="h-14" item={keyItem} />
                   <span>
                     {translate("CaseUse")}{" "}
-                    <strong>{getItemNameString(keyItem)}</strong>
+                    <strong>{nameItemString(keyItem)}</strong>
                   </span>
                 </div>
               )

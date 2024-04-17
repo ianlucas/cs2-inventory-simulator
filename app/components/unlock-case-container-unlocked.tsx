@@ -5,7 +5,8 @@
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { createFakeInventoryItem, getItemNameString } from "~/utils/inventory";
+import { useNameItemString } from "~/hooks/use-name-item";
+import { createFakeInventoryItem } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
 import { useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -23,6 +24,7 @@ export function UnlockCaseContainerUnlocked({
   unlockedItem: ReturnType<typeof CS_Economy.unlockCase>;
 }) {
   const translate = useTranslate();
+  const nameItemString = useNameItemString();
   const [revealScale, setRevealScale] = useState(0);
 
   function handleLoad() {
@@ -42,12 +44,12 @@ export function UnlockCaseContainerUnlocked({
             className="border-b-4 pb-2 font-display font-semibold leading-10 tracking-wider drop-shadow"
             style={{ borderColor: item.rarity }}
           >
-            {getItemNameString(createFakeInventoryItem(item, attributes))}
+            {nameItemString(createFakeInventoryItem(item, attributes))}
           </span>
         </div>
         <div className="mt-4 flex items-center justify-center gap-2 text-sm">
           <ItemImage className="h-8" item={caseItem} />
-          <span>{getItemNameString(caseItem)}</span>
+          <span>{nameItemString(caseItem)}</span>
         </div>
         <ItemImage
           className="m-auto my-4 [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"

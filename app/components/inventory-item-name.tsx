@@ -4,13 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_InventoryItem } from "@ianlucas/cs2-lib";
-import { getItemNameString } from "~/utils/inventory";
+import { useNameItemString } from "~/hooks/use-name-item";
 
 export function InventoryItemName({
   inventoryItem
 }: {
   inventoryItem: CS_InventoryItem;
 }) {
-  const name = getItemNameString(inventoryItem);
-  return <div className="font-bold">{name}</div>;
+  const nameItemString = useNameItemString();
+  return <div className="font-bold">{nameItemString(inventoryItem)}</div>;
 }

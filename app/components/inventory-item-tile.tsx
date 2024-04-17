@@ -12,11 +12,8 @@ import {
   CS_NONE
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import {
-  getItemName,
-  resolveCSItem,
-  resolveInventoryItem
-} from "~/utils/inventory";
+import { useNameItem } from "~/hooks/use-name-item";
+import { resolveCSItem, resolveInventoryItem } from "~/utils/inventory";
 import { has } from "~/utils/misc";
 import { ItemImage } from "./item-image";
 
@@ -29,9 +26,10 @@ export function InventoryItemTile({
   item: CS_Item | CS_InventoryItem;
   onClick?: () => void;
 }) {
+  const nameItem = useNameItem();
   const inventoryItem = resolveInventoryItem(item);
   const data = resolveCSItem(item);
-  const [model, name] = getItemName(item, "inventory-name");
+  const [model, name] = nameItem(item, "inventory-name");
 
   return (
     <div className="w-[154px]">

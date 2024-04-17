@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item } from "@ianlucas/cs2-lib";
-import { getItemName } from "~/utils/inventory";
+import { useNameItem } from "~/hooks/use-name-item";
 import { has } from "~/utils/misc";
 
 const HAS_KIND_FIRST = [
@@ -18,8 +18,9 @@ const HAS_KIND_FIRST = [
 ];
 
 export function ItemEditorName({ item }: { item: CS_Item }) {
-  const { type, rarity } = item;
-  const [model, name] = getItemName(item, "editor-name");
+  const { rarity } = item;
+  const nameItem = useNameItem();
+  const [model, name] = nameItem(item, "editor-name");
 
   return (
     <div className="bg-gradient-to-r from-transparent via-black/30 to-transparent">
@@ -29,29 +30,4 @@ export function ItemEditorName({ item }: { item: CS_Item }) {
       </div>
     </div>
   );
-  /*
-      {names.map((name, index) => (
-        <span key={index} className="leading-3">
-          <span
-            className={clsx(
-              index === 0 && HAS_KIND_FIRST.includes(type) && names.length > 1
-                ? "text-sm text-neutral-400"
-                : "font-bold"
-            )}
-            style={{
-              color:
-                index !== 0 ||
-                !HAS_KIND_FIRST.includes(type) ||
-                names.length === 1
-                  ? rarity
-                  : undefined
-            }}
-          >
-            {name}
-          </span>
-          {index < names.length - 1 && <br />}
-        </span>
-      ))}
-    </>
-  );*/
 }

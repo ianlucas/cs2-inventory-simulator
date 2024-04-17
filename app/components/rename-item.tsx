@@ -9,12 +9,12 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useFreeze } from "~/hooks/use-freeze";
 import { useInput } from "~/hooks/use-input";
 import { useInventoryItem } from "~/hooks/use-inventory-item";
+import { useNameItemString } from "~/hooks/use-name-item";
 import { useSync } from "~/hooks/use-sync";
 import {
   AddWithNametagAction,
   RenameItemAction
 } from "~/routes/api.action.sync._index";
-import { getItemNameString } from "~/utils/inventory";
 import { useInventory, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { ItemImage } from "./item-image";
@@ -31,9 +31,10 @@ export function RenameItem({
   targetUid: number;
   toolUid: number;
 }) {
-  const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
   const sync = useSync();
+  const nameItemString = useNameItemString();
+  const [inventory, setInventory] = useInventory();
 
   const freeItems = useFreeze(() =>
     CS_Economy.filterItems({
@@ -76,7 +77,7 @@ export function RenameItem({
             <div>
               <UseItemHeader
                 actionDesc={translate("RenameEnterName")}
-                actionItem={getItemNameString(inventoryItem)}
+                actionItem={nameItemString(inventoryItem)}
                 title={translate("RenameUse")}
                 warning={translate("RenameWarn")}
               />
