@@ -91,7 +91,7 @@ export function AppProvider({
 }: Omit<
   ContextType<typeof AppContext>,
   | "inventory"
-  | "inventoryFilters"
+  | "inventoryFilter"
   | "items"
   | "requireAuth"
   | "setInventory"
