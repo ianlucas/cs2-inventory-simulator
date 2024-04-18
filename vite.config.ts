@@ -14,10 +14,8 @@ export default defineConfig({
   server: {
     port: 3000
   },
-  plugins: [
-    remix({
-      ignoredRouteFiles: ["**/.*"]
-    }),
-    tsconfigPaths()
-  ]
+  test: {
+    environment: "happy-dom"
+  },
+  plugins: [!process.env.VITEST && remix(), tsconfigPaths()]
 });

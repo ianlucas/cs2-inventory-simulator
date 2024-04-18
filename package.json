@@ -8,6 +8,7 @@
     "dev": "remix vite:dev",
     "format": "prettier . --write",
     "start": "remix-serve ./build/server/index.js",
+    "test": "vitest",
     "typecheck": "tsc",
     "upgrade": "npx npm-check-updates@latest --target minor -u"
   },
@@ -40,15 +41,18 @@
   },
   "devDependencies": {
     "@remix-run/dev": "^2.8.1",
+    "@testing-library/react": "^15.0.2",
     "@types/node": "^18.19.31",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
+    "happy-dom": "^14.7.1",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5",
     "vite": "^5.2.8",
-    "vite-tsconfig-paths": "^4.3.2"
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.5.0"
   },
   "engines": {
     "node": ">=18.0.0"
