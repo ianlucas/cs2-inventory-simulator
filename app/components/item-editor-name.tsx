@@ -7,16 +7,6 @@ import { CS_Item } from "@ianlucas/cs2-lib";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { has } from "~/utils/misc";
 
-const HAS_KIND_FIRST = [
-  "weapon",
-  "melee",
-  "glove",
-  "musickit",
-  "sticker",
-  "graffiti",
-  "patch"
-];
-
 export function ItemEditorName({ item }: { item: CS_Item }) {
   const { rarity } = item;
   const nameItem = useNameItem();

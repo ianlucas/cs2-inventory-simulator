@@ -8,8 +8,7 @@ import { useTranslate } from "~/components/app-context";
 import { resolveCSItem, resolveInventoryItem } from "~/utils/inventory";
 import { has } from "~/utils/misc";
 
-export function useNameItem() {
-  const translate = useTranslate();
+export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
   return function nameItem(
     item: CS_Item | CS_InventoryItem,
     formatter:
@@ -66,6 +65,11 @@ export function useNameItem() {
     }
     return [];
   };
+}
+
+export function useNameItem() {
+  const translate = useTranslate();
+  return nameItemFactory(translate);
 }
 
 export function useNameItemString() {
