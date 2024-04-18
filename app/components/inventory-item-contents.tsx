@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
-import { useNameItemString } from "~/hooks/use-name-item";
+import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useTranslate } from "./app-context";
 
 export function InventoryItemContents({ item }: { item: CS_Item }) {

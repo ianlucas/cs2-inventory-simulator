@@ -6,10 +6,10 @@
 import { CS_Economy } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { useInput } from "~/hooks/use-input";
-import { useInventoryItem } from "~/hooks/use-inventory-item";
-import { useNameItemString } from "~/hooks/use-name-item";
-import { useSync } from "~/hooks/use-sync";
+import { useInput } from "~/components/hooks/use-input";
+import { useInventoryItem } from "~/components/hooks/use-inventory-item";
+import { useNameItemString } from "~/components/hooks/use-name-item";
+import { useSync } from "~/components/hooks/use-sync";
 import { RenameStorageUnitAction } from "~/routes/api.action.sync._index";
 import { useInventory, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";

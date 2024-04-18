@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item } from "@ianlucas/cs2-lib";
-import { useIsDesktop } from "~/hooks/use-is-desktop";
+import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { ItemPickerDesktop } from "./item-picker-desktop";
 import { ItemPickerMobile } from "./item-picker-mobile";
 

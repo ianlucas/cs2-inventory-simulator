@@ -15,8 +15,8 @@ import {
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { useNameItemString } from "~/hooks/use-name-item";
-import { useSync } from "~/hooks/use-sync";
+import { useNameItemString } from "~/components/hooks/use-name-item";
+import { useSync } from "~/components/hooks/use-sync";
 import { ScrapeItemStickerAction } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
 import { useInventory, usePreferences, useTranslate } from "./app-context";

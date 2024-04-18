@@ -12,9 +12,9 @@ import {
 } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { useInspectFloating } from "~/hooks/use-inspect-floating";
-import { useInventoryItem } from "~/hooks/use-inventory-item";
-import { useNameItemString } from "~/hooks/use-name-item";
+import { useInspectFloating } from "~/components/hooks/use-inspect-floating";
+import { useInventoryItem } from "~/components/hooks/use-inventory-item";
+import { useNameItemString } from "~/components/hooks/use-name-item";
 import { wearToString } from "~/utils/economy";
 import { usePreferences, useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";

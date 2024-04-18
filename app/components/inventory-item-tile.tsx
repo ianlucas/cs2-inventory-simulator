@@ -12,7 +12,7 @@ import {
   CS_NONE
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useNameItem } from "~/hooks/use-name-item";
+import { useNameItem } from "~/components/hooks/use-name-item";
 import { resolveCSItem, resolveInventoryItem } from "~/utils/inventory";
 import { has } from "~/utils/misc";
 import { ItemImage } from "./item-image";

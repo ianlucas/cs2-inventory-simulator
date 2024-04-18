@@ -9,9 +9,9 @@ import { CS_Economy, CS_INVENTORY_STICKERS, CS_NONE } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { useInventoryItem } from "~/hooks/use-inventory-item";
-import { useNameItemString } from "~/hooks/use-name-item";
-import { useSync } from "~/hooks/use-sync";
+import { useInventoryItem } from "~/components/hooks/use-inventory-item";
+import { useNameItemString } from "~/components/hooks/use-name-item";
+import { useSync } from "~/components/hooks/use-sync";
 import {
   AddWithStickerAction,
   ApplyItemStickerAction

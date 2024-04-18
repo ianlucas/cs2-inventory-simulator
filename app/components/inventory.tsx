@@ -5,15 +5,15 @@
 
 import { CS_Economy, CS_Team } from "@ianlucas/cs2-lib";
 import { useNavigate } from "@remix-run/react";
+import { useApplyItemSticker } from "~/components/hooks/use-apply-item-sticker";
+import { useInspectItem } from "~/components/hooks/use-inspect-item";
+import { useRenameItem } from "~/components/hooks/use-rename-item";
+import { useScrapeItemSticker } from "~/components/hooks/use-scrape-item-sticker";
+import { useStorageUnit } from "~/components/hooks/use-storage-unit";
+import { useSwapItemsStatTrak } from "~/components/hooks/use-swap-items-stattrak";
+import { useSync } from "~/components/hooks/use-sync";
+import { useUnlockCase } from "~/components/hooks/use-unlock-case";
 import { InventoryItem } from "~/components/inventory-item";
-import { useApplyItemSticker } from "~/hooks/use-apply-item-sticker";
-import { useInspectItem } from "~/hooks/use-inspect-item";
-import { useRenameItem } from "~/hooks/use-rename-item";
-import { useScrapeItemSticker } from "~/hooks/use-scrape-item-sticker";
-import { useStorageUnit } from "~/hooks/use-storage-unit";
-import { useSwapItemsStatTrak } from "~/hooks/use-swap-items-stattrak";
-import { useSync } from "~/hooks/use-sync";
-import { useUnlockCase } from "~/hooks/use-unlock-case";
 import {
   EquipAction,
   RemoveAction,

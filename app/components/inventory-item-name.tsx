@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_InventoryItem } from "@ianlucas/cs2-lib";
-import { useNameItemString } from "~/hooks/use-name-item";
+import { useNameItemString } from "~/components/hooks/use-name-item";
 
 export function InventoryItemName({
   inventoryItem

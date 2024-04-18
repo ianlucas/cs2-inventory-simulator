@@ -5,7 +5,7 @@
 
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNameItemString } from "~/hooks/use-name-item";
+import { useNameItemString } from "~/components/hooks/use-name-item";
 import { resolveItemImage } from "~/utils/economy";
 import { useInventory, useTranslate } from "./app-context";
 import {

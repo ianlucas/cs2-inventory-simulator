@@ -10,8 +10,8 @@ import { ClientOnly } from "remix-utils/client-only";
 import {
   useInventoryItem,
   useTryInventoryItem
-} from "~/hooks/use-inventory-item";
-import { useTimer } from "~/hooks/use-timer";
+} from "~/components/hooks/use-inventory-item";
+import { useTimer } from "~/components/hooks/use-timer";
 import {
   ApiActionUnlockCaseActionData,
   ApiActionUnlockCaseUrl

@@ -13,9 +13,9 @@ import {
   useMemo
 } from "react";
 import { useTypedLoaderData } from "remix-typedjson";
-import { useInventoryFilterState } from "~/hooks/use-inventory-filter-state";
-import { useInventoryState } from "~/hooks/use-inventory-state";
-import { useTranslation } from "~/hooks/use-translation";
+import { useInventoryFilterState } from "~/components/hooks/use-inventory-filter-state";
+import { useInventoryState } from "~/components/hooks/use-inventory-state";
+import { useTranslation } from "~/components/hooks/use-translation";
 import type { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { pushToSync, sync } from "~/sync";

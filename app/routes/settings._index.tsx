@@ -14,14 +14,14 @@ import {
   useTranslate
 } from "~/components/app-context";
 import { EditorToggle } from "~/components/editor-toggle";
+import { useCheckbox } from "~/components/hooks/use-checkbox";
+import { useSync } from "~/components/hooks/use-sync";
 import { LanguageSelect } from "~/components/language-select";
 import { Modal } from "~/components/modal";
 import { ModalButton } from "~/components/modal-button";
 import { Select } from "~/components/select";
 import { backgrounds } from "~/data/backgrounds";
 import { languages } from "~/data/languages";
-import { useCheckbox } from "~/hooks/use-checkbox";
-import { useSync } from "~/hooks/use-sync";
 import { middleware } from "~/http.server";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
 import { RemoveAllItemsAction } from "./api.action.sync._index";

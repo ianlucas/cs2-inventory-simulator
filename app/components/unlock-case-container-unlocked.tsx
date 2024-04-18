@@ -5,7 +5,7 @@
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { useNameItemString } from "~/hooks/use-name-item";
+import { useNameItemString } from "~/components/hooks/use-name-item";
 import { createFakeInventoryItem } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
 import { useTranslate } from "./app-context";

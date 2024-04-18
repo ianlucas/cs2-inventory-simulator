@@ -5,7 +5,7 @@
 
 import { CS_Item } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useNameItem } from "~/hooks/use-name-item";
+import { useNameItem } from "~/components/hooks/use-name-item";
 import { ItemImage } from "./item-image";
 import { TextSlider } from "./text-slider";
 

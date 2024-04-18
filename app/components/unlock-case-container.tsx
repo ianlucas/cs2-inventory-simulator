@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
-import { useNameItemString } from "~/hooks/use-name-item";
+import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { ItemImage } from "./item-image";

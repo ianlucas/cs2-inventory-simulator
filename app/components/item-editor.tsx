@@ -19,8 +19,8 @@ import {
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useState } from "react";
-import { useCheckbox } from "~/hooks/use-checkbox";
-import { useInput } from "~/hooks/use-input";
+import { useCheckbox } from "~/components/hooks/use-checkbox";
+import { useInput } from "~/components/hooks/use-input";
 import {
   isItemCountable,
   seedStringMaxLen,

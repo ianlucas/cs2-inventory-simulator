@@ -6,9 +6,9 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS_Item } from "@ianlucas/cs2-lib";
+import { useItemPickerState } from "~/components/hooks/use-item-picker-state";
 import { ItemBrowser } from "~/components/item-browser";
 import { ItemPickerFilterMobile } from "~/components/item-picker-filter-mobile";
-import { useItemPickerState } from "~/hooks/use-item-picker-state";
 import { useTranslate } from "./app-context";
 
 export function ItemPickerMobile({

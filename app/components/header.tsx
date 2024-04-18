@@ -15,9 +15,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useToggle } from "@uidotdev/usehooks";
 import clsx from "clsx";
-import { useCraftFilterRules } from "~/hooks/use-craft-filter-rules";
-import { useIsDesktop } from "~/hooks/use-is-desktop";
-import { useIsOnTop } from "~/hooks/use-is-on-top";
+import { useCraftFilterRules } from "~/components/hooks/use-craft-filter-rules";
+import { useIsDesktop } from "~/components/hooks/use-is-desktop";
+import { useIsOnTop } from "~/components/hooks/use-is-on-top";
 import { ECONOMY_ITEM_FILTERS } from "~/utils/economy-filters";
 import {
   useInventory,

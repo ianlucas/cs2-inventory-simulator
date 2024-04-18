@@ -13,7 +13,7 @@ import {
   CS_Team
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useInventoryItemFloating } from "~/hooks/use-inventory-item-floating";
+import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
 import {
   EDITABLE_ITEM_TYPE,
   INSPECTABLE_ITEM_TYPE,

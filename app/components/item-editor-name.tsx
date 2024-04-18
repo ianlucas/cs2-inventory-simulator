@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item } from "@ianlucas/cs2-lib";
-import { useNameItem } from "~/hooks/use-name-item";
+import { useNameItem } from "~/components/hooks/use-name-item";
 import { has } from "~/utils/misc";
 
 const HAS_KIND_FIRST = [

@@ -20,7 +20,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
-import { useInput } from "~/hooks/use-input";
+import { useInput } from "~/components/hooks/use-input";
 import { stickerWearStringMaxLen, stickerWearToString } from "~/utils/economy";
 import { useRules, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";

@@ -6,8 +6,8 @@
 import { CS_Economy } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { useCounter } from "~/hooks/use-counter";
-import { useSync } from "~/hooks/use-sync";
+import { useCounter } from "~/components/hooks/use-counter";
+import { useSync } from "~/components/hooks/use-sync";
 import { SwapItemsStatTrakAction } from "~/routes/api.action.sync._index";
 import { useInventory, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
