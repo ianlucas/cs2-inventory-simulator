@@ -150,7 +150,7 @@ export default function Settings() {
             className="flex w-full items-center gap-2 rounded border border-neutral-500/20 px-2 py-1 text-red-500 transition-all hover:border-red-500"
             onClick={handleRemoveAllItems}
           >
-            <FontAwesomeIcon icon={faTrashCan} />
+            <FontAwesomeIcon icon={faTrashCan} className="h-4" />
             {translate("SettingsRemoveAllItems")}
           </button>
         )}

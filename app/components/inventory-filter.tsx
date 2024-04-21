@@ -69,7 +69,10 @@ export function InventoryFilter() {
       <div className="m-auto flex w-[1024px] items-center py-1.5">
         <div className="flex-1">
           <div className="group flex w-[320px] items-center gap-4">
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="text-white" />
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              className="h-4 text-white"
+            />
             <input
               className={clsx(
                 "flex-1 border-b-2 border-white bg-transparent placeholder-neutral-400 outline-none transition-all",
