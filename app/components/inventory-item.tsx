@@ -353,7 +353,7 @@ export function InventoryItem({
       {!isFreeInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <div
-            className="z-20 w-[440px] rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none"
+            className="z-20 rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none lg:w-[440px]"
             ref={hoverRefs.setFloating}
             style={hoverStyles}
             {...getHoverFloatingProps()}

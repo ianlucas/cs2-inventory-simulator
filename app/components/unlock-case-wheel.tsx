@@ -37,7 +37,10 @@ export function UnlockCaseWheel({
   });
 
   return (
-    <div style={{ transform: `scale(${scale})` }}>
+    <div
+      className="flex justify-center"
+      style={{ transform: `scale(${scale})` }}
+    >
       <div
         className="relative h-[496.8px] w-[1269.980px] [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
         style={{ transform: `scaleY(${scaleY})` }}
