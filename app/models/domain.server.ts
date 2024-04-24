@@ -8,8 +8,8 @@ import { getRule } from "./rule.server";
 
 export async function resolveDomain(request: Request) {
   const appUrl = new URL(await getRule("steamCallbackUrl"));
-  const url = new URL(appUrl);
-  if (request.url === url.pathname) {
+  const url = new URL(request.url);
+  if (appUrl.pathname === url.pathname) {
     return url.hostname;
   }
   return (
