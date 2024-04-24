@@ -106,3 +106,9 @@ model GroupRule {
   rule Rule @relation(fields: [name], references: [name], onDelete: Cascade)
   value String
 }
+
+model Domain {
+  expiresAt DateTime?
+  hostname String @id
+  image String?
+}
