@@ -11,7 +11,6 @@ import {
 import { z } from "zod";
 import { authenticator } from "~/auth.server";
 import { middleware } from "~/http.server";
-import { resolveDomain } from "~/models/domain.server";
 import {
   getUserPreferences,
   setUserPreferences
@@ -31,11 +30,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (!userId) {
     return redirect("/");
   }
-  const domainId = await resolveDomain(request);
   const session = await getSession(request.headers.get("Cookie"));
   assignToSession(
     session,
-    await getUserPreferences(domainId, userId, [
+    await getUserPreferences(userId, [
       "background",
       "hideFilters",
       "hideFreeItems",
@@ -53,7 +51,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   await middleware(request);
   const userId = await authenticator.isAuthenticated(request);
-  const domainId = await resolveDomain(request);
   const preferences = z
     .object({
       background: z
@@ -67,7 +64,7 @@ export async function action({ request }: ActionFunctionArgs) {
     })
     .parse(Object.fromEntries(await request.formData()));
   if (userId) {
-    await setUserPreferences(domainId, userId, preferences);
+    await setUserPreferences(userId, preferences);
   }
   const session = await getSession(request.headers.get("Cookie"));
   assignToSession(session, preferences);

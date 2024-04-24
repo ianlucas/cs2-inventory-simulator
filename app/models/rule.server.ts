@@ -63,7 +63,7 @@ export async function getUserRuleOverwrite(userId: string, name: string) {
   return (
     await prisma.userRule.findUnique({
       select: { value: true },
-      where: { name_userId_domainId: { userId, name, domainId: "localhost" } }
+      where: { name_userId: { userId, name } }
     })
   )?.value;
 }

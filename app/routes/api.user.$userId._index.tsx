@@ -8,7 +8,6 @@ import { z } from "zod";
 import { prisma } from "~/db.server";
 import { isValidApiRequest } from "~/middlewares/is-valid-api-request.server";
 import { API_SCOPE } from "~/models/api-credential.server";
-import { resolveDomain } from "~/models/domain.server";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   await isValidApiRequest(request, [API_SCOPE]);
@@ -18,10 +17,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         groups: true
       },
       where: {
-        id_domainId: {
-          id: z.string().parse(params.userId),
-          domainId: await resolveDomain(request)
-        }
+        id: z.string().parse(params.userId)
       }
     })
   );

@@ -12,7 +12,6 @@ import {
   clearExpiredAuthTokens,
   getAuthTokenDetails
 } from "./models/api-auth-token.server";
-import { resolveDomain } from "./models/domain.server";
 import { getRule } from "./models/rule.server";
 import { upsertUser } from "./models/user.server";
 import { fail } from "./utils/misc";
@@ -28,9 +27,8 @@ export class ApiStrategy extends Strategy<
 
   constructor() {
     super(
-      async ({ userId, request }) =>
+      async ({ userId }) =>
         await upsertUser(
-          await resolveDomain(request),
           (await new SteamAPI(await getRule("steamApiKey")).getUserSummary(
             userId
           )) as UserSummary
