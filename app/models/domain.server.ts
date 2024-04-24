@@ -4,14 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { prisma } from "~/db.server";
-import { getRule } from "./rule.server";
 
 export async function resolveDomain(request: Request) {
-  const appUrl = new URL(await getRule("steamCallbackUrl"));
-  const url = new URL(request.url);
-  if (appUrl.pathname === url.pathname) {
-    return url.hostname;
-  }
   return (
     (
       await prisma.domain.findFirst({
@@ -19,11 +13,11 @@ export async function resolveDomain(request: Request) {
           id: true
         },
         where: {
-          id: url.hostname,
+          id: new URL(request.url).hostname,
           OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }]
         }
       })
-    )?.id ?? appUrl.hostname
+    )?.id ?? "localhost"
   );
 }
 
