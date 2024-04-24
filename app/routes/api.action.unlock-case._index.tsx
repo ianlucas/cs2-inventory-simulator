@@ -8,6 +8,7 @@ import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
+import { getRequestHostname } from "~/models/domain.server";
 import { expectRule, getRule } from "~/models/rule.server";
 import { updateUserInventory } from "~/models/user.server";
 import { conflict } from "~/response.server";
@@ -22,6 +23,7 @@ export type ApiActionUnlockCaseActionData = ReturnType<
 
 export async function action({ request }: ActionFunctionArgs) {
   await middleware(request);
+  const domainHostname = getRequestHostname(request);
   const {
     id: userId,
     inventory: rawInventory,
@@ -46,6 +48,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const unlockedItem = CS_Economy.unlockCase(inventory.get(caseUid).id);
   inventory.unlockCase(unlockedItem, caseUid, keyUid);
   const { syncedAt: responseSyncedAt } = await updateUserInventory(
+    domainHostname,
     userId,
     inventory.export()
   );

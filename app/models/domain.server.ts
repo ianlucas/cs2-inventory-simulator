@@ -5,10 +5,20 @@
 
 import { prisma } from "~/db.server";
 
+export function getRequestHostname(request: Request) {
+  return new URL(request.url).hostname;
+}
+
 export async function isValidDomain(hostname: string) {
   return (
-    (await prisma.domain.count({
-      where: { hostname }
-    })) > 0
+    (await prisma.domain.findFirst({
+      select: {
+        hostname: true
+      },
+      where: {
+        hostname,
+        OR: [{ expiresAt: null }, { expiresAt: { gte: new Date() } }]
+      }
+    })) !== null
   );
 }

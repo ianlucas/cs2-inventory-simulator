@@ -7,7 +7,23 @@ import { CS_BaseInventoryItem, CS_Inventory } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { badRequest, conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
+import { isValidDomain } from "./domain.server";
 import { getRule } from "./rule.server";
+
+export async function getUserInventory(domainHostname: string, userId: string) {
+  if (await isValidDomain(domainHostname)) {
+    return (
+      (
+        await prisma.userDomainInventory.findFirst({
+          where: { userId, domainHostname }
+        })
+      )?.inventory ?? null
+    );
+  }
+  return (
+    (await prisma.user.findFirst({ where: { id: userId } }))?.inventory ?? null
+  );
+}
 
 export async function upsertUser(user: {
   avatar: { medium: string };
@@ -37,12 +53,23 @@ export async function upsertUser(user: {
   ).id;
 }
 
-export async function findUniqueUser(userId: string) {
-  return await prisma.user.findUniqueOrThrow({
-    where: {
-      id: userId
-    }
-  });
+export async function findUniqueUser(domainHostname: string, userId: string) {
+  return {
+    ...(await prisma.user.findUniqueOrThrow({
+      select: {
+        avatar: true,
+        createdAt: true,
+        id: true,
+        name: true,
+        updatedAt: true
+      },
+      where: {
+        id: userId
+      }
+    })),
+    inventory: await getUserInventory(domainHostname, userId),
+    syncedAt: await getUserSyncedAt(domainHostname, userId)
+  };
 }
 
 export async function existsUser(userId: string) {
@@ -57,16 +84,42 @@ export async function existsUser(userId: string) {
 }
 
 export async function updateUserInventory(
+  domainHostname: string,
   userId: string,
-  items: CS_BaseInventoryItem[]
+  rawInventory: CS_BaseInventoryItem[]
 ) {
+  const inventory = JSON.stringify(rawInventory);
+  const syncedAt = new Date();
+  if (await isValidDomain(domainHostname)) {
+    return await prisma.userDomainInventory.upsert({
+      select: {
+        syncedAt: true
+      },
+      create: {
+        domainHostname,
+        inventory,
+        syncedAt,
+        userId
+      },
+      update: {
+        inventory,
+        syncedAt
+      },
+      where: {
+        domainHostname_userId: {
+          domainHostname,
+          userId
+        }
+      }
+    });
+  }
   return await prisma.user.update({
     select: {
       syncedAt: true
     },
     data: {
-      inventory: JSON.stringify(items),
-      syncedAt: new Date()
+      inventory,
+      syncedAt
     },
     where: {
       id: userId
@@ -74,12 +127,34 @@ export async function updateUserInventory(
   });
 }
 
+export async function getUserSyncedAt(domainHostname: string, userId: string) {
+  if (await isValidDomain(domainHostname)) {
+    const syncedAt = (
+      await prisma.userDomainInventory.findFirst({
+        select: { syncedAt: true },
+        where: { userId, domainHostname }
+      })
+    )?.syncedAt;
+    if (syncedAt !== undefined) {
+      return syncedAt;
+    }
+  }
+  return (
+    await prisma.user.findFirstOrThrow({
+      select: { syncedAt: true },
+      where: { id: userId }
+    })
+  ).syncedAt;
+}
+
 export async function manipulateUserInventory({
+  domainHostname,
   manipulate,
   rawInventory,
   syncedAt,
   userId
 }: {
+  domainHostname: string;
   manipulate:
     | ((inventory: CS_Inventory) => void)
     | ((inventory: CS_Inventory) => Promise<void>);
@@ -98,22 +173,10 @@ export async function manipulateUserInventory({
     throw badRequest;
   }
   if (syncedAt !== undefined) {
-    const { syncedAt: currentSyncedAt } = await prisma.user.findUniqueOrThrow({
-      select: { syncedAt: true },
-      where: { id: userId }
-    });
+    const currentSyncedAt = await getUserSyncedAt(domainHostname, userId);
     if (syncedAt !== currentSyncedAt.getTime()) {
       throw conflict;
     }
   }
-  return await prisma.user.update({
-    select: {
-      syncedAt: true
-    },
-    data: {
-      syncedAt: new Date(),
-      inventory: JSON.stringify(inventory.export())
-    },
-    where: { id: userId }
-  });
+  return await updateUserInventory(domainHostname, userId, inventory.export());
 }

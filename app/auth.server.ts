@@ -7,6 +7,7 @@ import { redirect } from "@remix-run/node";
 import { Authenticator } from "remix-auth";
 import { sessionStorage } from "~/session.server";
 import { ApiStrategy } from "./api-strategy.server";
+import { getRequestHostname } from "./models/domain.server";
 import { findUniqueUser } from "./models/user.server";
 import { SteamStrategy } from "./steam-strategy.server";
 
@@ -15,12 +16,13 @@ export const authenticator = new Authenticator<string>(sessionStorage);
 authenticator.use(new SteamStrategy(), "steam").use(new ApiStrategy(), "api");
 
 export async function findRequestUser(request: Request) {
-  const userId = await authenticator.isAuthenticated(request);
-  if (userId === null) {
-    return undefined;
-  }
   try {
-    return await findUniqueUser(userId);
+    const userId = await authenticator.isAuthenticated(request);
+    if (userId === null) {
+      return undefined;
+    }
+    const domainHostname = getRequestHostname(request);
+    return await findUniqueUser(domainHostname, userId);
   } catch {
     throw redirect("/sign-out");
   }

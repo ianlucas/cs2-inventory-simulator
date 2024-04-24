@@ -14,6 +14,7 @@ import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
+import { getRequestHostname } from "~/models/domain.server";
 import {
   expectRule,
   expectRuleNotContain,
@@ -251,6 +252,7 @@ async function enforceEditRulesForInventoryItem(
 
 export async function action({ request }: ActionFunctionArgs) {
   await middleware(request);
+  const domainHostname = getRequestHostname(request);
   const { id: userId, inventory: rawInventory } = await requireUser(request);
   const { syncedAt, actions } = z
     .object({
@@ -260,9 +262,10 @@ export async function action({ request }: ActionFunctionArgs) {
     .parse(await request.json());
   let addedFromCache = false;
   const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
-    userId,
+    domainHostname,
     rawInventory,
     syncedAt,
+    userId,
     async manipulate(inventory) {
       for (const action of actions) {
         switch (action.type) {

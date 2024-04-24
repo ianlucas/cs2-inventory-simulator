@@ -9,28 +9,29 @@ import { z } from "zod";
 import { prisma } from "~/db.server";
 import { res } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
+import { getUserInventory, getUserSyncedAt } from "./user.server";
 
 export async function handleUserCachedResponse({
   args,
+  domainHostname,
   generate,
   mimeType,
-  request,
   throwBody,
   url,
   userId
 }: {
   args: string | null;
+  domainHostname: string;
   generate:
     | ((inventory: CS_BaseInventoryItem[], userId: string) => any)
     | ((inventory: CS_BaseInventoryItem[], userId: string) => Promise<any>);
-  request: Request;
   throwBody: any;
   mimeType: string;
   url: string;
   userId: string;
 }) {
   const user = await prisma.user.findFirst({
-    select: { syncedAt: true },
+    select: { id: true },
     where: { id: userId }
   });
   if (user === null) {
@@ -38,24 +39,20 @@ export async function handleUserCachedResponse({
       ? json(throwBody)
       : res(throwBody, mimeType);
   }
+  const timestamp = await getUserSyncedAt(domainHostname, userId);
   const cache = await prisma.userCache.findFirst({
     select: { body: true },
     where: {
       args,
       url,
       userId,
-      timestamp: user.syncedAt
+      timestamp
     }
   });
   if (cache !== null) {
     return res(cache.body, mimeType);
   }
-  const inventory = (
-    await prisma.user.findFirst({
-      select: { inventory: true },
-      where: { id: userId }
-    })
-  )?.inventory;
+  const inventory = await getUserInventory(domainHostname, userId);
   if (!inventory) {
     throw mimeType === "application/json"
       ? json(throwBody)
@@ -70,14 +67,14 @@ export async function handleUserCachedResponse({
     create: {
       args,
       body,
-      timestamp: user.syncedAt,
+      timestamp,
       url,
       userId
     },
     update: {
       args,
       body,
-      timestamp: user.syncedAt
+      timestamp
     },
     where: {
       url_userId: {
