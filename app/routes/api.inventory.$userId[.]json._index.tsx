@@ -19,6 +19,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       return inventory;
     },
     mimeType: "application/json",
+    request,
     throwBody: [],
     url: ApiInventoryUserIdUrl,
     userId

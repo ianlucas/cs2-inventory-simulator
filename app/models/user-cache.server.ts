@@ -9,12 +9,14 @@ import { z } from "zod";
 import { prisma } from "~/db.server";
 import { res } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
+import { resolveDomain } from "./domain.server";
 
 export async function handleUserCachedResponse({
   args,
   generate,
-  throwBody,
   mimeType,
+  request,
+  throwBody,
   url,
   userId
 }: {
@@ -22,6 +24,7 @@ export async function handleUserCachedResponse({
   generate:
     | ((inventory: CS_BaseInventoryItem[], userId: string) => any)
     | ((inventory: CS_BaseInventoryItem[], userId: string) => Promise<any>);
+  request: Request;
   throwBody: any;
   mimeType: string;
   url: string;
@@ -64,10 +67,12 @@ export async function handleUserCachedResponse({
     mimeType === "application/json"
       ? JSON.stringify(generated)
       : z.string().parse(generated);
+  const domainId = await resolveDomain(request);
   await prisma.userCache.upsert({
     create: {
       args,
       body,
+      domainId,
       timestamp: user.syncedAt,
       url,
       userId
@@ -78,7 +83,8 @@ export async function handleUserCachedResponse({
       timestamp: user.syncedAt
     },
     where: {
-      url_userId: {
+      url_userId_domainId: {
+        domainId,
         url,
         userId
       }

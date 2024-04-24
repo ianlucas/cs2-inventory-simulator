@@ -12,17 +12,25 @@ import {
   clearExpiredAuthTokens,
   getAuthTokenDetails
 } from "./models/api-auth-token.server";
+import { resolveDomain } from "./models/domain.server";
 import { getRule } from "./models/rule.server";
 import { upsertUser } from "./models/user.server";
 import { fail } from "./utils/misc";
 
-export class ApiStrategy extends Strategy<string, string> {
+export class ApiStrategy extends Strategy<
+  string,
+  {
+    request: Request;
+    userId: string;
+  }
+> {
   name = "api";
 
   constructor() {
     super(
-      async (userId: string) =>
+      async ({ userId, request }) =>
         await upsertUser(
+          await resolveDomain(request),
           (await new SteamAPI(await getRule("steamApiKey")).getUserSummary(
             userId
           )) as UserSummary
@@ -52,7 +60,7 @@ export class ApiStrategy extends Strategy<string, string> {
       await clearAuthTokens(userId);
 
       return this.success(
-        await this.verify(userId),
+        await this.verify({ userId, request }),
         request,
         sessionStorage,
         options

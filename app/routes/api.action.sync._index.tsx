@@ -14,6 +14,7 @@ import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
+import { resolveDomain } from "~/models/domain.server";
 import {
   expectRule,
   expectRuleNotContain,
@@ -258,8 +259,10 @@ export async function action({ request }: ActionFunctionArgs) {
       actions: z.array(actionShape)
     })
     .parse(await request.json());
+  const domainId = await resolveDomain(request);
   let addedFromCache = false;
   const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
+    domainId,
     userId,
     rawInventory,
     syncedAt,

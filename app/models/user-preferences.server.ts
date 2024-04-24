@@ -13,29 +13,34 @@ type UserPreferenceKeys =
   | "hideFilters";
 
 export async function getUserPreference(
+  domainId: string,
   userId: string,
   key: UserPreferenceKeys
 ) {
   return (
-    (await prisma.userPreference.findFirst({ where: { userId } }))?.[key] ||
-    undefined
+    (await prisma.userPreference.findFirst({ where: { userId, domainId } }))?.[
+      key
+    ] || undefined
   );
 }
 
 export async function getUserPreferences<Keys extends UserPreferenceKeys>(
+  domainId: string,
   userId: string,
   keys: Keys[]
 ) {
   return Object.fromEntries(
     await Promise.all(
       keys.map(
-        async (key) => [key, await getUserPreference(userId, key)] as const
+        async (key) =>
+          [key, await getUserPreference(domainId, userId, key)] as const
       )
     )
   ) as { [k in Keys]: Awaited<ReturnType<typeof getUserPreference>> };
 }
 
 export async function setUserPreference(
+  domainId: string,
   userId: string,
   preference: UserPreferenceKeys,
   value: string | null
@@ -43,17 +48,18 @@ export async function setUserPreference(
   return await prisma.userPreference.upsert({
     create: { [preference]: value, userId },
     update: { [preference]: value },
-    where: { userId }
+    where: { userId_domainId: { userId, domainId } }
   });
 }
 
 export async function setUserPreferences(
+  domainId: string,
   userId: string,
   preferences: { [key in UserPreferenceKeys]: string | null }
 ) {
   return await prisma.userPreference.upsert({
     create: { ...preferences, userId },
     update: preferences,
-    where: { userId }
+    where: { userId_domainId: { userId, domainId } }
   });
 }

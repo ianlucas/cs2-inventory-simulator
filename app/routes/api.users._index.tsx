@@ -8,9 +8,11 @@ import { z } from "zod";
 import { prisma } from "~/db.server";
 import { isValidApiRequest } from "~/middlewares/is-valid-api-request.server";
 import { API_SCOPE } from "~/models/api-credential.server";
+import { resolveDomain } from "~/models/domain.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await isValidApiRequest(request, [API_SCOPE]);
+  const domainId = await resolveDomain(request);
   const url = new URL(request.url);
   const page = z
     .string()
@@ -43,13 +45,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
     orderBy: {
       syncedAt: "desc"
     },
-    where:
-      search.length > 0
+    where: {
+      domainId,
+      ...(search.length > 0
         ? {
             name: { search },
             id: { search }
           }
-        : undefined
+        : undefined)
+    }
   });
   return {
     results,

@@ -119,15 +119,16 @@ export async function runUserInventoryCleanUp() {
   await prisma.userCache.deleteMany();
   const users = await prisma.user.findMany({
     select: {
-      id: true
+      id: true,
+      domainId: true
     }
   });
-  for (const { id } of users) {
+  for (const { id, domainId } of users) {
     const { inventory } = await prisma.user.findUniqueOrThrow({
       select: {
         inventory: true
       },
-      where: { id }
+      where: { id_domainId: { id, domainId } }
     });
     if (inventory) {
       const parsed = JSON.parse(inventory) as CS_BaseInventoryItem[];
@@ -140,7 +141,7 @@ export async function runUserInventoryCleanUp() {
         report = [...report, ...reporting];
         await prisma.user.update({
           data: { inventory: JSON.stringify(items) },
-          where: { id }
+          where: { id_domainId: { id, domainId } }
         });
       }
     }

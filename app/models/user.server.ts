@@ -9,11 +9,14 @@ import { badRequest, conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
 import { getRule } from "./rule.server";
 
-export async function upsertUser(user: {
-  avatar: { medium: string };
-  nickname: string;
-  steamID: string;
-}) {
+export async function upsertUser(
+  domainId: string,
+  user: {
+    avatar: { medium: string };
+    nickname: string;
+    steamID: string;
+  }
+) {
   const data = {
     avatar: user.avatar.medium,
     name: user.nickname
@@ -31,15 +34,23 @@ export async function upsertUser(user: {
         ...data
       },
       where: {
-        id: user.steamID
+        id_domainId: {
+          id: user.steamID,
+          domainId
+        }
       }
     })
   ).id;
 }
 
-export async function findUniqueUser(userId: string) {
+export async function findUniqueUser(domainId: string, userId: string) {
   return await prisma.user.findUniqueOrThrow({
-    where: { id: userId }
+    where: {
+      id_domainId: {
+        id: userId,
+        domainId
+      }
+    }
   });
 }
 
@@ -55,6 +66,7 @@ export async function existsUser(userId: string) {
 }
 
 export async function updateUserInventory(
+  domainId: string,
   userId: string,
   items: CS_BaseInventoryItem[]
 ) {
@@ -66,16 +78,23 @@ export async function updateUserInventory(
       inventory: JSON.stringify(items),
       syncedAt: new Date()
     },
-    where: { id: userId }
+    where: {
+      id_domainId: {
+        id: userId,
+        domainId
+      }
+    }
   });
 }
 
 export async function manipulateUserInventory({
+  domainId,
   manipulate,
   rawInventory,
   syncedAt,
   userId
 }: {
+  domainId: string;
   manipulate:
     | ((inventory: CS_Inventory) => void)
     | ((inventory: CS_Inventory) => Promise<void>);
@@ -96,7 +115,7 @@ export async function manipulateUserInventory({
   if (syncedAt !== undefined) {
     const { syncedAt: currentSyncedAt } = await prisma.user.findUniqueOrThrow({
       select: { syncedAt: true },
-      where: { id: userId }
+      where: { id_domainId: { id: userId, domainId } }
     });
     if (syncedAt !== currentSyncedAt.getTime()) {
       throw conflict;
@@ -110,6 +129,6 @@ export async function manipulateUserInventory({
       syncedAt: new Date(),
       inventory: JSON.stringify(inventory.export())
     },
-    where: { id: userId }
+    where: { id_domainId: { id: userId, domainId } }
   });
 }

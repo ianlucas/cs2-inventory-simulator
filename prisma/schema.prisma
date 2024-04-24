@@ -14,12 +14,15 @@ datasource db {
 }
 
 model User {
+  @@id([id, domainId])
   authTokens ApiAuthToken[]
   avatar String
   caches UserCache[]
   createdAt DateTime @default(now())
+  domain Domain? @relation(fields: [domainId], references: [id])
+  domainId String @default("localhost")
   groups UserGroup[]
-  id String @id @unique
+  id String
   inventory String?
   name String
   overwrites UserRule[]
@@ -29,23 +32,26 @@ model User {
 }
 
 model UserCache {
-  @@id([url, userId])
+  @@id([url, userId, domainId])
   args String?
   body String
+  domainId String @default("localhost")
   timestamp DateTime
   url String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId, domainId], references: [id, domainId], onDelete: Cascade)
   userId String
 }
 
 model UserPreference {
+  @@id([userId, domainId])
   background String?
+  domainId String @default("localhost")
   hideFilters String?
   hideFreeItems String?
   language String?
   statsForNerds String?
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @id
+  user User @relation(fields: [userId, domainId], references: [id, domainId], onDelete: Cascade)
+  userId String
 }
 
 model ApiCredential {
@@ -61,8 +67,9 @@ model ApiAuthToken {
   apiKey String
   createdAt DateTime @default(now())
   credential ApiCredential @relation(fields: [apiKey], references: [apiKey], onDelete: Cascade)
+  domainId String @default("localhost")
   token String @id @default(uuid())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId, domainId], references: [id, domainId], onDelete: Cascade)
   userId String
 }
 
@@ -75,10 +82,11 @@ model Rule {
 }
 
 model UserRule {
-  @@id([name, userId])
+  @@id([name, userId, domainId])
+  domainId String @default("localhost")
   name String
   rule Rule @relation(fields: [name], references: [name], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId, domainId], references: [id, domainId], onDelete: Cascade)
   userId String
   value String
 }
@@ -91,10 +99,11 @@ model Group {
 }
 
 model UserGroup {
-  @@id([groupId, userId])
+  @@id([groupId, userId, domainId])
+  domainId String @default("localhost")
   group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId, domainId], references: [id, domainId], onDelete: Cascade)
   userId String
 }
 
@@ -105,4 +114,11 @@ model GroupRule {
   name String
   rule Rule @relation(fields: [name], references: [name], onDelete: Cascade)
   value String
+}
+
+model Domain {
+  id String @id
+  image String?
+  expiresAt DateTime?
+  users User[]
 }

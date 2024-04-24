@@ -32,6 +32,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       });
     },
     mimeType: "application/json",
+    request,
     throwBody: {},
     url: ApiEquippedV3UserIdJsonUrl,
     userId

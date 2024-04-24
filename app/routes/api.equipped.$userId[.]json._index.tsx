@@ -18,6 +18,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     args: null,
     generate,
     mimeType: "application/json",
+    request,
     throwBody: {},
     url: ApiEquippedUserIdJsonUrl,
     userId

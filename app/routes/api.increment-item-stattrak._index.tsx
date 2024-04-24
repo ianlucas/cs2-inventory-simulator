@@ -11,6 +11,7 @@ import {
   STATTRAK_INCREMENT_SCOPE,
   isApiKeyValid
 } from "~/models/api-credential.server";
+import { resolveDomain } from "~/models/domain.server";
 import {
   existsUser,
   findUniqueUser,
@@ -29,6 +30,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (request.method !== "POST") {
     throw notFound;
   }
+  const domainId = await resolveDomain(request);
   const { apiKey, userId, targetUid } = z
     .object({
       apiKey: z.string(),
@@ -46,8 +48,9 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   try {
-    const { inventory: rawInventory } = await findUniqueUser(userId);
+    const { inventory: rawInventory } = await findUniqueUser(domainId, userId);
     await manipulateUserInventory({
+      domainId,
       userId,
       rawInventory,
       manipulate(inventory) {
