@@ -21,6 +21,7 @@ import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { useInventory, useUser } from "./app-context";
+import { useIsSyncing } from "./hooks/use-sync-state";
 import { UnlockCaseContainer } from "./unlock-case-container";
 import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
 
@@ -45,6 +46,7 @@ export function UnlockCase({
   onClose: () => void;
 }) {
   const user = useUser();
+  const isSyncing = useIsSyncing();
   const [inventory, setInventory] = useInventory();
   const [items, setItems] = useState<
     ReturnType<typeof CS_Economy.unlockCase>[]
@@ -54,6 +56,7 @@ export function UnlockCase({
   const [unlockedItem, setUnlockedItem] =
     useState<ReturnType<typeof CS_Economy.unlockCase>>();
   const [hideCaseContents, setHideCaseContents] = useState(false);
+
   const { data: caseItem } = useInventoryItem(caseUid);
   const keyItem = useTryInventoryItem(keyUid)?.data;
   const wait = useTimer();
@@ -107,6 +110,7 @@ export function UnlockCase({
                 caseItem={caseItem}
                 hideCaseContents={hideCaseContents}
                 isDisplaying={isDisplaying}
+                isSyncing={isSyncing}
                 items={items}
                 keyItem={keyItem}
                 onClose={onClose}

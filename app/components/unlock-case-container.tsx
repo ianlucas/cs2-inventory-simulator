@@ -20,6 +20,7 @@ export function UnlockCaseContainer({
   caseItem,
   hideCaseContents,
   isDisplaying,
+  isSyncing,
   items,
   keyItem,
   onClose,
@@ -29,6 +30,7 @@ export function UnlockCaseContainer({
   caseItem: CS_Item;
   hideCaseContents: boolean;
   isDisplaying: boolean;
+  isSyncing: boolean;
   items: ReturnType<typeof CS_Economy.unlockCase>[];
   keyItem?: CS_Item;
   onClose: () => void;
@@ -75,7 +77,7 @@ export function UnlockCaseContainer({
             }
             right={
               <>
-                {canUnlock ? (
+                {canUnlock && !isSyncing ? (
                   <ModalButton
                     children={translate("CaseUnlockContainer")}
                     disabled={!canUnlock}
