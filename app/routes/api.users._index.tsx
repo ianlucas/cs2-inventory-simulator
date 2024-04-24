@@ -24,7 +24,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
       avatar: true,
       id: true,
       name: true,
-      syncedAt: true,
       updatedAt: true,
       groups: {
         select: {
