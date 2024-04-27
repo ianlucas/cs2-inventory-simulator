@@ -84,9 +84,10 @@ export function useTranslationChecksum() {
 
 export function AppProvider({
   children,
+  logo,
   preferences,
-  translation: { checksum },
   rules,
+  translation: { checksum },
   user
 }: Omit<
   ContextType<typeof AppContext>,
@@ -184,6 +185,7 @@ export function AppProvider({
         inventory,
         inventoryFilter,
         items,
+        logo,
         preferences,
         requireAuth: retrieveUserId() !== undefined,
         rules,

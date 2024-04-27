@@ -22,3 +22,20 @@ export async function isValidDomain(hostname: string) {
     })) !== null
   );
 }
+
+export async function getDomainImage(request: Request) {
+  const hostname = getRequestHostname(request);
+  return (
+    (
+      await prisma.domain.findFirst({
+        select: {
+          image: true
+        },
+        where: {
+          hostname,
+          OR: [{ expiresAt: null }, { expiresAt: { gte: new Date() } }]
+        }
+      })
+    )?.image ?? undefined
+  );
+}
