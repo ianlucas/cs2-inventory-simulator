@@ -6,7 +6,6 @@
 import { CS_Economy } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { useFreeze } from "~/components/hooks/use-freeze";
 import { useInput } from "~/components/hooks/use-input";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
@@ -15,6 +14,7 @@ import {
   AddWithNametagAction,
   RenameItemAction
 } from "~/routes/api.action.sync._index";
+import { playSound } from "~/utils/sound";
 import { useInventory, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { ItemImage } from "./item-image";
@@ -35,20 +35,14 @@ export function RenameItem({
   const sync = useSync();
   const nameItemString = useNameItemString();
   const [inventory, setInventory] = useInventory();
-
-  const freeItems = useFreeze(() =>
-    CS_Economy.filterItems({
-      free: true
-    }).map((item) => item.id)
-  );
   const [nametag, setNametag] = useInput("");
 
   const inventoryItem = useInventoryItem(targetUid);
   const { data: targetItem } = inventoryItem;
-  const isRenamingFreeItem = freeItems.includes(targetItem.id);
 
   function handleRename() {
-    if (targetUid < 0 && isRenamingFreeItem) {
+    if (targetUid < 0 && targetItem.free) {
+      playSound("inventory_new_item_accept");
       sync({
         type: AddWithNametagAction,
         toolUid: toolUid,
@@ -105,7 +99,7 @@ export function RenameItem({
                       disabled={
                         (nametag !== "" &&
                           !CS_Economy.safeValidateNametag(nametag)) ||
-                        (nametag === "" && isRenamingFreeItem)
+                        (nametag === "" && targetItem.free)
                       }
                       variant="primary"
                       onClick={handleRename}
