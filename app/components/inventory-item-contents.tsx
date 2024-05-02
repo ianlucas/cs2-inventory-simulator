@@ -20,7 +20,7 @@ export function InventoryItemContents({
   const nameItemString = useNameItemString();
 
   return (
-    <div className="mt-4 text-xs">
+    <div className="mt-4">
       <div className="text-neutral-400">
         {unlockedItem === undefined
           ? translate("InventoryItemContainsOne")
