@@ -3,10 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item, CS_TEAM_CT, CS_TEAM_T } from "@ianlucas/cs2-lib";
+import { CS_TEAM_CT, CS_TEAM_T, CS_Team } from "@ianlucas/cs2-lib";
 import { useTranslate } from "./app-context";
 
-export function InventoryItemTeams({ item: { teams } }: { item: CS_Item }) {
+export function InventoryItemTeams({ teams }: { teams?: CS_Team[] }) {
   const translate = useTranslate();
 
   const hasCT = teams?.includes(CS_TEAM_CT);

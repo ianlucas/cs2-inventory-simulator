@@ -21,20 +21,10 @@ import {
 } from "~/utils/inventory";
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
-import {
-  useInventory,
-  usePreferences,
-  useRules,
-  useTranslate
-} from "./app-context";
-import { InventoryItemContents } from "./inventory-item-contents";
+import { useInventory, useRules, useTranslate } from "./app-context";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
-import { InventoryItemName } from "./inventory-item-name";
-import { InventoryItemSeed } from "./inventory-item-seed";
-import { InventoryItemStatTrak } from "./inventory-item-stattrak";
-import { InventoryItemTeams } from "./inventory-item-teams";
+import { InventoryItemHover } from "./inventory-item-hover";
 import { InventoryItemTile } from "./inventory-item-tile";
-import { InventoryItemWear } from "./inventory-item-wear";
 import { alert } from "./modal-generic";
 
 export function InventoryItem({
@@ -93,7 +83,6 @@ export function InventoryItem({
     inventoryItemEquipHideType,
     inventoryStorageUnitMaxItems
   } = useRules();
-  const { statsForNerds } = usePreferences();
   const [inventory] = useInventory();
 
   const {
@@ -134,10 +123,6 @@ export function InventoryItem({
   const canUnequipT = isEquippable && item.equippedT === true;
   const canUnequipCT = isEquippable && item.equippedCT === true;
 
-  const hasStatTrak = item.stattrak !== undefined;
-  const hasWear = !data.free && CS_Economy.hasWear(data);
-  const hasSeed = !data.free && CS_Economy.hasSeed(data);
-  const hasAttributes = hasWear || hasSeed;
   const canSwapStatTrak = CS_Economy.isStatTrakSwapTool(data);
   const canRename = CS_Economy.isNametagTool(data);
   const canApplySticker =
@@ -150,14 +135,9 @@ export function InventoryItem({
     inventoryItemAllowScrapeSticker &&
     CS_Economy.hasStickers(data) &&
     (item.stickers ?? []).filter((id) => id !== CS_NONE).length > 0;
-  const isCase = CS_Economy.isCase(data);
   const canUnlockContainer =
     inventoryItemAllowUnlockContainer &&
     UNLOCKABLE_ITEM_TYPE.includes(data.type);
-  const contentsItem =
-    item.caseid !== undefined ? CS_Economy.getById(item.caseid) : item.data;
-  const hasContents = contentsItem.contents !== undefined;
-  const hasTeams = data.teams !== undefined;
   const hasNametag = item.nametag !== undefined;
   const isStorageUnit = CS_Economy.isStorageUnitTool(data);
   const isEditable = EDITABLE_ITEM_TYPE.includes(data.type);
@@ -355,31 +335,12 @@ export function InventoryItem({
       )}
       {!isFreeInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
-          <div
-            className={clsx(
-              "z-20 rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none",
-              !isCase && "lg:w-[440px]"
-            )}
-            ref={hoverRefs.setFloating}
+          <InventoryItemHover
+            forwardRef={hoverRefs.setFloating}
             style={hoverStyles}
             {...getHoverFloatingProps()}
-          >
-            <InventoryItemName inventoryItem={item} />
-            {hasTeams && <InventoryItemTeams item={item.data} />}
-            {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
-            {hasContents && (
-              <InventoryItemContents
-                item={contentsItem}
-                unlockedItem={!isCase ? data : undefined}
-              />
-            )}
-            {statsForNerds && hasAttributes && (
-              <div className="mt-2 flex flex-col gap-2">
-                {hasWear && <InventoryItemWear inventoryItem={item} />}
-                {hasSeed && <InventoryItemSeed inventoryItem={item} />}
-              </div>
-            )}
-          </div>
+            item={item}
+          />
         </FloatingFocusManager>
       )}
     </>
