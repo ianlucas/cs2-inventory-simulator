@@ -7,22 +7,27 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 
 ## Current rules
 
+### `appCountry`
+
+- Country of the application (ISO-3166-1 alpha-2 code). This will change the language of the application if it's available for the respective country (e.g. `br` uses `brazilian` translation).
+- **Type:** `string`
+- **Default:** `us`
+
 ### `steamApiKey`
 
 - Steam API Key is used to retrieve user information from Steam.
 - **Type:** `string`
-
-> [!CAUTION]  
-> Authentication requires a valid Steam API Key.
+- **Default:** Whatever is set on environment variable `STEAM_API_KEY` or `YOUR_STEAM_API_KEY_GOES_HERE`.
 
 ### `steamCallbackUrl`
 
 - This URL is called to validate the user's authentication on Steam.
 - **Type:** `string`
 - **Expected value:** `https://your.domain/sign-in/steam/callback`
+- **Default:** Whatever is set on environment variable `STEAM_CALLBACK_URL` or `http://localhost/sign-in/steam/callback`.
 
 > [!CAUTION]  
-> You need to setup this URL for the authentication to work.
+> Both `steamApiKey` and `steamCallbackUrl` are required for authentication to work.
 
 ### `inventoryMaxItems`
 

@@ -5,6 +5,7 @@
 
 import { Session } from "@remix-run/node";
 import { languageNames, languages } from "~/data/languages";
+import { getRule } from "~/models/rule.server";
 
 export function isValidLanguage(language: string) {
   return languageNames.includes(language);
@@ -27,7 +28,7 @@ function getLangFromLanguage(name: string) {
 }
 
 export async function getLanguage(session: Session, ipCountry: string | null) {
-  const country = (ipCountry || "us").toLowerCase();
+  const country = (ipCountry || (await getRule("appCountry"))).toLowerCase();
   const language =
     (session.get("language") as string | null | undefined) ||
     getLanguageFromCountry(country);

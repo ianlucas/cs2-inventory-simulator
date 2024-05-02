@@ -29,7 +29,11 @@ const numberRulesNames = [
   "inventoryStorageUnitMaxItems"
 ] as const;
 const numberArrayRulesNames = ["craftHideId", "editHideId"] as const;
-const stringRulesNames = ["steamApiKey", "steamCallbackUrl"] as const;
+const stringRulesNames = [
+  "steamApiKey",
+  "steamCallbackUrl",
+  "appCountry"
+] as const;
 const stringArrayRulesName = [
   "craftHideCategory",
   "craftHideModel",
@@ -287,6 +291,11 @@ export async function setupRules() {
     name: "inventoryStorageUnitMaxItems",
     type: "number",
     input: 32
+  });
+  await addRule({
+    name: "appCountry",
+    type: "string",
+    input: "us"
   });
   await addRule({
     name: "steamApiKey",
