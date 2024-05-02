@@ -3,7 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_InventoryItem } from "@ianlucas/cs2-lib";
+import {
+  CS_Economy,
+  CS_InventoryItem,
+  CS_TEAM_CT,
+  CS_TEAM_T
+} from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { ComponentProps } from "react";
 import { usePreferences } from "./app-context";
@@ -28,11 +33,16 @@ export function InventoryItemHover({
   const contentsItem =
     item.caseid !== undefined ? CS_Economy.getById(item.caseid) : item.data;
   const hasContents = contentsItem.contents !== undefined;
-  const hasTeams = data.teams !== undefined;
   const hasWear = !data.free && CS_Economy.hasWear(data);
   const hasSeed = !data.free && CS_Economy.hasSeed(data);
   const hasAttributes = hasWear || hasSeed;
   const hasStatTrak = item.stattrak !== undefined;
+
+  // We don't treat graffiti as equippable for a particular team, but in-game it
+  // shows as CT or T, if we were to change cs2-lib it would be a breaking
+  // change for graffiti logic, so we just update here.
+  const teams = data.type === "graffiti" ? [CS_TEAM_CT, CS_TEAM_T] : data.teams;
+  const hasTeams = teams !== undefined;
 
   return (
     <div
@@ -43,8 +53,8 @@ export function InventoryItemHover({
       ref={forwardRef}
       {...props}
     >
-      <InventoryItemName inventoryItem={item} />
-      {hasTeams && <InventoryItemTeams teams={item.data.teams} />}
+      <InventoryItemName item={item} />
+      {hasTeams && <InventoryItemTeams teams={teams} />}
       {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
       {hasContents && (
         <InventoryItemContents
