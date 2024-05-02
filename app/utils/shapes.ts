@@ -61,6 +61,7 @@ const baseServerInventoryItemProps = {
 
 const serverInventoryItemProps = {
   ...baseServerInventoryItemProps,
+  caseid: nonNegativeInt.optional(),
   storage: z.array(z.object(baseServerInventoryItemProps)).optional()
 };
 

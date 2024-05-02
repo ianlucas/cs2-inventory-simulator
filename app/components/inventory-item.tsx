@@ -150,10 +150,13 @@ export function InventoryItem({
     inventoryItemAllowScrapeSticker &&
     CS_Economy.hasStickers(data) &&
     (item.stickers ?? []).filter((id) => id !== CS_NONE).length > 0;
+  const isCase = CS_Economy.isCase(data);
   const canUnlockContainer =
     inventoryItemAllowUnlockContainer &&
     UNLOCKABLE_ITEM_TYPE.includes(data.type);
-  const hasContents = data.contents !== undefined;
+  const contentsItem =
+    item.caseid !== undefined ? CS_Economy.getById(item.caseid) : item.data;
+  const hasContents = contentsItem.contents !== undefined;
   const hasTeams = data.teams !== undefined;
   const hasNametag = item.nametag !== undefined;
   const isStorageUnit = CS_Economy.isStorageUnitTool(data);
@@ -353,7 +356,10 @@ export function InventoryItem({
       {!isFreeInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <div
-            className="z-20 rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none lg:w-[440px]"
+            className={clsx(
+              "z-20 rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none",
+              !isCase && "lg:w-[440px]"
+            )}
             ref={hoverRefs.setFloating}
             style={hoverStyles}
             {...getHoverFloatingProps()}
@@ -361,7 +367,12 @@ export function InventoryItem({
             <InventoryItemName inventoryItem={item} />
             {hasTeams && <InventoryItemTeams item={item.data} />}
             {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
-            {hasContents && <InventoryItemContents item={item.data} />}
+            {hasContents && (
+              <InventoryItemContents
+                item={contentsItem}
+                unlockedItem={!isCase ? data : undefined}
+              />
+            )}
             {statsForNerds && hasAttributes && (
               <div className="mt-2 flex flex-col gap-2">
                 {hasWear && <InventoryItemWear inventoryItem={item} />}
