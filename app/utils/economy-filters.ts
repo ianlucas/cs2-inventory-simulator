@@ -39,12 +39,6 @@ export const ECONOMY_ITEM_FILTERS = [
     type: "weapon" as const
   },
   {
-    hasModel: true,
-    icon: "knife",
-    label: "Knife",
-    type: "melee" as const
-  },
-  {
     category: "equipment",
     hasModel: true,
     icon: "equipment",
@@ -52,6 +46,13 @@ export const ECONOMY_ITEM_FILTERS = [
     label: "Equipment",
     type: "weapon" as const
   },
+  {
+    hasModel: true,
+    icon: "knife",
+    label: "Knife",
+    type: "melee" as const
+  },
+
   {
     hasModel: true,
     icon: "glove",

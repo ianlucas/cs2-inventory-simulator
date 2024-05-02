@@ -16,6 +16,7 @@ import { usePreferences } from "./app-context";
 import { InventoryItemContents } from "./inventory-item-contents";
 import { InventoryItemExterior } from "./inventory-item-exterior";
 import { InventoryItemName } from "./inventory-item-name";
+import { InventoryItemRarity } from "./inventory-item-rarity";
 import { InventoryItemSeed } from "./inventory-item-seed";
 import { InventoryItemStatTrak } from "./inventory-item-stattrak";
 import { InventoryItemTeams } from "./inventory-item-teams";
@@ -47,8 +48,6 @@ export function InventoryItemHover({
   const teams = data.type === "graffiti" ? [CS_TEAM_CT, CS_TEAM_T] : data.teams;
   const hasTeams = teams !== undefined;
 
-  const hasInfo = hasTeams;
-
   return (
     <div
       className={clsx(
@@ -59,12 +58,11 @@ export function InventoryItemHover({
       {...props}
     >
       <InventoryItemName item={item} />
-      {hasInfo && (
-        <div className="mt-2.5 grid items-center gap-1 border-b border-t border-neutral-700/70 p-2 [grid-template-columns:auto_1fr] [grid-template-rows:auto_auto]">
-          {hasWear && <InventoryItemExterior wear={wear} />}
-          {hasTeams && <InventoryItemTeams teams={teams} />}
-        </div>
-      )}
+      <div className="mt-2.5 grid items-center gap-1 border-b border-t border-neutral-700/70 p-2 [grid-template-columns:auto_1fr] [grid-template-rows:auto_auto]">
+        <InventoryItemRarity data={item.data} />
+        {hasWear && <InventoryItemExterior wear={wear} />}
+        {hasTeams && <InventoryItemTeams teams={teams} />}
+      </div>
       {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
       {hasContents && (
         <InventoryItemContents

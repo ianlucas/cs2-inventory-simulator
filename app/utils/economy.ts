@@ -8,6 +8,13 @@ import {
   CS_Item,
   CS_ItemTranslations,
   CS_MAX_SEED,
+  CS_RARITY_ANCIENT_COLOR,
+  CS_RARITY_COMMON_COLOR,
+  CS_RARITY_IMMORTAL_COLOR,
+  CS_RARITY_LEGENDARY_COLOR,
+  CS_RARITY_MYTHICAL_COLOR,
+  CS_RARITY_RARE_COLOR,
+  CS_RARITY_UNCOMMON_COLOR,
   CS_STICKER_WEAR_FACTOR,
   CS_WEAR_FACTOR
 } from "@ianlucas/cs2-lib";
@@ -24,6 +31,15 @@ export const COUNTABLE_ITEM_TYPES = [
   "tool"
 ];
 export const FREE_MODEL_IN_NAME_TYPES = ["musickit"];
+export const RARITY_LABEL: Record<string, string> = {
+  [CS_RARITY_COMMON_COLOR]: "Common",
+  [CS_RARITY_UNCOMMON_COLOR]: "Uncommon",
+  [CS_RARITY_RARE_COLOR]: "Rare",
+  [CS_RARITY_MYTHICAL_COLOR]: "Mythical",
+  [CS_RARITY_LEGENDARY_COLOR]: "Legendary",
+  [CS_RARITY_ANCIENT_COLOR]: "Ancient",
+  [CS_RARITY_IMMORTAL_COLOR]: "Immortal"
+};
 
 export function translateItems(itemTranslation: CS_ItemTranslations[number]) {
   CS_Economy.applyTranslation(itemTranslation);
@@ -65,4 +81,59 @@ export function createFakeItem(
     ...baseItem,
     ...attributes
   } satisfies CS_Item;
+}
+
+export function getRarityItemName(item: CS_Item) {
+  const [model] = item.name.split(" | ");
+  if (item.type === "weapon") {
+    if (item.category == "secondary") {
+      return "Pistol";
+    }
+    if (item.category == "rifle") {
+      if (["AWP", "SSG 08", "SCAR 20", "G3SG1"].includes(model)) {
+        return "SniperRifle";
+      }
+      return "Rifle";
+    }
+    if (item.category === "smg") {
+      return "SMG";
+    }
+    if (item.category === "heavy") {
+      if (["Negev", "M249"].includes(model)) {
+        return "Machinegun";
+      }
+      return "Shotgun";
+    }
+    if (item.category === "equipment") {
+      return "Equipment";
+    }
+  }
+  if (item.type === "tool") {
+    if (item.id === 12032) {
+      return "Contract";
+    }
+    return "Tool";
+  }
+  switch (item.type) {
+    case "melee":
+      return "Knife";
+    case "glove":
+      return "Gloves";
+    case "sticker":
+      return "Sticker";
+    case "agent":
+      return "Agent";
+    case "patch":
+      return "Patch";
+    case "musickit":
+      return "MusicKit";
+    case "graffiti":
+      return "Graffiti";
+    case "collectible":
+      return "Collectible";
+    case "case":
+      return "Container";
+    case "key":
+      return "Key";
+  }
 }
