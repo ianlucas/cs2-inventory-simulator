@@ -19,8 +19,8 @@ export function InventoryItemTeams({ teams }: { teams?: CS_Team[] }) {
       className="flex items-center gap-1"
       label={translate("InventoryItemTeam")}
     >
-      {hasCT && <img src="/icons/ct.svg" className="h-5" alt="CT" />}
-      {hasT && <img src="/icons/t.svg" className="h-5" alt="T" />}
+      {hasCT && <img src="/icons/ct.svg" className="h-4" alt="CT" />}
+      {hasT && <img src="/icons/t.svg" className="h-4" alt="T" />}
       <span>
         {hasAny
           ? translate("InventoryItemTeamAny")
