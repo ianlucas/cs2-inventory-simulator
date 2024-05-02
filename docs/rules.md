@@ -17,14 +17,14 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 
 - Steam API Key is used to retrieve user information from Steam.
 - **Type:** `string`
-- **Default:** Whatever is set on environment variable `STEAM_API_KEY` or `YOUR_STEAM_API_KEY_GOES_HERE`.
+- **Default:** Either environment variable `STEAM_API_KEY` or `YOUR_STEAM_API_KEY_GOES_HERE`.
 
 ### `steamCallbackUrl`
 
 - This URL is called to validate the user's authentication on Steam.
 - **Type:** `string`
 - **Expected value:** `https://your.domain/sign-in/steam/callback`
-- **Default:** Whatever is set on environment variable `STEAM_CALLBACK_URL` or `http://localhost/sign-in/steam/callback`.
+- **Default:** Either environment variable `STEAM_CALLBACK_URL` or `http://localhost/sign-in/steam/callback`.
 
 > [!CAUTION]  
 > Both `steamApiKey` and `steamCallbackUrl` are required for authentication to work.
