@@ -4,12 +4,16 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Economy, CS_ITEMS, CS_Item } from "@ianlucas/cs2-lib";
+import english from "@ianlucas/cs2-lib/assets/translations/items-english.json";
 import { describe, expect, test } from "vitest";
 import { createFakeInventoryItem } from "~/utils/inventory";
 import { has } from "~/utils/misc";
 import { nameItemFactory } from "./use-name-item";
 
-CS_Economy.use(CS_ITEMS);
+CS_Economy.use({
+  items: CS_ITEMS,
+  translation: english
+});
 
 const translate = (token: string, ...values: string[]) => "StatTrak™";
 const nameItem = nameItemFactory(translate);
