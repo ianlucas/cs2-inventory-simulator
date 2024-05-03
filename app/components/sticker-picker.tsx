@@ -146,6 +146,11 @@ export function StickerPicker({
                   {translate("StickerPickerNA")}
                 </div>
               )}
+              {sticker !== CS_NONE && (
+                <div className="absolute bottom-0 right-1 font-black drop-shadow-lg [-webkit-text-stroke:1px_black]">
+                  {(value.wears[index] * 100).toFixed(0)}%
+                </div>
+              )}
               <div className="absolute left-0 top-0 h-full w-full transition-all hover:shadow-[inset_0_0_0_3px_#fff]"></div>
             </button>
           );
