@@ -147,7 +147,7 @@ export default function Settings() {
       <div className="mt-4 px-4">
         {inventory.size() > 0 && (
           <button
-            className="flex w-full items-center gap-2 rounded border border-neutral-500/20 px-2 py-1 text-red-500 transition-all hover:border-red-500"
+            className="flex w-full cursor-default items-center gap-2 rounded border border-neutral-500/20 px-2 py-1 text-red-500 transition-all hover:border-red-500"
             onClick={handleRemoveAllItems}
           >
             <FontAwesomeIcon icon={faTrashCan} className="h-4" />

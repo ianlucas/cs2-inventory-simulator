@@ -190,7 +190,7 @@ export const english = {
   SettingsStatsForNerds: "Stats for nerds",
   SettingsHideFilters: "Hide filters",
   SettingsHideFreeItems: "Hide default items",
-  SettingsRemoveAllItems: "Remove all items from my inventory",
+  SettingsRemoveAllItems: "Reset my inventory",
   SettingsConfirmRemoveAllItems: `Are you sure you want to remove all items from your inventory?\n\nTHIS ACTION CANNOT BE UNDONE.`,
   SettingsSave: "Save",
   CaseUnlockContainer: "Unlock Container",

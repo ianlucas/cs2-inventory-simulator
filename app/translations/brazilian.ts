@@ -185,7 +185,7 @@ export const brazilian = {
   SettingsStatsForNerds: "Estatísticas para Nerds",
   SettingsHideFilters: "Ocultar Filtros",
   SettingsHideFreeItems: "Ocultar Itens Gratuitos",
-  SettingsRemoveAllItems: "Remover todos os itens do meu inventário",
+  SettingsRemoveAllItems: "Redefinir meu inventário",
   SettingsConfirmRemoveAllItems: `Tem certeza de que deseja remover todos os itens do seu inventário?\n\nESSA AÇÃO NÃO PODE SER DESFEITA.`,
   SettingsSave: "Salvar",
   CaseUnlockContainer: "Destrancar recipiente",
