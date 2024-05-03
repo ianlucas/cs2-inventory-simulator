@@ -13,13 +13,15 @@ export function Modal({
   children,
   className,
   fixed,
-  hidden
+  hidden,
+  modalStyles
 }: {
   blur?: boolean;
   children: ReactNode;
   className?: string;
   fixed?: boolean;
   hidden?: boolean;
+  modalStyles?: string;
 }) {
   return (
     <ClientOnly
@@ -28,7 +30,8 @@ export function Modal({
           <div
             className={clsx(
               hidden ? "hidden" : fixed ? "fixed" : "absolute",
-              "left-0 top-0 z-50 flex min-h-full w-full select-none items-center justify-center",
+              modalStyles !== undefined ? modalStyles : "z-50",
+              "left-0 top-0 flex min-h-full w-full select-none items-center justify-center",
               blur && "bg-black/50 lg:bg-transparent lg:backdrop-blur-[2px]"
             )}
           >

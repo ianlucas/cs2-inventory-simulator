@@ -157,7 +157,12 @@ export function StickerPicker({
           );
         })}
       </div>
-      <Modal className="w-[540px] pb-1" hidden={activeIndex === undefined} blur>
+      <Modal
+        modalStyles="z-[60]"
+        className="w-[540px] pb-1"
+        hidden={activeIndex === undefined}
+        blur
+      >
         <div className="flex select-none justify-between px-4 py-2 font-bold">
           <label className="text-sm text-neutral-400">
             {translate("StickerPickerHeader")}
