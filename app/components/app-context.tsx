@@ -19,7 +19,7 @@ import { useTranslation } from "~/components/hooks/use-translation";
 import type { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { pushToSync, sync } from "~/sync";
-import { translateItems } from "~/utils/economy";
+import { updateEconomyTranslation } from "~/utils/economy";
 import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
 import {
   sortItemsByEquipped,
@@ -150,7 +150,7 @@ export function AppProvider({
   }, [user]);
 
   useEffect(() => {
-    translateItems(translation.items);
+    updateEconomyTranslation(translation.items);
     setInventory(new CS_Inventory(inventorySpec));
   }, [translation.items]);
 

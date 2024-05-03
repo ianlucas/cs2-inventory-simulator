@@ -6,6 +6,7 @@
 import { PassThrough } from "node:stream";
 
 import { CS_Economy, CS_ITEMS } from "@ianlucas/cs2-lib";
+import english from "@ianlucas/cs2-lib/assets/translations/items-english.json";
 import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
@@ -17,7 +18,7 @@ import { setupTranslation } from "./translation.server";
 
 const ABORT_DELAY = 5_000;
 
-CS_Economy.use(CS_ITEMS);
+CS_Economy.use({ items: CS_ITEMS, translation: english });
 setupRules().then(() => runUserInventoryCleanUp());
 setupTranslation();
 

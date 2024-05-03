@@ -8,7 +8,10 @@ import { RemixBrowser } from "@remix-run/react";
 import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
 
-CS_Economy.use(CS_ITEMS);
+CS_Economy.use({
+  items: CS_ITEMS,
+  translation: window.$itemsTranslation
+});
 
 startTransition(() => {
   hydrateRoot(

@@ -5,6 +5,7 @@
 
 import {
   CS_Economy,
+  CS_ITEMS,
   CS_Item,
   CS_ItemTranslations,
   CS_MAX_SEED,
@@ -41,8 +42,13 @@ export const RARITY_LABEL: Record<string, string> = {
   [CS_RARITY_IMMORTAL_COLOR]: "Immortal"
 };
 
-export function translateItems(itemTranslation: CS_ItemTranslations[number]) {
-  CS_Economy.applyTranslation(itemTranslation);
+export function updateEconomyTranslation(
+  translation: CS_ItemTranslations[number]
+) {
+  CS_Economy.use({
+    items: CS_ITEMS,
+    translation
+  });
 }
 
 export function isItemCountable(item: CS_Item) {
@@ -83,10 +89,7 @@ export function createFakeItem(
   } satisfies CS_Item;
 }
 
-export function sortByName(
-  a: CS_Item,
-  b: CS_Item
-) {
+export function sortByName(a: CS_Item, b: CS_Item) {
   return a.name.localeCompare(b.name);
 }
 
