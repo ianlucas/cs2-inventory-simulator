@@ -14,11 +14,11 @@ export function InventoryItemStatTrak({
   const translate = useTranslate();
 
   return (
-    <div>
-      <div className="mt-2 text-blue-300">
+    <div className="mt-2">
+      <div className="text-blue-300">
         {translate("InventoryItemStatTrakDesc")}
       </div>
-      <div className="mt-2 text-orange-400">
+      <div className="mt-4 text-orange-400">
         {translate(
           data.type === "musickit"
             ? "InventoryItemMVPStatTrakCount"
