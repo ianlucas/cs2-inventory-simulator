@@ -83,6 +83,13 @@ export function createFakeItem(
   } satisfies CS_Item;
 }
 
+export function sortByName(
+  a: CS_Item,
+  b: CS_Item
+) {
+  return a.name.localeCompare(b.name);
+}
+
 export function getRarityItemName(item: CS_Item) {
   const [model] = item.name.split(" | ");
   if (item.type === "weapon") {

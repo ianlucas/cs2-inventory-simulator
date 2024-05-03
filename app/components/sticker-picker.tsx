@@ -21,7 +21,11 @@ import {
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
-import { stickerWearStringMaxLen, stickerWearToString } from "~/utils/economy";
+import {
+  sortByName,
+  stickerWearStringMaxLen,
+  stickerWearToString
+} from "~/utils/economy";
 import { useRules, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorSelect } from "./editor-select";
@@ -49,7 +53,7 @@ export function StickerPicker({
   const [category, setCategory] = useState("");
   const [search, setSearch] = useInput("");
   const [activeIndex, setActiveIndex] = useState<number>();
-  const stickers = useMemo(() => CS_Economy.getStickers(), []);
+  const stickers = useMemo(() => CS_Economy.getStickers().sort(sortByName), []);
   const categories = useMemo(() => CS_Economy.getStickerCategories(), []);
   const [wear, setWear] = useState(0);
 
@@ -110,13 +114,7 @@ export function StickerPicker({
       ) {
         return false;
       }
-      if (search.length === 0) {
-        return item.category === category;
-      }
       if (category !== "" && item.category !== category) {
-        return false;
-      }
-      if (search.length < 1) {
         return false;
       }
       const name = item.name.toLowerCase();
@@ -153,77 +151,75 @@ export function StickerPicker({
           );
         })}
       </div>
-      {activeIndex !== undefined && (
-        <Modal className="w-[540px] pb-1" blur>
-          <div className="flex select-none justify-between px-4 py-2 font-bold">
-            <label className="text-sm text-neutral-400">
-              {translate("StickerPickerHeader")}
-            </label>
-            <button
-              onClick={handleCloseModal}
-              className="cursor-default text-white/50 hover:text-white"
-            >
-              <FontAwesomeIcon icon={faXmark} className="h-4" />
-            </button>
-          </div>
-          <div className="mb-4 flex flex-col gap-2 px-2 lg:flex-row lg:items-center lg:pl-4 lg:pr-2">
-            <div className="flex flex-1 items-center gap-2">
-              <FontAwesomeIcon icon={faMagnifyingGlass} className="h-4" />
-              <EditorInput
-                value={search}
-                onChange={setSearch}
-                placeholder={translate("StickerPickerSearchPlaceholder")}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faBoxOpen} className="h-4" />
-              <EditorSelect
-                className="w-[192px]"
-                onChange={setCategory}
-                options={categories}
-                placeholder={translate("StickerPickerFilterPlaceholder")}
-                value={category}
-              />
-            </div>
-            <button
-              className="flex h-[24px] cursor-default items-center gap-1 rounded px-2 text-red-500 transition hover:bg-black/30 active:bg-black/60"
-              onClick={handleRemoveSticker}
-            >
-              <FontAwesomeIcon icon={faTrashCan} className="h-4" />
-              <label>{translate("StickerPickerRemove")}</label>
-            </button>
-          </div>
-          <div
-            className={clsx(
-              "m-auto w-[400px] select-none px-4 pb-6 lg:px-0",
-              filtered.length === 0 && "invisible"
-            )}
+      <Modal className="w-[540px] pb-1" hidden={activeIndex === undefined} blur>
+        <div className="flex select-none justify-between px-4 py-2 font-bold">
+          <label className="text-sm text-neutral-400">
+            {translate("StickerPickerHeader")}
+          </label>
+          <button
+            onClick={handleCloseModal}
+            className="cursor-default text-white/50 hover:text-white"
           >
-            <div className="flex select-none items-center gap-4">
-              <label className="w-[150px] font-bold text-neutral-500">
-                {translate("EditorStickerWear")}
-              </label>
-              <EditorStepRangeWithInput
-                inputStyles="w-[68px]"
-                max={CS_MAX_STICKER_WEAR}
-                maxLength={stickerWearStringMaxLen}
-                min={CS_MIN_STICKER_WEAR}
-                onChange={setWear}
-                randomizable
-                step={CS_STICKER_WEAR_FACTOR}
-                stepRangeStyles="flex-1"
-                transform={stickerWearToString}
-                type="float"
-                validate={(value) =>
-                  value >= CS_MIN_STICKER_WEAR && value <= CS_MAX_STICKER_WEAR
-                }
-                value={wear}
-              />
-            </div>
+            <FontAwesomeIcon icon={faXmark} className="h-4" />
+          </button>
+        </div>
+        <div className="mb-4 flex flex-col gap-2 px-2 lg:flex-row lg:items-center lg:pl-4 lg:pr-2">
+          <div className="flex flex-1 items-center gap-2">
+            <FontAwesomeIcon icon={faMagnifyingGlass} className="h-4" />
+            <EditorInput
+              value={search}
+              onChange={setSearch}
+              placeholder={translate("StickerPickerSearchPlaceholder")}
+            />
           </div>
-          <ItemBrowser items={filtered} onClick={handleAddSticker} />
-        </Modal>
-      )}
+          <div className="flex items-center gap-2">
+            <FontAwesomeIcon icon={faBoxOpen} className="h-4" />
+            <EditorSelect
+              className="w-[192px]"
+              onChange={setCategory}
+              options={categories}
+              placeholder={translate("StickerPickerFilterPlaceholder")}
+              value={category}
+            />
+          </div>
+          <button
+            className="flex h-[24px] cursor-default items-center gap-1 rounded px-2 text-red-500 transition hover:bg-black/30 active:bg-black/60"
+            onClick={handleRemoveSticker}
+          >
+            <FontAwesomeIcon icon={faTrashCan} className="h-4" />
+            <label>{translate("StickerPickerRemove")}</label>
+          </button>
+        </div>
+        <div
+          className={clsx(
+            "m-auto w-[400px] select-none px-4 pb-6 lg:px-0",
+            filtered.length === 0 && "invisible"
+          )}
+        >
+          <div className="flex select-none items-center gap-4">
+            <label className="w-[150px] font-bold text-neutral-500">
+              {translate("EditorStickerWear")}
+            </label>
+            <EditorStepRangeWithInput
+              inputStyles="w-[68px]"
+              max={CS_MAX_STICKER_WEAR}
+              maxLength={stickerWearStringMaxLen}
+              min={CS_MIN_STICKER_WEAR}
+              onChange={setWear}
+              randomizable
+              step={CS_STICKER_WEAR_FACTOR}
+              stepRangeStyles="flex-1"
+              transform={stickerWearToString}
+              type="float"
+              validate={(value) =>
+                value >= CS_MIN_STICKER_WEAR && value <= CS_MAX_STICKER_WEAR
+              }
+              value={wear}
+            />
+          </div>
+        </div>
+        <ItemBrowser items={filtered} onClick={handleAddSticker} />
+      </Modal>
     </>
   );
 }

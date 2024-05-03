@@ -19,15 +19,15 @@ export function ItemBrowser({
   onClick?: (item: CS_Item) => void;
 }) {
   return (
-    <GridList itemHeight={64} maxItemsIntoView={maxItemsIntoView}>
-      {items.map((item) => (
+    <GridList itemHeight={64} maxItemsIntoView={maxItemsIntoView} items={items}>
+      {(item) => (
         <ItemButton
           ignoreRarityColor={ignoreRarityColor}
           item={item}
           key={item.id}
           onClick={onClick}
         />
-      ))}
+      )}
     </GridList>
   );
 }

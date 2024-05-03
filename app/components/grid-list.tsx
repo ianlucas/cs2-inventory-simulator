@@ -17,15 +17,17 @@ import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
 
-export function GridList({
+export function GridList<T>({
   children,
   className,
+  items,
   hideScrollbar,
   itemHeight,
   maxItemsIntoView = 6
 }: {
-  children: ReactNode[];
+  children: (item: T) => ReactNode;
   className?: string;
+  items: T[];
   hideScrollbar?: boolean;
   itemHeight: number;
   maxItemsIntoView?: number;
@@ -42,7 +44,7 @@ export function GridList({
   const scrollbar = useRef<ElementRef<"div">>(null);
   const currentIndex = scrollTop / itemHeight;
   const scrollableHeight = maxItemsIntoView * itemHeight;
-  const maxScrollTop = (children.length - maxItemsIntoView) * itemHeight;
+  const maxScrollTop = (items.length - maxItemsIntoView) * itemHeight;
 
   function handleScroll(deltaY: number) {
     if (!scrollable.current) {
@@ -71,7 +73,7 @@ export function GridList({
     if (!scrollable.current || !scrollbar.current) {
       return;
     }
-    const scrollableMaxHeight = children.length * itemHeight;
+    const scrollableMaxHeight = items.length * itemHeight;
     const scrollbarHeight = scrollbar.current.clientHeight;
     const height =
       scrollableMaxHeight > 0
@@ -135,7 +137,7 @@ export function GridList({
   useEffect(() => {
     setScrollTop(0);
     updateScrollbar();
-  }, [children]);
+  }, [items]);
 
   useEffect(() => {
     document.addEventListener("mousemove", handleMouseMove);
@@ -160,7 +162,7 @@ export function GridList({
         onWheel={handleWheel}
         ref={scrollable}
       >
-        {children.length === 0 && (
+        {items.length === 0 && (
           <div
             className="flex select-none items-center justify-center gap-2 bg-gradient-to-r from-transparent via-black/30 to-transparent"
             style={{ height: itemHeight }}
@@ -169,7 +171,10 @@ export function GridList({
             {translate("GridItemNoItemsToDisplay")}
           </div>
         )}
-        {range(maxItemsIntoView).map((index) => children[currentIndex + index])}
+        {range(maxItemsIntoView).map((index) => {
+          const item = items[currentIndex + index];
+          return item !== undefined ? children(item) : null;
+        })}
       </div>
       <div
         className="absolute right-0 top-0 h-full w-2"
@@ -181,7 +186,7 @@ export function GridList({
           <div
             className={clsx(
               "absolute w-full rounded bg-white/30",
-              (hideScrollbar || children.length === 0) && "opacity-0"
+              (hideScrollbar || items.length === 0) && "opacity-0"
             )}
             style={{
               height: scrollbarHeight,
