@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  faBoxOpen,
   faMagnifyingGlass,
+  faTag,
   faTrashCan,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
@@ -31,6 +31,7 @@ import { EditorInput } from "./editor-input";
 import { EditorSelect } from "./editor-select";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { ItemBrowser } from "./item-browser";
+import { ItemEditorLabel } from "./item-editor-label";
 import { ItemImage } from "./item-image";
 import { Modal } from "./modal";
 
@@ -136,22 +137,22 @@ export function StickerPicker({
           return (
             <button
               key={index}
-              className="relative overflow-hidden rounded-lg bg-black/50"
+              className="relative overflow-hidden rounded bg-black/50"
               onClick={handleClickSlot(index)}
             >
               {item !== CS_NONE ? (
                 <ItemImage className="h-[64px] w-[85.33px]" item={item} />
               ) : (
-                <div className="flex h-[64px] w-[85.33px] items-center justify-center text-neutral-700">
+                <div className="flex h-[64px] w-[85.33px] items-center justify-center font-display font-bold text-neutral-700">
                   {translate("StickerPickerNA")}
                 </div>
               )}
               {sticker !== CS_NONE && (
-                <div className="absolute bottom-0 right-1 font-black drop-shadow-lg [-webkit-text-stroke:1px_black]">
+                <div className="text-outline-1 absolute bottom-0 right-1 font-display font-bold drop-shadow-lg">
                   {(value.wears[index] * 100).toFixed(0)}%
                 </div>
               )}
-              <div className="absolute left-0 top-0 h-full w-full transition-all hover:shadow-[inset_0_0_0_3px_#fff]"></div>
+              <div className="absolute left-0 top-0 h-full w-full rounded border-[2.5px] border-transparent transition-all hover:border-white"></div>
             </button>
           );
         })}
@@ -178,7 +179,7 @@ export function StickerPicker({
             />
           </div>
           <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faBoxOpen} className="h-4" />
+            <FontAwesomeIcon icon={faTag} className="h-4" />
             <EditorSelect
               className="w-[192px]"
               onChange={setCategory}
@@ -190,23 +191,24 @@ export function StickerPicker({
           <button
             className="flex h-[24px] cursor-default items-center gap-1 rounded px-2 text-red-500 transition hover:bg-black/30 active:bg-black/60"
             onClick={handleRemoveSticker}
+            title={translate("StickerPickerRemove")}
           >
             <FontAwesomeIcon icon={faTrashCan} className="h-4" />
-            <label>{translate("StickerPickerRemove")}</label>
           </button>
         </div>
         <div
           className={clsx(
-            "m-auto w-[400px] select-none px-4 pb-6 lg:px-0",
+            "m-auto w-[460px] select-none px-4 pb-4 lg:px-0",
             filtered.length === 0 && "invisible"
           )}
         >
-          <div className="flex select-none items-center gap-4">
-            <label className="w-[150px] font-bold text-neutral-500">
-              {translate("EditorStickerWear")}
-            </label>
+          <ItemEditorLabel
+            className="flex select-none items-center gap-4"
+            label={translate("EditorStickerWear")}
+            labelStyles="w-[136px]"
+          >
             <EditorStepRangeWithInput
-              inputStyles="w-[68px]"
+              inputStyles="w-[26px]"
               max={CS_MAX_STICKER_WEAR}
               maxLength={stickerWearStringMaxLen}
               min={CS_MIN_STICKER_WEAR}
@@ -221,7 +223,7 @@ export function StickerPicker({
               }
               value={wear}
             />
-          </div>
+          </ItemEditorLabel>
         </div>
         <ItemBrowser items={filtered} onClick={handleAddSticker} />
       </Modal>

@@ -31,6 +31,7 @@ import { useInventory, useRules, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
+import { ItemEditorLabel } from "./item-editor-label";
 import { ItemEditorName } from "./item-editor-name";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -159,22 +160,19 @@ export function ItemEditor({
       </div>
       <div className="space-y-4">
         {hasStickers && (
-          <div>
-            <label className="w-[76.33px] select-none font-bold text-neutral-500">
-              {translate("EditorStickers")}
-            </label>
+          <ItemEditorLabel label={translate("EditorStickers")}>
             <StickerPicker
               isCrafting={isCrafting}
               value={stickersAttributes}
               onChange={setStickersAttributes}
             />
-          </div>
+          </ItemEditorLabel>
         )}
         {hasNametag && (
-          <div className="flex items-center gap-4">
-            <label className="w-[76.33px] select-none font-bold text-neutral-500">
-              {translate("EditorNametag")}
-            </label>
+          <ItemEditorLabel
+            className="flex items-center gap-4"
+            label={translate("EditorNametag")}
+          >
             <EditorInput
               maxLength={20}
               onChange={setNametag}
@@ -184,13 +182,13 @@ export function ItemEditor({
               }
               value={nametag}
             />
-          </div>
+          </ItemEditorLabel>
         )}
         {hasSeed && (
-          <div className="flex select-none items-center gap-4">
-            <label className="w-[76.33px] font-bold text-neutral-500">
-              {translate("EditorSeed")}
-            </label>
+          <ItemEditorLabel
+            className="flex select-none items-center gap-4"
+            label={translate("EditorSeed")}
+          >
             <EditorStepRangeWithInput
               inputStyles="w-[68px]"
               max={CS_MAX_SEED}
@@ -204,13 +202,13 @@ export function ItemEditor({
               validate={(value) => CS_Economy.safeValidateSeed(value, item)}
               value={seed}
             />
-          </div>
+          </ItemEditorLabel>
         )}
         {hasWear && (
-          <div className="flex select-none items-center gap-4">
-            <label className="w-[76.33px] font-bold text-neutral-500">
-              {translate("EditorWear")}
-            </label>
+          <ItemEditorLabel
+            className="flex select-none items-center gap-4"
+            label={translate("EditorWear")}
+          >
             <EditorStepRangeWithInput
               inputStyles="w-[68px]"
               max={item.wearmax ?? CS_MAX_WEAR}
@@ -225,21 +223,21 @@ export function ItemEditor({
               validate={(value) => CS_Economy.safeValidateWear(value, item)}
               value={wear}
             />
-          </div>
+          </ItemEditorLabel>
         )}
         {hasStattrak && (
-          <div className="flex select-none items-center gap-4">
-            <label className="w-[76.33px] font-bold text-neutral-500">
-              {translate("EditorStatTrak")}
-            </label>
+          <ItemEditorLabel
+            className="flex select-none items-center gap-4"
+            label={translate("EditorStatTrak")}
+          >
             <EditorToggle checked={stattrak} onChange={setStattrak} />
-          </div>
+          </ItemEditorLabel>
         )}
         {hasQuantity && (
-          <div className="flex select-none items-center gap-4">
-            <label className="w-[76.33px] font-bold text-neutral-500">
-              {translate("EditorQuantity")}
-            </label>
+          <ItemEditorLabel
+            className="flex select-none items-center gap-4"
+            label={translate("EditorQuantity")}
+          >
             <EditorStepRangeWithInput
               inputStyles="w-[68px]"
               max={maxQuantity}
@@ -252,7 +250,7 @@ export function ItemEditor({
               validate={(value) => value >= 1 && value <= maxQuantity}
               value={quantity}
             />
-          </div>
+          </ItemEditorLabel>
         )}
       </div>
       <div className="mt-6 flex justify-center gap-2">
