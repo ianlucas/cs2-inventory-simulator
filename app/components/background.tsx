@@ -24,6 +24,7 @@ export function Background() {
       muted
       onContextMenu={(event) => event.preventDefault()}
       src={`/videos/bg-${background}.webm`}
+      suppressHydrationWarning
     />
   );
 }
