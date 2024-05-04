@@ -131,6 +131,7 @@ export const brazilian = {
   InventorySelectItemToRetrieve: "Selecione quais itens retirar",
   InventorySelectItemToDeposit: "Selecione quais itens guardar",
   InventorySelectInspectContents: "Inspecionando o conteúdo de",
+  InventoryItemNew: "Novo!",
   InventoryItemEquip: "Equipar",
   InventoryItemEquipT: "Equipar T",
   InventoryItemEquipCT: "Equipar CT",

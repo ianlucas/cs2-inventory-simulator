@@ -134,6 +134,7 @@ export const english = {
   InventoryFilterAlphabetical: "Alphabetical",
   InventoryFilterType: "Type",
   InventoryFilterCollection: "Collection",
+  InventoryItemNew: "New!",
   InventoryItemEquip: "Equip",
   InventoryItemEquipT: "Equip T",
   InventoryItemEquipCT: "Equip CT",

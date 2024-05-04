@@ -9,12 +9,14 @@ import {
   CS_Economy,
   CS_InventoryItem,
   CS_Item,
-  CS_NONE
+  CS_NONE,
+  CS_getTimestamp
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { resolveCSItem, resolveInventoryItem } from "~/utils/inventory";
 import { has } from "~/utils/misc";
+import { useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 
 export function InventoryItemTile({
@@ -26,14 +28,20 @@ export function InventoryItemTile({
   item: CS_Item | CS_InventoryItem;
   onClick?: () => void;
 }) {
+  const translate = useTranslate();
   const nameItem = useNameItem();
   const inventoryItem = resolveInventoryItem(item);
   const data = resolveCSItem(item);
   const [model, name] = nameItem(item, "inventory-name");
 
+  const currDate = CS_getTimestamp();
+  const isNew =
+    inventoryItem?.updatedat !== undefined &&
+    currDate - inventoryItem.updatedat < 120;
+
   return (
     <div className="w-[154px]">
-      <div className="relative bg-gradient-to-b from-neutral-600 to-neutral-400 p-[1px]">
+      <div className="group relative bg-gradient-to-b from-neutral-600 to-neutral-400 p-[1px]">
         <div className="bg-gradient-to-b from-neutral-500 to-neutral-300 px-1">
           <ItemImage
             className="h-[108px] w-[144px]"
@@ -41,6 +49,11 @@ export function InventoryItemTile({
             wear={inventoryItem?.wear}
           />
         </div>
+        {isNew && (
+          <div className="absolute left-[1px] top-[1px] bg-sky-600 px-1 py-1 text-[10px] font-bold text-sky-200 shadow-lg transition-all group-hover:text-white">
+            {translate("InventoryItemNew")}
+          </div>
+        )}
         <div className="absolute bottom-0 left-0 flex items-center p-1">
           {inventoryItem?.stickers !== undefined &&
             inventoryItem.stickers.map(
