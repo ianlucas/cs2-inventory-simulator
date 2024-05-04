@@ -12,6 +12,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { ComponentProps } from "react";
+import { has } from "~/utils/misc";
 import { usePreferences } from "./app-context";
 import { InventoryItemContents } from "./inventory-item-contents";
 import { InventoryItemExterior } from "./inventory-item-exterior";
@@ -63,14 +64,12 @@ export function InventoryItemHover({
         {hasWear && <InventoryItemExterior wear={wear} />}
         {hasTeams && <InventoryItemTeams teams={teams} />}
       </div>
-      {data.tournamentdesc !== undefined && (
+      {has(data.tournamentdesc) && (
         <p className="mt-4 text-yellow-300">{data.tournamentdesc}</p>
       )}
       {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
-      {data.desc !== undefined && (
-        <p className="mt-4 text-neutral-300">{data.desc}</p>
-      )}
-      {data.customdesc !== undefined && (
+      {has(data.desc) && <p className="mt-4 text-neutral-300">{data.desc}</p>}
+      {has(data.customdesc) && (
         <p
           className={clsx(
             "mt-4 text-neutral-300",
