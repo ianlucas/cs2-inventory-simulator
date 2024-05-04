@@ -29,14 +29,9 @@ export function ItemPickerDesktop({
   const translate = useTranslate();
 
   return (
-    <div className="flex gap-2">
-      <ItemPickerFilterDesktop
-        categories={categories}
-        onChange={handleCategoryClick}
-        value={filter}
-      />
-      <div className="flex-1">
-        <div className="mb-2 flex items-center gap-2 px-6">
+    <div className="pb-2">
+      <div className="flex justify-end">
+        <div className="flex w-[calc(100%-220px)] items-center gap-2 px-6">
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
             className="h-4 text-neutral-500"
@@ -48,13 +43,22 @@ export function ItemPickerDesktop({
             placeholder={translate("CraftSearchPlaceholder")}
           />
         </div>
-        <div className="pb-2 pt-1">
-          <ItemBrowser
-            ignoreRarityColor={ignoreRarityColor}
-            items={items}
-            maxItemsIntoView={8}
-            onClick={handleItemClick}
-          />
+      </div>
+      <div className="mt-2 flex gap-2">
+        <ItemPickerFilterDesktop
+          categories={categories}
+          onChange={handleCategoryClick}
+          value={filter}
+        />
+        <div className="flex flex-1 items-center">
+          <div className="w-full">
+            <ItemBrowser
+              ignoreRarityColor={ignoreRarityColor}
+              items={items}
+              maxItemsIntoView={8}
+              onClick={handleItemClick}
+            />
+          </div>
         </div>
       </div>
     </div>
