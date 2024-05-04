@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS_Item } from "@ianlucas/cs2-lib";
+import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { has } from "~/utils/misc";
 
@@ -15,7 +16,10 @@ export function ItemEditorName({ item }: { item: CS_Item }) {
   return (
     <div className="bg-gradient-to-r from-transparent via-black/30 to-transparent font-display">
       {has(model) && <div className="text-sm text-neutral-400">{model}</div>}
-      <div className="-mt-2 font-bold" style={{ color: rarity }}>
+      <div
+        className={clsx(has(model) && "-mt-2", "font-bold")}
+        style={{ color: rarity }}
+      >
         {name}
       </div>
     </div>
