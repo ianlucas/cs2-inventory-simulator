@@ -26,7 +26,8 @@ export function ItemButton({
   const showAltname =
     item.altname !== undefined &&
     (item.altname.includes("Collectible") ||
-      item.altname.includes("Commodity"));
+      item.altname.includes("Commodity") ||
+      ["weapon", "glove", "melee"].includes(item.type));
 
   function handleClick() {
     if (onClick) {

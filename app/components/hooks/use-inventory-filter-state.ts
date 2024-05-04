@@ -74,12 +74,16 @@ export function useInventoryFilterState() {
   function filterItems({ item }: TransformedInventoryItem) {
     if (search.length > 0) {
       const searchLower = search.toLowerCase();
-      const nameLower = item.data.name.toLowerCase();
-      const nametagLower = item.nametag?.toLowerCase() ?? "";
-      if (nameLower.includes(searchLower)) {
+      const name = item.data.name.toLowerCase();
+      const nametag = item.nametag?.toLowerCase() ?? "";
+      const altname = item.data.altname?.toLowerCase() ?? "";
+      if (name.includes(searchLower)) {
         return true;
       }
-      if (item.nametag !== undefined && nametagLower.includes(searchLower)) {
+      if (altname.includes(searchLower)) {
+        return true;
+      }
+      if (nametag.includes(searchLower)) {
         return true;
       }
       return false;

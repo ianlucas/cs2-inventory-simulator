@@ -48,11 +48,15 @@ export function useItemPickerState({
   const items = useMemo(
     () =>
       (model === undefined ? getBaseItems(filter) : getPaidItems(filter, model))
-        .filter(({ name }) => {
+        .filter(({ altname, name }) => {
           if (query.length < 2) {
             return true;
           }
-          return name.toLowerCase().includes(query.toLowerCase());
+          const queryLower = query.toLocaleLowerCase();
+          return (
+            name.toLocaleLowerCase().includes(queryLower) ||
+            altname?.toLocaleLowerCase().includes(queryLower)
+          );
         })
         .filter(itemFilter)
         .sort((a, b) => a.name.localeCompare(b.name)),
