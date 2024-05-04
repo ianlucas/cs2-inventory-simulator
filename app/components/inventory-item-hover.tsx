@@ -68,11 +68,13 @@ export function InventoryItemHover({
         <p className="mt-4 text-yellow-300">{data.tournamentdesc}</p>
       )}
       {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
-      {has(data.desc) && <p className="mt-4 text-neutral-300">{data.desc}</p>}
+      {has(data.desc) && (
+        <p className="mt-4 whitespace-pre-wrap text-neutral-300">{data.desc}</p>
+      )}
       {has(data.customdesc) && (
         <p
           className={clsx(
-            "mt-4 text-neutral-300",
+            "mt-4 whitespace-pre-wrap text-neutral-300",
             ["weapon", "melee", "glove"].includes(data.type) && "italic"
           )}
         >
