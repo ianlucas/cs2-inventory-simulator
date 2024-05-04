@@ -14,7 +14,7 @@ export function InventoryItemStatTrak({
   const translate = useTranslate();
 
   return (
-    <div className="mt-2">
+    <div className="mt-4">
       <div className="text-blue-300">
         {translate("InventoryItemStatTrakDesc")}
       </div>
