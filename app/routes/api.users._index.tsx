@@ -16,7 +16,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .string()
     .transform((value) => Number(value))
     .parse(url.searchParams.get("page") ?? "0");
-  const search = z.string().parse(url.searchParams.get("search") ?? "");
+  const search = z
+    .string()
+    .parse(url.searchParams.get("search") ?? "")
+    // @see https://github.com/prisma/prisma/issues/8939#issuecomment-933990947
+    .replace(/[\s\n\t]/g, "_");
   const take = 10;
   const count = await prisma.user.count();
   const results = await prisma.user.findMany({
