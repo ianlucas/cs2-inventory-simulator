@@ -19,6 +19,7 @@ export const brazilian = {
   HeaderSignInLabel: "Entrar e sincronizar",
   HeaderSignOutLabel: "Sair",
   HeaderSignedInAsLabel: "Entrou como",
+  HeaderDonate: "Doar",
   APIPageHeader: "API para programadores",
   CraftSelectHeader: "Criando um item...",
   CraftConfirmHeader: "Confirmar criação",

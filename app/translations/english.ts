@@ -17,6 +17,7 @@ export const english = {
   HeaderSignInLabel: "Sign-in to sync",
   HeaderSignOutLabel: "Sign out",
   HeaderSignedInAsLabel: "Signed in as",
+  HeaderDonate: "Donate",
   APIPageHeader: "API for programmers",
   CraftSelectHeader: "Crafting an item...",
   CraftConfirmHeader: "Confirm craft",

@@ -10,11 +10,14 @@ import clsx from "clsx";
 import { ComponentProps } from "react";
 
 export function HeaderLink({
+  className,
   icon,
+  iconStyles,
   label,
   ...props
 }: ComponentProps<typeof Link> & {
   icon?: IconProp;
+  iconStyles?: string;
   label?: string;
 }) {
   const location = useLocation();
@@ -24,7 +27,8 @@ export function HeaderLink({
       {...props}
       className={clsx(
         "flex items-center gap-2 px-2 py-1 text-base transition-all hover:bg-black/30 active:bg-black/70 lg:px-1.5 lg:py-1 lg:[font-size:inherit]",
-        isActive && "bg-black/30"
+        isActive && "bg-black/30",
+        className
       )}
     >
       {props.children !== undefined ? (
@@ -32,7 +36,10 @@ export function HeaderLink({
       ) : (
         <>
           {icon !== undefined && (
-            <FontAwesomeIcon className="h-4" icon={icon} />
+            <FontAwesomeIcon
+              className={clsx(iconStyles ?? "h-4")}
+              icon={icon}
+            />
           )}
           {label}
         </>

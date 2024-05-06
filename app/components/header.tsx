@@ -111,7 +111,22 @@ export function Header() {
                     onClick={closeMenu}
                     to="/sign-out"
                   />
-                  <div className="flex flex-1 justify-end">
+                  <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
+                    {
+                      /* Consider donating to the project on donate.cstrike.app
+                      if you are self-hosting this app! */
+                      typeof window !== "undefined" &&
+                        ["inventory.cstrike.app", "localhost"].includes(
+                          window.location.hostname
+                        ) && (
+                          <HeaderLink
+                            className="font-bold"
+                            label={translate("HeaderDonate")}
+                            target="_blank"
+                            to="https://donate.cstrike.app"
+                          />
+                        )
+                    }
                     <HeaderLink to="/settings" onClick={closeMenu}>
                       <span className="text-neutral-400">
                         {translate("HeaderSignedInAsLabel")}
