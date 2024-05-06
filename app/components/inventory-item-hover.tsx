@@ -59,7 +59,7 @@ export function InventoryItemHover({
       {...props}
     >
       <InventoryItemName item={item} />
-      <div className="mt-2.5 grid items-center gap-1 border-b border-t border-neutral-700/70 p-2 [grid-template-columns:auto_1fr] [grid-template-rows:auto_auto]">
+      <div className="mt-2.5 grid items-center gap-1 border-b border-t border-neutral-700/70 p-2 [grid-template-columns:auto_1fr]">
         <InventoryItemRarity data={item.data} />
         {hasWear && <InventoryItemExterior wear={wear} />}
         {hasTeams && <InventoryItemTeams teams={teams} />}
