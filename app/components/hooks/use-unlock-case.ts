@@ -21,15 +21,22 @@ export function useUnlockCase() {
   function handleUnlockCase(uid: number) {
     const selectedItem = inventory.get(uid).data;
     if (selectedItem.keys || selectedItem.type === "key") {
+      const keyItems = items.filter(
+        ({ item }) =>
+          (CS_Economy.isKey(selectedItem) &&
+            item.data.keys?.includes(selectedItem.id)) ||
+          (CS_Economy.isCase(selectedItem) &&
+            selectedItem.keys?.includes(item.data.id))
+      );
+      if (selectedItem.type === "case" && keyItems.length === 0) {
+        playSound("case_drop");
+        return setUnlockCase({
+          caseUid: uid
+        });
+      }
       return setItemSelector({
         uid,
-        items: items.filter(
-          ({ item }) =>
-            (CS_Economy.isKey(selectedItem) &&
-              item.data.keys?.includes(selectedItem.id)) ||
-            (CS_Economy.isCase(selectedItem) &&
-              selectedItem.keys?.includes(item.data.id))
-        ),
+        items: keyItems,
         type: "unlock-case"
       });
     }
@@ -50,6 +57,11 @@ export function useUnlockCase() {
     });
   }
 
+  function handleUnlockCaseEvent(state: NonNullable<typeof unlockCase>) {
+    playSound("case_drop");
+    return setUnlockCase(state);
+  }
+
   function closeUnlockCase() {
     return setUnlockCase(undefined);
   }
@@ -60,11 +72,15 @@ export function useUnlockCase() {
     return state !== undefined;
   }
 
+  const unlockCaseKey = `${unlockCase?.caseUid}:${unlockCase?.keyUid}`;
+
   return {
     closeUnlockCase,
     handleUnlockCase,
+    handleUnlockCaseEvent,
     handleUnlockCaseSelect,
     isUnlockingCase,
-    unlockCase
+    unlockCase,
+    unlockCaseKey
   };
 }

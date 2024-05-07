@@ -43,12 +43,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function Craft() {
   const { uid } = useTypedLoaderData<typeof loader>();
+  const isEditing = uid !== undefined;
   const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
   const sync = useSync();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(
-    uid !== undefined ? inventory.get(uid).data : undefined
+    isEditing ? inventory.get(uid).data : undefined
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -73,7 +74,7 @@ export default function Craft() {
       ...attributes
     };
 
-    if (uid !== undefined) {
+    if (isEditing) {
       deleteEmptyProps(inventoryItem);
       setInventory(
         inventory.edit(uid, {
@@ -100,7 +101,7 @@ export default function Craft() {
   }
 
   function handleReset() {
-    if (uid !== undefined) {
+    if (isEditing) {
       return navigate("/");
     }
     return setSelectedItem(undefined);
@@ -130,10 +131,11 @@ export default function Craft() {
         <ItemPicker onPickItem={setSelectedItem} />
       ) : (
         <ItemEditor
+          attributes={isEditing ? inventory.get(uid) : undefined}
+          dismissType={isEditing ? "cancel" : "reset"}
           item={selectedItem}
-          attributes={uid !== undefined ? inventory.get(uid) : undefined}
+          onDismiss={handleReset}
           onSubmit={handleSubmit}
-          onReset={handleReset}
         />
       )}
     </Modal>

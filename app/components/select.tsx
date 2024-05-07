@@ -12,19 +12,24 @@ import { ReactNode, useState } from "react";
 export function Select<T extends { value: string }>({
   children,
   className,
+  direction,
   noMaxHeight,
   onChange,
   options,
+  optionsStyles,
   value
 }: {
   children?: (option: T) => ReactNode;
   className?: string;
+  direction?: "up" | "down";
   noMaxHeight?: boolean;
   onChange: (value: string) => void;
   options: T[];
+  optionsStyles?: string;
   value: string;
 }) {
-  children = children !== undefined ? children : ({ value }) => value;
+  children ??= ({ value }) => value;
+  direction ??= "down";
   const [isOpen, setIsOpen] = useState(false);
   const ref = useClickAway(() => {
     setIsOpen(false);
@@ -49,8 +54,10 @@ export function Select<T extends { value: string }>({
         <div
           className={clsx(
             "absolute left-0 z-10 bg-neutral-800",
+            direction === "up" && "bottom-full",
             className ?? "min-w-[253px]",
-            !noMaxHeight && "max-h-[128px] overflow-y-scroll"
+            !noMaxHeight && "max-h-[128px] overflow-y-scroll",
+            optionsStyles
           )}
           ref={ref as any}
         >

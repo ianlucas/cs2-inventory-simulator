@@ -28,6 +28,7 @@ import {
   useTranslate
 } from "./app-context";
 import { ApplyItemSticker } from "./apply-item-sticker";
+import { useListenAppEvent } from "./hooks/use-listen-app-event";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
@@ -56,9 +57,11 @@ export function Inventory() {
   const {
     closeUnlockCase,
     handleUnlockCase,
+    handleUnlockCaseEvent,
     handleUnlockCaseSelect,
     isUnlockingCase,
-    unlockCase
+    unlockCase,
+    unlockCaseKey
   } = useUnlockCase();
 
   const {
@@ -169,6 +172,8 @@ export function Inventory() {
     }
   }
 
+  useListenAppEvent("unlockcase", handleUnlockCaseEvent);
+
   const isSelectingAnItem = itemSelector !== undefined;
   const displayedItems = isSelectingAnItem
     ? itemSelector.items
@@ -227,7 +232,11 @@ export function Inventory() {
         </div>
       )}
       {isUnlockingCase(unlockCase) && (
-        <UnlockCase {...unlockCase} onClose={closeUnlockCase} />
+        <UnlockCase
+          {...unlockCase}
+          key={unlockCaseKey}
+          onClose={closeUnlockCase}
+        />
       )}
       {isRenamingItem(renameItem) && (
         <RenameItem {...renameItem} onClose={closeRenameItem} />

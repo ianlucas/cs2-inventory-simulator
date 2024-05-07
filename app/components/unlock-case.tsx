@@ -58,6 +58,10 @@ export function UnlockCase({
   const [hideCaseContents, setHideCaseContents] = useState(false);
 
   const { data: caseItem } = useInventoryItem(caseUid);
+  const neededKeyItem =
+    caseItem.keys !== undefined
+      ? CS_Economy.getById(caseItem.keys[0])
+      : undefined;
   const keyItem = useTryInventoryItem(keyUid)?.data;
   const wait = useTimer();
 
@@ -108,11 +112,13 @@ export function UnlockCase({
               <UnlockCaseContainer
                 canUnlock={canUnlock}
                 caseItem={caseItem}
+                caseUid={caseUid}
                 hideCaseContents={hideCaseContents}
                 isDisplaying={isDisplaying}
                 isSyncing={isSyncing}
                 items={items}
                 keyItem={keyItem}
+                neededKeyItem={neededKeyItem}
                 onClose={onClose}
                 onUnlock={handleUnlock}
               />

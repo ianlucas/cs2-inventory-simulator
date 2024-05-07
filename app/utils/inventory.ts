@@ -14,7 +14,6 @@ import { serverInventoryShape } from "./shapes";
 export const UNLOCKABLE_ITEM_TYPE = ["case", "key"];
 export const EDITABLE_ITEM_TYPE = ["weapon", "melee", "glove", "musickit"];
 export const INSPECTABLE_ITEM_TYPE = [
-  "case",
   "collectible",
   "glove",
   "graffiti",

@@ -49,8 +49,11 @@ export interface ItemEditorAttributes {
 
 export function ItemEditor({
   attributes,
+  defaultQuantity,
+  dismissType,
   item,
-  onReset,
+  maxQuantity,
+  onDismiss,
   onSubmit
 }: {
   attributes?: {
@@ -61,8 +64,11 @@ export function ItemEditor({
     stickerswear?: number[];
     wear?: number;
   };
+  defaultQuantity?: number;
+  dismissType?: "cancel" | "reset";
   item: CS_Item;
-  onReset: () => void;
+  maxQuantity?: number;
+  onDismiss: () => void;
   onSubmit: (props: ItemEditorAttributes) => void;
 }) {
   const [inventory] = useInventory();
@@ -94,7 +100,7 @@ export function ItemEditor({
     ids: attributes?.stickers ?? [...CS_INVENTORY_STICKERS],
     wears: attributes?.stickerswear ?? [...CS_INVENTORY_STICKERS_WEAR]
   });
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(defaultQuantity ?? 1);
   const isCrafting = attributes === undefined;
   const hasStickers =
     (isCrafting ? craftAllowStickers : editAllowStickers) &&
@@ -119,8 +125,11 @@ export function ItemEditor({
     nametag.length === 0;
   const isSeedValid = !hasSeed || CS_Economy.safeValidateSeed(seed);
   const canCraft = isWearValid && isNametagValid && isSeedValid;
-  const maxQuantity = inventoryMaxItems - inventory.size();
+  const isDismissReset = dismissType === "reset";
   const hasQuantity = isItemCountable(item);
+
+  maxQuantity ??= inventoryMaxItems - inventory.size();
+  dismissType ??= "reset";
 
   function handleSubmit() {
     const stickers =
@@ -254,11 +263,11 @@ export function ItemEditor({
         )}
       </div>
       <div className="mt-6 flex justify-center gap-2">
-        <ModalButton variant="secondary" onClick={onReset}>
-          {isCrafting && (
+        <ModalButton variant="secondary" onClick={onDismiss}>
+          {isDismissReset && (
             <FontAwesomeIcon icon={faLongArrowLeft} className="mr-2 h-4" />
           )}
-          {translate(isCrafting ? "EditorReset" : "EditorCancel")}
+          {translate(isDismissReset ? "EditorReset" : "EditorCancel")}
         </ModalButton>
         <ModalButton
           children={translate(isCrafting ? "EditorCraft" : "EditorSave")}

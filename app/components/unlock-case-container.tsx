@@ -9,6 +9,7 @@ import { useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
+import { UnlockCaseContainerAddKey } from "./unlock-case-container-add-key";
 import { UnlockCaseContainerBackground } from "./unlock-case-container-background";
 import { UnlockCaseContainerContents } from "./unlock-case-container-contents";
 import { UnlockCaseWheel } from "./unlock-case-wheel";
@@ -18,26 +19,31 @@ import { UseItemHeader } from "./use-item-header";
 export function UnlockCaseContainer({
   canUnlock,
   caseItem,
+  caseUid,
   hideCaseContents,
   isDisplaying,
   isSyncing,
   items,
   keyItem,
+  neededKeyItem,
   onClose,
   onUnlock
 }: {
   canUnlock: boolean;
   caseItem: CS_Item;
+  caseUid: number;
   hideCaseContents: boolean;
   isDisplaying: boolean;
   isSyncing: boolean;
   items: ReturnType<typeof CS_Economy.unlockCase>[];
   keyItem?: CS_Item;
+  neededKeyItem?: CS_Item;
   onClose: () => void;
   onUnlock: () => void;
 }) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
+  const needsToAddKey = keyItem === undefined && neededKeyItem !== undefined;
 
   return (
     <>
@@ -65,7 +71,7 @@ export function UnlockCaseContainer({
           <UseItemFooter
             className="lg:max-w-[1024px]"
             left={
-              keyItem !== undefined && (
+              keyItem !== undefined ? (
                 <div className="flex items-center gap-2 font-display text-lg">
                   <ItemImage className="h-14" item={keyItem} />
                   <span>
@@ -73,11 +79,26 @@ export function UnlockCaseContainer({
                     <strong>{nameItemString(keyItem)}</strong>
                   </span>
                 </div>
+              ) : (
+                neededKeyItem !== undefined && (
+                  <div className="flex items-center gap-2 font-display text-lg">
+                    <ItemImage className="h-14" item={neededKeyItem} />
+                    <span>
+                      {translate("CaseNeed")}{" "}
+                      <strong>{nameItemString(neededKeyItem)}</strong>
+                    </span>
+                  </div>
+                )
               )
             }
             right={
               <>
-                {canUnlock && !isSyncing ? (
+                {needsToAddKey ? (
+                  <UnlockCaseContainerAddKey
+                    caseUid={caseUid}
+                    neededKeyItem={neededKeyItem}
+                  />
+                ) : canUnlock && !isSyncing ? (
                   <ModalButton
                     children={translate("CaseUnlockContainer")}
                     disabled={!canUnlock}
