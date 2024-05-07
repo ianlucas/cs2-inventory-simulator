@@ -25,6 +25,7 @@ import {
   useTranslate,
   useUser
 } from "./app-context";
+import { DonateHeaderLink } from "./donate-header-link";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
 import { useItemSelector } from "./item-selector-context";
@@ -94,7 +95,8 @@ export function Header() {
                     icon={faSteam}
                     label={translate("HeaderSignInLabel")}
                   />
-                  <div className="flex flex-1 justify-end">
+                  <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
+                    <DonateHeaderLink />
                     <HeaderLink
                       to="/settings"
                       icon={faCog}
@@ -112,21 +114,7 @@ export function Header() {
                     to="/sign-out"
                   />
                   <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
-                    {
-                      /* Consider donating to the project on donate.cstrike.app
-                      if you are self-hosting this app! */
-                      typeof window !== "undefined" &&
-                        ["inventory.cstrike.app", "localhost"].includes(
-                          window.location.hostname
-                        ) && (
-                          <HeaderLink
-                            className="font-bold"
-                            label={translate("HeaderDonate")}
-                            target="_blank"
-                            to="https://donate.cstrike.app"
-                          />
-                        )
-                    }
+                    <DonateHeaderLink />
                     <HeaderLink to="/settings" onClick={closeMenu}>
                       <span className="text-neutral-400">
                         {translate("HeaderSignedInAsLabel")}
