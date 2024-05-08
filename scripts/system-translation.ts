@@ -246,8 +246,9 @@ function readCsgoLanguage(include?: string[]) {
 
 function writeTranslationFile(
   lang: string,
-  translation: Record<string, string>
+  translations: Record<string, Record<string, string>>
 ) {
+  const translation = translations[lang];
   const dist = `app/translations/${lang}.ts`;
   const sortedKeys = Object.keys(translation).sort();
   // prettier-ignore
@@ -265,26 +266,27 @@ ${lang !== 'english' ? '  ...english,' : ''}
 ${sortedKeys.map(key => (
 `  ${key}: ${STRINGS_FROM_GAME[key] !== undefined ? `/* csgo_${lang}.txt */` : ''}${JSON.stringify(translation[key])}`
 )).join(',\n')}
-};`
-  );
+};`);
   console.log(`Wrote '${dist}'`);
 }
 
 async function main() {
   const languages = readCsgoLanguage();
-  const keys = [
+  const langs = [
     "english",
     ...Object.keys(languages).filter((key) => key !== "english")
   ];
   const find = (language: (typeof languages)[string], key: string) =>
     language[key.toLowerCase()];
   const translations: Record<string, Record<string, string>> = {};
-  for (const lang of keys) {
+  for (const lang of langs) {
     console.log(`Processing '${lang}'...`);
     const language = languages[lang];
-    translations[lang] = (
-      await import(resolve(process.cwd(), `app/translations/${lang}.ts`))
-    )[lang];
+    const translationPath = resolve(
+      process.cwd(),
+      `app/translations/${lang}.ts`
+    );
+    translations[lang] = (await import(translationPath))[lang];
     const translation = translations[lang];
     for (const [key, value] of Object.entries(STRINGS_FROM_GAME)) {
       if (typeof value === "string") {
@@ -310,7 +312,17 @@ async function main() {
       }
       assert(translation[key] !== undefined, `Missing key '${key}'`);
     }
-    writeTranslationFile(lang, translation);
+    if (lang !== "english") {
+      for (const key of Object.keys(translation)) {
+        if (
+          translation[key] === translations.english[key] &&
+          !Object.keys(STRINGS_FROM_GAME).includes(key)
+        ) {
+          delete translation[key];
+        }
+      }
+    }
+    writeTranslationFile(lang, translations);
   }
 }
 
