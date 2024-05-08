@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faGratipay } from "@fortawesome/free-brands-svg-icons";
 import { useTranslate } from "./app-context";
 import { HeaderLink } from "./header-link";
 
@@ -17,6 +18,7 @@ export function DonateHeaderLink() {
     ) && (
       <HeaderLink
         className="font-bold"
+        icon={faGratipay}
         label={translate("HeaderDonate")}
         target="_blank"
         to="https://donate.cstrike.app"
