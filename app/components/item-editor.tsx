@@ -169,7 +169,7 @@ export function ItemEditor({
       </div>
       <div className="space-y-4">
         {hasStickers && (
-          <ItemEditorLabel label={translate("EditorStickers")}>
+          <ItemEditorLabel direction="left" label={translate("EditorStickers")}>
             <StickerPicker
               isCrafting={isCrafting}
               value={stickersAttributes}

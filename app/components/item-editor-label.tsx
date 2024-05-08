@@ -5,26 +5,31 @@
 
 import clsx from "clsx";
 import { ComponentProps } from "react";
+import { TextSlider } from "./text-slider";
 
 export function ItemEditorLabel({
   children,
+  direction,
   label,
   labelStyles,
   ...props
 }: ComponentProps<"div"> & {
+  direction?: "left" | "right";
   label: string;
   labelStyles?: string;
 }) {
+  direction ??= "right";
   return (
     <div {...props}>
-      <label
+      <div
         className={clsx(
-          "select-none text-right font-display font-bold text-neutral-500",
-          labelStyles !== undefined ? labelStyles : "w-[76.33px]"
+          "select-none whitespace-nowrap font-display font-bold text-neutral-500",
+          direction === "left" ? "text-left" : "text-right",
+          labelStyles !== undefined ? labelStyles : "w-[76.33px] lg:w-[128px]"
         )}
       >
-        {label}
-      </label>
+        <TextSlider text={label} />
+      </div>
       {children}
     </div>
   );
