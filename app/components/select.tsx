@@ -40,7 +40,12 @@ export function Select<T extends { value: string }>({
     <div className="relative">
       <button
         className={clsx(
-          "flex cursor-default items-center gap-2 rounded bg-black/20 px-2 py-1 hover:bg-black/40",
+          "flex cursor-default items-center gap-2 bg-black/20 px-2 py-1 hover:bg-black/40",
+          isOpen
+            ? direction === "down"
+              ? "rounded-t"
+              : "rounded-b"
+            : "rounded",
           className ?? "min-w-[253px]"
         )}
         onClick={() => setIsOpen(true)}
@@ -54,6 +59,11 @@ export function Select<T extends { value: string }>({
         <div
           className={clsx(
             "absolute left-0 z-10 bg-neutral-800",
+            isOpen
+              ? direction === "down"
+                ? "rounded-b"
+                : "rounded-t"
+              : undefined,
             direction === "up" && "bottom-full",
             className ?? "min-w-[253px]",
             !noMaxHeight && "max-h-[128px] overflow-y-scroll",
