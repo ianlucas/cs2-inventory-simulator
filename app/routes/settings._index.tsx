@@ -20,6 +20,7 @@ import { LanguageSelect } from "~/components/language-select";
 import { Modal } from "~/components/modal";
 import { ModalButton } from "~/components/modal-button";
 import { Select } from "~/components/select";
+import { SettingsLabel } from "~/components/settings-label";
 import { backgrounds } from "~/data/backgrounds";
 import { languages } from "~/data/languages";
 import { middleware } from "~/http.server";
@@ -92,10 +93,7 @@ export default function Settings() {
         </div>
       </div>
       <div className="space-y-2 px-4">
-        <div>
-          <label className="text-neutral-500">
-            {translate("SettingsLanguage")}
-          </label>
+        <SettingsLabel label={translate("SettingsLanguage")}>
           <LanguageSelect
             languages={languages.map(({ name, countries }) => ({
               name,
@@ -104,11 +102,8 @@ export default function Settings() {
             value={language}
             onChange={setLanguage}
           />
-        </div>
-        <div>
-          <label className="text-neutral-500">
-            {translate("SettingsBackground")}
-          </label>
+        </SettingsLabel>
+        <SettingsLabel label={translate("SettingsBackground")}>
           <Select
             value={background ?? ""}
             onChange={setBackground}
@@ -118,36 +113,21 @@ export default function Settings() {
             })}
             children={({ label }) => label}
           />
-        </div>
-        <div>
-          <label className="text-neutral-500">
-            {translate("SettingsStatsForNerds")}
-          </label>
-          <div>
-            <EditorToggle checked={statsForNerds} onChange={setStatsForNerds} />
-          </div>
-        </div>
-        <div>
-          <label className="text-neutral-500">
-            {translate("SettingsHideFreeItems")}
-          </label>
-          <div>
-            <EditorToggle checked={hideFreeItems} onChange={setHideFreeItems} />
-          </div>
-        </div>
-        <div>
-          <label className="text-neutral-500">
-            {translate("SettingsHideFilters")}
-          </label>
-          <div>
-            <EditorToggle checked={hideFilters} onChange={setHideFilters} />
-          </div>
-        </div>
+        </SettingsLabel>
+        <SettingsLabel label={translate("SettingsStatsForNerds")}>
+          <EditorToggle checked={statsForNerds} onChange={setStatsForNerds} />
+        </SettingsLabel>
+        <SettingsLabel label={translate("SettingsHideFreeItems")}>
+          <EditorToggle checked={hideFreeItems} onChange={setHideFreeItems} />
+        </SettingsLabel>
+        <SettingsLabel label={translate("SettingsHideFilters")}>
+          <EditorToggle checked={hideFilters} onChange={setHideFilters} />
+        </SettingsLabel>
       </div>
       <div className="mt-4 px-4">
         {inventory.size() > 0 && (
           <button
-            className="flex w-full cursor-default items-center gap-2 rounded border border-neutral-500/20 px-2 py-1 text-red-500 transition-all hover:border-red-500"
+            className="flex w-full cursor-default items-center gap-2 rounded border border-neutral-500/20 px-2 py-1 font-semibold text-red-500 transition-all hover:border-red-500"
             onClick={handleRemoveAllItems}
           >
             <FontAwesomeIcon icon={faTrashCan} className="h-4" />
