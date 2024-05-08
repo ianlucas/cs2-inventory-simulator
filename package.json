@@ -9,6 +9,7 @@
     "format": "prettier . --write",
     "start": "remix-serve ./build/server/index.js",
     "test": "vitest",
+    "translation": "tsx scripts/system-translation.ts && prettier app/translations/*.ts --write",
     "typecheck": "tsc",
     "upgrade": "npx npm-check-updates@latest --target minor -u"
   },

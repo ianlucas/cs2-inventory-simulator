@@ -19,4 +19,4 @@ export const BUILD_LAST_COMMIT = existsSync(BUILD_LAST_COMMIT_PATH)
   ? readFileSync(BUILD_LAST_COMMIT_PATH, "utf-8")
   : undefined;
 
-export const { STEAM_API_KEY, STEAM_CALLBACK_URL } = process.env;
+export const { STEAM_API_KEY, STEAM_CALLBACK_URL, CS2_CSGO_PATH } = process.env;
