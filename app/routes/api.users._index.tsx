@@ -6,10 +6,12 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { prisma } from "~/db.server";
+import { middleware } from "~/http.server";
 import { isValidApiRequest } from "~/middlewares/is-valid-api-request.server";
 import { API_SCOPE } from "~/models/api-credential.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  middleware(request);
   await isValidApiRequest(request, [API_SCOPE]);
   const url = new URL(request.url);
   const page = z

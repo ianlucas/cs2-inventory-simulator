@@ -5,9 +5,11 @@
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
+import { middleware } from "~/http.server";
 import { badRequest } from "~/response.server";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  middleware(request);
   try {
     const language = z
       .string()

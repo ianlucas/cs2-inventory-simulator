@@ -3,10 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { removeTrailingDots } from "./middlewares/remove-trailing-dots.server";
-import { removeTrailingSlashes } from "./middlewares/remove-trailing-slashes.server";
+import { redirect } from "@remix-run/node";
 
-export async function middleware(request: Request) {
-  await removeTrailingDots(request);
-  await removeTrailingSlashes(request);
+export async function removeTrailingSlashes(request: Request) {
+  const url = new URL(request.url);
+  if (url.pathname.endsWith("/") && url.pathname !== "/") {
+    throw redirect(url.pathname.slice(0, -1) + url.search);
+  }
 }

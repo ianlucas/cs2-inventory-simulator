@@ -3,8 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { redirect } from "@remix-run/node";
+import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { middleware } from "~/http.server";
 
-export function loader() {
+export function loader({request}: LoaderFunctionArgs) {
+  middleware(request);
   return redirect("/");
 }
