@@ -24,7 +24,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // @see https://github.com/prisma/prisma/issues/8939#issuecomment-933990947
     .replace(/[\s\n\t]/g, "_");
   const take = 10;
-  const count = await prisma.user.count();
+  const where =
+    search.length > 0
+      ? {
+          name: { search },
+          id: { search }
+        }
+      : undefined;
+  const count = await prisma.user.count({ where });
   const results = await prisma.user.findMany({
     select: {
       avatar: true,
@@ -48,13 +55,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     orderBy: {
       syncedAt: "desc"
     },
-    where:
-      search.length > 0
-        ? {
-            name: { search },
-            id: { search }
-          }
-        : undefined
+    where
   });
   return {
     results,
