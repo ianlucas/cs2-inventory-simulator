@@ -88,6 +88,7 @@ export const russian = {
   InventoryItemExterior: /* csgo_russian.txt */"Износ:",
   InventoryItemInspect: /* csgo_russian.txt */"Осмотреть",
   InventoryItemInspectFinishCatalog: /* csgo_russian.txt */"Номер в каталоге",
+  InventoryItemInspectInGame: /* csgo_russian.txt */"Осмотреть в игре…",
   InventoryItemInspectPatternTemplate: /* csgo_russian.txt */"Шаблон раскраски",
   InventoryItemInspectWearRating: /* csgo_russian.txt */"Степень износа",
   InventoryItemMVPStatTrakCount: /* csgo_russian.txt */"Награды СЦИ в соревновательных играх, записанные StatTrak™:",

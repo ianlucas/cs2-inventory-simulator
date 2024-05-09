@@ -88,6 +88,7 @@ export const turkish = {
   InventoryItemExterior: /* csgo_turkish.txt */"Dış Görünüş:",
   InventoryItemInspect: /* csgo_turkish.txt */"İncele",
   InventoryItemInspectFinishCatalog: /* csgo_turkish.txt */"Tasarım Kataloğu",
+  InventoryItemInspectInGame: /* csgo_turkish.txt */"Oyunda incele...",
   InventoryItemInspectPatternTemplate: /* csgo_turkish.txt */"Kalıp Şablonu",
   InventoryItemInspectWearRating: /* csgo_turkish.txt */"Aşınma Durumu",
   InventoryItemMVPStatTrakCount: /* csgo_turkish.txt */"StatTrak™ Resmî Rekabetçi EDO'lar:",

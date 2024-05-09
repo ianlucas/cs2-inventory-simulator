@@ -88,6 +88,7 @@ export const dutch = {
   InventoryItemExterior: /* csgo_dutch.txt */"Staat:",
   InventoryItemInspect: /* csgo_dutch.txt */"Inspecteren",
   InventoryItemInspectFinishCatalog: /* csgo_dutch.txt */"Afwerkingscatalogus",
+  InventoryItemInspectInGame: /* csgo_dutch.txt */"In-game bekijken...",
   InventoryItemInspectPatternTemplate: /* csgo_dutch.txt */"Patroonsjabloon",
   InventoryItemInspectWearRating: /* csgo_dutch.txt */"Slijtagescore",
   InventoryItemMVPStatTrakCount: /* csgo_dutch.txt */"StatTrak™ officiële competitieve MVPs:",

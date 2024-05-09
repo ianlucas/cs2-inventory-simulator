@@ -88,6 +88,7 @@ export const greek = {
   InventoryItemExterior: /* csgo_greek.txt */"Εξωτερικό:",
   InventoryItemInspect: /* csgo_greek.txt */"Επιθεώρηση",
   InventoryItemInspectFinishCatalog: /* csgo_greek.txt */"Αριθμός καταλόγου",
+  InventoryItemInspectInGame: /* csgo_greek.txt */"Επιθεώρηση εντός παιχνιδιού...",
   InventoryItemInspectPatternTemplate: /* csgo_greek.txt */"Τύπος μοτίβου",
   InventoryItemInspectWearRating: /* csgo_greek.txt */"Βαθμός φθοράς",
   InventoryItemMVPStatTrakCount: /* csgo_greek.txt */"Επίσημοι ανταγωνιστικοί StatTrak™ MVP:",

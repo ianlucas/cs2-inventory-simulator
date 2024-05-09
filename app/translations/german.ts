@@ -88,6 +88,7 @@ export const german = {
   InventoryItemExterior: /* csgo_german.txt */"Zustand:",
   InventoryItemInspect: /* csgo_german.txt */"Untersuchen",
   InventoryItemInspectFinishCatalog: /* csgo_german.txt */"Lackkatalog",
+  InventoryItemInspectInGame: /* csgo_german.txt */"Im Spiel untersuchen …",
   InventoryItemInspectPatternTemplate: /* csgo_german.txt */"Mustervorlage",
   InventoryItemInspectWearRating: /* csgo_german.txt */"Abnutzungsgrad",
   InventoryItemMVPStatTrakCount: /* csgo_german.txt */"StatTrak™ Auszeichnungen als „Beste Spieler“ im offiziellen Wettkampf:",

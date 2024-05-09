@@ -88,6 +88,7 @@ export const danish = {
   InventoryItemExterior: /* csgo_danish.txt */"Overflade:",
   InventoryItemInspect: /* csgo_danish.txt */"Inspicer",
   InventoryItemInspectFinishCatalog: /* csgo_danish.txt */"Lakeringskatalog",
+  InventoryItemInspectInGame: /* csgo_danish.txt */"Inspicer i spillet...",
   InventoryItemInspectPatternTemplate: /* csgo_danish.txt */"Mønsterskabelon",
   InventoryItemInspectWearRating: /* csgo_danish.txt */"Slidvurdering",
   InventoryItemMVPStatTrakCount: /* csgo_danish.txt */"StatTrak™ officielle Competitive-MVP'er:",

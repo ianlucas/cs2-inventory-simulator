@@ -88,6 +88,7 @@ export const latam = {
   InventoryItemExterior: /* csgo_latam.txt */"Exterior:",
   InventoryItemInspect: /* csgo_latam.txt */"Inspeccionar",
   InventoryItemInspectFinishCatalog: /* csgo_latam.txt */"Catálogo de acabados",
+  InventoryItemInspectInGame: /* csgo_latam.txt */"Inspeccionar en el juego...",
   InventoryItemInspectPatternTemplate: /* csgo_latam.txt */"Plantilla de patrón",
   InventoryItemInspectWearRating: /* csgo_latam.txt */"Índice de desgaste",
   InventoryItemMVPStatTrakCount: /* csgo_latam.txt */"Premios al MJ en Competitivo oficial StatTrak™:",

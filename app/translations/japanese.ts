@@ -88,6 +88,7 @@ export const japanese = {
   InventoryItemExterior: /* csgo_japanese.txt */"外観：",
   InventoryItemInspect: /* csgo_japanese.txt */"調べる",
   InventoryItemInspectFinishCatalog: /* csgo_japanese.txt */"スキンカタログ",
+  InventoryItemInspectInGame: /* csgo_japanese.txt */"ゲーム内調査...",
   InventoryItemInspectPatternTemplate: /* csgo_japanese.txt */"パターンテンプレート",
   InventoryItemInspectWearRating: /* csgo_japanese.txt */"損耗率",
   InventoryItemMVPStatTrakCount: /* csgo_japanese.txt */"StatTrak™ 公式コンペティティブ MVP数:",

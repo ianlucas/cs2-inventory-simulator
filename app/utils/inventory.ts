@@ -23,6 +23,18 @@ export const INSPECTABLE_ITEM_TYPE = [
   "sticker",
   "weapon"
 ];
+export const INSPECTABLE_IN_GAME_ITEM_TYPE = [
+  "agent",
+  "case",
+  "collectible",
+  "glove",
+  "graffiti",
+  "melee",
+  "musickit",
+  "patch",
+  "sticker",
+  "weapon"
+];
 
 export function parseInventory(inventory?: string | null) {
   try {

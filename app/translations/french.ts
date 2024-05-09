@@ -88,6 +88,7 @@ export const french = {
   InventoryItemExterior: /* csgo_french.txt */"Apparence :",
   InventoryItemInspect: /* csgo_french.txt */"Examiner",
   InventoryItemInspectFinishCatalog: /* csgo_french.txt */"ID de la finition ",
+  InventoryItemInspectInGame: /* csgo_french.txt */"Examiner en jeu…",
   InventoryItemInspectPatternTemplate: /* csgo_french.txt */"Modèle des motifs ",
   InventoryItemInspectWearRating: /* csgo_french.txt */"Taux d'usure ",
   InventoryItemMVPStatTrakCount: /* csgo_french.txt */"StatTrak™ des MJs en compétitif:",

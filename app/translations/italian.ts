@@ -88,6 +88,7 @@ export const italian = {
   InventoryItemExterior: /* csgo_italian.txt */"Condizioni:",
   InventoryItemInspect: /* csgo_italian.txt */"Esamina",
   InventoryItemInspectFinishCatalog: /* csgo_italian.txt */"ID della skin",
+  InventoryItemInspectInGame: /* csgo_italian.txt */"Esamina in gioco...",
   InventoryItemInspectPatternTemplate: /* csgo_italian.txt */"Modello del motivo",
   InventoryItemInspectWearRating: /* csgo_italian.txt */"Tasso di usura",
   InventoryItemMVPStatTrakCount: /* csgo_italian.txt */"MVP nelle partite Competitive StatTrak™:",

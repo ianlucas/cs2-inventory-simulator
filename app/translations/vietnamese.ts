@@ -88,6 +88,7 @@ export const vietnamese = {
   InventoryItemExterior: /* csgo_vietnamese.txt */"Độ bền:",
   InventoryItemInspect: /* csgo_vietnamese.txt */"Quan sát",
   InventoryItemInspectFinishCatalog: /* csgo_vietnamese.txt */"Catalog thiết kế số",
+  InventoryItemInspectInGame: /* csgo_vietnamese.txt */"Xem trong trò chơi...",
   InventoryItemInspectPatternTemplate: /* csgo_vietnamese.txt */"Mẫu họa tiết",
   InventoryItemInspectWearRating: /* csgo_vietnamese.txt */"Độ mòn",
   InventoryItemMVPStatTrakCount: /* csgo_vietnamese.txt */"Lần MVP khi tranh đấu chính thức qua StatTrak™:",

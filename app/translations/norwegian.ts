@@ -88,6 +88,7 @@ export const norwegian = {
   InventoryItemExterior: /* csgo_norwegian.txt */"Tilstand:",
   InventoryItemInspect: /* csgo_norwegian.txt */"Inspiser",
   InventoryItemInspectFinishCatalog: /* csgo_norwegian.txt */"Overflatebehandlingskatalog",
+  InventoryItemInspectInGame: /* csgo_norwegian.txt */"Inspiser i spillet …",
   InventoryItemInspectPatternTemplate: /* csgo_norwegian.txt */"Mønstermal",
   InventoryItemInspectWearRating: /* csgo_norwegian.txt */"Slitasjegrad",
   InventoryItemMVPStatTrakCount: /* csgo_norwegian.txt */"StatTrak™ offisielle MVP-er i konkurransespilling:",

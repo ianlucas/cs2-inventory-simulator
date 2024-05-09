@@ -88,6 +88,7 @@ export const polish = {
   InventoryItemExterior: /* csgo_polish.txt */"Wygląd:",
   InventoryItemInspect: /* csgo_polish.txt */"Zbadaj",
   InventoryItemInspectFinishCatalog: /* csgo_polish.txt */"Nr w katalogu wykończenia",
+  InventoryItemInspectInGame: /* csgo_polish.txt */"Zbadaj w grze...",
   InventoryItemInspectPatternTemplate: /* csgo_polish.txt */"Wzór szablonu",
   InventoryItemInspectWearRating: /* csgo_polish.txt */"Współczynnik zużycia",
   InventoryItemMVPStatTrakCount: /* csgo_polish.txt */"Turniejowe MVP (StatTrak™):",

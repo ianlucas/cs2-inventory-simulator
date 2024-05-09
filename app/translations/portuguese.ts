@@ -107,6 +107,7 @@ export const portuguese = {
   InventoryItemExterior: /* csgo_portuguese.txt */"Exterior:",
   InventoryItemInspect: /* csgo_portuguese.txt */"Examinar",
   InventoryItemInspectFinishCatalog: /* csgo_portuguese.txt */"Número de catálogo",
+  InventoryItemInspectInGame: /* csgo_portuguese.txt */"Examinar no jogo...",
   InventoryItemInspectPatternTemplate: /* csgo_portuguese.txt */"Modelo do padrão",
   InventoryItemInspectWearRating: /* csgo_portuguese.txt */"Valor do desgaste",
   InventoryItemMVPStatTrakCount: /* csgo_portuguese.txt */"MVPs no modo competitivo:",

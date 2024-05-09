@@ -88,6 +88,7 @@ export const koreana = {
   InventoryItemExterior: /* csgo_koreana.txt */"외관:",
   InventoryItemInspect: /* csgo_koreana.txt */"관찰",
   InventoryItemInspectFinishCatalog: /* csgo_koreana.txt */"도색 카탈로그 번호",
+  InventoryItemInspectInGame: /* csgo_koreana.txt */"게임 내에서 관찰...",
   InventoryItemInspectPatternTemplate: /* csgo_koreana.txt */"무늬 템플릿 번호",
   InventoryItemInspectWearRating: /* csgo_koreana.txt */"닳은 정도",
   InventoryItemMVPStatTrakCount: /* csgo_koreana.txt */"StatTrak™ 공식 경쟁 매치 MVP 횟수:",

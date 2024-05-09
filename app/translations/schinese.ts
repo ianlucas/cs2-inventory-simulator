@@ -88,6 +88,7 @@ export const schinese = {
   InventoryItemExterior: /* csgo_schinese.txt */"外观：",
   InventoryItemInspect: /* csgo_schinese.txt */"检视",
   InventoryItemInspectFinishCatalog: /* csgo_schinese.txt */"皮肤编号",
+  InventoryItemInspectInGame: /* csgo_schinese.txt */"在游戏中检视…",
   InventoryItemInspectPatternTemplate: /* csgo_schinese.txt */"图案模板",
   InventoryItemInspectWearRating: /* csgo_schinese.txt */"磨损率",
   InventoryItemMVPStatTrakCount: /* csgo_schinese.txt */"StatTrak™ 官方竞技 MVP 次数:",

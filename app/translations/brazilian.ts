@@ -107,6 +107,7 @@ export const brazilian = {
   InventoryItemExterior: /* csgo_brazilian.txt */"Exterior:",
   InventoryItemInspect: /* csgo_brazilian.txt */"Inspecionar",
   InventoryItemInspectFinishCatalog: /* csgo_brazilian.txt */"Catálogo de revestimentos",
+  InventoryItemInspectInGame: /* csgo_brazilian.txt */"Inspecionar no jogo...",
   InventoryItemInspectPatternTemplate: /* csgo_brazilian.txt */"Estilo do padrão",
   InventoryItemInspectWearRating: /* csgo_brazilian.txt */"Nível de desgaste",
   InventoryItemMVPStatTrakCount: /* csgo_brazilian.txt */"★ em partidas competitivas oficiais via StatTrak™:",

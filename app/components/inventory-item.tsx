@@ -12,10 +12,12 @@ import {
   CS_TEAM_T,
   CS_Team
 } from "@ianlucas/cs2-lib";
+import { CS_generateInspectLink } from "@ianlucas/cs2-lib-inspect";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
 import {
   EDITABLE_ITEM_TYPE,
+  INSPECTABLE_IN_GAME_ITEM_TYPE,
   INSPECTABLE_ITEM_TYPE,
   UNLOCKABLE_ITEM_TYPE
 } from "~/utils/inventory";
@@ -142,6 +144,9 @@ export function InventoryItem({
   const isStorageUnit = CS_Economy.isStorageUnitTool(data);
   const isEditable = EDITABLE_ITEM_TYPE.includes(data.type);
   const canInspect = INSPECTABLE_ITEM_TYPE.includes(data.type);
+  const canInspectInGame =
+    INSPECTABLE_IN_GAME_ITEM_TYPE.includes(data.type) ||
+    CS_Economy.isNametagTool(data);
   const canEdit =
     inventoryItemAllowEdit &&
     isEditable &&
@@ -192,6 +197,13 @@ export function InventoryItem({
                     condition: canInspect,
                     label: translate("InventoryItemInspect"),
                     onClick: close(() => onInspectItem?.(uid))
+                  },
+                  {
+                    condition: canInspectInGame,
+                    label: translate("InventoryItemInspectInGame"),
+                    onClick: close(() => {
+                      window.location.assign(CS_generateInspectLink(item));
+                    })
                   }
                 ],
                 [

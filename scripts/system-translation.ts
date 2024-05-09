@@ -109,6 +109,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   InventoryItemExterior: "inv_header_grade",
   InventoryItemInspect: "inv_context_preview",
   InventoryItemInspectFinishCatalog: "SFUI_ItemInfo_FinishCatalog",
+  InventoryItemInspectInGame: "CSGO_EconAction_Preview",
   InventoryItemInspectPatternTemplate: "SFUI_ItemInfo_PatternTemplate",
   InventoryItemInspectWearRating: "SFUI_ItemInfo_WearAmount",
   InventoryItemMVPStatTrakCount: ["#KillEaterEventType_OCMVPs", ":"],

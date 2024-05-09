@@ -88,6 +88,7 @@ export const finnish = {
   InventoryItemExterior: /* csgo_finnish.txt */"Pinta:",
   InventoryItemInspect: /* csgo_finnish.txt */"Tarkasta",
   InventoryItemInspectFinishCatalog: /* csgo_finnish.txt */"Viimeistelyvalikoima",
+  InventoryItemInspectInGame: /* csgo_finnish.txt */"Tutki pelissä...",
   InventoryItemInspectPatternTemplate: /* csgo_finnish.txt */"Kuviopohja",
   InventoryItemInspectWearRating: /* csgo_finnish.txt */"Kuluma",
   InventoryItemMVPStatTrakCount: /* csgo_finnish.txt */"StatTrak™ Viralliset kilpailutilan Tähtipelaaja-merkinnät:",

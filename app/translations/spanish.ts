@@ -88,6 +88,7 @@ export const spanish = {
   InventoryItemExterior: /* csgo_spanish.txt */"Exterior:",
   InventoryItemInspect: /* csgo_spanish.txt */"Inspeccionar",
   InventoryItemInspectFinishCatalog: /* csgo_spanish.txt */"Catálogo de acabados",
+  InventoryItemInspectInGame: /* csgo_spanish.txt */"Inspeccionar en el juego...",
   InventoryItemInspectPatternTemplate: /* csgo_spanish.txt */"Plantilla de patrón",
   InventoryItemInspectWearRating: /* csgo_spanish.txt */"Índice de desgaste",
   InventoryItemMVPStatTrakCount: /* csgo_spanish.txt */"Veces JMV en competitivo oficial de StatTrak™:",

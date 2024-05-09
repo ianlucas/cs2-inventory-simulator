@@ -88,6 +88,7 @@ export const ukrainian = {
   InventoryItemExterior: /* csgo_ukrainian.txt */"Вигляд:",
   InventoryItemInspect: /* csgo_ukrainian.txt */"Оглянути",
   InventoryItemInspectFinishCatalog: /* csgo_ukrainian.txt */"Каталог оздоблень",
+  InventoryItemInspectInGame: /* csgo_ukrainian.txt */"Оглянути у грі…",
   InventoryItemInspectPatternTemplate: /* csgo_ukrainian.txt */"Текстурний шаблон",
   InventoryItemInspectWearRating: /* csgo_ukrainian.txt */"Зношування",
   InventoryItemMVPStatTrakCount: /* csgo_ukrainian.txt */"Зірок найкращого гравця в змагальному режимі (за даними СтатТрек™):",

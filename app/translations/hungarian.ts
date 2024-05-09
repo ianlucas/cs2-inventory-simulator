@@ -88,6 +88,7 @@ export const hungarian = {
   InventoryItemExterior: /* csgo_hungarian.txt */"Külső:",
   InventoryItemInspect: /* csgo_hungarian.txt */"Megvizsgálás",
   InventoryItemInspectFinishCatalog: /* csgo_hungarian.txt */"Festéskatalógus",
+  InventoryItemInspectInGame: /* csgo_hungarian.txt */"Megvizsgálás játékban...",
   InventoryItemInspectPatternTemplate: /* csgo_hungarian.txt */"Mintasablon",
   InventoryItemInspectWearRating: /* csgo_hungarian.txt */"Kopottsági érték",
   InventoryItemMVPStatTrakCount: /* csgo_hungarian.txt */"StatTrak™ hivatalos versengő MVP-k:",

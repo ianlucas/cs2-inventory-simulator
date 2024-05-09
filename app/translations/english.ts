@@ -108,6 +108,7 @@ export const english = {
   InventoryItemExterior: /* csgo_english.txt */"Exterior:",
   InventoryItemInspect: /* csgo_english.txt */"Inspect",
   InventoryItemInspectFinishCatalog: /* csgo_english.txt */"Finish Catalog",
+  InventoryItemInspectInGame: /* csgo_english.txt */"Inspect in Game...",
   InventoryItemInspectPatternTemplate: /* csgo_english.txt */"Pattern Template",
   InventoryItemInspectWearRating: /* csgo_english.txt */"Wear Rating",
   InventoryItemMVPStatTrakCount: /* csgo_english.txt */"StatTrak™ Official Competitive MVPs:",

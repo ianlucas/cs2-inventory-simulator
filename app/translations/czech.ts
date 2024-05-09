@@ -88,6 +88,7 @@ export const czech = {
   InventoryItemExterior: /* csgo_czech.txt */"Povrch:",
   InventoryItemInspect: /* csgo_czech.txt */"Prohlédnout",
   InventoryItemInspectFinishCatalog: /* csgo_czech.txt */"Katalogové číslo",
+  InventoryItemInspectInGame: /* csgo_czech.txt */"Prohlédnout ve hře...",
   InventoryItemInspectPatternTemplate: /* csgo_czech.txt */"Číslo šablony vzoru",
   InventoryItemInspectWearRating: /* csgo_czech.txt */"Opotřebení",
   InventoryItemMVPStatTrakCount: /* csgo_czech.txt */"Nejlepší hráč v kompetitivních zápasech:",

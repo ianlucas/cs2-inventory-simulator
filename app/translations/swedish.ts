@@ -88,6 +88,7 @@ export const swedish = {
   InventoryItemExterior: /* csgo_swedish.txt */"Exteriör:",
   InventoryItemInspect: /* csgo_swedish.txt */"Inspektera",
   InventoryItemInspectFinishCatalog: /* csgo_swedish.txt */"Ytbehandlingskatalog",
+  InventoryItemInspectInGame: /* csgo_swedish.txt */"Inspektera i spelet...",
   InventoryItemInspectPatternTemplate: /* csgo_swedish.txt */"Mönstermall",
   InventoryItemInspectWearRating: /* csgo_swedish.txt */"Slitagegradering",
   InventoryItemMVPStatTrakCount: /* csgo_swedish.txt */"StatTrak™ Officiella tävlingsinriktade MVPs:",

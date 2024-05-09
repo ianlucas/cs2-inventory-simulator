@@ -88,6 +88,7 @@ export const bulgarian = {
   InventoryItemExterior: /* csgo_bulgarian.txt */"Външен вид:",
   InventoryItemInspect: /* csgo_bulgarian.txt */"Оглед",
   InventoryItemInspectFinishCatalog: /* csgo_bulgarian.txt */"№ за окраската в каталога",
+  InventoryItemInspectInGame: /* csgo_bulgarian.txt */"Оглед в играта…",
   InventoryItemInspectPatternTemplate: /* csgo_bulgarian.txt */"Шаблон на шарката",
   InventoryItemInspectWearRating: /* csgo_bulgarian.txt */"Оценка на износването",
   InventoryItemMVPStatTrakCount: /* csgo_bulgarian.txt */"Официални съревнователни НЦИ от StatTrak™:",

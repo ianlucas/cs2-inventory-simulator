@@ -88,6 +88,7 @@ export const tchinese = {
   InventoryItemExterior: /* csgo_tchinese.txt */"外觀：",
   InventoryItemInspect: /* csgo_tchinese.txt */"檢視",
   InventoryItemInspectFinishCatalog: /* csgo_tchinese.txt */"外觀目錄",
+  InventoryItemInspectInGame: /* csgo_tchinese.txt */"在遊戲中檢視…",
   InventoryItemInspectPatternTemplate: /* csgo_tchinese.txt */"圖案範本",
   InventoryItemInspectWearRating: /* csgo_tchinese.txt */"磨損度",
   InventoryItemMVPStatTrakCount: /* csgo_tchinese.txt */"StatTrak™ 官方競技 MVP 次數:",

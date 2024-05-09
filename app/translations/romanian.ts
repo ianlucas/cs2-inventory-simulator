@@ -88,6 +88,7 @@ export const romanian = {
   InventoryItemExterior: /* csgo_romanian.txt */"Exterior:",
   InventoryItemInspect: /* csgo_romanian.txt */"Inspectează",
   InventoryItemInspectFinishCatalog: /* csgo_romanian.txt */"Catalogul finisajului",
+  InventoryItemInspectInGame: /* csgo_romanian.txt */"Inspectează în joc...",
   InventoryItemInspectPatternTemplate: /* csgo_romanian.txt */"Șablonul modelului",
   InventoryItemInspectWearRating: /* csgo_romanian.txt */"Grad de uzură",
   InventoryItemMVPStatTrakCount: /* csgo_romanian.txt */"MVP-uri competitive oficiale StatTrak™:",
