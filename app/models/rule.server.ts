@@ -21,6 +21,7 @@ const booleanRulesNames = [
   "editAllowWear",
   "inventoryItemAllowApplySticker",
   "inventoryItemAllowEdit",
+  "inventoryItemAllowInspectInGame",
   "inventoryItemAllowScrapeSticker",
   "inventoryItemAllowUnlockContainer"
 ] as const;
@@ -424,6 +425,11 @@ export async function setupRules() {
   });
   await addRule({
     name: "editAllowStickers",
+    type: "boolean",
+    input: true
+  });
+  await addRule({
+    name: "inventoryItemAllowInspectInGame",
     type: "boolean",
     input: true
   });

@@ -87,6 +87,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           "editHideType",
           "inventoryItemAllowApplySticker",
           "inventoryItemAllowEdit",
+          "inventoryItemAllowInspectInGame",
           "inventoryItemAllowScrapeSticker",
           "inventoryItemAllowUnlockContainer",
           "inventoryItemEquipHideModel",

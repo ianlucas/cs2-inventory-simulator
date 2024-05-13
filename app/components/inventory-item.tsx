@@ -79,6 +79,7 @@ export function InventoryItem({
     editHideType,
     inventoryItemAllowApplySticker,
     inventoryItemAllowEdit,
+    inventoryItemAllowInspectInGame,
     inventoryItemAllowScrapeSticker,
     inventoryItemAllowUnlockContainer,
     inventoryItemEquipHideModel,
@@ -145,8 +146,9 @@ export function InventoryItem({
   const isEditable = EDITABLE_ITEM_TYPE.includes(data.type);
   const canInspect = INSPECTABLE_ITEM_TYPE.includes(data.type);
   const canInspectInGame =
-    INSPECTABLE_IN_GAME_ITEM_TYPE.includes(data.type) ||
-    CS_Economy.isNametagTool(data);
+    inventoryItemAllowInspectInGame &&
+    (INSPECTABLE_IN_GAME_ITEM_TYPE.includes(data.type) ||
+      CS_Economy.isNametagTool(data));
   const canEdit =
     inventoryItemAllowEdit &&
     isEditable &&

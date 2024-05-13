@@ -65,6 +65,12 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 - **Type:** `boolean`
 - **Default:** `true`
 
+### `inventoryItemAllowInspectInGame`
+
+- Indicates whether the user can inspect an item in-game.
+- **Type:** `boolean`
+- **Default:** `true`
+
 ### `inventoryItemEquipHideModel`
 
 - Determines whether to disallow an item model from being equipped by the user.
