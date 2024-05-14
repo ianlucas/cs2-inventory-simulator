@@ -64,7 +64,7 @@ export function RenameStorageUnit({
                 className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
                 item={item}
               />
-              <div className="flex">
+              <div className="flex lg:m-auto lg:mb-4 lg:max-w-[360px]">
                 <EditorInput
                   autoFocus
                   className="py-1 text-xl"

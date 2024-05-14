@@ -89,7 +89,7 @@ export function ApplyItemSticker({
                 className="m-auto aspect-[1.33333] max-w-[512px]"
                 item={targetItem}
               />
-              <div className="flex">
+              <div className="flex items-center justify-center">
                 {stickers.map((id, index) =>
                   id !== CS_NONE || index === stickerIndex ? (
                     <ItemImage
