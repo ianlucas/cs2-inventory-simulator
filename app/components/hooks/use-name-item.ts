@@ -3,14 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_InventoryItem, CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { useTranslate } from "~/components/app-context";
-import { resolveCSItem, resolveInventoryItem } from "~/utils/inventory";
 import { has } from "~/utils/misc";
 
 export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
   return function nameItem(
-    item: CS_Item | CS_InventoryItem,
+    item: CS2EconomyItem | CS2InventoryItem,
     formatter:
       | "case-contents-name"
       | "craft-name"
@@ -18,12 +17,12 @@ export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
       | "editor-name"
       | "inventory-name" = "default"
   ) {
-    const inventoryItem = resolveInventoryItem(item);
-    const data = resolveCSItem(item);
+    const inventoryItem = item instanceof CS2InventoryItem ? item : undefined;
+    const data = item;
     const nametag =
-      inventoryItem?.nametag !== undefined ? `"${inventoryItem.nametag}"` : "";
+      inventoryItem?.nameTag !== undefined ? `"${inventoryItem.nameTag}"` : "";
     const stattrak =
-      inventoryItem?.stattrak !== undefined
+      inventoryItem?.statTrak !== undefined
         ? `${translate("InventoryItemStatTrak")} `
         : "";
     const quality = data.type === "melee" && !data.free ? "★ " : "";
@@ -56,7 +55,7 @@ export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
         return [model, name];
       case "inventory-name":
         if (nametag.length > 0) {
-          if (!CS_Economy.isStorageUnitTool(data)) {
+          if (!data.isStorageUnit()) {
             model = "";
           }
           name = nametag;

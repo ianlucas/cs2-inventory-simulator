@@ -49,7 +49,7 @@ export default function Craft() {
   const sync = useSync();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(
-    isEditing ? inventory.get(uid).data : undefined
+    isEditing ? inventory.get(uid) : undefined
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -59,7 +59,7 @@ export default function Craft() {
 
   function handleSubmit({
     quantity,
-    stattrak,
+    stattrak: statTrak,
     ...attributes
   }: ItemEditorAttributes) {
     if (isSubmitting || selectedItem === undefined) {
@@ -70,7 +70,7 @@ export default function Craft() {
 
     const inventoryItem = {
       id: selectedItem.id,
-      stattrak: stattrak ? (0 as const) : undefined,
+      statTrak: statTrak ? (0 as const) : undefined,
       ...attributes
     };
 
@@ -79,7 +79,7 @@ export default function Craft() {
       setInventory(
         inventory.edit(uid, {
           ...inventoryItem,
-          stattrak: stattrak ? inventory.get(uid).stattrak ?? 0 : undefined
+          statTrak: statTrak ? inventory.get(uid).statTrak ?? 0 : undefined
         })
       );
       sync({

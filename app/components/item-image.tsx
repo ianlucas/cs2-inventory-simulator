@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { ComponentProps } from "react";
 import { resolveItemImage } from "~/utils/economy";
 
@@ -12,7 +12,7 @@ export function ItemImage({
   wear,
   ...props
 }: ComponentProps<"img"> & {
-  item: CS_Item;
+  item: CS2EconomyItem;
   wear?: number;
 }) {
   return (

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item, CS_randomInt } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem, CS2UnlockedItem, randomInt } from "@ianlucas/cs2-lib";
 import { ElementRef, useRef, useState } from "react";
 import { useDetectCollision } from "~/components/hooks/use-detect-collision";
 import { useResponsiveScale } from "~/components/hooks/use-responsive-scale";
@@ -15,14 +15,14 @@ export function UnlockCaseWheel({
   isDisplaying,
   items
 }: {
-  caseItem: CS_Item;
+  caseItem: CS2EconomyItem;
   isDisplaying: boolean;
-  items: ReturnType<typeof CS_Economy.unlockCase>[];
+  items: CS2UnlockedItem[];
 }) {
   const targetRef = useRef<ElementRef<"div">>(null);
   const hitsRef = useRef<ElementRef<"div">>(null);
   const scale = useResponsiveScale();
-  const [offset] = useState(CS_randomInt(188, 440));
+  const [offset] = useState(randomInt(188, 440));
   const scaleY = isDisplaying ? 1 : 0;
   // Stops at items[28] with an offset.
   const translateX = isDisplaying ? -29 * 256 + offset : 0;

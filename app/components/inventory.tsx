@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Team } from "@ianlucas/cs2-lib";
+import { CS2TeamValues } from "@ianlucas/cs2-lib";
 import { useNavigate } from "@remix-run/react";
 import { useApplyItemSticker } from "~/components/hooks/use-apply-item-sticker";
 import { useInspectItem } from "~/components/hooks/use-inspect-item";
@@ -51,8 +51,8 @@ export function Inventory() {
   const navigate = useNavigate();
 
   const ownApplicableStickers =
-    items.filter(({ item }) => CS_Economy.isSticker(item.data)).length > 0 &&
-    items.filter(({ item }) => CS_Economy.hasStickers(item.data)).length > 0;
+    items.filter(({ item }) => item.isSticker()).length > 0 &&
+    items.filter(({ item }) => item.hasStickers()).length > 0;
 
   const {
     closeUnlockCase,
@@ -110,9 +110,9 @@ export function Inventory() {
   const { closeInspectItem, handleInspectItem, inspectItem, isInspectingItem } =
     useInspectItem();
 
-  function handleEquip(uid: number, team?: CS_Team) {
+  function handleEquip(uid: number, team?: CS2TeamValues) {
     playSound(
-      inventory.get(uid).data.type === "musickit"
+      inventory.get(uid).type === "musickit"
         ? "music_equip"
         : "inventory_item_pickup"
     );
@@ -120,7 +120,7 @@ export function Inventory() {
     sync({ type: EquipAction, uid: uid, team });
   }
 
-  function handleUnequip(uid: number, team?: CS_Team) {
+  function handleUnequip(uid: number, team?: CS2TeamValues) {
     playSound("inventory_item_close");
     setInventory(inventory.unequip(uid, team));
     sync({ type: UnequipAction, uid: uid, team });

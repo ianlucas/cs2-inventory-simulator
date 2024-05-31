@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_BaseInventoryItem, CS_Inventory } from "@ianlucas/cs2-lib";
+import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { badRequest, conflict } from "~/response.server";
 import { parseInventory } from "~/utils/inventory";
@@ -86,9 +86,8 @@ export async function existsUser(userId: string) {
 export async function updateUserInventory(
   domainHostname: string,
   userId: string,
-  rawInventory: CS_BaseInventoryItem[]
+  inventory: string
 ) {
-  const inventory = JSON.stringify(rawInventory);
   const syncedAt = new Date();
   if (await isValidDomain(domainHostname)) {
     return await prisma.userDomainInventory.upsert({
@@ -156,14 +155,14 @@ export async function manipulateUserInventory({
 }: {
   domainHostname: string;
   manipulate:
-    | ((inventory: CS_Inventory) => void)
-    | ((inventory: CS_Inventory) => Promise<void>);
+    | ((inventory: CS2Inventory) => void)
+    | ((inventory: CS2Inventory) => Promise<void>);
   rawInventory: string | null;
   syncedAt?: number;
   userId: string;
 }) {
-  const inventory = new CS_Inventory({
-    items: parseInventory(rawInventory),
+  const inventory = new CS2Inventory({
+    data: parseInventory(rawInventory),
     maxItems: await getRule("inventoryMaxItems", userId),
     storageUnitMaxItems: await getRule("inventoryStorageUnitMaxItems", userId)
   });
@@ -178,5 +177,9 @@ export async function manipulateUserInventory({
       throw conflict;
     }
   }
-  return await updateUserInventory(domainHostname, userId, inventory.export());
+  return await updateUserInventory(
+    domainHostname,
+    userId,
+    inventory.stringify()
+  );
 }

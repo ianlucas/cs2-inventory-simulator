@@ -49,11 +49,7 @@ export function InventorySelectedItem({
       </button>
       <div className="flex flex-1 select-none items-center justify-center gap-3">
         <strong>{translate(getLabelToken(itemSelector?.type))}</strong>
-        <img
-          draggable={false}
-          className="h-12"
-          src={resolveItemImage(item.data)}
-        />
+        <img draggable={false} className="h-12" src={resolveItemImage(item)} />
         <span className="text-neutral-300">
           {nameItemString(item, "inventory-name")}
         </span>

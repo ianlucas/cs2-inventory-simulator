@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { createFakeInventoryItem } from "~/utils/inventory";
@@ -19,9 +19,9 @@ export function UnlockCaseContainerUnlocked({
   onClose,
   unlockedItem: { attributes, id, rarity }
 }: {
-  caseItem: CS_Item;
+  caseItem: CS2EconomyItem;
   onClose: () => void;
-  unlockedItem: ReturnType<typeof CS_Economy.unlockCase>;
+  unlockedItem: CS2UnlockedItem;
 }) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
@@ -34,7 +34,7 @@ export function UnlockCaseContainerUnlocked({
     );
   }
 
-  const item = CS_Economy.getById(id);
+  const item = CS2Economy.getById(id);
 
   return (
     <div className="flex h-full w-full items-center justify-center text-center drop-shadow">

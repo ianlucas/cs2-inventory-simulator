@@ -3,13 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_InventoryItem } from "@ianlucas/cs2-lib";
+import { CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { useTranslate } from "./app-context";
 
 export function InventoryItemStatTrak({
-  inventoryItem: { data, stattrak }
+  inventoryItem: { type, statTrak }
 }: {
-  inventoryItem: CS_InventoryItem;
+  inventoryItem: CS2InventoryItem;
 }) {
   const translate = useTranslate();
 
@@ -20,11 +20,11 @@ export function InventoryItemStatTrak({
       </div>
       <div className="mt-4 text-orange-400">
         {translate(
-          data.type === "musickit"
+          type === "musickit"
             ? "InventoryItemMVPStatTrakCount"
             : "InventoryItemStatTrakCount"
         )}{" "}
-        {stattrak}
+        {statTrak}
       </div>
     </div>
   );

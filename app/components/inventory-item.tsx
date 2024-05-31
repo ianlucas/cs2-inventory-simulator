@@ -5,12 +5,9 @@
 
 import { FloatingFocusManager } from "@floating-ui/react";
 import {
-  CS_Economy,
-  CS_INVENTORY_EQUIPPABLE_ITEMS,
-  CS_NONE,
-  CS_TEAM_CT,
-  CS_TEAM_T,
-  CS_Team
+  CS2Team,
+  CS2TeamValues,
+  CS2_INVENTORY_EQUIPPABLE_ITEMS
 } from "@ianlucas/cs2-lib";
 import { CS_generateInspectLink } from "@ianlucas/cs2-lib-inspect";
 import clsx from "clsx";
@@ -58,7 +55,7 @@ export function InventoryItem({
   onClick?: (uid: number) => void;
   onDepositToStorageUnit?: (uid: number) => void;
   onEdit?: (uid: number) => void;
-  onEquip?: (uid: number, team?: CS_Team) => void;
+  onEquip?: (uid: number, team?: CS2TeamValues) => void;
   onInspectItem?: (uid: number) => void;
   onInspectStorageUnit?: (uid: number) => void;
   onRemove?: (uid: number) => void;
@@ -67,7 +64,7 @@ export function InventoryItem({
   onRetrieveFromStorageUnit?: (uid: number) => void;
   onScrapeSticker?: (uid: number) => void;
   onSwapItemsStatTrak?: (uid: number) => void;
-  onUnequip?: (uid: number, team?: CS_Team) => void;
+  onUnequip?: (uid: number, team?: CS2TeamValues) => void;
   onUnlockContainer?: (uid: number) => void;
   ownApplicableStickers?: boolean;
 }) {
@@ -107,48 +104,46 @@ export function InventoryItem({
   } = useInventoryItemFloating();
 
   const isFreeInventoryItem = uid < 0;
-  const { data } = item;
+  const data = item;
 
   const isEquippable =
-    (item.data.model === undefined ||
-      !inventoryItemEquipHideModel.includes(item.data.model)) &&
-    !inventoryItemEquipHideType.includes(item.data.type);
+    (item.model === undefined ||
+      !inventoryItemEquipHideModel.includes(item.model)) &&
+    !inventoryItemEquipHideType.includes(item.type);
   const canEquip =
     isEquippable &&
     data.teams === undefined &&
     !item.equipped &&
-    CS_INVENTORY_EQUIPPABLE_ITEMS.includes(data.type);
+    CS2_INVENTORY_EQUIPPABLE_ITEMS.includes(data.type);
   const canEquipT =
-    isEquippable && data.teams?.includes(CS_TEAM_T) && !item.equippedT;
+    isEquippable && data.teams?.includes(CS2Team.T) && !item.equippedT;
   const canEquipCT =
-    isEquippable && data.teams?.includes(CS_TEAM_CT) && !item.equippedCT;
+    isEquippable && data.teams?.includes(CS2Team.CT) && !item.equippedCT;
   const canUnequip = isEquippable && item.equipped === true;
   const canUnequipT = isEquippable && item.equippedT === true;
   const canUnequipCT = isEquippable && item.equippedCT === true;
 
-  const canSwapStatTrak = CS_Economy.isStatTrakSwapTool(data);
-  const canRename = CS_Economy.isNametagTool(data);
+  const canSwapStatTrak = data.isStatTrakSwapTool();
+  const canRename = data.isNameTag();
   const canApplySticker =
     inventoryItemAllowApplySticker &&
     ownApplicableStickers &&
-    ((CS_Economy.hasStickers(data) &&
-      (item.stickers ?? []).filter((id) => id !== CS_NONE).length < 4) ||
-      data.type === "sticker");
+    ((data.hasStickers() && Object.keys(item.stickers ?? {}).length < 4) ||
+      data.isSticker());
   const canScrapeSticker =
     inventoryItemAllowScrapeSticker &&
-    CS_Economy.hasStickers(data) &&
-    (item.stickers ?? []).filter((id) => id !== CS_NONE).length > 0;
+    data.hasStickers() &&
+    Object.keys(item.stickers ?? {}).length > 0;
   const canUnlockContainer =
     inventoryItemAllowUnlockContainer &&
     UNLOCKABLE_ITEM_TYPE.includes(data.type);
-  const hasNametag = item.nametag !== undefined;
-  const isStorageUnit = CS_Economy.isStorageUnitTool(data);
+  const hasNametag = item.nameTag !== undefined;
+  const isStorageUnit = data.isStorageUnit();
   const isEditable = EDITABLE_ITEM_TYPE.includes(data.type);
   const canInspect = INSPECTABLE_ITEM_TYPE.includes(data.type);
   const canInspectInGame =
     inventoryItemAllowInspectInGame &&
-    (INSPECTABLE_IN_GAME_ITEM_TYPE.includes(data.type) ||
-      CS_Economy.isNametagTool(data));
+    (INSPECTABLE_IN_GAME_ITEM_TYPE.includes(data.type) || data.isNameTag());
   const canEdit =
     inventoryItemAllowEdit &&
     isEditable &&
@@ -217,19 +212,19 @@ export function InventoryItem({
                   {
                     condition: canEquipT,
                     label: translate("InventoryItemEquipT"),
-                    onClick: close(() => onEquip?.(uid, CS_TEAM_T))
+                    onClick: close(() => onEquip?.(uid, CS2Team.T))
                   },
                   {
                     condition: canEquipCT,
                     label: translate("InventoryItemEquipCT"),
-                    onClick: close(() => onEquip?.(uid, CS_TEAM_CT))
+                    onClick: close(() => onEquip?.(uid, CS2Team.CT))
                   },
                   {
                     condition: canEquipCT && canEquipT,
                     label: translate("InventoryItemEquipBothTeams"),
                     onClick: close(() => {
-                      onEquip?.(uid, CS_TEAM_CT);
-                      onEquip?.(uid, CS_TEAM_T);
+                      onEquip?.(uid, CS2Team.CT);
+                      onEquip?.(uid, CS2Team.T);
                     })
                   }
                 ],
@@ -242,12 +237,12 @@ export function InventoryItem({
                   {
                     condition: canUnequipT,
                     label: translate("InventoryItemUnequipT"),
-                    onClick: close(() => onUnequip?.(uid, CS_TEAM_T))
+                    onClick: close(() => onUnequip?.(uid, CS2Team.T))
                   },
                   {
                     condition: canUnequipCT,
                     label: translate("InventoryItemUnequipCT"),
-                    onClick: close(() => onUnequip?.(uid, CS_TEAM_CT))
+                    onClick: close(() => onUnequip?.(uid, CS2Team.CT))
                   }
                 ],
                 [

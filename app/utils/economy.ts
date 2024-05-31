@@ -4,20 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_Economy,
-  CS_ITEMS,
-  CS_Item,
-  CS_ItemTranslations,
-  CS_MAX_SEED,
-  CS_RARITY_ANCIENT_COLOR,
-  CS_RARITY_COMMON_COLOR,
-  CS_RARITY_IMMORTAL_COLOR,
-  CS_RARITY_LEGENDARY_COLOR,
-  CS_RARITY_MYTHICAL_COLOR,
-  CS_RARITY_RARE_COLOR,
-  CS_RARITY_UNCOMMON_COLOR,
-  CS_STICKER_WEAR_FACTOR,
-  CS_WEAR_FACTOR
+  CS2Economy,
+  CS2EconomyItem,
+  CS2ItemLocalizationByLanguage,
+  CS2RarityColor,
+  CS2_ITEMS,
+  CS2_MAX_SEED,
+  CS2_STICKER_WEAR_FACTOR,
+  CS2_WEAR_FACTOR
 } from "@ianlucas/cs2-lib";
 
 export const assetBaseUrl =
@@ -33,43 +27,43 @@ export const COUNTABLE_ITEM_TYPES = [
 ];
 export const FREE_MODEL_IN_NAME_TYPES = ["musickit"];
 export const RARITY_LABEL: Record<string, string> = {
-  [CS_RARITY_COMMON_COLOR]: "Common",
-  [CS_RARITY_UNCOMMON_COLOR]: "Uncommon",
-  [CS_RARITY_RARE_COLOR]: "Rare",
-  [CS_RARITY_MYTHICAL_COLOR]: "Mythical",
-  [CS_RARITY_LEGENDARY_COLOR]: "Legendary",
-  [CS_RARITY_ANCIENT_COLOR]: "Ancient",
-  [CS_RARITY_IMMORTAL_COLOR]: "Immortal"
+  [CS2RarityColor.Common]: "Common",
+  [CS2RarityColor.Uncommon]: "Uncommon",
+  [CS2RarityColor.Rare]: "Rare",
+  [CS2RarityColor.Mythical]: "Mythical",
+  [CS2RarityColor.Legendary]: "Legendary",
+  [CS2RarityColor.Ancient]: "Ancient",
+  [CS2RarityColor.Immortal]: "Immortal"
 };
 
 export function updateEconomyTranslation(
-  translation: CS_ItemTranslations[number]
+  language: CS2ItemLocalizationByLanguage[string]
 ) {
-  CS_Economy.use({
-    items: CS_ITEMS,
-    translation
+  CS2Economy.use({
+    items: CS2_ITEMS,
+    language
   });
 }
 
-export function isItemCountable(item: CS_Item) {
+export function isItemCountable(item: CS2EconomyItem) {
   return COUNTABLE_ITEM_TYPES.includes(item.type);
 }
 
-export function resolveItemImage(item: number | CS_Item, wear?: number) {
-  return CS_Economy.resolveItemImage(assetBaseUrl, item, wear);
+export function resolveItemImage(item: number | CS2EconomyItem, wear?: number) {
+  return CS2Economy.resolveItemImage(assetBaseUrl, item, wear);
 }
 
-export function resolveCaseSpecialsImage(item: number | CS_Item) {
-  return CS_Economy.resolveCaseSpecialsImage(assetBaseUrl, item);
+export function resolveCaseSpecialsImage(item: number | CS2EconomyItem) {
+  return CS2Economy.resolveContainerSpecialsImage(assetBaseUrl, item);
 }
 
-export function resolveCollectionImage(item: number | CS_Item) {
-  return CS_Economy.resolveCollectionImage(assetBaseUrl, item);
+export function resolveCollectionImage(item: number | CS2EconomyItem) {
+  return CS2Economy.resolveCollectionImage(assetBaseUrl, item);
 }
 
-export const seedStringMaxLen = String(CS_MAX_SEED).length;
-export const wearStringMaxLen = String(CS_WEAR_FACTOR).length;
-export const stickerWearStringMaxLen = String(CS_STICKER_WEAR_FACTOR).length;
+export const seedStringMaxLen = String(CS2_MAX_SEED).length;
+export const wearStringMaxLen = String(CS2_WEAR_FACTOR).length;
+export const stickerWearStringMaxLen = String(CS2_STICKER_WEAR_FACTOR).length;
 
 export function wearToString(wear: number) {
   return wear.toFixed(wearStringMaxLen - 2);
@@ -80,20 +74,19 @@ export function stickerWearToString(wear: number) {
 }
 
 export function createFakeItem(
-  baseItem: CS_Item,
-  attributes: Partial<CS_Item>
+  { economy, item, language }: CS2EconomyItem,
+  attributes: Partial<CS2EconomyItem>
 ) {
-  return {
-    ...baseItem,
-    ...attributes
-  } satisfies CS_Item;
+  const fakeItem = new CS2EconomyItem(economy, item, language);
+  Object.assign(fakeItem, attributes);
+  return fakeItem;
 }
 
-export function sortByName(a: CS_Item, b: CS_Item) {
+export function sortByName(a: CS2EconomyItem, b: CS2EconomyItem) {
   return a.name.localeCompare(b.name);
 }
 
-export function getRarityItemName(item: CS_Item) {
+export function getRarityItemName(item: CS2EconomyItem) {
   const [model] = item.name.split(" | ");
   if (item.type === "weapon") {
     if (item.category == "secondary") {
@@ -127,7 +120,7 @@ export function getRarityItemName(item: CS_Item) {
   switch (item.type) {
     case "melee":
       return "Knife";
-    case "glove":
+    case "gloves":
       return "Gloves";
     case "sticker":
       return "Sticker";
@@ -141,9 +134,9 @@ export function getRarityItemName(item: CS_Item) {
       return "Graffiti";
     case "collectible":
       return "Collectible";
-    case "case":
+    case "container":
       return "Container";
-    case "key":
+    case "containerkey":
       return "Key";
   }
 }

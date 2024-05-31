@@ -5,7 +5,7 @@
 
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useTranslate } from "./app-context";
 
@@ -13,8 +13,8 @@ export function InventoryItemContents({
   item,
   unlockedItem
 }: {
-  item: CS_Item;
-  unlockedItem?: CS_Item;
+  item: CS2EconomyItem;
+  unlockedItem?: CS2EconomyItem;
 }) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
@@ -24,9 +24,9 @@ export function InventoryItemContents({
       <div className="text-neutral-400">
         {unlockedItem === undefined
           ? translate("InventoryItemContainsOne")
-          : unlockedItem.collectionname}
+          : unlockedItem.collectionName}
       </div>
-      {CS_Economy.listCaseContents(item, true).map((item) => (
+      {item.listContents(true).map((item) => (
         <div
           className="flex items-center gap-1"
           key={item.id}

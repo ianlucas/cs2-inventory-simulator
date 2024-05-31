@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { ItemImage } from "./item-image";
@@ -17,16 +17,16 @@ export function ItemButton({
 }: {
   bigger?: boolean;
   ignoreRarityColor?: boolean;
-  item: CS_Item;
-  onClick?: (item: CS_Item) => void;
+  item: CS2EconomyItem;
+  onClick?: (item: CS2EconomyItem) => void;
 }) {
   const nameItem = useNameItem();
   const [name] = nameItem(item, "craft-name");
   const clickable = onClick !== undefined;
   const showAltname =
-    item.altname !== undefined &&
-    (item.altname.includes("Collectible") ||
-      item.altname.includes("Commodity") ||
+    item.altName !== undefined &&
+    (item.altName.includes("Collectible") ||
+      item.altName.includes("Commodity") ||
       ["weapon", "glove", "melee"].includes(item.type));
 
   function handleClick() {
@@ -66,10 +66,10 @@ export function ItemButton({
           <div style={{ color: ignoreRarityColor ? undefined : item.rarity }}>
             <TextSlider text={name} />
           </div>
-          {showAltname && item.altname !== undefined && (
+          {showAltname && item.altName !== undefined && (
             <TextSlider
               className="text-sm text-neutral-400"
-              text={item.altname}
+              text={item.altName}
             />
           )}
         </div>

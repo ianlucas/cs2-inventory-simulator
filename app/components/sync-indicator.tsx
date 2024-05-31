@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory } from "@ianlucas/cs2-lib";
+import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -44,8 +44,8 @@ export function SyncIndicator() {
       const { syncedAt, inventory } =
         await getJson<ApiActionResyncData>(ApiActionResyncUrl);
       setInventory(
-        new CS_Inventory({
-          items: parseInventory(inventory),
+        new CS2Inventory({
+          data: parseInventory(inventory),
           maxItems: inventoryMaxItems,
           storageUnitMaxItems: inventoryStorageUnitMaxItems
         })

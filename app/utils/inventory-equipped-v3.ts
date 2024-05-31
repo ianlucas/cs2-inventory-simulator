@@ -4,12 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_BaseInventoryItem,
-  CS_Economy,
-  CS_INVENTORY_STICKERS,
-  CS_NONE,
-  CS_TEAM_CT,
-  CS_TEAM_T
+  CS2Economy,
+  CS2InventoryData,
+  CS2Team,
+  mapAllStickers
 } from "@ianlucas/cs2-lib";
 import { assert } from "./misc";
 import { range } from "./number";
@@ -48,7 +46,7 @@ interface MusicKitItem {
 }
 
 export async function generate(
-  inventory: CS_BaseInventoryItem[],
+  inventory: CS2InventoryData,
   nonEquippable = {
     models: [] as string[],
     types: [] as string[]
@@ -59,12 +57,13 @@ export async function generate(
   const tWeapons: Record<number, WeaponEconItem> = {};
   const ctWeapons: Record<number, WeaponEconItem> = {};
   const agents: Record<number, AgentItem> = {};
-  const teams = [undefined, CS_TEAM_CT, CS_TEAM_T];
+  const teams = [undefined, CS2Team.CT, CS2Team.T];
   let collectible: number | undefined;
   let musicKit: MusicKitItem | undefined;
 
-  for (const item of inventory) {
-    const data = CS_Economy.getById(item.id);
+  for (const [uid, item] of Object.entries(inventory.items)) {
+    const intUid = parseInt(uid, 10);
+    const data = CS2Economy.getById(item.id);
 
     const isEquippable =
       (data.model === undefined ||
@@ -79,10 +78,10 @@ export async function generate(
       if (team === undefined && !item.equipped) {
         continue;
       }
-      if (team === CS_TEAM_CT && !item.equippedCT) {
+      if (team === CS2Team.CT && !item.equippedCT) {
         continue;
       }
-      if (team === CS_TEAM_T && !item.equippedT) {
+      if (team === CS2Team.T && !item.equippedT) {
         continue;
       }
       switch (data.type) {
@@ -93,8 +92,8 @@ export async function generate(
           assert(data.index);
           musicKit = {
             def: data.index,
-            stattrak: item.stattrak ?? -1,
-            uid: item.uid
+            stattrak: item.statTrak ?? -1,
+            uid: intUid
           };
           break;
         case "collectible":
@@ -106,45 +105,41 @@ export async function generate(
           knives[team] = {
             def: data.def,
             legacy: false,
-            nametag: item.nametag ?? "",
+            nametag: item.nameTag ?? "",
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
-            stattrak: item.stattrak ?? -1,
+            stattrak: item.statTrak ?? -1,
             stickers: [],
-            uid: item.uid,
-            wear: item.wear ?? data.wearmin ?? 0
+            uid: intUid,
+            wear: item.wear ?? data.wearMin ?? 0
           };
           break;
-        case "glove":
+        case "gloves":
           assert(team);
           assert(data.def);
           gloves[team] = {
             def: data.def,
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
-            wear: item.wear ?? data.wearmin ?? 0
+            wear: item.wear ?? data.wearMin ?? 0
           };
           break;
         case "weapon":
           assert(data.def);
-          const weapon = team === CS_TEAM_CT ? ctWeapons : tWeapons;
+          const weapon = team === CS2Team.CT ? ctWeapons : tWeapons;
           weapon[data.def] = {
             def: data.def,
             legacy: data.legacy ?? false,
-            nametag: item.nametag ?? "",
+            nametag: item.nameTag ?? "",
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
-            stattrak: item.stattrak ?? -1,
-            stickers: (item.stickers ?? CS_INVENTORY_STICKERS).map(
-              (sticker, index) => ({
-                slot: index,
-                wear: item.stickerswear?.[index] ?? 0,
-                def:
-                  sticker !== CS_NONE
-                    ? CS_Economy.getById(sticker).index ?? 0
-                    : 0
-              })
-            ),
+            stattrak: item.statTrak ?? -1,
+            stickers: mapAllStickers(item.stickers).map((sticker, index) => ({
+              slot: index,
+              wear: item.stickerswear?.[index] ?? 0,
+              def:
+                sticker !== CS_NONE ? CS2Economy.getById(sticker).index ?? 0 : 0
+            })),
             uid: item.uid,
             wear: item.wear ?? data.wearmin ?? 0
           };
@@ -155,17 +150,17 @@ export async function generate(
           assert(data.voprefix);
           const patch = inventory.find(
             (item) =>
-              CS_Economy.getById(item.id).type === "patch" &&
-              item[team === CS_TEAM_CT ? "equippedCT" : "equippedT"]
+              CS2Economy.getById(item.id).type === "patch" &&
+              item[team === CS2Team.CT ? "equippedCT" : "equippedT"]
           );
           agents[team] = {
             model: data.model,
             patches: range(5).map(() =>
-              patch !== undefined ? CS_Economy.getById(patch.id).index ?? 0 : 0
+              patch !== undefined ? CS2Economy.getById(patch.id).index ?? 0 : 0
             ),
-            vofallback: data.vofallback ?? false,
-            vofemale: data.vofemale ?? false,
-            voprefix: data.voprefix
+            vofallback: data.voFallback ?? false,
+            vofemale: data.voFemale ?? false,
+            voprefix: data.voPrefix
           };
           break;
       }

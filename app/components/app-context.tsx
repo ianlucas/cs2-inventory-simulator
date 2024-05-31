@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory } from "@ianlucas/cs2-lib";
+import { CS2Inventory } from "@ianlucas/cs2-lib";
 import {
   ContextType,
   createContext,
@@ -28,19 +28,19 @@ import {
 } from "~/utils/inventory-transform";
 import type { SyncInventoryShape } from "~/utils/shapes.server";
 import {
-  retrieveInventoryItems,
+  retrieveInventoryData,
   retrieveUserId,
-  storeInventoryItems,
+  storeInventoryData,
   storeUserId
 } from "~/utils/user";
 
 const AppContext = createContext<
   {
-    inventory: CS_Inventory;
+    inventory: CS2Inventory;
     inventoryFilter: ReturnType<typeof useInventoryFilterState>;
     items: TransformedInventoryItems;
     requireAuth: boolean;
-    setInventory: (value: CS_Inventory) => void;
+    setInventory: (value: CS2Inventory) => void;
     translation: ReturnType<typeof useTranslation>;
   } & ReturnType<typeof useTypedLoaderData<typeof loader>>
 >(null!);
@@ -106,12 +106,12 @@ export function AppProvider({
   const inventorySpec = {
     items: user?.inventory
       ? parseInventory(user?.inventory)
-      : retrieveInventoryItems(),
+      : retrieveInventoryData(),
     maxItems: rules.inventoryMaxItems,
     storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
   };
   const [inventory, setInventory] = useInventoryState(
-    new CS_Inventory(inventorySpec)
+    new CS2Inventory(inventorySpec)
   );
   const inventoryFilter = useInventoryFilterState();
   const translation = useTranslation({
@@ -120,24 +120,32 @@ export function AppProvider({
   });
 
   useEffect(() => {
-    storeInventoryItems(inventory.export());
+    storeInventoryData(inventory.stringify());
   }, [inventory]);
 
   useEffect(() => {
-    const items = retrieveInventoryItems();
-    if (user !== undefined && user.inventory === null && items.length > 0) {
+    const data = retrieveInventoryData();
+    if (user !== undefined && user.inventory === null && data !== undefined) {
       pushToSync({
         type: AddFromCacheAction,
-        items: items as SyncInventoryShape
+        items: data as SyncInventoryShape
       });
       setInventory(
-        new CS_Inventory({
-          items: items.map((item) => ({
-            ...item,
-            equipped: undefined,
-            equippedCT: undefined,
-            equippedT: undefined
-          })),
+        new CS2Inventory({
+          data: {
+            items: Object.fromEntries(
+              Object.entries(data.items).map(([uid, value]) => [
+                uid,
+                {
+                  ...value,
+                  equipped: undefined,
+                  equippedCT: undefined,
+                  equippedT: undefined
+                }
+              ])
+            ),
+            version: data.version
+          },
           maxItems: rules.inventoryMaxItems,
           storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
         })
@@ -151,7 +159,7 @@ export function AppProvider({
 
   useEffect(() => {
     updateEconomyTranslation(translation.items);
-    setInventory(new CS_Inventory(inventorySpec));
+    setInventory(new CS2Inventory(inventorySpec));
   }, [translation.items]);
 
   const items = useMemo(

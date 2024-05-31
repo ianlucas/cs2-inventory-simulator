@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cs2-lib";
+import { CS2Economy } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/components/hooks/use-input";
@@ -38,7 +38,7 @@ export function RenameItem({
   const [nametag, setNametag] = useInput("");
 
   const inventoryItem = useInventoryItem(targetUid);
-  const { data: targetItem } = inventoryItem;
+  const targetItem = inventoryItem;
 
   function handleRename() {
     if (targetUid < 0 && targetItem.free) {
@@ -87,7 +87,7 @@ export function RenameItem({
                   onChange={setNametag}
                   placeholder={translate("EditorNametagPlaceholder")}
                   validate={(nametag) =>
-                    CS_Economy.safeValidateNametag(nametag ?? "")
+                    CS2Economy.safeValidateNametag(nametag ?? "")
                   }
                   value={nametag}
                 />
@@ -98,7 +98,7 @@ export function RenameItem({
                     <ModalButton
                       disabled={
                         (nametag !== "" &&
-                          !CS_Economy.safeValidateNametag(nametag)) ||
+                          !CS2Economy.safeValidateNametag(nametag)) ||
                         (nametag === "" && targetItem.free)
                       }
                       variant="primary"

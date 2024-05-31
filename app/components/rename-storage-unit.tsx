@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cs2-lib";
+import { CS2Economy } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/components/hooks/use-input";
@@ -30,7 +30,8 @@ export function RenameStorageUnit({
   const sync = useSync();
   const nameItemString = useNameItemString();
 
-  const { data: item, nametag: defaultValue } = useInventoryItem(uid);
+  const item = useInventoryItem(uid);
+  const { nameTag: defaultValue } = item;
   const isStartUsingStorageUnit = defaultValue === undefined;
   const [nametag, setNametag] = useInput(defaultValue ?? "");
 
@@ -72,7 +73,7 @@ export function RenameStorageUnit({
                   onChange={setNametag}
                   placeholder={translate("EditorNametagPlaceholder")}
                   validate={(nametag) =>
-                    CS_Economy.safeValidateNametag(nametag ?? "")
+                    CS2Economy.safeValidateNametag(nametag ?? "")
                   }
                   value={nametag}
                 />
@@ -83,7 +84,7 @@ export function RenameStorageUnit({
                     <ModalButton
                       disabled={
                         nametag === "" ||
-                        !CS_Economy.safeValidateNametag(nametag)
+                        !CS2Economy.safeValidateNametag(nametag)
                       }
                       variant="primary"
                       onClick={handleRename}

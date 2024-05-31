@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_ItemTranslations } from "@ianlucas/cs2-lib";
+import { CS2ItemLocalizationByLanguage } from "@ianlucas/cs2-lib";
 import { createHash } from "crypto";
 import { readFileSync, readdirSync } from "fs";
 import { resolve } from "path";
@@ -41,16 +41,16 @@ export type SystemTranslations = Record<string, Record<string, string>>;
 
 declare global {
   var $systemTranslations: SystemTranslations;
-  var $itemsTranslations: CS_ItemTranslations;
+  var $itemsTranslations: CS2ItemLocalizationByLanguage;
 
   interface Window {
     $systemTranslation: SystemTranslations[string];
-    $itemsTranslation: CS_ItemTranslations[string];
+    $itemsTranslation: CS2ItemLocalizationByLanguage[string];
   }
 }
 
 function readItemTranslations() {
-  const itemsTranslations: CS_ItemTranslations = {};
+  const itemsTranslations: CS2ItemLocalizationByLanguage = {};
   const directory = resolve(
     process.cwd(),
     "node_modules/@ianlucas/cs2-lib/assets/translations"

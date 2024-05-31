@@ -5,21 +5,20 @@
 
 import { PassThrough } from "node:stream";
 
-import { CS_Economy, CS_ITEMS } from "@ianlucas/cs2-lib";
-import english from "@ianlucas/cs2-lib/assets/translations/items-english.json";
+import { CS2Economy, CS2_ITEMS } from "@ianlucas/cs2-lib";
+import english from "@ianlucas/cs2-lib/assets/localizations/items-english.json";
 import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import { setupRules } from "./models/rule.server";
-import { runUserInventoryCleanUp } from "./scripts/user-inventory-clean-up";
 import { setupTranslation } from "./translation.server";
 
 const ABORT_DELAY = 5_000;
 
-CS_Economy.use({ items: CS_ITEMS, translation: english });
-setupRules().then(() => runUserInventoryCleanUp());
+CS2Economy.use({ items: CS2_ITEMS, language: english });
+setupRules();
 setupTranslation();
 
 export default function handleRequest(

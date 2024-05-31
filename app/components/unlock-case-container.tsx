@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
@@ -30,14 +30,14 @@ export function UnlockCaseContainer({
   onUnlock
 }: {
   canUnlock: boolean;
-  caseItem: CS_Item;
+  caseItem: CS2EconomyItem;
   caseUid: number;
   hideCaseContents: boolean;
   isDisplaying: boolean;
   isSyncing: boolean;
-  items: ReturnType<typeof CS_Economy.unlockCase>[];
-  keyItem?: CS_Item;
-  neededKeyItem?: CS_Item;
+  items: CS2UnlockedItem[];
+  keyItem?: CS2EconomyItem;
+  neededKeyItem?: CS2EconomyItem;
   onClose: () => void;
   onUnlock: () => void;
 }) {

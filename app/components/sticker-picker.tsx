@@ -11,12 +11,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  CS_Economy,
-  CS_Item,
-  CS_MAX_STICKER_WEAR,
-  CS_MIN_STICKER_WEAR,
-  CS_NONE,
-  CS_STICKER_WEAR_FACTOR
+  CS2Economy,
+  CS2EconomyItem,
+  CS2_MAX_STICKER_WEAR,
+  CS2_MIN_STICKER_WEAR,
+  CS2_STICKER_WEAR_FACTOR
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
@@ -54,8 +53,8 @@ export function StickerPicker({
   const [category, setCategory] = useState("");
   const [search, setSearch] = useInput("");
   const [activeIndex, setActiveIndex] = useState<number>();
-  const stickers = useMemo(() => CS_Economy.getStickers().sort(sortByName), []);
-  const categories = useMemo(() => CS_Economy.getStickerCategories(), []);
+  const stickers = useMemo(() => CS2Economy.getStickers().sort(sortByName), []);
+  const categories = useMemo(() => CS2Economy.getStickerCategories(), []);
   const [wear, setWear] = useState(0);
 
   function handleClickSlot(index: number) {
@@ -64,7 +63,7 @@ export function StickerPicker({
     };
   }
 
-  function handleAddSticker(item: CS_Item) {
+  function handleAddSticker(item: CS2EconomyItem) {
     onChange({
       ids: value.ids.map((other, index) =>
         index === activeIndex ? item.id : other
@@ -133,7 +132,7 @@ export function StickerPicker({
       <div className="flex justify-between">
         {value.ids.map((sticker, index) => {
           const item =
-            sticker !== CS_NONE ? CS_Economy.getById(sticker) : CS_NONE;
+            sticker !== CS_NONE ? CS2Economy.getById(sticker) : CS_NONE;
           return (
             <button
               key={index}
@@ -209,17 +208,17 @@ export function StickerPicker({
           >
             <EditorStepRangeWithInput
               inputStyles="w-[26px]"
-              max={CS_MAX_STICKER_WEAR}
+              max={CS2_MAX_STICKER_WEAR}
               maxLength={stickerWearStringMaxLen}
-              min={CS_MIN_STICKER_WEAR}
+              min={CS2_MIN_STICKER_WEAR}
               onChange={setWear}
               randomizable
-              step={CS_STICKER_WEAR_FACTOR}
+              step={CS2_STICKER_WEAR_FACTOR}
               stepRangeStyles="flex-1"
               transform={stickerWearToString}
               type="float"
               validate={(value) =>
-                value >= CS_MIN_STICKER_WEAR && value <= CS_MAX_STICKER_WEAR
+                value >= CS2_MIN_STICKER_WEAR && value <= CS2_MAX_STICKER_WEAR
               }
               value={wear}
             />

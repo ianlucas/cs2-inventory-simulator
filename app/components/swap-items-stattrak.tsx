@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cs2-lib";
+import { CS2Economy } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useCounter } from "~/components/hooks/use-counter";
@@ -43,12 +43,12 @@ export function SwapItemsStatTrak({
 
   const toInventoryItem = inventory.get(toUid);
   const fromInventoryItem = inventory.get(fromUid);
-  const toItem = CS_Economy.getById(toInventoryItem.id);
-  const fromItem = CS_Economy.getById(fromInventoryItem.id);
-  const to = useCounter(toInventoryItem.stattrak!, fromInventoryItem.stattrak!);
+  const toItem = CS2Economy.getById(toInventoryItem.id);
+  const fromItem = CS2Economy.getById(fromInventoryItem.id);
+  const to = useCounter(toInventoryItem.statTrak!, fromInventoryItem.statTrak!);
   const from = useCounter(
-    fromInventoryItem.stattrak!,
-    toInventoryItem.stattrak!
+    fromInventoryItem.statTrak!,
+    toInventoryItem.statTrak!
   );
 
   const items = [

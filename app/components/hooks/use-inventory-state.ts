@@ -3,12 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory } from "@ianlucas/cs2-lib";
+import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 
 export function useInventoryState(
-  initialState: CS_Inventory | (() => CS_Inventory)
+  initialState: CS2Inventory | (() => CS2Inventory)
 ) {
   const [state, setState] = useState(initialState);
-  return [state, (state: CS_Inventory) => setState(state.move())] as const;
+  return [state, (state: CS2Inventory) => setState(state.move())] as const;
 }

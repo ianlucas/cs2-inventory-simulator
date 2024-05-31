@@ -5,7 +5,7 @@
 
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useToggle } from "@uidotdev/usehooks";
 import { useState } from "react";
 import { dispatchAppEvent } from "~/app";
@@ -23,7 +23,7 @@ export function UnlockCaseContainerAddKey({
   neededKeyItem
 }: {
   caseUid: number;
-  neededKeyItem: CS_Item;
+  neededKeyItem: CS2EconomyItem;
 }) {
   const translate = useTranslate();
   const sync = useSync();

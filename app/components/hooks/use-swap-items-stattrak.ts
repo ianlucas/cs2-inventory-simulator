@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS2ItemType } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
@@ -20,13 +21,13 @@ export function useSwapItemsStatTrak() {
   function handleSwapItemsStatTrak(uid: number) {
     return setItemSelector({
       uid,
-      items: items.filter(({ item }) => item.stattrak !== undefined),
+      items: items.filter(({ item }) => item.statTrak !== undefined),
       type: "swap-items-stattrak"
     });
   }
 
   function handleSwapItemsStatTrakSelect(uid: number) {
-    const { data: selectedItem } = inventory.get(uid);
+    const selectedItem = inventory.get(uid);
     if (swapItemsStatTrak?.fromUid !== undefined) {
       setSwapItemsStatTrak((existing) => ({
         ...existing!,
@@ -41,11 +42,11 @@ export function useSwapItemsStatTrak() {
         uid: uid,
         items: items.filter(
           ({ item, uid: otherUid }) =>
-            item.stattrak !== undefined &&
+            item.statTrak !== undefined &&
             otherUid !== uid &&
-            selectedItem.type === item.data.type &&
-            (selectedItem.type === "musickit" ||
-              selectedItem.def === item.data.def)
+            selectedItem.type === item.type &&
+            (selectedItem.type === CS2ItemType.MusicKit ||
+              selectedItem.def === item.def)
         ),
         type: "swap-items-stattrak"
       });

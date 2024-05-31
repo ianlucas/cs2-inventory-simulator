@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import type { CS_BaseInventoryItem } from "@ianlucas/cs2-lib";
 import { parseInventory } from "./inventory";
 
 export function storeUserId(value: string) {
@@ -18,15 +17,15 @@ export function retrieveUserId() {
   }
 }
 
-export function storeInventoryItems(value: CS_BaseInventoryItem[]) {
+export function storeInventoryData(value: string) {
   if (typeof document !== "undefined") {
-    return window.localStorage.setItem("inventoryItems", JSON.stringify(value));
+    return window.localStorage.setItem("inventoryItems", value);
   }
 }
 
-export function retrieveInventoryItems() {
+export function retrieveInventoryData() {
   if (typeof document !== "undefined") {
     return parseInventory(window.localStorage.getItem("inventoryItems"));
   }
-  return [];
+  return undefined;
 }

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2ItemType } from "@ianlucas/cs2-lib";
 
 export const ECONOMY_ITEM_FILTERS = [
   {
@@ -12,7 +12,7 @@ export const ECONOMY_ITEM_FILTERS = [
     icon: "pistol",
     isFree: true,
     label: "Pistol",
-    type: "weapon" as const
+    type: CS2ItemType.Weapon
   },
   {
     category: "smg",
@@ -20,7 +20,7 @@ export const ECONOMY_ITEM_FILTERS = [
     icon: "smg",
     isFree: true,
     label: "SMG",
-    type: "weapon" as const
+    type: CS2ItemType.Weapon
   },
   {
     category: "heavy",
@@ -28,7 +28,7 @@ export const ECONOMY_ITEM_FILTERS = [
     isFree: true,
     icon: "heavy",
     label: "Heavy",
-    type: "weapon" as const
+    type: CS2ItemType.Weapon
   },
   {
     category: "rifle",
@@ -36,7 +36,7 @@ export const ECONOMY_ITEM_FILTERS = [
     isFree: true,
     icon: "rifle",
     label: "Rifle",
-    type: "weapon" as const
+    type: CS2ItemType.Weapon
   },
   {
     category: "equipment",
@@ -44,74 +44,74 @@ export const ECONOMY_ITEM_FILTERS = [
     icon: "equipment",
     isFree: true,
     label: "Equipment",
-    type: "weapon" as const
+    type: CS2ItemType.Weapon
   },
   {
     hasModel: true,
     icon: "knife",
     label: "Knife",
-    type: "melee" as const
+    type: CS2ItemType.Melee
   },
 
   {
     hasModel: true,
     icon: "glove",
     label: "Glove",
-    type: "glove" as const
+    type: CS2ItemType.Gloves
   },
   {
     hasModel: false,
     icon: "sticker",
     label: "Sticker",
-    type: "sticker" as const
+    type: CS2ItemType.Sticker
   },
   {
     hasModel: false,
     icon: "agent",
     label: "Agent",
-    type: "agent" as const
+    type: CS2ItemType.Agent
   },
   {
     hasModel: false,
     icon: "patch",
     label: "Patch",
-    type: "patch" as const
+    type: CS2ItemType.Patch
   },
   {
     hasModel: false,
     icon: "musickit",
     label: "Music Kit",
-    type: "musickit" as const
+    type: CS2ItemType.MusicKit
   },
   {
     hasModel: false,
     icon: "spray",
     label: "Graffiti",
-    type: "graffiti" as const
+    type: CS2ItemType.Graffiti
   },
   {
     hasModel: false,
     icon: "collectible",
     label: "Collectible",
-    type: "collectible" as const
+    type: CS2ItemType.Collectible
   },
   {
     hasModel: false,
     icon: "case",
     label: "Case",
-    type: "case" as const
+    type: CS2ItemType.Container
   },
   {
     hasModel: false,
     icon: "key",
     label: "Key",
-    type: "key" as const
+    type: CS2ItemType.ContainerKey
   },
   {
     hasModel: false,
     icon: "tool",
     label: "Tool",
-    type: "tool" as const
+    type: CS2ItemType.Tool
   }
 ];
 
@@ -123,7 +123,7 @@ export function getBaseItems({
   type,
   isFree
 }: EconomyItemFilter) {
-  return CS_Economy.filterItems({
+  return CS2Economy.filterItems({
     category,
     type,
     base: hasModel ? true : undefined
@@ -133,7 +133,7 @@ export function getBaseItems({
 }
 
 export function getPaidItems({ type }: EconomyItemFilter, model: string) {
-  return CS_Economy.filterItems({
+  return CS2Economy.filterItems({
     model
   }).filter(({ base }) => type === "melee" || !base);
 }

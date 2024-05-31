@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_BaseInventoryItem } from "@ianlucas/cs2-lib";
+import { CS2InventoryData } from "@ianlucas/cs2-lib";
 import { json } from "@remix-run/node";
 import { z } from "zod";
 import { prisma } from "~/db.server";
@@ -23,8 +23,8 @@ export async function handleUserCachedResponse({
   args: string | null;
   domainHostname: string;
   generate:
-    | ((inventory: CS_BaseInventoryItem[], userId: string) => any)
-    | ((inventory: CS_BaseInventoryItem[], userId: string) => Promise<any>);
+    | ((inventory: CS2InventoryData, userId: string) => any)
+    | ((inventory: CS2InventoryData, userId: string) => Promise<any>);
   throwBody: any;
   mimeType: string;
   url: string;
@@ -52,13 +52,15 @@ export async function handleUserCachedResponse({
   if (cache !== null) {
     return res(cache.body, mimeType);
   }
-  const inventory = await getUserInventory(domainHostname, userId);
+  const inventory = parseInventory(
+    await getUserInventory(domainHostname, userId)
+  );
   if (!inventory) {
     throw mimeType === "application/json"
       ? json(throwBody)
       : res(throwBody, mimeType);
   }
-  const generated = await generate(parseInventory(inventory), userId);
+  const generated = await generate(inventory, userId);
   const body =
     mimeType === "application/json"
       ? JSON.stringify(generated)

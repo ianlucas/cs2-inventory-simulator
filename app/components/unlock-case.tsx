@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2UnlockedItem } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -48,21 +48,18 @@ export function UnlockCase({
   const user = useUser();
   const isSyncing = useIsSyncing();
   const [inventory, setInventory] = useInventory();
-  const [items, setItems] = useState<
-    ReturnType<typeof CS_Economy.unlockCase>[]
-  >([]);
+  const [items, setItems] = useState<CS2UnlockedItem[]>([]);
   const [isDisplaying, setIsDisplaying] = useState(false);
   const [canUnlock, setCanUnlock] = useState(true);
-  const [unlockedItem, setUnlockedItem] =
-    useState<ReturnType<typeof CS_Economy.unlockCase>>();
+  const [unlockedItem, setUnlockedItem] = useState<CS2UnlockedItem>();
   const [hideCaseContents, setHideCaseContents] = useState(false);
 
-  const { data: caseItem } = useInventoryItem(caseUid);
+  const caseItem = useInventoryItem(caseUid);
   const neededKeyItem =
     caseItem.keys !== undefined
-      ? CS_Economy.getById(caseItem.keys[0])
+      ? CS2Economy.getById(caseItem.keys[0])
       : undefined;
-  const keyItem = useTryInventoryItem(keyUid)?.data;
+  const keyItem = useTryInventoryItem(keyUid);
   const wait = useTimer();
 
   async function handleUnlock() {
@@ -71,7 +68,7 @@ export function UnlockCase({
       setCanUnlock(false);
       const unlockedItem =
         user === undefined
-          ? CS_Economy.unlockCase(caseItem)
+          ? caseItem.unlockContainer()
           : await unlockCase(caseUid, keyUid);
       wait(() => {
         setHideCaseContents(true);
@@ -81,13 +78,15 @@ export function UnlockCase({
         wait(() => {
           setItems(
             range(32).map((_, index) =>
-              index === 28 ? unlockedItem : CS_Economy.unlockCase(caseItem)
+              index === 28 ? unlockedItem : caseItem.unlockContainer()
             )
           );
           setIsDisplaying(true);
           wait(() => {
             setUnlockedItem(unlockedItem);
-            setInventory(inventory.unlockCase(unlockedItem, caseUid, keyUid));
+            setInventory(
+              inventory.unlockContainer(unlockedItem, caseUid, keyUid)
+            );
           }, 6000);
         }, 100);
       }, 250);

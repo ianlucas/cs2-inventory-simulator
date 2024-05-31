@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useMemo, useState } from "react";
 import {
   ECONOMY_ITEM_FILTERS,
@@ -18,7 +18,7 @@ import { useInput } from "./use-input";
 export function useItemPickerState({
   onPickItem
 }: {
-  onPickItem: (item: CS_Item) => void;
+  onPickItem: (item: CS2EconomyItem) => void;
 }) {
   const itemFilter = useCraftItemRules();
   const categoryFilter = useCraftFilterRules();
@@ -37,7 +37,7 @@ export function useItemPickerState({
     return reset();
   }
 
-  function handleItemClick(item: CS_Item) {
+  function handleItemClick(item: CS2EconomyItem) {
     if (!filter.hasModel || model !== undefined) {
       return onPickItem(item);
     }
@@ -48,14 +48,14 @@ export function useItemPickerState({
   const items = useMemo(
     () =>
       (model === undefined ? getBaseItems(filter) : getPaidItems(filter, model))
-        .filter(({ altname, name }) => {
+        .filter(({ altName, name }) => {
           if (query.length < 2) {
             return true;
           }
           const queryLower = query.toLocaleLowerCase();
           return (
             name.toLocaleLowerCase().includes(queryLower) ||
-            altname?.toLocaleLowerCase().includes(queryLower)
+            altName?.toLocaleLowerCase().includes(queryLower)
           );
         })
         .filter(itemFilter)

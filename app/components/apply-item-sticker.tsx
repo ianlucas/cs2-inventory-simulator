@@ -5,7 +5,7 @@
 
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_INVENTORY_STICKERS, CS_NONE } from "@ianlucas/cs2-lib";
+import { CS2Economy, mapAllStickers } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -38,10 +38,10 @@ export function ApplyItemSticker({
   const nameItemString = useNameItemString();
 
   const [stickerIndex, setStickerIndex] = useState<number>();
-  const { data: stickerItem } = useInventoryItem(stickerUid);
-  const targetInventoryItem = useInventoryItem(targetUid);
-  const { data: targetItem, stickers: initialStickers } = targetInventoryItem;
-  const stickers = initialStickers ?? [...CS_INVENTORY_STICKERS];
+  const stickerItem = useInventoryItem(stickerUid);
+  const targetItem = useInventoryItem(targetUid);
+  const { stickers: initialStickers } = targetItem;
+  const stickers = initialStickers;
 
   function handleApplySticker() {
     if (stickerIndex !== undefined) {
@@ -81,7 +81,7 @@ export function ApplyItemSticker({
             <div>
               <UseItemHeader
                 actionDesc={translate("ApplyStickerUseOn")}
-                actionItem={nameItemString(targetInventoryItem)}
+                actionItem={nameItemString(targetItem)}
                 title={translate("ApplyStickerUse")}
                 warning={translate("ApplyStickerWarn")}
               />
@@ -90,23 +90,23 @@ export function ApplyItemSticker({
                 item={targetItem}
               />
               <div className="flex items-center justify-center">
-                {stickers.map((id, index) =>
-                  id !== CS_NONE || index === stickerIndex ? (
+                {mapAllStickers(stickers).map(([slot, sticker]) =>
+                  sticker !== undefined || slot === stickerIndex ? (
                     <ItemImage
-                      key={index}
+                      key={slot}
                       className="h-[126px] w-[168px]"
                       item={
-                        index === stickerIndex
-                          ? stickerItem
-                          : CS_Economy.getById(id!)
+                        sticker !== undefined
+                          ? CS2Economy.getById(sticker.id)
+                          : stickerItem
                       }
                     />
                   ) : (
                     <button
-                      key={index}
+                      key={slot}
                       className="group flex h-[126px] w-[168px] items-center justify-center"
                       onClick={() => {
-                        setStickerIndex(index);
+                        setStickerIndex(slot);
                         playSound("sticker_apply");
                       }}
                     >

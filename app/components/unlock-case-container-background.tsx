@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useWindowSize } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useState } from "react";
@@ -14,7 +14,7 @@ export function UnlockCaseContainerBackground({
   caseItem
 }: {
   canUnlock: boolean;
-  caseItem: CS_Item;
+  caseItem: CS2EconomyItem;
 }) {
   const { width } = useWindowSize();
   const [scale, setScale] = useState(0);

@@ -3,9 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_NONE } from "@ianlucas/cs2-lib";
+import { CS2Economy } from "@ianlucas/cs2-lib";
 import { z } from "zod";
-import { size } from "./number";
 
 export const nonNegativeInt = z.number().int().nonnegative().finite().safe();
 export const positiveInt = z.number().int().positive().finite().safe();
@@ -16,57 +15,54 @@ export const baseInventoryItemProps = {
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
   id: nonNegativeInt,
-  nametag: z
+  nameTag: z
     .string()
     .max(20)
     .optional()
-    .transform((nametag) => CS_Economy.trimNametag(nametag))
-    .refine((nametag) => CS_Economy.safeValidateNametag(nametag)),
+    .transform((nametag) => CS2Economy.trimNametag(nametag))
+    .refine((nametag) => CS2Economy.safeValidateNametag(nametag)),
+  patches: z.record(nonNegativeInt).optional(),
   seed: positiveInt
     .optional()
-    .refine((seed) => CS_Economy.safeValidateSeed(seed)),
-  stattrak: z.literal(0).optional(),
+    .refine((seed) => CS2Economy.safeValidateSeed(seed)),
+  statTrak: z.literal(0).optional(),
   stickers: z
-    .array(nonNegativeInt)
-    .optional()
-    .transform((stickers) =>
-      size(stickers?.filter((sticker) => sticker !== CS_NONE)) > 0
-        ? stickers
-        : undefined
-    ),
-  stickerswear: z
-    .array(nonNegativeFloat)
-    .optional()
-    .transform((stickerswear) =>
-      size(stickerswear?.filter((wear) => wear !== CS_NONE)) > 0
-        ? stickerswear
-        : undefined
-    ),
+    .record(
+      z.object({
+        id: nonNegativeInt,
+        wear: nonNegativeFloat.optional(),
+        x: z.number().finite().optional(),
+        y: z.number().finite().optional()
+      })
+    )
+    .optional(),
   wear: nonNegativeFloat
     .optional()
-    .refine((wear) => wear === undefined || CS_Economy.safeValidateWear(wear))
+    .refine((wear) => wear === undefined || CS2Economy.safeValidateWear(wear))
 };
 
 const baseServerInventoryItemProps = {
   ...baseInventoryItemProps,
-  stattrak: z
+  statTrak: z
     .number()
     .optional()
     .refine(
-      (stattrak) =>
-        stattrak === undefined || CS_Economy.safeValidateStatTrak(stattrak)
-    ),
-  uid: nonNegativeInt
+      (statTrak) =>
+        statTrak === undefined || CS2Economy.safeValidateStatTrak(statTrak)
+    )
 };
 
 const serverInventoryItemProps = {
   ...baseServerInventoryItemProps,
-  caseid: nonNegativeInt.optional(),
-  storage: z.array(z.object(baseServerInventoryItemProps)).optional()
+  containerId: nonNegativeInt.optional(),
+  storage: z.record(z.object(baseServerInventoryItemProps)).optional()
 };
 
 export const serverInventoryItemShape = z.object(serverInventoryItemProps);
 
-export const serverInventoryShape = z.array(serverInventoryItemShape);
+export const serverInventoryShape = z.object({
+  items: z.record(serverInventoryItemShape),
+  version: nonNegativeInt
+});
 
 export const teamShape = z.literal(0).or(z.literal(2)).or(z.literal(3));

@@ -4,12 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { FloatingFocusManager } from "@floating-ui/react";
-import {
-  CS_Economy,
-  CS_MIN_SEED,
-  CS_MIN_WEAR,
-  CS_NONE
-} from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2_MIN_SEED, CS2_MIN_WEAR } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/components/hooks/use-inspect-floating";
@@ -34,7 +29,8 @@ export function InspectItem({
   const nameItemString = useNameItemString();
   const inventoryItem = useInventoryItem(uid);
   const { statsForNerds } = usePreferences();
-  const { data: item, seed, stickers, stickerswear, wear } = inventoryItem;
+  const item = inventoryItem;
+  const { seed, stickers, wear } = item;
   const {
     getHoverFloatingProps,
     getHoverReferenceProps,
@@ -45,7 +41,7 @@ export function InspectItem({
     ref
   } = useInspectFloating();
 
-  const hasHover = CS_Economy.hasSeed(item) && CS_Economy.hasWear(item);
+  const hasHover = item.hasSeed() && item.hasWear();
 
   return (
     <ClientOnly
@@ -58,16 +54,16 @@ export function InspectItem({
                   className="flex items-center justify-center gap-2 border-b-4 px-1 pb-2"
                   style={{ borderColor: item.rarity }}
                 >
-                  {item.collectionid !== undefined && (
+                  {item.collection !== undefined && (
                     <ItemCollectionImage className="h-16" item={item} />
                   )}
                   <div className="font-display">
                     <div className="text-3xl">
                       {nameItemString(inventoryItem)}
                     </div>
-                    {item.collectionname !== undefined && (
+                    {item.collectionName !== undefined && (
                       <div className="-mt-2 text-neutral-300">
-                        {item.collectionname}
+                        {item.collectionName}
                       </div>
                     )}
                   </div>
@@ -80,27 +76,27 @@ export function InspectItem({
                     item={item}
                     wear={wear}
                   />
-                  <div className="absolute bottom-0 left-0 flex items-center justify-center">
-                    {stickers?.map((sticker, index) =>
-                      sticker === CS_NONE ? null : (
+                  {stickers !== undefined && (
+                    <div className="absolute bottom-0 left-0 flex items-center justify-center">
+                      {Object.entries(stickers).map(([index, { id, wear }]) => (
                         <span className="inline-block" key={index}>
                           <ItemImage
                             className="aspect-[1.33333] w-[128px]"
-                            item={CS_Economy.getById(sticker)}
+                            item={CS2Economy.getById(id)}
                             style={{
-                              filter: `grayscale(${stickerswear?.[index] ?? 0})`,
-                              opacity: `${1 - (stickerswear?.[index] ?? 0)}`
+                              filter: `grayscale(${wear ?? 0})`,
+                              opacity: `${1 - (wear ?? 0)}`
                             }}
                           />
                           {statsForNerds && (
                             <div className="text-sm font-bold text-neutral-300 transition-all group-hover:scale-150">
-                              {((stickerswear?.[index] ?? 0) * 100).toFixed(0)}%
+                              {((wear ?? 0) * 100).toFixed(0)}%
                             </div>
                           )}
                         </span>
-                      )
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               <UseItemFooter
@@ -146,13 +142,13 @@ export function InspectItem({
                     <strong>
                       {translate("InventoryItemInspectPatternTemplate")}:
                     </strong>{" "}
-                    {seed ?? CS_MIN_SEED}
+                    {seed ?? CS2_MIN_SEED}
                   </div>
                   <div>
                     <strong>
                       {translate("InventoryItemInspectWearRating")}:
                     </strong>{" "}
-                    {wearToString(wear ?? item.wearmin ?? CS_MIN_WEAR)}
+                    {wearToString(wear ?? item.wearMin ?? CS2_MIN_WEAR)}
                   </div>
                 </div>
               </FloatingFocusManager>

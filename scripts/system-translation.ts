@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_parseValveKeyValue } from "@ianlucas/cs2-lib";
+import { CS2KeyValues } from "@ianlucas/cs2-lib";
 import { fail } from "assert";
 import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
@@ -226,7 +226,7 @@ function readCsgoLanguage(include?: string[]) {
     languages[language] = {};
     const kv = languages[language];
     console.log(`Parsing 'csgo_${language}.txt'...`);
-    const parsed = CS_parseValveKeyValue<{
+    const parsed = CS2KeyValues.parse<{
       lang: {
         Tokens: { [key: string]: string };
       };

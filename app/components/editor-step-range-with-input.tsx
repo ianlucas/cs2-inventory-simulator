@@ -5,7 +5,7 @@
 
 import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_randomFloat, CS_randomInt } from "@ianlucas/cs2-lib";
+import { randomFloat, randomInt } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
@@ -64,8 +64,7 @@ export function EditorStepRangeWithInput({
   }
 
   function handleRandomClick() {
-    const value =
-      type === "int" ? CS_randomInt(min, max) : CS_randomFloat(min, max);
+    const value = type === "int" ? randomInt(min, max) : randomFloat(min, max);
     handleChange(Number(transform!(value)));
   }
 

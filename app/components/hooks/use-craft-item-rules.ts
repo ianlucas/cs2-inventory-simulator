@@ -3,14 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useRules } from "~/components/app-context";
 
 export function useCraftItemRules() {
   const { craftHideCategory, craftHideType, craftHideModel, craftHideId } =
     useRules();
 
-  return function filter({ category, id, type, model }: CS_Item) {
+  return function filter({ category, id, type, model }: CS2EconomyItem) {
     if (category !== undefined && craftHideCategory.includes(category)) {
       return false;
     }

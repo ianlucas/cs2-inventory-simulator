@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { GridList } from "./grid-list";
 import { ItemButton } from "./item-button";
 
@@ -14,9 +14,9 @@ export function ItemBrowser({
   onClick
 }: {
   ignoreRarityColor?: boolean;
-  items: CS_Item[];
+  items: CS2EconomyItem[];
   maxItemsIntoView?: number;
-  onClick?: (item: CS_Item) => void;
+  onClick?: (item: CS2EconomyItem) => void;
 }) {
   return (
     <GridList itemHeight={64} maxItemsIntoView={maxItemsIntoView} items={items}>

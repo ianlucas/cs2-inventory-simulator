@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_Economy,
-  CS_InventoryItem,
-  CS_Item,
-  CS_NONE
+  CS2Economy,
+  CS2EconomyItem,
+  CS2Inventory,
+  CS2InventoryItem
 } from "@ianlucas/cs2-lib";
 import { serverInventoryShape } from "./shapes";
 
@@ -38,32 +38,32 @@ export const INSPECTABLE_IN_GAME_ITEM_TYPE = [
 
 export function parseInventory(inventory?: string | null) {
   try {
-    if (!inventory) {
-      return [];
-    }
-    return serverInventoryShape.parse(JSON.parse(inventory));
+    return serverInventoryShape.parse(CS2Inventory.parse(inventory));
   } catch {
-    return [];
+    return undefined;
   }
 }
 
+const fakeInventory = new CS2Inventory({});
 export function createFakeInventoryItem(
-  data: CS_Item,
-  item?: Partial<CS_InventoryItem>
+  props: CS2EconomyItem,
+  item?: Partial<CS2InventoryItem>
 ) {
-  return {
-    data,
-    id: data.id,
-    uid: -1,
-    ...item
-  } satisfies CS_InventoryItem;
+  const inventoryItem = new CS2InventoryItem(
+    fakeInventory,
+    -1,
+    { id: props.id },
+    props
+  );
+  Object.assign(inventoryItem, item);
+  return inventoryItem;
 }
 
 export function getFreeItemsToDisplay(hideFreeItems = false) {
   if (hideFreeItems) {
     return [];
   }
-  return CS_Economy.filterItems({
+  return CS2Economy.filterItems({
     free: true
   }).map((item, index) => ({
     equipped: [],
@@ -74,21 +74,9 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
   }));
 }
 
-export function getStickerCount(stickers?: number[]) {
+export function getStickerCount(stickers?: CS2InventoryItem["stickers"]) {
   if (stickers === undefined) {
     return 0;
   }
-  return stickers.filter((sticker) => sticker !== CS_NONE).length;
-}
-
-export function resolveInventoryItem(item: CS_Item | CS_InventoryItem) {
-  return (item as CS_InventoryItem).uid !== undefined
-    ? (item as CS_InventoryItem)
-    : undefined;
-}
-
-export function resolveCSItem(item: CS_Item | CS_InventoryItem) {
-  return (item as CS_InventoryItem).uid !== undefined
-    ? (item as CS_InventoryItem).data
-    : (item as CS_Item);
+  return stickers.size;
 }
