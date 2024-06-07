@@ -5,6 +5,7 @@
 
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
@@ -48,7 +49,7 @@ export default function Craft() {
   const translate = useTranslate();
   const sync = useSync();
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState(
+  const [selectedItem, setSelectedItem] = useState<CS2EconomyItem | undefined>(
     isEditing ? inventory.get(uid) : undefined
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -131,7 +132,7 @@ export default function Craft() {
         <ItemPicker onPickItem={setSelectedItem} />
       ) : (
         <ItemEditor
-          attributes={isEditing ? inventory.get(uid) : undefined}
+          attributes={isEditing ? inventory.get(uid).asBase() : undefined}
           dismissType={isEditing ? "cancel" : "reset"}
           item={selectedItem}
           onDismiss={handleReset}

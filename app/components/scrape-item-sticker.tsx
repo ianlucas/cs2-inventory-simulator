@@ -7,8 +7,7 @@ import {
   CS2Economy,
   CS2_MAX_STICKER_WEAR,
   CS2_STICKER_WEAR_FACTOR,
-  CS2_WEAR_FACTOR,
-  mapStickers
+  CS2_WEAR_FACTOR
 } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
@@ -97,7 +96,7 @@ export function ScrapeItemSticker({
                   item={item}
                 />
                 <div className="flex justify-center">
-                  {mapStickers(stickers).map(([index, { id, wear }]) => (
+                  {inventoryItem.someStickers().map(([index, { id, wear }]) => (
                     <button key={index} className="group">
                       <ItemImage
                         className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"

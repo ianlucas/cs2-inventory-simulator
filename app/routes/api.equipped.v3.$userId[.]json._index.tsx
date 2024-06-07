@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { middleware } from "~/http.server";
@@ -17,11 +18,20 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   await middleware(request);
   const domainHostname = getRequestHostname(request);
   const userId = z.string().parse(params.userId);
-  const { inventoryItemEquipHideModel, inventoryItemEquipHideType } =
-    await getRules(
-      ["inventoryItemEquipHideModel", "inventoryItemEquipHideType"],
-      userId
-    );
+  const {
+    inventoryItemEquipHideModel,
+    inventoryItemEquipHideType,
+    inventoryMaxItems,
+    inventoryStorageUnitMaxItems
+  } = await getRules(
+    [
+      "inventoryItemEquipHideModel",
+      "inventoryItemEquipHideType",
+      "inventoryMaxItems",
+      "inventoryStorageUnitMaxItems"
+    ],
+    userId
+  );
   const args = [
     domainHostname,
     inventoryItemEquipHideModel,
@@ -29,11 +39,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   ].join(";");
   return await handleUserCachedResponse({
     args,
-    generate(item) {
-      return generate(item, {
-        models: inventoryItemEquipHideModel,
-        types: inventoryItemEquipHideType
-      });
+    generate(data) {
+      return generate(
+        new CS2Inventory({
+          data,
+          maxItems: inventoryMaxItems,
+          storageUnitMaxItems: inventoryStorageUnitMaxItems
+        }),
+        {
+          models: inventoryItemEquipHideModel,
+          types: inventoryItemEquipHideType
+        }
+      );
     },
     mimeType: "application/json",
     domainHostname,

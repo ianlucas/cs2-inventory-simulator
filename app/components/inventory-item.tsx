@@ -9,7 +9,7 @@ import {
   CS2TeamValues,
   CS2_INVENTORY_EQUIPPABLE_ITEMS
 } from "@ianlucas/cs2-lib";
-import { CS_generateInspectLink } from "@ianlucas/cs2-lib-inspect";
+import { generateInspectLink } from "@ianlucas/cs2-lib-inspect";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
 import {
@@ -199,7 +199,7 @@ export function InventoryItem({
                     condition: canInspectInGame,
                     label: translate("InventoryItemInspectInGame"),
                     onClick: close(() => {
-                      window.location.assign(CS_generateInspectLink(item));
+                      window.location.assign(generateInspectLink(item));
                     })
                   }
                 ],

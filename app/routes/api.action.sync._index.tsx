@@ -280,8 +280,7 @@ export async function action({ request }: ActionFunctionArgs) {
                     "inventoryStorageUnitMaxItems",
                     userId
                   )
-                }).getAll()) {
-                  //@Todo need a way to get base inventory items...
+                }).getAllAsBase()) {
                   await enforceCraftRulesForInventoryItem(item, userId);
                   await enforceCraftRulesForItem(item.id, userId);
                   inventory.add(item);

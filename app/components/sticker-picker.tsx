@@ -11,11 +11,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
   CS2_MAX_STICKER_WEAR,
   CS2_MIN_STICKER_WEAR,
-  CS2_STICKER_WEAR_FACTOR
+  CS2_STICKER_WEAR_FACTOR,
+  ensure
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
@@ -25,6 +27,7 @@ import {
   stickerWearStringMaxLen,
   stickerWearToString
 } from "~/utils/economy";
+import { range } from "~/utils/number";
 import { useRules, useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorSelect } from "./editor-select";
@@ -40,11 +43,8 @@ export function StickerPicker({
   value
 }: {
   isCrafting: boolean;
-  onChange: (value: { ids: number[]; wears: number[] }) => void;
-  value: {
-    ids: number[];
-    wears: number[];
-  };
+  onChange: (value: NonNullable<CS2BaseInventoryItem["stickers"]>) => void;
+  value: NonNullable<CS2BaseInventoryItem["stickers"]>;
 }) {
   const { craftHideId, craftHideCategory, editHideId, editHideCategory } =
     useRules();
@@ -65,25 +65,19 @@ export function StickerPicker({
 
   function handleAddSticker(item: CS2EconomyItem) {
     onChange({
-      ids: value.ids.map((other, index) =>
-        index === activeIndex ? item.id : other
-      ),
-      wears: value.wears.map((other, index) =>
-        index === activeIndex ? wear : other
-      )
+      ...value,
+      [ensure(activeIndex)]: {
+        id: item.id,
+        wear
+      }
     });
     setActiveIndex(undefined);
   }
 
   function handleRemoveSticker() {
-    onChange({
-      ids: value.ids.map((other, index) =>
-        index === activeIndex ? CS_NONE : other
-      ),
-      wears: value.wears.map((other, index) =>
-        index === activeIndex ? CS_NONE : other
-      )
-    });
+    const updated = { ...value };
+    delete updated[ensure(activeIndex)];
+    onChange(updated);
     setActiveIndex(undefined);
   }
 
@@ -130,25 +124,26 @@ export function StickerPicker({
   return (
     <>
       <div className="flex justify-between">
-        {value.ids.map((sticker, index) => {
+        {range(4).map((index) => {
+          const sticker = value[index];
           const item =
-            sticker !== CS_NONE ? CS2Economy.getById(sticker) : CS_NONE;
+            sticker !== undefined ? CS2Economy.getById(sticker.id) : undefined;
           return (
             <button
               key={index}
               className="relative overflow-hidden rounded bg-black/50"
               onClick={handleClickSlot(index)}
             >
-              {item !== CS_NONE ? (
+              {item !== undefined ? (
                 <ItemImage className="h-[64px] w-[85.33px]" item={item} />
               ) : (
                 <div className="flex h-[64px] w-[85.33px] items-center justify-center font-display font-bold text-neutral-700">
                   {translate("StickerPickerNA")}
                 </div>
               )}
-              {sticker !== CS_NONE && (
+              {sticker !== undefined && (
                 <div className="text-outline-1 absolute bottom-0 right-1 font-display font-bold drop-shadow-lg">
-                  {(value.wears[index] * 100).toFixed(0)}%
+                  {((sticker.wear ?? 0) * 100).toFixed(0)}%
                 </div>
               )}
               <div className="absolute left-0 top-0 h-full w-full rounded border-[2.5px] border-transparent transition-all hover:border-white"></div>

@@ -59,7 +59,16 @@ function readItemTranslations() {
   for (const file of files) {
     const language = file.replace(/^items-|\.json$/g, "");
     itemsTranslations[language] = z
-      .record(z.record(z.string()))
+      .record(
+        z.object({
+          category: z.string().optional(),
+          collectionDesc: z.string().optional(),
+          collectionName: z.string().optional(),
+          desc: z.string().optional(),
+          name: z.string(),
+          tournamentDesc: z.string().optional()
+        })
+      )
       .parse(JSON.parse(readFileSync(resolve(directory, file), "utf-8")));
   }
   return itemsTranslations;

@@ -45,7 +45,7 @@ export async function action({ request }: ActionFunctionArgs) {
     maxItems: await getRule("inventoryMaxItems", userId),
     storageUnitMaxItems: await getRule("inventoryStorageUnitMaxItems", userId)
   });
-  const unlockedItem = inventory.get(caseUid).props.unlock();
+  const unlockedItem = inventory.get(caseUid).unlockContainer();
   inventory.unlockContainer(unlockedItem, caseUid, keyUid);
   const { syncedAt: responseSyncedAt } = await updateUserInventory(
     domainHostname,

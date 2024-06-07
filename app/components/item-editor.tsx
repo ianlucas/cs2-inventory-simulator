@@ -6,6 +6,7 @@
 import { faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
   CS2_MAX_SEED,
@@ -39,8 +40,7 @@ export interface ItemEditorAttributes {
   quantity: number;
   seed?: number;
   stattrak?: boolean;
-  stickers?: number[];
-  stickerswear?: number[];
+  stickers?: CS2BaseInventoryItem["stickers"];
   wear?: number;
 }
 
@@ -57,8 +57,7 @@ export function ItemEditor({
     nametag?: string;
     seed?: number;
     stattrak?: number;
-    stickers?: number[];
-    stickerswear?: number[];
+    stickers?: CS2BaseInventoryItem["stickers"];
     wear?: number;
   };
   defaultQuantity?: number;
@@ -93,28 +92,25 @@ export function ItemEditor({
   );
   const [seed, setSeed] = useState(attributes?.seed ?? 1);
   const [nametag, setNametag] = useInput(attributes?.nametag ?? "");
-  const [stickersAttributes, setStickersAttributes] = useState({
-    ids: attributes?.stickers ?? [...CS_INVENTORY_STICKERS],
-    wears: attributes?.stickerswear ?? [...CS_INVENTORY_STICKERS_WEAR]
-  });
+  const [stickers, setStickers] = useState<
+    NonNullable<CS2BaseInventoryItem["stickers"]>
+  >(attributes?.stickers ?? {});
   const [quantity, setQuantity] = useState(defaultQuantity ?? 1);
   const isCrafting = attributes === undefined;
   const hasStickers =
     (isCrafting ? craftAllowStickers : editAllowStickers) &&
-    CS2Economy.hasStickers(item) &&
+    item.hasStickers() &&
     (isCrafting
       ? !craftHideType.includes("sticker")
       : !editHideType.includes("sticker"));
   const hasStattrak =
-    (isCrafting ? craftAllowStatTrak : editAllowStatTrak) &&
-    CS2Economy.hasStatTrak(item);
+    (isCrafting ? craftAllowStatTrak : editAllowStatTrak) && item.hasStatTrak();
   const hasSeed =
-    (isCrafting ? craftAllowSeed : editAllowSeed) && CS2Economy.hasSeed(item);
+    (isCrafting ? craftAllowSeed : editAllowSeed) && item.hasSeed();
   const hasWear =
-    (isCrafting ? craftAllowWear : editAllowWear) && CS2Economy.hasWear(item);
+    (isCrafting ? craftAllowWear : editAllowWear) && item.hasWear();
   const hasNametag =
-    (isCrafting ? craftAllowNametag : editAllowNametag) &&
-    CS2Economy.hasNametag(item);
+    (isCrafting ? craftAllowNametag : editAllowNametag) && item.hasNametag();
   const isWearValid = !hasWear || CS2Economy.safeValidateWear(wear);
   const isNametagValid =
     !hasNametag ||
@@ -129,18 +125,6 @@ export function ItemEditor({
   dismissType ??= "reset";
 
   function handleSubmit() {
-    const stickers =
-      hasStickers &&
-      stickersAttributes.ids.filter((sticker) => sticker !== CS_NONE).length > 0
-        ? stickersAttributes.ids
-        : undefined;
-
-    const stickerswear =
-      hasStickers &&
-      stickersAttributes.wears.filter((wear) => wear !== CS_NONE).length > 0
-        ? stickersAttributes.wears
-        : undefined;
-
     onSubmit({
       nametag: hasNametag && nametag.length > 0 ? nametag : undefined,
       quantity,
@@ -148,7 +132,6 @@ export function ItemEditor({
         hasSeed && (!isCrafting || seed !== CS2_MIN_SEED) ? seed : undefined,
       stattrak: hasStattrak && stattrak === true ? stattrak : undefined,
       stickers,
-      stickerswear,
       wear: hasWear && (!isCrafting || wear !== CS2_MIN_WEAR) ? wear : undefined
     });
   }
@@ -158,7 +141,7 @@ export function ItemEditor({
       <ItemImage
         className="m-auto h-[192px] w-[256px]"
         item={item}
-        wear={CS2Economy.hasWear(item) ? wear : undefined}
+        wear={item.hasWear() ? wear : undefined}
       />
       <div
         className={clsx("mb-4 text-center", item.type === "agent" && "mt-4")}
@@ -170,8 +153,8 @@ export function ItemEditor({
           <ItemEditorLabel direction="left" label={translate("EditorStickers")}>
             <StickerPicker
               isCrafting={isCrafting}
-              value={stickersAttributes}
-              onChange={setStickersAttributes}
+              value={stickers}
+              onChange={setStickers}
             />
           </ItemEditorLabel>
         )}
@@ -218,7 +201,7 @@ export function ItemEditor({
           >
             <EditorStepRangeWithInput
               inputStyles="w-[68px]"
-              max={item.wearmax ?? CS2_MAX_WEAR}
+              max={item.wearMax ?? CS2_MAX_WEAR}
               maxLength={wearStringMaxLen}
               min={item.wearMin ?? CS2_MIN_WEAR}
               onChange={setWear}

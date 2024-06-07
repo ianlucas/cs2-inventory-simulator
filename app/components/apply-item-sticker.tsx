@@ -5,7 +5,7 @@
 
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS2Economy, mapAllStickers } from "@ianlucas/cs2-lib";
+import { CS2Economy } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -90,7 +90,7 @@ export function ApplyItemSticker({
                 item={targetItem}
               />
               <div className="flex items-center justify-center">
-                {mapAllStickers(stickers).map(([slot, sticker]) =>
+                {targetItem.allStickers().map(([slot, sticker]) =>
                   sticker !== undefined || slot === stickerIndex ? (
                     <ItemImage
                       key={slot}

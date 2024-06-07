@@ -3,14 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS2Economy,
-  CS2InventoryData,
-  CS2Team,
-  mapAllStickers
-} from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2Inventory, CS2Team } from "@ianlucas/cs2-lib";
 import { assert } from "./misc";
-import { range } from "./number";
 
 interface BaseEconItem {
   def: number;
@@ -46,7 +40,7 @@ interface MusicKitItem {
 }
 
 export async function generate(
-  inventory: CS2InventoryData,
+  inventory: CS2Inventory,
   nonEquippable = {
     models: [] as string[],
     types: [] as string[]
@@ -61,9 +55,8 @@ export async function generate(
   let collectible: number | undefined;
   let musicKit: MusicKitItem | undefined;
 
-  for (const [uid, item] of Object.entries(inventory.items)) {
-    const intUid = parseInt(uid, 10);
-    const data = CS2Economy.getById(item.id);
+  for (const item of inventory.getAll()) {
+    const data = item;
 
     const isEquippable =
       (data.model === undefined ||
@@ -85,15 +78,12 @@ export async function generate(
         continue;
       }
       switch (data.type) {
-        case "patch":
-          // Handled by "agents".
-          break;
         case "musickit":
           assert(data.index);
           musicKit = {
             def: data.index,
             stattrak: item.statTrak ?? -1,
-            uid: intUid
+            uid: item.uid
           };
           break;
         case "collectible":
@@ -110,7 +100,7 @@ export async function generate(
             seed: item.seed ?? 1,
             stattrak: item.statTrak ?? -1,
             stickers: [],
-            uid: intUid,
+            uid: item.uid,
             wear: item.wear ?? data.wearMin ?? 0
           };
           break;
@@ -134,30 +124,26 @@ export async function generate(
             paint: data.index ?? 0,
             seed: item.seed ?? 1,
             stattrak: item.statTrak ?? -1,
-            stickers: mapAllStickers(item.stickers).map((sticker, index) => ({
+            stickers: item.someStickers().map(([index, sticker]) => ({
               slot: index,
-              wear: item.stickerswear?.[index] ?? 0,
-              def:
-                sticker !== CS_NONE ? CS2Economy.getById(sticker).index ?? 0 : 0
+              wear: sticker.wear ?? 0,
+              def: CS2Economy.getById(sticker.id).index ?? 0
             })),
             uid: item.uid,
-            wear: item.wear ?? data.wearmin ?? 0
+            wear: item.wear ?? data.wearMin ?? 0
           };
           break;
         case "agent":
           assert(team);
           assert(data.model);
-          assert(data.voprefix);
-          const patch = inventory.find(
-            (item) =>
-              CS2Economy.getById(item.id).type === "patch" &&
-              item[team === CS2Team.CT ? "equippedCT" : "equippedT"]
-          );
+          assert(data.voPrefix);
           agents[team] = {
             model: data.model,
-            patches: range(5).map(() =>
-              patch !== undefined ? CS2Economy.getById(patch.id).index ?? 0 : 0
-            ),
+            patches: data
+              .allPatches()
+              .map(([_, patch]) =>
+                patch !== undefined ? CS2Economy.getById(patch).index ?? 0 : 0
+              ),
             vofallback: data.voFallback ?? false,
             vofemale: data.voFemale ?? false,
             voprefix: data.voPrefix

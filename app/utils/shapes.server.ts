@@ -5,7 +5,7 @@
 
 import { CS2BaseInventoryItem, CS2Economy } from "@ianlucas/cs2-lib";
 import { z } from "zod";
-import { baseInventoryItemProps } from "./shapes";
+import { baseInventoryItemProps, nonNegativeInt } from "./shapes";
 
 const clientInventoryItemProps = {
   ...baseInventoryItemProps
@@ -66,8 +66,14 @@ export const syncInventoryItemShape = z
   .object(syncInventoryItemProps)
   .refine(refine);
 
-export const clientInventoryShape = z.array(clientInventoryItemShape);
-export const syncInventoryShape = z.array(syncInventoryItemShape);
+export const clientInventoryShape = z.object({
+  items: z.record(clientInventoryItemShape),
+  version: nonNegativeInt
+});
+export const syncInventoryShape = z.object({
+  items: z.record(syncInventoryItemShape),
+  version: nonNegativeInt
+});
 
 export type SyncInventoryItemShape = z.infer<typeof syncInventoryItemShape>;
 export type SyncInventoryShape = z.infer<typeof syncInventoryShape>;
