@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { Session } from "@remix-run/node";
-import { languageNames, languages } from "~/data/languages";
+import { LanguageName, languageNames, languages } from "~/data/languages";
 import { getRule } from "~/models/rule.server";
 
-export function isValidLanguage(language: string) {
-  return languageNames.includes(language);
+export function isValidLanguage(language: unknown): language is LanguageName {
+  return languageNames.includes(language as LanguageName);
 }
 
 function getLanguageFromCountry(countryCode: string) {

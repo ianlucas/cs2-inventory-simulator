@@ -13,7 +13,8 @@ import {
   CS2_ITEMS,
   CS2_MAX_SEED,
   CS2_STICKER_WEAR_FACTOR,
-  CS2_WEAR_FACTOR
+  CS2_WEAR_FACTOR,
+  fail
 } from "@ianlucas/cs2-lib";
 
 export const assetBaseUrl =
@@ -27,7 +28,7 @@ export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Sticker,
   CS2ItemType.Tool
 ];
-export const RARITY_LABEL: Record<string, string> = {
+export const RarityLabel = {
   [CS2RarityColor.Common]: "Common",
   [CS2RarityColor.Uncommon]: "Uncommon",
   [CS2RarityColor.Rare]: "Rare",
@@ -35,7 +36,7 @@ export const RARITY_LABEL: Record<string, string> = {
   [CS2RarityColor.Legendary]: "Legendary",
   [CS2RarityColor.Ancient]: "Ancient",
   [CS2RarityColor.Immortal]: "Immortal"
-};
+} as const;
 
 export function updateEconomyTranslation(
   language: CS2ItemLocalizationByLanguage[string]
@@ -140,4 +141,5 @@ export function getRarityItemName(item: CS2EconomyItem) {
     case CS2ItemType.ContainerKey:
       return "Key";
   }
+  fail();
 }

@@ -38,6 +38,7 @@ import { ukrainian } from "~/translations/ukrainian";
 import { vietnamese } from "~/translations/vietnamese";
 
 export type SystemTranslations = Record<string, Record<string, string>>;
+export type SystemTranslationTokens = keyof typeof english;
 
 declare global {
   var $systemTranslations: SystemTranslations;

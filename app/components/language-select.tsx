@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ComponentProps } from "react";
+import { LanguageName } from "~/data/languages";
 import { useTranslate } from "./app-context";
 import { Select } from "./select";
 
@@ -13,7 +14,7 @@ export function LanguageSelect({
   value
 }: {
   languages: {
-    name: string;
+    name: LanguageName;
     country: string;
   }[];
 } & Omit<ComponentProps<typeof Select>, "children" | "options">) {

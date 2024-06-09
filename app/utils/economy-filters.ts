@@ -11,7 +11,7 @@ export const ECONOMY_ITEM_FILTERS = [
     hasModel: true,
     icon: "pistol",
     isFree: true,
-    label: "Pistol",
+    label: "Pistol" as const,
     type: CS2ItemType.Weapon
   },
   {
@@ -19,7 +19,7 @@ export const ECONOMY_ITEM_FILTERS = [
     hasModel: true,
     icon: "smg",
     isFree: true,
-    label: "SMG",
+    label: "SMG" as const,
     type: CS2ItemType.Weapon
   },
   {
@@ -27,7 +27,7 @@ export const ECONOMY_ITEM_FILTERS = [
     hasModel: true,
     isFree: true,
     icon: "heavy",
-    label: "Heavy",
+    label: "Heavy" as const,
     type: CS2ItemType.Weapon
   },
   {
@@ -35,7 +35,7 @@ export const ECONOMY_ITEM_FILTERS = [
     hasModel: true,
     isFree: true,
     icon: "rifle",
-    label: "Rifle",
+    label: "Rifle" as const,
     type: CS2ItemType.Weapon
   },
   {
@@ -43,74 +43,74 @@ export const ECONOMY_ITEM_FILTERS = [
     hasModel: true,
     icon: "equipment",
     isFree: true,
-    label: "Equipment",
+    label: "Equipment" as const,
     type: CS2ItemType.Weapon
   },
   {
     hasModel: true,
     icon: "knife",
-    label: "Knife",
+    label: "Knife" as const,
     type: CS2ItemType.Melee
   },
 
   {
     hasModel: true,
     icon: "glove",
-    label: "Glove",
+    label: "Glove" as const,
     type: CS2ItemType.Gloves
   },
   {
     hasModel: false,
     icon: "sticker",
-    label: "Sticker",
+    label: "Sticker" as const,
     type: CS2ItemType.Sticker
   },
   {
     hasModel: false,
     icon: "agent",
-    label: "Agent",
+    label: "Agent" as const,
     type: CS2ItemType.Agent
   },
   {
     hasModel: false,
     icon: "patch",
-    label: "Patch",
+    label: "Patch" as const,
     type: CS2ItemType.Patch
   },
   {
     hasModel: false,
     icon: "musickit",
-    label: "Music Kit",
+    label: "MusicKit" as const,
     type: CS2ItemType.MusicKit
   },
   {
     hasModel: false,
     icon: "spray",
-    label: "Graffiti",
+    label: "Graffiti" as const,
     type: CS2ItemType.Graffiti
   },
   {
     hasModel: false,
     icon: "collectible",
-    label: "Collectible",
+    label: "Collectible" as const,
     type: CS2ItemType.Collectible
   },
   {
     hasModel: false,
     icon: "case",
-    label: "Case",
+    label: "Case" as const,
     type: CS2ItemType.Container
   },
   {
     hasModel: false,
     icon: "key",
-    label: "Key",
+    label: "Key" as const,
     type: CS2ItemType.ContainerKey
   },
   {
     hasModel: false,
     icon: "tool",
-    label: "Tool",
+    label: "Tool" as const,
     type: CS2ItemType.Tool
   }
 ];

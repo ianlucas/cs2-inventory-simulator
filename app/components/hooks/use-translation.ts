@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
+import { SystemTranslationTokens } from "~/translation.server";
 
 export function useTranslation({
   language,
@@ -33,8 +34,7 @@ export function useTranslation({
 
   const [items, setItems] = useState(getItemsTranslation());
 
-  function translate(token: string, ...values: string[]) {
-    token = token.replace(/\s/g, "");
+  function translate(token: SystemTranslationTokens, ...values: string[]) {
     const value = system[token];
     if (value === undefined) {
       return "";
