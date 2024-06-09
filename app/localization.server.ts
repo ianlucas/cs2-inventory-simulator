@@ -8,34 +8,34 @@ import { createHash } from "crypto";
 import { readFileSync, readdirSync } from "fs";
 import { resolve } from "path";
 import { z } from "zod";
-import { brazilian } from "~/localization/brazilian";
-import { bulgarian } from "~/localization/bulgarian";
-import { czech } from "~/localization/czech";
-import { danish } from "~/localization/danish";
-import { dutch } from "~/localization/dutch";
-import { english } from "~/localization/english";
-import { finnish } from "~/localization/finnish";
-import { french } from "~/localization/french";
-import { german } from "~/localization/german";
-import { greek } from "~/localization/greek";
-import { hungarian } from "~/localization/hungarian";
-import { italian } from "~/localization/italian";
-import { japanese } from "~/localization/japanese";
-import { koreana } from "~/localization/koreana";
-import { latam } from "~/localization/latam";
-import { norwegian } from "~/localization/norwegian";
-import { polish } from "~/localization/polish";
-import { portuguese } from "~/localization/portuguese";
-import { romanian } from "~/localization/romanian";
-import { russian } from "~/localization/russian";
-import { schinese } from "~/localization/schinese";
-import { spanish } from "~/localization/spanish";
-import { swedish } from "~/localization/swedish";
-import { tchinese } from "~/localization/tchinese";
-import { thai } from "~/localization/thai";
-import { turkish } from "~/localization/turkish";
-import { ukrainian } from "~/localization/ukrainian";
-import { vietnamese } from "~/localization/vietnamese";
+import { brazilian } from "~/localizations/brazilian";
+import { bulgarian } from "~/localizations/bulgarian";
+import { czech } from "~/localizations/czech";
+import { danish } from "~/localizations/danish";
+import { dutch } from "~/localizations/dutch";
+import { english } from "~/localizations/english";
+import { finnish } from "~/localizations/finnish";
+import { french } from "~/localizations/french";
+import { german } from "~/localizations/german";
+import { greek } from "~/localizations/greek";
+import { hungarian } from "~/localizations/hungarian";
+import { italian } from "~/localizations/italian";
+import { japanese } from "~/localizations/japanese";
+import { koreana } from "~/localizations/koreana";
+import { latam } from "~/localizations/latam";
+import { norwegian } from "~/localizations/norwegian";
+import { polish } from "~/localizations/polish";
+import { portuguese } from "~/localizations/portuguese";
+import { romanian } from "~/localizations/romanian";
+import { russian } from "~/localizations/russian";
+import { schinese } from "~/localizations/schinese";
+import { spanish } from "~/localizations/spanish";
+import { swedish } from "~/localizations/swedish";
+import { tchinese } from "~/localizations/tchinese";
+import { thai } from "~/localizations/thai";
+import { turkish } from "~/localizations/turkish";
+import { ukrainian } from "~/localizations/ukrainian";
+import { vietnamese } from "~/localizations/vietnamese";
 
 export type SystemLocalizationByLanguage = Record<
   string,
@@ -57,7 +57,7 @@ function readItemLocalization() {
   const itemLocalizationByLanguage: CS2ItemLocalizationByLanguage = {};
   const directory = resolve(
     process.cwd(),
-    "node_modules/@ianlucas/cs2-lib/assets/translations"
+    "node_modules/@ianlucas/cs2-lib/assets/localizations"
   );
   const files = readdirSync(directory);
   for (const file of files) {
