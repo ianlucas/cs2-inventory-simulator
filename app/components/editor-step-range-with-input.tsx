@@ -7,7 +7,7 @@ import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { randomFloat, randomInt } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
 
@@ -40,7 +40,7 @@ export function EditorStepRangeWithInput({
 }) {
   transform = transform !== undefined ? transform : String;
   const [text, setText] = useState(transform(value));
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   function handleTextChange({
     target: { value: text }
@@ -91,7 +91,7 @@ export function EditorStepRangeWithInput({
       {randomizable !== undefined && (
         <button
           onClick={handleRandomClick}
-          title={translate("EditorRandom")}
+          title={localize("EditorRandom")}
           className="flex cursor-default items-center rounded border border-neutral-600/30 p-1 text-neutral-400 transition-all hover:border-neutral-200 hover:text-neutral-200"
         >
           <FontAwesomeIcon className="h-3" icon={faRandom} />

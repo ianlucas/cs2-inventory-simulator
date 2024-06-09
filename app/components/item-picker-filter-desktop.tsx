@@ -7,7 +7,7 @@ import { faSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { EconomyItemFilter } from "~/utils/economy-filters";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { ItemPickerFilterIcon } from "./item-picker-filter-icon";
 import { TextSlider } from "./text-slider";
 
@@ -20,7 +20,7 @@ export function ItemPickerFilterDesktop({
   onChange: (newValue: EconomyItemFilter) => void;
   value: EconomyItemFilter;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   function handleClick(filter: EconomyItemFilter) {
     return function handleClick() {
@@ -50,7 +50,7 @@ export function ItemPickerFilterDesktop({
                 className={clsx("h-3 transition-all", isIdle && "opacity-0")}
               />
               <div className="min-w-0 flex-1 whitespace-nowrap font-display font-bold">
-                <TextSlider text={translate(`Category${filter.label}`)} />
+                <TextSlider text={localize(`Category${filter.label}`)} />
               </div>
               <ItemPickerFilterIcon
                 icon={filter.icon}

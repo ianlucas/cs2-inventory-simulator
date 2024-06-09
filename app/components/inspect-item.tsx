@@ -11,7 +11,7 @@ import { useInspectFloating } from "~/components/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { wearToString } from "~/utils/economy";
-import { usePreferences, useTranslate } from "./app-context";
+import { useLocalize, usePreferences } from "./app-context";
 import { InfoIcon } from "./info-icon";
 import { ItemCollectionImage } from "./item-collection-image";
 import { ItemImage } from "./item-image";
@@ -25,7 +25,7 @@ export function InspectItem({
   onClose: () => void;
   uid: number;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const nameItemString = useNameItemString();
   const inventoryItem = useInventoryItem(uid);
   const { statsForNerds } = usePreferences();
@@ -118,7 +118,7 @@ export function InspectItem({
                     <ModalButton
                       variant="secondary"
                       onClick={onClose}
-                      children={translate("InspectClose")}
+                      children={localize("InspectClose")}
                     />
                   </>
                 }
@@ -134,19 +134,19 @@ export function InspectItem({
                 >
                   <div>
                     <strong>
-                      {translate("InventoryItemInspectFinishCatalog")}:
+                      {localize("InventoryItemInspectFinishCatalog")}:
                     </strong>{" "}
                     {item.index}
                   </div>
                   <div>
                     <strong>
-                      {translate("InventoryItemInspectPatternTemplate")}:
+                      {localize("InventoryItemInspectPatternTemplate")}:
                     </strong>{" "}
                     {seed ?? CS2_MIN_SEED}
                   </div>
                   <div>
                     <strong>
-                      {translate("InventoryItemInspectWearRating")}:
+                      {localize("InventoryItemInspectWearRating")}:
                     </strong>{" "}
                     {wearToString(wear ?? item.wearMin ?? CS2_MIN_WEAR)}
                   </div>

@@ -15,7 +15,7 @@ import {
 import { useTypedLoaderData } from "remix-typedjson";
 import { useInventoryFilterState } from "~/components/hooks/use-inventory-filter-state";
 import { useInventoryState } from "~/components/hooks/use-inventory-state";
-import { useTranslation } from "~/components/hooks/use-translation";
+import { useLocalization } from "~/components/hooks/use-translation";
 import type { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { pushToSync, sync } from "~/sync";
@@ -41,7 +41,7 @@ const AppContext = createContext<
     items: TransformedInventoryItems;
     requireAuth: boolean;
     setInventory: (value: CS2Inventory) => void;
-    translation: ReturnType<typeof useTranslation>;
+    localization: ReturnType<typeof useLocalization>;
   } & ReturnType<typeof useTypedLoaderData<typeof loader>>
 >(null!);
 
@@ -49,8 +49,8 @@ export function useAppContext() {
   return useContext(AppContext);
 }
 
-export function useTranslate() {
-  return useAppContext().translation.translate;
+export function useLocalize() {
+  return useAppContext().localization.localize;
 }
 
 export function useRules() {
@@ -79,7 +79,7 @@ export function useInventoryFilter() {
 }
 
 export function useTranslationChecksum() {
-  return useAppContext().translation.checksum;
+  return useAppContext().localization.checksum;
 }
 
 export function AppProvider({
@@ -87,19 +87,19 @@ export function AppProvider({
   logo,
   preferences,
   rules,
-  translation: { checksum },
+  localization: { checksum },
   user
 }: Omit<
   ContextType<typeof AppContext>,
   | "inventory"
   | "inventoryFilter"
   | "items"
+  | "localization"
   | "requireAuth"
   | "setInventory"
-  | "translation"
 > & {
   children: ReactNode;
-  translation: {
+  localization: {
     checksum: string;
   };
 }) {
@@ -114,7 +114,7 @@ export function AppProvider({
     new CS2Inventory(inventorySpec)
   );
   const inventoryFilter = useInventoryFilterState();
-  const translation = useTranslation({
+  const localization = useLocalization({
     checksum,
     language: preferences.language
   });
@@ -158,9 +158,9 @@ export function AppProvider({
   }, [user]);
 
   useEffect(() => {
-    updateEconomyTranslation(translation.items);
+    updateEconomyTranslation(localization.items);
     setInventory(new CS2Inventory(inventorySpec));
-  }, [translation.items]);
+  }, [localization.items]);
 
   const items = useMemo(
     () =>
@@ -193,12 +193,12 @@ export function AppProvider({
         inventory,
         inventoryFilter,
         items,
+        localization,
         logo,
         preferences,
         requireAuth: retrieveUserId() !== undefined,
         rules,
         setInventory,
-        translation,
         user
       }}
     >

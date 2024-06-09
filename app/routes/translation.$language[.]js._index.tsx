@@ -5,6 +5,7 @@
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
+import { LOCALIZATION_LOADED_TYPE } from "~/components/hooks/use-translation";
 import { middleware } from "~/http.server";
 import { badRequest } from "~/response.server";
 
@@ -16,9 +17,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .transform((value) => value.split(".")[0].trim())
       .parse(params.language);
     return new Response(
-      `window.$systemTranslation = ${JSON.stringify(global.$systemTranslations[language] ?? global.$systemTranslations.english)};
-  window.$itemsTranslation = ${JSON.stringify(global.$itemsTranslations[language] ?? global.$itemsTranslations.english)};
-  window.dispatchEvent(new Event("translationloaded"));`,
+      `window.__systemLocalizationMap = ${JSON.stringify(global.__systemLocalizationByLanguage[language] ?? global.__systemLocalizationByLanguage.english)};
+  window.__itemLocalizationMap = ${JSON.stringify(global.__itemLocalizationByLanguage[language] ?? global.__itemLocalizationByLanguage.english)};
+  window.dispatchEvent(new Event("${LOCALIZATION_LOADED_TYPE}"));`,
       {
         headers: {
           "Content-Type": "application/javascript; charset=utf-8",

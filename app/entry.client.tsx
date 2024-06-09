@@ -10,7 +10,7 @@ import { hydrateRoot } from "react-dom/client";
 
 CS2Economy.use({
   items: CS2_ITEMS,
-  language: window.$itemsTranslation
+  language: window.__itemLocalizationMap
 });
 
 startTransition(() => {

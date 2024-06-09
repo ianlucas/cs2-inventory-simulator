@@ -9,7 +9,7 @@ import {
   CS2ItemTypeValues
 } from "@ianlucas/cs2-lib";
 import { RarityLabel, getRarityItemName } from "~/utils/economy";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { InventoryItemInfo } from "./inventory-item-info";
 
 const HOLDABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
@@ -19,7 +19,7 @@ const HOLDABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
 ];
 
 export function InventoryItemRarity({ data }: { data: CS2EconomyItem }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   const isWeapon = HOLDABLE_ITEM_TYPES.includes(data.type);
   const rarityType = isWeapon ? "Weapon" : "";
@@ -30,9 +30,9 @@ export function InventoryItemRarity({ data }: { data: CS2EconomyItem }) {
   return (
     <InventoryItemInfo
       style={{ color: data.rarity }}
-      label={translate("InventoryItemRarity")}
+      label={localize("InventoryItemRarity")}
     >
-      {translate("ItemRarityFormat", translate(rarityKey), translate(nameKey))}
+      {localize("ItemRarityFormat", localize(rarityKey), localize(nameKey))}
     </InventoryItemInfo>
   );
 }

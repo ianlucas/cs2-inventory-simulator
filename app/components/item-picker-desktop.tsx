@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useItemPickerState } from "~/components/hooks/use-item-picker-state";
 import { ItemBrowser } from "~/components/item-browser";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { ItemPickerFilterDesktop } from "./item-picker-filter-desktop";
 
 export function ItemPickerDesktop({
@@ -26,7 +26,7 @@ export function ItemPickerDesktop({
     query,
     setQuery
   } = useItemPickerState({ onPickItem });
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   return (
     <div className="pb-2">
@@ -40,7 +40,7 @@ export function ItemPickerDesktop({
             value={query}
             onChange={setQuery}
             className="flex-1 rounded bg-neutral-950/40 px-3 py-1 placeholder-neutral-600 outline-none"
-            placeholder={translate("CraftSearchPlaceholder")}
+            placeholder={localize("CraftSearchPlaceholder")}
           />
         </div>
       </div>

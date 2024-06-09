@@ -14,7 +14,7 @@ import {
 import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { has } from "~/utils/misc";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 
 export function InventoryItemTile({
@@ -26,7 +26,7 @@ export function InventoryItemTile({
   item: CS2EconomyItem | CS2InventoryItem;
   onClick?: () => void;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const nameItem = useNameItem();
   const inventoryItem = item instanceof CS2InventoryItem ? item : undefined;
   const data = item;
@@ -49,7 +49,7 @@ export function InventoryItemTile({
         </div>
         {isNew && (
           <div className="absolute left-[1px] top-[1px] bg-sky-600 px-1 py-1 text-[10px] font-bold text-sky-200 shadow-lg transition-all group-hover:text-white">
-            {translate("InventoryItemNew")}
+            {localize("InventoryItemNew")}
           </div>
         )}
         {inventoryItem?.stickers !== undefined && (

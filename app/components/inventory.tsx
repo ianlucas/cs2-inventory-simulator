@@ -24,8 +24,8 @@ import {
   useInventory,
   useInventoryFilter,
   useInventoryItems,
-  usePreferences,
-  useTranslate
+  useLocalize,
+  usePreferences
 } from "./app-context";
 import { ApplyItemSticker } from "./apply-item-sticker";
 import { useListenAppEvent } from "./hooks/use-listen-app-event";
@@ -41,7 +41,7 @@ import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
 
 export function Inventory() {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
   const items = useInventoryItems();
   const { filterItems } = useInventoryFilter();
@@ -227,7 +227,7 @@ export function Inventory() {
         <div className="m-auto flex select-none justify-center lg:w-[1024px]">
           <div className="flex w-full items-center justify-center gap-2 bg-gradient-to-r from-transparent via-black/30 to-transparent py-1">
             <InfoIcon className="h-4" />
-            {translate("InventoryNoItemsToDisplay")}
+            {localize("InventoryNoItemsToDisplay")}
           </div>
         </div>
       )}

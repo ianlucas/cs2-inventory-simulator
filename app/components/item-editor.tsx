@@ -26,7 +26,7 @@ import {
   wearStringMaxLen,
   wearToString
 } from "~/utils/economy";
-import { useInventory, useRules, useTranslate } from "./app-context";
+import { useInventory, useLocalize, useRules } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
@@ -84,7 +84,7 @@ export function ItemEditor({
     editHideType,
     inventoryMaxItems
   } = useRules();
-  const translate = useTranslate();
+  const localize = useLocalize();
   const [stattrak, setStattrak] = useCheckbox(
     attributes?.stattrak !== undefined ? attributes.stattrak >= 0 : false
   );
@@ -154,7 +154,7 @@ export function ItemEditor({
       </div>
       <div className="space-y-4">
         {hasStickers && (
-          <ItemEditorLabel direction="left" label={translate("EditorStickers")}>
+          <ItemEditorLabel direction="left" label={localize("EditorStickers")}>
             <StickerPicker
               isCrafting={isCrafting}
               value={stickers}
@@ -165,12 +165,12 @@ export function ItemEditor({
         {hasNametag && (
           <ItemEditorLabel
             className="flex items-center gap-4"
-            label={translate("EditorNametag")}
+            label={localize("EditorNametag")}
           >
             <EditorInput
               maxLength={20}
               onChange={setNametag}
-              placeholder={translate("EditorNametagPlaceholder")}
+              placeholder={localize("EditorNametagPlaceholder")}
               validate={(nametag) =>
                 CS2Economy.safeValidateNametag(nametag ?? "")
               }
@@ -181,7 +181,7 @@ export function ItemEditor({
         {hasSeed && (
           <ItemEditorLabel
             className="flex select-none items-center gap-4"
-            label={translate("EditorSeed")}
+            label={localize("EditorSeed")}
           >
             <EditorStepRangeWithInput
               inputStyles="w-[68px]"
@@ -201,7 +201,7 @@ export function ItemEditor({
         {hasWear && (
           <ItemEditorLabel
             className="flex select-none items-center gap-4"
-            label={translate("EditorWear")}
+            label={localize("EditorWear")}
           >
             <EditorStepRangeWithInput
               inputStyles="w-[68px]"
@@ -222,7 +222,7 @@ export function ItemEditor({
         {hasStattrak && (
           <ItemEditorLabel
             className="flex select-none items-center gap-4"
-            label={translate("EditorStatTrak")}
+            label={localize("EditorStatTrak")}
           >
             <EditorToggle checked={stattrak} onChange={setStattrak} />
           </ItemEditorLabel>
@@ -230,7 +230,7 @@ export function ItemEditor({
         {hasQuantity && (
           <ItemEditorLabel
             className="flex select-none items-center gap-4"
-            label={translate("EditorQuantity")}
+            label={localize("EditorQuantity")}
           >
             <EditorStepRangeWithInput
               inputStyles="w-[68px]"
@@ -252,10 +252,10 @@ export function ItemEditor({
           {isDismissReset && (
             <FontAwesomeIcon icon={faLongArrowLeft} className="mr-2 h-4" />
           )}
-          {translate(isDismissReset ? "EditorReset" : "EditorCancel")}
+          {localize(isDismissReset ? "EditorReset" : "EditorCancel")}
         </ModalButton>
         <ModalButton
-          children={translate(isCrafting ? "EditorCraft" : "EditorSave")}
+          children={localize(isCrafting ? "EditorCraft" : "EditorSave")}
           disabled={!canCraft}
           onClick={handleSubmit}
           variant="primary"

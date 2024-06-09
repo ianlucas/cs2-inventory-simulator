@@ -11,7 +11,7 @@ import { useState } from "react";
 import { dispatchAppEvent } from "~/app";
 import { AddAction } from "~/routes/api.action.sync._index";
 import { range } from "~/utils/number";
-import { useInventory, useRules, useTranslate } from "./app-context";
+import { useInventory, useLocalize, useRules } from "./app-context";
 import { useSync } from "./hooks/use-sync";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { Modal } from "./modal";
@@ -25,7 +25,7 @@ export function UnlockCaseContainerAddKey({
   caseUid: number;
   neededKeyItem: CS2EconomyItem;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
   const [inventory, setInventory] = useInventory();
   const { inventoryMaxItems } = useRules();
@@ -67,7 +67,7 @@ export function UnlockCaseContainerAddKey({
         optionsStyles="max-h-[256px] overflow-y-scroll"
       />
       <ModalButton
-        children={translate("CaseAdd")}
+        children={localize("CaseAdd")}
         variant="primary"
         onClick={() => toggleIsCrafting()}
       />
@@ -75,7 +75,7 @@ export function UnlockCaseContainerAddKey({
         <Modal className="w-[420px]" fixed>
           <div className="flex select-none items-center justify-between px-4 py-2 text-sm font-bold">
             <span className="text-neutral-400">
-              {translate("CaseAddKeyConfirm")}
+              {localize("CaseAddKeyConfirm")}
             </span>
             <div className="flex items-center">
               <button

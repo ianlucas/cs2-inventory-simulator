@@ -8,6 +8,7 @@ import { fail } from "assert";
 import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 import { CS2_CSGO_PATH } from "~/env.server";
+import { SystemLocalizationByLanguage } from "~/localization.server";
 import { assert } from "~/utils/misc";
 
 function replace(
@@ -279,7 +280,7 @@ async function main() {
   ];
   const find = (language: (typeof languages)[string], key: string) =>
     language[key.toLowerCase()];
-  const translations: Record<string, Record<string, string>> = {};
+  const systemLocalizationByLanguage: SystemLocalizationByLanguage = {};
   for (const lang of langs) {
     console.log(`Processing '${lang}'...`);
     const language = languages[lang];
@@ -287,17 +288,19 @@ async function main() {
       process.cwd(),
       `app/translations/${lang}.ts`
     );
-    translations[lang] = (await import(translationPath))[lang];
-    const translation = translations[lang];
+    systemLocalizationByLanguage[lang] = (await import(translationPath))[lang];
+    const localizationMap = systemLocalizationByLanguage[lang];
     for (const [key, value] of Object.entries(STRINGS_FROM_GAME)) {
       if (typeof value === "string") {
-        translation[key] = find(language, value) ?? translations.english[key];
+        localizationMap[key] =
+          find(language, value) ?? systemLocalizationByLanguage.english[key];
       } else if (Array.isArray(value)) {
-        translation[key] = value
+        localizationMap[key] = value
           .map((token) => {
             if (token.charAt(0) === "#") {
               return (
-                find(language, token.substring(1)) ?? translations.english[key]
+                find(language, token.substring(1)) ??
+                systemLocalizationByLanguage.english[key]
               );
             }
             return token;
@@ -305,25 +308,25 @@ async function main() {
           .join("");
       } else {
         const { token, transform } = value;
-        const translated = find(language, token);
-        translation[key] =
-          translated !== undefined
-            ? transform(translated, lang).trim()
-            : translations.english[key];
+        const localized = find(language, token);
+        localizationMap[key] =
+          localized !== undefined
+            ? transform(localized, lang).trim()
+            : systemLocalizationByLanguage.english[key];
       }
-      assert(translation[key] !== undefined, `Missing key '${key}'`);
+      assert(localizationMap[key] !== undefined, `Missing key '${key}'`);
     }
     if (lang !== "english") {
-      for (const key of Object.keys(translation)) {
+      for (const key of Object.keys(localizationMap)) {
         if (
-          translation[key] === translations.english[key] &&
+          localizationMap[key] === systemLocalizationByLanguage.english[key] &&
           !Object.keys(STRINGS_FROM_GAME).includes(key)
         ) {
-          delete translation[key];
+          delete localizationMap[key];
         }
       }
     }
-    writeTranslationFile(lang, translations);
+    writeTranslationFile(lang, systemLocalizationByLanguage);
   }
 }
 

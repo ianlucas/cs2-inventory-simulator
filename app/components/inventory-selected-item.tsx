@@ -7,7 +7,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { resolveItemImage } from "~/utils/economy";
-import { useInventory, useTranslate } from "./app-context";
+import { useInventory, useLocalize } from "./app-context";
 import {
   ItemSelectorContextProps,
   useItemSelector
@@ -33,7 +33,7 @@ export function InventorySelectedItem({
   uid: number;
   onDismiss: () => void;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const nameItemString = useNameItemString();
   const [inventory] = useInventory();
   const [itemSelector] = useItemSelector();
@@ -48,7 +48,7 @@ export function InventorySelectedItem({
         <FontAwesomeIcon icon={faArrowLeft} className="h-5" />
       </button>
       <div className="flex flex-1 select-none items-center justify-center gap-3">
-        <strong>{translate(getLabelToken(itemSelector?.type))}</strong>
+        <strong>{localize(getLabelToken(itemSelector?.type))}</strong>
         <img draggable={false} className="h-12" src={resolveItemImage(item)} />
         <span className="text-neutral-300">
           {nameItemString(item, "inventory-name")}

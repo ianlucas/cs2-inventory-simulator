@@ -4,22 +4,22 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2InventoryItem, CS2ItemType } from "@ianlucas/cs2-lib";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 
 export function InventoryItemStatTrak({
   inventoryItem: { type, statTrak }
 }: {
   inventoryItem: CS2InventoryItem;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   return (
     <div className="mt-4">
       <div className="text-blue-300">
-        {translate("InventoryItemStatTrakDesc")}
+        {localize("InventoryItemStatTrakDesc")}
       </div>
       <div className="mt-4 text-orange-400">
-        {translate(
+        {localize(
           type === CS2ItemType.MusicKit
             ? "InventoryItemMVPStatTrakCount"
             : "InventoryItemStatTrakCount"

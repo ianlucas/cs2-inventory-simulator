@@ -12,7 +12,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { z } from "zod";
-import { useInventory, useTranslate } from "~/components/app-context";
+import { useInventory, useLocalize } from "~/components/app-context";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
@@ -46,7 +46,7 @@ export default function Craft() {
   const { uid } = useTypedLoaderData<typeof loader>();
   const isEditing = uid !== undefined;
   const [inventory, setInventory] = useInventory();
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<CS2EconomyItem | undefined>(
@@ -119,8 +119,8 @@ export default function Craft() {
       <div className="flex select-none items-center justify-between px-4 py-2 text-sm font-bold">
         <span className="text-neutral-400">
           {isPickingItem
-            ? translate("CraftSelectHeader")
-            : translate("CraftConfirmHeader")}
+            ? localize("CraftSelectHeader")
+            : localize("CraftConfirmHeader")}
         </span>
         <div className="flex items-center">
           <Link className="opacity-50 hover:opacity-100" to="/">

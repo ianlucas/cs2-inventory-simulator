@@ -5,7 +5,7 @@
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { createFakeItem, resolveCaseSpecialsImage } from "~/utils/economy";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { InventoryItemTile } from "./inventory-item-tile";
 
 export function InventoryItemSpecialTile({
@@ -13,12 +13,12 @@ export function InventoryItemSpecialTile({
 }: {
   caseItem: CS2EconomyItem;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   return (
     <InventoryItemTile
       item={createFakeItem(caseItem, {
-        name: `Container | ${translate("CaseRareItem")}`,
+        name: `Container | ${localize("CaseRareItem")}`,
         image: resolveCaseSpecialsImage(caseItem),
         rarity: "#e4ae39"
       })}

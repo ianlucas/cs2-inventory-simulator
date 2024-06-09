@@ -4,19 +4,19 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2InventoryItem, CS2_MIN_SEED } from "@ianlucas/cs2-lib";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 
 export function InventoryItemSeed({
   inventoryItem: { seed }
 }: {
   inventoryItem: CS2InventoryItem;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   return (
     <div>
       <strong className="text-neutral-400">
-        {translate("InventoryItemSeed")}
+        {localize("InventoryItemSeed")}
       </strong>{" "}
       {seed ?? CS2_MIN_SEED}
     </div>

@@ -9,7 +9,7 @@ import {
   CS2ItemType,
   CS2ItemTypeValues
 } from "@ianlucas/cs2-lib";
-import { useTranslate } from "~/components/app-context";
+import { useLocalize } from "~/components/app-context";
 import { has } from "~/utils/misc";
 
 const ITEM_TYPES_WITHOUT_NAME: CS2ItemTypeValues[] = [
@@ -25,7 +25,7 @@ const ITEM_TYPE_WITH_MODEL: CS2ItemTypeValues[] = [
   CS2ItemType.Collectible
 ];
 
-export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
+export function nameItemFactory(localize: ReturnType<typeof useLocalize>) {
   return function nameItem(
     item: CS2EconomyItem | CS2InventoryItem,
     formatter:
@@ -41,7 +41,7 @@ export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
       inventoryItem?.nameTag !== undefined ? `"${inventoryItem.nameTag}"` : "";
     const stattrak =
       inventoryItem?.statTrak !== undefined
-        ? `${translate("InventoryItemStatTrak")} `
+        ? `${localize("InventoryItemStatTrak")} `
         : "";
     const quality = data.type === CS2ItemType.Melee && !data.free ? "★ " : "";
     let [model, ...names] = data.name.split(" | ");
@@ -87,8 +87,8 @@ export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
 }
 
 export function useNameItem() {
-  const translate = useTranslate();
-  return nameItemFactory(translate);
+  const localize = useLocalize();
+  return nameItemFactory(localize);
 }
 
 export function useNameItemString() {

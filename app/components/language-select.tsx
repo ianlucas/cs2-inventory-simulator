@@ -5,7 +5,7 @@
 
 import { ComponentProps } from "react";
 import { LanguageName } from "~/data/languages";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { Select } from "./select";
 
 export function LanguageSelect({
@@ -18,7 +18,7 @@ export function LanguageSelect({
     country: string;
   }[];
 } & Omit<ComponentProps<typeof Select>, "children" | "options">) {
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   return (
     <Select
@@ -33,11 +33,11 @@ export function LanguageSelect({
           <img
             src={`/countries/${label}.svg`}
             className="h-[24px] w-[34px]"
-            alt={translate(`LanguageN${value}`)}
-            title={translate(`LanguageN${value}`)}
+            alt={localize(`LanguageN${value}`)}
+            title={localize(`LanguageN${value}`)}
             draggable={false}
           />
-          {translate(`LanguageN${value}`)}
+          {localize(`LanguageN${value}`)}
         </>
       )}
     />

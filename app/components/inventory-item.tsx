@@ -20,7 +20,7 @@ import {
 } from "~/utils/inventory";
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
-import { useInventory, useRules, useTranslate } from "./app-context";
+import { useInventory, useLocalize, useRules } from "./app-context";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemHover } from "./inventory-item-hover";
 import { InventoryItemTile } from "./inventory-item-tile";
@@ -68,7 +68,7 @@ export function InventoryItem({
   onUnlockContainer?: (uid: number) => void;
   ownApplicableStickers?: boolean;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const {
     editHideCategory,
     editHideId,
@@ -192,12 +192,12 @@ export function InventoryItem({
                 [
                   {
                     condition: canInspect,
-                    label: translate("InventoryItemInspect"),
+                    label: localize("InventoryItemInspect"),
                     onClick: close(() => onInspectItem?.(uid))
                   },
                   {
                     condition: canInspectInGame,
-                    label: translate("InventoryItemInspectInGame"),
+                    label: localize("InventoryItemInspectInGame"),
                     onClick: close(() => {
                       window.location.assign(generateInspectLink(item));
                     })
@@ -206,22 +206,22 @@ export function InventoryItem({
                 [
                   {
                     condition: canEquip,
-                    label: translate("InventoryItemEquip"),
+                    label: localize("InventoryItemEquip"),
                     onClick: close(() => onEquip?.(uid))
                   },
                   {
                     condition: canEquipT,
-                    label: translate("InventoryItemEquipT"),
+                    label: localize("InventoryItemEquipT"),
                     onClick: close(() => onEquip?.(uid, CS2Team.T))
                   },
                   {
                     condition: canEquipCT,
-                    label: translate("InventoryItemEquipCT"),
+                    label: localize("InventoryItemEquipCT"),
                     onClick: close(() => onEquip?.(uid, CS2Team.CT))
                   },
                   {
                     condition: canEquipCT && canEquipT,
-                    label: translate("InventoryItemEquipBothTeams"),
+                    label: localize("InventoryItemEquipBothTeams"),
                     onClick: close(() => {
                       onEquip?.(uid, CS2Team.CT);
                       onEquip?.(uid, CS2Team.T);
@@ -231,46 +231,46 @@ export function InventoryItem({
                 [
                   {
                     condition: canUnequip,
-                    label: translate("InventoryItemUnequip"),
+                    label: localize("InventoryItemUnequip"),
                     onClick: close(() => onUnequip?.(uid))
                   },
                   {
                     condition: canUnequipT,
-                    label: translate("InventoryItemUnequipT"),
+                    label: localize("InventoryItemUnequipT"),
                     onClick: close(() => onUnequip?.(uid, CS2Team.T))
                   },
                   {
                     condition: canUnequipCT,
-                    label: translate("InventoryItemUnequipCT"),
+                    label: localize("InventoryItemUnequipCT"),
                     onClick: close(() => onUnequip?.(uid, CS2Team.CT))
                   }
                 ],
                 [
                   {
                     condition: canUnlockContainer,
-                    label: translate("InventoryItemUnlockContainer"),
+                    label: localize("InventoryItemUnlockContainer"),
                     onClick: close(() => onUnlockContainer?.(uid))
                   }
                 ],
                 [
                   {
                     condition: canRename,
-                    label: translate("InventoryItemRename"),
+                    label: localize("InventoryItemRename"),
                     onClick: close(() => onRename?.(uid))
                   },
                   {
                     condition: canSwapStatTrak,
-                    label: translate("InventoryItemSwapStatTrak"),
+                    label: localize("InventoryItemSwapStatTrak"),
                     onClick: close(() => onSwapItemsStatTrak?.(uid))
                   },
                   {
                     condition: canApplySticker,
-                    label: translate("InventoryApplySticker"),
+                    label: localize("InventoryApplySticker"),
                     onClick: close(() => onApplySticker?.(uid))
                   },
                   {
                     condition: canScrapeSticker,
-                    label: translate("InventoryScrapeSticker"),
+                    label: localize("InventoryScrapeSticker"),
                     onClick: close(() => onScrapeSticker?.(uid))
                   }
                 ],
@@ -280,18 +280,18 @@ export function InventoryItem({
                       isStorageUnit &&
                       (inventory.canDepositToStorageUnit(uid) ||
                         inventory.canRetrieveFromStorageUnit(uid)),
-                    label: translate("InventoryItemStorageUnitInspect"),
+                    label: localize("InventoryItemStorageUnitInspect"),
                     onClick: close(() => {
                       if (inventory.getStorageUnitSize(uid) === 0) {
                         return alert({
-                          bodyText: translate(
+                          bodyText: localize(
                             "InventoryItemStorageUnitEmptyBody",
                             format(inventoryStorageUnitMaxItems)
                           ),
-                          closeText: translate(
+                          closeText: localize(
                             "InventoryItemStorageUnitEmptyClose"
                           ),
-                          titleText: translate(
+                          titleText: localize(
                             "InventoryItemStorageUnitEmptyTitle"
                           )
                         });
@@ -306,13 +306,13 @@ export function InventoryItem({
                     condition:
                       isStorageUnit &&
                       inventory.canRetrieveFromStorageUnit(uid),
-                    label: translate("InventoryItemStorageUnitRetrieve"),
+                    label: localize("InventoryItemStorageUnitRetrieve"),
                     onClick: close(() => onRetrieveFromStorageUnit?.(uid))
                   },
                   {
                     condition:
                       isStorageUnit && inventory.canDepositToStorageUnit(uid),
-                    label: translate("InventoryItemStorageUnitDeposit"),
+                    label: localize("InventoryItemStorageUnitDeposit"),
                     onClick: close(() => onDepositToStorageUnit?.(uid))
                   }
                 ],
@@ -320,20 +320,20 @@ export function InventoryItem({
                   {
                     condition: isStorageUnit,
                     label: hasNametag
-                      ? translate("InventoryItemRenameStorageUnit")
-                      : translate("InventoryItemUseStorageUnit"),
+                      ? localize("InventoryItemRenameStorageUnit")
+                      : localize("InventoryItemUseStorageUnit"),
                     onClick: close(() => onRenameStorageUnit?.(uid))
                   }
                 ],
                 [
                   {
                     condition: canEdit,
-                    label: translate("InventoryItemEdit"),
+                    label: localize("InventoryItemEdit"),
                     onClick: close(() => onEdit?.(uid))
                   },
                   {
                     condition: true,
-                    label: translate("InventoryItemDelete"),
+                    label: localize("InventoryItemDelete"),
                     onClick: close(() => onRemove?.(uid))
                   }
                 ]

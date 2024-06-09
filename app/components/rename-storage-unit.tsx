@@ -11,7 +11,7 @@ import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { RenameStorageUnitAction } from "~/routes/api.action.sync._index";
-import { useInventory, useTranslate } from "./app-context";
+import { useInventory, useLocalize } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -26,7 +26,7 @@ export function RenameStorageUnit({
   uid: number;
 }) {
   const [inventory, setInventory] = useInventory();
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
   const nameItemString = useNameItemString();
 
@@ -52,13 +52,13 @@ export function RenameStorageUnit({
           <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
             <div>
               <UseItemHeader
-                actionDesc={translate("RenameStorageUnitEnterName")}
+                actionDesc={localize("RenameStorageUnitEnterName")}
                 actionItem={nameItemString(item)}
-                title={translate("RenameStorageUnitUse")}
+                title={localize("RenameStorageUnitUse")}
                 warning={
                   isStartUsingStorageUnit
-                    ? translate("RenameStorageUnitFirstNameWarn")
-                    : translate("RenameStorageUnitNewNameWarn")
+                    ? localize("RenameStorageUnitFirstNameWarn")
+                    : localize("RenameStorageUnitNewNameWarn")
                 }
               />
               <ItemImage
@@ -71,7 +71,7 @@ export function RenameStorageUnit({
                   className="py-1 text-xl"
                   maxLength={20}
                   onChange={setNametag}
-                  placeholder={translate("EditorNametagPlaceholder")}
+                  placeholder={localize("EditorNametagPlaceholder")}
                   validate={(nametag) =>
                     CS2Economy.safeValidateNametag(nametag ?? "")
                   }
@@ -88,12 +88,12 @@ export function RenameStorageUnit({
                       }
                       variant="primary"
                       onClick={handleRename}
-                      children={translate("RenameStorageUnitRename")}
+                      children={localize("RenameStorageUnitRename")}
                     />
                     <ModalButton
                       variant="secondary"
                       onClick={onClose}
-                      children={translate("RenameStorageUnitClose")}
+                      children={localize("RenameStorageUnitClose")}
                     />
                   </>
                 }

@@ -7,7 +7,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useNameItemString } from "~/components/hooks/use-name-item";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 
 export function InventoryItemContents({
   item,
@@ -16,14 +16,14 @@ export function InventoryItemContents({
   item: CS2EconomyItem;
   unlockedItem?: CS2EconomyItem;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const nameItemString = useNameItemString();
 
   return (
     <div className="mt-4">
       <div className="text-neutral-400">
         {unlockedItem === undefined
-          ? translate("InventoryItemContainsOne")
+          ? localize("InventoryItemContainsOne")
           : unlockedItem.collectionName}
       </div>
       {item.listContents(true).map((item) => (
@@ -49,7 +49,7 @@ export function InventoryItemContents({
       ))}
       {item.specials !== undefined && (
         <div className="text-yellow-300">
-          {translate("InventoryItemRareItem")}
+          {localize("InventoryItemRareItem")}
         </div>
       )}
     </div>

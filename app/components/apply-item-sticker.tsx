@@ -17,7 +17,7 @@ import {
   ApplyItemStickerAction
 } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
-import { useInventory, useTranslate } from "./app-context";
+import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
@@ -33,7 +33,7 @@ export function ApplyItemSticker({
   stickerUid: number;
 }) {
   const [inventory, setInventory] = useInventory();
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
   const nameItemString = useNameItemString();
 
@@ -80,10 +80,10 @@ export function ApplyItemSticker({
           <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
             <div>
               <UseItemHeader
-                actionDesc={translate("ApplyStickerUseOn")}
+                actionDesc={localize("ApplyStickerUseOn")}
                 actionItem={nameItemString(targetItem)}
-                title={translate("ApplyStickerUse")}
-                warning={translate("ApplyStickerWarn")}
+                title={localize("ApplyStickerUse")}
+                warning={localize("ApplyStickerWarn")}
               />
               <ItemImage
                 className="m-auto aspect-[1.33333] max-w-[512px]"
@@ -121,13 +121,13 @@ export function ApplyItemSticker({
                 right={
                   <>
                     <ModalButton
-                      children={translate("ApplyStickerUse")}
+                      children={localize("ApplyStickerUse")}
                       disabled={stickerIndex === undefined}
                       onClick={handleApplySticker}
                       variant="primary"
                     />
                     <ModalButton
-                      children={translate("ApplyStickerCancel")}
+                      children={localize("ApplyStickerCancel")}
                       onClick={onClose}
                       variant="secondary"
                     />

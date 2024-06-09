@@ -9,7 +9,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useCounter } from "~/components/hooks/use-counter";
 import { useSync } from "~/components/hooks/use-sync";
 import { SwapItemsStatTrakAction } from "~/routes/api.action.sync._index";
-import { useInventory, useTranslate } from "./app-context";
+import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
@@ -27,7 +27,7 @@ export function SwapItemsStatTrak({
   toolUid: number;
 }) {
   const [inventory, setInventory] = useInventory();
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
 
   function handleAccept() {
@@ -63,9 +63,9 @@ export function SwapItemsStatTrak({
           <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
             <div>
               <UseItemHeader
-                actionDesc={translate("ItemSwapStatTrakDesc")}
-                title={translate("ItemSwapStatTrakUse")}
-                warning={translate("ItemSwapStatTrakWarn")}
+                actionDesc={localize("ItemSwapStatTrakDesc")}
+                title={localize("ItemSwapStatTrakUse")}
+                warning={localize("ItemSwapStatTrakWarn")}
               />
               <div className="mt-16 flex items-center justify-center gap-10">
                 {items.map(
@@ -96,12 +96,12 @@ export function SwapItemsStatTrak({
                     <ModalButton
                       variant="primary"
                       onClick={handleAccept}
-                      children={translate("ItemSwapStatTrakAccept")}
+                      children={localize("ItemSwapStatTrakAccept")}
                     />
                     <ModalButton
                       variant="secondary"
                       onClick={onClose}
-                      children={translate("ItemSwapStatTrakClose")}
+                      children={localize("ItemSwapStatTrakClose")}
                     />
                   </>
                 }

@@ -15,7 +15,7 @@ import {
   RenameItemAction
 } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
-import { useInventory, useTranslate } from "./app-context";
+import { useInventory, useLocalize } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -31,7 +31,7 @@ export function RenameItem({
   targetUid: number;
   toolUid: number;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
   const nameItemString = useNameItemString();
   const [inventory, setInventory] = useInventory();
@@ -70,10 +70,10 @@ export function RenameItem({
           <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
             <div>
               <UseItemHeader
-                actionDesc={translate("RenameEnterName")}
+                actionDesc={localize("RenameEnterName")}
                 actionItem={nameItemString(inventoryItem)}
-                title={translate("RenameUse")}
-                warning={translate("RenameWarn")}
+                title={localize("RenameUse")}
+                warning={localize("RenameWarn")}
               />
               <ItemImage
                 className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
@@ -85,7 +85,7 @@ export function RenameItem({
                   className="py-1 text-xl"
                   maxLength={20}
                   onChange={setNametag}
-                  placeholder={translate("EditorNametagPlaceholder")}
+                  placeholder={localize("EditorNametagPlaceholder")}
                   validate={(nametag) =>
                     CS2Economy.safeValidateNametag(nametag ?? "")
                   }
@@ -103,12 +103,12 @@ export function RenameItem({
                       }
                       variant="primary"
                       onClick={handleRename}
-                      children={translate("RenameRename")}
+                      children={localize("RenameRename")}
                     />
                     <ModalButton
                       variant="secondary"
                       onClick={onClose}
-                      children={translate("RenameCancel")}
+                      children={localize("RenameCancel")}
                     />
                   </>
                 }

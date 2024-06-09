@@ -15,8 +15,8 @@ CS2Economy.use({
   language: english
 });
 
-const translate = (token: string, ...values: string[]) => "statTrak™";
-const nameItem = nameItemFactory(translate);
+const localize = (token: string, ...values: string[]) => "statTrak™";
+const nameItem = nameItemFactory(localize);
 const nameItemString = (...args: Parameters<typeof nameItem>) =>
   nameItem(...args)
     .filter((value) => has(value))

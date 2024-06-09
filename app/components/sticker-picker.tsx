@@ -28,7 +28,7 @@ import {
   stickerWearToString
 } from "~/utils/economy";
 import { range } from "~/utils/number";
-import { useRules, useTranslate } from "./app-context";
+import { useLocalize, useRules } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorSelect } from "./editor-select";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
@@ -48,7 +48,7 @@ export function StickerPicker({
 }) {
   const { craftHideId, craftHideCategory, editHideId, editHideCategory } =
     useRules();
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   const [category, setCategory] = useState("");
   const [search, setSearch] = useInput("");
@@ -138,7 +138,7 @@ export function StickerPicker({
                 <ItemImage className="h-[64px] w-[85.33px]" item={item} />
               ) : (
                 <div className="flex h-[64px] w-[85.33px] items-center justify-center font-display font-bold text-neutral-700">
-                  {translate("StickerPickerNA")}
+                  {localize("StickerPickerNA")}
                 </div>
               )}
               {sticker !== undefined && (
@@ -154,7 +154,7 @@ export function StickerPicker({
       <Modal className="w-[540px] pb-1" hidden={activeIndex === undefined} blur>
         <div className="flex select-none justify-between px-4 py-2 font-bold">
           <label className="text-sm text-neutral-400">
-            {translate("StickerPickerHeader")}
+            {localize("StickerPickerHeader")}
           </label>
           <button
             onClick={handleCloseModal}
@@ -169,7 +169,7 @@ export function StickerPicker({
             <EditorInput
               value={search}
               onChange={setSearch}
-              placeholder={translate("StickerPickerSearchPlaceholder")}
+              placeholder={localize("StickerPickerSearchPlaceholder")}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -178,14 +178,14 @@ export function StickerPicker({
               className="w-[192px]"
               onChange={setCategory}
               options={categories}
-              placeholder={translate("StickerPickerFilterPlaceholder")}
+              placeholder={localize("StickerPickerFilterPlaceholder")}
               value={category}
             />
           </div>
           <button
             className="flex h-[24px] cursor-default items-center gap-1 rounded px-2 text-red-500 transition hover:bg-black/30 active:bg-black/60"
             onClick={handleRemoveSticker}
-            title={translate("StickerPickerRemove")}
+            title={localize("StickerPickerRemove")}
           >
             <FontAwesomeIcon icon={faTrashCan} className="h-4" />
           </button>
@@ -198,7 +198,7 @@ export function StickerPicker({
         >
           <ItemEditorLabel
             className="flex select-none items-center gap-4"
-            label={translate("EditorStickerWear")}
+            label={localize("EditorStickerWear")}
             labelStyles="w-[136px]"
           >
             <EditorStepRangeWithInput
