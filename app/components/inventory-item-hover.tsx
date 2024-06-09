@@ -45,7 +45,7 @@ export function InventoryItemHover({
     item.containerId !== undefined
       ? CS2Economy.getById(item.containerId)
       : item;
-  const hasContents = contentsItem.contents !== undefined;
+  const hasContents = contentsItem.isContainer();
   const hasWear = !data.free && data.hasWear();
   const hasSeed = !data.free && data.hasSeed();
   const hasAttributes = hasWear || hasSeed;
@@ -58,6 +58,9 @@ export function InventoryItemHover({
   const teams =
     data.type === CS2ItemType.Graffiti ? CS2_TEAMS_BOTH : data.teams;
   const hasTeams = teams !== undefined;
+
+  const baseDescription = (data.parent ?? data).desc;
+  const itemDescription = data.parent !== undefined ? data.desc : undefined;
 
   return (
     <div
@@ -78,19 +81,19 @@ export function InventoryItemHover({
         <p className="mt-4 text-yellow-300">{data.tournamentDesc}</p>
       )}
       {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
-      {has(data.desc) && (
+      {has(baseDescription) && (
         <p className="mt-4 whitespace-pre-wrap text-neutral-300">
-          {(data.parent ?? data).desc}
+          {baseDescription}
         </p>
       )}
-      {data.parent && has(data.desc) && (
+      {has(itemDescription) && (
         <p
           className={clsx(
             "mt-4 whitespace-pre-wrap text-neutral-300",
             HOLDABLE_ITEM_TYPES.includes(data.type) && "italic"
           )}
         >
-          {data.desc}
+          {itemDescription}
         </p>
       )}
       {hasContents && (

@@ -3,11 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Inventory } from "@ianlucas/cs2-lib";
+import { CS2Inventory, CS2InventorySpec } from "@ianlucas/cs2-lib";
 import {
   ContextType,
-  createContext,
   ReactNode,
+  createContext,
   useContext,
   useEffect,
   useMemo
@@ -22,9 +22,9 @@ import { pushToSync, sync } from "~/sync";
 import { updateEconomyTranslation } from "~/utils/economy";
 import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
 import {
+  TransformedInventoryItems,
   sortItemsByEquipped,
-  transform,
-  TransformedInventoryItems
+  transform
 } from "~/utils/inventory-transform";
 import type { SyncInventoryShape } from "~/utils/shapes.server";
 import {
@@ -104,12 +104,12 @@ export function AppProvider({
   };
 }) {
   const inventorySpec = {
-    items: user?.inventory
+    data: user?.inventory
       ? parseInventory(user?.inventory)
       : retrieveInventoryData(),
     maxItems: rules.inventoryMaxItems,
     storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
-  };
+  } satisfies Partial<CS2InventorySpec>;
   const [inventory, setInventory] = useInventoryState(
     new CS2Inventory(inventorySpec)
   );
