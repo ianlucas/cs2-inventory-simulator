@@ -3,9 +3,27 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2EconomyItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
+import {
+  CS2EconomyItem,
+  CS2InventoryItem,
+  CS2ItemType,
+  CS2ItemTypeValues
+} from "@ianlucas/cs2-lib";
 import { useTranslate } from "~/components/app-context";
 import { has } from "~/utils/misc";
+
+const ITEM_TYPES_WITHOUT_NAME: CS2ItemTypeValues[] = [
+  CS2ItemType.Collectible,
+  CS2ItemType.Container,
+  CS2ItemType.ContainerKey,
+  CS2ItemType.Tool
+];
+
+const ITEM_TYPE_WITH_MODEL: CS2ItemTypeValues[] = [
+  CS2ItemType.Weapon,
+  CS2ItemType.Melee,
+  CS2ItemType.Collectible
+];
 
 export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
   return function nameItem(
@@ -25,28 +43,30 @@ export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
       inventoryItem?.statTrak !== undefined
         ? `${translate("InventoryItemStatTrak")} `
         : "";
-    const quality = data.type === "melee" && !data.free ? "★ " : "";
+    const quality = data.type === CS2ItemType.Melee && !data.free ? "★ " : "";
     let [model, ...names] = data.name.split(" | ");
     let name = names.join(" | ");
     model = `${quality}${stattrak}${model}`;
-    if (data.type === "agent") {
+    if (data.type === CS2ItemType.Agent) {
       [model, name] = name.split(" | ");
-    } else if (["collectible", "case", "key", "tool"].includes(data.type)) {
+    } else if (ITEM_TYPES_WITHOUT_NAME.includes(data.type)) {
       model = name;
       name = "";
     }
     switch (formatter) {
       case "case-contents-name":
-        if (!["weapon", "melee", "collectible"].includes(data.type)) {
+        if (!ITEM_TYPE_WITH_MODEL.includes(data.type)) {
           model = "";
         }
         return [model, name];
       case "craft-name":
-        return [name.length > 0 && data.type !== "agent" ? name : model];
+        return [
+          name.length > 0 && data.type !== CS2ItemType.Agent ? name : model
+        ];
       case "default":
         return [model, name];
       case "editor-name":
-        if (data.type === "agent") {
+        if (data.type === CS2ItemType.Agent) {
           [name, model] = [model, name];
         } else if (name.length === 0) {
           name = model;

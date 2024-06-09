@@ -8,6 +8,7 @@ import {
   CS2Economy,
   CS2EconomyItem,
   CS2Inventory,
+  CS2ItemType,
   CS2_INVENTORY_VERSION
 } from "@ianlucas/cs2-lib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
@@ -185,7 +186,7 @@ async function enforceCraftRulesForInventoryItem(
 ) {
   if (stickers !== undefined) {
     await expectRule("craftAllowStickers", true, userId);
-    await expectRuleNotContain("craftHideType", "sticker", userId);
+    await expectRuleNotContain("craftHideType", CS2ItemType.Sticker, userId);
     for (const sticker of Object.values(stickers)) {
       await enforceCraftRulesForItem(sticker.id, userId);
     }
@@ -227,7 +228,7 @@ async function enforceEditRulesForInventoryItem(
 ) {
   if (stickers !== undefined) {
     await expectRule("editAllowStickers", true, userId);
-    await expectRuleNotContain("editHideType", "sticker", userId);
+    await expectRuleNotContain("editHideType", CS2ItemType.Sticker, userId);
     for (const sticker of Object.values(stickers)) {
       await enforceEditRulesForItem(sticker.id, userId);
     }

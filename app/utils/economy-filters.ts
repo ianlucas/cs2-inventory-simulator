@@ -135,5 +135,5 @@ export function getBaseItems({
 export function getPaidItems({ type }: EconomyItemFilter, model: string) {
   return CS2Economy.filterItems({
     model
-  }).filter(({ base }) => type === "melee" || !base);
+  }).filter(({ base }) => type === CS2ItemType.Melee || !base);
 }

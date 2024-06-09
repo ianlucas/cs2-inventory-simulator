@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2InventoryItem } from "@ianlucas/cs2-lib";
+import { CS2InventoryItem, CS2ItemType } from "@ianlucas/cs2-lib";
 import { useTranslate } from "./app-context";
 
 export function InventoryItemStatTrak({
@@ -20,7 +20,7 @@ export function InventoryItemStatTrak({
       </div>
       <div className="mt-4 text-orange-400">
         {translate(
-          type === "musickit"
+          type === CS2ItemType.MusicKit
             ? "InventoryItemMVPStatTrakCount"
             : "InventoryItemStatTrakCount"
         )}{" "}

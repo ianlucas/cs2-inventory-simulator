@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2TeamValues } from "@ianlucas/cs2-lib";
+import { CS2ItemType, CS2TeamValues } from "@ianlucas/cs2-lib";
 import { useNavigate } from "@remix-run/react";
 import { useApplyItemSticker } from "~/components/hooks/use-apply-item-sticker";
 import { useInspectItem } from "~/components/hooks/use-inspect-item";
@@ -112,7 +112,7 @@ export function Inventory() {
 
   function handleEquip(uid: number, team?: CS2TeamValues) {
     playSound(
-      inventory.get(uid).type === "musickit"
+      inventory.get(uid).type === CS2ItemType.MusicKit
         ? "music_equip"
         : "inventory_item_pickup"
     );

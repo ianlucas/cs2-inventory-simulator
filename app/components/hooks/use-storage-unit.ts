@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS2ItemType } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
@@ -27,7 +28,7 @@ export function useStorageUnit() {
     item: { free, type, nameTag, stickers }
   }: (typeof items)[number]) =>
     (!free || nameTag !== undefined || stickers !== undefined) &&
-    type !== "tool";
+    type !== CS2ItemType.Tool;
 
   function handleRenameStorageUnit(uid: number) {
     return setRenameStorageUnit({ uid });

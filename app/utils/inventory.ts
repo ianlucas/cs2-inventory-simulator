@@ -7,33 +7,43 @@ import {
   CS2Economy,
   CS2EconomyItem,
   CS2Inventory,
-  CS2InventoryItem
+  CS2InventoryItem,
+  CS2ItemType,
+  CS2ItemTypeValues
 } from "@ianlucas/cs2-lib";
 import { serverInventoryShape } from "./shapes";
 
-export const UNLOCKABLE_ITEM_TYPE = ["case", "key"];
-export const EDITABLE_ITEM_TYPE = ["weapon", "melee", "glove", "musickit"];
-export const INSPECTABLE_ITEM_TYPE = [
-  "collectible",
-  "glove",
-  "graffiti",
-  "melee",
-  "musickit",
-  "patch",
-  "sticker",
-  "weapon"
+export const UNLOCKABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
+  CS2ItemType.Container,
+  CS2ItemType.ContainerKey
 ];
-export const INSPECTABLE_IN_GAME_ITEM_TYPE = [
-  "agent",
-  "case",
-  "collectible",
-  "glove",
-  "graffiti",
-  "melee",
-  "musickit",
-  "patch",
-  "sticker",
-  "weapon"
+export const EDITABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
+  CS2ItemType.Weapon,
+  CS2ItemType.Melee,
+  CS2ItemType.Gloves,
+  CS2ItemType.MusicKit
+];
+export const INSPECTABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
+  CS2ItemType.Collectible,
+  CS2ItemType.Gloves,
+  CS2ItemType.Graffiti,
+  CS2ItemType.Melee,
+  CS2ItemType.MusicKit,
+  CS2ItemType.Patch,
+  CS2ItemType.Sticker,
+  CS2ItemType.Weapon
+];
+export const INSPECTABLE_IN_GAME_ITEM_TYPE: CS2ItemTypeValues[] = [
+  CS2ItemType.Agent,
+  CS2ItemType.Container,
+  CS2ItemType.Collectible,
+  CS2ItemType.Gloves,
+  CS2ItemType.Graffiti,
+  CS2ItemType.Melee,
+  CS2ItemType.MusicKit,
+  CS2ItemType.Patch,
+  CS2ItemType.Sticker,
+  CS2ItemType.Weapon
 ];
 
 export function parseInventory(inventory?: string | null) {

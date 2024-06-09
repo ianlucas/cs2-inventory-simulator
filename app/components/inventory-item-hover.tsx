@@ -7,6 +7,7 @@ import {
   CS2Economy,
   CS2InventoryItem,
   CS2ItemType,
+  CS2ItemTypeValues,
   CS2_MIN_WEAR,
   CS2_TEAMS_BOTH
 } from "@ianlucas/cs2-lib";
@@ -22,6 +23,12 @@ import { InventoryItemSeed } from "./inventory-item-seed";
 import { InventoryItemStatTrak } from "./inventory-item-stattrak";
 import { InventoryItemTeams } from "./inventory-item-teams";
 import { InventoryItemWear } from "./inventory-item-wear";
+
+const HOLDABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
+  CS2ItemType.Weapon,
+  CS2ItemType.Melee,
+  CS2ItemType.Gloves
+];
 
 export function InventoryItemHover({
   item,
@@ -80,7 +87,7 @@ export function InventoryItemHover({
         <p
           className={clsx(
             "mt-4 whitespace-pre-wrap text-neutral-300",
-            ["weapon", "melee", "glove"].includes(data.type) && "italic"
+            HOLDABLE_ITEM_TYPES.includes(data.type) && "italic"
           )}
         >
           {data.desc}

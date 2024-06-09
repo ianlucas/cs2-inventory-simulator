@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2ItemType } from "@ianlucas/cs2-lib";
+import { CS2ItemType, CS2ItemTypeValues } from "@ianlucas/cs2-lib";
 import {
   INVENTORY_PRIMARY_FILTERS,
   INVENTORY_SECONDARY_FILTERS,
@@ -23,6 +23,30 @@ import {
 import { useStorageInput } from "./use-storage-input";
 import { useStorageState } from "./use-storage-state";
 import { useWatch } from "./use-watch";
+
+const ALL_EQUIPMENT_ITEM_TYPES: CS2ItemTypeValues[] = [
+  CS2ItemType.Weapon,
+  CS2ItemType.Agent,
+  CS2ItemType.Gloves,
+  CS2ItemType.Melee,
+  CS2ItemType.MusicKit
+];
+
+const ALL_GRAPHIC_ART_ITEM_TYPES: CS2ItemTypeValues[] = [
+  CS2ItemType.Patch,
+  CS2ItemType.Sticker,
+  CS2ItemType.Graffiti
+];
+
+const ALL_CONTAINERS_ITEM_TYPES: CS2ItemTypeValues[] = [
+  CS2ItemType.Container,
+  CS2ItemType.Tool
+];
+
+const ALL_DISPLAY_ITEM_TYPES: CS2ItemTypeValues[] = [
+  CS2ItemType.Collectible,
+  CS2ItemType.MusicKit
+];
 
 export function useScrollToTopOnChange<T>(dependency: T) {
   return useWatch((oldState, newState) => {
@@ -94,11 +118,9 @@ export function useInventoryFilterState() {
       case "Equipment":
         switch (secondaryFilter) {
           case "AllEquipment":
-            return ["weapon", "agent", "glove", "melee", "musickit"].includes(
-              item.type
-            );
+            return ALL_EQUIPMENT_ITEM_TYPES.includes(item.type);
           case "Melee":
-            return item.type === "melee";
+            return item.type === CS2ItemType.Melee;
           case "Pistols":
             return item.category === "secondary";
           case "MidTier":
@@ -118,19 +140,19 @@ export function useInventoryFilterState() {
       case "GraphicArt":
         switch (secondaryFilter) {
           case "AllGraphicArt":
-            return ["patch", "sticker", "graffiti"].includes(item.type);
+            return ALL_GRAPHIC_ART_ITEM_TYPES.includes(item.type);
           case "Patches":
-            return item.type === "patch";
+            return item.type === CS2ItemType.Patch;
           case "Stickers":
-            return item.type === "sticker";
+            return item.type === CS2ItemType.Sticker;
           case "Graffiti":
-            return item.type === "graffiti";
+            return item.type === CS2ItemType.Graffiti;
         }
         break;
       case "Containers":
         switch (secondaryFilter) {
           case "All":
-            return ["case", "tool"].includes(item.type);
+            return ALL_CONTAINERS_ITEM_TYPES.includes(item.type);
           case "WeaponCases":
             return item.isWeaponCase();
           case "StickerCapsules":
@@ -140,17 +162,17 @@ export function useInventoryFilterState() {
           case "SouvenirCases":
             return item.isSouvenirCase();
           case "Tools":
-            return item.type === "tool";
+            return item.type === CS2ItemType.Tool;
         }
         break;
       case "Display":
         switch (secondaryFilter) {
           case "All":
-            return ["collectible", "musickit"].includes(item.type);
+            return ALL_DISPLAY_ITEM_TYPES.includes(item.type);
           case "Medals":
-            return item.type === "collectible";
+            return item.type === CS2ItemType.Collectible;
           case "MusicKits":
-            return item.type === "musickit";
+            return item.type === CS2ItemType.MusicKit;
         }
         break;
     }

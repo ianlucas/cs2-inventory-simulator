@@ -9,6 +9,7 @@ import {
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
+  CS2ItemType,
   CS2_MAX_SEED,
   CS2_MAX_WEAR,
   CS2_MIN_SEED,
@@ -101,8 +102,8 @@ export function ItemEditor({
     (isCrafting ? craftAllowStickers : editAllowStickers) &&
     item.hasStickers() &&
     (isCrafting
-      ? !craftHideType.includes("sticker")
-      : !editHideType.includes("sticker"));
+      ? !craftHideType.includes(CS2ItemType.Sticker)
+      : !editHideType.includes(CS2ItemType.Sticker));
   const hasStattrak =
     (isCrafting ? craftAllowStatTrak : editAllowStatTrak) && item.hasStatTrak();
   const hasSeed =
@@ -144,7 +145,10 @@ export function ItemEditor({
         wear={item.hasWear() ? wear : undefined}
       />
       <div
-        className={clsx("mb-4 text-center", item.type === "agent" && "mt-4")}
+        className={clsx(
+          "mb-4 text-center",
+          item.type === CS2ItemType.Agent && "mt-4"
+        )}
       >
         <ItemEditorName item={item} />
       </div>

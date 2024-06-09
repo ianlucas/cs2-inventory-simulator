@@ -3,7 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2Inventory, CS2Team } from "@ianlucas/cs2-lib";
+import {
+  CS2Economy,
+  CS2Inventory,
+  CS2ItemType,
+  CS2Team
+} from "@ianlucas/cs2-lib";
 import { assert } from "./misc";
 
 interface BaseEconItem {
@@ -78,7 +83,7 @@ export async function generate(
         continue;
       }
       switch (data.type) {
-        case "musickit":
+        case CS2ItemType.MusicKit:
           assert(data.index);
           musicKit = {
             def: data.index,
@@ -86,10 +91,10 @@ export async function generate(
             uid: item.uid
           };
           break;
-        case "collectible":
+        case CS2ItemType.Collectible:
           collectible = data.def;
           break;
-        case "melee":
+        case CS2ItemType.Melee:
           assert(team);
           assert(data.def);
           knives[team] = {
@@ -104,7 +109,7 @@ export async function generate(
             wear: item.wear ?? data.wearMin ?? 0
           };
           break;
-        case "gloves":
+        case CS2ItemType.Gloves:
           assert(team);
           assert(data.def);
           gloves[team] = {
@@ -114,7 +119,7 @@ export async function generate(
             wear: item.wear ?? data.wearMin ?? 0
           };
           break;
-        case "weapon":
+        case CS2ItemType.Weapon:
           assert(data.def);
           const weapon = team === CS2Team.CT ? ctWeapons : tWeapons;
           weapon[data.def] = {
@@ -133,7 +138,7 @@ export async function generate(
             wear: item.wear ?? data.wearMin ?? 0
           };
           break;
-        case "agent":
+        case CS2ItemType.Agent:
           assert(team);
           assert(data.model);
           assert(data.voPrefix);

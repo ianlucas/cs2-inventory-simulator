@@ -7,6 +7,8 @@ import {
   CS2Economy,
   CS2EconomyItem,
   CS2ItemLocalizationByLanguage,
+  CS2ItemType,
+  CS2ItemTypeValues,
   CS2RarityColor,
   CS2_ITEMS,
   CS2_MAX_SEED,
@@ -17,15 +19,14 @@ import {
 export const assetBaseUrl =
   "https://cdn.statically.io/gh/ianlucas/cs2-lib/main/assets/images";
 
-export const COUNTABLE_ITEM_TYPES = [
-  "case",
-  "graffiti",
-  "key",
-  "patch",
-  "sticker",
-  "tool"
+export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
+  CS2ItemType.Container,
+  CS2ItemType.Graffiti,
+  CS2ItemType.ContainerKey,
+  CS2ItemType.Patch,
+  CS2ItemType.Sticker,
+  CS2ItemType.Tool
 ];
-export const FREE_MODEL_IN_NAME_TYPES = ["musickit"];
 export const RARITY_LABEL: Record<string, string> = {
   [CS2RarityColor.Common]: "Common",
   [CS2RarityColor.Uncommon]: "Uncommon",
@@ -88,7 +89,7 @@ export function sortByName(a: CS2EconomyItem, b: CS2EconomyItem) {
 
 export function getRarityItemName(item: CS2EconomyItem) {
   const [model] = item.name.split(" | ");
-  if (item.type === "weapon") {
+  if (item.type === CS2ItemType.Weapon) {
     if (item.category == "secondary") {
       return "Pistol";
     }
@@ -111,32 +112,32 @@ export function getRarityItemName(item: CS2EconomyItem) {
       return "Equipment";
     }
   }
-  if (item.type === "tool") {
+  if (item.type === CS2ItemType.Tool) {
     if (item.id === 12032) {
       return "Contract";
     }
     return "Tool";
   }
   switch (item.type) {
-    case "melee":
+    case CS2ItemType.Melee:
       return "Knife";
-    case "gloves":
+    case CS2ItemType.Gloves:
       return "Gloves";
-    case "sticker":
+    case CS2ItemType.Sticker:
       return "Sticker";
-    case "agent":
+    case CS2ItemType.Agent:
       return "Agent";
-    case "patch":
+    case CS2ItemType.Patch:
       return "Patch";
-    case "musickit":
+    case CS2ItemType.MusicKit:
       return "MusicKit";
-    case "graffiti":
+    case CS2ItemType.Graffiti:
       return "Graffiti";
-    case "collectible":
+    case CS2ItemType.Collectible:
       return "Collectible";
     case "container":
       return "Container";
-    case "containerkey":
+    case CS2ItemType.ContainerKey:
       return "Key";
   }
 }
