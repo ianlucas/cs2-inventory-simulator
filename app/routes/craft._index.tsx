@@ -5,7 +5,7 @@
 
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS2EconomyItem } from "@ianlucas/cs2-lib";
+import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
@@ -60,7 +60,7 @@ export default function Craft() {
 
   function handleSubmit({
     quantity,
-    stattrak: statTrak,
+    statTrak,
     ...attributes
   }: ItemEditorAttributes) {
     if (isSubmitting || selectedItem === undefined) {
@@ -73,7 +73,7 @@ export default function Craft() {
       id: selectedItem.id,
       statTrak: statTrak ? (0 as const) : undefined,
       ...attributes
-    };
+    } satisfies CS2BaseInventoryItem;
 
     if (isEditing) {
       deleteEmptyProps(inventoryItem);

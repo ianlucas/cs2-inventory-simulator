@@ -37,10 +37,10 @@ import { ModalButton } from "./modal-button";
 import { StickerPicker } from "./sticker-picker";
 
 export interface ItemEditorAttributes {
-  nametag?: string;
+  nameTag?: string;
   quantity: number;
   seed?: number;
-  stattrak?: boolean;
+  statTrak?: boolean;
   stickers?: CS2BaseInventoryItem["stickers"];
   wear?: number;
 }
@@ -57,7 +57,7 @@ export function ItemEditor({
   attributes?: {
     nametag?: string;
     seed?: number;
-    stattrak?: number;
+    statTrak?: number;
     stickers?: CS2BaseInventoryItem["stickers"];
     wear?: number;
   };
@@ -86,7 +86,7 @@ export function ItemEditor({
   } = useRules();
   const localize = useLocalize();
   const [stattrak, setStattrak] = useCheckbox(
-    attributes?.stattrak !== undefined ? attributes.stattrak >= 0 : false
+    attributes?.statTrak !== undefined ? attributes.statTrak >= 0 : false
   );
   const [wear, setWear] = useState(
     attributes?.wear ?? item.wearMin ?? CS2_MIN_WEAR
@@ -127,11 +127,11 @@ export function ItemEditor({
 
   function handleSubmit() {
     onSubmit({
-      nametag: hasNametag && nametag.length > 0 ? nametag : undefined,
+      nameTag: hasNametag && nametag.length > 0 ? nametag : undefined,
       quantity,
       seed:
         hasSeed && (!isCrafting || seed !== CS2_MIN_SEED) ? seed : undefined,
-      stattrak: hasStattrak && stattrak === true ? stattrak : undefined,
+      statTrak: hasStattrak && stattrak === true ? stattrak : undefined,
       stickers,
       wear: hasWear && (!isCrafting || wear !== CS2_MIN_WEAR) ? wear : undefined
     });
