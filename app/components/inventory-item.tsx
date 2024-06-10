@@ -128,12 +128,12 @@ export function InventoryItem({
   const canApplySticker =
     inventoryItemAllowApplySticker &&
     ownApplicableStickers &&
-    ((data.hasStickers() && Object.keys(item.stickers ?? {}).length < 4) ||
+    ((data.hasStickers() && item.someStickers().length < 4) ||
       data.isSticker());
   const canScrapeSticker =
     inventoryItemAllowScrapeSticker &&
     data.hasStickers() &&
-    Object.keys(item.stickers ?? {}).length > 0;
+    item.someStickers().length > 0;
   const canUnlockContainer =
     inventoryItemAllowUnlockContainer &&
     UNLOCKABLE_ITEM_TYPE.includes(data.type);
