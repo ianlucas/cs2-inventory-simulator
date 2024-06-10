@@ -91,7 +91,8 @@ export function ApplyItemSticker({
               />
               <div className="flex items-center justify-center">
                 {targetItem.allStickers().map(([slot, sticker]) =>
-                  sticker !== undefined || slot === stickerIndex ? (
+                  slot === 4 ? undefined : sticker !== undefined ||
+                    slot === stickerIndex ? (
                     <ItemImage
                       key={slot}
                       className="h-[126px] w-[168px]"
