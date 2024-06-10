@@ -54,7 +54,7 @@ export function InventoryItemTile({
         )}
         {inventoryItem?.stickers !== undefined && (
           <div className="absolute bottom-0 left-0 flex items-center p-1">
-            {Object.entries(inventoryItem.stickers).map(([index, { id }]) => (
+            {inventoryItem.someStickers().map(([index, { id }]) => (
               <ItemImage
                 className="h-5"
                 item={CS2Economy.getById(id)}

@@ -30,7 +30,7 @@ export function InspectItem({
   const inventoryItem = useInventoryItem(uid);
   const { statsForNerds } = usePreferences();
   const item = inventoryItem;
-  const { seed, stickers, wear } = item;
+  const { seed, wear } = item;
   const {
     getHoverFloatingProps,
     getHoverReferenceProps,
@@ -76,9 +76,9 @@ export function InspectItem({
                     item={item}
                     wear={wear}
                   />
-                  {stickers !== undefined && (
+                  {item.stickers !== undefined && (
                     <div className="absolute bottom-0 left-0 flex items-center justify-center">
-                      {Object.entries(stickers).map(([index, { id, wear }]) => (
+                      {item.someStickers().map(([index, { id, wear }]) => (
                         <span className="inline-block" key={index}>
                           <ItemImage
                             className="aspect-[1.33333] w-[128px]"
