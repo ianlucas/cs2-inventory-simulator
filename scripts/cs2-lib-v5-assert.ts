@@ -3,8 +3,17 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Inventory, assert, ensure } from "@ianlucas/cs2-lib";
+import {
+  CS2Economy,
+  CS2Inventory,
+  CS2_ITEMS,
+  assert,
+  ensure
+} from "@ianlucas/cs2-lib";
+import english from "@ianlucas/cs2-lib/assets/localizations/items-english.json";
 import { prisma } from "~/db.server";
+
+CS2Economy.use({ items: CS2_ITEMS, language: english });
 
 const v0ToV1Key: Record<string, string> = {
   caseid: "containerId",
@@ -21,7 +30,7 @@ function assertV0Item(v0: any, v1: any, inStorageUnit = false) {
       case "equipped":
       case "equippedCT":
       case "equippedT":
-        if (v0.type === "patch") {
+        if (CS2Economy.get(v0.id).isPatch()) {
           value = undefined;
         }
         break;
