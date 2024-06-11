@@ -55,7 +55,7 @@ export function ItemEditor({
   onSubmit
 }: {
   attributes?: {
-    nametag?: string;
+    nameTag?: string;
     seed?: number;
     statTrak?: number;
     stickers?: CS2BaseInventoryItem["stickers"];
@@ -85,14 +85,14 @@ export function ItemEditor({
     inventoryMaxItems
   } = useRules();
   const localize = useLocalize();
-  const [stattrak, setStattrak] = useCheckbox(
+  const [statTrak, setStatTrak] = useCheckbox(
     attributes?.statTrak !== undefined ? attributes.statTrak >= 0 : false
   );
   const [wear, setWear] = useState(
     attributes?.wear ?? item.wearMin ?? CS2_MIN_WEAR
   );
   const [seed, setSeed] = useState(attributes?.seed ?? 1);
-  const [nametag, setNametag] = useInput(attributes?.nametag ?? "");
+  const [nameTag, setNameTag] = useInput(attributes?.nameTag ?? "");
   const [stickers, setStickers] = useState<
     NonNullable<CS2BaseInventoryItem["stickers"]>
   >(attributes?.stickers ?? {});
@@ -104,7 +104,7 @@ export function ItemEditor({
     (isCrafting
       ? !craftHideType.includes(CS2ItemType.Sticker)
       : !editHideType.includes(CS2ItemType.Sticker));
-  const hasStattrak =
+  const hasStatTrak =
     (isCrafting ? craftAllowStatTrak : editAllowStatTrak) && item.hasStatTrak();
   const hasSeed =
     (isCrafting ? craftAllowSeed : editAllowSeed) && item.hasSeed();
@@ -115,8 +115,8 @@ export function ItemEditor({
   const isWearValid = !hasWear || CS2Economy.safeValidateWear(wear);
   const isNametagValid =
     !hasNametag ||
-    CS2Economy.safeValidateNametag(nametag) ||
-    nametag.length === 0;
+    CS2Economy.safeValidateNametag(nameTag) ||
+    nameTag.length === 0;
   const isSeedValid = !hasSeed || CS2Economy.safeValidateSeed(seed);
   const canCraft = isWearValid && isNametagValid && isSeedValid;
   const isDismissReset = dismissType === "reset";
@@ -127,11 +127,11 @@ export function ItemEditor({
 
   function handleSubmit() {
     onSubmit({
-      nameTag: hasNametag && nametag.length > 0 ? nametag : undefined,
+      nameTag: hasNametag && nameTag.length > 0 ? nameTag : undefined,
       quantity,
       seed:
         hasSeed && (!isCrafting || seed !== CS2_MIN_SEED) ? seed : undefined,
-      statTrak: hasStattrak && stattrak === true ? stattrak : undefined,
+      statTrak: hasStatTrak && statTrak === true ? statTrak : undefined,
       stickers,
       wear: hasWear && (!isCrafting || wear !== CS2_MIN_WEAR) ? wear : undefined
     });
@@ -169,12 +169,12 @@ export function ItemEditor({
           >
             <EditorInput
               maxLength={20}
-              onChange={setNametag}
+              onChange={setNameTag}
               placeholder={localize("EditorNametagPlaceholder")}
-              validate={(nametag) =>
-                CS2Economy.safeValidateNametag(nametag ?? "")
+              validate={(nameTag) =>
+                CS2Economy.safeValidateNametag(nameTag ?? "")
               }
-              value={nametag}
+              value={nameTag}
             />
           </ItemEditorLabel>
         )}
@@ -219,12 +219,12 @@ export function ItemEditor({
             />
           </ItemEditorLabel>
         )}
-        {hasStattrak && (
+        {hasStatTrak && (
           <ItemEditorLabel
             className="flex select-none items-center gap-4"
             label={localize("EditorStatTrak")}
           >
-            <EditorToggle checked={stattrak} onChange={setStattrak} />
+            <EditorToggle checked={statTrak} onChange={setStatTrak} />
           </ItemEditorLabel>
         )}
         {hasQuantity && (

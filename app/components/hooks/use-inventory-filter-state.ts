@@ -74,7 +74,7 @@ export function useInventoryFilterState() {
     if (search.length > 0) {
       const searchLower = search.toLowerCase();
       const name = item.name.toLowerCase();
-      const nametag = item.nameTag?.toLowerCase() ?? "";
+      const nameTag = item.nameTag?.toLowerCase() ?? "";
       const altname = item.altName?.toLowerCase() ?? "";
       if (name.includes(searchLower)) {
         return true;
@@ -82,7 +82,7 @@ export function useInventoryFilterState() {
       if (altname.includes(searchLower)) {
         return true;
       }
-      if (nametag.includes(searchLower)) {
+      if (nameTag.includes(searchLower)) {
         return true;
       }
       return false;

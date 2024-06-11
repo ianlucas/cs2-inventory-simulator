@@ -19,8 +19,8 @@ export const baseInventoryItemProps = {
     .string()
     .max(20)
     .optional()
-    .transform((nametag) => CS2Economy.trimNametag(nametag))
-    .refine((nametag) => CS2Economy.safeValidateNametag(nametag)),
+    .transform((nameTag) => CS2Economy.trimNametag(nameTag))
+    .refine((nameTag) => CS2Economy.safeValidateNametag(nameTag)),
   patches: z.record(nonNegativeInt).optional(),
   seed: positiveInt
     .optional()

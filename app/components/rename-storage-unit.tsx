@@ -39,7 +39,7 @@ export function RenameStorageUnit({
     sync({
       type: RenameStorageUnitAction,
       uid: uid,
-      nametag: nameTag
+      nameTag: nameTag
     });
     setInventory(inventory.renameStorageUnit(uid, nameTag));
     onClose();
@@ -72,8 +72,8 @@ export function RenameStorageUnit({
                   maxLength={20}
                   onChange={setNameTag}
                   placeholder={localize("EditorNametagPlaceholder")}
-                  validate={(nametag) =>
-                    CS2Economy.safeValidateNametag(nametag ?? "")
+                  validate={(nameTag) =>
+                    CS2Economy.safeValidateNametag(nameTag ?? "")
                   }
                   value={nameTag}
                 />

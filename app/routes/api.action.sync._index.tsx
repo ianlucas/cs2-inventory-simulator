@@ -62,15 +62,15 @@ const actionShape = z
       type: z.literal(AddWithNametagAction),
       toolUid: nonNegativeInt,
       itemId: nonNegativeInt,
-      nametag: z.string()
+      nameTag: z.string()
     })
   )
   .or(
     z.object({
       type: z.literal(ApplyItemStickerAction),
-      targetUid: nonNegativeInt,
+      slot: nonNegativeInt,
       stickerUid: nonNegativeInt,
-      stickerIndex: nonNegativeInt
+      targetUid: nonNegativeInt
     })
   )
   .or(
@@ -92,7 +92,7 @@ const actionShape = z
       type: z.literal(RenameItemAction),
       toolUid: nonNegativeInt,
       targetUid: nonNegativeInt,
-      nametag: z.string().optional()
+      nameTag: z.string().optional()
     })
   )
   .or(
@@ -105,7 +105,7 @@ const actionShape = z
     z.object({
       type: z.literal(ScrapeItemStickerAction),
       targetUid: nonNegativeInt,
-      stickerIndex: nonNegativeInt
+      slot: nonNegativeInt
     })
   )
   .or(
@@ -120,7 +120,7 @@ const actionShape = z
     z.object({
       type: z.literal(RenameStorageUnitAction),
       uid: nonNegativeInt,
-      nametag: z.string()
+      nameTag: z.string()
     })
   )
   .or(
@@ -147,9 +147,9 @@ const actionShape = z
   .or(
     z.object({
       type: z.literal(AddWithStickerAction),
-      stickerUid: nonNegativeInt,
       itemId: nonNegativeInt,
-      stickerIndex: nonNegativeInt
+      slot: nonNegativeInt,
+      stickerUid: nonNegativeInt
     })
   )
   .or(
@@ -295,7 +295,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.addWithNametag(
               action.toolUid,
               action.itemId,
-              action.nametag
+              action.nameTag
             );
             break;
           case ApplyItemStickerAction:
@@ -303,7 +303,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.applyItemSticker(
               action.targetUid,
               action.stickerUid,
-              action.stickerIndex
+              action.slot
             );
             break;
           case EquipAction:
@@ -316,7 +316,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.renameItem(
               action.toolUid,
               action.targetUid,
-              action.nametag
+              action.nameTag
             );
             break;
           case RemoveAction:
@@ -324,7 +324,7 @@ export async function action({ request }: ActionFunctionArgs) {
             break;
           case ScrapeItemStickerAction:
             await expectRule("inventoryItemAllowScrapeSticker", true, userId);
-            inventory.scrapeItemSticker(action.targetUid, action.stickerIndex);
+            inventory.scrapeItemSticker(action.targetUid, action.slot);
             break;
           case SwapItemsStatTrakAction:
             inventory.swapItemsStatTrak(
@@ -334,7 +334,7 @@ export async function action({ request }: ActionFunctionArgs) {
             );
             break;
           case RenameStorageUnitAction:
-            inventory.renameStorageUnit(action.uid, action.nametag);
+            inventory.renameStorageUnit(action.uid, action.nameTag);
             break;
           case DepositToStorageUnitAction:
             inventory.depositToStorageUnit(action.uid, action.depositUids);
@@ -360,7 +360,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.addWithSticker(
               action.stickerUid,
               action.itemId,
-              action.stickerIndex
+              action.slot
             );
             break;
           case RemoveAllItemsAction:

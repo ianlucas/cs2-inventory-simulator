@@ -36,16 +36,16 @@ export function nameItemFactory(localize: ReturnType<typeof useLocalize>) {
       | "inventory-name" = "default"
   ) {
     const inventoryItem = item instanceof CS2InventoryItem ? item : undefined;
-    const nametag =
+    const nameTag =
       inventoryItem?.nameTag !== undefined ? `"${inventoryItem.nameTag}"` : "";
-    const stattrak =
+    const statTrak =
       inventoryItem?.statTrak !== undefined
         ? `${localize("InventoryItemStatTrak")} `
         : "";
     const quality = item.isMelee() && !item.free ? "★ " : "";
     let [model, ...names] = item.name.split(" | ");
     let name = names.join(" | ");
-    model = `${quality}${stattrak}${model}`;
+    model = `${quality}${statTrak}${model}`;
     if (item.isAgent()) {
       [model, name] = name.split(" | ");
     } else if (ITEM_TYPES_WITHOUT_NAME.includes(item.type)) {
@@ -71,11 +71,11 @@ export function nameItemFactory(localize: ReturnType<typeof useLocalize>) {
         }
         return [model, name];
       case "inventory-name":
-        if (nametag.length > 0) {
+        if (nameTag.length > 0) {
           if (!item.isStorageUnit()) {
             model = "";
           }
-          name = nametag;
+          name = nameTag;
         }
         return [model, name];
     }

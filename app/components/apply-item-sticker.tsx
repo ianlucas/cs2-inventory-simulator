@@ -37,22 +37,20 @@ export function ApplyItemSticker({
   const sync = useSync();
   const nameItemString = useNameItemString();
 
-  const [stickerIndex, setStickerIndex] = useState<number>();
+  const [slot, setSlot] = useState<number>();
   const stickerItem = useInventoryItem(stickerUid);
   const targetItem = useInventoryItem(targetUid);
 
   function handleApplySticker() {
-    if (stickerIndex !== undefined) {
+    if (slot !== undefined) {
       if (targetUid >= 0) {
         sync({
           type: ApplyItemStickerAction,
           targetUid,
-          stickerIndex,
+          slot: slot,
           stickerUid
         });
-        setInventory(
-          inventory.applyItemSticker(targetUid, stickerUid, stickerIndex)
-        );
+        setInventory(inventory.applyItemSticker(targetUid, stickerUid, slot));
         playSound("sticker_apply_confirm");
         onClose();
       } else {
@@ -60,11 +58,9 @@ export function ApplyItemSticker({
           type: AddWithStickerAction,
           stickerUid,
           itemId: targetItem.id,
-          stickerIndex
+          slot: slot
         });
-        setInventory(
-          inventory.addWithSticker(stickerUid, targetItem.id, stickerIndex)
-        );
+        setInventory(inventory.addWithSticker(stickerUid, targetItem.id, slot));
         playSound("sticker_apply_confirm");
         onClose();
       }
@@ -88,11 +84,11 @@ export function ApplyItemSticker({
                 item={targetItem}
               />
               <div className="flex items-center justify-center">
-                {targetItem.allStickers().map(([slot, sticker]) =>
-                  slot === 4 ? undefined : sticker !== undefined ||
-                    slot === stickerIndex ? (
+                {targetItem.allStickers().map(([xslot, sticker]) =>
+                  xslot === 4 ? undefined : sticker !== undefined ||
+                    xslot === slot ? (
                     <ItemImage
-                      key={slot}
+                      key={xslot}
                       className="h-[126px] w-[168px]"
                       item={
                         sticker !== undefined
@@ -102,10 +98,10 @@ export function ApplyItemSticker({
                     />
                   ) : (
                     <button
-                      key={slot}
+                      key={xslot}
                       className="group flex h-[126px] w-[168px] items-center justify-center"
                       onClick={() => {
-                        setStickerIndex(slot);
+                        setSlot(xslot);
                         playSound("sticker_apply");
                       }}
                     >
@@ -121,7 +117,7 @@ export function ApplyItemSticker({
                   <>
                     <ModalButton
                       children={localize("ApplyStickerUse")}
-                      disabled={stickerIndex === undefined}
+                      disabled={slot === undefined}
                       onClick={handleApplySticker}
                       variant="primary"
                     />

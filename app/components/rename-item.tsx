@@ -46,7 +46,7 @@ export function RenameItem({
         type: AddWithNametagAction,
         toolUid: toolUid,
         itemId: inventoryItem.id,
-        nametag: nameTag
+        nameTag: nameTag
       });
       setInventory(
         inventory.addWithNametag(toolUid, inventoryItem.id, nameTag)
@@ -56,7 +56,7 @@ export function RenameItem({
         type: RenameItemAction,
         toolUid: toolUid,
         targetUid: targetUid,
-        nametag: nameTag
+        nameTag: nameTag
       });
       setInventory(inventory.renameItem(toolUid, targetUid, nameTag));
     }
@@ -87,8 +87,8 @@ export function RenameItem({
                   maxLength={20}
                   onChange={setNameTag}
                   placeholder={localize("EditorNametagPlaceholder")}
-                  validate={(nametag) =>
-                    CS2Economy.safeValidateNametag(nametag ?? "")
+                  validate={(nameTag) =>
+                    CS2Economy.safeValidateNametag(nameTag ?? "")
                   }
                   value={nameTag}
                 />

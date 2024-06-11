@@ -48,7 +48,7 @@ export function ScrapeItemSticker({
     sync({
       type: ScrapeItemStickerAction,
       targetUid: uid,
-      stickerIndex: slot
+      slot: slot
     });
     setInventory(inventory.scrapeItemSticker(uid, slot));
     playSound(`sticker_scratch${scratch as 1 | 2 | 3 | 4 | 5}`);
