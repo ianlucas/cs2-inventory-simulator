@@ -126,6 +126,7 @@ export function StickerPicker({
       <div className="flex justify-between">
         {range(4).map((index) => {
           const sticker = value[index];
+          const stickerWear = sticker.wear ?? CS2_MIN_STICKER_WEAR;
           const item =
             sticker !== undefined ? CS2Economy.getById(sticker.id) : undefined;
           return (
@@ -143,7 +144,7 @@ export function StickerPicker({
               )}
               {sticker !== undefined && (
                 <div className="text-outline-1 absolute bottom-0 right-1 font-display font-bold drop-shadow-lg">
-                  {((sticker.wear ?? 0) * 100).toFixed(0)}%
+                  {(stickerWear * 100).toFixed(0)}%
                 </div>
               )}
               <div className="absolute left-0 top-0 h-full w-full rounded border-[2.5px] border-transparent transition-all hover:border-white"></div>

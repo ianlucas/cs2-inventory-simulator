@@ -8,7 +8,6 @@ import {
   CS2InventoryItem,
   CS2ItemType,
   CS2ItemTypeValues,
-  CS2_MIN_WEAR,
   CS2_TEAMS_BOTH
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
@@ -49,7 +48,7 @@ export function InventoryItemHover({
   const hasSeed = !item.free && item.hasSeed();
   const hasAttributes = hasWear || hasSeed;
   const hasStatTrak = item.statTrak !== undefined;
-  const wear = item.wear ?? item.wearMin ?? CS2_MIN_WEAR;
+  const wear = item.getWear();
 
   // We don't treat graffiti as equippable for a particular team, but in-game it
   // shows as CT or T, if we were to change cs2-lib it would be a breaking

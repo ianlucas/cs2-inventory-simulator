@@ -41,29 +41,24 @@ export function ScrapeItemSticker({
 
   const item = inventory.get(uid);
 
-  function doScrapeSticker(stickerIndex: number) {
+  function doScrapeSticker(slot: number) {
     const scratch = Math.ceil(
-      ((item.stickers?.get(stickerIndex)?.wear ?? 0) +
-        CS2_STICKER_WEAR_FACTOR) *
-        5
+      (item.getStickerWear(slot) + CS2_STICKER_WEAR_FACTOR) * 5
     );
     sync({
       type: ScrapeItemStickerAction,
       targetUid: uid,
-      stickerIndex
+      stickerIndex: slot
     });
-    setInventory(inventory.scrapeItemSticker(uid, stickerIndex));
+    setInventory(inventory.scrapeItemSticker(uid, slot));
     playSound(`sticker_scratch${scratch as 1 | 2 | 3 | 4 | 5}`);
   }
 
-  function handleScrapeSticker(stickerIndex: number) {
-    if (
-      (item.stickers?.get(stickerIndex)?.wear ?? 0) + CS2_WEAR_FACTOR >
-      CS2_MAX_STICKER_WEAR
-    ) {
-      setConfirmScrapeIndex(stickerIndex);
+  function handleScrapeSticker(slot: number) {
+    if (item.getStickerWear(slot) + CS2_WEAR_FACTOR > CS2_MAX_STICKER_WEAR) {
+      setConfirmScrapeIndex(slot);
     } else {
-      doScrapeSticker(stickerIndex);
+      doScrapeSticker(slot);
     }
   }
 

@@ -21,7 +21,7 @@ export function ItemImage({
       draggable={false}
       src={resolveItemImage(
         item,
-        wear ?? (item instanceof CS2InventoryItem ? item.wear : undefined)
+        wear ?? (item instanceof CS2InventoryItem ? item.getWear() : undefined)
       )}
       {...props}
     />

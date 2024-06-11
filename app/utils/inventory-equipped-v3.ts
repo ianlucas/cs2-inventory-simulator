@@ -7,7 +7,9 @@ import {
   CS2Economy,
   CS2Inventory,
   CS2ItemType,
-  CS2Team
+  CS2Team,
+  CS2_MIN_SEED,
+  CS2_MIN_STICKER_WEAR
 } from "@ianlucas/cs2-lib";
 import { assert } from "./misc";
 
@@ -102,11 +104,11 @@ export async function generate(
             legacy: false,
             nametag: item.nameTag ?? "",
             paint: data.index ?? 0,
-            seed: item.seed ?? 1,
+            seed: item.seed ?? CS2_MIN_SEED,
             stattrak: item.statTrak ?? -1,
             stickers: [],
             uid: item.uid,
-            wear: item.wear ?? data.wearMin ?? 0
+            wear: item.getWear()
           };
           break;
         case CS2ItemType.Gloves:
@@ -115,8 +117,8 @@ export async function generate(
           gloves[team] = {
             def: data.def,
             paint: data.index ?? 0,
-            seed: item.seed ?? 1,
-            wear: item.wear ?? data.wearMin ?? 0
+            seed: item.seed ?? CS2_MIN_SEED,
+            wear: item.getWear()
           };
           break;
         case CS2ItemType.Weapon:
@@ -127,15 +129,15 @@ export async function generate(
             legacy: data.legacy ?? false,
             nametag: item.nameTag ?? "",
             paint: data.index ?? 0,
-            seed: item.seed ?? 1,
+            seed: item.seed ?? CS2_MIN_SEED,
             stattrak: item.statTrak ?? -1,
             stickers: item.someStickers().map(([index, sticker]) => ({
               slot: index,
-              wear: sticker.wear ?? 0,
+              wear: sticker.wear ?? CS2_MIN_STICKER_WEAR,
               def: CS2Economy.getById(sticker.id).index ?? 0
             })),
             uid: item.uid,
-            wear: item.wear ?? data.wearMin ?? 0
+            wear: item.getWear()
           };
           break;
         case CS2ItemType.Agent:

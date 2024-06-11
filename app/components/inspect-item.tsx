@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { FloatingFocusManager } from "@floating-ui/react";
-import { CS2Economy, CS2_MIN_SEED, CS2_MIN_WEAR } from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2_MIN_SEED } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/components/hooks/use-inspect-floating";
@@ -143,7 +143,7 @@ export function InspectItem({
                     <strong>
                       {localize("InventoryItemInspectWearRating")}:
                     </strong>{" "}
-                    {wearToString(item.wear ?? item.wearMin ?? CS2_MIN_WEAR)}
+                    {wearToString(item.getWear())}
                   </div>
                 </div>
               </FloatingFocusManager>
