@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { assert } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
@@ -19,7 +20,7 @@ export function useUnlockCase() {
 
   function handleUnlockCase(uid: number) {
     const selectedItem = inventory.get(uid);
-    if (selectedItem.keys || selectedItem.isContainerKey()) {
+    if (selectedItem.keys !== undefined || selectedItem.isContainerKey()) {
       const keyItems = items.filter(
         ({ item }) =>
           (selectedItem.isContainerKey() &&
@@ -47,11 +48,12 @@ export function useUnlockCase() {
   }
 
   function handleUnlockCaseSelect(uid: number) {
+    assert(itemSelector !== undefined);
     playSound("case_drop");
     const selectedItem = inventory.get(uid);
     return setUnlockCase({
-      caseUid: selectedItem.isContainer() ? uid : itemSelector!.uid,
-      keyUid: selectedItem.isContainerKey() ? uid : itemSelector!.uid
+      caseUid: selectedItem.isContainer() ? uid : itemSelector.uid,
+      keyUid: selectedItem.isContainerKey() ? uid : itemSelector.uid
     });
   }
 

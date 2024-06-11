@@ -3,20 +3,19 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { ensure } from "@ianlucas/cs2-lib";
 import { useInventory, useInventoryItems } from "~/components/app-context";
-import { assert } from "~/utils/misc";
 import { useFreeze } from "./use-freeze";
 
 export function useInventoryItem(uid: number) {
   const [inventory] = useInventory();
   const items = useInventoryItems();
   const item = useFreeze(() => {
+    // Negative UIDs are free items added by us if setting is enabled.
     if (uid < 0) {
-      const item = items.find(
-        ({ item: { uid: otherUid } }) => otherUid === uid
+      return ensure(
+        items.find(({ item: { uid: xuid } }) => xuid === uid)?.item
       );
-      assert(item, `Item with uid ${uid} not found.`);
-      return item.item;
     }
     return inventory.get(uid);
   });

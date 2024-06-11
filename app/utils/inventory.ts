@@ -83,10 +83,3 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
     uid: -1 * (index + 1)
   }));
 }
-
-export function getStickerCount(stickers?: CS2InventoryItem["stickers"]) {
-  if (stickers === undefined) {
-    return 0;
-  }
-  return stickers.size;
-}

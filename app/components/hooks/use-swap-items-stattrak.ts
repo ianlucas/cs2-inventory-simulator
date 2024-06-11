@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2ItemType } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
@@ -41,12 +40,11 @@ export function useSwapItemsStatTrak() {
       setItemSelector({
         uid: uid,
         items: items.filter(
-          ({ item, uid: otherUid }) =>
+          ({ item, uid: xuid }) =>
             item.statTrak !== undefined &&
-            otherUid !== uid &&
+            xuid !== uid &&
             selectedItem.type === item.type &&
-            (selectedItem.type === CS2ItemType.MusicKit ||
-              selectedItem.def === item.def)
+            (selectedItem.isMusicKit() || selectedItem.def === item.def)
         ),
         type: "swap-items-stattrak"
       });

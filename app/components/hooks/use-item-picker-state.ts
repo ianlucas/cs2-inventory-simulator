@@ -32,7 +32,7 @@ export function useItemPickerState({
     setModel(undefined);
   }
 
-  function handleFilterClick(filter: EconomyItemFilter) {
+  function handleCategoryClick(filter: EconomyItemFilter) {
     setFilter(filter);
     return reset();
   }
@@ -68,7 +68,7 @@ export function useItemPickerState({
   return {
     categories,
     filter,
-    handleCategoryClick: handleFilterClick,
+    handleCategoryClick,
     handleItemClick,
     ignoreRarityColor,
     items,

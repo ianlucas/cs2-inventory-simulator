@@ -36,11 +36,12 @@ export function useLocalization({
   const [itemMap, setItemMap] = useState(getItemLocalizationMap());
 
   function localize(token: SystemLocalizationTokens, ...values: string[]) {
-    const value = systemMap[token];
-    if (value === undefined) {
-      return "";
-    }
-    return value.replace(/\{(\d+)\}/g, (_, index) => values[Number(index) - 1]);
+    return (
+      systemMap[token]?.replace(
+        /\{(\d+)\}/g,
+        (_, index) => values[Number(index) - 1]
+      ) ?? ""
+    );
   }
 
   useEffect(() => {

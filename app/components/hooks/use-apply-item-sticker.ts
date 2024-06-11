@@ -7,7 +7,6 @@ import { assert } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
-import { getStickerCount } from "~/utils/inventory";
 
 export function useApplyItemSticker() {
   const items = useInventoryItems();
@@ -22,14 +21,10 @@ export function useApplyItemSticker() {
     const selectedItem = inventory.get(uid);
     return setItemSelector({
       uid,
-      items: items.filter(
-        ({ item }) =>
-          (selectedItem.isSticker() &&
-            item.hasStickers() &&
-            getStickerCount(item.stickers) < 4) ||
-          (!selectedItem.isSticker() &&
-            getStickerCount(selectedItem.stickers) < 4 &&
-            item.isSticker())
+      items: items.filter(({ item }) =>
+        selectedItem.isSticker()
+          ? item.hasStickers() && item.getStickersCount() < 4
+          : selectedItem.getStickersCount() < 4 && item.isSticker()
       ),
       type: "apply-item-sticker"
     });

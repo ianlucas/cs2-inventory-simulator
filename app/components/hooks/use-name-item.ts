@@ -36,37 +36,34 @@ export function nameItemFactory(localize: ReturnType<typeof useLocalize>) {
       | "inventory-name" = "default"
   ) {
     const inventoryItem = item instanceof CS2InventoryItem ? item : undefined;
-    const data = item;
     const nametag =
       inventoryItem?.nameTag !== undefined ? `"${inventoryItem.nameTag}"` : "";
     const stattrak =
       inventoryItem?.statTrak !== undefined
         ? `${localize("InventoryItemStatTrak")} `
         : "";
-    const quality = data.type === CS2ItemType.Melee && !data.free ? "★ " : "";
-    let [model, ...names] = data.name.split(" | ");
+    const quality = item.isMelee() && !item.free ? "★ " : "";
+    let [model, ...names] = item.name.split(" | ");
     let name = names.join(" | ");
     model = `${quality}${stattrak}${model}`;
-    if (data.type === CS2ItemType.Agent) {
+    if (item.isAgent()) {
       [model, name] = name.split(" | ");
-    } else if (ITEM_TYPES_WITHOUT_NAME.includes(data.type)) {
+    } else if (ITEM_TYPES_WITHOUT_NAME.includes(item.type)) {
       model = name;
       name = "";
     }
     switch (formatter) {
       case "case-contents-name":
-        if (!ITEM_TYPE_WITH_MODEL.includes(data.type)) {
+        if (!ITEM_TYPE_WITH_MODEL.includes(item.type)) {
           model = "";
         }
         return [model, name];
       case "craft-name":
-        return [
-          name.length > 0 && data.type !== CS2ItemType.Agent ? name : model
-        ];
+        return [name.length > 0 && !item.isAgent() ? name : model];
       case "default":
         return [model, name];
       case "editor-name":
-        if (data.type === CS2ItemType.Agent) {
+        if (item.isAgent()) {
           [name, model] = [model, name];
         } else if (name.length === 0) {
           name = model;
@@ -75,7 +72,7 @@ export function nameItemFactory(localize: ReturnType<typeof useLocalize>) {
         return [model, name];
       case "inventory-name":
         if (nametag.length > 0) {
-          if (!data.isStorageUnit()) {
+          if (!item.isStorageUnit()) {
             model = "";
           }
           name = nametag;
