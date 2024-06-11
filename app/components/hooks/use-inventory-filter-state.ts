@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2ItemType, CS2ItemTypeValues } from "@ianlucas/cs2-lib";
 import {
   INVENTORY_PRIMARY_FILTERS,
   INVENTORY_SECONDARY_FILTERS,
@@ -23,30 +22,6 @@ import {
 import { useStorageInput } from "./use-storage-input";
 import { useStorageState } from "./use-storage-state";
 import { useWatch } from "./use-watch";
-
-const ALL_EQUIPMENT_ITEM_TYPES: CS2ItemTypeValues[] = [
-  CS2ItemType.Weapon,
-  CS2ItemType.Agent,
-  CS2ItemType.Gloves,
-  CS2ItemType.Melee,
-  CS2ItemType.MusicKit
-];
-
-const ALL_GRAPHIC_ART_ITEM_TYPES: CS2ItemTypeValues[] = [
-  CS2ItemType.Patch,
-  CS2ItemType.Sticker,
-  CS2ItemType.Graffiti
-];
-
-const ALL_CONTAINERS_ITEM_TYPES: CS2ItemTypeValues[] = [
-  CS2ItemType.Container,
-  CS2ItemType.Tool
-];
-
-const ALL_DISPLAY_ITEM_TYPES: CS2ItemTypeValues[] = [
-  CS2ItemType.Collectible,
-  CS2ItemType.MusicKit
-];
 
 export function useScrollToTopOnChange<T>(dependency: T) {
   return useWatch((oldState, newState) => {
@@ -118,41 +93,41 @@ export function useInventoryFilterState() {
       case "Equipment":
         switch (secondaryFilter) {
           case "AllEquipment":
-            return ALL_EQUIPMENT_ITEM_TYPES.includes(item.type);
+            return item.isInEquipments();
           case "Melee":
-            return item.type === CS2ItemType.Melee;
+            return item.isMelee();
           case "Pistols":
-            return item.category === "secondary";
+            return item.isPistol();
           case "MidTier":
-            return ["heavy", "smg"].includes(item.category!);
+            return item.isInMidTiers();
           case "Rifles":
-            return ["rifle"].includes(item.category!);
+            return item.isInRifles();
           case "Misc":
-            return ["c4", "equipment"].includes(item.category!);
+            return item.isInMisc();
           case "Agents":
             return item.isAgent();
           case "Gloves":
             return item.isGloves();
           case "MusicKits":
-            return item.type === CS2ItemType.MusicKit;
+            return item.isMusicKit();
         }
         break;
       case "GraphicArt":
         switch (secondaryFilter) {
           case "AllGraphicArt":
-            return ALL_GRAPHIC_ART_ITEM_TYPES.includes(item.type);
+            return item.isInGraphicArts();
           case "Patches":
-            return item.type === CS2ItemType.Patch;
+            return item.isPatch();
           case "Stickers":
-            return item.type === CS2ItemType.Sticker;
+            return item.isSticker();
           case "Graffiti":
-            return item.type === CS2ItemType.Graffiti;
+            return item.isGraffiti();
         }
         break;
       case "Containers":
         switch (secondaryFilter) {
           case "All":
-            return ALL_CONTAINERS_ITEM_TYPES.includes(item.type);
+            return item.isInContainers();
           case "WeaponCases":
             return item.isWeaponCase();
           case "StickerCapsules":
@@ -162,17 +137,17 @@ export function useInventoryFilterState() {
           case "SouvenirCases":
             return item.isSouvenirCase();
           case "Tools":
-            return item.type === CS2ItemType.Tool;
+            return item.isTool();
         }
         break;
       case "Display":
         switch (secondaryFilter) {
           case "All":
-            return ALL_DISPLAY_ITEM_TYPES.includes(item.type);
+            return item.isInDisplay();
           case "Medals":
-            return item.type === CS2ItemType.Collectible;
+            return item.isCollectible();
           case "MusicKits":
-            return item.type === CS2ItemType.MusicKit;
+            return item.isMusicKit();
         }
         break;
     }
