@@ -40,8 +40,6 @@ export function ApplyItemSticker({
   const [stickerIndex, setStickerIndex] = useState<number>();
   const stickerItem = useInventoryItem(stickerUid);
   const targetItem = useInventoryItem(targetUid);
-  const { stickers: initialStickers } = targetItem;
-  const stickers = initialStickers;
 
   function handleApplySticker() {
     if (stickerIndex !== undefined) {

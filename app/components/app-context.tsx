@@ -125,33 +125,33 @@ export function AppProvider({
 
   useEffect(() => {
     const data = retrieveInventoryData();
-    if (user !== undefined && user.inventory === null && data !== undefined) {
-      pushToSync({
-        type: AddFromCacheAction,
-        items: data as SyncInventoryShape
-      });
-      setInventory(
-        new CS2Inventory({
-          data: {
-            items: Object.fromEntries(
-              Object.entries(data.items).map(([uid, value]) => [
-                uid,
-                {
-                  ...value,
-                  equipped: undefined,
-                  equippedCT: undefined,
-                  equippedT: undefined
-                }
-              ])
-            ),
-            version: data.version
-          },
-          maxItems: rules.inventoryMaxItems,
-          storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
-        })
-      );
-    }
     if (user !== undefined) {
+      if (user.inventory === null && data !== undefined) {
+        pushToSync({
+          type: AddFromCacheAction,
+          items: data as SyncInventoryShape
+        });
+        setInventory(
+          new CS2Inventory({
+            data: {
+              items: Object.fromEntries(
+                Object.entries(data.items).map(([uid, value]) => [
+                  uid,
+                  {
+                    ...value,
+                    equipped: undefined,
+                    equippedCT: undefined,
+                    equippedT: undefined
+                  }
+                ])
+              ),
+              version: data.version
+            },
+            maxItems: rules.inventoryMaxItems,
+            storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
+          })
+        );
+      }
       storeUserId(user.id);
       sync.syncedAt = user.syncedAt.getTime();
     }

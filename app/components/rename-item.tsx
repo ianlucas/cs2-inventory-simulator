@@ -35,29 +35,30 @@ export function RenameItem({
   const sync = useSync();
   const nameItemString = useNameItemString();
   const [inventory, setInventory] = useInventory();
-  const [nametag, setNametag] = useInput("");
+  const [nameTag, setNameTag] = useInput("");
 
   const inventoryItem = useInventoryItem(targetUid);
-  const targetItem = inventoryItem;
 
   function handleRename() {
-    if (targetUid < 0 && targetItem.free) {
+    if (targetUid < 0 && inventoryItem.free) {
       playSound("inventory_new_item_accept");
       sync({
         type: AddWithNametagAction,
         toolUid: toolUid,
-        itemId: targetItem.id,
-        nametag
+        itemId: inventoryItem.id,
+        nametag: nameTag
       });
-      setInventory(inventory.addWithNametag(toolUid, targetItem.id, nametag));
+      setInventory(
+        inventory.addWithNametag(toolUid, inventoryItem.id, nameTag)
+      );
     } else {
       sync({
         type: RenameItemAction,
         toolUid: toolUid,
         targetUid: targetUid,
-        nametag
+        nametag: nameTag
       });
-      setInventory(inventory.renameItem(toolUid, targetUid, nametag));
+      setInventory(inventory.renameItem(toolUid, targetUid, nameTag));
     }
 
     onClose();
@@ -77,19 +78,19 @@ export function RenameItem({
               />
               <ItemImage
                 className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
-                item={targetItem}
+                item={inventoryItem}
               />
               <div className="flex lg:m-auto lg:mb-4 lg:max-w-[360px]">
                 <EditorInput
                   autoFocus
                   className="py-1 text-xl"
                   maxLength={20}
-                  onChange={setNametag}
+                  onChange={setNameTag}
                   placeholder={localize("EditorNametagPlaceholder")}
                   validate={(nametag) =>
                     CS2Economy.safeValidateNametag(nametag ?? "")
                   }
-                  value={nametag}
+                  value={nameTag}
                 />
               </div>
               <UseItemFooter
@@ -97,9 +98,9 @@ export function RenameItem({
                   <>
                     <ModalButton
                       disabled={
-                        (nametag !== "" &&
-                          !CS2Economy.safeValidateNametag(nametag)) ||
-                        (nametag === "" && targetItem.free)
+                        (nameTag !== "" &&
+                          !CS2Economy.safeValidateNametag(nameTag)) ||
+                        (nameTag === "" && inventoryItem.free)
                       }
                       variant="primary"
                       onClick={handleRename}

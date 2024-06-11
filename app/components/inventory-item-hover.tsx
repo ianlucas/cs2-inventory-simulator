@@ -39,28 +39,27 @@ export function InventoryItemHover({
   forwardRef: typeof props.ref;
 }) {
   const { statsForNerds } = usePreferences();
-  const data = item;
-  const isContainer = data.isContainer();
+  const isContainer = item.isContainer();
   const contentsItem =
     item.containerId !== undefined
       ? CS2Economy.getById(item.containerId)
       : item;
   const hasContents = contentsItem.isContainer();
-  const hasWear = !data.free && data.hasWear();
-  const hasSeed = !data.free && data.hasSeed();
+  const hasWear = !item.free && item.hasWear();
+  const hasSeed = !item.free && item.hasSeed();
   const hasAttributes = hasWear || hasSeed;
   const hasStatTrak = item.statTrak !== undefined;
-  const wear = item.wear ?? data.wearMin ?? CS2_MIN_WEAR;
+  const wear = item.wear ?? item.wearMin ?? CS2_MIN_WEAR;
 
   // We don't treat graffiti as equippable for a particular team, but in-game it
   // shows as CT or T, if we were to change cs2-lib it would be a breaking
   // change for graffiti logic, so we just update here.
   const teams =
-    data.type === CS2ItemType.Graffiti ? CS2_TEAMS_BOTH : data.teams;
+    item.type === CS2ItemType.Graffiti ? CS2_TEAMS_BOTH : item.teams;
   const hasTeams = teams !== undefined;
 
-  const baseDescription = (data.parent ?? data).desc;
-  const itemDescription = data.parent !== undefined ? data.desc : undefined;
+  const baseDescription = (item.parent ?? item).desc;
+  const itemDescription = item.parent !== undefined ? item.desc : undefined;
 
   return (
     <div
@@ -73,12 +72,12 @@ export function InventoryItemHover({
     >
       <InventoryItemName item={item} />
       <div className="mt-2.5 grid items-center gap-1 border-b border-t border-neutral-700/70 p-2 [grid-template-columns:auto_1fr]">
-        <InventoryItemRarity data={item} />
+        <InventoryItemRarity item={item} />
         {hasWear && <InventoryItemExterior wear={wear} />}
         {hasTeams && <InventoryItemTeams teams={teams} />}
       </div>
-      {has(data.tournamentDesc) && (
-        <p className="mt-4 text-yellow-300">{data.tournamentDesc}</p>
+      {has(item.tournamentDesc) && (
+        <p className="mt-4 text-yellow-300">{item.tournamentDesc}</p>
       )}
       {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
       {has(baseDescription) && (
@@ -90,7 +89,7 @@ export function InventoryItemHover({
         <p
           className={clsx(
             "mt-4 whitespace-pre-wrap text-neutral-300",
-            HOLDABLE_ITEM_TYPES.includes(data.type) && "italic"
+            HOLDABLE_ITEM_TYPES.includes(item.type) && "italic"
           )}
         >
           {itemDescription}
@@ -99,7 +98,7 @@ export function InventoryItemHover({
       {hasContents && (
         <InventoryItemContents
           item={contentsItem}
-          unlockedItem={!isContainer ? data : undefined}
+          unlockedItem={!isContainer ? item : undefined}
         />
       )}
       {statsForNerds && hasAttributes && (

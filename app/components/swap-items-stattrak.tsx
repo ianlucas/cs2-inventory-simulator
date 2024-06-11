@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy } from "@ianlucas/cs2-lib";
+import { ensure } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useCounter } from "~/components/hooks/use-counter";
@@ -41,19 +41,14 @@ export function SwapItemsStatTrak({
     onClose();
   }
 
-  const toInventoryItem = inventory.get(toUid);
-  const fromInventoryItem = inventory.get(fromUid);
-  const toItem = CS2Economy.getById(toInventoryItem.id);
-  const fromItem = CS2Economy.getById(fromInventoryItem.id);
-  const to = useCounter(toInventoryItem.statTrak!, fromInventoryItem.statTrak!);
-  const from = useCounter(
-    fromInventoryItem.statTrak!,
-    toInventoryItem.statTrak!
-  );
+  const toItem = inventory.get(toUid);
+  const fromItem = inventory.get(fromUid);
+  const to = useCounter(ensure(toItem.statTrak), ensure(fromItem.statTrak));
+  const from = useCounter(ensure(fromItem.statTrak), ensure(toItem.statTrak));
 
   const items = [
-    { inventoryItem: fromInventoryItem, item: fromItem, value: from },
-    { inventoryItem: toInventoryItem, item: toItem, value: to }
+    { item: fromItem, value: from },
+    { item: toItem, value: to }
   ];
 
   return (
@@ -68,27 +63,24 @@ export function SwapItemsStatTrak({
                 warning={localize("ItemSwapStatTrakWarn")}
               />
               <div className="mt-16 flex items-center justify-center gap-10">
-                {items.map(
-                  ({ inventoryItem: { wear }, item, value }, index) => (
-                    <div className="flex flex-col justify-center" key={index}>
-                      <ItemImage
-                        className="aspect-[1.33333] max-w-[256px]"
-                        item={item}
-                        wear={wear}
+                {items.map(({ item, value }, index) => (
+                  <div className="flex flex-col justify-center" key={index}>
+                    <ItemImage
+                      className="aspect-[1.33333] max-w-[256px]"
+                      item={item}
+                    />
+                    <div className="relative m-auto">
+                      <img
+                        className="h-[128px]"
+                        src="/images/stattrak-module.png"
+                        draggable={false}
                       />
-                      <div className="relative m-auto">
-                        <img
-                          className="h-[128px]"
-                          src="/images/stattrak-module.png"
-                          draggable={false}
-                        />
-                        <span className="absolute top-[22%] w-full text-center font-display text-3xl text-orange-500">
-                          {String(value).padStart(6, "0")}
-                        </span>
-                      </div>
+                      <span className="absolute top-[22%] w-full text-center font-display text-3xl text-orange-500">
+                        {String(value).padStart(6, "0")}
+                      </span>
                     </div>
-                  )
-                )}
+                  </div>
+                ))}
               </div>
               <UseItemFooter
                 right={

@@ -104,7 +104,6 @@ export function InventoryItem({
   } = useInventoryItemFloating();
 
   const isFreeInventoryItem = uid < 0;
-  const data = item;
 
   const isEquippable =
     (item.model === undefined ||
@@ -112,46 +111,45 @@ export function InventoryItem({
     !inventoryItemEquipHideType.includes(item.type);
   const canEquip =
     isEquippable &&
-    data.teams === undefined &&
+    item.teams === undefined &&
     !item.equipped &&
-    CS2_INVENTORY_EQUIPPABLE_ITEMS.includes(data.type);
+    CS2_INVENTORY_EQUIPPABLE_ITEMS.includes(item.type);
   const canEquipT =
-    isEquippable && data.teams?.includes(CS2Team.T) && !item.equippedT;
+    isEquippable && item.teams?.includes(CS2Team.T) && !item.equippedT;
   const canEquipCT =
-    isEquippable && data.teams?.includes(CS2Team.CT) && !item.equippedCT;
+    isEquippable && item.teams?.includes(CS2Team.CT) && !item.equippedCT;
   const canUnequip = isEquippable && item.equipped === true;
   const canUnequipT = isEquippable && item.equippedT === true;
   const canUnequipCT = isEquippable && item.equippedCT === true;
 
-  const canSwapStatTrak = data.isStatTrakSwapTool();
-  const canRename = data.isNameTag();
+  const canSwapStatTrak = item.isStatTrakSwapTool();
+  const canRename = item.isNameTag();
   const canApplySticker =
     inventoryItemAllowApplySticker &&
     ownApplicableStickers &&
-    ((data.hasStickers() && item.someStickers().length < 4) ||
-      data.isSticker());
+    ((item.hasStickers() && item.getStickersCount() < 4) || item.isSticker());
   const canScrapeSticker =
     inventoryItemAllowScrapeSticker &&
-    data.hasStickers() &&
-    item.someStickers().length > 0;
+    item.hasStickers() &&
+    item.getStickersCount() > 0;
   const canUnlockContainer =
     inventoryItemAllowUnlockContainer &&
-    UNLOCKABLE_ITEM_TYPE.includes(data.type);
+    UNLOCKABLE_ITEM_TYPE.includes(item.type);
   const hasNametag = item.nameTag !== undefined;
-  const isStorageUnit = data.isStorageUnit();
-  const isEditable = EDITABLE_ITEM_TYPE.includes(data.type);
-  const canInspect = INSPECTABLE_ITEM_TYPE.includes(data.type);
+  const isStorageUnit = item.isStorageUnit();
+  const isEditable = EDITABLE_ITEM_TYPE.includes(item.type);
+  const canInspect = INSPECTABLE_ITEM_TYPE.includes(item.type);
   const canInspectInGame =
     inventoryItemAllowInspectInGame &&
-    (INSPECTABLE_IN_GAME_ITEM_TYPE.includes(data.type) || data.isNameTag());
+    (INSPECTABLE_IN_GAME_ITEM_TYPE.includes(item.type) || item.isNameTag());
   const canEdit =
     inventoryItemAllowEdit &&
     isEditable &&
-    (data.category === undefined ||
-      !editHideCategory.includes(data.category)) &&
-    (data.type === undefined || !editHideType.includes(data.type)) &&
-    (data.model === undefined || !editHideModel.includes(data.model)) &&
-    !editHideId.includes(data.id);
+    (item.category === undefined ||
+      !editHideCategory.includes(item.category)) &&
+    (item.type === undefined || !editHideType.includes(item.type)) &&
+    (item.model === undefined || !editHideModel.includes(item.model)) &&
+    !editHideId.includes(item.id);
 
   function close(callBeforeClosing: () => void) {
     return function close() {

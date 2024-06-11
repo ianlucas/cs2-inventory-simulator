@@ -27,10 +27,8 @@ export function InspectItem({
 }) {
   const localize = useLocalize();
   const nameItemString = useNameItemString();
-  const inventoryItem = useInventoryItem(uid);
+  const item = useInventoryItem(uid);
   const { statsForNerds } = usePreferences();
-  const item = inventoryItem;
-  const { seed, wear } = item;
   const {
     getHoverFloatingProps,
     getHoverReferenceProps,
@@ -58,9 +56,7 @@ export function InspectItem({
                     <ItemCollectionImage className="h-16" item={item} />
                   )}
                   <div className="font-display">
-                    <div className="text-3xl">
-                      {nameItemString(inventoryItem)}
-                    </div>
+                    <div className="text-3xl">{nameItemString(item)}</div>
                     {item.collectionName !== undefined && (
                       <div className="-mt-2 text-neutral-300">
                         {item.collectionName}
@@ -74,7 +70,6 @@ export function InspectItem({
                   <ItemImage
                     className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
                     item={item}
-                    wear={wear}
                   />
                   {item.stickers !== undefined && (
                     <div className="absolute bottom-0 left-0 flex items-center justify-center">
@@ -142,13 +137,13 @@ export function InspectItem({
                     <strong>
                       {localize("InventoryItemInspectPatternTemplate")}:
                     </strong>{" "}
-                    {seed ?? CS2_MIN_SEED}
+                    {item.seed ?? CS2_MIN_SEED}
                   </div>
                   <div>
                     <strong>
                       {localize("InventoryItemInspectWearRating")}:
                     </strong>{" "}
-                    {wearToString(wear ?? item.wearMin ?? CS2_MIN_WEAR)}
+                    {wearToString(item.wear ?? item.wearMin ?? CS2_MIN_WEAR)}
                   </div>
                 </div>
               </FloatingFocusManager>

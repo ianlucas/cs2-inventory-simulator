@@ -3,21 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS2EconomyItem,
-  CS2ItemType,
-  CS2ItemTypeValues
-} from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { ItemImage } from "./item-image";
 import { TextSlider } from "./text-slider";
-
-const HOLDABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
-  CS2ItemType.Weapon,
-  CS2ItemType.Gloves,
-  CS2ItemType.Melee
-];
 
 export function ItemButton({
   bigger,
@@ -37,7 +27,7 @@ export function ItemButton({
     item.altName !== undefined &&
     (item.altName.includes("Collectible") ||
       item.altName.includes("Commodity") ||
-      HOLDABLE_ITEM_TYPES.includes(item.type));
+      item.isHoldable());
 
   function handleClick() {
     if (onClick) {

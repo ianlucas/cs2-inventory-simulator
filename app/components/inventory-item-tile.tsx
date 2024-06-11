@@ -29,7 +29,6 @@ export function InventoryItemTile({
   const localize = useLocalize();
   const nameItem = useNameItem();
   const inventoryItem = item instanceof CS2InventoryItem ? item : undefined;
-  const data = item;
   const [model, name] = nameItem(item, "inventory-name");
 
   const currDate = getTimestamp();
@@ -41,11 +40,7 @@ export function InventoryItemTile({
     <div className="w-[154px]">
       <div className="group relative bg-gradient-to-b from-neutral-600 to-neutral-400 p-[1px]">
         <div className="bg-gradient-to-b from-neutral-500 to-neutral-300 px-1">
-          <ItemImage
-            className="h-[108px] w-[144px]"
-            item={data}
-            wear={inventoryItem?.wear}
-          />
+          <ItemImage className="h-[108px] w-[144px]" item={item} />
         </div>
         {isNew && (
           <div className="absolute left-[1px] top-[1px] bg-sky-600 px-1 py-1 text-[10px] font-bold text-sky-200 shadow-lg transition-all group-hover:text-white">
@@ -85,7 +80,7 @@ export function InventoryItemTile({
       </div>
       <div
         className="h-1 shadow shadow-black/50"
-        style={{ backgroundColor: data.rarity }}
+        style={{ backgroundColor: item.rarity }}
       />
       <div className="mt-2 text-[12px] leading-3 text-white drop-shadow-[0_0_1px_rgba(0,0,0,1)]">
         {has(model) && <div className="font-bold">{model}</div>}

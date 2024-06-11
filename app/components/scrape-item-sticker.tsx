@@ -39,15 +39,13 @@ export function ScrapeItemSticker({
 
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
 
-  const inventoryItem = inventory.get(uid);
-  const item = inventoryItem;
-  const { stickers: initialStickers } = inventoryItem;
-
-  const stickers = initialStickers;
+  const item = inventory.get(uid);
 
   function doScrapeSticker(stickerIndex: number) {
     const scratch = Math.ceil(
-      ((stickers?.get(stickerIndex)?.wear ?? 0) + CS2_STICKER_WEAR_FACTOR) * 5
+      ((item.stickers?.get(stickerIndex)?.wear ?? 0) +
+        CS2_STICKER_WEAR_FACTOR) *
+        5
     );
     sync({
       type: ScrapeItemStickerAction,
@@ -60,7 +58,7 @@ export function ScrapeItemSticker({
 
   function handleScrapeSticker(stickerIndex: number) {
     if (
-      (stickers?.get(stickerIndex)?.wear ?? 0) + CS2_WEAR_FACTOR >
+      (item.stickers?.get(stickerIndex)?.wear ?? 0) + CS2_WEAR_FACTOR >
       CS2_MAX_STICKER_WEAR
     ) {
       setConfirmScrapeIndex(stickerIndex);
@@ -89,14 +87,14 @@ export function ScrapeItemSticker({
                 <UseItemHeader
                   title={localize("ScrapeStickerUse")}
                   warning={localize("ScrapeStickerWarn")}
-                  warningItem={nameItemString(inventoryItem)}
+                  warningItem={nameItemString(item)}
                 />
                 <ItemImage
                   className="m-auto aspect-[1.33333] max-w-[512px]"
                   item={item}
                 />
                 <div className="flex justify-center">
-                  {inventoryItem.someStickers().map(([index, { id, wear }]) => (
+                  {item.someStickers().map(([index, { id, wear }]) => (
                     <button key={index} className="group">
                       <ItemImage
                         className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"

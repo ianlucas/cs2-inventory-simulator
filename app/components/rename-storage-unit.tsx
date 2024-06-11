@@ -33,15 +33,15 @@ export function RenameStorageUnit({
   const item = useInventoryItem(uid);
   const { nameTag: defaultValue } = item;
   const isStartUsingStorageUnit = defaultValue === undefined;
-  const [nametag, setNametag] = useInput(defaultValue ?? "");
+  const [nameTag, setNameTag] = useInput(defaultValue ?? "");
 
   function handleRename() {
     sync({
       type: RenameStorageUnitAction,
       uid: uid,
-      nametag
+      nametag: nameTag
     });
-    setInventory(inventory.renameStorageUnit(uid, nametag));
+    setInventory(inventory.renameStorageUnit(uid, nameTag));
     onClose();
   }
 
@@ -70,12 +70,12 @@ export function RenameStorageUnit({
                   autoFocus
                   className="py-1 text-xl"
                   maxLength={20}
-                  onChange={setNametag}
+                  onChange={setNameTag}
                   placeholder={localize("EditorNametagPlaceholder")}
                   validate={(nametag) =>
                     CS2Economy.safeValidateNametag(nametag ?? "")
                   }
-                  value={nametag}
+                  value={nameTag}
                 />
               </div>
               <UseItemFooter
@@ -83,8 +83,8 @@ export function RenameStorageUnit({
                   <>
                     <ModalButton
                       disabled={
-                        nametag === "" ||
-                        !CS2Economy.safeValidateNametag(nametag)
+                        nameTag === "" ||
+                        !CS2Economy.safeValidateNametag(nameTag)
                       }
                       variant="primary"
                       onClick={handleRename}
