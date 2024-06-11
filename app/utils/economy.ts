@@ -89,35 +89,25 @@ export function sortByName(a: CS2EconomyItem, b: CS2EconomyItem) {
 }
 
 export function getRarityItemName(item: CS2EconomyItem) {
-  const [model] = item.name.split(" | ");
-  if (item.type === CS2ItemType.Weapon) {
-    if (item.category == "secondary") {
+  switch (true) {
+    case item.isPistol():
       return "Pistol";
-    }
-    if (item.category == "rifle") {
-      if (["AWP", "SSG 08", "SCAR 20", "G3SG1"].includes(model)) {
-        return "SniperRifle";
-      }
+    case item.isSniperRifle():
+      return "SniperRifle";
+    case item.isRifle():
       return "Rifle";
-    }
-    if (item.category === "smg") {
+    case item.isSMG():
       return "SMG";
-    }
-    if (item.category === "heavy") {
-      if (["Negev", "M249"].includes(model)) {
-        return "Machinegun";
-      }
+    case item.isMachinegun():
+      return "Machinegun";
+    case item.isHeavy():
       return "Shotgun";
-    }
-    if (item.category === "equipment") {
+    case item.isEquipment():
       return "Equipment";
-    }
-  }
-  if (item.type === CS2ItemType.Tool) {
-    if (item.id === 12032) {
+    case item.isContract():
       return "Contract";
-    }
-    return "Tool";
+    case item.isTool():
+      return "Tool";
   }
   switch (item.type) {
     case CS2ItemType.Melee:
@@ -136,7 +126,7 @@ export function getRarityItemName(item: CS2EconomyItem) {
       return "Graffiti";
     case CS2ItemType.Collectible:
       return "Collectible";
-    case "container":
+    case CS2ItemType.Container:
       return "Container";
     case CS2ItemType.ContainerKey:
       return "Key";
