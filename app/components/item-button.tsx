@@ -27,7 +27,7 @@ export function ItemButton({
     item.altName !== undefined &&
     (item.altName.includes("Collectible") ||
       item.altName.includes("Commodity") ||
-      item.isHoldable());
+      item.isPaintable());
 
   function handleClick() {
     if (onClick) {

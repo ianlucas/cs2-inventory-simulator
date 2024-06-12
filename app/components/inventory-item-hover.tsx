@@ -81,7 +81,7 @@ export function InventoryItemHover({
         <p
           className={clsx(
             "mt-4 whitespace-pre-wrap text-neutral-300",
-            item.isHoldable() && "italic"
+            item.isPaintable() && "italic"
           )}
         >
           {itemDescription}
