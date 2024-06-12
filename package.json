@@ -29,6 +29,7 @@
     "@remix-run/serve": "^2.9.2",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
+    "country-flag-icons": "^1.5.12",
     "isbot": "^3.8.0",
     "prisma": "^5.14.0",
     "react": "^18.3.1",

@@ -31,8 +31,8 @@ export function LanguageSelect({
       children={({ label, value }) => (
         <>
           <img
-            src={`/countries/${label}.svg`}
-            className="h-[24px] w-[34px]"
+            src={`/images/flags/${label.toUpperCase()}.svg`}
+            className="h-[16px] w-[24px]"
             alt={localize(`LanguageN${value}`)}
             title={localize(`LanguageN${value}`)}
             draggable={false}
