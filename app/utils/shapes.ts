@@ -14,7 +14,7 @@ export const baseInventoryItemProps = {
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
-  id: nonNegativeInt,
+  id: nonNegativeInt.refine((id) => CS2Economy.items.has(id)),
   nameTag: z
     .string()
     .max(20)

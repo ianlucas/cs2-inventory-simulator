@@ -70,6 +70,7 @@ export const clientInventoryShape = z.object({
   items: z.record(clientInventoryItemShape),
   version: nonNegativeInt
 });
+
 export const syncInventoryShape = z.object({
   items: z.record(syncInventoryItemShape),
   version: nonNegativeInt

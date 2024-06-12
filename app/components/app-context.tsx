@@ -26,7 +26,6 @@ import {
   sortItemsByEquipped,
   transform
 } from "~/utils/inventory-transform";
-import type { SyncInventoryShape } from "~/utils/shapes.server";
 import {
   retrieveInventoryData,
   retrieveUserId,
@@ -127,26 +126,46 @@ export function AppProvider({
     const data = retrieveInventoryData();
     if (user !== undefined) {
       if (user.inventory === null && data !== undefined) {
+        /** @todo Move this elsewhere? */
+        const cacheData = {
+          ...data,
+          items: Object.fromEntries(
+            Object.entries(data.items).map(([uid, value]) => [
+              uid,
+              {
+                ...value,
+                equipped: undefined,
+                equippedCT: undefined,
+                equippedT: undefined,
+                statTrak:
+                  value.statTrak !== undefined ? (0 as const) : undefined,
+                storage:
+                  value.storage !== undefined
+                    ? Object.fromEntries(
+                        Object.entries(value.storage).map(([uid, value]) => [
+                          uid,
+                          {
+                            ...value,
+                            statTrak:
+                              value.statTrak !== undefined
+                                ? (0 as const)
+                                : undefined,
+                            storage: undefined
+                          }
+                        ])
+                      )
+                    : undefined
+              }
+            ])
+          )
+        };
         pushToSync({
           type: AddFromCacheAction,
-          items: data as SyncInventoryShape
+          data: cacheData
         });
         setInventory(
           new CS2Inventory({
-            data: {
-              items: Object.fromEntries(
-                Object.entries(data.items).map(([uid, value]) => [
-                  uid,
-                  {
-                    ...value,
-                    equipped: undefined,
-                    equippedCT: undefined,
-                    equippedT: undefined
-                  }
-                ])
-              ),
-              version: data.version
-            },
+            data: cacheData,
             maxItems: rules.inventoryMaxItems,
             storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
           })

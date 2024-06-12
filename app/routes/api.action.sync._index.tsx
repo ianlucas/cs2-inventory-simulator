@@ -7,20 +7,14 @@ import {
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
-  CS2Inventory,
-  CS2ItemType,
-  CS2_INVENTORY_VERSION
+  CS2ItemType
 } from "@ianlucas/cs2-lib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
 import { getRequestHostname } from "~/models/domain.server";
-import {
-  expectRule,
-  expectRuleNotContain,
-  getRule
-} from "~/models/rule.server";
+import { expectRule, expectRuleNotContain } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
@@ -54,7 +48,7 @@ const actionShape = z
   .or(
     z.object({
       type: z.literal(AddFromCacheAction),
-      items: syncInventoryShape
+      data: syncInventoryShape
     })
   )
   .or(
@@ -273,20 +267,13 @@ export async function action({ request }: ActionFunctionArgs) {
             break;
           case AddFromCacheAction:
             if (rawInventory === null && !addedFromCache) {
-              try {
-                for (const item of new CS2Inventory({
-                  data: { items: action.items, version: CS2_INVENTORY_VERSION },
-                  maxItems: await getRule("inventoryMaxItems", userId),
-                  storageUnitMaxItems: await getRule(
-                    "inventoryStorageUnitMaxItems",
-                    userId
-                  )
-                }).getAllAsBase()) {
+              for (const item of Object.values(action.data.items)) {
+                try {
                   await enforceCraftRulesForInventoryItem(item, userId);
                   await enforceCraftRulesForItem(item.id, userId);
                   inventory.add(item);
-                }
-              } catch {}
+                } catch {}
+              }
               addedFromCache = true;
             }
             break;
