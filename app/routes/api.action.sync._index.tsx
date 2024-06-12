@@ -9,13 +9,15 @@ import {
   CS2EconomyItem,
   CS2ItemType
 } from "@ianlucas/cs2-lib";
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, SerializeFrom, json } from "@remix-run/node";
 import { z } from "zod";
+import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
 import { getRequestHostname } from "~/models/domain.server";
 import { expectRule, expectRuleNotContain } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
+import { methodNotAllowed } from "~/responses.server";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
   clientInventoryItemShape,
@@ -153,9 +155,8 @@ const actionShape = z
   );
 
 export type ActionShape = z.infer<typeof actionShape>;
-export type ApiActionSyncData = ReturnType<
-  Awaited<ReturnType<typeof action>>["json"]
->;
+
+export type ApiActionSyncData = SerializeFrom<typeof action>;
 
 async function enforceCraftRulesForItem(
   idOrItem: number | CS2EconomyItem,
@@ -241,8 +242,11 @@ async function enforceEditRulesForInventoryItem(
   }
 }
 
-export async function action({ request }: ActionFunctionArgs) {
+export const action = api(async ({ request }: ActionFunctionArgs) => {
   await middleware(request);
+  if (request.method !== "POST") {
+    throw methodNotAllowed;
+  }
   const domainHostname = getRequestHostname(request);
   const { id: userId, inventory: rawInventory } = await requireUser(request);
   const { syncedAt, actions } = z
@@ -357,5 +361,7 @@ export async function action({ request }: ActionFunctionArgs) {
       }
     }
   });
-  return json({ syncedAt: responseSyncedAt.getTime() });
-}
+  return json({
+    syncedAt: responseSyncedAt.getTime()
+  });
+});

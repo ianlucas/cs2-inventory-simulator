@@ -5,7 +5,7 @@
 
 import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
-import { badRequest, conflict } from "~/response.server";
+import { badRequest, conflict } from "~/responses.server";
 import { parseInventory } from "~/utils/inventory";
 import { isValidDomain } from "./domain.server";
 import { getRule } from "./rule.server";

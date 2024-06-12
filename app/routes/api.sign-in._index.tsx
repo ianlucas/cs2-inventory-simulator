@@ -5,16 +5,17 @@
 
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
+import { api } from "~/api.server";
 import { middleware } from "~/http.server";
 import { generateAuthToken } from "~/models/api-auth-token.server";
 import { API_AUTH_SCOPE, isApiKeyValid } from "~/models/api-credential.server";
 import { existsUser } from "~/models/user.server";
-import { badRequest, notFound, unauthorized } from "~/response.server";
+import { badRequest, methodNotAllowed, unauthorized } from "~/responses.server";
 
-export async function action({ request }: ActionFunctionArgs) {
+export const action = api(async ({ request }: ActionFunctionArgs) => {
   await middleware(request);
   if (request.method !== "POST") {
-    throw notFound;
+    throw methodNotAllowed;
   }
   const { apiKey, userId } = z
     .object({
@@ -30,8 +31,7 @@ export async function action({ request }: ActionFunctionArgs) {
   if (!(await existsUser(userId))) {
     throw badRequest;
   }
-
   return json({
     token: await generateAuthToken({ apiKey, userId })
   });
-}
+});

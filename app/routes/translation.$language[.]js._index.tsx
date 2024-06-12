@@ -7,7 +7,7 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { LOCALIZATION_LOADED_TYPE } from "~/components/hooks/use-translation";
 import { middleware } from "~/http.server";
-import { badRequest } from "~/response.server";
+import { badRequest } from "~/responses.server";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   middleware(request);

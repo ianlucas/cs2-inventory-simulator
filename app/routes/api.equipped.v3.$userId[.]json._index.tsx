@@ -6,6 +6,7 @@
 import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
+import { api } from "~/api.server";
 import { middleware } from "~/http.server";
 import { getRequestHostname } from "~/models/domain.server";
 import { getRules } from "~/models/rule.server";
@@ -14,7 +15,7 @@ import { generate } from "~/utils/inventory-equipped-v3";
 
 export const ApiEquippedV3UserIdJsonUrl = "/api/equipped/v3/$userId.json";
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export const loader = api(async ({ params, request }: LoaderFunctionArgs) => {
   await middleware(request);
   const domainHostname = getRequestHostname(request);
   const userId = z.string().parse(params.userId);
@@ -58,4 +59,4 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     url: ApiEquippedV3UserIdJsonUrl,
     userId
   });
-}
+});

@@ -5,7 +5,7 @@
 
 import { z } from "zod";
 import { isApiKeyValid } from "~/models/api-credential.server";
-import { unauthorized } from "~/response.server";
+import { unauthorized } from "~/responses.server";
 
 export async function isValidApiRequest(request: Request, scope?: string[]) {
   const apiKey = z

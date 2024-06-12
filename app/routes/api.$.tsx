@@ -4,9 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { api } from "~/api.server";
 import { middleware } from "~/http.server";
 
-export function loader({ request }: LoaderFunctionArgs) {
+export const loader = api(async ({ request }: LoaderFunctionArgs) => {
   middleware(request);
   return json(
     {
@@ -17,4 +18,4 @@ export function loader({ request }: LoaderFunctionArgs) {
       status: 404
     }
   );
-}
+});

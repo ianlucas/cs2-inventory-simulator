@@ -5,6 +5,7 @@
 
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
+import { api } from "~/api.server";
 import { middleware } from "~/http.server";
 import {
   API_SCOPE,
@@ -19,16 +20,16 @@ import {
 } from "~/models/user.server";
 import {
   badRequest,
+  methodNotAllowed,
   noContent,
-  notFound,
   unauthorized
-} from "~/response.server";
+} from "~/responses.server";
 import { nonNegativeInt } from "~/utils/shapes";
 
-export async function action({ request }: ActionFunctionArgs) {
+export const action = api(async ({ request }: ActionFunctionArgs) => {
   await middleware(request);
   if (request.method !== "POST") {
-    throw notFound;
+    throw methodNotAllowed;
   }
   const domainHostname = getRequestHostname(request);
   const { apiKey, userId, targetUid } = z
@@ -64,4 +65,4 @@ export async function action({ request }: ActionFunctionArgs) {
   } catch {
     return badRequest;
   }
-}
+});

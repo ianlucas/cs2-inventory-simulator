@@ -7,7 +7,7 @@ import { CS2InventoryData } from "@ianlucas/cs2-lib";
 import { json } from "@remix-run/node";
 import { z } from "zod";
 import { prisma } from "~/db.server";
-import { res } from "~/response.server";
+import { res } from "~/responses.server";
 import { parseInventory } from "~/utils/inventory";
 import { getUserInventory, getUserSyncedAt } from "./user.server";
 

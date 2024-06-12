@@ -5,12 +5,13 @@
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
+import { api } from "~/api.server";
 import { prisma } from "~/db.server";
 import { middleware } from "~/http.server";
 import { isValidApiRequest } from "~/middlewares/is-valid-api-request.server";
 import { API_SCOPE } from "~/models/api-credential.server";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export const loader = api(async ({ request }: LoaderFunctionArgs) => {
   middleware(request);
   await isValidApiRequest(request, [API_SCOPE]);
   const url = new URL(request.url);
@@ -64,4 +65,4 @@ export async function loader({ request }: LoaderFunctionArgs) {
       size: Math.ceil(count / take)
     }
   };
-}
+});

@@ -4,13 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { LoaderFunctionArgs } from "@remix-run/node";
+import { api } from "~/api.server";
 import { authenticator } from "~/auth.server";
 import { middleware } from "~/http.server";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export const loader = api(async ({ request }: LoaderFunctionArgs) => {
   await middleware(request);
   return authenticator.authenticate("api", request, {
     successRedirect: "/api/action/preferences",
     failureRedirect: "/"
   });
-}
+});

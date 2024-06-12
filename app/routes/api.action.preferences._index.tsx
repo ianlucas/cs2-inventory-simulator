@@ -9,6 +9,7 @@ import {
   redirect
 } from "@remix-run/node";
 import { z } from "zod";
+import { api } from "~/api.server";
 import { authenticator } from "~/auth.server";
 import { middleware } from "~/http.server";
 import {
@@ -20,11 +21,12 @@ import {
   transformBackground
 } from "~/preferences/background.server";
 import { isValidLanguage } from "~/preferences/language.server";
+import { methodNotAllowed } from "~/responses.server";
 import { assignToSession, commitSession, getSession } from "~/session.server";
 
 export const ApiActionPreferencesUrl = "/api/action/preferences";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export const loader = api(async ({ request }: LoaderFunctionArgs) => {
   await middleware(request);
   const userId = await authenticator.isAuthenticated(request);
   if (!userId) {
@@ -46,10 +48,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
       "Set-Cookie": await commitSession(session)
     }
   });
-}
+});
 
-export async function action({ request }: ActionFunctionArgs) {
+export const action = api(async ({ request }: ActionFunctionArgs) => {
   await middleware(request);
+  if (request.method !== "POST") {
+    throw methodNotAllowed;
+  }
   const userId = await authenticator.isAuthenticated(request);
   const preferences = z
     .object({
@@ -73,4 +78,4 @@ export async function action({ request }: ActionFunctionArgs) {
       "Set-Cookie": await commitSession(session)
     }
   });
-}
+});
