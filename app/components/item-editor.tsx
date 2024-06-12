@@ -132,7 +132,11 @@ export function ItemEditor({
       seed:
         hasSeed && (!isCrafting || seed !== CS2_MIN_SEED) ? seed : undefined,
       statTrak: hasStatTrak && statTrak === true ? statTrak : undefined,
-      stickers,
+      stickers: hasStickers
+        ? Object.keys(stickers).length > 0
+          ? stickers
+          : undefined
+        : undefined,
       wear: hasWear && (!isCrafting || wear !== CS2_MIN_WEAR) ? wear : undefined
     });
   }

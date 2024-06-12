@@ -126,7 +126,7 @@ export function StickerPicker({
       <div className="flex justify-between">
         {range(4).map((index) => {
           const sticker = value[index];
-          const stickerWear = sticker.wear ?? CS2_MIN_STICKER_WEAR;
+          const stickerWear = sticker?.wear ?? CS2_MIN_STICKER_WEAR;
           const item =
             sticker !== undefined ? CS2Economy.getById(sticker.id) : undefined;
           return (
