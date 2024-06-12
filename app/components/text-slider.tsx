@@ -12,8 +12,8 @@ export function TextSlider({
   className?: string;
   text: string;
 }) {
-  const wrapperElement = useRef<ElementRef<"div">>(null!);
-  const textElement = useRef<ElementRef<"div">>(null!);
+  const wrapperElement = useRef<ElementRef<"div">>(null);
+  const textElement = useRef<ElementRef<"div">>(null);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
