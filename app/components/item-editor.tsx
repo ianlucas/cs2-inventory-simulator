@@ -142,7 +142,7 @@ export function ItemEditor({
   }
 
   return (
-    <div className="m-auto w-[360px] select-none px-4 pb-6 lg:px-0">
+    <div className="m-auto w-[368px] select-none px-4 pb-6 lg:px-0">
       <ItemImage
         className="m-auto h-[192px] w-[256px]"
         item={item}

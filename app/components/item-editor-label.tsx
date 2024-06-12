@@ -25,7 +25,7 @@ export function ItemEditorLabel({
         className={clsx(
           "select-none whitespace-nowrap font-display font-bold text-neutral-500",
           direction === "left" ? "text-left" : "text-right",
-          labelStyles !== undefined ? labelStyles : "w-[76.33px] lg:w-[128px]"
+          labelStyles !== undefined ? labelStyles : "w-[76.33px] lg:w-[136px]"
         )}
       >
         <TextSlider text={label} />

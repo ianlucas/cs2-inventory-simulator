@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ElementRef, useEffect, useRef } from "react";
-import { wait } from "~/utils/promise";
 
 export function TextSlider({
   className,
@@ -19,20 +18,47 @@ export function TextSlider({
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
 
-    async function animate(goToRight: boolean = true) {
-      await wait(2500);
+    async function animate(frame: number = 0) {
       if (textElement.current === null || wrapperElement.current === null) {
         return;
       }
-      const duration = text.length * 50 * (goToRight ? 1 : 0.5); // 50 ms per letter.
-      const wrapperWidth = wrapperElement.current.clientWidth ?? 0;
-      const textWidth = textElement.current.scrollWidth ?? 0;
-      const translation =
-        goToRight && textWidth > wrapperWidth ? -(textWidth - wrapperWidth) : 0;
-      textElement.current.style.transitionProperty = "transform";
-      textElement.current.style.transitionDuration = `${duration}ms`;
-      textElement.current.style.transform = `translateX(${translation}px)`;
-      timeout = setTimeout(() => animate(!goToRight), duration);
+      const wrapperWidth = wrapperElement.current.clientWidth;
+      const textWidth = textElement.current.scrollWidth;
+      if (wrapperWidth >= textWidth) {
+        return;
+      }
+      let duration = 0;
+      switch (frame) {
+        case 0:
+          duration = 1000;
+          textElement.current.style.opacity = "1";
+          textElement.current.style.transform = "translateX(0px)";
+          frame++;
+          break;
+
+        case 1:
+          duration = text.length * 50; // 50 ms per letter.
+          const translation = -(textWidth - wrapperWidth);
+          textElement.current.style.transitionProperty = "transform";
+          textElement.current.style.transitionDuration = `${duration}ms`;
+          textElement.current.style.transform = `translateX(${translation}px)`;
+          frame++;
+          break;
+
+        case 2:
+          duration = 400;
+          frame++;
+          break;
+
+        case 3:
+          duration = 200;
+          textElement.current.style.transitionProperty = "opacity";
+          textElement.current.style.transitionDuration = `${duration}ms`;
+          textElement.current.style.opacity = "0";
+          frame = 0;
+          break;
+      }
+      timeout = setTimeout(() => animate(frame), duration);
     }
     animate();
     return () => clearTimeout(timeout);
