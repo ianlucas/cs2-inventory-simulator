@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Inventory } from "@ianlucas/cs2-lib";
+import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
@@ -40,17 +40,17 @@ export async function action({ request }: ActionFunctionArgs) {
   if (syncedAt !== currentSyncedAt.getTime()) {
     throw conflict;
   }
-  const inventory = new CS_Inventory({
-    items: parseInventory(rawInventory),
+  const inventory = new CS2Inventory({
+    data: parseInventory(rawInventory),
     maxItems: await getRule("inventoryMaxItems", userId),
     storageUnitMaxItems: await getRule("inventoryStorageUnitMaxItems", userId)
   });
-  const unlockedItem = CS_Economy.unlockCase(inventory.get(caseUid).id);
-  inventory.unlockCase(unlockedItem, caseUid, keyUid);
+  const unlockedItem = inventory.get(caseUid).unlockContainer();
+  inventory.unlockContainer(unlockedItem, caseUid, keyUid);
   const { syncedAt: responseSyncedAt } = await updateUserInventory(
     domainHostname,
     userId,
-    inventory.export()
+    inventory.stringify()
   );
   return json({
     unlockedItem,

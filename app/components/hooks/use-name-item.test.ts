@@ -3,68 +3,68 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_ITEMS, CS_Item } from "@ianlucas/cs2-lib";
-import english from "@ianlucas/cs2-lib/assets/translations/items-english.json";
+import { CS2Economy, CS2EconomyItem, CS2_ITEMS } from "@ianlucas/cs2-lib";
+import english from "@ianlucas/cs2-lib/assets/localizations/items-english.json";
 import { describe, expect, test } from "vitest";
 import { createFakeInventoryItem } from "~/utils/inventory";
 import { has } from "~/utils/misc";
 import { nameItemFactory } from "./use-name-item";
 
-CS_Economy.use({
-  items: CS_ITEMS,
-  translation: english
+CS2Economy.use({
+  items: CS2_ITEMS,
+  language: english
 });
 
-const translate = (token: string, ...values: string[]) => "StatTrak™";
-const nameItem = nameItemFactory(translate);
+const localize = (token: string, ...values: string[]) => "statTrak™";
+const nameItem = nameItemFactory(localize);
 const nameItemString = (...args: Parameters<typeof nameItem>) =>
   nameItem(...args)
     .filter((value) => has(value))
     .join(" | ");
 
-const AK47_STOCK_ITEM = CS_Economy.getById(4);
-const AK47_ASIIMOV_ITEM = CS_Economy.getById(244);
-const KARAMBIT_VANILLA_ITEM = CS_Economy.getById(41);
-const KARAMBIT_DOOPLER_ITEM = CS_Economy.getById(1347);
-const HAND_WRAPS_STOCK_ITEM = CS_Economy.getById(62);
-const HAND_WRAPS_SLAUGHTER_ITEM = CS_Economy.getById(1741);
-const STICKER_ENCE_RIO_2022_ITEM = CS_Economy.getById(7241);
-const SPECIAL_AGENT_AVA_FBI_ITEM = CS_Economy.getById(8632);
-const PATCH_DRAGON_ITEM = CS_Economy.getById(8561);
-const MUSIC_KIT_DESERT_FIRE_ITEM = CS_Economy.getById(1786);
-const GRAFFITI_EZ_ITEM = CS_Economy.getById(9549);
-const COLLECTIBLE_ALYX_PIN_ITEM = CS_Economy.getById(9128);
-const CONTAINER_KILOWATT_CASE_ITEM = CS_Economy.getById(11422);
-const KEY_KILOWATT_CASE_KEY_ITEM = CS_Economy.getById(11423);
-const TOOL_STORAGE_UNIT_ITEM = CS_Economy.getById(11262);
+const AK47_STOCK_ITEM = CS2Economy.getById(4);
+const AK47_ASIIMOV_ITEM = CS2Economy.getById(244);
+const KARAMBIT_VANILLA_ITEM = CS2Economy.getById(41);
+const KARAMBIT_DOOPLER_ITEM = CS2Economy.getById(1347);
+const HAND_WRAPS_STOCK_ITEM = CS2Economy.getById(62);
+const HAND_WRAPS_SLAUGHTER_ITEM = CS2Economy.getById(1741);
+const STICKER_ENCE_RIO_2022_ITEM = CS2Economy.getById(7241);
+const SPECIAL_AGENT_AVA_FBI_ITEM = CS2Economy.getById(8632);
+const PATCH_DRAGON_ITEM = CS2Economy.getById(8561);
+const MUSIC_KIT_DESERT_FIRE_ITEM = CS2Economy.getById(1786);
+const GRAFFITI_EZ_ITEM = CS2Economy.getById(9549);
+const COLLECTIBLE_ALYX_PIN_ITEM = CS2Economy.getById(9128);
+const CONTAINER_KILOWATT_CASE_ITEM = CS2Economy.getById(11422);
+const KEY_KILOWATT_CASE_KEY_ITEM = CS2Economy.getById(11423);
+const TOOL_STORAGE_UNIT_ITEM = CS2Economy.getById(11262);
 
-const stattrak = (item: CS_Item) =>
+const statTrak = (item: CS2EconomyItem) =>
   createFakeInventoryItem(item, {
-    stattrak: 0
+    statTrak: 0
   });
 
-const nametag = (item: CS_Item) =>
+const nameTag = (item: CS2EconomyItem) =>
   createFakeInventoryItem(item, {
-    nametag: "CustomName"
+    nameTag: "CustomName"
   });
 
-const stattrakAndNametag = (item: CS_Item) =>
+const statTrakAndnameTag = (item: CS2EconomyItem) =>
   createFakeInventoryItem(item, {
-    stattrak: 0,
-    nametag: "CustomName"
+    statTrak: 0,
+    nameTag: "CustomName"
   });
 
 describe("test useNameItem hook", () => {
   test("'default' formatter", () => {
     expect(nameItem(AK47_STOCK_ITEM)).toEqual(["AK-47", ""]);
     expect(nameItem(AK47_ASIIMOV_ITEM)).toEqual(["AK-47", "Asiimov"]);
-    expect(nameItem(stattrak(AK47_ASIIMOV_ITEM))).toEqual([
-      "StatTrak™ AK-47",
+    expect(nameItem(statTrak(AK47_ASIIMOV_ITEM))).toEqual([
+      "statTrak™ AK-47",
       "Asiimov"
     ]);
-    expect(nameItem(nametag(AK47_ASIIMOV_ITEM))).toEqual(["AK-47", "Asiimov"]);
-    expect(nameItem(stattrakAndNametag(AK47_ASIIMOV_ITEM))).toEqual([
-      "StatTrak™ AK-47",
+    expect(nameItem(nameTag(AK47_ASIIMOV_ITEM))).toEqual(["AK-47", "Asiimov"]);
+    expect(nameItem(statTrakAndnameTag(AK47_ASIIMOV_ITEM))).toEqual([
+      "statTrak™ AK-47",
       "Asiimov"
     ]);
     expect(nameItem(KARAMBIT_VANILLA_ITEM)).toEqual(["★ Karambit", ""]);
@@ -97,7 +97,7 @@ describe("test useNameItem hook", () => {
       ""
     ]);
     expect(nameItem(TOOL_STORAGE_UNIT_ITEM)).toEqual(["Storage Unit", ""]);
-    expect(nameItem(nametag(TOOL_STORAGE_UNIT_ITEM))).toEqual([
+    expect(nameItem(nameTag(TOOL_STORAGE_UNIT_ITEM))).toEqual([
       "Storage Unit",
       ""
     ]);
@@ -218,7 +218,7 @@ describe("test useNameItem hook", () => {
 
   test("'inventory-name' formatter", () => {
     expect(nameItem(AK47_STOCK_ITEM, "inventory-name")).toEqual(["AK-47", ""]);
-    expect(nameItem(nametag(AK47_STOCK_ITEM), "inventory-name")).toEqual([
+    expect(nameItem(nameTag(AK47_STOCK_ITEM), "inventory-name")).toEqual([
       "",
       '"CustomName"'
     ]);
@@ -226,44 +226,44 @@ describe("test useNameItem hook", () => {
       "AK-47",
       "Asiimov"
     ]);
-    expect(nameItem(nametag(AK47_ASIIMOV_ITEM), "inventory-name")).toEqual([
+    expect(nameItem(nameTag(AK47_ASIIMOV_ITEM), "inventory-name")).toEqual([
       "",
       '"CustomName"'
     ]);
-    expect(nameItem(stattrak(AK47_ASIIMOV_ITEM), "inventory-name")).toEqual([
-      "StatTrak™ AK-47",
+    expect(nameItem(statTrak(AK47_ASIIMOV_ITEM), "inventory-name")).toEqual([
+      "statTrak™ AK-47",
       "Asiimov"
     ]);
     expect(
-      nameItem(stattrakAndNametag(AK47_ASIIMOV_ITEM), "inventory-name")
+      nameItem(statTrakAndnameTag(AK47_ASIIMOV_ITEM), "inventory-name")
     ).toEqual(["", '"CustomName"']);
     expect(nameItem(KARAMBIT_VANILLA_ITEM, "inventory-name")).toEqual([
       "★ Karambit",
       ""
     ]);
-    expect(nameItem(stattrak(KARAMBIT_VANILLA_ITEM), "inventory-name")).toEqual(
-      ["★ StatTrak™ Karambit", ""]
+    expect(nameItem(statTrak(KARAMBIT_VANILLA_ITEM), "inventory-name")).toEqual(
+      ["★ statTrak™ Karambit", ""]
     );
-    expect(nameItem(nametag(KARAMBIT_VANILLA_ITEM), "inventory-name")).toEqual([
+    expect(nameItem(nameTag(KARAMBIT_VANILLA_ITEM), "inventory-name")).toEqual([
       "",
       '"CustomName"'
     ]);
     expect(
-      nameItem(stattrakAndNametag(KARAMBIT_VANILLA_ITEM), "inventory-name")
+      nameItem(statTrakAndnameTag(KARAMBIT_VANILLA_ITEM), "inventory-name")
     ).toEqual(["", '"CustomName"']);
     expect(nameItem(KARAMBIT_DOOPLER_ITEM, "inventory-name")).toEqual([
       "★ Karambit",
       "Doppler"
     ]);
-    expect(nameItem(stattrak(KARAMBIT_DOOPLER_ITEM), "inventory-name")).toEqual(
-      ["★ StatTrak™ Karambit", "Doppler"]
+    expect(nameItem(statTrak(KARAMBIT_DOOPLER_ITEM), "inventory-name")).toEqual(
+      ["★ statTrak™ Karambit", "Doppler"]
     );
-    expect(nameItem(nametag(KARAMBIT_DOOPLER_ITEM), "inventory-name")).toEqual([
+    expect(nameItem(nameTag(KARAMBIT_DOOPLER_ITEM), "inventory-name")).toEqual([
       "",
       '"CustomName"'
     ]);
     expect(
-      nameItem(stattrakAndNametag(KARAMBIT_DOOPLER_ITEM), "inventory-name")
+      nameItem(statTrakAndnameTag(KARAMBIT_DOOPLER_ITEM), "inventory-name")
     ).toEqual(["", '"CustomName"']);
     expect(nameItem(HAND_WRAPS_SLAUGHTER_ITEM, "inventory-name")).toEqual([
       "Hand Wraps",
@@ -305,7 +305,7 @@ describe("test useNameItem hook", () => {
       "Storage Unit",
       ""
     ]);
-    expect(nameItem(nametag(TOOL_STORAGE_UNIT_ITEM), "inventory-name")).toEqual(
+    expect(nameItem(nameTag(TOOL_STORAGE_UNIT_ITEM), "inventory-name")).toEqual(
       ["Storage Unit", '"CustomName"']
     );
   });

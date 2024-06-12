@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cs2-lib";
+import { CS2BaseInventoryItem, CS2Economy } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { baseInventoryItemProps, nonNegativeInt } from "./shapes";
 
@@ -14,29 +14,27 @@ const clientInventoryItemProps = {
 const syncInventoryItemProps = {
   ...clientInventoryItemProps,
   storage: z
-    .array(
+    .record(
       z.object({
-        ...clientInventoryItemProps,
-        uid: nonNegativeInt
+        ...clientInventoryItemProps
       })
     )
-    .optional(),
-  uid: nonNegativeInt
+    .optional()
 };
 
 function legit({
   id,
-  nametag,
+  nameTag,
   stickers
 }: {
   id: number;
-  nametag?: string;
-  stickers?: number[];
+  nameTag?: string;
+  stickers?: CS2BaseInventoryItem["stickers"];
 }) {
   // Free items can be stored if they have a nametag or stickers
   if (
-    CS_Economy.getById(id).free &&
-    nametag === undefined &&
+    CS2Economy.getById(id).free &&
+    nameTag === undefined &&
     stickers === undefined
   ) {
     return false;
@@ -45,16 +43,13 @@ function legit({
 }
 
 function refine(
-  inventoryItem: Omit<
-    z.infer<Zod.ZodObject<typeof syncInventoryItemProps>>,
-    "uid"
-  >
+  inventoryItem: z.infer<Zod.ZodObject<typeof syncInventoryItemProps>>
 ) {
   if (!legit(inventoryItem)) {
     return false;
   }
   if (inventoryItem.storage !== undefined) {
-    for (const item of inventoryItem.storage) {
+    for (const item of Object.values(inventoryItem.storage)) {
       if (!legit(item)) {
         return false;
       }
@@ -71,8 +66,15 @@ export const syncInventoryItemShape = z
   .object(syncInventoryItemProps)
   .refine(refine);
 
-export const clientInventoryShape = z.array(clientInventoryItemShape);
-export const syncInventoryShape = z.array(syncInventoryItemShape);
+export const clientInventoryShape = z.object({
+  items: z.record(clientInventoryItemShape),
+  version: nonNegativeInt
+});
+
+export const syncInventoryShape = z.object({
+  items: z.record(syncInventoryItemShape),
+  version: nonNegativeInt
+});
 
 export type SyncInventoryItemShape = z.infer<typeof syncInventoryItemShape>;
 export type SyncInventoryShape = z.infer<typeof syncInventoryShape>;

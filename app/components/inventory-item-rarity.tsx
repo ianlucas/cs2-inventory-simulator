@@ -3,24 +3,25 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cs2-lib";
-import { RARITY_LABEL, getRarityItemName } from "~/utils/economy";
-import { useTranslate } from "./app-context";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
+import { RarityLabel, getRarityItemName } from "~/utils/economy";
+import { useLocalize } from "./app-context";
 import { InventoryItemInfo } from "./inventory-item-info";
 
-export function InventoryItemRarity({ data }: { data: CS_Item }) {
-  const translate = useTranslate();
+export function InventoryItemRarity({ item }: { item: CS2EconomyItem }) {
+  const localize = useLocalize();
 
-  const isWeapon = ["glove", "melee", "weapon"].includes(data.type);
-  const rarityKey = `Item${isWeapon ? "Weapon" : ""}Rarity${RARITY_LABEL[data.rarity]}`;
-  const nameKey = `ItemRarityName${getRarityItemName(data)}`;
+  const rarityType = item.isHoldable() ? "Weapon" : "";
+  const rarityLabel = RarityLabel[item.rarity];
+  const rarityKey = `Item${rarityType}Rarity${rarityLabel}` as const;
+  const nameKey = `ItemRarityName${getRarityItemName(item)}` as const;
 
   return (
     <InventoryItemInfo
-      style={{ color: data.rarity }}
-      label={translate("InventoryItemRarity")}
+      style={{ color: item.rarity }}
+      label={localize("InventoryItemRarity")}
     >
-      {translate("ItemRarityFormat", translate(rarityKey), translate(nameKey))}
+      {localize("ItemRarityFormat", localize(rarityKey), localize(nameKey))}
     </InventoryItemInfo>
   );
 }

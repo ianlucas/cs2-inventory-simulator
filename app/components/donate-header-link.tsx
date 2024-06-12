@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { faGratipay } from "@fortawesome/free-brands-svg-icons";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { HeaderLink } from "./header-link";
 
 export function DonateHeaderLink() {
-  const translate = useTranslate();
+  const localize = useLocalize();
   /* Consider donating to the project on donate.cstrike.app if you are
   self-hosting this app! */
   return (
@@ -19,7 +19,7 @@ export function DonateHeaderLink() {
       <HeaderLink
         className="font-bold"
         icon={faGratipay}
-        label={translate("HeaderDonate")}
+        label={localize("HeaderDonate")}
         target="_blank"
         to="https://donate.cstrike.app"
       />

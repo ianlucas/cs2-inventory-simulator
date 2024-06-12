@@ -3,22 +3,22 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_InventoryItem, CS_MIN_SEED } from "@ianlucas/cs2-lib";
-import { useTranslate } from "./app-context";
+import { CS2InventoryItem, CS2_MIN_SEED } from "@ianlucas/cs2-lib";
+import { useLocalize } from "./app-context";
 
 export function InventoryItemSeed({
   inventoryItem: { seed }
 }: {
-  inventoryItem: CS_InventoryItem;
+  inventoryItem: CS2InventoryItem;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   return (
     <div>
       <strong className="text-neutral-400">
-        {translate("InventoryItemSeed")}
+        {localize("InventoryItemSeed")}
       </strong>{" "}
-      {seed ?? CS_MIN_SEED}
+      {seed ?? CS2_MIN_SEED}
     </div>
   );
 }

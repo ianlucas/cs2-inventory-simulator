@@ -10,8 +10,8 @@ import { Link, useNavigate, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import {
   useInventory,
-  usePreferences,
-  useTranslate
+  useLocalize,
+  usePreferences
 } from "~/components/app-context";
 import { EditorToggle } from "~/components/editor-toggle";
 import { useCheckbox } from "~/components/hooks/use-checkbox";
@@ -45,7 +45,7 @@ export default function Settings() {
     statsForNerds: selectedStatsForNerds
   } = usePreferences();
   const [inventory, setInventory] = useInventory();
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
 
   const [background, setBackground] = useState(selectedBackground ?? "");
@@ -74,7 +74,7 @@ export default function Settings() {
   }
 
   function handleRemoveAllItems() {
-    if (confirm(translate("SettingsConfirmRemoveAllItems"))) {
+    if (confirm(localize("SettingsConfirmRemoveAllItems"))) {
       inventory.removeAll();
       setInventory(inventory);
       sync({ type: RemoveAllItemsAction });
@@ -85,7 +85,7 @@ export default function Settings() {
   return (
     <Modal className="w-[420px]">
       <div className="flex select-none items-center justify-between px-4 py-2 text-sm font-bold">
-        <span className="text-neutral-400">{translate("SettingsHeader")}</span>
+        <span className="text-neutral-400">{localize("SettingsHeader")}</span>
         <div className="flex items-center">
           <Link className="opacity-50 hover:opacity-100" to="/">
             <FontAwesomeIcon icon={faXmark} className="h-4" />
@@ -93,7 +93,7 @@ export default function Settings() {
         </div>
       </div>
       <div className="space-y-2 px-4">
-        <SettingsLabel label={translate("SettingsLanguage")}>
+        <SettingsLabel label={localize("SettingsLanguage")}>
           <LanguageSelect
             languages={languages.map(({ name, countries }) => ({
               name,
@@ -103,24 +103,24 @@ export default function Settings() {
             onChange={setLanguage}
           />
         </SettingsLabel>
-        <SettingsLabel label={translate("SettingsBackground")}>
+        <SettingsLabel label={localize("SettingsBackground")}>
           <Select
             value={background ?? ""}
             onChange={setBackground}
             options={backgrounds.concat({
-              label: translate("SettingsBackgroundRandom"),
+              label: localize("SettingsBackgroundRandom"),
               value: ""
             })}
             children={({ label }) => label}
           />
         </SettingsLabel>
-        <SettingsLabel label={translate("SettingsStatsForNerds")}>
+        <SettingsLabel label={localize("SettingsStatsForNerds")}>
           <EditorToggle checked={statsForNerds} onChange={setStatsForNerds} />
         </SettingsLabel>
-        <SettingsLabel label={translate("SettingsHideFreeItems")}>
+        <SettingsLabel label={localize("SettingsHideFreeItems")}>
           <EditorToggle checked={hideFreeItems} onChange={setHideFreeItems} />
         </SettingsLabel>
-        <SettingsLabel label={translate("SettingsHideFilters")}>
+        <SettingsLabel label={localize("SettingsHideFilters")}>
           <EditorToggle checked={hideFilters} onChange={setHideFilters} />
         </SettingsLabel>
       </div>
@@ -131,13 +131,13 @@ export default function Settings() {
             onClick={handleRemoveAllItems}
           >
             <FontAwesomeIcon icon={faTrashCan} className="h-4" />
-            {translate("SettingsRemoveAllItems")}
+            {localize("SettingsRemoveAllItems")}
           </button>
         )}
       </div>
       <div className="mt-6 flex justify-end gap-2 px-4 pb-4">
         <ModalButton
-          children={translate("SettingsSave")}
+          children={localize("SettingsSave")}
           onClick={handleSubmit}
           variant="primary"
         />

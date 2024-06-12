@@ -4,13 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_Economy,
-  CS_INVENTORY_STICKERS,
-  CS_INVENTORY_STICKERS_WEAR,
-  CS_MAX_STICKER_WEAR,
-  CS_NONE,
-  CS_STICKER_WEAR_FACTOR,
-  CS_WEAR_FACTOR
+  CS2Economy,
+  CS2_MAX_STICKER_WEAR,
+  CS2_STICKER_WEAR_FACTOR,
+  CS2_WEAR_FACTOR
 } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
@@ -19,7 +16,7 @@ import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { ScrapeItemStickerAction } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
-import { useInventory, usePreferences, useTranslate } from "./app-context";
+import { useInventory, useLocalize, usePreferences } from "./app-context";
 import { ItemImage } from "./item-image";
 import { Modal } from "./modal";
 import { ModalButton } from "./modal-button";
@@ -37,39 +34,31 @@ export function ScrapeItemSticker({
   const { statsForNerds } = usePreferences();
   const [inventory, setInventory] = useInventory();
 
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
 
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
 
-  const inventoryItem = inventory.get(uid);
-  const {
-    data: item,
-    stickers: initialStickers,
-    stickerswear: initialStickersWear
-  } = inventoryItem;
+  const item = inventory.get(uid);
 
-  const stickers = initialStickers ?? CS_INVENTORY_STICKERS;
-  const stickersWear = initialStickersWear ?? CS_INVENTORY_STICKERS_WEAR;
-
-  function doScrapeSticker(stickerIndex: number) {
+  function doScrapeSticker(slot: number) {
     const scratch = Math.ceil(
-      (stickersWear[stickerIndex] + CS_STICKER_WEAR_FACTOR) * 5
+      (item.getStickerWear(slot) + CS2_STICKER_WEAR_FACTOR) * 5
     );
     sync({
       type: ScrapeItemStickerAction,
       targetUid: uid,
-      stickerIndex
+      slot: slot
     });
-    setInventory(inventory.scrapeItemSticker(uid, stickerIndex));
+    setInventory(inventory.scrapeItemSticker(uid, slot));
     playSound(`sticker_scratch${scratch as 1 | 2 | 3 | 4 | 5}`);
   }
 
-  function handleScrapeSticker(stickerIndex: number) {
-    if (stickersWear[stickerIndex] + CS_WEAR_FACTOR > CS_MAX_STICKER_WEAR) {
-      setConfirmScrapeIndex(stickerIndex);
+  function handleScrapeSticker(slot: number) {
+    if (item.getStickerWear(slot) + CS2_WEAR_FACTOR > CS2_MAX_STICKER_WEAR) {
+      setConfirmScrapeIndex(slot);
     } else {
-      doScrapeSticker(stickerIndex);
+      doScrapeSticker(slot);
     }
   }
 
@@ -91,40 +80,38 @@ export function ScrapeItemSticker({
             <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
               <div>
                 <UseItemHeader
-                  title={translate("ScrapeStickerUse")}
-                  warning={translate("ScrapeStickerWarn")}
-                  warningItem={nameItemString(inventoryItem)}
+                  title={localize("ScrapeStickerUse")}
+                  warning={localize("ScrapeStickerWarn")}
+                  warningItem={nameItemString(item)}
                 />
                 <ItemImage
                   className="m-auto aspect-[1.33333] max-w-[512px]"
                   item={item}
                 />
                 <div className="flex justify-center">
-                  {stickers.map((id, index) =>
-                    id !== CS_NONE ? (
-                      <button key={index} className="group">
-                        <ItemImage
-                          className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
-                          onClick={() => handleScrapeSticker(index)}
-                          style={{
-                            filter: `grayscale(${stickersWear[index]})`,
-                            opacity: `${1 - stickersWear[index]}`
-                          }}
-                          item={CS_Economy.getById(id)}
-                        />
-                        {statsForNerds && (
-                          <div className="text-sm font-bold text-neutral-300 transition-all group-hover:scale-150">
-                            {(stickersWear[index] * 100).toFixed(0)}%
-                          </div>
-                        )}
-                      </button>
-                    ) : null
-                  )}
+                  {item.someStickers().map(([index, { id, wear }]) => (
+                    <button key={index} className="group">
+                      <ItemImage
+                        className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
+                        onClick={() => handleScrapeSticker(index)}
+                        style={{
+                          filter: `grayscale(${wear ?? 0})`,
+                          opacity: `${1 - (wear ?? 0)}`
+                        }}
+                        item={CS2Economy.getById(id)}
+                      />
+                      {statsForNerds && (
+                        <div className="text-sm font-bold text-neutral-300 transition-all group-hover:scale-150">
+                          {((wear ?? 0) * 100).toFixed(0)}%
+                        </div>
+                      )}
+                    </button>
+                  ))}
                 </div>
                 <UseItemFooter
                   right={
                     <ModalButton
-                      children={translate("ScrapeStickerClose")}
+                      children={localize("ScrapeStickerClose")}
                       onClick={onClose}
                       variant="secondary"
                     />
@@ -136,20 +123,20 @@ export function ScrapeItemSticker({
               <Modal>
                 <div className="px-4 py-2 text-sm font-bold">
                   <span className="text-neutral-400">
-                    {translate("ScrapeStickerRemove")}
+                    {localize("ScrapeStickerRemove")}
                   </span>
                 </div>
-                <p className="px-4">{translate("ScrapeStickerRemoveDesc")}</p>
+                <p className="px-4">{localize("ScrapeStickerRemoveDesc")}</p>
                 <div className="flex justify-end px-4 py-2">
                   <ModalButton
                     onClick={handleConfirmScrape}
                     variant="secondary"
-                    children={translate("ScrapeStickerRemove")}
+                    children={localize("ScrapeStickerRemove")}
                   />
                   <ModalButton
                     onClick={() => setConfirmScrapeIndex(undefined)}
                     variant="secondary"
-                    children={translate("ScrapeStickerCancel")}
+                    children={localize("ScrapeStickerCancel")}
                   />
                 </div>
               </Modal>

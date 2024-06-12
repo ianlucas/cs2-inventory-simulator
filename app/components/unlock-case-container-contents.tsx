@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { ElementRef, useEffect, useRef, useState } from "react";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { InventoryItemSpecialTile } from "./inventory-item-special-tile";
 import { InventoryItemTile } from "./inventory-item-tile";
 
@@ -13,10 +13,10 @@ export function UnlockCaseContainerContents({
   caseItem,
   hideCaseContents
 }: {
-  caseItem: CS_Item;
+  caseItem: CS2EconomyItem;
   hideCaseContents: boolean;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const [translateY, setTranslateY] = useState(0);
   const [opacity, setOpacity] = useState(0);
 
@@ -41,12 +41,14 @@ export function UnlockCaseContainerContents({
       ref={ref}
     >
       <div className="m-auto lg:max-w-[1024px]">
-        <h2 className="my-2">{translate("CaseContainsOne")}</h2>
+        <h2 className="my-2">{localize("CaseContainsOne")}</h2>
         <div className="flex h-[320px] flex-wrap gap-3 overflow-y-scroll pb-4">
           {[
-            ...CS_Economy.listCaseContents(caseItem, true).map(
-              (item, index) => <InventoryItemTile key={index} item={item} />
-            ),
+            ...caseItem
+              .listContents(true)
+              .map((item, index) => (
+                <InventoryItemTile key={index} item={item} />
+              )),
             caseItem.specials !== undefined && (
               <InventoryItemSpecialTile key={-1} caseItem={caseItem} />
             )

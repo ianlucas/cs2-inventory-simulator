@@ -3,12 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { has } from "~/utils/misc";
 
-export function ItemEditorName({ item }: { item: CS_Item }) {
+export function ItemEditorName({ item }: { item: CS2EconomyItem }) {
   const { rarity } = item;
   const nameItem = useNameItem();
   const [model, name] = nameItem(item, "editor-name");

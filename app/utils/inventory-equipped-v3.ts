@@ -4,15 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_BaseInventoryItem,
-  CS_Economy,
-  CS_INVENTORY_STICKERS,
-  CS_NONE,
-  CS_TEAM_CT,
-  CS_TEAM_T
+  CS2Economy,
+  CS2Inventory,
+  CS2ItemType,
+  CS2Team,
+  CS2_MIN_SEED,
+  CS2_MIN_STICKER_WEAR
 } from "@ianlucas/cs2-lib";
 import { assert } from "./misc";
-import { range } from "./number";
 
 interface BaseEconItem {
   def: number;
@@ -48,7 +47,7 @@ interface MusicKitItem {
 }
 
 export async function generate(
-  inventory: CS_BaseInventoryItem[],
+  inventory: CS2Inventory,
   nonEquippable = {
     models: [] as string[],
     types: [] as string[]
@@ -59,12 +58,12 @@ export async function generate(
   const tWeapons: Record<number, WeaponEconItem> = {};
   const ctWeapons: Record<number, WeaponEconItem> = {};
   const agents: Record<number, AgentItem> = {};
-  const teams = [undefined, CS_TEAM_CT, CS_TEAM_T];
+  const teams = [undefined, CS2Team.CT, CS2Team.T];
   let collectible: number | undefined;
   let musicKit: MusicKitItem | undefined;
 
-  for (const item of inventory) {
-    const data = CS_Economy.getById(item.id);
+  for (const item of inventory.getAll()) {
+    const data = item;
 
     const isEquippable =
       (data.model === undefined ||
@@ -79,93 +78,82 @@ export async function generate(
       if (team === undefined && !item.equipped) {
         continue;
       }
-      if (team === CS_TEAM_CT && !item.equippedCT) {
+      if (team === CS2Team.CT && !item.equippedCT) {
         continue;
       }
-      if (team === CS_TEAM_T && !item.equippedT) {
+      if (team === CS2Team.T && !item.equippedT) {
         continue;
       }
       switch (data.type) {
-        case "patch":
-          // Handled by "agents".
-          break;
-        case "musickit":
+        case CS2ItemType.MusicKit:
           assert(data.index);
           musicKit = {
             def: data.index,
-            stattrak: item.stattrak ?? -1,
+            stattrak: item.statTrak ?? -1,
             uid: item.uid
           };
           break;
-        case "collectible":
+        case CS2ItemType.Collectible:
           collectible = data.def;
           break;
-        case "melee":
+        case CS2ItemType.Melee:
           assert(team);
           assert(data.def);
           knives[team] = {
             def: data.def,
             legacy: false,
-            nametag: item.nametag ?? "",
+            nametag: item.nameTag ?? "",
             paint: data.index ?? 0,
-            seed: item.seed ?? 1,
-            stattrak: item.stattrak ?? -1,
+            seed: item.seed ?? CS2_MIN_SEED,
+            stattrak: item.statTrak ?? -1,
             stickers: [],
             uid: item.uid,
-            wear: item.wear ?? data.wearmin ?? 0
+            wear: item.getWear()
           };
           break;
-        case "glove":
+        case CS2ItemType.Gloves:
           assert(team);
           assert(data.def);
           gloves[team] = {
             def: data.def,
             paint: data.index ?? 0,
-            seed: item.seed ?? 1,
-            wear: item.wear ?? data.wearmin ?? 0
+            seed: item.seed ?? CS2_MIN_SEED,
+            wear: item.getWear()
           };
           break;
-        case "weapon":
+        case CS2ItemType.Weapon:
           assert(data.def);
-          const weapon = team === CS_TEAM_CT ? ctWeapons : tWeapons;
+          const weapon = team === CS2Team.CT ? ctWeapons : tWeapons;
           weapon[data.def] = {
             def: data.def,
             legacy: data.legacy ?? false,
-            nametag: item.nametag ?? "",
+            nametag: item.nameTag ?? "",
             paint: data.index ?? 0,
-            seed: item.seed ?? 1,
-            stattrak: item.stattrak ?? -1,
-            stickers: (item.stickers ?? CS_INVENTORY_STICKERS).map(
-              (sticker, index) => ({
-                slot: index,
-                wear: item.stickerswear?.[index] ?? 0,
-                def:
-                  sticker !== CS_NONE
-                    ? CS_Economy.getById(sticker).index ?? 0
-                    : 0
-              })
-            ),
+            seed: item.seed ?? CS2_MIN_SEED,
+            stattrak: item.statTrak ?? -1,
+            stickers: item.someStickers().map(([index, sticker]) => ({
+              slot: index,
+              wear: sticker.wear ?? CS2_MIN_STICKER_WEAR,
+              def: CS2Economy.getById(sticker.id).index ?? 0
+            })),
             uid: item.uid,
-            wear: item.wear ?? data.wearmin ?? 0
+            wear: item.getWear()
           };
           break;
-        case "agent":
+        case CS2ItemType.Agent:
           assert(team);
           assert(data.model);
-          assert(data.voprefix);
-          const patch = inventory.find(
-            (item) =>
-              CS_Economy.getById(item.id).type === "patch" &&
-              item[team === CS_TEAM_CT ? "equippedCT" : "equippedT"]
-          );
+          assert(data.voPrefix);
           agents[team] = {
             model: data.model,
-            patches: range(5).map(() =>
-              patch !== undefined ? CS_Economy.getById(patch.id).index ?? 0 : 0
-            ),
-            vofallback: data.vofallback ?? false,
-            vofemale: data.vofemale ?? false,
-            voprefix: data.voprefix
+            patches: data
+              .allPatches()
+              .map(([_, patch]) =>
+                patch !== undefined ? CS2Economy.getById(patch).index ?? 0 : 0
+              ),
+            vofallback: data.voFallback ?? false,
+            vofemale: data.voFemale ?? false,
+            voprefix: data.voPrefix
           };
           break;
       }

@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cs2-lib";
 import {
   INVENTORY_PRIMARY_FILTERS,
   INVENTORY_SECONDARY_FILTERS,
@@ -74,16 +73,16 @@ export function useInventoryFilterState() {
   function filterItems({ item }: TransformedInventoryItem) {
     if (search.length > 0) {
       const searchLower = search.toLowerCase();
-      const name = item.data.name.toLowerCase();
-      const nametag = item.nametag?.toLowerCase() ?? "";
-      const altname = item.data.altname?.toLowerCase() ?? "";
+      const name = item.name.toLowerCase();
+      const nameTag = item.nameTag?.toLowerCase() ?? "";
+      const altname = item.altName?.toLowerCase() ?? "";
       if (name.includes(searchLower)) {
         return true;
       }
       if (altname.includes(searchLower)) {
         return true;
       }
-      if (nametag.includes(searchLower)) {
+      if (nameTag.includes(searchLower)) {
         return true;
       }
       return false;
@@ -94,63 +93,61 @@ export function useInventoryFilterState() {
       case "Equipment":
         switch (secondaryFilter) {
           case "AllEquipment":
-            return ["weapon", "agent", "glove", "melee", "musickit"].includes(
-              item.data.type
-            );
+            return item.isInEquipments();
           case "Melee":
-            return item.data.type === "melee";
+            return item.isMelee();
           case "Pistols":
-            return item.data.category === "secondary";
+            return item.isPistol();
           case "MidTier":
-            return ["heavy", "smg"].includes(item.data.category!);
+            return item.isInMidTiers();
           case "Rifles":
-            return ["rifle"].includes(item.data.category!);
+            return item.isInRifles();
           case "Misc":
-            return ["c4", "equipment"].includes(item.data.category!);
+            return item.isInMisc();
           case "Agents":
-            return item.data.type === "agent";
+            return item.isAgent();
           case "Gloves":
-            return item.data.type === "glove";
+            return item.isGloves();
           case "MusicKits":
-            return item.data.type === "musickit";
+            return item.isMusicKit();
         }
         break;
       case "GraphicArt":
         switch (secondaryFilter) {
           case "AllGraphicArt":
-            return ["patch", "sticker", "graffiti"].includes(item.data.type);
+            return item.isInGraphicArts();
           case "Patches":
-            return item.data.type === "patch";
+            return item.isPatch();
           case "Stickers":
-            return item.data.type === "sticker";
+            return item.isSticker();
           case "Graffiti":
-            return item.data.type === "graffiti";
+            return item.isGraffiti();
         }
         break;
       case "Containers":
         switch (secondaryFilter) {
           case "All":
-            return ["case", "tool"].includes(item.data.type);
+            return item.isInContainers();
           case "WeaponCases":
-            return CS_Economy.isWeaponCase(item.data);
+            return item.isWeaponCase();
           case "StickerCapsules":
-            return CS_Economy.isStickerCapsule(item.data);
+            return item.isStickerCapsule();
           case "GraffitiBoxes":
-            return CS_Economy.isGraffitiBox(item.data);
+            return item.isGraffitiBox();
           case "SouvenirCases":
-            return CS_Economy.isSouvenirCase(item.data);
+            return item.isSouvenirCase();
           case "Tools":
-            return item.data.type === "tool";
+            return item.isTool();
         }
         break;
       case "Display":
         switch (secondaryFilter) {
           case "All":
-            return ["collectible", "musickit"].includes(item.data.type);
+            return item.isInDisplay();
           case "Medals":
-            return item.data.type === "collectible";
+            return item.isCollectible();
           case "MusicKits":
-            return item.data.type === "musickit";
+            return item.isMusicKit();
         }
         break;
     }

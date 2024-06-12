@@ -37,10 +37,10 @@ export const INVENTORY_SECONDARY_FILTERS = {
 } as const;
 
 export const INVENTORY_SORTERS = [
-  { value: "equipped", label: "Equipped" },
-  { value: "newest", label: "Newest" },
-  { value: "quality", label: "Quality" },
-  { value: "alphabetical", label: "Alphabetical" },
-  { value: "type", label: "Type" },
-  { value: "collection", label: "Collection" }
+  { value: "equipped", label: "Equipped" as const },
+  { value: "newest", label: "Newest" as const },
+  { value: "quality", label: "Quality" as const },
+  { value: "alphabetical", label: "Alphabetical" as const },
+  { value: "type", label: "Type" as const },
+  { value: "collection", label: "Collection" as const }
 ];

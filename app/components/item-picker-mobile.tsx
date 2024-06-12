@@ -5,16 +5,16 @@
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useItemPickerState } from "~/components/hooks/use-item-picker-state";
 import { ItemBrowser } from "~/components/item-browser";
 import { ItemPickerFilterMobile } from "~/components/item-picker-filter-mobile";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 
 export function ItemPickerMobile({
   onPickItem
 }: {
-  onPickItem: (item: CS_Item) => void;
+  onPickItem: (item: CS2EconomyItem) => void;
 }) {
   const {
     categories,
@@ -26,7 +26,7 @@ export function ItemPickerMobile({
     query,
     setQuery
   } = useItemPickerState({ onPickItem });
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   return (
     <>
@@ -44,7 +44,7 @@ export function ItemPickerMobile({
           value={query}
           onChange={setQuery}
           className="flex-1 rounded bg-neutral-950/40 px-3 py-1 placeholder-neutral-600 outline-none"
-          placeholder={translate("CraftSearchPlaceholder")}
+          placeholder={localize("CraftSearchPlaceholder")}
         />
       </div>
       <div className="pb-2 pt-1">

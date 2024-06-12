@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cs2-lib";
+import { assert } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
@@ -19,16 +19,14 @@ export function useUnlockCase() {
   }>();
 
   function handleUnlockCase(uid: number) {
-    const selectedItem = inventory.get(uid).data;
-    if (selectedItem.keys || selectedItem.type === "key") {
+    const selectedItem = inventory.get(uid);
+    if (selectedItem.keys !== undefined || selectedItem.isKey()) {
       const keyItems = items.filter(
         ({ item }) =>
-          (CS_Economy.isKey(selectedItem) &&
-            item.data.keys?.includes(selectedItem.id)) ||
-          (CS_Economy.isCase(selectedItem) &&
-            selectedItem.keys?.includes(item.data.id))
+          (selectedItem.isKey() && item.keys?.includes(selectedItem.id)) ||
+          (selectedItem.isContainer() && selectedItem.keys?.includes(item.id))
       );
-      if (selectedItem.type === "case" && keyItems.length === 0) {
+      if (selectedItem.isContainer() && keyItems.length === 0) {
         playSound("case_drop");
         return setUnlockCase({
           caseUid: uid
@@ -40,7 +38,7 @@ export function useUnlockCase() {
         type: "unlock-case"
       });
     }
-    if (selectedItem.type === "case") {
+    if (selectedItem.isContainer()) {
       playSound("case_drop");
       return setUnlockCase({
         caseUid: uid
@@ -49,11 +47,12 @@ export function useUnlockCase() {
   }
 
   function handleUnlockCaseSelect(uid: number) {
+    assert(itemSelector !== undefined);
     playSound("case_drop");
-    const { data: selectedItem } = inventory.get(uid);
+    const selectedItem = inventory.get(uid);
     return setUnlockCase({
-      caseUid: selectedItem.type === "case" ? uid : itemSelector!.uid,
-      keyUid: selectedItem.type === "key" ? uid : itemSelector!.uid
+      caseUid: selectedItem.isContainer() ? uid : itemSelector.uid,
+      keyUid: selectedItem.isKey() ? uid : itemSelector.uid
     });
   }
 

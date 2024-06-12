@@ -23,11 +23,9 @@ export function useStorageUnit() {
     uid: number;
   }>();
 
-  const isDepositableItem = ({
-    item: { data, nametag, stickers }
-  }: (typeof items)[number]) =>
-    (!data.free || nametag !== undefined || stickers !== undefined) &&
-    data.type !== "tool";
+  const isDepositableItem = ({ item }: (typeof items)[number]) =>
+    (!item.free || item.nameTag !== undefined || item.stickers !== undefined) &&
+    !item.isTool();
 
   function handleRenameStorageUnit(uid: number) {
     return setRenameStorageUnit({ uid });
@@ -51,7 +49,7 @@ export function useStorageUnit() {
   }
 
   function handleDepositToStorageUnitSelect(uid: number) {
-    assert(itemSelector, "Unexpected state when depositing item.");
+    assert(itemSelector !== undefined);
     const depositUids = [uid];
     sync({
       type: DepositToStorageUnitAction,
@@ -66,9 +64,7 @@ export function useStorageUnit() {
       canDepositItems
         ? {
             ...itemSelector,
-            items: itemSelector.items.filter(
-              ({ uid: otherUid }) => otherUid !== uid
-            )
+            items: itemSelector.items.filter(({ uid: xuid }) => xuid !== uid)
           }
         : undefined
     );
@@ -83,7 +79,7 @@ export function useStorageUnit() {
   }
 
   function handleRetrieveFromStorageUnitSelect(uid: number) {
-    assert(itemSelector, "Unexpected state when retrieving item.");
+    assert(itemSelector !== undefined);
     const retrieveUids = [uid];
     sync({
       type: RetrieveFromStorageUnitAction,

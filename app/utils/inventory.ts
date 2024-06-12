@@ -4,66 +4,66 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_Economy,
-  CS_InventoryItem,
-  CS_Item,
-  CS_NONE
+  CS2Economy,
+  CS2EconomyItem,
+  CS2Inventory,
+  CS2InventoryItem,
+  CS2ItemType,
+  CS2ItemTypeValues
 } from "@ianlucas/cs2-lib";
 import { serverInventoryShape } from "./shapes";
 
-export const UNLOCKABLE_ITEM_TYPE = ["case", "key"];
-export const EDITABLE_ITEM_TYPE = ["weapon", "melee", "glove", "musickit"];
-export const INSPECTABLE_ITEM_TYPE = [
-  "collectible",
-  "glove",
-  "graffiti",
-  "melee",
-  "musickit",
-  "patch",
-  "sticker",
-  "weapon"
+export const UNLOCKABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
+  CS2ItemType.Container,
+  CS2ItemType.Key
 ];
-export const INSPECTABLE_IN_GAME_ITEM_TYPE = [
-  "agent",
-  "case",
-  "collectible",
-  "glove",
-  "graffiti",
-  "melee",
-  "musickit",
-  "patch",
-  "sticker",
-  "weapon"
+
+export const EDITABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
+  CS2ItemType.Weapon,
+  CS2ItemType.Melee,
+  CS2ItemType.Gloves,
+  CS2ItemType.MusicKit
+];
+
+export const INSPECTABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
+  CS2ItemType.Collectible,
+  CS2ItemType.Gloves,
+  CS2ItemType.Graffiti,
+  CS2ItemType.Melee,
+  CS2ItemType.MusicKit,
+  CS2ItemType.Patch,
+  CS2ItemType.Sticker,
+  CS2ItemType.Weapon
 ];
 
 export function parseInventory(inventory?: string | null) {
   try {
-    if (!inventory) {
-      return [];
-    }
-    return serverInventoryShape.parse(JSON.parse(inventory));
+    return serverInventoryShape.parse(CS2Inventory.parse(inventory));
   } catch {
-    return [];
+    return undefined;
   }
 }
 
+const fakeInventory = new CS2Inventory({});
 export function createFakeInventoryItem(
-  data: CS_Item,
-  item?: Partial<CS_InventoryItem>
+  props: CS2EconomyItem,
+  item?: Partial<CS2InventoryItem>
 ) {
-  return {
-    data,
-    id: data.id,
-    uid: -1,
-    ...item
-  } satisfies CS_InventoryItem;
+  const inventoryItem = new CS2InventoryItem(
+    fakeInventory,
+    -1,
+    { id: props.id },
+    props
+  );
+  Object.assign(inventoryItem, item);
+  return inventoryItem;
 }
 
 export function getFreeItemsToDisplay(hideFreeItems = false) {
   if (hideFreeItems) {
     return [];
   }
-  return CS_Economy.filterItems({
+  return CS2Economy.filterItems({
     free: true
   }).map((item, index) => ({
     equipped: [],
@@ -72,23 +72,4 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
     }),
     uid: -1 * (index + 1)
   }));
-}
-
-export function getStickerCount(stickers?: number[]) {
-  if (stickers === undefined) {
-    return 0;
-  }
-  return stickers.filter((sticker) => sticker !== CS_NONE).length;
-}
-
-export function resolveInventoryItem(item: CS_Item | CS_InventoryItem) {
-  return (item as CS_InventoryItem).uid !== undefined
-    ? (item as CS_InventoryItem)
-    : undefined;
-}
-
-export function resolveCSItem(item: CS_Item | CS_InventoryItem) {
-  return (item as CS_InventoryItem).uid !== undefined
-    ? (item as CS_InventoryItem).data
-    : (item as CS_Item);
 }

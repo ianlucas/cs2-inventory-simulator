@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { ForwardedRef, forwardRef } from "react";
 import { UnlockCaseWheelItem } from "./unlock-case-wheel-item";
@@ -15,9 +15,9 @@ export const UnlockCaseWheelItems = forwardRef(function Items(
     items,
     translateX
   }: {
-    caseItem: CS_Item;
+    caseItem: CS2EconomyItem;
     instant?: boolean;
-    items: ReturnType<typeof CS_Economy.unlockCase>[];
+    items: CS2UnlockedItem[];
     translateX: number;
   },
   ref: ForwardedRef<Element>

@@ -5,7 +5,7 @@
 
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS_Economy, CS_INVENTORY_STICKERS, CS_NONE } from "@ianlucas/cs2-lib";
+import { CS2Economy } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -17,7 +17,7 @@ import {
   ApplyItemStickerAction
 } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
-import { useInventory, useTranslate } from "./app-context";
+import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
@@ -33,28 +33,24 @@ export function ApplyItemSticker({
   stickerUid: number;
 }) {
   const [inventory, setInventory] = useInventory();
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
   const nameItemString = useNameItemString();
 
-  const [stickerIndex, setStickerIndex] = useState<number>();
-  const { data: stickerItem } = useInventoryItem(stickerUid);
-  const targetInventoryItem = useInventoryItem(targetUid);
-  const { data: targetItem, stickers: initialStickers } = targetInventoryItem;
-  const stickers = initialStickers ?? [...CS_INVENTORY_STICKERS];
+  const [slot, setSlot] = useState<number>();
+  const stickerItem = useInventoryItem(stickerUid);
+  const targetItem = useInventoryItem(targetUid);
 
   function handleApplySticker() {
-    if (stickerIndex !== undefined) {
+    if (slot !== undefined) {
       if (targetUid >= 0) {
         sync({
           type: ApplyItemStickerAction,
           targetUid,
-          stickerIndex,
+          slot: slot,
           stickerUid
         });
-        setInventory(
-          inventory.applyItemSticker(targetUid, stickerUid, stickerIndex)
-        );
+        setInventory(inventory.applyItemSticker(targetUid, stickerUid, slot));
         playSound("sticker_apply_confirm");
         onClose();
       } else {
@@ -62,11 +58,9 @@ export function ApplyItemSticker({
           type: AddWithStickerAction,
           stickerUid,
           itemId: targetItem.id,
-          stickerIndex
+          slot: slot
         });
-        setInventory(
-          inventory.addWithSticker(stickerUid, targetItem.id, stickerIndex)
-        );
+        setInventory(inventory.addWithSticker(stickerUid, targetItem.id, slot));
         playSound("sticker_apply_confirm");
         onClose();
       }
@@ -80,33 +74,34 @@ export function ApplyItemSticker({
           <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
             <div>
               <UseItemHeader
-                actionDesc={translate("ApplyStickerUseOn")}
-                actionItem={nameItemString(targetInventoryItem)}
-                title={translate("ApplyStickerUse")}
-                warning={translate("ApplyStickerWarn")}
+                actionDesc={localize("ApplyStickerUseOn")}
+                actionItem={nameItemString(targetItem)}
+                title={localize("ApplyStickerUse")}
+                warning={localize("ApplyStickerWarn")}
               />
               <ItemImage
                 className="m-auto aspect-[1.33333] max-w-[512px]"
                 item={targetItem}
               />
               <div className="flex items-center justify-center">
-                {stickers.map((id, index) =>
-                  id !== CS_NONE || index === stickerIndex ? (
+                {targetItem.allStickers().map(([xslot, sticker]) =>
+                  xslot === 4 ? undefined : sticker !== undefined ||
+                    xslot === slot ? (
                     <ItemImage
-                      key={index}
+                      key={xslot}
                       className="h-[126px] w-[168px]"
                       item={
-                        index === stickerIndex
-                          ? stickerItem
-                          : CS_Economy.getById(id!)
+                        sticker !== undefined
+                          ? CS2Economy.getById(sticker.id)
+                          : stickerItem
                       }
                     />
                   ) : (
                     <button
-                      key={index}
+                      key={xslot}
                       className="group flex h-[126px] w-[168px] items-center justify-center"
                       onClick={() => {
-                        setStickerIndex(index);
+                        setSlot(xslot);
                         playSound("sticker_apply");
                       }}
                     >
@@ -121,13 +116,13 @@ export function ApplyItemSticker({
                 right={
                   <>
                     <ModalButton
-                      children={translate("ApplyStickerUse")}
-                      disabled={stickerIndex === undefined}
+                      children={localize("ApplyStickerUse")}
+                      disabled={slot === undefined}
                       onClick={handleApplySticker}
                       variant="primary"
                     />
                     <ModalButton
-                      children={translate("ApplyStickerCancel")}
+                      children={localize("ApplyStickerCancel")}
                       onClick={onClose}
                       variant="secondary"
                     />

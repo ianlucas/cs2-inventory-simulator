@@ -4,37 +4,38 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_InventoryItem,
-  CS_RARITY_COLORS,
-  CS_RARITY_ORDER
+  CS2InventoryItem,
+  CS2ItemType,
+  CS2RarityColorName,
+  CS2_RARITY_ORDER
 } from "@ianlucas/cs2-lib";
 
 const INVENTORY_ITEM_TYPE_ORDER = {
-  weapon: 0,
-  melee: 1,
-  glove: 2,
-  agent: 3,
-  patch: 4,
-  collectible: 5,
-  musickit: 6,
-  graffiti: 7,
-  sticker: 8,
-  case: 9,
-  key: 10,
-  tool: 11
+  [CS2ItemType.Weapon]: 0,
+  [CS2ItemType.Melee]: 1,
+  [CS2ItemType.Gloves]: 2,
+  [CS2ItemType.Agent]: 3,
+  [CS2ItemType.Patch]: 4,
+  [CS2ItemType.Collectible]: 5,
+  [CS2ItemType.MusicKit]: 6,
+  [CS2ItemType.Graffiti]: 7,
+  [CS2ItemType.Sticker]: 8,
+  [CS2ItemType.Container]: 9,
+  [CS2ItemType.Key]: 10,
+  [CS2ItemType.Tool]: 11,
+  [CS2ItemType.Stub]: 12
 } as const;
 
 export function transform(
-  item: CS_InventoryItem,
+  item: CS2InventoryItem,
   nonEquippable = {
     models: [] as string[],
     types: [] as string[]
   }
 ) {
   const isEquippable =
-    (item.data.model === undefined ||
-      !nonEquippable.models.includes(item.data.model)) &&
-    !nonEquippable.types.includes(item.data.type);
+    (item.model === undefined || !nonEquippable.models.includes(item.model)) &&
+    !nonEquippable.types.includes(item.type);
 
   if (!isEquippable) {
     item.equipped = undefined;
@@ -60,7 +61,7 @@ export function sortByName(
   a: TransformedInventoryItem,
   b: TransformedInventoryItem
 ) {
-  return a.item.data.name.localeCompare(b.item.data.name);
+  return a.item.name.localeCompare(b.item.name);
 }
 
 export function sortByType(
@@ -68,8 +69,8 @@ export function sortByType(
   b: TransformedInventoryItem
 ) {
   return (
-    INVENTORY_ITEM_TYPE_ORDER[a.item.data.type] -
-    INVENTORY_ITEM_TYPE_ORDER[b.item.data.type]
+    INVENTORY_ITEM_TYPE_ORDER[a.item.type] -
+    INVENTORY_ITEM_TYPE_ORDER[b.item.type]
   );
 }
 
@@ -92,7 +93,7 @@ export function sortByNewest(
   a: TransformedInventoryItem,
   b: TransformedInventoryItem
 ) {
-  return (b.item.updatedat ?? 0) - (a.item.updatedat ?? 0);
+  return (b.item.updatedAt ?? 0) - (a.item.updatedAt ?? 0);
 }
 
 export function sortByQuality(
@@ -100,8 +101,8 @@ export function sortByQuality(
   b: TransformedInventoryItem
 ) {
   return (
-    CS_RARITY_ORDER.indexOf(CS_RARITY_COLORS[b.item.data.rarity] as any) -
-    CS_RARITY_ORDER.indexOf(CS_RARITY_COLORS[a.item.data.rarity] as any)
+    CS2_RARITY_ORDER.indexOf(CS2RarityColorName[b.item.rarity]) -
+    CS2_RARITY_ORDER.indexOf(CS2RarityColorName[a.item.rarity])
   );
 }
 
@@ -109,8 +110,8 @@ export function sortByCollection(
   a: TransformedInventoryItem,
   b: TransformedInventoryItem
 ) {
-  return (b.item.data.collectionname ?? "").localeCompare(
-    a.item.data.collectionname ?? ""
+  return (b.item.collectionName ?? "").localeCompare(
+    a.item.collectionName ?? ""
   );
 }
 

@@ -3,11 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { Logo } from "./logo";
 
 export function Splash() {
-  const translate = useTranslate();
+  const localize = useLocalize();
 
   return (
     <div
@@ -58,7 +58,7 @@ export function Splash() {
         </div>
         <noscript>
           <div className="px-2 pb-1 text-center">
-            <strong>{translate("JavaScriptRequired")}</strong>
+            <strong>{localize("JavaScriptRequired")}</strong>
           </div>
         </noscript>
       </div>

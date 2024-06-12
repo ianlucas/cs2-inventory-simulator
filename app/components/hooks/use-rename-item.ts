@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
@@ -20,9 +19,7 @@ export function useRenameItem() {
     return setItemSelector({
       uid,
       items: items.filter(
-        ({ item }) =>
-          CS_Economy.hasNametag(item.data) &&
-          !CS_Economy.isStorageUnitTool(item.data)
+        ({ item }) => item.hasNametag() && !item.isStorageUnit()
       ),
       type: "rename-item"
     });

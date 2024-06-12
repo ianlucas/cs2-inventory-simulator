@@ -5,13 +5,14 @@
 
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { z } from "zod";
-import { useInventory, useTranslate } from "~/components/app-context";
+import { useInventory, useLocalize } from "~/components/app-context";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
@@ -45,11 +46,11 @@ export default function Craft() {
   const { uid } = useTypedLoaderData<typeof loader>();
   const isEditing = uid !== undefined;
   const [inventory, setInventory] = useInventory();
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState(
-    isEditing ? inventory.get(uid).data : undefined
+  const [selectedItem, setSelectedItem] = useState<CS2EconomyItem | undefined>(
+    isEditing ? inventory.get(uid) : undefined
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -59,7 +60,7 @@ export default function Craft() {
 
   function handleSubmit({
     quantity,
-    stattrak,
+    statTrak,
     ...attributes
   }: ItemEditorAttributes) {
     if (isSubmitting || selectedItem === undefined) {
@@ -70,16 +71,16 @@ export default function Craft() {
 
     const inventoryItem = {
       id: selectedItem.id,
-      stattrak: stattrak ? (0 as const) : undefined,
+      statTrak: statTrak ? (0 as const) : undefined,
       ...attributes
-    };
+    } satisfies CS2BaseInventoryItem;
 
     if (isEditing) {
       deleteEmptyProps(inventoryItem);
       setInventory(
         inventory.edit(uid, {
           ...inventoryItem,
-          stattrak: stattrak ? inventory.get(uid).stattrak ?? 0 : undefined
+          statTrak: statTrak ? inventory.get(uid).statTrak ?? 0 : undefined
         })
       );
       sync({
@@ -118,8 +119,8 @@ export default function Craft() {
       <div className="flex select-none items-center justify-between px-4 py-2 text-sm font-bold">
         <span className="text-neutral-400">
           {isPickingItem
-            ? translate("CraftSelectHeader")
-            : translate("CraftConfirmHeader")}
+            ? localize("CraftSelectHeader")
+            : localize("CraftConfirmHeader")}
         </span>
         <div className="flex items-center">
           <Link className="opacity-50 hover:opacity-100" to="/">
@@ -131,7 +132,7 @@ export default function Craft() {
         <ItemPicker onPickItem={setSelectedItem} />
       ) : (
         <ItemEditor
-          attributes={isEditing ? inventory.get(uid) : undefined}
+          attributes={isEditing ? inventory.get(uid).asBase() : undefined}
           dismissType={isEditing ? "cancel" : "reset"}
           item={selectedItem}
           onDismiss={handleReset}

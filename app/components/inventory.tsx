@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Team } from "@ianlucas/cs2-lib";
+import { CS2ItemType, CS2TeamValues } from "@ianlucas/cs2-lib";
 import { useNavigate } from "@remix-run/react";
 import { useApplyItemSticker } from "~/components/hooks/use-apply-item-sticker";
 import { useInspectItem } from "~/components/hooks/use-inspect-item";
@@ -24,8 +24,8 @@ import {
   useInventory,
   useInventoryFilter,
   useInventoryItems,
-  usePreferences,
-  useTranslate
+  useLocalize,
+  usePreferences
 } from "./app-context";
 import { ApplyItemSticker } from "./apply-item-sticker";
 import { useListenAppEvent } from "./hooks/use-listen-app-event";
@@ -41,7 +41,7 @@ import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
 
 export function Inventory() {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const sync = useSync();
   const items = useInventoryItems();
   const { filterItems } = useInventoryFilter();
@@ -51,8 +51,8 @@ export function Inventory() {
   const navigate = useNavigate();
 
   const ownApplicableStickers =
-    items.filter(({ item }) => CS_Economy.isSticker(item.data)).length > 0 &&
-    items.filter(({ item }) => CS_Economy.hasStickers(item.data)).length > 0;
+    items.filter(({ item }) => item.isSticker()).length > 0 &&
+    items.filter(({ item }) => item.hasStickers()).length > 0;
 
   const {
     closeUnlockCase,
@@ -110,9 +110,9 @@ export function Inventory() {
   const { closeInspectItem, handleInspectItem, inspectItem, isInspectingItem } =
     useInspectItem();
 
-  function handleEquip(uid: number, team?: CS_Team) {
+  function handleEquip(uid: number, team?: CS2TeamValues) {
     playSound(
-      inventory.get(uid).data.type === "musickit"
+      inventory.get(uid).type === CS2ItemType.MusicKit
         ? "music_equip"
         : "inventory_item_pickup"
     );
@@ -120,7 +120,7 @@ export function Inventory() {
     sync({ type: EquipAction, uid: uid, team });
   }
 
-  function handleUnequip(uid: number, team?: CS_Team) {
+  function handleUnequip(uid: number, team?: CS2TeamValues) {
     playSound("inventory_item_close");
     setInventory(inventory.unequip(uid, team));
     sync({ type: UnequipAction, uid: uid, team });
@@ -227,7 +227,7 @@ export function Inventory() {
         <div className="m-auto flex select-none justify-center lg:w-[1024px]">
           <div className="flex w-full items-center justify-center gap-2 bg-gradient-to-r from-transparent via-black/30 to-transparent py-1">
             <InfoIcon className="h-4" />
-            {translate("InventoryNoItemsToDisplay")}
+            {localize("InventoryNoItemsToDisplay")}
           </div>
         </div>
       )}

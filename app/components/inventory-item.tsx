@@ -5,25 +5,24 @@
 
 import { FloatingFocusManager } from "@floating-ui/react";
 import {
-  CS_Economy,
-  CS_INVENTORY_EQUIPPABLE_ITEMS,
-  CS_NONE,
-  CS_TEAM_CT,
-  CS_TEAM_T,
-  CS_Team
+  CS2Team,
+  CS2TeamValues,
+  CS2_INVENTORY_EQUIPPABLE_ITEMS
 } from "@ianlucas/cs2-lib";
-import { CS_generateInspectLink } from "@ianlucas/cs2-lib-inspect";
+import {
+  CS2_PREVIEW_INSPECTABLE_ITEMS,
+  generateInspectLink
+} from "@ianlucas/cs2-lib-inspect";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
 import {
   EDITABLE_ITEM_TYPE,
-  INSPECTABLE_IN_GAME_ITEM_TYPE,
   INSPECTABLE_ITEM_TYPE,
   UNLOCKABLE_ITEM_TYPE
 } from "~/utils/inventory";
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
-import { useInventory, useRules, useTranslate } from "./app-context";
+import { useInventory, useLocalize, useRules } from "./app-context";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemHover } from "./inventory-item-hover";
 import { InventoryItemTile } from "./inventory-item-tile";
@@ -58,7 +57,7 @@ export function InventoryItem({
   onClick?: (uid: number) => void;
   onDepositToStorageUnit?: (uid: number) => void;
   onEdit?: (uid: number) => void;
-  onEquip?: (uid: number, team?: CS_Team) => void;
+  onEquip?: (uid: number, team?: CS2TeamValues) => void;
   onInspectItem?: (uid: number) => void;
   onInspectStorageUnit?: (uid: number) => void;
   onRemove?: (uid: number) => void;
@@ -67,11 +66,11 @@ export function InventoryItem({
   onRetrieveFromStorageUnit?: (uid: number) => void;
   onScrapeSticker?: (uid: number) => void;
   onSwapItemsStatTrak?: (uid: number) => void;
-  onUnequip?: (uid: number, team?: CS_Team) => void;
+  onUnequip?: (uid: number, team?: CS2TeamValues) => void;
   onUnlockContainer?: (uid: number) => void;
   ownApplicableStickers?: boolean;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const {
     editHideCategory,
     editHideId,
@@ -107,56 +106,52 @@ export function InventoryItem({
   } = useInventoryItemFloating();
 
   const isFreeInventoryItem = uid < 0;
-  const { data } = item;
 
   const isEquippable =
-    (item.data.model === undefined ||
-      !inventoryItemEquipHideModel.includes(item.data.model)) &&
-    !inventoryItemEquipHideType.includes(item.data.type);
+    (item.model === undefined ||
+      !inventoryItemEquipHideModel.includes(item.model)) &&
+    !inventoryItemEquipHideType.includes(item.type);
   const canEquip =
     isEquippable &&
-    data.teams === undefined &&
+    item.teams === undefined &&
     !item.equipped &&
-    CS_INVENTORY_EQUIPPABLE_ITEMS.includes(data.type);
+    CS2_INVENTORY_EQUIPPABLE_ITEMS.includes(item.type);
   const canEquipT =
-    isEquippable && data.teams?.includes(CS_TEAM_T) && !item.equippedT;
+    isEquippable && item.teams?.includes(CS2Team.T) && !item.equippedT;
   const canEquipCT =
-    isEquippable && data.teams?.includes(CS_TEAM_CT) && !item.equippedCT;
+    isEquippable && item.teams?.includes(CS2Team.CT) && !item.equippedCT;
   const canUnequip = isEquippable && item.equipped === true;
   const canUnequipT = isEquippable && item.equippedT === true;
   const canUnequipCT = isEquippable && item.equippedCT === true;
 
-  const canSwapStatTrak = CS_Economy.isStatTrakSwapTool(data);
-  const canRename = CS_Economy.isNametagTool(data);
+  const canSwapStatTrak = item.isStatTrakSwapTool();
+  const canRename = item.isNameTag();
   const canApplySticker =
     inventoryItemAllowApplySticker &&
     ownApplicableStickers &&
-    ((CS_Economy.hasStickers(data) &&
-      (item.stickers ?? []).filter((id) => id !== CS_NONE).length < 4) ||
-      data.type === "sticker");
+    ((item.hasStickers() && item.getStickersCount() < 4) || item.isSticker());
   const canScrapeSticker =
     inventoryItemAllowScrapeSticker &&
-    CS_Economy.hasStickers(data) &&
-    (item.stickers ?? []).filter((id) => id !== CS_NONE).length > 0;
+    item.hasStickers() &&
+    item.getStickersCount() > 0;
   const canUnlockContainer =
     inventoryItemAllowUnlockContainer &&
-    UNLOCKABLE_ITEM_TYPE.includes(data.type);
-  const hasNametag = item.nametag !== undefined;
-  const isStorageUnit = CS_Economy.isStorageUnitTool(data);
-  const isEditable = EDITABLE_ITEM_TYPE.includes(data.type);
-  const canInspect = INSPECTABLE_ITEM_TYPE.includes(data.type);
+    UNLOCKABLE_ITEM_TYPE.includes(item.type);
+  const hasNametag = item.nameTag !== undefined;
+  const isStorageUnit = item.isStorageUnit();
+  const isEditable = EDITABLE_ITEM_TYPE.includes(item.type);
+  const canInspect = INSPECTABLE_ITEM_TYPE.includes(item.type);
   const canInspectInGame =
     inventoryItemAllowInspectInGame &&
-    (INSPECTABLE_IN_GAME_ITEM_TYPE.includes(data.type) ||
-      CS_Economy.isNametagTool(data));
+    (CS2_PREVIEW_INSPECTABLE_ITEMS.includes(item.type) || item.isNameTag());
   const canEdit =
     inventoryItemAllowEdit &&
     isEditable &&
-    (data.category === undefined ||
-      !editHideCategory.includes(data.category)) &&
-    (data.type === undefined || !editHideType.includes(data.type)) &&
-    (data.model === undefined || !editHideModel.includes(data.model)) &&
-    !editHideId.includes(data.id);
+    (item.category === undefined ||
+      !editHideCategory.includes(item.category)) &&
+    (item.type === undefined || !editHideType.includes(item.type)) &&
+    (item.model === undefined || !editHideModel.includes(item.model)) &&
+    !editHideId.includes(item.id);
 
   function close(callBeforeClosing: () => void) {
     return function close() {
@@ -197,85 +192,85 @@ export function InventoryItem({
                 [
                   {
                     condition: canInspect,
-                    label: translate("InventoryItemInspect"),
+                    label: localize("InventoryItemInspect"),
                     onClick: close(() => onInspectItem?.(uid))
                   },
                   {
                     condition: canInspectInGame,
-                    label: translate("InventoryItemInspectInGame"),
+                    label: localize("InventoryItemInspectInGame"),
                     onClick: close(() => {
-                      window.location.assign(CS_generateInspectLink(item));
+                      window.location.assign(generateInspectLink(item));
                     })
                   }
                 ],
                 [
                   {
                     condition: canEquip,
-                    label: translate("InventoryItemEquip"),
+                    label: localize("InventoryItemEquip"),
                     onClick: close(() => onEquip?.(uid))
                   },
                   {
                     condition: canEquipT,
-                    label: translate("InventoryItemEquipT"),
-                    onClick: close(() => onEquip?.(uid, CS_TEAM_T))
+                    label: localize("InventoryItemEquipT"),
+                    onClick: close(() => onEquip?.(uid, CS2Team.T))
                   },
                   {
                     condition: canEquipCT,
-                    label: translate("InventoryItemEquipCT"),
-                    onClick: close(() => onEquip?.(uid, CS_TEAM_CT))
+                    label: localize("InventoryItemEquipCT"),
+                    onClick: close(() => onEquip?.(uid, CS2Team.CT))
                   },
                   {
                     condition: canEquipCT && canEquipT,
-                    label: translate("InventoryItemEquipBothTeams"),
+                    label: localize("InventoryItemEquipBothTeams"),
                     onClick: close(() => {
-                      onEquip?.(uid, CS_TEAM_CT);
-                      onEquip?.(uid, CS_TEAM_T);
+                      onEquip?.(uid, CS2Team.CT);
+                      onEquip?.(uid, CS2Team.T);
                     })
                   }
                 ],
                 [
                   {
                     condition: canUnequip,
-                    label: translate("InventoryItemUnequip"),
+                    label: localize("InventoryItemUnequip"),
                     onClick: close(() => onUnequip?.(uid))
                   },
                   {
                     condition: canUnequipT,
-                    label: translate("InventoryItemUnequipT"),
-                    onClick: close(() => onUnequip?.(uid, CS_TEAM_T))
+                    label: localize("InventoryItemUnequipT"),
+                    onClick: close(() => onUnequip?.(uid, CS2Team.T))
                   },
                   {
                     condition: canUnequipCT,
-                    label: translate("InventoryItemUnequipCT"),
-                    onClick: close(() => onUnequip?.(uid, CS_TEAM_CT))
+                    label: localize("InventoryItemUnequipCT"),
+                    onClick: close(() => onUnequip?.(uid, CS2Team.CT))
                   }
                 ],
                 [
                   {
                     condition: canUnlockContainer,
-                    label: translate("InventoryItemUnlockContainer"),
+                    label: localize("InventoryItemUnlockContainer"),
                     onClick: close(() => onUnlockContainer?.(uid))
                   }
                 ],
                 [
                   {
                     condition: canRename,
-                    label: translate("InventoryItemRename"),
+                    label: localize("InventoryItemRename"),
                     onClick: close(() => onRename?.(uid))
                   },
                   {
                     condition: canSwapStatTrak,
-                    label: translate("InventoryItemSwapStatTrak"),
+                    label: localize("InventoryItemSwapStatTrak"),
                     onClick: close(() => onSwapItemsStatTrak?.(uid))
                   },
                   {
                     condition: canApplySticker,
-                    label: translate("InventoryApplySticker"),
+                    label: localize("InventoryApplySticker"),
                     onClick: close(() => onApplySticker?.(uid))
                   },
                   {
                     condition: canScrapeSticker,
-                    label: translate("InventoryScrapeSticker"),
+                    label: localize("InventoryScrapeSticker"),
                     onClick: close(() => onScrapeSticker?.(uid))
                   }
                 ],
@@ -285,18 +280,18 @@ export function InventoryItem({
                       isStorageUnit &&
                       (inventory.canDepositToStorageUnit(uid) ||
                         inventory.canRetrieveFromStorageUnit(uid)),
-                    label: translate("InventoryItemStorageUnitInspect"),
+                    label: localize("InventoryItemStorageUnitInspect"),
                     onClick: close(() => {
                       if (inventory.getStorageUnitSize(uid) === 0) {
                         return alert({
-                          bodyText: translate(
+                          bodyText: localize(
                             "InventoryItemStorageUnitEmptyBody",
                             format(inventoryStorageUnitMaxItems)
                           ),
-                          closeText: translate(
+                          closeText: localize(
                             "InventoryItemStorageUnitEmptyClose"
                           ),
-                          titleText: translate(
+                          titleText: localize(
                             "InventoryItemStorageUnitEmptyTitle"
                           )
                         });
@@ -311,13 +306,13 @@ export function InventoryItem({
                     condition:
                       isStorageUnit &&
                       inventory.canRetrieveFromStorageUnit(uid),
-                    label: translate("InventoryItemStorageUnitRetrieve"),
+                    label: localize("InventoryItemStorageUnitRetrieve"),
                     onClick: close(() => onRetrieveFromStorageUnit?.(uid))
                   },
                   {
                     condition:
                       isStorageUnit && inventory.canDepositToStorageUnit(uid),
-                    label: translate("InventoryItemStorageUnitDeposit"),
+                    label: localize("InventoryItemStorageUnitDeposit"),
                     onClick: close(() => onDepositToStorageUnit?.(uid))
                   }
                 ],
@@ -325,20 +320,20 @@ export function InventoryItem({
                   {
                     condition: isStorageUnit,
                     label: hasNametag
-                      ? translate("InventoryItemRenameStorageUnit")
-                      : translate("InventoryItemUseStorageUnit"),
+                      ? localize("InventoryItemRenameStorageUnit")
+                      : localize("InventoryItemUseStorageUnit"),
                     onClick: close(() => onRenameStorageUnit?.(uid))
                   }
                 ],
                 [
                   {
                     condition: canEdit,
-                    label: translate("InventoryItemEdit"),
+                    label: localize("InventoryItemEdit"),
                     onClick: close(() => onEdit?.(uid))
                   },
                   {
                     condition: true,
-                    label: translate("InventoryItemDelete"),
+                    label: localize("InventoryItemDelete"),
                     onClick: close(() => onRemove?.(uid))
                   }
                 ]

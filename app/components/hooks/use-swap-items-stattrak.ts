@@ -20,13 +20,13 @@ export function useSwapItemsStatTrak() {
   function handleSwapItemsStatTrak(uid: number) {
     return setItemSelector({
       uid,
-      items: items.filter(({ item }) => item.stattrak !== undefined),
+      items: items.filter(({ item }) => item.statTrak !== undefined),
       type: "swap-items-stattrak"
     });
   }
 
   function handleSwapItemsStatTrakSelect(uid: number) {
-    const { data: selectedItem } = inventory.get(uid);
+    const selectedItem = inventory.get(uid);
     if (swapItemsStatTrak?.fromUid !== undefined) {
       setSwapItemsStatTrak((existing) => ({
         ...existing!,
@@ -40,12 +40,11 @@ export function useSwapItemsStatTrak() {
       setItemSelector({
         uid: uid,
         items: items.filter(
-          ({ item, uid: otherUid }) =>
-            item.stattrak !== undefined &&
-            otherUid !== uid &&
-            selectedItem.type === item.data.type &&
-            (selectedItem.type === "musickit" ||
-              selectedItem.def === item.data.def)
+          ({ item, uid: xuid }) =>
+            item.statTrak !== undefined &&
+            xuid !== uid &&
+            selectedItem.type === item.type &&
+            (selectedItem.isMusicKit() || selectedItem.def === item.def)
         ),
         type: "swap-items-stattrak"
       });

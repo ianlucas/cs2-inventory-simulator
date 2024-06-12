@@ -6,17 +6,15 @@
 import { faCircleDot } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  CS_Economy,
-  CS_InventoryItem,
-  CS_Item,
-  CS_NONE,
-  CS_getTimestamp
+  CS2Economy,
+  CS2EconomyItem,
+  CS2InventoryItem,
+  getTimestamp
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
-import { resolveCSItem, resolveInventoryItem } from "~/utils/inventory";
 import { has } from "~/utils/misc";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 
 export function InventoryItemTile({
@@ -25,48 +23,41 @@ export function InventoryItemTile({
   onClick
 }: {
   equipped?: (string | false | undefined)[];
-  item: CS_Item | CS_InventoryItem;
+  item: CS2EconomyItem | CS2InventoryItem;
   onClick?: () => void;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const nameItem = useNameItem();
-  const inventoryItem = resolveInventoryItem(item);
-  const data = resolveCSItem(item);
+  const inventoryItem = item instanceof CS2InventoryItem ? item : undefined;
   const [model, name] = nameItem(item, "inventory-name");
 
-  const currDate = CS_getTimestamp();
+  const currDate = getTimestamp();
   const isNew =
-    inventoryItem?.updatedat !== undefined &&
-    currDate - inventoryItem.updatedat < 120;
+    inventoryItem?.updatedAt !== undefined &&
+    currDate - inventoryItem.updatedAt < 120;
 
   return (
     <div className="w-[154px]">
       <div className="group relative bg-gradient-to-b from-neutral-600 to-neutral-400 p-[1px]">
         <div className="bg-gradient-to-b from-neutral-500 to-neutral-300 px-1">
-          <ItemImage
-            className="h-[108px] w-[144px]"
-            item={data}
-            wear={inventoryItem?.wear}
-          />
+          <ItemImage className="h-[108px] w-[144px]" item={item} />
         </div>
         {isNew && (
           <div className="absolute left-[1px] top-[1px] bg-sky-600 px-1 py-1 text-[10px] font-bold text-sky-200 shadow-lg transition-all group-hover:text-white">
-            {translate("InventoryItemNew")}
+            {localize("InventoryItemNew")}
           </div>
         )}
-        <div className="absolute bottom-0 left-0 flex items-center p-1">
-          {inventoryItem?.stickers !== undefined &&
-            inventoryItem.stickers.map(
-              (sticker, index) =>
-                sticker !== CS_NONE && (
-                  <ItemImage
-                    className="h-5"
-                    item={CS_Economy.getById(sticker)}
-                    key={index}
-                  />
-                )
-            )}
-        </div>
+        {inventoryItem?.stickers !== undefined && (
+          <div className="absolute bottom-0 left-0 flex items-center p-1">
+            {inventoryItem.someStickers().map(([index, { id }]) => (
+              <ItemImage
+                className="h-5"
+                item={CS2Economy.getById(id)}
+                key={index}
+              />
+            ))}
+          </div>
+        )}
         {equipped !== undefined && (
           <div className="absolute right-0 top-0 flex items-center gap-1 p-2">
             {equipped.map((color, colorIndex) =>
@@ -89,7 +80,7 @@ export function InventoryItemTile({
       </div>
       <div
         className="h-1 shadow shadow-black/50"
-        style={{ backgroundColor: data.rarity }}
+        style={{ backgroundColor: item.rarity }}
       />
       <div className="mt-2 text-[12px] leading-3 text-white drop-shadow-[0_0_1px_rgba(0,0,0,1)]">
         {has(model) && <div className="font-bold">{model}</div>}

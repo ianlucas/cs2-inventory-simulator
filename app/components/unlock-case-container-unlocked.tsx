@@ -3,12 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { createFakeInventoryItem } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { UnlockCaseAttribute } from "./unlock-case-attribute";
@@ -19,11 +19,11 @@ export function UnlockCaseContainerUnlocked({
   onClose,
   unlockedItem: { attributes, id, rarity }
 }: {
-  caseItem: CS_Item;
+  caseItem: CS2EconomyItem;
   onClose: () => void;
-  unlockedItem: ReturnType<typeof CS_Economy.unlockCase>;
+  unlockedItem: CS2UnlockedItem;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const nameItemString = useNameItemString();
   const [revealScale, setRevealScale] = useState(0);
 
@@ -34,7 +34,7 @@ export function UnlockCaseContainerUnlocked({
     );
   }
 
-  const item = CS_Economy.getById(id);
+  const item = CS2Economy.getById(id);
 
   return (
     <div className="flex h-full w-full items-center justify-center text-center drop-shadow">
@@ -63,18 +63,18 @@ export function UnlockCaseContainerUnlocked({
           left={
             <div className="flex items-center gap-8">
               <UnlockCaseAttribute
-                label={translate("CaseWear")}
+                label={localize("CaseWear")}
                 value={attributes.wear}
               />
               <UnlockCaseAttribute
-                label={translate("CaseSeed")}
+                label={localize("CaseSeed")}
                 value={attributes.seed}
               />
             </div>
           }
           right={
             <ModalButton
-              children={translate("CaseClose")}
+              children={localize("CaseClose")}
               onClick={onClose}
               variant="secondary"
             />

@@ -3,11 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy } from "@ianlucas/cs2-lib";
+import { assert } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
-import { getStickerCount } from "~/utils/inventory";
 
 export function useApplyItemSticker() {
   const items = useInventoryItems();
@@ -19,30 +18,24 @@ export function useApplyItemSticker() {
   }>();
 
   function handleApplyItemSticker(uid: number) {
-    const { data: selectedItem, stickers: selectedStickers } =
-      inventory.get(uid);
+    const selectedItem = inventory.get(uid);
     return setItemSelector({
       uid,
-      items: items.filter(
-        ({ item }) =>
-          (CS_Economy.isSticker(selectedItem) &&
-            CS_Economy.hasStickers(item.data) &&
-            getStickerCount(item.stickers) < 4) ||
-          (!CS_Economy.isSticker(selectedItem) &&
-            getStickerCount(selectedStickers) < 4 &&
-            CS_Economy.isSticker(item.data))
+      items: items.filter(({ item }) =>
+        selectedItem.isSticker()
+          ? item.hasStickers() && item.getStickersCount() < 4
+          : selectedItem.getStickersCount() < 4 && item.isSticker()
       ),
       type: "apply-item-sticker"
     });
   }
 
   function handleApplyItemStickerSelect(uid: number) {
-    const {
-      data: { type }
-    } = inventory.get(uid);
+    assert(itemSelector !== undefined);
+    const isSticker = inventory.get(uid).isSticker();
     return setApplyItemSticker({
-      targetUid: type !== "sticker" ? uid : itemSelector!.uid,
-      stickerUid: type === "sticker" ? uid : itemSelector!.uid
+      targetUid: !isSticker ? uid : itemSelector.uid,
+      stickerUid: isSticker ? uid : itemSelector.uid
     });
   }
 

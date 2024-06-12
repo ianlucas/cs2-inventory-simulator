@@ -3,7 +3,6 @@
 /.cache
 /build
 /deploys
-/logs
 /prisma/dev.db
 /prisma/dev.db-journal
 /public/build

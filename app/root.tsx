@@ -26,6 +26,7 @@ import { SyncWarn } from "./components/sync-warn";
 import { TranslationScript } from "./components/translation-script";
 import { BUILD_LAST_COMMIT } from "./env.server";
 import { middleware } from "./http.server";
+import { getLocalizationChecksum } from "./localization.server";
 import { getDomainImage } from "./models/domain.server";
 import { getRule, getRules } from "./models/rule.server";
 import { getBackground } from "./preferences/background.server";
@@ -34,7 +35,6 @@ import { getToggleable } from "./preferences/toggleable.server";
 import { getSeoLinks, getSeoMeta } from "./seo";
 import { getSession } from "./session.server";
 import styles from "./tailwind.css?url";
-import { getTranslationChecksum } from "./translation.server";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wdth,wght@0,62.5..100,400..800;1,62.5..100,400..800&display=swap";
@@ -61,8 +61,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
   return typedjson({
     logo: await getDomainImage(request),
-    translation: {
-      checksum: getTranslationChecksum()
+    localization: {
+      checksum: getLocalizationChecksum()
     },
     rules: {
       ...(await getRules(

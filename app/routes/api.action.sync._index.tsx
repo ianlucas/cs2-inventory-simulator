@@ -4,22 +4,17 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS_BaseInventoryItem,
-  CS_Economy,
-  CS_Inventory,
-  CS_Item,
-  CS_NONE
+  CS2BaseInventoryItem,
+  CS2Economy,
+  CS2EconomyItem,
+  CS2ItemType
 } from "@ianlucas/cs2-lib";
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
 import { getRequestHostname } from "~/models/domain.server";
-import {
-  expectRule,
-  expectRuleNotContain,
-  getRule
-} from "~/models/rule.server";
+import { expectRule, expectRuleNotContain } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
@@ -53,7 +48,7 @@ const actionShape = z
   .or(
     z.object({
       type: z.literal(AddFromCacheAction),
-      items: syncInventoryShape
+      data: syncInventoryShape
     })
   )
   .or(
@@ -61,15 +56,15 @@ const actionShape = z
       type: z.literal(AddWithNametagAction),
       toolUid: nonNegativeInt,
       itemId: nonNegativeInt,
-      nametag: z.string()
+      nameTag: z.string()
     })
   )
   .or(
     z.object({
       type: z.literal(ApplyItemStickerAction),
-      targetUid: nonNegativeInt,
+      slot: nonNegativeInt,
       stickerUid: nonNegativeInt,
-      stickerIndex: nonNegativeInt
+      targetUid: nonNegativeInt
     })
   )
   .or(
@@ -91,7 +86,7 @@ const actionShape = z
       type: z.literal(RenameItemAction),
       toolUid: nonNegativeInt,
       targetUid: nonNegativeInt,
-      nametag: z.string().optional()
+      nameTag: z.string().optional()
     })
   )
   .or(
@@ -104,7 +99,7 @@ const actionShape = z
     z.object({
       type: z.literal(ScrapeItemStickerAction),
       targetUid: nonNegativeInt,
-      stickerIndex: nonNegativeInt
+      slot: nonNegativeInt
     })
   )
   .or(
@@ -119,7 +114,7 @@ const actionShape = z
     z.object({
       type: z.literal(RenameStorageUnitAction),
       uid: nonNegativeInt,
-      nametag: z.string()
+      nameTag: z.string()
     })
   )
   .or(
@@ -146,9 +141,9 @@ const actionShape = z
   .or(
     z.object({
       type: z.literal(AddWithStickerAction),
-      stickerUid: nonNegativeInt,
       itemId: nonNegativeInt,
-      stickerIndex: nonNegativeInt
+      slot: nonNegativeInt,
+      stickerUid: nonNegativeInt
     })
   )
   .or(
@@ -163,10 +158,10 @@ export type ApiActionSyncData = ReturnType<
 >;
 
 async function enforceCraftRulesForItem(
-  idOrItem: number | CS_Item,
+  idOrItem: number | CS2EconomyItem,
   userId: string
 ) {
-  const { category, type, model, id } = CS_Economy.get(idOrItem);
+  const { category, type, model, id } = CS2Economy.get(idOrItem);
   await expectRuleNotContain("craftHideId", id, userId);
   if (category !== undefined) {
     await expectRuleNotContain("craftHideCategory", category, userId);
@@ -180,19 +175,17 @@ async function enforceCraftRulesForItem(
 }
 
 async function enforceCraftRulesForInventoryItem(
-  { stickers, stattrak, wear, seed, nametag }: Partial<CS_BaseInventoryItem>,
+  { stickers, statTrak, wear, seed, nameTag }: Partial<CS2BaseInventoryItem>,
   userId: string
 ) {
   if (stickers !== undefined) {
     await expectRule("craftAllowStickers", true, userId);
-    await expectRuleNotContain("craftHideType", "sticker", userId);
-    for (const sticker of stickers) {
-      if (sticker !== CS_NONE) {
-        await enforceCraftRulesForItem(sticker, userId);
-      }
+    await expectRuleNotContain("craftHideType", CS2ItemType.Sticker, userId);
+    for (const sticker of Object.values(stickers)) {
+      await enforceCraftRulesForItem(sticker.id, userId);
     }
   }
-  if (stattrak !== undefined) {
+  if (statTrak !== undefined) {
     await expectRule("craftAllowStatTrak", true, userId);
   }
   if (wear !== undefined) {
@@ -201,16 +194,16 @@ async function enforceCraftRulesForInventoryItem(
   if (seed !== undefined) {
     await expectRule("craftAllowSeed", true, userId);
   }
-  if (nametag !== undefined) {
+  if (nameTag !== undefined) {
     await expectRule("craftAllowNametag", true, userId);
   }
 }
 
 async function enforceEditRulesForItem(
-  idOrItem: number | CS_Item,
+  idOrItem: number | CS2EconomyItem,
   userId: string
 ) {
-  const { category, type, model, id } = CS_Economy.get(idOrItem);
+  const { category, type, model, id } = CS2Economy.get(idOrItem);
   await expectRuleNotContain("editHideId", id, userId);
   if (category !== undefined) {
     await expectRuleNotContain("editHideCategory", category, userId);
@@ -224,19 +217,17 @@ async function enforceEditRulesForItem(
 }
 
 async function enforceEditRulesForInventoryItem(
-  { stickers, stattrak, wear, seed, nametag }: Partial<CS_BaseInventoryItem>,
+  { stickers, statTrak, wear, seed, nameTag }: Partial<CS2BaseInventoryItem>,
   userId: string
 ) {
   if (stickers !== undefined) {
     await expectRule("editAllowStickers", true, userId);
-    await expectRuleNotContain("editHideType", "sticker", userId);
-    for (const sticker of stickers) {
-      if (sticker !== CS_NONE) {
-        await enforceEditRulesForItem(sticker, userId);
-      }
+    await expectRuleNotContain("editHideType", CS2ItemType.Sticker, userId);
+    for (const sticker of Object.values(stickers)) {
+      await enforceEditRulesForItem(sticker.id, userId);
     }
   }
-  if (stattrak !== undefined) {
+  if (statTrak !== undefined) {
     await expectRule("editAllowStatTrak", true, userId);
   }
   if (wear !== undefined) {
@@ -245,7 +236,7 @@ async function enforceEditRulesForInventoryItem(
   if (seed !== undefined) {
     await expectRule("editAllowSeed", true, userId);
   }
-  if (nametag !== undefined) {
+  if (nameTag !== undefined) {
     await expectRule("editAllowNametag", true, userId);
   }
 }
@@ -276,20 +267,13 @@ export async function action({ request }: ActionFunctionArgs) {
             break;
           case AddFromCacheAction:
             if (rawInventory === null && !addedFromCache) {
-              try {
-                for (const item of new CS_Inventory({
-                  items: action.items,
-                  maxItems: await getRule("inventoryMaxItems", userId),
-                  storageUnitMaxItems: await getRule(
-                    "inventoryStorageUnitMaxItems",
-                    userId
-                  )
-                }).export()) {
+              for (const item of Object.values(action.data.items)) {
+                try {
                   await enforceCraftRulesForInventoryItem(item, userId);
                   await enforceCraftRulesForItem(item.id, userId);
                   inventory.add(item);
-                }
-              } catch {}
+                } catch {}
+              }
               addedFromCache = true;
             }
             break;
@@ -298,7 +282,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.addWithNametag(
               action.toolUid,
               action.itemId,
-              action.nametag
+              action.nameTag
             );
             break;
           case ApplyItemStickerAction:
@@ -306,7 +290,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.applyItemSticker(
               action.targetUid,
               action.stickerUid,
-              action.stickerIndex
+              action.slot
             );
             break;
           case EquipAction:
@@ -319,7 +303,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.renameItem(
               action.toolUid,
               action.targetUid,
-              action.nametag
+              action.nameTag
             );
             break;
           case RemoveAction:
@@ -327,7 +311,7 @@ export async function action({ request }: ActionFunctionArgs) {
             break;
           case ScrapeItemStickerAction:
             await expectRule("inventoryItemAllowScrapeSticker", true, userId);
-            inventory.scrapeItemSticker(action.targetUid, action.stickerIndex);
+            inventory.scrapeItemSticker(action.targetUid, action.slot);
             break;
           case SwapItemsStatTrakAction:
             inventory.swapItemsStatTrak(
@@ -337,7 +321,7 @@ export async function action({ request }: ActionFunctionArgs) {
             );
             break;
           case RenameStorageUnitAction:
-            inventory.renameStorageUnit(action.uid, action.nametag);
+            inventory.renameStorageUnit(action.uid, action.nameTag);
             break;
           case DepositToStorageUnitAction:
             inventory.depositToStorageUnit(action.uid, action.depositUids);
@@ -351,11 +335,11 @@ export async function action({ request }: ActionFunctionArgs) {
             await enforceEditRulesForInventoryItem(action.attributes, userId);
             inventory.edit(action.uid, {
               ...action.attributes,
-              stattrak:
-                action.attributes.stattrak !== undefined
-                  ? inventory.get(action.uid).stattrak ?? 0
+              statTrak:
+                action.attributes.statTrak !== undefined
+                  ? inventory.get(action.uid).statTrak ?? 0
                   : undefined,
-              nametag: action.attributes.nametag
+              nameTag: action.attributes.nameTag
             });
             break;
           case AddWithStickerAction:
@@ -363,7 +347,7 @@ export async function action({ request }: ActionFunctionArgs) {
             inventory.addWithSticker(
               action.stickerUid,
               action.itemId,
-              action.stickerIndex
+              action.slot
             );
             break;
           case RemoveAllItemsAction:

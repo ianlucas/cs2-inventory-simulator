@@ -4,17 +4,17 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { wearToString } from "~/utils/economy";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 
 export function InventoryItemWear({ wear }: { wear: number }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const left = `${wear * 100}%`;
 
   return (
     <div>
       <div>
         <strong className="text-neutral-400">
-          {translate("InventoryItemWear")}
+          {localize("InventoryItemWear")}
         </strong>{" "}
         {wearToString(wear)}
       </div>

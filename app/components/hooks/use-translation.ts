@@ -4,54 +4,59 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
+import { SystemLocalizationTokens } from "~/localization.server";
 
-export function useTranslation({
+export const LOCALIZATION_LOADED_TYPE = "localizationloaded";
+
+export function useLocalization({
   language,
   checksum
 }: {
   language: string;
   checksum: string;
 }) {
-  function getSystemTranslation() {
+  function getSystemLocalizationMap() {
     return (
       (typeof global !== "undefined"
-        ? global.$systemTranslations[language] ??
-          global.$systemTranslations.english
-        : window.$systemTranslation) ?? {}
+        ? global.__systemLocalizationByLanguage[language] ??
+          global.__systemLocalizationByLanguage.english
+        : window.__systemLocalizationMap) ?? {}
     );
   }
 
-  function getItemsTranslation() {
+  function getItemLocalizationMap() {
     return (
       (typeof global !== "undefined"
-        ? global.$itemsTranslations[language]
-        : window.$itemsTranslation) ?? {}
+        ? global.__itemLocalizationByLanguage[language]
+        : window.__itemLocalizationMap) ?? {}
     );
   }
 
-  const [system, setSystem] = useState(getSystemTranslation());
+  const [systemMap, setSystemMap] = useState(getSystemLocalizationMap());
+  const [itemMap, setItemMap] = useState(getItemLocalizationMap());
 
-  const [items, setItems] = useState(getItemsTranslation());
-
-  function translate(token: string, ...values: string[]) {
-    token = token.replace(/\s/g, "");
-    const value = system[token];
-    if (value === undefined) {
-      return "";
-    }
-    return value.replace(/\{(\d+)\}/g, (_, index) => values[Number(index) - 1]);
+  function localize(token: SystemLocalizationTokens, ...values: string[]) {
+    return (
+      systemMap[token]?.replace(
+        /\{(\d+)\}/g,
+        (_, index) => values[Number(index) - 1]
+      ) ?? ""
+    );
   }
 
   useEffect(() => {
     function handleTranslationLoaded() {
-      setSystem(getSystemTranslation());
-      setItems(getItemsTranslation());
+      setSystemMap(getSystemLocalizationMap());
+      setItemMap(getItemLocalizationMap());
     }
-    window.addEventListener("translationloaded", handleTranslationLoaded);
+    window.addEventListener(LOCALIZATION_LOADED_TYPE, handleTranslationLoaded);
     return () => {
-      window.removeEventListener("translationloaded", handleTranslationLoaded);
+      window.removeEventListener(
+        LOCALIZATION_LOADED_TYPE,
+        handleTranslationLoaded
+      );
     };
   }, []);
 
-  return { system, items, translate, checksum };
+  return { system: systemMap, items: itemMap, localize, checksum };
 }

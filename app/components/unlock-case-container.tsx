@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Economy, CS_Item } from "@ianlucas/cs2-lib";
+import { CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
 import { useNameItemString } from "~/components/hooks/use-name-item";
-import { useTranslate } from "./app-context";
+import { useLocalize } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -30,18 +30,18 @@ export function UnlockCaseContainer({
   onUnlock
 }: {
   canUnlock: boolean;
-  caseItem: CS_Item;
+  caseItem: CS2EconomyItem;
   caseUid: number;
   hideCaseContents: boolean;
   isDisplaying: boolean;
   isSyncing: boolean;
-  items: ReturnType<typeof CS_Economy.unlockCase>[];
-  keyItem?: CS_Item;
-  neededKeyItem?: CS_Item;
+  items: CS2UnlockedItem[];
+  keyItem?: CS2EconomyItem;
+  neededKeyItem?: CS2EconomyItem;
   onClose: () => void;
   onUnlock: () => void;
 }) {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const nameItemString = useNameItemString();
   const needsToAddKey = keyItem === undefined && neededKeyItem !== undefined;
 
@@ -53,10 +53,10 @@ export function UnlockCaseContainer({
       />
       <div className="flex w-full flex-col justify-center gap-4">
         <UseItemHeader
-          actionDesc={translate("CaseUnlock")}
+          actionDesc={localize("CaseUnlock")}
           actionItem={nameItemString(caseItem)}
-          title={translate("CaseUnlockContainer")}
-          warning={translate("CaseOnceWarn")}
+          title={localize("CaseUnlockContainer")}
+          warning={localize("CaseOnceWarn")}
         />
         <UnlockCaseWheel
           caseItem={caseItem}
@@ -75,7 +75,7 @@ export function UnlockCaseContainer({
                 <div className="flex items-center gap-2 font-display text-lg">
                   <ItemImage className="h-14" item={keyItem} />
                   <span>
-                    {translate("CaseUse")}{" "}
+                    {localize("CaseUse")}{" "}
                     <strong>{nameItemString(keyItem)}</strong>
                   </span>
                 </div>
@@ -84,7 +84,7 @@ export function UnlockCaseContainer({
                   <div className="flex items-center gap-2 font-display text-lg">
                     <ItemImage className="h-14" item={neededKeyItem} />
                     <span>
-                      {translate("CaseNeed")}{" "}
+                      {localize("CaseNeed")}{" "}
                       <strong>{nameItemString(neededKeyItem)}</strong>
                     </span>
                   </div>
@@ -100,7 +100,7 @@ export function UnlockCaseContainer({
                   />
                 ) : canUnlock && !isSyncing ? (
                   <ModalButton
-                    children={translate("CaseUnlockContainer")}
+                    children={localize("CaseUnlockContainer")}
                     disabled={!canUnlock}
                     onClick={onUnlock}
                     variant="primary"
@@ -109,7 +109,7 @@ export function UnlockCaseContainer({
                   <FillSpinner className="mx-4" />
                 )}
                 <ModalButton
-                  children={translate("CaseClose")}
+                  children={localize("CaseClose")}
                   disabled={!canUnlock}
                   onClick={onClose}
                   variant="secondary"

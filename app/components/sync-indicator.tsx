@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS_Inventory } from "@ianlucas/cs2-lib";
+import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -14,13 +14,13 @@ import {
 import { sync } from "~/sync";
 import { getJson } from "~/utils/fetch";
 import { parseInventory } from "~/utils/inventory";
-import { useInventory, useRules, useTranslate } from "./app-context";
+import { useInventory, useLocalize, useRules } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { Modal } from "./modal";
 import { ModalButton } from "./modal-button";
 
 export function SyncIndicator() {
-  const translate = useTranslate();
+  const localize = useLocalize();
   const { inventoryMaxItems, inventoryStorageUnitMaxItems } = useRules();
   const [, setInventory] = useInventory();
   const [opacity, setOpacity] = useState(0);
@@ -44,8 +44,8 @@ export function SyncIndicator() {
       const { syncedAt, inventory } =
         await getJson<ApiActionResyncData>(ApiActionResyncUrl);
       setInventory(
-        new CS_Inventory({
-          items: parseInventory(inventory),
+        new CS2Inventory({
+          data: parseInventory(inventory),
           maxItems: inventoryMaxItems,
           storageUnitMaxItems: inventoryStorageUnitMaxItems
         })
@@ -78,10 +78,10 @@ export function SyncIndicator() {
               <Modal fixed>
                 <div className="px-4 py-2 text-sm font-bold">
                   <span className="text-neutral-400">
-                    {translate("SyncErrorTitle")}
+                    {localize("SyncErrorTitle")}
                   </span>
                 </div>
-                <p className="px-4">{translate("SyncErrorDesc")}</p>
+                <p className="px-4">{localize("SyncErrorDesc")}</p>
                 <div className="mt-4 flex justify-end px-4 py-2">
                   <ModalButton
                     disabled={disableContinueButton}
@@ -93,7 +93,7 @@ export function SyncIndicator() {
                           <FillSpinner />
                         </span>
                       ) : (
-                        translate("SyncErrorContinue")
+                        localize("SyncErrorContinue")
                       )
                     }
                   />
