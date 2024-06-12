@@ -246,13 +246,13 @@ function readCsgoLanguage(include?: string[]) {
   return languages;
 }
 
-function writeTranslationFile(
+function writeLocalizationFile(
   lang: string,
-  translations: Record<string, Record<string, string>>
+  localizations: Record<string, Record<string, string>>
 ) {
-  const translation = translations[lang];
-  const dist = `app/translations/${lang}.ts`;
-  const sortedKeys = Object.keys(translation).sort();
+  const localization = localizations[lang];
+  const dist = `app/localizations/${lang}.ts`;
+  const sortedKeys = Object.keys(localization).sort();
   // prettier-ignore
   writeFileSync(
     resolve(process.cwd(), dist),
@@ -266,7 +266,7 @@ ${lang !== 'english' ? 'import { english } from "./english";\n' : ''}
 export const ${lang} = {
 ${lang !== 'english' ? '  ...english,' : ''}
 ${sortedKeys.map(key => (
-`  ${key}: ${STRINGS_FROM_GAME[key] !== undefined ? `/* csgo_${lang}.txt */` : ''}${JSON.stringify(translation[key])}`
+`  ${key}: ${STRINGS_FROM_GAME[key] !== undefined ? `/* csgo_${lang}.txt */` : ''}${JSON.stringify(localization[key])}`
 )).join(',\n')}
 };`);
   console.log(`Wrote '${dist}'`);
@@ -284,11 +284,11 @@ async function main() {
   for (const lang of langs) {
     console.log(`Processing '${lang}'...`);
     const language = languages[lang];
-    const translationPath = resolve(
+    const localizationPath = resolve(
       process.cwd(),
-      `app/translations/${lang}.ts`
+      `app/localizations/${lang}.ts`
     );
-    systemLocalizationByLanguage[lang] = (await import(translationPath))[lang];
+    systemLocalizationByLanguage[lang] = (await import(localizationPath))[lang];
     const localizationMap = systemLocalizationByLanguage[lang];
     for (const [key, value] of Object.entries(STRINGS_FROM_GAME)) {
       if (typeof value === "string") {
@@ -326,7 +326,7 @@ async function main() {
         }
       }
     }
-    writeTranslationFile(lang, systemLocalizationByLanguage);
+    writeLocalizationFile(lang, systemLocalizationByLanguage);
   }
 }
 

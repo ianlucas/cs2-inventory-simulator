@@ -90,7 +90,7 @@ export const thai = {
   InventoryItemInspectFinishCatalog: /* csgo_thai.txt */"แค็ตตาล็อกการลงสี",
   InventoryItemInspectInGame: /* csgo_thai.txt */"ตรวจสอบในเกม...",
   InventoryItemInspectPatternTemplate: /* csgo_thai.txt */"แม่แบบของรูปแบบ",
-  InventoryItemInspectWearRating: /* csgo_thai.txt */"คะแนนการสวมใส่",
+  InventoryItemInspectWearRating: /* csgo_thai.txt */"เรตติ้งสวมใส่",
   InventoryItemMVPStatTrakCount: /* csgo_thai.txt */"จำนวน MVP แมตช์แข่งขันอย่างเป็นทางการของ StatTrak™:",
   InventoryItemNew: /* csgo_thai.txt */"ใหม่!",
   InventoryItemRareItem: /* csgo_thai.txt */"หรือไอเท็มพิเศษหายากมาก!",

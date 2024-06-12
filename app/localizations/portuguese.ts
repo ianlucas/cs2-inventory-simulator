@@ -104,7 +104,7 @@ export const portuguese = {
   InventoryItemEquipBothTeams: "Equipar Ambas Equipes",
   InventoryItemEquipCT: "Equipar CT",
   InventoryItemEquipT: "Equipar T",
-  InventoryItemExterior: /* csgo_portuguese.txt */"Exterior:",
+  InventoryItemExterior: /* csgo_portuguese.txt */"Condição:",
   InventoryItemInspect: /* csgo_portuguese.txt */"Examinar",
   InventoryItemInspectFinishCatalog: /* csgo_portuguese.txt */"Número de catálogo",
   InventoryItemInspectInGame: /* csgo_portuguese.txt */"Examinar no jogo...",

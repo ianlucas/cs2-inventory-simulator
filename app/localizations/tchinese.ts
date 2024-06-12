@@ -93,7 +93,7 @@ export const tchinese = {
   InventoryItemInspectWearRating: /* csgo_tchinese.txt */"磨損度",
   InventoryItemMVPStatTrakCount: /* csgo_tchinese.txt */"StatTrak™ 官方競技 MVP 次數:",
   InventoryItemNew: /* csgo_tchinese.txt */"新！",
-  InventoryItemRareItem: /* csgo_tchinese.txt */"或超稀有的特殊物品！",
+  InventoryItemRareItem: /* csgo_tchinese.txt */"或極度稀有的特殊物品！",
   InventoryItemRarity: /* csgo_tchinese.txt */"稀有度：",
   InventoryItemRename: /* csgo_tchinese.txt */"重新命名",
   InventoryItemRenameStorageUnit: /* csgo_tchinese.txt */"更改標籤",
