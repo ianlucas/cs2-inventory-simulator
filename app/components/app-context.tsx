@@ -22,23 +22,22 @@ import { pushToSync, sync } from "~/sync";
 import { updateEconomyTranslation } from "~/utils/economy";
 import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
 import {
+  cacheInventoryData,
+  getCachedInventoryData,
+  getSanitizedCachedInventoryData
+} from "~/utils/inventory-cached-data";
+import {
   TransformedInventoryItems,
   sortItemsByEquipped,
   transform
 } from "~/utils/inventory-transform";
-import {
-  retrieveInventoryData,
-  retrieveUserId,
-  storeInventoryData,
-  storeUserId
-} from "~/utils/user";
+import { cacheAuthenticatedUserId } from "~/utils/user-cached-data";
 
 const AppContext = createContext<
   {
     inventory: CS2Inventory;
     inventoryFilter: ReturnType<typeof useInventoryFilterState>;
     items: TransformedInventoryItems;
-    requireAuth: boolean;
     setInventory: (value: CS2Inventory) => void;
     localization: ReturnType<typeof useLocalization>;
   } & ReturnType<typeof useTypedLoaderData<typeof loader>>
@@ -90,12 +89,7 @@ export function AppProvider({
   user
 }: Omit<
   ContextType<typeof AppContext>,
-  | "inventory"
-  | "inventoryFilter"
-  | "items"
-  | "localization"
-  | "requireAuth"
-  | "setInventory"
+  "inventory" | "inventoryFilter" | "items" | "localization" | "setInventory"
 > & {
   children: ReactNode;
   localization: {
@@ -105,7 +99,7 @@ export function AppProvider({
   const inventorySpec = {
     data: user?.inventory
       ? parseInventory(user?.inventory)
-      : retrieveInventoryData(),
+      : getCachedInventoryData(),
     maxItems: rules.inventoryMaxItems,
     storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
   } satisfies Partial<CS2InventorySpec>;
@@ -119,59 +113,27 @@ export function AppProvider({
   });
 
   useEffect(() => {
-    storeInventoryData(inventory.stringify());
+    cacheInventoryData(inventory.stringify());
   }, [inventory]);
 
   useEffect(() => {
-    const data = retrieveInventoryData();
     if (user !== undefined) {
-      if (user.inventory === null && data !== undefined) {
-        /** @todo Move this elsewhere? */
-        const cacheData = {
-          ...data,
-          items: Object.fromEntries(
-            Object.entries(data.items).map(([uid, value]) => [
-              uid,
-              {
-                ...value,
-                equipped: undefined,
-                equippedCT: undefined,
-                equippedT: undefined,
-                statTrak:
-                  value.statTrak !== undefined ? (0 as const) : undefined,
-                storage:
-                  value.storage !== undefined
-                    ? Object.fromEntries(
-                        Object.entries(value.storage).map(([uid, value]) => [
-                          uid,
-                          {
-                            ...value,
-                            statTrak:
-                              value.statTrak !== undefined
-                                ? (0 as const)
-                                : undefined,
-                            storage: undefined
-                          }
-                        ])
-                      )
-                    : undefined
-              }
-            ])
-          )
-        };
-        pushToSync({
-          type: AddFromCacheAction,
-          data: cacheData
-        });
-        setInventory(
-          new CS2Inventory({
-            data: cacheData,
-            maxItems: rules.inventoryMaxItems,
-            storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
-          })
-        );
+      if (user.inventory === null) {
+        const cachedData = getSanitizedCachedInventoryData();
+        if (cachedData !== undefined) {
+          pushToSync({
+            type: AddFromCacheAction,
+            data: cachedData
+          });
+          setInventory(
+            new CS2Inventory({
+              ...inventorySpec,
+              data: cachedData
+            })
+          );
+        }
       }
-      storeUserId(user.id);
+      cacheAuthenticatedUserId(user.id);
       sync.syncedAt = user.syncedAt.getTime();
     }
   }, [user]);
@@ -215,7 +177,6 @@ export function AppProvider({
         localization,
         logo,
         preferences,
-        requireAuth: retrieveUserId() !== undefined,
         rules,
         setInventory,
         user
