@@ -5,9 +5,13 @@
 
 import { CS2Team, CS2TeamValues } from "@ianlucas/cs2-lib";
 import { useLocalize } from "./app-context";
-import { InventoryItemInfo } from "./inventory-item-info";
+import { InventoryItemTooltipInfo } from "./inventory-item-tooltip-info";
 
-export function InventoryItemTeams({ teams }: { teams?: CS2TeamValues[] }) {
+export function InventoryItemTooltipTeams({
+  teams
+}: {
+  teams?: CS2TeamValues[];
+}) {
   const localize = useLocalize();
 
   const hasCT = teams?.includes(CS2Team.CT);
@@ -15,7 +19,7 @@ export function InventoryItemTeams({ teams }: { teams?: CS2TeamValues[] }) {
   const hasAny = teams?.length === 2;
 
   return (
-    <InventoryItemInfo
+    <InventoryItemTooltipInfo
       className="flex items-center gap-1"
       label={localize("InventoryItemTeam")}
     >
@@ -26,6 +30,6 @@ export function InventoryItemTeams({ teams }: { teams?: CS2TeamValues[] }) {
           ? localize("InventoryItemTeamAny")
           : localize(`InventoryItemTeam${hasCT ? "CT" : "T"}`)}
       </span>
-    </InventoryItemInfo>
+    </InventoryItemTooltipInfo>
   );
 }

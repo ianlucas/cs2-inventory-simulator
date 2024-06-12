@@ -9,11 +9,11 @@ import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useLocalize } from "./app-context";
 
-export function InventoryItemContents({
-  item,
+export function InventoryItemTooltipContents({
+  containerItem: item,
   unlockedItem
 }: {
-  item: CS2EconomyItem;
+  containerItem: CS2EconomyItem;
   unlockedItem?: CS2EconomyItem;
 }) {
   const localize = useLocalize();

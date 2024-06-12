@@ -7,7 +7,7 @@ import { CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { ItemCollectionImage } from "./item-collection-image";
 
-export function InventoryItemName({ item }: { item: CS2InventoryItem }) {
+export function InventoryItemTooltipName({ item }: { item: CS2InventoryItem }) {
   const nameItemString = useNameItemString();
 
   if (item.collectionName === undefined) {

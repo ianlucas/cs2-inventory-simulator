@@ -6,8 +6,8 @@
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useLocalize } from "./app-context";
-import { InventoryItemSpecialTile } from "./inventory-item-special-tile";
 import { InventoryItemTile } from "./inventory-item-tile";
+import { InventoryItemTileSpecial } from "./inventory-item-tile-special";
 
 export function UnlockCaseContainerContents({
   caseItem,
@@ -50,7 +50,7 @@ export function UnlockCaseContainerContents({
                 <InventoryItemTile key={index} item={item} />
               )),
             caseItem.specials !== undefined && (
-              <InventoryItemSpecialTile key={-1} caseItem={caseItem} />
+              <InventoryItemTileSpecial key={-1} containerItem={caseItem} />
             )
           ]}
         </div>

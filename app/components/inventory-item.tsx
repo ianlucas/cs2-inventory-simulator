@@ -24,8 +24,8 @@ import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
 import { useInventory, useLocalize, useRules } from "./app-context";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
-import { InventoryItemHover } from "./inventory-item-hover";
 import { InventoryItemTile } from "./inventory-item-tile";
+import { InventoryItemTooltip } from "./inventory-item-tooltip";
 import { alert } from "./modal-generic";
 
 export function InventoryItem({
@@ -344,7 +344,7 @@ export function InventoryItem({
       )}
       {!isFreeInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
-          <InventoryItemHover
+          <InventoryItemTooltip
             forwardRef={hoverRefs.setFloating}
             style={hoverStyles}
             {...getHoverFloatingProps()}

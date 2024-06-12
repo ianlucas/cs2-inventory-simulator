@@ -13,16 +13,16 @@ import clsx from "clsx";
 import { ComponentProps } from "react";
 import { has } from "~/utils/misc";
 import { usePreferences } from "./app-context";
-import { InventoryItemContents } from "./inventory-item-contents";
-import { InventoryItemExterior } from "./inventory-item-exterior";
-import { InventoryItemName } from "./inventory-item-name";
-import { InventoryItemRarity } from "./inventory-item-rarity";
-import { InventoryItemSeed } from "./inventory-item-seed";
-import { InventoryItemStatTrak } from "./inventory-item-stattrak";
-import { InventoryItemTeams } from "./inventory-item-teams";
-import { InventoryItemWear } from "./inventory-item-wear";
+import { InventoryItemTooltipContents } from "./inventory-item-tooltip-contents";
+import { InventoryItemTooltipExterior } from "./inventory-item-tooltip-exterior";
+import { InventoryItemTooltipName } from "./inventory-item-tooltip-name";
+import { InventoryItemTooltipRarity } from "./inventory-item-tooltip-rarity";
+import { InventoryItemTooltipSeed } from "./inventory-item-tooltip-seed";
+import { InventoryItemTooltipStatTrak } from "./inventory-item-tooltip-stattrak";
+import { InventoryItemTooltipTeams } from "./inventory-item-tooltip-teams";
+import { InventoryItemTooltipWear } from "./inventory-item-wear";
 
-export function InventoryItemHover({
+export function InventoryItemTooltip({
   item,
   forwardRef,
   ...props
@@ -32,11 +32,11 @@ export function InventoryItemHover({
 }) {
   const { statsForNerds } = usePreferences();
   const isContainer = item.isContainer();
-  const contentsItem =
+  const containerItem =
     item.containerId !== undefined
       ? CS2Economy.getById(item.containerId)
       : item;
-  const hasContents = contentsItem.isContainer();
+  const hasContents = containerItem.isContainer();
   const hasWear = !item.free && item.hasWear();
   const hasSeed = !item.free && item.hasSeed();
   const hasAttributes = hasWear || hasSeed;
@@ -62,16 +62,21 @@ export function InventoryItemHover({
       ref={forwardRef}
       {...props}
     >
-      <InventoryItemName item={item} />
+      <InventoryItemTooltipName item={item} />
       <div className="mt-2.5 grid items-center gap-1 border-b border-t border-neutral-700/70 p-2 [grid-template-columns:auto_1fr]">
-        <InventoryItemRarity item={item} />
-        {hasWear && <InventoryItemExterior wear={wear} />}
-        {hasTeams && <InventoryItemTeams teams={teams} />}
+        <InventoryItemTooltipRarity item={item} />
+        {hasWear && <InventoryItemTooltipExterior wear={wear} />}
+        {hasTeams && <InventoryItemTooltipTeams teams={teams} />}
       </div>
       {has(item.tournamentDesc) && (
         <p className="mt-4 text-yellow-300">{item.tournamentDesc}</p>
       )}
-      {hasStatTrak && <InventoryItemStatTrak inventoryItem={item} />}
+      {hasStatTrak && (
+        <InventoryItemTooltipStatTrak
+          type={item.type}
+          statTrak={item.statTrak}
+        />
+      )}
       {has(baseDescription) && (
         <p className="mt-4 whitespace-pre-wrap text-neutral-300">
           {baseDescription}
@@ -88,15 +93,15 @@ export function InventoryItemHover({
         </p>
       )}
       {hasContents && (
-        <InventoryItemContents
-          item={contentsItem}
+        <InventoryItemTooltipContents
+          containerItem={containerItem}
           unlockedItem={!isContainer ? item : undefined}
         />
       )}
       {statsForNerds && hasAttributes && (
         <div className="mt-2 flex flex-col gap-2">
-          {hasWear && <InventoryItemWear wear={wear} />}
-          {hasSeed && <InventoryItemSeed inventoryItem={item} />}
+          {hasWear && <InventoryItemTooltipWear wear={wear} />}
+          {hasSeed && <InventoryItemTooltipSeed seed={item.seed} />}
         </div>
       )}
     </div>

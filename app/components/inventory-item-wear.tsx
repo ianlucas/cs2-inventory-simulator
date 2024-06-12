@@ -6,7 +6,7 @@
 import { wearToString } from "~/utils/economy";
 import { useLocalize } from "./app-context";
 
-export function InventoryItemWear({ wear }: { wear: number }) {
+export function InventoryItemTooltipWear({ wear }: { wear: number }) {
   const localize = useLocalize();
   const left = `${wear * 100}%`;
 

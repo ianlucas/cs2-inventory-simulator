@@ -3,13 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2InventoryItem, CS2ItemType } from "@ianlucas/cs2-lib";
+import { CS2ItemType, CS2ItemTypeValues } from "@ianlucas/cs2-lib";
 import { useLocalize } from "./app-context";
 
-export function InventoryItemStatTrak({
-  inventoryItem: { type, statTrak }
+export function InventoryItemTooltipStatTrak({
+  statTrak,
+  type
 }: {
-  inventoryItem: CS2InventoryItem;
+  statTrak?: number;
+  type: CS2ItemTypeValues;
 }) {
   const localize = useLocalize();
 

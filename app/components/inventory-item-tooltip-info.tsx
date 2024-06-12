@@ -5,7 +5,7 @@
 
 import { ComponentProps } from "react";
 
-export function InventoryItemInfo({
+export function InventoryItemTooltipInfo({
   label,
   ...props
 }: ComponentProps<"div"> & {
