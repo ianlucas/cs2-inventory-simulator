@@ -9,12 +9,14 @@ import {
   CS2TeamValues,
   CS2_INVENTORY_EQUIPPABLE_ITEMS
 } from "@ianlucas/cs2-lib";
-import { generateInspectLink } from "@ianlucas/cs2-lib-inspect";
+import {
+  CS2_PREVIEW_INSPECTABLE_ITEMS,
+  generateInspectLink
+} from "@ianlucas/cs2-lib-inspect";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
 import {
   EDITABLE_ITEM_TYPE,
-  INSPECTABLE_IN_GAME_ITEM_TYPE,
   INSPECTABLE_ITEM_TYPE,
   UNLOCKABLE_ITEM_TYPE
 } from "~/utils/inventory";
@@ -141,7 +143,7 @@ export function InventoryItem({
   const canInspect = INSPECTABLE_ITEM_TYPE.includes(item.type);
   const canInspectInGame =
     inventoryItemAllowInspectInGame &&
-    (INSPECTABLE_IN_GAME_ITEM_TYPE.includes(item.type) || item.isNameTag());
+    (CS2_PREVIEW_INSPECTABLE_ITEMS.includes(item.type) || item.isNameTag());
   const canEdit =
     inventoryItemAllowEdit &&
     isEditable &&
