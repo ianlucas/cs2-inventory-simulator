@@ -20,11 +20,10 @@ export function useUnlockCase() {
 
   function handleUnlockCase(uid: number) {
     const selectedItem = inventory.get(uid);
-    if (selectedItem.keys !== undefined || selectedItem.isContainerKey()) {
+    if (selectedItem.keys !== undefined || selectedItem.isKey()) {
       const keyItems = items.filter(
         ({ item }) =>
-          (selectedItem.isContainerKey() &&
-            item.keys?.includes(selectedItem.id)) ||
+          (selectedItem.isKey() && item.keys?.includes(selectedItem.id)) ||
           (selectedItem.isContainer() && selectedItem.keys?.includes(item.id))
       );
       if (selectedItem.isContainer() && keyItems.length === 0) {
@@ -53,7 +52,7 @@ export function useUnlockCase() {
     const selectedItem = inventory.get(uid);
     return setUnlockCase({
       caseUid: selectedItem.isContainer() ? uid : itemSelector.uid,
-      keyUid: selectedItem.isContainerKey() ? uid : itemSelector.uid
+      keyUid: selectedItem.isKey() ? uid : itemSelector.uid
     });
   }
 

@@ -15,7 +15,7 @@ import { serverInventoryShape } from "./shapes";
 
 export const UNLOCKABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
-  CS2ItemType.ContainerKey
+  CS2ItemType.Key
 ];
 
 export const EDITABLE_ITEM_TYPE: CS2ItemTypeValues[] = [

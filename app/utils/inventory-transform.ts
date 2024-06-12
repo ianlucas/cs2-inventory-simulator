@@ -21,7 +21,7 @@ const INVENTORY_ITEM_TYPE_ORDER = {
   [CS2ItemType.Graffiti]: 7,
   [CS2ItemType.Sticker]: 8,
   [CS2ItemType.Container]: 9,
-  [CS2ItemType.ContainerKey]: 10,
+  [CS2ItemType.Key]: 10,
   [CS2ItemType.Tool]: 11,
   [CS2ItemType.Stub]: 12
 } as const;

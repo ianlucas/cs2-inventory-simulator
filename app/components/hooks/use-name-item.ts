@@ -15,7 +15,7 @@ import { has } from "~/utils/misc";
 const ITEM_TYPES_WITHOUT_NAME: CS2ItemTypeValues[] = [
   CS2ItemType.Collectible,
   CS2ItemType.Container,
-  CS2ItemType.ContainerKey,
+  CS2ItemType.Key,
   CS2ItemType.Tool
 ];
 

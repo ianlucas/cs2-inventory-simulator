@@ -105,7 +105,7 @@ export const ECONOMY_ITEM_FILTERS = [
     hasModel: false,
     icon: "key",
     label: "Key" as const,
-    type: CS2ItemType.ContainerKey
+    type: CS2ItemType.Key
   },
   {
     hasModel: false,

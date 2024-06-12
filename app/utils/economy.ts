@@ -23,7 +23,7 @@ export const assetBaseUrl =
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
   CS2ItemType.Graffiti,
-  CS2ItemType.ContainerKey,
+  CS2ItemType.Key,
   CS2ItemType.Patch,
   CS2ItemType.Sticker,
   CS2ItemType.Tool
@@ -128,7 +128,7 @@ export function getRarityItemName(item: CS2EconomyItem) {
       return "Collectible";
     case CS2ItemType.Container:
       return "Container";
-    case CS2ItemType.ContainerKey:
+    case CS2ItemType.Key:
       return "Key";
   }
   fail();
