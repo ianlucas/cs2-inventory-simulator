@@ -25,19 +25,20 @@ export function LanguageSelect({
       value={value}
       onChange={onChange}
       options={languages.map(({ name, country }) => ({
-        label: country,
+        flag: country.toUpperCase(),
+        label: localize(`Language$${name}`),
         value: name
       }))}
-      children={({ label, value }) => (
+      children={({ flag, label }) => (
         <>
           <img
-            src={`/images/flags/${label.toUpperCase()}.svg`}
+            src={`/images/flags/${flag}.svg`}
             className="h-[16px] w-[24px]"
-            alt={localize(`LanguageN${value}`)}
-            title={localize(`LanguageN${value}`)}
+            alt={label}
+            title={label}
             draggable={false}
           />
-          {localize(`LanguageN${value}`)}
+          {label}
         </>
       )}
     />
