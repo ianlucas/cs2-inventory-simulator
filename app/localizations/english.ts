@@ -202,6 +202,7 @@ export const english = {
   Language$german: "Deutsch",
   Language$greek: "Ελληνικά",
   Language$hungarian: "Magyar",
+  Language$indonesian: "Bahasa Indonesia",
   Language$italian: "Italiano",
   Language$japanese: "日本語",
   Language$koreana: "한국어",

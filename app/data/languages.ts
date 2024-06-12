@@ -15,6 +15,7 @@ export const languages = [
   { name: "german" as const, countries: ["de"], lang: "de-DE" },
   { name: "greek" as const, countries: ["gr"], lang: "el-GR" },
   { name: "hungarian" as const, countries: ["hu"], lang: "hu-HU" },
+  { name: "indonesian" as const, countries: ["id"], lang: "id-ID" },
   { name: "italian" as const, countries: ["it"], lang: "it-IT" },
   { name: "japanese" as const, countries: ["jp"], lang: "ja-JP" },
   { name: "koreana" as const, countries: ["kr"], lang: "ko-KR" },
