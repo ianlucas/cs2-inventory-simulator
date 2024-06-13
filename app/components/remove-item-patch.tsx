@@ -42,6 +42,9 @@ export function RemoveItemPatch({
     });
     setInventory(inventory.removeItemPatch(uid, slot));
     playSound("inventory_new_item_accept");
+    if (item.getPatchesCount() === 0) {
+      onClose();
+    }
   }
 
   function handleConfirmScrape() {
@@ -90,7 +93,7 @@ export function RemoveItemPatch({
               </div>
             </div>
             {confirmRemoveSlot !== undefined && (
-              <Modal>
+              <Modal fixed>
                 <div className="px-4 py-2 text-sm font-bold">
                   <span className="text-neutral-400">
                     {localize("RemovePatchRemove")}

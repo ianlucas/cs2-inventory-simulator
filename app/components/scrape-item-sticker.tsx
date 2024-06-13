@@ -52,6 +52,9 @@ export function ScrapeItemSticker({
     });
     setInventory(inventory.scrapeItemSticker(uid, slot));
     playSound(`sticker_scratch${scratch as 1 | 2 | 3 | 4 | 5}`);
+    if (item.getStickersCount() === 0) {
+      onClose();
+    }
   }
 
   function handleScrapeSticker(slot: number) {
@@ -120,7 +123,7 @@ export function ScrapeItemSticker({
               </div>
             </div>
             {confirmScrapeIndex !== undefined && (
-              <Modal>
+              <Modal fixed>
                 <div className="px-4 py-2 text-sm font-bold">
                   <span className="text-neutral-400">
                     {localize("ScrapeStickerRemove")}
