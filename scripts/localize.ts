@@ -62,6 +62,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   CategoryTool: "CSGO_Type_Tool",
   EditorCancel: "Cancel_Button",
   EditorNametag: "ToolType_name",
+  EditorPatches: "inv_nav_patches",
   EditorQuantity: "op_store_column_title_quantity",
   EditorRandom: "SFUI_Map_random",
   EditorReset: "settings_reset",

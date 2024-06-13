@@ -19,10 +19,11 @@ export const UNLOCKABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
 ];
 
 export const EDITABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
-  CS2ItemType.Weapon,
-  CS2ItemType.Melee,
+  CS2ItemType.Agent,
   CS2ItemType.Gloves,
-  CS2ItemType.MusicKit
+  CS2ItemType.Melee,
+  CS2ItemType.MusicKit,
+  CS2ItemType.Weapon
 ];
 
 export const INSPECTABLE_ITEM_TYPE: CS2ItemTypeValues[] = [

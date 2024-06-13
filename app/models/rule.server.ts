@@ -10,11 +10,13 @@ import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "~/env.server";
 
 const booleanRulesNames = [
   "craftAllowNametag",
+  "craftAllowPatches",
   "craftAllowSeed",
   "craftAllowStatTrak",
   "craftAllowStickers",
   "craftAllowWear",
   "editAllowNametag",
+  "editAllowPatches",
   "editAllowSeed",
   "editAllowStatTrak",
   "editAllowStickers",
@@ -416,6 +418,11 @@ export async function setupRules() {
     input: true
   });
   await addRule({
+    name: "craftAllowPatches",
+    type: "boolean",
+    input: true
+  });
+  await addRule({
     name: "editAllowNametag",
     type: "boolean",
     input: true
@@ -437,6 +444,11 @@ export async function setupRules() {
   });
   await addRule({
     name: "editAllowStickers",
+    type: "boolean",
+    input: true
+  });
+  await addRule({
+    name: "editAllowPatches",
     type: "boolean",
     input: true
   });

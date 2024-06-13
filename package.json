@@ -7,7 +7,7 @@
     "deploy": "npx @ianlucas/deploy@latest",
     "dev": "remix vite:dev",
     "format": "prettier . --write",
-    "localize": "tsx scripts/system-localization.ts && prettier app/localizations/*.ts --write",
+    "localize": "tsx scripts/localize.ts && prettier app/localizations/*.ts --write",
     "start": "remix-serve ./build/server/index.js",
     "test": "vitest",
     "typecheck": "tsc",

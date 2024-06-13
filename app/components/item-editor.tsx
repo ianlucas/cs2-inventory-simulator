@@ -34,10 +34,12 @@ import { ItemEditorLabel } from "./item-editor-label";
 import { ItemEditorName } from "./item-editor-name";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
+import { PatchPicker } from "./patch-picker";
 import { StickerPicker } from "./sticker-picker";
 
 export interface ItemEditorAttributes {
   nameTag?: string;
+  patches?: CS2BaseInventoryItem["patches"];
   quantity: number;
   seed?: number;
   statTrak?: boolean;
@@ -56,6 +58,7 @@ export function ItemEditor({
 }: {
   attributes?: {
     nameTag?: string;
+    patches?: CS2BaseInventoryItem["patches"];
     seed?: number;
     statTrak?: number;
     stickers?: CS2BaseInventoryItem["stickers"];
@@ -71,12 +74,14 @@ export function ItemEditor({
   const [inventory] = useInventory();
   const {
     craftAllowNametag,
+    craftAllowPatches,
     craftAllowSeed,
     craftAllowStatTrak,
     craftAllowStickers,
     craftAllowWear,
     craftHideType,
     editAllowNametag,
+    editAllowPatches,
     editAllowSeed,
     editAllowStatTrak,
     editAllowStickers,
@@ -96,6 +101,9 @@ export function ItemEditor({
   const [stickers, setStickers] = useState<
     NonNullable<CS2BaseInventoryItem["stickers"]>
   >(attributes?.stickers ?? {});
+  const [patches, setPatches] = useState<
+    NonNullable<CS2BaseInventoryItem["patches"]>
+  >(attributes?.patches ?? {});
   const [quantity, setQuantity] = useState(defaultQuantity ?? 1);
   const isCrafting = attributes === undefined;
   const hasStickers =
@@ -104,6 +112,12 @@ export function ItemEditor({
     (isCrafting
       ? !craftHideType.includes(CS2ItemType.Sticker)
       : !editHideType.includes(CS2ItemType.Sticker));
+  const hasPatches =
+    (isCrafting ? craftAllowPatches : editAllowPatches) &&
+    item.hasPatches() &&
+    (isCrafting
+      ? !craftHideType.includes(CS2ItemType.Patch)
+      : !editHideType.includes(CS2ItemType.Patch));
   const hasStatTrak =
     (isCrafting ? craftAllowStatTrak : editAllowStatTrak) && item.hasStatTrak();
   const hasSeed =
@@ -127,6 +141,8 @@ export function ItemEditor({
 
   function handleSubmit() {
     onSubmit({
+      patches:
+        hasPatches && Object.keys(patches).length > 0 ? patches : undefined,
       nameTag: hasNametag && nameTag.length > 0 ? nameTag : undefined,
       quantity,
       seed:
@@ -163,6 +179,15 @@ export function ItemEditor({
               isCrafting={isCrafting}
               value={stickers}
               onChange={setStickers}
+            />
+          </ItemEditorLabel>
+        )}
+        {hasPatches && (
+          <ItemEditorLabel direction="left" label={localize("EditorPatches")}>
+            <PatchPicker
+              isCrafting={isCrafting}
+              value={patches}
+              onChange={setPatches}
             />
           </ItemEditorLabel>
         )}

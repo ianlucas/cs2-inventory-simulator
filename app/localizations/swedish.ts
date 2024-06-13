@@ -41,6 +41,7 @@ export const swedish = {
   CategoryTool: /* csgo_swedish.txt */"Verktyg",
   EditorCancel: /* csgo_swedish.txt */"Avbryt",
   EditorNametag: /* csgo_swedish.txt */"Namnplåt",
+  EditorPatches: /* csgo_swedish.txt */"Tygmärken",
   EditorQuantity: /* csgo_swedish.txt */"Antal",
   EditorRandom: /* csgo_swedish.txt */"Slumpmässig",
   EditorReset: /* csgo_swedish.txt */"Återställ",

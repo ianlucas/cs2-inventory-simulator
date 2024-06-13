@@ -68,6 +68,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ...(await getRules(
         [
           "craftAllowNametag",
+          "craftAllowPatches",
           "craftAllowSeed",
           "craftAllowStatTrak",
           "craftAllowStickers",
@@ -77,6 +78,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           "craftHideModel",
           "craftHideType",
           "editAllowNametag",
+          "editAllowPatches",
           "editAllowSeed",
           "editAllowStatTrak",
           "editAllowStickers",
