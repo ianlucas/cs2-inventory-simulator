@@ -3,14 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import invariant from "tiny-invariant";
-
-export const assert: typeof invariant = invariant;
-
-export function fail(message: string): never {
-  throw new Error(message);
-}
-
 export function random<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }

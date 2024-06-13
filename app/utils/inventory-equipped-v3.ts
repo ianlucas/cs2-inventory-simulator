@@ -9,9 +9,9 @@ import {
   CS2ItemType,
   CS2Team,
   CS2_MIN_SEED,
-  CS2_MIN_STICKER_WEAR
+  CS2_MIN_STICKER_WEAR,
+  assert
 } from "@ianlucas/cs2-lib";
-import { assert } from "./misc";
 
 interface BaseEconItem {
   def: number;

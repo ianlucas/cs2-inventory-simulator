@@ -3,13 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { fail } from "@ianlucas/cs2-lib";
 import {
   ActionShape,
   ApiActionSyncData,
   ApiActionSyncUrl
 } from "~/routes/api.action.sync._index";
 import { postJson } from "./utils/fetch";
-import { fail } from "./utils/misc";
 
 export const sync = new (class Sync extends EventTarget {
   isSyncing = false;

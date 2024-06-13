@@ -3,10 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { assert, fail } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "~/env.server";
-import { assert, fail } from "~/utils/misc";
 
 const booleanRulesNames = [
   "craftAllowNametag",

@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { fail } from "@ianlucas/cs2-lib";
 import { SessionStorage } from "@remix-run/server-runtime";
 import { AuthenticateOptions, Strategy } from "remix-auth";
 import SteamAPI, { UserSummary } from "steamapi";
@@ -14,7 +15,6 @@ import {
 } from "./models/api-auth-token.server";
 import { getRule } from "./models/rule.server";
 import { upsertUser } from "./models/user.server";
-import { fail } from "./utils/misc";
 
 export class ApiStrategy extends Strategy<
   string,

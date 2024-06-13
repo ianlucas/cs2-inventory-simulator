@@ -3,13 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2KeyValues } from "@ianlucas/cs2-lib";
+import { CS2KeyValues, assert } from "@ianlucas/cs2-lib";
 import { fail } from "assert";
 import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 import { CS2_CSGO_PATH } from "~/env.server";
 import { SystemLocalizationByLanguage } from "~/localization.server";
-import { assert } from "~/utils/misc";
 
 function replace(
   str: string,
