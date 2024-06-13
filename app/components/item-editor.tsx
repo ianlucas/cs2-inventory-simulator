@@ -213,7 +213,7 @@ export function ItemEditor({
             label={localize("EditorSeed")}
           >
             <EditorStepRangeWithInput
-              inputStyles="w-[68px]"
+              inputStyles="w-[74px]"
               max={CS2_MAX_SEED}
               maxLength={seedStringMaxLen}
               min={CS2_MIN_SEED}
@@ -233,7 +233,7 @@ export function ItemEditor({
             label={localize("EditorWear")}
           >
             <EditorStepRangeWithInput
-              inputStyles="w-[68px]"
+              inputStyles="w-[74px]"
               max={item.wearMax ?? CS2_MAX_WEAR}
               maxLength={wearStringMaxLen}
               min={item.wearMin ?? CS2_MIN_WEAR}
@@ -262,7 +262,7 @@ export function ItemEditor({
             label={localize("EditorQuantity")}
           >
             <EditorStepRangeWithInput
-              inputStyles="w-[68px]"
+              inputStyles="w-[74px]"
               max={maxQuantity}
               maxLength={String(maxQuantity).length}
               min={1}

@@ -38,7 +38,7 @@ export function ItemPickerFilterDesktop({
           return (
             <button
               className={clsx(
-                "flex w-full items-center justify-between gap-2 rounded-br rounded-tr px-4 py-1 text-left transition-all",
+                "flex w-full items-center justify-between gap-2 px-4 py-1 text-left transition-all",
                 isIdle && "group text-neutral-500 hover:text-neutral-300",
                 isActive && "bg-black/20"
               )}
@@ -54,7 +54,10 @@ export function ItemPickerFilterDesktop({
               </div>
               <ItemPickerFilterIcon
                 icon={filter.icon}
-                className={clsx("h-4")}
+                className={clsx(
+                  "h-4 transition-all",
+                  isActive ? "translate-x-0 scale-125" : "-translate-x-2"
+                )}
               />
             </button>
           );
