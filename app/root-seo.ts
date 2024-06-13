@@ -16,7 +16,7 @@ export function getSeoMeta({
   appSiteName: string;
 }) {
   const appDescription =
-    "Counter-Strike 2 Inventory Simulator. Craft items, open cases, and scrape stickers - organize and plan your dream inventory.";
+    "Counter-Strike 2 Inventory Simulator. Craft items, open cases, and apply stickers - organize and plan your dream inventory.";
   const appTitle = "The best free, Counter-Strike 2 Inventory Simulator";
   const appWideImage = `${appUrl}/images/inventory-simulator.png`;
 
@@ -80,13 +80,13 @@ export function getSeoLinks({ appUrl }: { appUrl: string }) {
   return [
     ...linkImages.map((size) => ({
       rel: "apple-touch-icon",
-      href: `${appUrl}/link-images/${size}.png`,
+      href: `${appUrl}/images/thumbnails/${size}.png`,
       sizes: `${size}x${size}`
     })),
     ...linkImages.map((size) => ({
       rel: "icon",
       type: "image/png",
-      href: `${appUrl}/link-images/${size}.png`,
+      href: `${appUrl}/images/thumbnails/${size}.png`,
       sizes: `${size}x${size}`
     }))
   ];

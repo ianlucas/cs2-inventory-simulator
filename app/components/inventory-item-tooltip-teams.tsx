@@ -23,8 +23,8 @@ export function InventoryItemTooltipTeams({
       className="flex items-center gap-1"
       label={localize("InventoryItemTeam")}
     >
-      {hasCT && <img src="/icons/ct.svg" className="h-4" alt="CT" />}
-      {hasT && <img src="/icons/t.svg" className="h-4" alt="T" />}
+      {hasCT && <img src="/images/vectors/ct.svg" className="h-4" alt="CT" />}
+      {hasT && <img src="/images/vectors/t.svg" className="h-4" alt="T" />}
       <span>
         {hasAny
           ? localize("InventoryItemTeamAny")

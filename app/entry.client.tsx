@@ -23,5 +23,5 @@ startTransition(() => {
 });
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/javascript/service-worker.js");
+  navigator.serviceWorker.register("/scripts/service-worker.js");
 }
