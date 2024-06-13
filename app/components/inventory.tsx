@@ -164,6 +164,7 @@ export function Inventory() {
     closeApplyItemPatch();
     closeApplyItemSticker();
     closeInspectItem();
+    closeRemoveItemPatch();
     closeRenameItem();
     closeRenameStorageUnit();
     closeScrapeItemSticker();
