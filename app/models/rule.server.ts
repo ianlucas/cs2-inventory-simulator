@@ -19,9 +19,11 @@ const booleanRulesNames = [
   "editAllowStatTrak",
   "editAllowStickers",
   "editAllowWear",
+  "inventoryItemAllowApplyPatch",
   "inventoryItemAllowApplySticker",
   "inventoryItemAllowEdit",
   "inventoryItemAllowInspectInGame",
+  "inventoryItemAllowRemovePatch",
   "inventoryItemAllowScrapeSticker",
   "inventoryItemAllowUnlockContainer"
 ] as const;
@@ -352,6 +354,16 @@ export async function setupRules() {
     name: "editHideId",
     type: "number-array",
     input: []
+  });
+  await addRule({
+    name: "inventoryItemAllowApplyPatch",
+    type: "boolean",
+    input: true
+  });
+  await addRule({
+    name: "inventoryItemAllowRemovePatch",
+    type: "boolean",
+    input: true
   });
   await addRule({
     name: "inventoryItemAllowApplySticker",

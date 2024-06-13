@@ -59,6 +59,18 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 - **Type:** `boolean`
 - **Default:** `true`
 
+### `inventoryItemAllowApplyPatch`
+
+- Indicates whether the user can apply patch to an inventory item.
+- **Type:** `boolean`
+- **Default:** `true`
+
+### `inventoryItemAllowRemovePatch`
+
+- Indicates whether the user can remove patch in an inventory item.
+- **Type:** `boolean`
+- **Default:** `true`
+
 ### `inventoryItemAllowUnlockContainer`
 
 - Indicates whether the user can unlock a container inventory item.

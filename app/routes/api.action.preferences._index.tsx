@@ -15,7 +15,7 @@ import { middleware } from "~/http.server";
 import {
   getUserPreferences,
   setUserPreferences
-} from "~/models/user-preferences.server";
+} from "~/models/user-preference.server";
 import {
   isValidBackground,
   transformBackground

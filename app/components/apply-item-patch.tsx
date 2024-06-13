@@ -12,10 +12,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
-import {
-  AddWithStickerAction,
-  ApplyItemStickerAction
-} from "~/routes/api.action.sync._index";
+import { ApplyItemPatchAction } from "~/routes/api.action.sync._index";
 import { playSound } from "~/utils/sound";
 import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -23,14 +20,14 @@ import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
-export function ApplyItemSticker({
+export function ApplyItemPatch({
   onClose,
   targetUid,
-  stickerUid
+  patchUid: patchUid
 }: {
   onClose: () => void;
   targetUid: number;
-  stickerUid: number;
+  patchUid: number;
 }) {
   const [inventory, setInventory] = useInventory();
   const localize = useLocalize();
@@ -38,32 +35,20 @@ export function ApplyItemSticker({
   const nameItemString = useNameItemString();
 
   const [slot, setSlot] = useState<number>();
-  const stickerItem = useInventoryItem(stickerUid);
+  const stickerItem = useInventoryItem(patchUid);
   const targetItem = useInventoryItem(targetUid);
 
-  function handleApplySticker() {
+  function handleApplyPatch() {
     if (slot !== undefined) {
-      if (targetUid >= 0) {
-        sync({
-          type: ApplyItemStickerAction,
-          targetUid,
-          slot,
-          stickerUid
-        });
-        setInventory(inventory.applyItemSticker(targetUid, stickerUid, slot));
-        playSound("sticker_apply_confirm");
-        onClose();
-      } else {
-        sync({
-          type: AddWithStickerAction,
-          stickerUid,
-          itemId: targetItem.id,
-          slot
-        });
-        setInventory(inventory.addWithSticker(stickerUid, targetItem.id, slot));
-        playSound("sticker_apply_confirm");
-        onClose();
-      }
+      sync({
+        type: ApplyItemPatchAction,
+        patchUid,
+        slot,
+        targetUid
+      });
+      setInventory(inventory.applyItemPatch(targetUid, patchUid, slot));
+      playSound("inventory_new_item_accept");
+      onClose();
     }
   }
 
@@ -76,23 +61,22 @@ export function ApplyItemSticker({
               <UseItemHeader
                 actionDesc={localize("ApplyStickerUseOn")}
                 actionItem={nameItemString(targetItem)}
-                title={localize("ApplyStickerUse")}
-                warning={localize("ApplyStickerWarn")}
+                title={localize("ApplyPatchUse")}
+                warning={localize("ApplyPatchWarn")}
               />
               <ItemImage
                 className="m-auto aspect-[1.33333] max-w-[512px]"
                 item={targetItem}
               />
               <div className="flex items-center justify-center">
-                {targetItem.allStickers().map(([xslot, sticker]) =>
-                  xslot === 4 ? undefined : sticker !== undefined ||
-                    xslot === slot ? (
+                {targetItem.allPatches().map(([xslot, patchId]) =>
+                  patchId !== undefined || xslot === slot ? (
                     <ItemImage
                       key={xslot}
                       className="h-[126px] w-[168px]"
                       item={
-                        sticker !== undefined
-                          ? CS2Economy.getById(sticker.id)
+                        patchId !== undefined
+                          ? CS2Economy.getById(patchId)
                           : stickerItem
                       }
                     />
@@ -102,7 +86,7 @@ export function ApplyItemSticker({
                       className="group flex h-[126px] w-[168px] items-center justify-center"
                       onClick={() => {
                         setSlot(xslot);
-                        playSound("sticker_apply");
+                        playSound("buttonclick");
                       }}
                     >
                       <div className="rounded-md border-2 border-white/20 p-4 px-6 transition group-hover:border-white/80">
@@ -116,9 +100,9 @@ export function ApplyItemSticker({
                 right={
                   <>
                     <ModalButton
-                      children={localize("ApplyStickerUse")}
+                      children={localize("ApplyPatchUse")}
                       disabled={slot === undefined}
-                      onClick={handleApplySticker}
+                      onClick={handleApplyPatch}
                       variant="primary"
                     />
                     <ModalButton

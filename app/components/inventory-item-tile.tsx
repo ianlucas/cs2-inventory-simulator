@@ -49,11 +49,22 @@ export function InventoryItemTile({
         )}
         {inventoryItem?.stickers !== undefined && (
           <div className="absolute bottom-0 left-0 flex items-center p-1">
-            {inventoryItem.someStickers().map(([index, { id }]) => (
+            {inventoryItem.someStickers().map(([slot, { id }]) => (
               <ItemImage
                 className="h-5"
                 item={CS2Economy.getById(id)}
-                key={index}
+                key={slot}
+              />
+            ))}
+          </div>
+        )}
+        {inventoryItem?.patches !== undefined && (
+          <div className="absolute bottom-0 left-0 flex items-center p-1">
+            {inventoryItem.somePatches().map(([slot, id]) => (
+              <ItemImage
+                className="h-5"
+                item={CS2Economy.getById(id)}
+                key={slot}
               />
             ))}
           </div>

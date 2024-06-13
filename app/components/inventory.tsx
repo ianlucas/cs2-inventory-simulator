@@ -27,13 +27,17 @@ import {
   useLocalize,
   usePreferences
 } from "./app-context";
+import { ApplyItemPatch } from "./apply-item-patch";
 import { ApplyItemSticker } from "./apply-item-sticker";
+import { useApplyItemPatch } from "./hooks/use-apply-item-patch";
 import { useListenAppEvent } from "./hooks/use-listen-app-event";
+import { useRemoveItemPatch } from "./hooks/use-remove-item-patch";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelector } from "./item-selector-context";
+import { RemoveItemPatch } from "./remove-item-patch";
 import { RenameItem } from "./rename-item";
 import { RenameStorageUnit } from "./rename-storage-unit";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
@@ -53,6 +57,10 @@ export function Inventory() {
   const ownApplicableStickers =
     items.filter(({ item }) => item.isSticker()).length > 0 &&
     items.filter(({ item }) => item.hasStickers()).length > 0;
+
+  const ownApplicablePatches =
+    items.filter(({ item }) => item.isPatch()).length > 0 &&
+    items.filter(({ item }) => item.hasPatches()).length > 0;
 
   const {
     closeUnlockCase,
@@ -83,6 +91,21 @@ export function Inventory() {
     isRenamingStorageUnit,
     renameStorageUnit
   } = useStorageUnit();
+
+  const {
+    applyItemPatch,
+    closeApplyItemPatch,
+    handleApplyItemPatch,
+    handleApplyItemPatchSelect,
+    isApplyingItemPatch
+  } = useApplyItemPatch();
+
+  const {
+    closeRemoveItemPatch,
+    handleRemoveItemPatch,
+    isRemovingItemPatch,
+    removeItemPatch
+  } = useRemoveItemPatch();
 
   const {
     applyItemSticker,
@@ -138,13 +161,14 @@ export function Inventory() {
 
   function dismissSelectItem() {
     setItemSelector(undefined);
-    closeUnlockCase();
-    closeSwapItemsStatTrak();
+    closeApplyItemPatch();
+    closeApplyItemSticker();
+    closeInspectItem();
     closeRenameItem();
     closeRenameStorageUnit();
-    closeApplyItemSticker();
     closeScrapeItemSticker();
-    closeInspectItem();
+    closeSwapItemsStatTrak();
+    closeUnlockCase();
   }
 
   function handleSelectItem(uid: number) {
@@ -161,6 +185,9 @@ export function Inventory() {
         case "rename-item":
           setItemSelector(undefined);
           return handleRenameItemSelect(uid);
+        case "apply-item-patch":
+          setItemSelector(undefined);
+          return handleApplyItemPatchSelect(uid);
         case "apply-item-sticker":
           setItemSelector(undefined);
           return handleApplyItemStickerSelect(uid);
@@ -202,6 +229,7 @@ export function Inventory() {
                       : handleSelectItem
                   }
                 : {
+                    onApplyPatch: handleApplyItemPatch,
                     onApplySticker: handleApplyItemSticker,
                     onDepositToStorageUnit: handleDepositToStorageUnit,
                     onEdit: handleEdit,
@@ -209,6 +237,7 @@ export function Inventory() {
                     onInspectItem: handleInspectItem,
                     onInspectStorageUnit: handleInspectStorageUnit,
                     onRemove: handleRemove,
+                    onRemovePatch: handleRemoveItemPatch,
                     onRename: handleRenameItem,
                     onRenameStorageUnit: handleRenameStorageUnit,
                     onRetrieveFromStorageUnit: handleRetrieveFromStorageUnit,
@@ -216,7 +245,8 @@ export function Inventory() {
                     onSwapItemsStatTrak: handleSwapItemsStatTrak,
                     onUnequip: handleUnequip,
                     onUnlockContainer: handleUnlockCase,
-                    ownApplicableStickers: ownApplicableStickers
+                    ownApplicablePatches,
+                    ownApplicableStickers
                   })}
             />
           </div>
@@ -246,6 +276,12 @@ export function Inventory() {
           {...renameStorageUnit}
           onClose={closeRenameStorageUnit}
         />
+      )}
+      {isApplyingItemPatch(applyItemPatch) && (
+        <ApplyItemPatch {...applyItemPatch} onClose={closeApplyItemPatch} />
+      )}
+      {isRemovingItemPatch(removeItemPatch) && (
+        <RemoveItemPatch {...removeItemPatch} onClose={closeRemoveItemPatch} />
       )}
       {isApplyingItemSticker(applyItemSticker) && (
         <ApplyItemSticker

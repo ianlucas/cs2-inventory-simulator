@@ -7,7 +7,8 @@ import { FloatingFocusManager } from "@floating-ui/react";
 import {
   CS2Team,
   CS2TeamValues,
-  CS2_INVENTORY_EQUIPPABLE_ITEMS
+  CS2_INVENTORY_EQUIPPABLE_ITEMS,
+  CS2_MAX_PATCHES
 } from "@ianlucas/cs2-lib";
 import {
   CS2_PREVIEW_INSPECTABLE_ITEMS,
@@ -33,6 +34,7 @@ export function InventoryItem({
   disableHover,
   equipped,
   item,
+  onApplyPatch,
   onApplySticker,
   onClick,
   onDepositToStorageUnit,
@@ -41,6 +43,7 @@ export function InventoryItem({
   onInspectItem,
   onInspectStorageUnit,
   onRemove,
+  onRemovePatch,
   onRename,
   onRenameStorageUnit,
   onRetrieveFromStorageUnit,
@@ -48,11 +51,13 @@ export function InventoryItem({
   onSwapItemsStatTrak,
   onUnequip,
   onUnlockContainer,
+  ownApplicablePatches,
   ownApplicableStickers,
   uid
 }: TransformedInventoryItem & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
+  onApplyPatch?: (uid: number) => void;
   onApplySticker?: (uid: number) => void;
   onClick?: (uid: number) => void;
   onDepositToStorageUnit?: (uid: number) => void;
@@ -61,6 +66,7 @@ export function InventoryItem({
   onInspectItem?: (uid: number) => void;
   onInspectStorageUnit?: (uid: number) => void;
   onRemove?: (uid: number) => void;
+  onRemovePatch?: (uid: number) => void;
   onRename?: (uid: number) => void;
   onRenameStorageUnit?: (uid: number) => void;
   onRetrieveFromStorageUnit?: (uid: number) => void;
@@ -68,6 +74,7 @@ export function InventoryItem({
   onSwapItemsStatTrak?: (uid: number) => void;
   onUnequip?: (uid: number, team?: CS2TeamValues) => void;
   onUnlockContainer?: (uid: number) => void;
+  ownApplicablePatches?: boolean;
   ownApplicableStickers?: boolean;
 }) {
   const localize = useLocalize();
@@ -76,9 +83,11 @@ export function InventoryItem({
     editHideId,
     editHideModel,
     editHideType,
+    inventoryItemAllowApplyPatch,
     inventoryItemAllowApplySticker,
     inventoryItemAllowEdit,
     inventoryItemAllowInspectInGame,
+    inventoryItemAllowRemovePatch,
     inventoryItemAllowScrapeSticker,
     inventoryItemAllowUnlockContainer,
     inventoryItemEquipHideModel,
@@ -126,6 +135,15 @@ export function InventoryItem({
 
   const canSwapStatTrak = item.isStatTrakSwapTool();
   const canRename = item.isNameTag();
+  const canApplyPatch =
+    inventoryItemAllowApplyPatch &&
+    ownApplicablePatches &&
+    ((item.hasPatches() && item.getPatchesCount() < CS2_MAX_PATCHES) ||
+      item.isPatch());
+  const canRemovePatch =
+    inventoryItemAllowRemovePatch &&
+    item.hasPatches() &&
+    item.getPatchesCount() > 0;
   const canApplySticker =
     inventoryItemAllowApplySticker &&
     ownApplicableStickers &&
@@ -270,8 +288,18 @@ export function InventoryItem({
                   },
                   {
                     condition: canScrapeSticker,
-                    label: localize("InventoryScrapeSticker"),
+                    label: localize("InventoryItemScrapeSticker"),
                     onClick: close(() => onScrapeSticker?.(uid))
+                  },
+                  {
+                    condition: canApplyPatch,
+                    label: localize("InventoryApplyPatch"),
+                    onClick: close(() => onApplyPatch?.(uid))
+                  },
+                  {
+                    condition: canRemovePatch,
+                    label: localize("InventoryItemRemovePatch"),
+                    onClick: close(() => onRemovePatch?.(uid))
                   }
                 ],
                 [

@@ -19,6 +19,7 @@ export interface ItemSelectorContextProps {
   items: TransformedInventoryItems;
   readOnly?: boolean;
   type:
+    | "apply-item-patch"
     | "apply-item-sticker"
     | "deposit-to-storage-unit"
     | "inspect-storage-unit"

@@ -9,6 +9,7 @@ let sounds: HTMLAudioElement[] = [];
 let index = 0;
 export function playSound(
   src:
+    | "buttonclick"
     | "case_awarded_ancient"
     | "case_awarded_common"
     | "case_awarded_legendary"

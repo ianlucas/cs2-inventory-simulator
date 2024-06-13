@@ -29,12 +29,14 @@ export const AddAction = "add";
 export const AddFromCacheAction = "add-from-cache";
 export const AddWithNametagAction = "add-with-nametag";
 export const AddWithStickerAction = "add-with-sticker";
+export const ApplyItemPatchAction = "apply-item-patch";
 export const ApplyItemStickerAction = "apply-item-sticker";
 export const DepositToStorageUnitAction = "deposit-to-storage-unit";
 export const EditAction = "edit";
 export const EquipAction = "equip";
 export const RemoveAction = "remove";
 export const RemoveAllItemsAction = "remove-all-items";
+export const RemoveItemPatchAction = "remove-item-patch";
 export const RenameItemAction = "rename-item";
 export const RenameStorageUnitAction = "rename-storage-unit";
 export const RetrieveFromStorageUnitAction = "retrieve-from-storage-unit";
@@ -59,6 +61,14 @@ const actionShape = z
       toolUid: nonNegativeInt,
       itemId: nonNegativeInt,
       nameTag: z.string()
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(ApplyItemPatchAction),
+      patchUid: nonNegativeInt,
+      slot: nonNegativeInt,
+      targetUid: nonNegativeInt
     })
   )
   .or(
@@ -95,6 +105,13 @@ const actionShape = z
     z.object({
       type: z.literal(RemoveAction),
       uid: nonNegativeInt
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(RemoveItemPatchAction),
+      targetUid: nonNegativeInt,
+      slot: nonNegativeInt
     })
   )
   .or(
@@ -289,6 +306,14 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
               action.nameTag
             );
             break;
+          case ApplyItemPatchAction:
+            await expectRule("inventoryItemAllowApplyPatch", true, userId);
+            inventory.applyItemPatch(
+              action.targetUid,
+              action.patchUid,
+              action.slot
+            );
+            break;
           case ApplyItemStickerAction:
             await expectRule("inventoryItemAllowApplySticker", true, userId);
             inventory.applyItemSticker(
@@ -312,6 +337,10 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
             break;
           case RemoveAction:
             inventory.remove(action.uid);
+            break;
+          case RemoveItemPatchAction:
+            await expectRule("inventoryItemAllowRemovePatch", true, userId);
+            inventory.removeItemPatch(action.targetUid, action.slot);
             break;
           case ScrapeItemStickerAction:
             await expectRule("inventoryItemAllowScrapeSticker", true, userId);

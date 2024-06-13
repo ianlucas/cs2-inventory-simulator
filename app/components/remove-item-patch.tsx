@@ -1,0 +1,120 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+import { CS2Economy } from "@ianlucas/cs2-lib";
+import { useState } from "react";
+import { createPortal } from "react-dom";
+import { ClientOnly } from "remix-utils/client-only";
+import { useNameItemString } from "~/components/hooks/use-name-item";
+import { useSync } from "~/components/hooks/use-sync";
+import { RemoveItemPatchAction } from "~/routes/api.action.sync._index";
+import { playSound } from "~/utils/sound";
+import { useInventory, useLocalize } from "./app-context";
+import { ItemImage } from "./item-image";
+import { Modal } from "./modal";
+import { ModalButton } from "./modal-button";
+import { UseItemFooter } from "./use-item-footer";
+import { UseItemHeader } from "./use-item-header";
+
+export function RemoveItemPatch({
+  onClose,
+  uid
+}: {
+  onClose: () => void;
+  uid: number;
+}) {
+  const nameItemString = useNameItemString();
+  const localize = useLocalize();
+  const sync = useSync();
+
+  const [inventory, setInventory] = useInventory();
+  const [confirmRemoveSlot, setConfirmRemoveSlot] = useState<number>();
+
+  const item = inventory.get(uid);
+
+  function doRemovePatch(slot: number) {
+    sync({
+      type: RemoveItemPatchAction,
+      targetUid: uid,
+      slot: slot
+    });
+    setInventory(inventory.removeItemPatch(uid, slot));
+    playSound("inventory_new_item_accept");
+  }
+
+  function handleConfirmScrape() {
+    if (confirmRemoveSlot !== undefined) {
+      doRemovePatch(confirmRemoveSlot);
+      setConfirmRemoveSlot(undefined);
+    }
+  }
+
+  return (
+    <ClientOnly
+      children={() =>
+        createPortal(
+          <>
+            <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
+              <div>
+                <UseItemHeader
+                  title={localize("ScrapeStickerUse")}
+                  warning={localize("RemovePatchWarn")}
+                  warningItem={nameItemString(item)}
+                />
+                <ItemImage
+                  className="m-auto aspect-[1.33333] max-w-[512px]"
+                  item={item}
+                />
+                <div className="flex justify-center">
+                  {item.somePatches().map(([slot, id]) => (
+                    <button key={slot} className="group">
+                      <ItemImage
+                        className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
+                        onClick={() => setConfirmRemoveSlot(slot)}
+                        item={CS2Economy.getById(id)}
+                      />
+                    </button>
+                  ))}
+                </div>
+                <UseItemFooter
+                  right={
+                    <ModalButton
+                      children={localize("ScrapeStickerClose")}
+                      onClick={onClose}
+                      variant="secondary"
+                    />
+                  }
+                />
+              </div>
+            </div>
+            {confirmRemoveSlot !== undefined && (
+              <Modal>
+                <div className="px-4 py-2 text-sm font-bold">
+                  <span className="text-neutral-400">
+                    {localize("RemovePatchRemove")}
+                  </span>
+                </div>
+                <p className="px-4">{localize("RemovePatchRemoveDesc")}</p>
+                <div className="flex justify-end px-4 py-2">
+                  <ModalButton
+                    onClick={handleConfirmScrape}
+                    variant="secondary"
+                    children={localize("RemovePatchRemove")}
+                  />
+                  <ModalButton
+                    onClick={() => setConfirmRemoveSlot(undefined)}
+                    variant="secondary"
+                    children={localize("ScrapeStickerCancel")}
+                  />
+                </div>
+              </Modal>
+            )}
+          </>,
+          document.body
+        )
+      }
+    />
+  );
+}
