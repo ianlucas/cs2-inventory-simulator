@@ -7,12 +7,14 @@ import {
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
+  CS2_MAX_STICKERS,
   CS2_MIN_STICKER_WEAR,
   ensure
 } from "@ianlucas/cs2-lib";
+import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
-import { sortByName } from "~/utils/economy";
+import { CS2_LEGACY_MAX_STICKERS, sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { useLocalize, useRules } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -30,6 +32,9 @@ export function StickerPicker({
 }) {
   const { craftHideId, craftHideCategory, editHideId, editHideCategory } =
     useRules();
+
+  const canMoveStickers = true;
+
   const localize = useLocalize();
 
   const [category, setCategory] = useState("");
@@ -38,9 +43,22 @@ export function StickerPicker({
   const stickers = useMemo(() => CS2Economy.getStickers().sort(sortByName), []);
   const categories = useMemo(() => CS2Economy.getStickerCategories(), []);
   const [wear, setWear] = useState(0);
+  const [showEditor, setShowEditor] = useState(false);
+  const appliedStickers = Object.keys(stickers).length;
+  const maxStickers =
+    canMoveStickers || appliedStickers > CS2_LEGACY_MAX_STICKERS
+      ? CS2_MAX_STICKERS
+      : CS2_LEGACY_MAX_STICKERS;
+  const fourSlotsSyles = "h-[64px] w-[85.33px]";
+  const fiveSlotsStyles = "h-[51px] w-[68px]";
+  const slotStyles =
+    maxStickers === CS2_MAX_STICKERS ? fiveSlotsStyles : fourSlotsSyles;
 
   function handleClickSlot(index: number) {
     return function handleClickSlot() {
+      if (canMoveStickers) {
+        return setShowEditor(true);
+      }
       setActiveIndex(index);
     };
   }
@@ -106,7 +124,7 @@ export function StickerPicker({
   return (
     <>
       <div className="flex justify-between">
-        {range(4).map((index) => {
+        {range(maxStickers).map((index) => {
           const sticker = value[index];
           const stickerWear = sticker?.wear ?? CS2_MIN_STICKER_WEAR;
           const item =
@@ -118,9 +136,14 @@ export function StickerPicker({
               onClick={handleClickSlot(index)}
             >
               {item !== undefined ? (
-                <ItemImage className="h-[64px] w-[85.33px]" item={item} />
+                <ItemImage className={slotStyles} item={item} />
               ) : (
-                <div className="flex h-[64px] w-[85.33px] items-center justify-center font-display font-bold text-neutral-700">
+                <div
+                  className={clsx(
+                    slotStyles,
+                    "flex items-center justify-center font-display font-bold text-neutral-700"
+                  )}
+                >
                   {localize("StickerPickerNA")}
                 </div>
               )}
@@ -134,7 +157,7 @@ export function StickerPicker({
           );
         })}
       </div>
-      <StickerPickerEditor />
+      {showEditor && <StickerPickerEditor value={value} />}
       <StickerPickerSelect
         categories={categories}
         category={category}
