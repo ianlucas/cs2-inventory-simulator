@@ -27,7 +27,7 @@ export function StickerPickerEditor({
   const [controller] = useState(() => {
     const background = new Image();
     let canvas: HTMLCanvasElement | undefined;
-    let stickers = value;
+    let state = { stickers: value };
     let panning = false;
     let lastX = 0;
     let lastY = 0;
@@ -95,8 +95,9 @@ export function StickerPickerEditor({
         }
       },
 
-      update(newStickers: typeof stickers) {
-        stickers = newStickers;
+      update(newState: typeof state) {
+        state = newState;
+        render();
       }
     };
   });
@@ -108,7 +109,7 @@ export function StickerPickerEditor({
   }, [canvasRef]);
 
   useEffect(() => {
-    controller.update(value);
+    controller.update({ stickers: value });
   }, [value]);
 
   return (
@@ -120,7 +121,7 @@ export function StickerPickerEditor({
         </button>
       </div>
       <div className="flex">
-        <div className="flex w-[120px] flex-col justify-center gap-1">
+        <div className="flex w-[120px] flex-col gap-1">
           {range(CS2_MAX_STICKERS).map((index) => {
             const sticker = value[index];
             const stickerWear = sticker?.wear ?? CS2_MIN_STICKER_WEAR;
