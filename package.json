@@ -30,6 +30,7 @@
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.5.12",
+    "dotenv": "^16.4.5",
     "isbot": "^3.8.0",
     "prisma": "^5.15.0",
     "react": "^18.3.1",
