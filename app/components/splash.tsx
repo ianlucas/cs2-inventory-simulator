@@ -64,9 +64,7 @@ export function Splash() {
       <style
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: `:root {
-  color-scheme: dark;
-}`
+          __html: `:root {color-scheme: dark;}`
         }}
       />
       <script
