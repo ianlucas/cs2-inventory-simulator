@@ -157,7 +157,7 @@ export function StickerPicker({
           );
         })}
       </div>
-      {showEditor && <StickerPickerEditor value={value} />}
+      {showEditor && <StickerPickerEditor onChange={onChange} value={value} />}
       <StickerPickerSelect
         categories={categories}
         category={category}

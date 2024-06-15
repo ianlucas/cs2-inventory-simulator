@@ -11,6 +11,7 @@ import {
   CS2_MAX_STICKERS,
   CS2_MIN_STICKER_WEAR
 } from "@ianlucas/cs2-lib";
+import clsx from "clsx";
 import { ComponentRef, useEffect, useRef, useState } from "react";
 import { range } from "~/utils/number";
 import { useLocalize } from "./app-context";
@@ -18,29 +19,44 @@ import { ItemImage } from "./item-image";
 import { Modal } from "./modal";
 
 export function StickerPickerEditor({
+  onChange,
   value
 }: {
+  onChange: (value: NonNullable<CS2BaseInventoryItem["stickers"]>) => void;
   value: NonNullable<CS2BaseInventoryItem["stickers"]>;
 }) {
   const localize = useLocalize();
   const canvasRef = useRef<ComponentRef<"canvas">>(null);
+  const [activeSlot, setActiveSlot] = useState<number>();
+  const activeSticker =
+    activeSlot !== undefined ? value[activeSlot] : undefined;
+
+  function handleClickSlot(slot: number) {
+    return function handleClickSlot() {
+      setActiveSlot(slot);
+    };
+  }
+
   const [controller] = useState(() => {
     const background = new Image();
     let canvas: HTMLCanvasElement | undefined;
-    let state = { stickers: value };
+    let state = { stickers: value, activeIndex: activeSlot };
     let panning = false;
     let lastX = 0;
     let lastY = 0;
     let offsetX = 0;
     let offsetY = 0;
     let scale = 1.25;
+    let images = new Map<number, HTMLImageElement>();
+    const sh = 80;
+    const sw = sh * (4 / 3);
 
     const handleBackgroundLoad = () => {
       if (canvas !== undefined) {
         canvas.width = background.naturalWidth;
         canvas.height = background.naturalHeight;
-        offsetX = -(canvas.width / 2);
-        offsetY = -(canvas.height / 2);
+        offsetX = 0;
+        offsetY = 0;
         render();
       }
     };
@@ -48,56 +64,29 @@ export function StickerPickerEditor({
     background.onload = handleBackgroundLoad;
     background.src = "/images/schematics/m4a4.png";
 
-    function render() {
-      const ctx = canvas?.getContext("2d");
-      if (canvas === undefined || ctx === undefined || ctx === null) {
-        return;
-      }
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.scale(scale, scale);
-      ctx.translate(offsetX, offsetY);
-      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-      ctx.restore();
-    }
+    function render() {}
 
     return {
       hook(newCanvas: HTMLCanvasElement) {
         canvas = newCanvas;
-        canvas.onwheel = (e) => {
-          e.preventDefault();
-          scale += e.deltaY * -0.001;
-          scale = Math.min(Math.max(1, scale), 4);
-          render();
-        };
-        canvas.onmousedown = (e) => {
-          panning = true;
-          lastX = e.offsetX;
-          lastY = e.offsetY;
-        };
-        canvas.onmousemove = (e) => {
-          if (panning) {
-            const dx = e.offsetX - lastX;
-            const dy = e.offsetY - lastY;
-            offsetX += dx;
-            offsetY += dy;
-            lastX = e.offsetX;
-            lastY = e.offsetY;
-            render();
-          }
-        };
-        canvas.onmouseup = () => {
-          panning = false;
-        };
-        if (background.naturalHeight !== 0) {
-          handleBackgroundLoad();
-        }
       },
 
       update(newState: typeof state) {
         state = newState;
         render();
+      },
+
+      place() {
+        if (canvas !== undefined && state.activeIndex !== undefined) {
+          onChange({
+            ...state.stickers,
+            [state.activeIndex]: {
+              ...value[state.activeIndex],
+              x: canvas.width / 2 - sw / 2,
+              y: canvas.height / 2 - sh / 2
+            }
+          });
+        }
       }
     };
   });
@@ -109,8 +98,8 @@ export function StickerPickerEditor({
   }, [canvasRef]);
 
   useEffect(() => {
-    controller.update({ stickers: value });
-  }, [value]);
+    controller.update({ stickers: value, activeIndex: activeSlot });
+  }, [activeSlot, value]);
 
   return (
     <Modal className="w-[800px] pb-1" blur>
@@ -122,16 +111,23 @@ export function StickerPickerEditor({
       </div>
       <div className="flex">
         <div className="flex w-[120px] flex-col gap-1">
-          {range(CS2_MAX_STICKERS).map((index) => {
-            const sticker = value[index];
+          {range(CS2_MAX_STICKERS).map((slot) => {
+            const sticker = value[slot];
             const stickerWear = sticker?.wear ?? CS2_MIN_STICKER_WEAR;
             const item =
               sticker !== undefined
                 ? CS2Economy.getById(sticker.id)
                 : undefined;
+            const isActive = activeSlot === slot;
             return (
-              <div className="flex justify-center" key={index}>
-                <button className="relative h-[69px] w-[92px] rounded border-2 border-neutral-50/5">
+              <div className="flex justify-center" key={slot}>
+                <button
+                  className={clsx(
+                    "relative h-[69px] w-[92px] rounded border-2",
+                    isActive ? "border-white" : "border-neutral-50/5"
+                  )}
+                  onClick={handleClickSlot(slot)}
+                >
                   {item !== undefined ? (
                     <ItemImage className="h-[66px] w-[88px]" item={item} />
                   ) : (
@@ -147,9 +143,16 @@ export function StickerPickerEditor({
             );
           })}
         </div>
-        <div className="flex-1">
-          {/* <img draggable={false} src={"/images/schematics/m4a4.png"} /> */}
+        <div className="relative flex-1">
           <canvas className="h-[389.844px] w-[678px]" ref={canvasRef} />
+          {activeSticker && (
+            <div className="absolute bottom-1 right-0">
+              {activeSticker.x === undefined &&
+                activeSticker.y === undefined && (
+                  <button onClick={controller.place}>Place sticker</button>
+                )}
+            </div>
+          )}
         </div>
       </div>
     </Modal>
