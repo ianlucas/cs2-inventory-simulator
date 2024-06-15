@@ -41,7 +41,7 @@ export const RarityLabel = {
   [CS2RarityColor.Immortal]: "Immortal"
 } as const;
 
-export function updateEconomyTranslation(
+export function updateEconomyLanguage(
   language: CS2ItemLocalizationByLanguage[string]
 ) {
   CS2Economy.use({

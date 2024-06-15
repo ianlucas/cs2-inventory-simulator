@@ -8,7 +8,6 @@ import { Logo } from "./logo";
 
 export function Splash() {
   const localize = useLocalize();
-
   return (
     <div
       id="splash"
@@ -65,61 +64,13 @@ export function Splash() {
       <style
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: `:root {
-  color-scheme: dark;
-}`
+          __html: `:root {color-scheme: dark;}`
         }}
       />
       <script
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: `if (!window.$splashInit) {
-  window.$splashInit = true;
-  window.$splashN = 0;
-  window.$splashLoaded = document.readyState === 'complete';
-
-  window.addEventListener('load', () => {
-    window.$splashLoaded = true;
-  });
-
-  window.$splashRender = function () {
-    const splash = document.getElementById('splash');
-    const progress = document.getElementById('splash-progress');
-    if (splash.display === 'none') {
-      return;
-    }
-    if (window.$splashLoaded) {
-      window.$splashN = 1;
-    } else {
-      const thresholds = [0.2, 0.5, 0.8, 0.99];
-      const amounts = [0.1, 0.04, 0.02, 0.005];
-      const amount =
-        amounts.find((a, i) => window.$splashN < thresholds[i]) || 0;
-      window.$splashN = Math.min(window.$splashN + amount, 0.994);
-    }
-    if (window.$splashN >= 1) {
-      setTimeout(window.$splashEnd, 1000);
-    } else {
-      progress.style.width = window.$splashN * 100 + '%';
-      setTimeout(window.$splashRender, 500);
-    }
-  };
-
-  window.$splashEnd = function () {
-    const splash = document.getElementById('splash');
-    const progress = document.getElementById('splash-progress');
-    progress.style.width = window.$splashN * 100 + '%';
-    splash.style.opacity = 0;
-    splash.style.pointerEvents = 'none';
-    setTimeout(() => (splash.display = 'none'), 1000);
-  };
-
-  window.$splashRender();
-
-  window.onerror = () => {
-    window.$splashRender();
-  };
-}`
+          __html: __SPLASH_SCRIPT__
         }}
       />
     </div>

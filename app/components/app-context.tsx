@@ -15,11 +15,11 @@ import {
 import { useTypedLoaderData } from "remix-typedjson";
 import { useInventoryFilterState } from "~/components/hooks/use-inventory-filter-state";
 import { useInventoryState } from "~/components/hooks/use-inventory-state";
-import { useLocalization } from "~/components/hooks/use-translation";
+import { useLocalization } from "~/components/hooks/use-localization";
 import type { loader } from "~/root";
 import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { pushToSync, sync } from "~/sync";
-import { updateEconomyTranslation } from "~/utils/economy";
+import { updateEconomyLanguage } from "~/utils/economy";
 import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
 import {
   cacheInventoryData,
@@ -76,7 +76,7 @@ export function useInventoryFilter() {
   return useAppContext().inventoryFilter;
 }
 
-export function useTranslationChecksum() {
+export function useLocalizationChecksum() {
   return useAppContext().localization.checksum;
 }
 
@@ -139,7 +139,7 @@ export function AppProvider({
   }, [user]);
 
   useEffect(() => {
-    updateEconomyTranslation(localization.items);
+    updateEconomyLanguage(localization.items);
     setInventory(new CS2Inventory(inventorySpec));
   }, [localization.items]);
 
