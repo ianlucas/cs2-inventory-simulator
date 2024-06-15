@@ -5,7 +5,7 @@
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
-import { LOCALIZATION_LOADED_TYPE } from "~/components/hooks/use-translation";
+import { LOCALIZATION_LOADED_TYPE } from "~/components/hooks/use-localization";
 import { middleware } from "~/http.server";
 import { badRequest } from "~/responses.server";
 

@@ -45,15 +45,15 @@ export function useLocalization({
   }
 
   useEffect(() => {
-    function handleTranslationLoaded() {
+    function handleLocalizationLoaded() {
       setSystemMap(getSystemLocalizationMap());
       setItemMap(getItemLocalizationMap());
     }
-    window.addEventListener(LOCALIZATION_LOADED_TYPE, handleTranslationLoaded);
+    window.addEventListener(LOCALIZATION_LOADED_TYPE, handleLocalizationLoaded);
     return () => {
       window.removeEventListener(
         LOCALIZATION_LOADED_TYPE,
-        handleTranslationLoaded
+        handleLocalizationLoaded
       );
     };
   }, []);
