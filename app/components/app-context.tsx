@@ -76,7 +76,7 @@ export function useInventoryFilter() {
   return useAppContext().inventoryFilter;
 }
 
-export function useTranslationChecksum() {
+export function useLocalizationChecksum() {
   return useAppContext().localization.checksum;
 }
 

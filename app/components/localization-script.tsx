@@ -4,17 +4,18 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
-import { usePreferences, useTranslationChecksum } from "./app-context";
+import { useLocalizationChecksum, usePreferences } from "./app-context";
 
-export function TranslationScript() {
-  const checksum = useTranslationChecksum();
+export function LocalizationScript() {
+  const checksum = useLocalizationChecksum();
   const { language } = usePreferences();
   const [isInitialized, setIsInitialized] = useState(false);
+  const localizationUrl = `/localizations/${language}.${checksum}.js`;
 
   useEffect(() => {
     setIsInitialized(true);
     const script = document.createElement("script");
-    script.src = `/translation/${language}.${checksum}.js`;
+    script.src = localizationUrl;
     script.type = "text/javascript";
     document.body.appendChild(script);
     return () => {
@@ -26,11 +27,5 @@ export function TranslationScript() {
     return null;
   }
 
-  return (
-    <script
-      key={language}
-      src={`/translation/${language}.${checksum}.js`}
-      type="text/javascript"
-    />
-  );
+  return <script key={language} src={localizationUrl} type="text/javascript" />;
 }

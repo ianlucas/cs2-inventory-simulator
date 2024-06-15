@@ -20,10 +20,10 @@ import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { Inventory } from "./components/inventory";
 import { ItemSelectorProvider } from "./components/item-selector-context";
+import { LocalizationScript } from "./components/localization-script";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
-import { TranslationScript } from "./components/translation-script";
 import { BUILD_LAST_COMMIT } from "./env.server";
 import { middleware } from "./http.server";
 import { getLocalizationChecksum } from "./localization.server";
@@ -147,7 +147,7 @@ export default function App() {
           <Footer />
           <SyncIndicator />
           <ScrollRestoration />
-          <TranslationScript />
+          <LocalizationScript />
           <Scripts />
         </body>
       </html>
