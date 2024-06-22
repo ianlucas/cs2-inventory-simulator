@@ -32,7 +32,6 @@ model User {
 model UserDomainInventory {
   @@id([domainHostname, userId])
   createdAt DateTime @default(now())
-  domain Domain @relation(fields: [domainHostname], references: [hostname], onDelete: Cascade)
   domainHostname String
   inventory String?
   syncedAt DateTime @default(now())
@@ -117,11 +116,4 @@ model GroupRule {
   name String
   rule Rule @relation(fields: [name], references: [name], onDelete: Cascade)
   value String
-}
-
-model Domain {
-  expiresAt DateTime?
-  hostname String @id
-  image String?
-  inventories UserDomainInventory[]
 }

@@ -7,19 +7,9 @@ import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { badRequest, conflict } from "~/responses.server";
 import { parseInventory } from "~/utils/inventory";
-import { isValidDomain } from "./domain.server";
 import { getRule } from "./rule.server";
 
-export async function getUserInventory(domainHostname: string, userId: string) {
-  if (await isValidDomain(domainHostname)) {
-    return (
-      (
-        await prisma.userDomainInventory.findFirst({
-          where: { userId, domainHostname }
-        })
-      )?.inventory ?? null
-    );
-  }
+export async function getUserInventory(userId: string) {
   return (
     (await prisma.user.findFirst({ where: { id: userId } }))?.inventory ?? null
   );
@@ -53,7 +43,7 @@ export async function upsertUser(user: {
   ).id;
 }
 
-export async function findUniqueUser(domainHostname: string, userId: string) {
+export async function findUniqueUser(userId: string) {
   return {
     ...(await prisma.user.findUniqueOrThrow({
       select: {
@@ -67,8 +57,8 @@ export async function findUniqueUser(domainHostname: string, userId: string) {
         id: userId
       }
     })),
-    inventory: await getUserInventory(domainHostname, userId),
-    syncedAt: await getUserSyncedAt(domainHostname, userId)
+    inventory: await getUserInventory(userId),
+    syncedAt: await getUserSyncedAt(userId)
   };
 }
 
@@ -83,35 +73,8 @@ export async function existsUser(userId: string) {
   );
 }
 
-export async function updateUserInventory(
-  domainHostname: string,
-  userId: string,
-  inventory: string
-) {
+export async function updateUserInventory(userId: string, inventory: string) {
   const syncedAt = new Date();
-  if (await isValidDomain(domainHostname)) {
-    return await prisma.userDomainInventory.upsert({
-      select: {
-        syncedAt: true
-      },
-      create: {
-        domainHostname,
-        inventory,
-        syncedAt,
-        userId
-      },
-      update: {
-        inventory,
-        syncedAt
-      },
-      where: {
-        domainHostname_userId: {
-          domainHostname,
-          userId
-        }
-      }
-    });
-  }
   return await prisma.user.update({
     select: {
       syncedAt: true
@@ -126,18 +89,7 @@ export async function updateUserInventory(
   });
 }
 
-export async function getUserSyncedAt(domainHostname: string, userId: string) {
-  if (await isValidDomain(domainHostname)) {
-    const syncedAt = (
-      await prisma.userDomainInventory.findFirst({
-        select: { syncedAt: true },
-        where: { userId, domainHostname }
-      })
-    )?.syncedAt;
-    if (syncedAt !== undefined) {
-      return syncedAt;
-    }
-  }
+export async function getUserSyncedAt(userId: string) {
   return (
     await prisma.user.findFirstOrThrow({
       select: { syncedAt: true },
@@ -147,13 +99,11 @@ export async function getUserSyncedAt(domainHostname: string, userId: string) {
 }
 
 export async function manipulateUserInventory({
-  domainHostname,
   manipulate,
   rawInventory,
   syncedAt,
   userId
 }: {
-  domainHostname: string;
   manipulate:
     | ((inventory: CS2Inventory) => void)
     | ((inventory: CS2Inventory) => Promise<void>);
@@ -172,14 +122,10 @@ export async function manipulateUserInventory({
     throw badRequest;
   }
   if (syncedAt !== undefined) {
-    const currentSyncedAt = await getUserSyncedAt(domainHostname, userId);
+    const currentSyncedAt = await getUserSyncedAt(userId);
     if (syncedAt !== currentSyncedAt.getTime()) {
       throw conflict;
     }
   }
-  return await updateUserInventory(
-    domainHostname,
-    userId,
-    inventory.stringify()
-  );
+  return await updateUserInventory(userId, inventory.stringify());
 }

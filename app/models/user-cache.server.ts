@@ -13,7 +13,6 @@ import { getUserInventory, getUserSyncedAt } from "./user.server";
 
 export async function handleUserCachedResponse({
   args,
-  domainHostname,
   generate,
   mimeType,
   throwBody,
@@ -21,7 +20,6 @@ export async function handleUserCachedResponse({
   userId
 }: {
   args: string | null;
-  domainHostname: string;
   generate:
     | ((inventory: CS2InventoryData, userId: string) => any)
     | ((inventory: CS2InventoryData, userId: string) => Promise<any>);
@@ -39,7 +37,7 @@ export async function handleUserCachedResponse({
       ? json(throwBody)
       : res(throwBody, mimeType);
   }
-  const timestamp = await getUserSyncedAt(domainHostname, userId);
+  const timestamp = await getUserSyncedAt(userId);
   const cache = await prisma.userCache.findFirst({
     select: { body: true },
     where: {
@@ -52,9 +50,7 @@ export async function handleUserCachedResponse({
   if (cache !== null) {
     return res(cache.body, mimeType);
   }
-  const inventory = parseInventory(
-    await getUserInventory(domainHostname, userId)
-  );
+  const inventory = parseInventory(await getUserInventory(userId));
   if (!inventory) {
     throw mimeType === "application/json"
       ? json(throwBody)

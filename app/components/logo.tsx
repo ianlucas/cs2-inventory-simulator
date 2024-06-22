@@ -3,13 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useAppContext } from "./app-context";
-
 export function Logo(props: { className?: string }) {
-  const { logo } = useAppContext();
-  if (logo !== undefined) {
-    return <img {...props} src={logo} draggable={false} />;
-  }
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -14,7 +14,6 @@ import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
-import { getRequestHostname } from "~/models/domain.server";
 import { expectRule, expectRuleNotContain } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
@@ -264,7 +263,6 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
   if (request.method !== "POST") {
     throw methodNotAllowed;
   }
-  const domainHostname = getRequestHostname(request);
   const { id: userId, inventory: rawInventory } = await requireUser(request);
   const { syncedAt, actions } = z
     .object({
@@ -274,7 +272,6 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
     .parse(await request.json());
   let addedFromCache = false;
   const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
-    domainHostname,
     rawInventory,
     syncedAt,
     userId,

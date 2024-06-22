@@ -12,7 +12,6 @@ import {
   STATTRAK_INCREMENT_SCOPE,
   isApiKeyValid
 } from "~/models/api-credential.server";
-import { getRequestHostname } from "~/models/domain.server";
 import {
   existsUser,
   findUniqueUser,
@@ -31,7 +30,6 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
   if (request.method !== "POST") {
     throw methodNotAllowed;
   }
-  const domainHostname = getRequestHostname(request);
   const { apiKey, userId, targetUid } = z
     .object({
       apiKey: z.string(),
@@ -49,12 +47,8 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
   }
 
   try {
-    const { inventory: rawInventory } = await findUniqueUser(
-      domainHostname,
-      userId
-    );
+    const { inventory: rawInventory } = await findUniqueUser(userId);
     await manipulateUserInventory({
-      domainHostname,
       rawInventory,
       userId,
       manipulate(inventory) {
