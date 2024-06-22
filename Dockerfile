@@ -4,7 +4,7 @@ FROM node:18-bullseye-slim as base
 ENV NODE_ENV production
 
 # Install Prisma dependencies
-RUN apt-get update && apt-get install -y openssl
+RUN apt-get update && apt-get install -y openssl git
 
 # Install Inventory Simulator dependencies
 FROM base as deps
@@ -34,6 +34,7 @@ ADD prisma .
 RUN npx prisma generate
 
 ADD . .
+RUN git log -n 1 --pretty=format:%H > .build-last-commit
 RUN npm run build
 
 # Finally, build the production image with minimal footprint
@@ -49,6 +50,7 @@ COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
 COPY --from=build /myapp/build /myapp/build
 COPY --from=build /myapp/public /myapp/public
 COPY --from=build /myapp/package.json /myapp/package.json
+COPY --from=build /myapp/.build-last-commit /myapp/.build-last-commit
 COPY --from=build /myapp/start.sh /myapp/start.sh
 COPY --from=build /myapp/prisma /myapp/prisma
 
