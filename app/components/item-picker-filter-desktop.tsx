@@ -29,7 +29,7 @@ export function ItemPickerFilterDesktop({
   }
 
   return (
-    <div className="flex w-[220px] items-center">
+    <div className="flex w-[220px]">
       <div className="w-full rounded-br rounded-tr bg-black/10 py-1.5">
         {categories.map((filter, index) => {
           const isActive =
