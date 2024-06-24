@@ -38,7 +38,6 @@
     "remix-auth": "^3.7.0",
     "remix-typedjson": "^0.4.1",
     "remix-utils": "^7.6.0",
-    "steamapi": "^3.0.8",
     "tsx": "^4.15.7",
     "zod": "^3.23.8"
   },
@@ -60,5 +59,8 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "overrides": {
+    "steamapi": "3.0.8"
   }
 }
