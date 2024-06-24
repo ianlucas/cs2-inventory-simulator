@@ -32,6 +32,7 @@ export function StickerPickerEditor({
 }) {
   const localize = useLocalize();
   const canvasRef = useRef<ComponentRef<"canvas">>(null);
+  const backgroundRef = useRef<fabric.Image | null>(null);
   const [activeSlot, setActiveSlot] = useState<number>();
   const activeSticker =
     activeSlot !== undefined ? value[activeSlot] : undefined;
@@ -49,11 +50,6 @@ export function StickerPickerEditor({
       selection: false
     });
 
-    canvas.setZoom(0.8);
-    const vpt = ensure(canvas.viewportTransform);
-    vpt[4] -= CANVAS_WIDTH / 2;
-    vpt[5] -= CANVAS_HEIGHT / 2;
-
     fabric.Image.fromURL("/images/schematics/m4a4.png", (img) => {
       img.set({
         left: 0,
@@ -61,6 +57,7 @@ export function StickerPickerEditor({
         selectable: false,
         evented: false
       });
+      backgroundRef.current = img;
       canvas.add(img);
       canvas.setZoom(ensure(canvas.width) / ensure(img.width));
       const vpt = ensure(canvas.viewportTransform);
@@ -74,8 +71,20 @@ export function StickerPickerEditor({
       let zoom = canvas.getZoom();
       zoom *= 0.999 ** delta;
       if (zoom > 20) zoom = 20;
-      if (zoom < 0.01) zoom = 0.01;
+      if (zoom < 0.5) zoom = 0.5;
       canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+      const vpt = canvas.viewportTransform;
+      const img = backgroundRef.current;
+      if (vpt === undefined || img === null) {
+        return;
+      }
+      const cw = ensure(canvas.width);
+      const ch = ensure(canvas.height);
+      const bw = ensure(img.width);
+      const bh = ensure(img.height);
+      vpt[4] = Math.min(0, Math.max(cw - bw * vpt[0], vpt[4]));
+      vpt[5] = Math.min(0, Math.max(ch - bh * vpt[0], vpt[5]));
+      canvas.requestRenderAll();
       opt.e.preventDefault();
       opt.e.stopPropagation();
     });
@@ -94,9 +103,19 @@ export function StickerPickerEditor({
     canvas.on("mouse:move", (opt) => {
       if (isPanning) {
         const e = opt.e;
-        const vpt = ensure(canvas.viewportTransform);
+        const vpt = canvas.viewportTransform;
+        const img = backgroundRef.current;
+        if (vpt === undefined || img === null) {
+          return;
+        }
         vpt[4] += e.clientX - lastPosX;
         vpt[5] += e.clientY - lastPosY;
+        const cw = ensure(canvas.width);
+        const ch = ensure(canvas.height);
+        const bw = ensure(img.width);
+        const bh = ensure(img.height);
+        vpt[4] = Math.min(0, Math.max(cw - bw * vpt[0], vpt[4]));
+        vpt[5] = Math.min(0, Math.max(ch - bh * vpt[0], vpt[5]));
         canvas.requestRenderAll();
         lastPosX = e.clientX;
         lastPosY = e.clientY;
