@@ -9,7 +9,6 @@ import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
-import { getRequestHostname } from "~/models/domain.server";
 import { expectRule, getRule } from "~/models/rule.server";
 import { updateUserInventory } from "~/models/user.server";
 import { conflict, methodNotAllowed } from "~/responses.server";
@@ -28,7 +27,6 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
   if (request.method !== "POST") {
     throw methodNotAllowed;
   }
-  const domainHostname = getRequestHostname(request);
   const {
     id: userId,
     inventory: rawInventory,
@@ -53,7 +51,6 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
   const unlockedItem = inventory.get(caseUid).unlockContainer();
   inventory.unlockContainer(unlockedItem, caseUid, keyUid);
   const { syncedAt: responseSyncedAt } = await updateUserInventory(
-    domainHostname,
     userId,
     inventory.stringify()
   );

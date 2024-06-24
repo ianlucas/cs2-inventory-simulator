@@ -7,22 +7,19 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { middleware } from "~/http.server";
-import { getRequestHostname } from "~/models/domain.server";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
 
 export const ApiInventoryUserIdUrl = "/api/inventory/$userId.json";
 
 export const loader = api(async ({ params, request }: LoaderFunctionArgs) => {
   await middleware(request);
-  const domainHostname = getRequestHostname(request);
   const userId = z.string().parse(params.userId);
   return await handleUserCachedResponse({
-    args: domainHostname,
+    args: null,
     generate(inventory) {
       return inventory;
     },
     mimeType: "application/json",
-    domainHostname,
     throwBody: [],
     url: ApiInventoryUserIdUrl,
     userId

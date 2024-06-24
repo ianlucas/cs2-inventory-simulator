@@ -27,7 +27,6 @@ import { SyncWarn } from "./components/sync-warn";
 import { BUILD_LAST_COMMIT } from "./env.server";
 import { middleware } from "./http.server";
 import { getLocalizationChecksum } from "./localization.server";
-import { getDomainImage } from "./models/domain.server";
 import { getRule, getRules } from "./models/rule.server";
 import { getBackground } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
@@ -60,7 +59,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     await getRule("steamCallbackUrl")
   );
   return typedjson({
-    logo: await getDomainImage(request),
     localization: {
       checksum: getLocalizationChecksum()
     },

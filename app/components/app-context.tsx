@@ -82,7 +82,6 @@ export function useLocalizationChecksum() {
 
 export function AppProvider({
   children,
-  logo,
   preferences,
   rules,
   localization: { checksum },
@@ -175,7 +174,6 @@ export function AppProvider({
         inventoryFilter,
         items,
         localization,
-        logo,
         preferences,
         rules,
         setInventory,

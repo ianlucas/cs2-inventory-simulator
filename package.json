@@ -14,7 +14,7 @@
     "upgrade": "npx npm-check-updates@latest --target minor -u"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.26.16",
+    "@floating-ui/react": "^0.26.17",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
@@ -23,7 +23,7 @@
     "@ianlucas/cs2-lib": "^5.0.0-rc.24",
     "@ianlucas/cs2-lib-inspect": "^2.0.0-rc.3",
     "@ianlucas/remix-auth-steam": "^3.0.0",
-    "@prisma/client": "^5.15.0",
+    "@prisma/client": "^5.15.1",
     "@remix-run/node": "^2.9.2",
     "@remix-run/react": "^2.9.2",
     "@remix-run/serve": "^2.9.2",
@@ -32,33 +32,35 @@
     "country-flag-icons": "^1.5.12",
     "dotenv": "^16.4.5",
     "isbot": "^3.8.0",
-    "prisma": "^5.15.0",
+    "prisma": "^5.15.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "remix-auth": "^3.7.0",
     "remix-typedjson": "^0.4.1",
     "remix-utils": "^7.6.0",
-    "steamapi": "^3.0.8",
-    "tsx": "^4.15.2",
+    "tsx": "^4.15.7",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.9.2",
     "@testing-library/react": "^15.0.7",
-    "@types/node": "^18.19.34",
+    "@types/node": "^18.19.39",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "happy-dom": "^14.12.0",
+    "happy-dom": "^14.12.3",
     "prettier": "^3.3.2",
-    "prettier-plugin-tailwindcss": "^0.6.3",
+    "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "^3.4.4",
     "terser": "^5.31.1",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.13",
+    "typescript": "^5.5.2",
+    "vite": "^5.3.1",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^1.6.0"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "overrides": {
+    "steamapi": "3.0.8"
   }
 }

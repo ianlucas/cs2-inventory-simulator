@@ -8,7 +8,6 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { middleware } from "~/http.server";
-import { getRequestHostname } from "~/models/domain.server";
 import { getRules } from "~/models/rule.server";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
 import { generate } from "~/utils/inventory-equipped-v3";
@@ -17,7 +16,6 @@ export const ApiEquippedV3UserIdJsonUrl = "/api/equipped/v3/$userId.json";
 
 export const loader = api(async ({ params, request }: LoaderFunctionArgs) => {
   await middleware(request);
-  const domainHostname = getRequestHostname(request);
   const userId = z.string().parse(params.userId);
   const {
     inventoryItemEquipHideModel,
@@ -33,11 +31,9 @@ export const loader = api(async ({ params, request }: LoaderFunctionArgs) => {
     ],
     userId
   );
-  const args = [
-    domainHostname,
-    inventoryItemEquipHideModel,
-    inventoryItemEquipHideType
-  ].join(";");
+  const args = [inventoryItemEquipHideModel, inventoryItemEquipHideType].join(
+    ";"
+  );
   return await handleUserCachedResponse({
     args,
     generate(data) {
@@ -54,7 +50,6 @@ export const loader = api(async ({ params, request }: LoaderFunctionArgs) => {
       );
     },
     mimeType: "application/json",
-    domainHostname,
     throwBody: {},
     url: ApiEquippedV3UserIdJsonUrl,
     userId
