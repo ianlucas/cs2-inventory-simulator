@@ -5,6 +5,7 @@ ENV NODE_ENV production
 
 # Install Prisma dependencies
 RUN apt-get update && apt-get install -y openssl git
+RUN git log -n 1 --pretty=format:%H > .build-last-commit
 
 # Install Inventory Simulator dependencies
 FROM base as deps
@@ -12,6 +13,7 @@ FROM base as deps
 WORKDIR /myapp
 
 ADD package.json ./
+ADD .build-last-commit ./
 RUN npm install --include=dev
 
 # Setup production node_modules
@@ -34,7 +36,6 @@ ADD prisma .
 RUN npx prisma generate
 
 ADD . .
-RUN git log -n 1 --pretty=format:%H > .build-last-commit
 RUN npm run build
 
 # Finally, build the production image with minimal footprint
