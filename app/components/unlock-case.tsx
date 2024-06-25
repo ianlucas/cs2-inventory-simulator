@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Economy, CS2UnlockedItem } from "@ianlucas/cs2-lib";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import {
@@ -21,6 +21,7 @@ import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { useInventory, useUser } from "./app-context";
+import { useKeyRelease } from "./hooks/use-key-release";
 import { useIsSyncing } from "./hooks/use-sync-state";
 import { UnlockCaseContainer } from "./unlock-case-container";
 import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
@@ -53,6 +54,7 @@ export function UnlockCase({
   const [canUnlock, setCanUnlock] = useState(true);
   const [unlockedItem, setUnlockedItem] = useState<CS2UnlockedItem>();
   const [hideCaseContents, setHideCaseContents] = useState(false);
+  const unlockedItemRef = useRef<CS2UnlockedItem>();
 
   const caseItem = useInventoryItem(caseUid);
   const neededKeyItem =
@@ -62,6 +64,21 @@ export function UnlockCase({
   const keyItem = useTryInventoryItem(keyUid);
   const wait = useTimer();
 
+  function addUnlockedItemToInventory() {
+    const unlockedItem = unlockedItemRef.current;
+    if (unlockedItem === undefined) {
+      return;
+    }
+    setUnlockedItem(unlockedItem);
+    setInventory(inventory.unlockContainer(unlockedItem, caseUid, keyUid));
+    unlockedItemRef.current = undefined;
+  }
+
+  function handleClose() {
+    addUnlockedItemToInventory();
+    onClose();
+  }
+
   async function handleUnlock() {
     try {
       setIsDisplaying(false);
@@ -70,6 +87,7 @@ export function UnlockCase({
         user === undefined
           ? caseItem.unlockContainer()
           : await unlockCase(caseUid, keyUid);
+      unlockedItemRef.current = unlockedItem;
       wait(() => {
         setHideCaseContents(true);
         if (caseItem.keys !== undefined) {
@@ -82,12 +100,7 @@ export function UnlockCase({
             )
           );
           setIsDisplaying(true);
-          wait(() => {
-            setUnlockedItem(unlockedItem);
-            setInventory(
-              inventory.unlockContainer(unlockedItem, caseUid, keyUid)
-            );
-          }, 6000);
+          wait(addUnlockedItemToInventory, 6000);
         }, 100);
       }, 250);
     } catch {
@@ -95,6 +108,8 @@ export function UnlockCase({
       onClose();
     }
   }
+
+  useKeyRelease("Escape", handleClose);
 
   return (
     <ClientOnly
@@ -118,7 +133,7 @@ export function UnlockCase({
                 items={items}
                 keyItem={keyItem}
                 neededKeyItem={neededKeyItem}
-                onClose={onClose}
+                onClose={handleClose}
                 onUnlock={handleUnlock}
               />
             )}
