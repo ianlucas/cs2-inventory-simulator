@@ -12,9 +12,12 @@ import {
   CS2_MIN_STICKER_WEAR,
   ensure
 } from "@ianlucas/cs2-lib";
+import { generateInspectLink } from "@ianlucas/cs2-lib-inspect";
 import clsx from "clsx";
 import { fabric } from "fabric";
 import { ComponentRef, useEffect, useRef, useState } from "react";
+import { resolveItemImage } from "~/utils/economy";
+import { createFakeInventoryItem } from "~/utils/inventory";
 import { range } from "~/utils/number";
 import { useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -22,6 +25,9 @@ import { Modal } from "./modal";
 
 const CANVAS_WIDTH = 678;
 const CANVAS_HEIGHT = 389.844;
+const EMPTY_STICKER_IMAGE =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAADAAQMAAADRIy8lAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRFAAAAp3o92gAAAAF0Uk5TAEDm2GYAAAAtSURBVHic7cqhAQAADAKg+f/TO8FmgkyuiCAIgiAIgiAIgiAIgiAIgiAIwjY8bacAwU8xO5cAAAAASUVORK5CYII=";
+const STICKER_SCALE = 0.35387943899137936;
 
 export function StickerPickerEditor({
   onChange,
@@ -32,7 +38,9 @@ export function StickerPickerEditor({
 }) {
   const localize = useLocalize();
   const canvasRef = useRef<ComponentRef<"canvas">>(null);
+  const fabricCanvasRef = useRef<fabric.Canvas | null>(null);
   const backgroundRef = useRef<fabric.Image | null>(null);
+  const stickerRefs = useRef<fabric.Image[]>([]);
   const [activeSlot, setActiveSlot] = useState<number>();
   const activeSticker =
     activeSlot !== undefined ? value[activeSlot] : undefined;
@@ -43,12 +51,79 @@ export function StickerPickerEditor({
     };
   }
 
+  function handleValueUpdate() {
+    for (const slot of range(CS2_MAX_STICKERS)) {
+      const img = stickerRefs.current[slot];
+      if (img === undefined) {
+        continue;
+      }
+      if (value[slot] === undefined) {
+        img.set({
+          visible: false
+        });
+        continue;
+      }
+      const { id } = value[slot];
+      const sticker = CS2Economy.getById(
+        [11321, 8530, 6156, 8509, 11307][slot]
+      );
+      img.set({
+        visible: true
+      });
+      const src = resolveItemImage(sticker);
+      // some stickers are w=256, others are w=512
+      const scale = STICKER_SCALE / (src.includes("statically") ? 2 : 1);
+      img.setSrc(src, () => {
+        img.set({
+          scaleX: scale,
+          scaleY: scale
+        });
+        fabricCanvasRef.current?.renderAll();
+      });
+      img.off("modified").on("modified", () => {
+        const newValue = {
+          ...value,
+          [slot]: {
+            ...value[slot]
+            // @todo: translate from canvas to weapon coordinates
+            //ensure(img.left)
+            //ensure(img.top)
+          }
+        };
+        console.log(newValue);
+        console.log(
+          generateInspectLink(
+            createFakeInventoryItem(CS2Economy.getById(11278), {
+              stickers: new Map(
+                Object.entries(newValue).map(([k, v]) => [parseInt(k, 10), v])
+              )
+            })
+          )
+        );
+        stickerRefs.current.forEach((img) => {
+          console.log({
+            url: img.getSrc(),
+            x: ensure(img.left),
+            y: ensure(img.top)
+          });
+        });
+        onChange(newValue);
+      });
+    }
+  }
+
   useEffect(() => {
     const canvas = new fabric.Canvas(canvasRef.current, {
       height: CANVAS_HEIGHT,
       width: CANVAS_WIDTH,
       selection: false
     });
+    fabricCanvasRef.current = canvas;
+
+    let isPanning = false;
+    let isBlockPlanning = false;
+    let lastPosX = 0;
+    let lastPosY = 0;
 
     fabric.Image.fromURL("/images/schematics/m4a4.png", (img) => {
       img.set({
@@ -65,6 +140,39 @@ export function StickerPickerEditor({
       vpt[5] = (ensure(canvas.height) - ensure(img.height) * vpt[0]) / 2;
       canvas.requestRenderAll();
     });
+
+    for (const slot of range(CS2_MAX_STICKERS)) {
+      fabric.Image.fromURL(EMPTY_STICKER_IMAGE, (img) => {
+        stickerRefs.current[slot] = img;
+        handleValueUpdate();
+
+        img.set({
+          hasControls: true,
+          hasBorders: true,
+          lockMovementX: false,
+          lockMovementY: false,
+          lockRotation: false,
+
+          visible: false
+        });
+
+        canvas.add(img);
+        canvas.bringToFront(img);
+        canvas.setActiveObject(img);
+
+        img.on("selected", () => {
+          img.bringToFront();
+        });
+
+        img.on("mouseover", () => {
+          isBlockPlanning = true;
+        });
+
+        img.on("mouseout", () => {
+          isBlockPlanning = false;
+        });
+      });
+    }
 
     canvas.on("mouse:wheel", (opt) => {
       const delta = opt.e.deltaY;
@@ -89,10 +197,6 @@ export function StickerPickerEditor({
       opt.e.stopPropagation();
     });
 
-    let isPanning = false;
-    let lastPosX = 0;
-    let lastPosY = 0;
-
     canvas.on("mouse:down", (opt) => {
       const evt = opt.e;
       isPanning = true;
@@ -101,7 +205,7 @@ export function StickerPickerEditor({
     });
 
     canvas.on("mouse:move", (opt) => {
-      if (isPanning) {
+      if (isPanning && !isBlockPlanning) {
         const e = opt.e;
         const vpt = canvas.viewportTransform;
         const img = backgroundRef.current;
@@ -130,6 +234,8 @@ export function StickerPickerEditor({
       canvas.dispose();
     };
   }, []);
+
+  useEffect(handleValueUpdate, [value]);
 
   return (
     <Modal className="w-[800px] pb-1" blur>
