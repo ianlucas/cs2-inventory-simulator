@@ -110,7 +110,7 @@ export function UnlockCaseContainer({
                 )}
                 <ModalButton
                   children={localize("CaseClose")}
-                  disabled={!canUnlock}
+                  disabled={isSyncing}
                   onClick={onClose}
                   variant="secondary"
                 />
