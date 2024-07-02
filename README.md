@@ -14,7 +14,8 @@ A Counter-Strike 2 **Inventory Simulator** for the web using TypeScript and Remi
 - **Equip Items:** equip items as you would do in-game.
 - **Case Opening:** unlock cases by using Cases and their Keys.
 - **Item Renaming:** use the Name Tag tool to rename items.
-- **Apply/Scrape Stickers:** apply and scrape Stickers from items.
+- **Apply/Scrape Stickers:** apply and scrape Stickers items.
+- **Apply/Remove Patches:** apply and remove Patches on agents.
 - **Storage Units:** organize and store items in Storage Units.
 - **API for developers:** fetch a user inventory and equipped items by using HTTP endpoints.
 - **Partial support for mobile devices**
@@ -31,5 +32,6 @@ Please be sure to add the following prefixes in the title when opening an issue:
 
 The documentation is divided into several sections:
 
+- [Self-hosting](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/docs/self-hosting.md)
 - [Rules](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/docs/rules.md)
 - [API for Developers](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/docs/api.md)
