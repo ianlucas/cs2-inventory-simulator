@@ -1,17 +1,18 @@
 # Self-hosting
 
-If you are looking into self-hosting your own Inventory Simulator instance, check out our [Dockerfile](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/Dockerfile) for a more precise step-by-step instructions for building and starting the app.
+If you are looking into self-hosting your own Inventory Simulator instance, check out our [Dockerfile](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/Dockerfile) for a more precise step-by-step instruction for building and starting the app.
 
 ## Steps for building and starting the app
 
-1. Setup a Postgres database instance up and running. Figure that out first before building the app.
+1. Have a Postgres database instance up and running. Figure that out first before building the app.
 2. Rename `.env.example` to `.env` with the proper environment variable values, including the database URL.
 3. `npm install` to install dependencies.
 4. `npx prisma migrate deploy` to sync database.
-5. `npm run start` to start application.
+5. `npm run build` to build application.
+6. `npm run start` to start application.
 
 > [!IMPORTANT]  
-> Authentication requires the rules `steamApiKey` and `steamCallbackUrl` (in `public.Rules` table) to be configured properly to work.
+> Authentication requires the rules `steamApiKey` and `steamCallbackUrl` (in `public.Rules` table) to be properly configured to work.
 
 ### Can I use a MySQL database?
 
@@ -23,9 +24,9 @@ There is no admin interface in Inventory Simulator, so you need to interact with
 
 ### Using the API
 
-Inventory Simulator also exposes some API endpoints that can be used by other applications, such as [Inventory Simulator Plugin](https://github.com/ianlucas/cs2-inventory-simulator-plugin). For endpoints that require API keys, you need to create them in `public.ApiCredential` table.
+Inventory Simulator also [exposes some API endpoints](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/docs/api.md) that can be used by other applications, such as [Inventory Simulator Plugin](https://github.com/ianlucas/cs2-inventory-simulator-plugin). For endpoints that require API keys, you need to create them in `public.ApiCredential` table.
 
-### Inserting new API keys
+### Creating new API keys
 
 Insert a row into `public.ApiCredential` table, here's a description of the important columns:
 
