@@ -18,6 +18,8 @@ If you are looking into self-hosting your own Inventory Simulator instance, chec
 
 Yes, but you need to maintain your own Prisma migration. Make sure to double check fields noted as `String` in our [schema.prisma](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/prisma/schema.prisma) as it [does not](https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string) translate 1:1 to MySQL.
 
+[Follow this guide as an example of using MySQL.](https://github.com/ianlucas/cs2-inventory-simulator/discussions/92)
+
 ## Configuring the app
 
 There is no admin interface in Inventory Simulator, so you need to interact with the database to configure runtime logic. The main table is `public.Rule` where you can configure [some runtime logic](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/docs/rules.md).
