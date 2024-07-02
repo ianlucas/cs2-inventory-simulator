@@ -12,14 +12,16 @@ import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
-import { setupLocalizations } from "./localization.server";
+import { setupLocalization } from "./localization.server";
+import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule.server";
 
 const ABORT_DELAY = 5_000;
 
 CS2Economy.use({ items: CS2_ITEMS, language: english });
 setupRules();
-setupLocalizations();
+setupLocalization();
+setupLogo();
 
 export default function handleRequest(
   request: Request,

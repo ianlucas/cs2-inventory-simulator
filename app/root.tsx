@@ -65,6 +65,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     rules: {
       ...(await getRules(
         [
+          "appLogoUrl",
           "craftAllowNametag",
           "craftAllowPatches",
           "craftAllowSeed",

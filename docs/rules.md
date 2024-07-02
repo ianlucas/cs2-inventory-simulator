@@ -7,6 +7,12 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 
 ## Current rules
 
+### `appLogoUrl`
+
+- URL of the app's logo. If empty, uses Inventory Simulator's logo. Server must be restarted if changed.
+- **Type:** `string`
+- **Default:** _Empty_
+
 ### `appCountry`
 
 - Country of the application (ISO-3166-1 alpha-2 code). This will change the language of the application if it's available for the respective country (e.g. `br` uses `brazilian` translation).

@@ -78,7 +78,7 @@ function readItemLocalization() {
   return itemLocalizationByLanguage;
 }
 
-export function setupLocalizations() {
+export function setupLocalization() {
   global.__systemLocalizationByLanguage = {
     brazilian,
     bulgarian,

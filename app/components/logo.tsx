@@ -3,12 +3,25 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { useRules } from "./app-context";
+
 export function Logo(props: { className?: string }) {
+  const { appLogoUrl } = useRules();
+  if (typeof global !== "undefined") {
+    const base64Url = global.__appLogoBase64Url;
+    if (base64Url !== undefined && base64Url.length > 0) {
+      return <img suppressHydrationWarning {...props} src={base64Url} />;
+    }
+  }
+  if (appLogoUrl.length > 0) {
+    return <img suppressHydrationWarning {...props} src={appLogoUrl} />;
+  }
   return (
     <svg
+      suppressHydrationWarning
+      viewBox="0 0 521 83"
       xmlns="http://www.w3.org/2000/svg"
       xmlSpace="preserve"
-      viewBox="0 0 521 83"
       {...props}
     >
       <g fill="#fff">

@@ -35,9 +35,10 @@ const numberRulesNames = [
 ] as const;
 const numberArrayRulesNames = ["craftHideId", "editHideId"] as const;
 const stringRulesNames = [
+  "appCountry",
+  "appLogoUrl",
   "steamApiKey",
-  "steamCallbackUrl",
-  "appCountry"
+  "steamCallbackUrl"
 ] as const;
 const stringArrayRulesName = [
   "craftHideCategory",
@@ -146,7 +147,7 @@ export async function getRule(name: RuleNames, userId?: string) {
     return Number(value);
   }
   if (stringRulesNames.includes(name as StringRuleNames)) {
-    return value;
+    return value.trim();
   }
   if (stringArrayRulesName.includes(name as StringArrayRuleNames)) {
     return value
@@ -301,6 +302,11 @@ export async function setupRules() {
     name: "appCountry",
     type: "string",
     input: "us"
+  });
+  await addRule({
+    name: "appLogoUrl",
+    type: "string",
+    input: ""
   });
   await addRule({
     name: "steamApiKey",
