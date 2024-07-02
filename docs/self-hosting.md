@@ -12,7 +12,7 @@ If you are looking into self-hosting your own Inventory Simulator instance, chec
 6. `npm run start` to start application.
 
 > [!IMPORTANT]  
-> Authentication requires the rules `steamApiKey` and `steamCallbackUrl` (in `public.Rules` table) to be properly configured to work.
+> Authentication requires the rules `steamApiKey` and `steamCallbackUrl` (in `public.Rule` table) to be properly configured to work.
 
 ### Can I use a MySQL database?
 
@@ -26,7 +26,7 @@ There is no admin interface in Inventory Simulator, so you need to interact with
 
 Inventory Simulator also [exposes some API endpoints](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/docs/api.md) that can be used by other applications, such as [Inventory Simulator Plugin](https://github.com/ianlucas/cs2-inventory-simulator-plugin). For endpoints that require API keys, you need to create them in `public.ApiCredential` table.
 
-### Creating new API keys
+#### Creating new API keys
 
 Insert a row into `public.ApiCredential` table, here's a description of the important columns:
 
