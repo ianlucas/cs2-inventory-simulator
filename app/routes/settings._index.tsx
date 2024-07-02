@@ -5,7 +5,7 @@
 
 import { faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { Link, useNavigate, useSubmit } from "@remix-run/react";
 import { useState } from "react";
 import {
@@ -24,12 +24,11 @@ import { SettingsLabel } from "~/components/settings-label";
 import { backgrounds } from "~/data/backgrounds";
 import { languages } from "~/data/languages";
 import { middleware } from "~/http.server";
+import { getMetaTitle } from "~/root-meta";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
 import { RemoveAllItemsAction } from "./api.action.sync._index";
 
-export const meta: MetaFunction = () => {
-  return [{ title: "Settings - CS2 Inventory Simulator" }];
-};
+export const meta = getMetaTitle("HeaderSettingsLabel");
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);

@@ -37,6 +37,10 @@ const numberArrayRulesNames = ["craftHideId", "editHideId"] as const;
 const stringRulesNames = [
   "appCountry",
   "appLogoUrl",
+  "appName",
+  "appSeoDescription",
+  "appSeoImageUrl",
+  "appSeoTitle",
   "steamApiKey",
   "steamCallbackUrl"
 ] as const;
@@ -299,14 +303,34 @@ export async function setupRules() {
     input: 32
   });
   await addRule({
-    name: "appCountry",
-    type: "string",
-    input: "us"
-  });
-  await addRule({
     name: "appLogoUrl",
     type: "string",
     input: ""
+  });
+  await addRule({
+    name: "appName",
+    type: "string",
+    input: ""
+  });
+  await addRule({
+    name: "appSeoDescription",
+    type: "string",
+    input: ""
+  });
+  await addRule({
+    name: "appSeoImageUrl",
+    type: "string",
+    input: ""
+  });
+  await addRule({
+    name: "appSeoTitle",
+    type: "string",
+    input: ""
+  });
+  await addRule({
+    name: "appCountry",
+    type: "string",
+    input: "us"
   });
   await addRule({
     name: "steamApiKey",

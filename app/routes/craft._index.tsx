@@ -6,7 +6,7 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
-import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
 import { useState } from "react";
@@ -20,15 +20,14 @@ import { ItemEditor, ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
 import { Modal } from "~/components/modal";
 import { middleware } from "~/http.server";
+import { getMetaTitle } from "~/root-meta";
 import { isItemCountable } from "~/utils/economy";
 import { deleteEmptyProps } from "~/utils/misc";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { AddAction, EditAction } from "./api.action.sync._index";
 
-export const meta: MetaFunction = () => {
-  return [{ title: "Craft - CS2 Inventory Simulator" }];
-};
+export const meta = getMetaTitle("HeaderCraftLabel");
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);
