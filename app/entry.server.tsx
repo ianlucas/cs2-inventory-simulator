@@ -15,12 +15,14 @@ import { renderToPipeableStream } from "react-dom/server";
 import { setupLocalization } from "./localization.server";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule.server";
+import { setupPurge } from "./routines/setup-purge";
 
 const ABORT_DELAY = 5_000;
 
 CS2Economy.use({ items: CS2_ITEMS, language: english });
-setupRules();
 setupLocalization();
+setupPurge();
+setupRules();
 setupLogo();
 
 export default function handleRequest(
