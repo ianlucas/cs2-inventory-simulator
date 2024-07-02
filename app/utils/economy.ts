@@ -20,6 +20,8 @@ import {
 export const assetBaseUrl =
   "https://cdn.statically.io/gh/ianlucas/cs2-lib/main/assets/images";
 
+export const CS2_LEGACY_MAX_STICKERS = 4;
+
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
   CS2ItemType.Graffiti,
@@ -28,6 +30,7 @@ export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Sticker,
   CS2ItemType.Tool
 ];
+
 export const RarityLabel = {
   [CS2RarityColor.Common]: "Common",
   [CS2RarityColor.Uncommon]: "Uncommon",
