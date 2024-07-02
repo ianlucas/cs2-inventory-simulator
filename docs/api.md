@@ -14,32 +14,58 @@ GET https://inventory.cstrike.app/api/inventory/{steamID64}.json
 
   ```typescript
   type GetUserInventoryResponse = {
-    caseid?: number;
-    equipped?: boolean;
-    equippedCT?: boolean;
-    equippedT?: boolean;
-    id: number;
-    nametag?: string;
-    seed?: number;
-    stattrak?: number;
-    stickers?: number[];
-    stickerswear?: number[];
-    storage?: {
-      caseid?: number;
-      id: number;
-      nametag?: string;
-      seed?: number;
-      stattrak?: number;
-      stickers?: number[];
-      stickerswear?: number[];
-      uid: number;
-      updatedat?: number;
-      wear?: number;
-    }[];
-    uid: number;
-    updatedat?: number;
-    wear?: number;
-  }[];
+    items: Record<
+      number,
+      {
+        containerId?: number;
+        equipped?: boolean;
+        equippedCT?: boolean;
+        equippedT?: boolean;
+        id: number;
+        nameTag?: string;
+        patches?: Record<number, number>;
+        seed?: number;
+        statTrak?: number;
+        stickers?: Record<
+          number,
+          {
+            id: number;
+            wear?: number;
+            x?: number;
+            y?: number;
+          }
+        >;
+        storage?: Record<
+          number,
+          {
+            containerId?: number;
+            equipped?: boolean;
+            equippedCT?: boolean;
+            equippedT?: boolean;
+            id: number;
+            nameTag?: string;
+            patches?: Record<number, number>;
+            seed?: number;
+            statTrak?: number;
+            stickers?: Record<
+              number,
+              {
+                id: number;
+                wear?: number;
+                x?: number;
+                y?: number;
+              }
+            >;
+            updatedAt?: number;
+            wear?: number;
+          }
+        >;
+        updatedAt?: number;
+        wear?: number;
+      }
+    >;
+    version: number;
+  };
   ```
 
 ## Get user equipped items
