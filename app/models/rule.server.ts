@@ -36,6 +36,7 @@ const numberRulesNames = [
 const numberArrayRulesNames = ["craftHideId", "editHideId"] as const;
 const stringRulesNames = [
   "appCountry",
+  "appFooterName",
   "appLogoUrl",
   "appName",
   "appSeoDescription",
@@ -309,6 +310,11 @@ export async function setupRules() {
   });
   await addRule({
     name: "appName",
+    type: "string",
+    input: ""
+  });
+  await addRule({
+    name: "appFooterName",
     type: "string",
     input: ""
   });

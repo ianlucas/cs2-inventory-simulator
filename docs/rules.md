@@ -13,6 +13,12 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 - **Type:** `string`
 - **Default:** _Empty_
 
+### `appFooterName`
+
+- Name in the footer of the app. If empty, uses Inventory Simulator's default value.
+- **Type:** `string`
+- **Default:** _Empty_
+
 ### `appLogoUrl`
 
 - URL of the app's logo. If empty, uses Inventory Simulator's logo. Server must be restarted if changed.

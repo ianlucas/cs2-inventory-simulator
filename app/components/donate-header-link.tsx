@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { isOurHostname } from "~/utils/misc";
 import { useLocalize } from "./app-context";
 import { HeaderLink } from "./header-link";
 
@@ -13,9 +14,7 @@ export function DonateHeaderLink() {
   self-hosting this app! */
   return (
     typeof window !== "undefined" &&
-    ["inventory.cstrike.app", "localhost"].includes(
-      window.location.hostname
-    ) && (
+    isOurHostname() && (
       <HeaderLink
         className="font-bold"
         icon={faHeart}

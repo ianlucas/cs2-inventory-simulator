@@ -26,3 +26,9 @@ export function deleteEmptyProps(obj: any) {
 export function has(str?: string) {
   return (str?.length ?? 0) > 0;
 }
+
+export function isOurHostname() {
+  return ["inventory.cstrike.app", "localhost"].includes(
+    window.location.hostname
+  );
+}
