@@ -17,7 +17,6 @@ export const loader = api(async ({ request, params }: LoaderFunctionArgs) => {
   return json(
     await prisma.user.findUnique({
       include: {
-        inventories: true,
         groups: true
       },
       where: {

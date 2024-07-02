@@ -20,23 +20,12 @@ model User {
   createdAt DateTime @default(now())
   groups UserGroup[]
   id String @id
-  inventories UserDomainInventory[]
   inventory String?
   name String
   overwrites UserRule[]
   preferences UserPreference?
   syncedAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model UserDomainInventory {
-  @@id([domainHostname, userId])
-  createdAt DateTime @default(now())
-  domainHostname String
-  inventory String?
-  syncedAt DateTime @default(now())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
 }
 
 model UserCache {
