@@ -1,6 +1,6 @@
 # Self-hosting
 
-If you are looking into self-hosting your Inventory Simulator own instance, check out our [Dockerfile](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/Dockerfile) for a more precise step-by-step instructions for building and starting the app.
+If you are looking into self-hosting your own Inventory Simulator instance, check out our [Dockerfile](https://github.com/ianlucas/cs2-inventory-simulator/blob/main/Dockerfile) for a more precise step-by-step instructions for building and starting the app.
 
 ## Steps for building and starting the app
 
