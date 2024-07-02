@@ -6,7 +6,7 @@
 import { fail } from "@ianlucas/cs2-lib";
 import { SessionStorage } from "@remix-run/server-runtime";
 import { AuthenticateOptions, Strategy } from "remix-auth";
-import SteamAPI, { PlayerSummary } from "steamapi";
+import SteamAPI, { UserSummary } from "steamapi";
 import { z } from "zod";
 import {
   clearAuthTokens,
@@ -31,7 +31,7 @@ export class ApiStrategy extends Strategy<
         await upsertUser(
           (await new SteamAPI(await getRule("steamApiKey")).getUserSummary(
             userId
-          )) as PlayerSummary
+          )) as UserSummary
         )
     );
   }
