@@ -28,14 +28,14 @@ export function EditorSelect({
       {...rest}
       className={clsx(
         "h-[24px] rounded bg-black/50 outline-none",
-        value === "" && "text-neutral-500",
+        value === "" && "text-neutral-600",
         className
       )}
       onChange={handleChange}
       value={value}
     >
       {placeholder !== undefined && (
-        <option className="bg-black py-1 text-neutral-500" value="">
+        <option className="bg-black py-1 text-neutral-600" value="">
           {placeholder}
         </option>
       )}

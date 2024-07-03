@@ -112,6 +112,7 @@ export default function Craft() {
   return (
     <Modal
       className={clsx(
+        "transition-[width]",
         isPickingItem ? (isDesktop ? "w-[720px]" : "w-[540px]") : "w-[420px]"
       )}
     >

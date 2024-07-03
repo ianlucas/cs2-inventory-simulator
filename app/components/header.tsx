@@ -8,7 +8,7 @@ import {
   faBarsStaggered,
   faBoxesStacked,
   faCog,
-  faPlus,
+  faHammer,
   faRightFromBracket,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
@@ -83,7 +83,7 @@ export function Header() {
               {canCraft && (
                 <HeaderLink
                   to="/craft"
-                  icon={faPlus}
+                  icon={faHammer}
                   label={localize("HeaderCraftLabel")}
                   onClick={closeMenu}
                 />

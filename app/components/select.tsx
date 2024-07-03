@@ -13,6 +13,7 @@ export function Select<T extends { value: string }>({
   children,
   className,
   direction,
+  grayscale,
   noMaxHeight,
   onChange,
   options,
@@ -22,6 +23,7 @@ export function Select<T extends { value: string }>({
   children?: (option: T) => ReactNode;
   className?: string;
   direction?: "up" | "down";
+  grayscale?: boolean;
   noMaxHeight?: boolean;
   onChange: (value: string) => void;
   options: T[];
@@ -77,8 +79,13 @@ export function Select<T extends { value: string }>({
                 key={option.value}
                 className={clsx(
                   "flex w-full cursor-default items-center gap-2 px-2 py-1 transition-all",
-                  value === option.value && "bg-neutral-600/50",
-                  value !== option.value && "hover:bg-black/30"
+                  value === option.value
+                    ? grayscale
+                      ? "bg-neutral-600/50"
+                      : "bg-blue-600"
+                    : grayscale
+                      ? "hover:bg-black/30"
+                      : "hover:bg-blue-600 hover:text-white"
                 )}
                 onClick={() => {
                   onChange(option.value);

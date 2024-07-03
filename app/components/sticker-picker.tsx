@@ -147,7 +147,7 @@ export function StickerPicker({
                   {(stickerWear * 100).toFixed(0)}%
                 </div>
               )}
-              <div className="absolute left-0 top-0 h-full w-full rounded border-[2.5px] border-transparent transition-all hover:border-white"></div>
+              <div className="absolute left-0 top-0 h-full w-full rounded border-[3px] border-transparent transition-all hover:border-white"></div>
             </button>
           );
         })}

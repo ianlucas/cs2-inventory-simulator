@@ -93,6 +93,7 @@ export function InventoryFilter() {
           <Select
             children={({ label }) => <span className="text-sm">{label}</span>}
             className="min-w-[200px]"
+            grayscale
             noMaxHeight
             onChange={setSorter}
             options={INVENTORY_SORTERS.map(({ label, value }) => ({
