@@ -22,8 +22,7 @@ const ABORT_DELAY = 5_000;
 CS2Economy.use({ items: CS2_ITEMS, language: english });
 setupLocalization();
 setupPurge();
-setupRules();
-setupLogo();
+setupRules().then(() => setupLogo());
 
 export default function handleRequest(
   request: Request,
