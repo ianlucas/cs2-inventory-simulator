@@ -10,11 +10,11 @@ declare global {
 }
 
 export async function setupLogo() {
-  const url = await getRule("appLogoUrl");
-  if (url === "") {
-    return;
-  }
   try {
+    const url = await getRule("appLogoUrl");
+    if (url === "") {
+      return;
+    }
     const response = await fetch(url);
     const string = Buffer.from(await response.arrayBuffer()).toString("base64");
     const mimeType = response.headers.get("content-type");
