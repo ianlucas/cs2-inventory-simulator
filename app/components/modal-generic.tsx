@@ -37,3 +37,48 @@ export async function alert({
     )
   );
 }
+
+export async function confirm({
+  bodyText,
+  cancelText,
+  confirmText,
+  titleText
+}: {
+  bodyText: string;
+  cancelText: string;
+  confirmText: string;
+  titleText: string;
+}): Promise<boolean> {
+  return new Promise((resolve) => {
+    const root = createRoot(document.createElement("div"));
+    root.render(
+      createPortal(
+        <Modal className="w-[550px]" fixed blur>
+          <div className="px-4 py-2 text-sm font-bold">
+            <span className="text-neutral-400">{titleText}</span>
+          </div>
+          <p className="whitespace-pre px-4">{bodyText}</p>
+          <div className="flex justify-end gap-2 px-4 py-2">
+            <ModalButton
+              onClick={() => {
+                root.unmount();
+                resolve(false);
+              }}
+              variant="secondary"
+              children={cancelText}
+            />
+            <ModalButton
+              onClick={() => {
+                root.unmount();
+                resolve(true);
+              }}
+              variant="primary"
+              children={confirmText}
+            />
+          </div>
+        </Modal>,
+        document.body
+      )
+    );
+  });
+}

@@ -250,7 +250,7 @@ export const english = {
   ScrapeStickerWarn: /* csgo_english.txt */"Scrape a sticker from",
   SettingsBackground: "Background",
   SettingsBackgroundRandom: "Random",
-  SettingsConfirmRemoveAllItems: "Are you sure you want to remove all items from your inventory?\n\nTHIS ACTION CANNOT BE UNDONE.",
+  SettingsConfirmRemoveAllItems: "Are you sure you want to remove all items from your inventory?\nTHIS ACTION CANNOT BE UNDONE.",
   SettingsHeader: "Settings",
   SettingsHideFilters: "Hide filters",
   SettingsHideFreeItems: "Hide default items",

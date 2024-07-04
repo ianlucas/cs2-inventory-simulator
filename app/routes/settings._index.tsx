@@ -19,6 +19,7 @@ import { useSync } from "~/components/hooks/use-sync";
 import { LanguageSelect } from "~/components/language-select";
 import { Modal } from "~/components/modal";
 import { ModalButton } from "~/components/modal-button";
+import { confirm } from "~/components/modal-generic";
 import { Select } from "~/components/select";
 import { SettingsLabel } from "~/components/settings-label";
 import { backgrounds } from "~/data/backgrounds";
@@ -72,8 +73,15 @@ export default function Settings() {
     );
   }
 
-  function handleRemoveAllItems() {
-    if (confirm(localize("SettingsConfirmRemoveAllItems"))) {
+  async function handleRemoveAllItems() {
+    if (
+      await confirm({
+        titleText: localize("SettingsRemoveAllItems"),
+        bodyText: localize("SettingsConfirmRemoveAllItems"),
+        cancelText: localize("EditorCancel"),
+        confirmText: localize("InventoryItemStorageUnitEmptyClose")
+      })
+    ) {
       inventory.removeAll();
       setInventory(inventory);
       sync({ type: RemoveAllItemsAction });
@@ -129,7 +137,7 @@ export default function Settings() {
       <div className="mt-4 px-4">
         {inventory.size() > 0 && (
           <button
-            className="flex cursor-default items-center gap-2 rounded border border-neutral-500/20 px-2 py-1 font-semibold text-red-500 transition-all hover:border-red-500"
+            className="flex cursor-default items-center gap-2 rounded border border-neutral-500/20 px-2 py-1 font-display text-red-500 transition-all hover:border-red-500"
             onClick={handleRemoveAllItems}
           >
             <FontAwesomeIcon icon={faTrashCan} className="h-4" />

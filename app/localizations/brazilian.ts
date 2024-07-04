@@ -217,7 +217,7 @@ export const brazilian = {
   ScrapeStickerWarn: /* csgo_brazilian.txt */"Raspar um adesivo de",
   SettingsBackground: "Plano de Fundo",
   SettingsBackgroundRandom: "Aleatório",
-  SettingsConfirmRemoveAllItems: "Tem certeza de que deseja remover todos os itens do seu inventário?\n\nESSA AÇÃO NÃO PODE SER DESFEITA.",
+  SettingsConfirmRemoveAllItems: "Tem certeza de que deseja remover todos os itens do seu inventário?\nESSA AÇÃO NÃO PODE SER DESFEITA.",
   SettingsHeader: "Configurações",
   SettingsHideFilters: "Ocultar Filtros",
   SettingsHideFreeItems: "Ocultar Itens Gratuitos",
