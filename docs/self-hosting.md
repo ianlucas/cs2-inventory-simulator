@@ -4,12 +4,13 @@ If you are looking into self-hosting your own Inventory Simulator instance, chec
 
 ## Steps for building and starting the app
 
-1. Have a Postgres database instance up and running. Figure that out first before building the app.
-2. Rename `.env.example` to `.env` with the proper environment variable values, including the database URL.
-3. `npm install` to install dependencies.
-4. `npx prisma migrate deploy` to sync database.
-5. `npm run build` to build application.
-6. `npm run start` to start application.
+1. Have at least Node 18.x installed in your system.
+2. Have a Postgres database instance up and running. Figure that out first before building the app.
+3. Rename `.env.example` to `.env` with the proper environment variable values, including the database URL.
+4. `npm install` to install dependencies.
+5. `npx prisma migrate deploy` to sync database.
+6. `npm run build` to build application.
+7. `npm run start` to start application.
 
 > [!IMPORTANT]  
 > Authentication requires the rules `steamApiKey` and `steamCallbackUrl` (in `public.Rule` table) to be properly configured to work.
