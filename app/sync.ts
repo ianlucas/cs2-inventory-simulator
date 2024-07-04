@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { fail } from "@ianlucas/cs2-lib";
-import {
+import type {
   ActionShape,
-  ApiActionSyncData,
-  ApiActionSyncUrl
+  ApiActionSyncData
 } from "~/routes/api.action.sync._index";
+import { ApiActionSyncUrl } from "./data/sync";
 import { postJson } from "./utils/fetch";
 
 export const sync = new (class Sync extends EventTarget {

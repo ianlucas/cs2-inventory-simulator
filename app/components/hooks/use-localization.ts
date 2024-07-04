@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
-import { SystemLocalizationTokens } from "~/localization.server";
+import type { SystemLocalizationTokens } from "~/localization.server";
 
 export const LOCALIZATION_LOADED_TYPE = "localizationloaded";
 

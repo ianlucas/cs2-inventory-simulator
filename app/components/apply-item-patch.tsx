@@ -12,7 +12,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
-import { ApplyItemPatchAction } from "~/routes/api.action.sync._index";
+import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
 import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -41,7 +41,7 @@ export function ApplyItemPatch({
   function handleApplyPatch() {
     if (slot !== undefined) {
       sync({
-        type: ApplyItemPatchAction,
+        type: SyncAction.ApplyItemPatch,
         patchUid,
         slot,
         targetUid

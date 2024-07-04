@@ -10,10 +10,7 @@ import { useInput } from "~/components/hooks/use-input";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
-import {
-  AddWithNametagAction,
-  RenameItemAction
-} from "~/routes/api.action.sync._index";
+import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
 import { useInventory, useLocalize } from "./app-context";
 import { EditorInput } from "./editor-input";
@@ -43,7 +40,7 @@ export function RenameItem({
     if (targetUid < 0 && inventoryItem.free) {
       playSound("inventory_new_item_accept");
       sync({
-        type: AddWithNametagAction,
+        type: SyncAction.AddWithNametag,
         toolUid: toolUid,
         itemId: inventoryItem.id,
         nameTag: nameTag
@@ -53,7 +50,7 @@ export function RenameItem({
       );
     } else {
       sync({
-        type: RenameItemAction,
+        type: SyncAction.RenameItem,
         toolUid: toolUid,
         targetUid: targetUid,
         nameTag: nameTag

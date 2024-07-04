@@ -7,10 +7,7 @@ import { assert } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
-import {
-  DepositToStorageUnitAction,
-  RetrieveFromStorageUnitAction
-} from "~/routes/api.action.sync._index";
+import { SyncAction } from "~/data/sync";
 import { transform } from "~/utils/inventory-transform";
 import { useSync } from "./use-sync";
 
@@ -52,7 +49,7 @@ export function useStorageUnit() {
     assert(itemSelector !== undefined);
     const depositUids = [uid];
     sync({
-      type: DepositToStorageUnitAction,
+      type: SyncAction.DepositToStorageUnit,
       uid: itemSelector.uid,
       depositUids: depositUids
     });
@@ -82,7 +79,7 @@ export function useStorageUnit() {
     assert(itemSelector !== undefined);
     const retrieveUids = [uid];
     sync({
-      type: RetrieveFromStorageUnitAction,
+      type: SyncAction.RetrieveFromStorageUnit,
       uid: itemSelector.uid,
       retrieveUids: retrieveUids
     });

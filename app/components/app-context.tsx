@@ -16,8 +16,8 @@ import { useTypedLoaderData } from "remix-typedjson";
 import { useInventoryFilterState } from "~/components/hooks/use-inventory-filter-state";
 import { useInventoryState } from "~/components/hooks/use-inventory-state";
 import { useLocalization } from "~/components/hooks/use-localization";
+import { SyncAction } from "~/data/sync";
 import type { loader } from "~/root";
-import { AddFromCacheAction } from "~/routes/api.action.sync._index";
 import { pushToSync, sync } from "~/sync";
 import { updateEconomyLanguage } from "~/utils/economy";
 import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
@@ -121,7 +121,7 @@ export function AppProvider({
         const cachedData = getSanitizedCachedInventoryData();
         if (cachedData !== undefined) {
           pushToSync({
-            type: AddFromCacheAction,
+            type: SyncAction.AddFromCache,
             data: cachedData
           });
           setInventory(

@@ -10,7 +10,7 @@ import { useInput } from "~/components/hooks/use-input";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
-import { RenameStorageUnitAction } from "~/routes/api.action.sync._index";
+import { SyncAction } from "~/data/sync";
 import { useInventory, useLocalize } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { ItemImage } from "./item-image";
@@ -37,7 +37,7 @@ export function RenameStorageUnit({
 
   function handleRename() {
     sync({
-      type: RenameStorageUnitAction,
+      type: SyncAction.RenameStorageUnit,
       uid: uid,
       nameTag: nameTag
     });

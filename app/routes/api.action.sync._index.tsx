@@ -13,6 +13,7 @@ import { ActionFunctionArgs, SerializeFrom, json } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
+import { SyncAction } from "~/data/sync";
 import { middleware } from "~/http.server";
 import { expectRule, expectRuleNotContain } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
@@ -23,40 +24,20 @@ import {
   syncInventoryShape
 } from "~/utils/shapes.server";
 
-export const ApiActionSyncUrl = "/api/action/sync";
-export const AddAction = "add";
-export const AddFromCacheAction = "add-from-cache";
-export const AddWithNametagAction = "add-with-nametag";
-export const AddWithStickerAction = "add-with-sticker";
-export const ApplyItemPatchAction = "apply-item-patch";
-export const ApplyItemStickerAction = "apply-item-sticker";
-export const DepositToStorageUnitAction = "deposit-to-storage-unit";
-export const EditAction = "edit";
-export const EquipAction = "equip";
-export const RemoveAction = "remove";
-export const RemoveAllItemsAction = "remove-all-items";
-export const RemoveItemPatchAction = "remove-item-patch";
-export const RenameItemAction = "rename-item";
-export const RenameStorageUnitAction = "rename-storage-unit";
-export const RetrieveFromStorageUnitAction = "retrieve-from-storage-unit";
-export const ScrapeItemStickerAction = "scrape-item-sticker";
-export const SwapItemsStatTrakAction = "swap-items-stattrak";
-export const UnequipAction = "unequip";
-
 const actionShape = z
   .object({
-    type: z.literal(AddAction),
+    type: z.literal(SyncAction.Add),
     item: clientInventoryItemShape
   })
   .or(
     z.object({
-      type: z.literal(AddFromCacheAction),
+      type: z.literal(SyncAction.AddFromCache),
       data: syncInventoryShape
     })
   )
   .or(
     z.object({
-      type: z.literal(AddWithNametagAction),
+      type: z.literal(SyncAction.AddWithNametag),
       toolUid: nonNegativeInt,
       itemId: nonNegativeInt,
       nameTag: z.string()
@@ -64,7 +45,7 @@ const actionShape = z
   )
   .or(
     z.object({
-      type: z.literal(ApplyItemPatchAction),
+      type: z.literal(SyncAction.ApplyItemPatch),
       patchUid: nonNegativeInt,
       slot: nonNegativeInt,
       targetUid: nonNegativeInt
@@ -72,7 +53,7 @@ const actionShape = z
   )
   .or(
     z.object({
-      type: z.literal(ApplyItemStickerAction),
+      type: z.literal(SyncAction.ApplyItemSticker),
       slot: nonNegativeInt,
       stickerUid: nonNegativeInt,
       targetUid: nonNegativeInt
@@ -80,21 +61,21 @@ const actionShape = z
   )
   .or(
     z.object({
-      type: z.literal(EquipAction),
+      type: z.literal(SyncAction.Equip),
       uid: nonNegativeInt,
       team: teamShape.optional()
     })
   )
   .or(
     z.object({
-      type: z.literal(UnequipAction),
+      type: z.literal(SyncAction.Unequip),
       uid: nonNegativeInt,
       team: teamShape.optional()
     })
   )
   .or(
     z.object({
-      type: z.literal(RenameItemAction),
+      type: z.literal(SyncAction.RenameItem),
       toolUid: nonNegativeInt,
       targetUid: nonNegativeInt,
       nameTag: z.string().optional()
@@ -102,27 +83,27 @@ const actionShape = z
   )
   .or(
     z.object({
-      type: z.literal(RemoveAction),
+      type: z.literal(SyncAction.Remove),
       uid: nonNegativeInt
     })
   )
   .or(
     z.object({
-      type: z.literal(RemoveItemPatchAction),
+      type: z.literal(SyncAction.RemoveItemPatch),
       targetUid: nonNegativeInt,
       slot: nonNegativeInt
     })
   )
   .or(
     z.object({
-      type: z.literal(ScrapeItemStickerAction),
+      type: z.literal(SyncAction.ScrapeItemSticker),
       targetUid: nonNegativeInt,
       slot: nonNegativeInt
     })
   )
   .or(
     z.object({
-      type: z.literal(SwapItemsStatTrakAction),
+      type: z.literal(SyncAction.SwapItemsStatTrak),
       fromUid: nonNegativeInt,
       toUid: nonNegativeInt,
       toolUid: nonNegativeInt
@@ -130,7 +111,7 @@ const actionShape = z
   )
   .or(
     z.object({
-      type: z.literal(RenameStorageUnitAction),
+      type: z.literal(SyncAction.RenameStorageUnit),
       uid: nonNegativeInt,
       nameTag: z.string()
     })
@@ -138,27 +119,27 @@ const actionShape = z
   .or(
     z.object({
       depositUids: z.array(nonNegativeInt).max(1),
-      type: z.literal(DepositToStorageUnitAction),
+      type: z.literal(SyncAction.DepositToStorageUnit),
       uid: nonNegativeInt
     })
   )
   .or(
     z.object({
       retrieveUids: z.array(nonNegativeInt).max(1),
-      type: z.literal(RetrieveFromStorageUnitAction),
+      type: z.literal(SyncAction.RetrieveFromStorageUnit),
       uid: nonNegativeInt
     })
   )
   .or(
     z.object({
-      type: z.literal(EditAction),
+      type: z.literal(SyncAction.Edit),
       uid: nonNegativeInt,
       attributes: clientInventoryItemShape
     })
   )
   .or(
     z.object({
-      type: z.literal(AddWithStickerAction),
+      type: z.literal(SyncAction.AddWithSticker),
       itemId: nonNegativeInt,
       slot: nonNegativeInt,
       stickerUid: nonNegativeInt
@@ -166,7 +147,7 @@ const actionShape = z
   )
   .or(
     z.object({
-      type: z.literal(RemoveAllItemsAction)
+      type: z.literal(SyncAction.RemoveAllItems)
     })
   );
 
@@ -278,12 +259,12 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
     async manipulate(inventory) {
       for (const action of actions) {
         switch (action.type) {
-          case AddAction:
+          case SyncAction.Add:
             await enforceCraftRulesForInventoryItem(action.item, userId);
             await enforceCraftRulesForItem(action.item.id, userId);
             inventory.add(action.item);
             break;
-          case AddFromCacheAction:
+          case SyncAction.AddFromCache:
             if (rawInventory === null && !addedFromCache) {
               for (const item of Object.values(action.data.items)) {
                 try {
@@ -295,7 +276,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
               addedFromCache = true;
             }
             break;
-          case AddWithNametagAction:
+          case SyncAction.AddWithNametag:
             await enforceCraftRulesForItem(action.itemId, userId);
             inventory.addWithNametag(
               action.toolUid,
@@ -303,7 +284,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
               action.nameTag
             );
             break;
-          case ApplyItemPatchAction:
+          case SyncAction.ApplyItemPatch:
             await expectRule("inventoryItemAllowApplyPatch", true, userId);
             inventory.applyItemPatch(
               action.targetUid,
@@ -311,7 +292,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
               action.slot
             );
             break;
-          case ApplyItemStickerAction:
+          case SyncAction.ApplyItemSticker:
             await expectRule("inventoryItemAllowApplySticker", true, userId);
             inventory.applyItemSticker(
               action.targetUid,
@@ -319,47 +300,47 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
               action.slot
             );
             break;
-          case EquipAction:
+          case SyncAction.Equip:
             inventory.equip(action.uid, action.team);
             break;
-          case UnequipAction:
+          case SyncAction.Unequip:
             inventory.unequip(action.uid, action.team);
             break;
-          case RenameItemAction:
+          case SyncAction.RenameItem:
             inventory.renameItem(
               action.toolUid,
               action.targetUid,
               action.nameTag
             );
             break;
-          case RemoveAction:
+          case SyncAction.Remove:
             inventory.remove(action.uid);
             break;
-          case RemoveItemPatchAction:
+          case SyncAction.RemoveItemPatch:
             await expectRule("inventoryItemAllowRemovePatch", true, userId);
             inventory.removeItemPatch(action.targetUid, action.slot);
             break;
-          case ScrapeItemStickerAction:
+          case SyncAction.ScrapeItemSticker:
             await expectRule("inventoryItemAllowScrapeSticker", true, userId);
             inventory.scrapeItemSticker(action.targetUid, action.slot);
             break;
-          case SwapItemsStatTrakAction:
+          case SyncAction.SwapItemsStatTrak:
             inventory.swapItemsStatTrak(
               action.toolUid,
               action.fromUid,
               action.toUid
             );
             break;
-          case RenameStorageUnitAction:
+          case SyncAction.RenameStorageUnit:
             inventory.renameStorageUnit(action.uid, action.nameTag);
             break;
-          case DepositToStorageUnitAction:
+          case SyncAction.DepositToStorageUnit:
             inventory.depositToStorageUnit(action.uid, action.depositUids);
             break;
-          case RetrieveFromStorageUnitAction:
+          case SyncAction.RetrieveFromStorageUnit:
             inventory.retrieveFromStorageUnit(action.uid, action.retrieveUids);
             break;
-          case EditAction:
+          case SyncAction.Edit:
             await expectRule("inventoryItemAllowEdit", true, userId);
             await enforceEditRulesForItem(action.attributes.id, userId);
             await enforceEditRulesForInventoryItem(action.attributes, userId);
@@ -372,7 +353,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
               nameTag: action.attributes.nameTag
             });
             break;
-          case AddWithStickerAction:
+          case SyncAction.AddWithSticker:
             await enforceCraftRulesForItem(action.itemId, userId);
             inventory.addWithSticker(
               action.stickerUid,
@@ -380,7 +361,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
               action.slot
             );
             break;
-          case RemoveAllItemsAction:
+          case SyncAction.RemoveAllItems:
             inventory.removeAll();
             break;
         }

@@ -9,7 +9,7 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
-import { RemoveItemPatchAction } from "~/routes/api.action.sync._index";
+import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
 import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -36,7 +36,7 @@ export function RemoveItemPatch({
 
   function doRemovePatch(slot: number) {
     sync({
-      type: RemoveItemPatchAction,
+      type: SyncAction.RemoveItemPatch,
       targetUid: uid,
       slot: slot
     });

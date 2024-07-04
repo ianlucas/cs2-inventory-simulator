@@ -14,7 +14,7 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
-import { ScrapeItemStickerAction } from "~/routes/api.action.sync._index";
+import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
 import { useInventory, useLocalize, usePreferences } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -46,7 +46,7 @@ export function ScrapeItemSticker({
       (item.getStickerWear(slot) + CS2_STICKER_WEAR_FACTOR) * 5
     );
     sync({
-      type: ScrapeItemStickerAction,
+      type: SyncAction.ScrapeItemSticker,
       targetUid: uid,
       slot: slot
     });

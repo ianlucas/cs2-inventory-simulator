@@ -8,7 +8,7 @@ import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useCounter } from "~/components/hooks/use-counter";
 import { useSync } from "~/components/hooks/use-sync";
-import { SwapItemsStatTrakAction } from "~/routes/api.action.sync._index";
+import { SyncAction } from "~/data/sync";
 import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -32,7 +32,7 @@ export function SwapItemsStatTrak({
 
   function handleAccept() {
     sync({
-      type: SwapItemsStatTrakAction,
+      type: SyncAction.SwapItemsStatTrak,
       toolUid: toolUid,
       fromUid: fromUid,
       toUid: toUid

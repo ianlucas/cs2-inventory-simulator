@@ -14,11 +14,7 @@ import { useSwapItemsStatTrak } from "~/components/hooks/use-swap-items-stattrak
 import { useSync } from "~/components/hooks/use-sync";
 import { useUnlockCase } from "~/components/hooks/use-unlock-case";
 import { InventoryItem } from "~/components/inventory-item";
-import {
-  EquipAction,
-  RemoveAction,
-  UnequipAction
-} from "~/routes/api.action.sync._index";
+import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
 import {
   useInventory,
@@ -140,19 +136,19 @@ export function Inventory() {
         : "inventory_item_pickup"
     );
     setInventory(inventory.equip(uid, team));
-    sync({ type: EquipAction, uid: uid, team });
+    sync({ type: SyncAction.Equip, uid: uid, team });
   }
 
   function handleUnequip(uid: number, team?: CS2TeamValues) {
     playSound("inventory_item_close");
     setInventory(inventory.unequip(uid, team));
-    sync({ type: UnequipAction, uid: uid, team });
+    sync({ type: SyncAction.Unequip, uid: uid, team });
   }
 
   function handleRemove(uid: number) {
     playSound("inventory_item_close");
     setInventory(inventory.remove(uid));
-    sync({ type: RemoveAction, uid: uid });
+    sync({ type: SyncAction.Remove, uid: uid });
   }
 
   function handleEdit(uid: number) {

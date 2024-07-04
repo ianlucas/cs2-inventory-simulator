@@ -19,13 +19,13 @@ import { useSync } from "~/components/hooks/use-sync";
 import { ItemEditor, ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
 import { Modal } from "~/components/modal";
+import { SyncAction } from "~/data/sync";
 import { middleware } from "~/http.server";
 import { getMetaTitle } from "~/root-meta";
 import { isItemCountable } from "~/utils/economy";
 import { deleteEmptyProps } from "~/utils/misc";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
-import { AddAction, EditAction } from "./api.action.sync._index";
 
 export const meta = getMetaTitle("HeaderCraftLabel");
 
@@ -83,7 +83,7 @@ export default function Craft() {
         })
       );
       sync({
-        type: EditAction,
+        type: SyncAction.Edit,
         uid,
         attributes: inventoryItem
       });
@@ -93,7 +93,7 @@ export default function Craft() {
     range(isItemCountable(selectedItem) ? quantity : 1).forEach(() => {
       setInventory(inventory.add(inventoryItem));
       sync({
-        type: AddAction,
+        type: SyncAction.Add,
         item: inventoryItem
       });
     });

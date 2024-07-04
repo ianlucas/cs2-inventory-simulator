@@ -9,7 +9,7 @@ import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useToggle } from "@uidotdev/usehooks";
 import { useState } from "react";
 import { dispatchAppEvent } from "~/app";
-import { AddAction } from "~/routes/api.action.sync._index";
+import { SyncAction } from "~/data/sync";
 import { range } from "~/utils/number";
 import { useInventory, useLocalize, useRules } from "./app-context";
 import { useSync } from "./hooks/use-sync";
@@ -38,7 +38,7 @@ export function UnlockCaseContainerAddKey({
     range(quantity).forEach(() => {
       setInventory(inventory.add(inventoryItem));
       sync({
-        type: AddAction,
+        type: SyncAction.Add,
         item: inventoryItem
       });
     });

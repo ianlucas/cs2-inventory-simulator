@@ -24,10 +24,10 @@ import { Select } from "~/components/select";
 import { SettingsLabel } from "~/components/settings-label";
 import { backgrounds } from "~/data/backgrounds";
 import { languages } from "~/data/languages";
+import { SyncAction } from "~/data/sync";
 import { middleware } from "~/http.server";
 import { getMetaTitle } from "~/root-meta";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
-import { RemoveAllItemsAction } from "./api.action.sync._index";
 
 export const meta = getMetaTitle("HeaderSettingsLabel");
 
@@ -84,7 +84,7 @@ export default function Settings() {
     ) {
       inventory.removeAll();
       setInventory(inventory);
-      sync({ type: RemoveAllItemsAction });
+      sync({ type: SyncAction.RemoveAllItems });
       return navigate("/");
     }
   }

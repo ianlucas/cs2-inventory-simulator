@@ -12,10 +12,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
-import {
-  AddWithStickerAction,
-  ApplyItemStickerAction
-} from "~/routes/api.action.sync._index";
+import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
 import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -45,7 +42,7 @@ export function ApplyItemSticker({
     if (slot !== undefined) {
       if (targetUid >= 0) {
         sync({
-          type: ApplyItemStickerAction,
+          type: SyncAction.ApplyItemSticker,
           targetUid,
           slot,
           stickerUid
@@ -55,7 +52,7 @@ export function ApplyItemSticker({
         onClose();
       } else {
         sync({
-          type: AddWithStickerAction,
+          type: SyncAction.AddWithSticker,
           stickerUid,
           itemId: targetItem.id,
           slot
