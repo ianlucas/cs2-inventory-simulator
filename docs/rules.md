@@ -25,6 +25,18 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 - **Type:** `string`
 - **Default:** _Empty_
 
+### `appFaviconUrl`
+
+- URL of the app's favicon. If empty, uses Inventory Simulator's favicon.
+- **Type:** `string`
+- **Default:** _Empty_
+
+### `appFaviconMimeType`
+
+- MIME type of the app's favicon. If empty, uses Inventory Simulator's favicon MIME type.
+- **Type:** `string`
+- **Default:** _Empty_
+
 ### `appSeoDescription`
 
 - SEO description for the app. If empty, uses Inventory Simulator's default value.

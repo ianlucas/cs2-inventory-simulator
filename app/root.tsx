@@ -68,6 +68,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     rules: {
       ...(await getRules(
         [
+          "appFaviconMimeType",
+          "appFaviconUrl",
           "appFooterName",
           "appLogoUrl",
           "appName",
@@ -134,6 +136,11 @@ export default function App() {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <Meta />
           <Links />
+          <link
+            rel="icon"
+            href={appProps.rules.appFaviconUrl || "/favicon.ico"}
+            type={appProps.rules.appFaviconMimeType || "image/x-icon"}
+          />
           {getSeoLinks(appProps.rules).map((attributes, index) => (
             <link key={index} {...attributes} />
           ))}
