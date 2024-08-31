@@ -46,6 +46,11 @@ interface MusicKitItem {
   uid: number;
 }
 
+interface GraffitiItem {
+  def: number;
+  tint: number;
+}
+
 export async function generate(
   inventory: CS2Inventory,
   nonEquippable = {
@@ -60,6 +65,7 @@ export async function generate(
   const agents: Record<number, AgentItem> = {};
   const teams = [undefined, CS2Team.CT, CS2Team.T];
   let collectible: number | undefined;
+  let graffiti: GraffitiItem | undefined;
   let musicKit: MusicKitItem | undefined;
 
   for (const item of inventory.getAll()) {
@@ -149,11 +155,18 @@ export async function generate(
             patches: data
               .allPatches()
               .map(([_, patch]) =>
-                patch !== undefined ? CS2Economy.getById(patch).index ?? 0 : 0
+                patch !== undefined ? (CS2Economy.getById(patch).index ?? 0) : 0
               ),
             vofallback: data.voFallback ?? false,
             vofemale: data.voFemale ?? false,
             voprefix: data.voPrefix
+          };
+          break;
+        case CS2ItemType.Graffiti:
+          assert(data.index);
+          graffiti = {
+            def: data.index,
+            tint: data.tint ?? 0
           };
           break;
       }
@@ -164,6 +177,7 @@ export async function generate(
     agents,
     ctWeapons,
     gloves,
+    graffiti,
     knives,
     musicKit,
     pin: collectible,

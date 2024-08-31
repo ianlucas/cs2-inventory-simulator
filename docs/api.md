@@ -10,63 +10,63 @@ GET https://inventory.cstrike.app/api/inventory/{steamID64}.json
 
 ### Response
 
-- Returns `200` (`application/json`):
+- Returns `200` (`application/json`).
 
-  ```typescript
-  type GetUserInventoryResponse = {
-    items: Record<
-      number,
-      {
-        containerId?: number;
-        equipped?: boolean;
-        equippedCT?: boolean;
-        equippedT?: boolean;
-        id: number;
-        nameTag?: string;
-        patches?: Record<number, number>;
-        seed?: number;
-        statTrak?: number;
-        stickers?: Record<
-          number,
-          {
-            id: number;
-            wear?: number;
-            x?: number;
-            y?: number;
-          }
-        >;
-        storage?: Record<
-          number,
-          {
-            containerId?: number;
-            equipped?: boolean;
-            equippedCT?: boolean;
-            equippedT?: boolean;
-            id: number;
-            nameTag?: string;
-            patches?: Record<number, number>;
-            seed?: number;
-            statTrak?: number;
-            stickers?: Record<
-              number,
-              {
-                id: number;
-                wear?: number;
-                x?: number;
-                y?: number;
-              }
-            >;
-            updatedAt?: number;
-            wear?: number;
-          }
-        >;
-        updatedAt?: number;
-        wear?: number;
-      }
-    >;
-    version: number;
-  };
-  ```
+```typescript
+type GetUserInventoryResponse = {
+  items: Record<
+    number,
+    {
+      containerId?: number;
+      equipped?: boolean;
+      equippedCT?: boolean;
+      equippedT?: boolean;
+      id: number;
+      nameTag?: string;
+      patches?: Record<number, number>;
+      seed?: number;
+      statTrak?: number;
+      stickers?: Record<
+        number,
+        {
+          id: number;
+          wear?: number;
+          x?: number;
+          y?: number;
+        }
+      >;
+      storage?: Record<
+        number,
+        {
+          containerId?: number;
+          equipped?: boolean;
+          equippedCT?: boolean;
+          equippedT?: boolean;
+          id: number;
+          nameTag?: string;
+          patches?: Record<number, number>;
+          seed?: number;
+          statTrak?: number;
+          stickers?: Record<
+            number,
+            {
+              id: number;
+              wear?: number;
+              x?: number;
+              y?: number;
+            }
+          >;
+          updatedAt?: number;
+          wear?: number;
+        }
+      >;
+      updatedAt?: number;
+      wear?: number;
+    }
+  >;
+  version: number;
+};
+```
 
 ## Get user equipped items
 
@@ -76,48 +76,53 @@ GET https://inventory.cstrike.app/api/equipped/v3/{steamID64}.json
 
 ### Response
 
-- Returns `200` (`application/json`):
+- Returns `200` (`application/json`).
 
-  ```typescript
-  interface BaseEconItem {
+```typescript
+interface BaseEconItem {
+  def: number;
+  paint: number;
+  seed: number;
+  wear: number;
+}
+interface WeaponEconItem extends BaseEconItem {
+  legacy: boolean;
+  nametag: string;
+  stattrak: number;
+  stickers: {
     def: number;
-    paint: number;
-    seed: number;
+    slot: number;
     wear: number;
-  }
-  interface WeaponEconItem extends BaseEconItem {
-    legacy: boolean;
-    nametag: string;
-    stattrak: number;
-    stickers: {
-      def: number;
-      slot: number;
-      wear: number;
-    }[];
-    uid: number;
-  }
-  interface AgentItem {
-    model: string;
-    patches: number[];
-    vofallback: boolean;
-    vofemale: boolean;
-    voprefix: string;
-  }
-  interface MusicKitItem {
-    def: number;
-    stattrak: number;
-    uid: number;
-  }
-  type GetUserEquippedItemsResponse = {
-    agents?: Record<number, AgentItem>;
-    ctWeapons?: Record<number, WeaponEconItem>;
-    gloves?: Record<number, BaseEconItem>;
-    knives?: Record<number, WeaponEconItem>;
-    musicKit?: MusicKitItem;
-    pin?: number;
-    tWeapons?: Record<number, WeaponEconItem>;
-  };
-  ```
+  }[];
+  uid: number;
+}
+interface AgentItem {
+  model: string;
+  patches: number[];
+  vofallback: boolean;
+  vofemale: boolean;
+  voprefix: string;
+}
+interface MusicKitItem {
+  def: number;
+  stattrak: number;
+  uid: number;
+}
+interface GraffitiItem {
+  def: number;
+  tint: number;
+}
+type GetUserEquippedItemsResponse = {
+  agents?: Record<number, AgentItem>;
+  ctWeapons?: Record<number, WeaponEconItem>;
+  gloves?: Record<number, BaseEconItem>;
+  graffiti?: GraffitiItem;
+  knives?: Record<number, WeaponEconItem>;
+  musicKit?: MusicKitItem;
+  pin?: number;
+  tWeapons?: Record<number, WeaponEconItem>;
+};
+```
 
 ## Increment item StatTrak
 
@@ -215,46 +220,46 @@ type PostAddContainerRequest = {
 
 - Returns `401` when using an invalid API key.
 - Returns `400` when the user does not exist, inventory is full, or filter is invalid.
-- Returns `200` (`application/json`) when a random container was added to user's inventory:
+- Returns `200` (`application/json`) when a random container was added to user's inventory.
 
-  ```typescript
-  type PostAddContainerResponse = {
-    altName?: string | undefined;
-    base?: boolean | undefined;
-    baseId?: number | undefined;
-    category?: string | undefined;
-    category?: string | undefined;
-    collection?: string | undefined;
-    collectionDesc?: string | undefined;
-    collectionName?: string | undefined;
-    containerType?: CS2ContainerTypeValues | undefined;
-    contents?: number[] | undefined;
-    def?: number | undefined;
-    desc?: string | undefined;
-    free?: boolean | undefined;
-    id: number;
-    image?: string | undefined;
-    index?: number | undefined;
-    keys?: number[] | undefined;
-    legacy?: boolean | undefined;
-    model?: string | undefined;
-    name: string;
-    rarity?: CS2RarityColorValues | undefined;
-    specials?: number[] | undefined;
-    specialsImage?: boolean | undefined;
-    statTrakless?: boolean | undefined;
-    statTrakOnly?: boolean | undefined;
-    teams?: CS2ItemTeamValues | undefined;
-    tint?: number | undefined;
-    tournamentDesc?: string | undefined;
-    type: CS2ItemTypeValues;
-    voFallback?: boolean | undefined;
-    voFemale?: boolean | undefined;
-    voPrefix?: string | undefined;
-    wearMax?: number | undefined;
-    wearMin?: number | undefined;
-  };
-  ```
+```typescript
+type PostAddContainerResponse = {
+  altName?: string | undefined;
+  base?: boolean | undefined;
+  baseId?: number | undefined;
+  category?: string | undefined;
+  category?: string | undefined;
+  collection?: string | undefined;
+  collectionDesc?: string | undefined;
+  collectionName?: string | undefined;
+  containerType?: CS2ContainerTypeValues | undefined;
+  contents?: number[] | undefined;
+  def?: number | undefined;
+  desc?: string | undefined;
+  free?: boolean | undefined;
+  id: number;
+  image?: string | undefined;
+  index?: number | undefined;
+  keys?: number[] | undefined;
+  legacy?: boolean | undefined;
+  model?: string | undefined;
+  name: string;
+  rarity?: CS2RarityColorValues | undefined;
+  specials?: number[] | undefined;
+  specialsImage?: boolean | undefined;
+  statTrakless?: boolean | undefined;
+  statTrakOnly?: boolean | undefined;
+  teams?: CS2ItemTeamValues | undefined;
+  tint?: number | undefined;
+  tournamentDesc?: string | undefined;
+  type: CS2ItemTypeValues;
+  voFallback?: boolean | undefined;
+  voFemale?: boolean | undefined;
+  voPrefix?: string | undefined;
+  wearMax?: number | undefined;
+  wearMin?: number | undefined;
+};
+```
 
 ## Sign-in user
 
@@ -282,13 +287,13 @@ type GetUserSignInTokenRequest = {
 
 - Returns `401` when using an invalid API key.
 - Returns `400` when the user does not exist.
-- Returns `200` (`application/json`) when a token is generated:
+- Returns `200` (`application/json`) when a token is generated.
 
-  ```typescript
-  type GetUserSignInTokenResponse = {
-    token: string; // expires in 1 minute.
-  };
-  ```
+```typescript
+type GetUserSignInTokenResponse = {
+  token: string; // expires in 1 minute.
+};
+```
 
 ### Sign-in user
 
