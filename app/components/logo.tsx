@@ -10,11 +10,25 @@ export function Logo(props: { className?: string }) {
   if (typeof global !== "undefined") {
     const base64Url = global.__appLogoBase64Url;
     if (base64Url !== undefined && base64Url.length > 0) {
-      return <img suppressHydrationWarning {...props} src={base64Url} />;
+      return (
+        <img
+          suppressHydrationWarning
+          {...props}
+          src={base64Url}
+          draggable={false}
+        />
+      );
     }
   }
   if (appLogoUrl.length > 0) {
-    return <img suppressHydrationWarning {...props} src={appLogoUrl} />;
+    return (
+      <img
+        suppressHydrationWarning
+        {...props}
+        src={appLogoUrl}
+        draggable={false}
+      />
+    );
   }
   return (
     <svg
