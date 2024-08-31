@@ -102,7 +102,7 @@ export function AppProvider({
     maxItems: rules.inventoryMaxItems,
     storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
   } satisfies Partial<CS2InventorySpec>;
-  const [inventory, setInventory, refreshInventory] = useInventoryState(
+  const [inventory, setInventory, reactSetInventory] = useInventoryState(
     () => new CS2Inventory(inventorySpec)
   );
   const inventoryFilter = useInventoryFilterState();
@@ -139,7 +139,13 @@ export function AppProvider({
 
   useEffect(() => {
     updateEconomyLanguage(localization.items);
-    refreshInventory();
+    reactSetInventory(
+      (inventory) =>
+        new CS2Inventory({
+          ...inventorySpec,
+          data: inventory.getData()
+        })
+    );
   }, [localization.items]);
 
   const items = useMemo(

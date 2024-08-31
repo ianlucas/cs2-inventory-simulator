@@ -13,6 +13,6 @@ export function useInventoryState(
   return [
     state,
     (state: CS2Inventory) => setState(state.move()),
-    () => setState((state) => state.move())
+    setState
   ] as const;
 }
