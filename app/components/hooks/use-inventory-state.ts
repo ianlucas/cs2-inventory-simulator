@@ -10,5 +10,9 @@ export function useInventoryState(
   initialState: CS2Inventory | (() => CS2Inventory)
 ) {
   const [state, setState] = useState(initialState);
-  return [state, (state: CS2Inventory) => setState(state.move())] as const;
+  return [
+    state,
+    (state: CS2Inventory) => setState(state.move()),
+    () => setState((state) => state.move())
+  ] as const;
 }
