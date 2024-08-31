@@ -144,6 +144,118 @@ type PostIncrementItemStatTrakRequest = {
 - Returns `400` when the user does not exist or target uid is invalid.
 - Returns `204` when the increment was successful.
 
+## Add Item
+
+```http
+POST https://inventory.cstrike.app/api/add-item
+```
+
+### Request
+
+> [!IMPORTANT]  
+> API key must have `api` or `inventory` scope.
+
+```typescript
+type PostAddItemRequest = {
+  apiKey: string;
+  userId: string;
+  inventoryItem: {
+    id: number;
+    wear?: number | undefined;
+    nameTag?: string | undefined;
+    patches?: Record<string, number> | undefined;
+    seed?: number | undefined;
+    statTrak?: 0 | undefined;
+    stickers?:
+      | Record<
+          string,
+          {
+            id: number;
+            wear?: number | undefined;
+            x?: number | undefined;
+            y?: number | undefined;
+          }
+        >
+      | undefined;
+  };
+};
+```
+
+### Response
+
+- Returns `401` when using an invalid API key.
+- Returns `400` when the user does not exist, inventory is full, or inventory item is invalid.
+- Returns `204` when the item was added to user's inventory.
+
+## Add Container
+
+```http
+POST https://inventory.cstrike.app/api/add-container
+```
+
+### Request
+
+> [!IMPORTANT]  
+> API key must have `api` or `inventory` scope.
+
+```typescript
+type PostAddContainerRequest = {
+  apiKey: string;
+  userId: string;
+  name?: string | undefined;
+  graffiti?: boolean | undefined;
+  language?: string | undefined;
+  souvenir?: boolean | undefined;
+  stickerCapsule?: boolean | undefined;
+  weapon?: boolean | undefined;
+};
+```
+
+### Response
+
+- Returns `401` when using an invalid API key.
+- Returns `400` when the user does not exist, inventory is full, or filter is invalid.
+- Returns `200` (`application/json`) when a random container was added to user's inventory:
+
+  ```typescript
+  type PostAddContainerResponse = {
+    altName?: string | undefined;
+    base?: boolean | undefined;
+    baseId?: number | undefined;
+    category?: string | undefined;
+    category?: string | undefined;
+    collection?: string | undefined;
+    collectionDesc?: string | undefined;
+    collectionName?: string | undefined;
+    containerType?: CS2ContainerTypeValues | undefined;
+    contents?: number[] | undefined;
+    def?: number | undefined;
+    desc?: string | undefined;
+    free?: boolean | undefined;
+    id: number;
+    image?: string | undefined;
+    index?: number | undefined;
+    keys?: number[] | undefined;
+    legacy?: boolean | undefined;
+    model?: string | undefined;
+    name: string;
+    rarity?: CS2RarityColorValues | undefined;
+    specials?: number[] | undefined;
+    specialsImage?: boolean | undefined;
+    statTrakless?: boolean | undefined;
+    statTrakOnly?: boolean | undefined;
+    teams?: CS2ItemTeamValues | undefined;
+    tint?: number | undefined;
+    tournamentDesc?: string | undefined;
+    type: CS2ItemTypeValues;
+    voFallback?: boolean | undefined;
+    voFemale?: boolean | undefined;
+    voPrefix?: string | undefined;
+    wearMax?: number | undefined;
+    wearMin?: number | undefined;
+  };
+  ```
+
 ## Sign-in user
 
 This is intended to be used in other first-party apps to authenticate users to Inventory Simulator. First, a POST request must be sent to `/api/sign-in` to get the user's authentication `token`, then the user must be immediately redirected to `/api/sign-in/callback?token={token}`.
