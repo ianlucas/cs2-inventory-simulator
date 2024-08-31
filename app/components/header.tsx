@@ -46,8 +46,10 @@ export function Header() {
     toggleIsMenuOpen(false);
   }
 
-  const canCraft =
-    !inventory.isFull() && ECONOMY_ITEM_FILTERS.filter(craftFilter).length > 0;
+  const isInventoryFull = inventory.isFull();
+  const cannotCraftItems =
+    ECONOMY_ITEM_FILTERS.filter(craftFilter).length === 0;
+  const isCraftDisabled = isInventoryFull || cannotCraftItems;
 
   const isSelectingAnItem = itemSelector !== undefined;
 
@@ -80,14 +82,18 @@ export function Header() {
                 label={localize("HeaderInventoryLabel")}
                 onClick={closeMenu}
               />
-              {canCraft && (
-                <HeaderLink
-                  to="/craft"
-                  icon={faHammer}
-                  label={localize("HeaderCraftLabel")}
-                  onClick={closeMenu}
-                />
-              )}
+              <HeaderLink
+                disabled={isCraftDisabled}
+                disabledText={
+                  isInventoryFull
+                    ? localize("HeaderCraftInventoryFull")
+                    : localize("HeaderCraftCannotCraft")
+                }
+                to="/craft"
+                icon={faHammer}
+                label={localize("HeaderCraftLabel")}
+                onClick={closeMenu}
+              />
               {user === undefined ? (
                 <>
                   <HeaderLink

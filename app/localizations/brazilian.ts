@@ -59,6 +59,8 @@ export const brazilian = {
   EditorStickers: /* csgo_brazilian.txt */"Adesivos",
   EditorWear: /* csgo_brazilian.txt */"Desgaste",
   GridItemNoItemsToDisplay: "Nenhum item para exibir",
+  HeaderCraftCannotCraft: "Você não pode criar itens.",
+  HeaderCraftInventoryFull: "Seu inventário está cheio.",
   HeaderCraftLabel: "Criar Item",
   HeaderDonate: "Doar",
   HeaderInventoryLabel: "Inventário",
