@@ -87,12 +87,12 @@ export function UnlockCaseContainerAddKey({
             </div>
           </div>
           <ItemEditor
-            dismissType="cancel"
+            defaultQuantity={Number(amount)}
             item={neededKeyItem}
             maxQuantity={maxQuantity}
-            defaultQuantity={Number(amount)}
-            onSubmit={craft}
             onDismiss={toggleIsCrafting}
+            onSubmit={craft}
+            type="craft"
           />
         </Modal>
       )}
