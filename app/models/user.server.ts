@@ -129,3 +129,17 @@ export async function manipulateUserInventory({
   }
   return await updateUserInventory(userId, inventory.stringify());
 }
+
+export async function getUserBasicData(userId: string) {
+  return (
+    (await prisma.user.findFirst({
+      select: {
+        avatar: true,
+        name: true
+      },
+      where: {
+        id: userId
+      }
+    })) || undefined
+  );
+}

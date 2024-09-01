@@ -4,14 +4,19 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { FloatingFocusManager } from "@floating-ui/react";
+import { faCheck, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2Economy, CS2_MIN_SEED } from "@ianlucas/cs2-lib";
+import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/components/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { wearToString } from "~/utils/economy";
-import { useLocalize, usePreferences } from "./app-context";
+import { getInventoryItemShareUrl } from "~/utils/inventory";
+import { useLocalize, usePreferences, useUser } from "./app-context";
+import { useTimedState } from "./hooks/use-timed-state";
 import { InfoIcon } from "./info-icon";
 import { ItemCollectionImage } from "./item-collection-image";
 import { ItemImage } from "./item-image";
@@ -25,10 +30,12 @@ export function InspectItem({
   onClose: () => void;
   uid: number;
 }) {
+  const [, copyToClipboard] = useCopyToClipboard();
   const localize = useLocalize();
   const nameItemString = useNameItemString();
   const item = useInventoryItem(uid);
   const { statsForNerds } = usePreferences();
+  const user = useUser();
   const {
     getHoverFloatingProps,
     getHoverReferenceProps,
@@ -38,8 +45,15 @@ export function InspectItem({
     isHoverOpen,
     ref
   } = useInspectFloating();
+  const [clickedShare, triggerClickedShare] = useTimedState();
 
-  const hasHover = item.hasSeed() && item.hasWear();
+  const hasInfo = item.hasSeed() && item.hasWear();
+  const hasShare = item.isPaintable();
+
+  function handleClickShare() {
+    triggerClickedShare();
+    copyToClipboard(getInventoryItemShareUrl(item, user?.id));
+  }
 
   return (
     <ClientOnly
@@ -97,13 +111,24 @@ export function InspectItem({
               <UseItemFooter
                 left={
                   <>
-                    {hasHover && (
+                    {hasInfo && (
                       <ModalButton
                         variant="secondary"
                         forwardRef={ref}
                         {...getHoverReferenceProps()}
                       >
                         <InfoIcon className="h-6" />
+                      </ModalButton>
+                    )}
+                    {hasShare && (
+                      <ModalButton
+                        variant="secondary"
+                        onClick={handleClickShare}
+                      >
+                        <FontAwesomeIcon
+                          icon={clickedShare ? faCheck : faShareNodes}
+                          className="h-6"
+                        />
                       </ModalButton>
                     )}
                   </>
@@ -119,7 +144,7 @@ export function InspectItem({
                 }
               />
             </div>
-            {hasHover && isHoverOpen && (
+            {hasInfo && isHoverOpen && (
               <FloatingFocusManager context={hoverContext} modal={false}>
                 <div
                   className="z-20 max-w-[320px] space-y-3 rounded bg-neutral-900/95 px-6 py-4 text-sm text-white outline-none"

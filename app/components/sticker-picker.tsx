@@ -38,10 +38,12 @@ import { ItemImage } from "./item-image";
 import { Modal } from "./modal";
 
 export function StickerPicker({
+  disabled,
   isCrafting,
   onChange,
   value
 }: {
+  disabled?: boolean;
   isCrafting: boolean;
   onChange: (value: NonNullable<CS2BaseInventoryItem["stickers"]>) => void;
   value: NonNullable<CS2BaseInventoryItem["stickers"]>;
@@ -131,6 +133,7 @@ export function StickerPicker({
             sticker !== undefined ? CS2Economy.getById(sticker.id) : undefined;
           return (
             <button
+              disabled={disabled}
               key={index}
               className="relative overflow-hidden rounded bg-black/50"
               onClick={handleClickSlot(index)}
@@ -147,7 +150,9 @@ export function StickerPicker({
                   {(stickerWear * 100).toFixed(0)}%
                 </div>
               )}
-              <div className="absolute left-0 top-0 h-full w-full rounded border-[3px] border-transparent transition-all hover:border-white"></div>
+              {!disabled && (
+                <div className="absolute left-0 top-0 h-full w-full rounded border-[3px] border-transparent transition-all hover:border-white" />
+              )}
             </button>
           );
         })}

@@ -5,10 +5,15 @@
 
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
+import {
+  CS2BaseInventoryItem,
+  CS2Economy,
+  CS2EconomyItem
+} from "@ianlucas/cs2-lib";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
+import lzstring from "lz-string";
 import { useState } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { z } from "zod";
@@ -21,10 +26,12 @@ import { ItemPicker } from "~/components/item-picker";
 import { Modal } from "~/components/modal";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/http.server";
+import { getUserBasicData } from "~/models/user.server";
 import { getMetaTitle } from "~/root-meta";
 import { isItemCountable } from "~/utils/economy";
 import { deleteEmptyProps } from "~/utils/misc";
 import { range } from "~/utils/number";
+import { baseInventoryItemProps } from "~/utils/shapes";
 import { playSound } from "~/utils/sound";
 
 export const meta = getMetaTitle("HeaderCraftLabel");
@@ -32,7 +39,37 @@ export const meta = getMetaTitle("HeaderCraftLabel");
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);
   const url = new URL(request.url);
+  const share = url.searchParams.get("share");
+  const shared = z
+    .object({
+      i: z.object({
+        ...baseInventoryItemProps,
+        statTrak: z
+          .number()
+          .optional()
+          .transform((statTrak) =>
+            statTrak !== undefined ? (0 as const) : undefined
+          )
+      }),
+      u: z.string().optional()
+    })
+    .optional()
+    .parse(
+      share !== null
+        ? JSON.parse(lzstring.decompressFromEncodedURIComponent(share))
+        : undefined
+    );
   return typedjson({
+    shared:
+      shared !== undefined
+        ? {
+            item: shared.i,
+            user:
+              shared.u !== undefined
+                ? await getUserBasicData(shared.u)
+                : undefined
+          }
+        : undefined,
     uid: z
       .string()
       .optional()
@@ -42,14 +79,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Craft() {
-  const { uid } = useTypedLoaderData<typeof loader>();
+  const { uid, shared } = useTypedLoaderData<typeof loader>();
   const isEditing = uid !== undefined;
+  const isSharing = shared?.item !== undefined;
   const [inventory, setInventory] = useInventory();
   const localize = useLocalize();
   const sync = useSync();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<CS2EconomyItem | undefined>(
-    isEditing ? inventory.get(uid) : undefined
+    isEditing
+      ? inventory.get(uid)
+      : isSharing
+        ? CS2Economy.get(shared.item.id)
+        : undefined
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -79,7 +121,7 @@ export default function Craft() {
       setInventory(
         inventory.edit(uid, {
           ...inventoryItem,
-          statTrak: statTrak ? inventory.get(uid).statTrak ?? 0 : undefined
+          statTrak: statTrak ? (inventory.get(uid).statTrak ?? 0) : undefined
         })
       );
       sync({
@@ -101,7 +143,7 @@ export default function Craft() {
   }
 
   function handleReset() {
-    if (isEditing) {
+    if (isEditing || isSharing) {
       return navigate("/");
     }
     return setSelectedItem(undefined);
@@ -118,9 +160,13 @@ export default function Craft() {
     >
       <div className="flex select-none items-center justify-between px-4 py-2 text-sm font-bold">
         <span className="text-neutral-400">
-          {isPickingItem
-            ? localize("CraftSelectHeader")
-            : localize("CraftConfirmHeader")}
+          {localize(
+            isSharing
+              ? "CraftSharedHeader"
+              : isPickingItem
+                ? "CraftSelectHeader"
+                : "CraftConfirmHeader"
+          )}
         </span>
         <div className="flex items-center">
           <Link className="opacity-50 hover:opacity-100" to="/">
@@ -128,12 +174,33 @@ export default function Craft() {
           </Link>
         </div>
       </div>
+      {shared?.user !== undefined && (
+        <div className="flex items-center gap-2 px-4 text-sm">
+          <span className="text-neutral-500">{localize("CraftBy")}</span>
+          <img
+            className="h-6 w-6 rounded-full"
+            src={shared.user.avatar}
+            alt={shared.user.name}
+            draggable={false}
+          />
+          <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+            {shared.user.name}
+          </span>
+        </div>
+      )}
       {isPickingItem ? (
         <ItemPicker onPickItem={setSelectedItem} />
       ) : (
         <ItemEditor
-          attributes={isEditing ? inventory.get(uid).asBase() : undefined}
-          dismissType={isEditing ? "cancel" : "reset"}
+          attributes={
+            isEditing
+              ? inventory.get(uid).asBase()
+              : isSharing
+                ? shared.item
+                : undefined
+          }
+          disabled={isSharing}
+          type={isEditing ? "edit" : isSharing ? "share" : "craft"}
           item={selectedItem}
           onDismiss={handleReset}
           onSubmit={handleSubmit}

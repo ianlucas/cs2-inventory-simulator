@@ -21,15 +21,15 @@ import { useState } from "react";
 import { useCheckbox } from "~/components/hooks/use-checkbox";
 import { useInput } from "~/components/hooks/use-input";
 import {
-  isItemCountable,
   seedStringMaxLen,
   wearStringMaxLen,
   wearToString
 } from "~/utils/economy";
-import { useInventory, useLocalize, useRules } from "./app-context";
+import { useLocalize } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
+import { useCraftableItem } from "./hooks/use-craftable-item";
 import { ItemEditorLabel } from "./item-editor-label";
 import { ItemEditorName } from "./item-editor-name";
 import { ItemImage } from "./item-image";
@@ -50,11 +50,12 @@ export interface ItemEditorAttributes {
 export function ItemEditor({
   attributes,
   defaultQuantity,
-  dismissType,
+  disabled,
   item,
   maxQuantity,
   onDismiss,
-  onSubmit
+  onSubmit,
+  type
 }: {
   attributes?: {
     nameTag?: string;
@@ -65,38 +66,21 @@ export function ItemEditor({
     wear?: number;
   };
   defaultQuantity?: number;
-  dismissType?: "cancel" | "reset";
+  disabled?: boolean;
   item: CS2EconomyItem;
   maxQuantity?: number;
   onDismiss: () => void;
   onSubmit: (props: ItemEditorAttributes) => void;
+  type?: "craft" | "edit" | "share";
 }) {
-  const [inventory] = useInventory();
-  const {
-    craftAllowNametag,
-    craftAllowPatches,
-    craftAllowSeed,
-    craftAllowStatTrak,
-    craftAllowStickers,
-    craftAllowWear,
-    craftHideType,
-    editAllowNametag,
-    editAllowPatches,
-    editAllowSeed,
-    editAllowStatTrak,
-    editAllowStickers,
-    editAllowWear,
-    editHideType,
-    inventoryMaxItems
-  } = useRules();
+  type ??= "craft";
+
   const localize = useLocalize();
   const [statTrak, setStatTrak] = useCheckbox(
-    attributes?.statTrak !== undefined ? attributes.statTrak >= 0 : false
+    attributes?.statTrak !== undefined
   );
-  const [wear, setWear] = useState(
-    attributes?.wear ?? item.wearMin ?? CS2_MIN_WEAR
-  );
-  const [seed, setSeed] = useState(attributes?.seed ?? 1);
+  const [wear, setWear] = useState(attributes?.wear ?? item.getMinimumWear());
+  const [seed, setSeed] = useState(attributes?.seed ?? CS2_MIN_SEED);
   const [nameTag, setNameTag] = useInput(attributes?.nameTag ?? "");
   const [stickers, setStickers] = useState<
     NonNullable<CS2BaseInventoryItem["stickers"]>
@@ -105,45 +89,51 @@ export function ItemEditor({
     NonNullable<CS2BaseInventoryItem["patches"]>
   >(attributes?.patches ?? {});
   const [quantity, setQuantity] = useState(defaultQuantity ?? 1);
-  const isCrafting = attributes === undefined;
-  const hasStickers =
-    (isCrafting ? craftAllowStickers : editAllowStickers) &&
-    item.hasStickers() &&
-    (isCrafting
-      ? !craftHideType.includes(CS2ItemType.Sticker)
-      : !editHideType.includes(CS2ItemType.Sticker));
-  const hasPatches =
-    (isCrafting ? craftAllowPatches : editAllowPatches) &&
-    item.hasPatches() &&
-    (isCrafting
-      ? !craftHideType.includes(CS2ItemType.Patch)
-      : !editHideType.includes(CS2ItemType.Patch));
-  const hasStatTrak =
-    (isCrafting ? craftAllowStatTrak : editAllowStatTrak) && item.hasStatTrak();
-  const hasSeed =
-    (isCrafting ? craftAllowSeed : editAllowSeed) && item.hasSeed();
-  const hasWear =
-    (isCrafting ? craftAllowWear : editAllowWear) && item.hasWear();
-  const hasNametag =
-    (isCrafting ? craftAllowNametag : editAllowNametag) && item.hasNametag();
-  const isWearValid = !hasWear || CS2Economy.safeValidateWear(wear);
-  const isNametagValid =
-    !hasNametag ||
-    CS2Economy.safeValidateNametag(nameTag) ||
-    nameTag.length === 0;
-  const isSeedValid = !hasSeed || CS2Economy.safeValidateSeed(seed);
-  const canCraft = isWearValid && isNametagValid && isSeedValid;
-  const isDismissReset = dismissType === "reset";
-  const hasQuantity = isItemCountable(item);
 
-  maxQuantity ??= inventoryMaxItems - inventory.size();
-  dismissType ??= "reset";
+  const {
+    craftable,
+    hasNameTag,
+    hasPatches,
+    hasQuantity,
+    hasSeed,
+    hasStatTrak,
+    hasStickers,
+    hasWear,
+    inventoryMaxQuantity,
+    isCrafting,
+    isSharing,
+    showNameTag,
+    showPatches,
+    showSeed,
+    showStatTrak,
+    showStickers,
+    showWear
+  } = useCraftableItem({
+    attributes: {
+      nameTag,
+      patches,
+      seed,
+      statTrak,
+      stickers,
+      wear
+    },
+    item,
+    type
+  });
+
+  const dismissLabel = isCrafting
+    ? "EditorReset"
+    : isSharing
+      ? "InspectClose"
+      : "EditorCancel";
+
+  maxQuantity ??= inventoryMaxQuantity;
 
   function handleSubmit() {
     onSubmit({
       patches:
         hasPatches && Object.keys(patches).length > 0 ? patches : undefined,
-      nameTag: hasNametag && nameTag.length > 0 ? nameTag : undefined,
+      nameTag: hasNameTag && nameTag.length > 0 ? nameTag : undefined,
       quantity,
       seed:
         hasSeed && (!isCrafting || seed !== CS2_MIN_SEED) ? seed : undefined,
@@ -173,33 +163,38 @@ export function ItemEditor({
         <ItemEditorName item={item} />
       </div>
       <div className="space-y-4">
-        {hasStickers && (
+        {showStickers && (
           <ItemEditorLabel direction="left" label={localize("EditorStickers")}>
             <StickerPicker
+              disabled={disabled}
               isCrafting={isCrafting}
               value={stickers}
               onChange={setStickers}
             />
           </ItemEditorLabel>
         )}
-        {hasPatches && (
+        {showPatches && (
           <ItemEditorLabel direction="left" label={localize("EditorPatches")}>
             <PatchPicker
+              disabled={disabled}
               isCrafting={isCrafting}
               value={patches}
               onChange={setPatches}
             />
           </ItemEditorLabel>
         )}
-        {hasNametag && (
+        {showNameTag && (
           <ItemEditorLabel
             className="flex items-center gap-4"
             label={localize("EditorNametag")}
           >
             <EditorInput
+              disabled={disabled}
               maxLength={20}
               onChange={setNameTag}
-              placeholder={localize("EditorNametagPlaceholder")}
+              placeholder={
+                disabled ? "N/A" : localize("EditorNametagPlaceholder")
+              }
               validate={(nameTag) =>
                 CS2Economy.safeValidateNametag(nameTag ?? "")
               }
@@ -207,12 +202,13 @@ export function ItemEditor({
             />
           </ItemEditorLabel>
         )}
-        {hasSeed && (
+        {showSeed && (
           <ItemEditorLabel
             className="flex select-none items-center gap-4"
             label={localize("EditorSeed")}
           >
             <EditorStepRangeWithInput
+              disabled={disabled}
               inputStyles="w-[74px]"
               max={CS2_MAX_SEED}
               maxLength={seedStringMaxLen}
@@ -227,12 +223,13 @@ export function ItemEditor({
             />
           </ItemEditorLabel>
         )}
-        {hasWear && (
+        {showWear && (
           <ItemEditorLabel
             className="flex select-none items-center gap-4"
             label={localize("EditorWear")}
           >
             <EditorStepRangeWithInput
+              disabled={disabled}
               inputStyles="w-[74px]"
               max={item.wearMax ?? CS2_MAX_WEAR}
               maxLength={wearStringMaxLen}
@@ -248,12 +245,16 @@ export function ItemEditor({
             />
           </ItemEditorLabel>
         )}
-        {hasStatTrak && (
+        {showStatTrak && (
           <ItemEditorLabel
             className="flex select-none items-center gap-4"
             label={localize("EditorStatTrak")}
           >
-            <EditorToggle checked={statTrak} onChange={setStatTrak} />
+            <EditorToggle
+              disabled={disabled}
+              checked={statTrak}
+              onChange={setStatTrak}
+            />
           </ItemEditorLabel>
         )}
         {hasQuantity && (
@@ -262,6 +263,7 @@ export function ItemEditor({
             label={localize("EditorQuantity")}
           >
             <EditorStepRangeWithInput
+              disabled={disabled}
               inputStyles="w-[74px]"
               max={maxQuantity}
               maxLength={String(maxQuantity).length}
@@ -278,17 +280,21 @@ export function ItemEditor({
       </div>
       <div className="mt-6 flex justify-center gap-2">
         <ModalButton variant="secondary" onClick={onDismiss}>
-          {isDismissReset && (
+          {type === "craft" && (
             <FontAwesomeIcon icon={faLongArrowLeft} className="mr-2 h-4" />
           )}
-          {localize(isDismissReset ? "EditorReset" : "EditorCancel")}
+          {localize(dismissLabel)}
         </ModalButton>
-        <ModalButton
-          children={localize(isCrafting ? "EditorCraft" : "EditorSave")}
-          disabled={!canCraft}
-          onClick={handleSubmit}
-          variant="primary"
-        />
+        {(!isSharing || craftable) && (
+          <ModalButton
+            children={localize(
+              isCrafting || isSharing ? "EditorCraft" : "EditorSave"
+            )}
+            disabled={!craftable}
+            onClick={handleSubmit}
+            variant="primary"
+          />
+        )}
       </div>
     </div>
   );

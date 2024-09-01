@@ -12,6 +12,7 @@ import { EditorInput } from "./editor-input";
 import { EditorStepRange } from "./editor-step-range";
 
 export function EditorStepRangeWithInput({
+  disabled,
   inputStyles,
   max,
   maxLength,
@@ -25,6 +26,7 @@ export function EditorStepRangeWithInput({
   validate,
   value
 }: {
+  disabled?: boolean;
   inputStyles: string;
   max: number;
   maxLength: number;
@@ -71,6 +73,7 @@ export function EditorStepRangeWithInput({
   return (
     <>
       <EditorInput
+        disabled={disabled}
         inflexible
         unstyled
         className={inputStyles}
@@ -80,15 +83,17 @@ export function EditorStepRangeWithInput({
         validate={(wearText) => validate(Number(wearText))}
         value={text}
       />
-      <EditorStepRange
-        className={stepRangeStyles}
-        value={value}
-        onChange={handleChange}
-        max={max}
-        min={min}
-        step={step}
-      />
-      {randomizable !== undefined && (
+      {!disabled && (
+        <EditorStepRange
+          className={stepRangeStyles}
+          value={value}
+          onChange={handleChange}
+          max={max}
+          min={min}
+          step={step}
+        />
+      )}
+      {!disabled && randomizable !== undefined && (
         <button
           onClick={handleRandomClick}
           title={localize("EditorRandom")}

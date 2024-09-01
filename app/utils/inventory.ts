@@ -11,6 +11,7 @@ import {
   CS2ItemType,
   CS2ItemTypeValues
 } from "@ianlucas/cs2-lib";
+import lzstring from "lz-string";
 import { serverInventoryShape } from "./shapes";
 
 export const UNLOCKABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
@@ -73,4 +74,13 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
     }),
     uid: -1 * (index + 1)
   }));
+}
+
+export function getInventoryItemShareUrl(
+  item: CS2InventoryItem,
+  userId?: string
+) {
+  return `${window.location.origin}/craft?share=${lzstring.compressToEncodedURIComponent(
+    JSON.stringify({ u: userId, i: item.asBase() })
+  )}`;
 }

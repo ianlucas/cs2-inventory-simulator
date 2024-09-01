@@ -10,7 +10,8 @@ export function EditorToggle({ className, ...props }: ComponentProps<"input">) {
   return (
     <label
       className={clsx(
-        "relative inline-flex cursor-pointer items-center",
+        "relative inline-flex items-center",
+        !props.disabled && "cursor-pointer",
         className
       )}
     >

@@ -5,25 +5,27 @@
 
 import { FloatingFocusManager } from "@floating-ui/react";
 import {
-  CS2Team,
-  CS2TeamValues,
   CS2_INVENTORY_EQUIPPABLE_ITEMS,
-  CS2_MAX_PATCHES
+  CS2_MAX_PATCHES,
+  CS2Team,
+  CS2TeamValues
 } from "@ianlucas/cs2-lib";
 import {
   CS2_PREVIEW_INSPECTABLE_ITEMS,
   generateInspectLink
 } from "@ianlucas/cs2-lib-inspect";
+import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
 import {
   EDITABLE_ITEM_TYPE,
+  getInventoryItemShareUrl,
   INSPECTABLE_ITEM_TYPE,
   UNLOCKABLE_ITEM_TYPE
 } from "~/utils/inventory";
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
-import { useInventory, useLocalize, useRules } from "./app-context";
+import { useInventory, useLocalize, useRules, useUser } from "./app-context";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemTile } from "./inventory-item-tile";
 import { InventoryItemTooltip } from "./inventory-item-tooltip";
@@ -77,6 +79,7 @@ export function InventoryItem({
   ownApplicablePatches?: boolean;
   ownApplicableStickers?: boolean;
 }) {
+  const [, copyToClipboard] = useCopyToClipboard();
   const localize = useLocalize();
   const {
     editHideCategory,
@@ -95,6 +98,7 @@ export function InventoryItem({
     inventoryStorageUnitMaxItems
   } = useRules();
   const [inventory] = useInventory();
+  const user = useUser();
 
   const {
     clickContext,
@@ -170,6 +174,7 @@ export function InventoryItem({
     (item.type === undefined || !editHideType.includes(item.type)) &&
     (item.model === undefined || !editHideModel.includes(item.model)) &&
     !editHideId.includes(item.id);
+  const canShare = item.isPaintable();
 
   function close(callBeforeClosing: () => void) {
     return function close() {
@@ -358,6 +363,13 @@ export function InventoryItem({
                     condition: canEdit,
                     label: localize("InventoryItemEdit"),
                     onClick: close(() => onEdit?.(uid))
+                  },
+                  {
+                    condition: canShare,
+                    label: localize("InventoryItemShare"),
+                    clickLabel: localize("InventoryItemShareCopied"),
+                    onClick: () =>
+                      copyToClipboard(getInventoryItemShareUrl(item, user?.id))
                   },
                   {
                     condition: true,

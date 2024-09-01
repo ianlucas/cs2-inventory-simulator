@@ -28,10 +28,12 @@ import { ItemImage } from "./item-image";
 import { Modal } from "./modal";
 
 export function PatchPicker({
+  disabled,
   isCrafting,
   onChange,
   value
 }: {
+  disabled?: boolean;
   isCrafting: boolean;
   onChange: (value: NonNullable<CS2BaseInventoryItem["patches"]>) => void;
   value: NonNullable<CS2BaseInventoryItem["patches"]>;
@@ -114,6 +116,7 @@ export function PatchPicker({
             patchId !== undefined ? CS2Economy.getById(patchId) : undefined;
           return (
             <button
+              disabled={disabled}
               key={index}
               className="relative overflow-hidden rounded bg-black/50"
               onClick={handleClickSlot(index)}
@@ -125,7 +128,9 @@ export function PatchPicker({
                   {localize("StickerPickerNA")}
                 </div>
               )}
-              <div className="absolute left-0 top-0 h-full w-full rounded border-[2.5px] border-transparent transition-all hover:border-white"></div>
+              {!disabled && (
+                <div className="absolute left-0 top-0 h-full w-full rounded border-[2.5px] border-transparent transition-all hover:border-white" />
+              )}
             </button>
           );
         })}
