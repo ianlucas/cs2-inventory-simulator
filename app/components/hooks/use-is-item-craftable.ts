@@ -6,7 +6,7 @@
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useRules } from "~/components/app-context";
 
-export function useCraftItemRules() {
+export function useIsItemCraftable() {
   const { craftHideCategory, craftHideType, craftHideModel, craftHideId } =
     useRules();
 

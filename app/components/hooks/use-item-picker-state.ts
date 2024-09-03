@@ -12,15 +12,15 @@ import {
   getPaidItems
 } from "~/utils/economy-filters";
 import { useCraftFilterRules } from "./use-craft-filter-rules";
-import { useCraftItemRules } from "./use-craft-item-rules";
 import { useInput } from "./use-input";
+import { useIsItemCraftable } from "./use-is-item-craftable";
 
 export function useItemPickerState({
   onPickItem
 }: {
   onPickItem: (item: CS2EconomyItem) => void;
 }) {
-  const itemFilter = useCraftItemRules();
+  const isItemCraftable = useIsItemCraftable();
   const categoryFilter = useCraftFilterRules();
   const categories = ECONOMY_ITEM_FILTERS.filter(categoryFilter);
   const [filter, setFilter] = useState(categories[0]);
@@ -58,7 +58,7 @@ export function useItemPickerState({
             altName?.toLocaleLowerCase().includes(queryLower)
           );
         })
-        .filter(itemFilter)
+        .filter(isItemCraftable)
         .sort((a, b) => a.name.localeCompare(b.name)),
     [filter, model, query]
   );

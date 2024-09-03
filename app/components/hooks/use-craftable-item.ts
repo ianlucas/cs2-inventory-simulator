@@ -12,7 +12,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { isItemCountable } from "~/utils/economy";
 import { useInventory, useRules } from "../app-context";
-import { useCraftItemRules } from "./use-craft-item-rules";
+import { useIsItemCraftable } from "./use-is-item-craftable";
 
 export function useCraftableItem({
   attributes: { nameTag, patches, seed, statTrak, stickers, wear },
@@ -49,7 +49,7 @@ export function useCraftableItem({
   } = useRules();
 
   const [inventory] = useInventory();
-  const canCraftItem = useCraftItemRules();
+  const isItemCraftable = useIsItemCraftable();
 
   const inventoryMaxQuantity = inventoryMaxItems - inventory.size();
   const isCrafting = type === "craft";
@@ -125,7 +125,7 @@ export function useCraftableItem({
 
   const craftable =
     !inventory.isFull() &&
-    canCraftItem(item) &&
+    isItemCraftable(item) &&
     isWearValid &&
     isNametagValid &&
     isSeedValid &&
