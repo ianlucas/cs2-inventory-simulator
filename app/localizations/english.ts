@@ -115,6 +115,7 @@ export const english = {
   InventoryItemEquipT: "Equip T",
   InventoryItemExterior: /* csgo_english.txt */"Exterior:",
   InventoryItemInspect: /* csgo_english.txt */"Inspect",
+  InventoryItemInspectCopied: "Command copied!",
   InventoryItemInspectFinishCatalog: /* csgo_english.txt */"Finish Catalog",
   InventoryItemInspectInGame: /* csgo_english.txt */"Inspect in Game...",
   InventoryItemInspectPatternTemplate: /* csgo_english.txt */"Pattern Template",

@@ -3,32 +3,33 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ComponentProps } from "react";
+import { ComponentProps, useState } from "react";
 import { ContextButton } from "./context-button";
 import { ContextDivider } from "./context-divider";
 import { useTimedState } from "./hooks/use-timed-state";
 
 export function InventoryItemContextButton({
-  clickLabel,
   label,
   condition,
-  onClick
+  onClick,
+  ...props
 }: {
   clickLabel?: string;
   condition?: boolean;
   label: string;
-  onClick?: () => void;
+  onClick?: (hooks: { setClickLabel: (value: string) => void }) => void;
 }) {
+  const [clickLabel, setClickLabel] = useState(props.clickLabel);
   const [clicked, triggerClicked] = useTimedState();
 
   function handleClick() {
+    onClick?.({ setClickLabel });
     triggerClicked();
-    onClick?.();
   }
 
   return (
     condition && (
-      <ContextButton key={label} onClick={handleClick}>
+      <ContextButton onClick={handleClick}>
         {clickLabel !== undefined && clicked ? clickLabel : label}
       </ContextButton>
     )
@@ -44,8 +45,8 @@ export function InventoryItemContextMenu({
     <>
       {menu.map((group, index) => (
         <div key={index}>
-          {group.map((props) => (
-            <InventoryItemContextButton {...props} />
+          {group.map((props, itemIndex) => (
+            <InventoryItemContextButton key={itemIndex} {...props} />
           ))}
           {index < menu.length - 1 &&
             group.some(({ condition }) => condition) && <ContextDivider />}

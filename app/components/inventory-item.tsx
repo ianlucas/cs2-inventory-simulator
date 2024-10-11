@@ -12,7 +12,8 @@ import {
 } from "@ianlucas/cs2-lib";
 import {
   CS2_PREVIEW_INSPECTABLE_ITEMS,
-  generateInspectLink
+  generateInspectLink,
+  isCommandInspect
 } from "@ianlucas/cs2-lib-inspect";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
@@ -221,9 +222,18 @@ export function InventoryItem({
                   {
                     condition: canInspectInGame,
                     label: localize("InventoryItemInspectInGame"),
-                    onClick: close(() => {
-                      window.location.assign(generateInspectLink(item));
-                    })
+                    onClick: ({ setClickLabel }) => {
+                      const inspectLink = generateInspectLink(item);
+                      if (isCommandInspect(inspectLink)) {
+                        copyToClipboard(inspectLink);
+                        return setClickLabel(
+                          localize("InventoryItemInspectCopied")
+                        );
+                      }
+                      close(() => {
+                        window.location.assign(inspectLink);
+                      });
+                    }
                   }
                 ],
                 [

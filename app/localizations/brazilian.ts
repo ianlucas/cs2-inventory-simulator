@@ -114,6 +114,7 @@ export const brazilian = {
   InventoryItemEquipT: "Equipar T",
   InventoryItemExterior: /* csgo_brazilian.txt */"Exterior:",
   InventoryItemInspect: /* csgo_brazilian.txt */"Inspecionar",
+  InventoryItemInspectCopied: "Comando copiado!",
   InventoryItemInspectFinishCatalog: /* csgo_brazilian.txt */"Catálogo de revestimentos",
   InventoryItemInspectInGame: /* csgo_brazilian.txt */"Inspecionar no jogo...",
   InventoryItemInspectPatternTemplate: /* csgo_brazilian.txt */"Estilo do padrão",
