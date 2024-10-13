@@ -3,9 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CSSProperties } from "react";
 import { useRules } from "./app-context";
 
-export function Logo(props: { className?: string }) {
+export function Logo(props: { className?: string; style?: CSSProperties }) {
   const { appLogoUrl } = useRules();
   if (typeof global !== "undefined") {
     const base64Url = global.__appLogoBase64Url;

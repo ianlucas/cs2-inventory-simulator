@@ -40,7 +40,10 @@ export function Splash() {
           suppressHydrationWarning
           style={{ padding: "0.25em 0.5em 0 0.5em" }}
         >
-          <Logo className="h-8" />
+          <Logo
+            className="m-auto h-8"
+            style={{ margin: "auto", height: "2rem" }}
+          />
         </div>
         <div style={{ padding: "2px" }}>
           <div
