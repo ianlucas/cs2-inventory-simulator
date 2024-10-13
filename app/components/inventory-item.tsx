@@ -93,6 +93,7 @@ export function InventoryItem({
     inventoryItemAllowInspectInGame,
     inventoryItemAllowRemovePatch,
     inventoryItemAllowScrapeSticker,
+    inventoryItemAllowShare,
     inventoryItemAllowUnlockContainer,
     inventoryItemEquipHideModel,
     inventoryItemEquipHideType,
@@ -175,7 +176,7 @@ export function InventoryItem({
     (item.type === undefined || !editHideType.includes(item.type)) &&
     (item.model === undefined || !editHideModel.includes(item.model)) &&
     !editHideId.includes(item.id);
-  const canShare = item.isPaintable();
+  const canShare = inventoryItemAllowShare && item.isPaintable();
 
   function close(callBeforeClosing: () => void) {
     return function close() {

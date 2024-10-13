@@ -103,6 +103,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           "inventoryItemAllowInspectInGame",
           "inventoryItemAllowRemovePatch",
           "inventoryItemAllowScrapeSticker",
+          "inventoryItemAllowShare",
           "inventoryItemAllowUnlockContainer",
           "inventoryItemEquipHideModel",
           "inventoryItemEquipHideType",

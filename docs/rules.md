@@ -137,6 +137,10 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 - **Type:** `boolean`
 - **Default:** `true`
 
+### `inventoryItemAllowShare`
+
+- Indicates whether the user can share an inventory item.
+
 ### `inventoryItemEquipHideModel`
 
 - Determines whether to disallow an item model from being equipped by the user.

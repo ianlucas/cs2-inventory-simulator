@@ -28,6 +28,7 @@ const booleanRulesNames = [
   "inventoryItemAllowInspectInGame",
   "inventoryItemAllowRemovePatch",
   "inventoryItemAllowScrapeSticker",
+  "inventoryItemAllowShare",
   "inventoryItemAllowUnlockContainer"
 ] as const;
 const numberRulesNames = [
@@ -423,6 +424,11 @@ export async function setupRules() {
   });
   await addRule({
     name: "inventoryItemAllowScrapeSticker",
+    type: "boolean",
+    input: true
+  });
+  await addRule({
+    name: "inventoryItemAllowShare",
     type: "boolean",
     input: true
   });
