@@ -68,6 +68,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     rules: {
       ...(await getRules(
         [
+          "appCacheInventory",
           "appFaviconMimeType",
           "appFaviconUrl",
           "appFooterName",

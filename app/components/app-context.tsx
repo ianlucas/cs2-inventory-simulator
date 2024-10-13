@@ -98,7 +98,9 @@ export function AppProvider({
   const inventorySpec = {
     data: user?.inventory
       ? parseInventory(user?.inventory)
-      : getCachedInventoryData(),
+      : rules.appCacheInventory
+        ? getCachedInventoryData()
+        : undefined,
     maxItems: rules.inventoryMaxItems,
     storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
   } satisfies Partial<CS2InventorySpec>;
@@ -117,7 +119,7 @@ export function AppProvider({
 
   useEffect(() => {
     if (user !== undefined) {
-      if (user.inventory === null) {
+      if (rules.appCacheInventory && user.inventory === null) {
         const cachedData = getSanitizedCachedInventoryData();
         if (cachedData !== undefined) {
           pushToSync({

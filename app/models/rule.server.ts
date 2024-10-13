@@ -9,6 +9,7 @@ import { prisma } from "~/db.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "~/env.server";
 
 const booleanRulesNames = [
+  "appCacheInventory",
   "craftAllowNametag",
   "craftAllowPatches",
   "craftAllowSeed",
@@ -437,6 +438,11 @@ export async function setupRules() {
   });
   await addRule({
     name: "inventoryItemAllowUnlockContainer",
+    type: "boolean",
+    input: true
+  });
+  await addRule({
+    name: "appCacheInventory",
     type: "boolean",
     input: true
   });

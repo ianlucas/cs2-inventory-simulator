@@ -77,6 +77,12 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 > [!CAUTION]  
 > Both `steamApiKey` and `steamCallbackUrl` are required for authentication to work.
 
+### `appCacheInventory`
+
+- Indicates whether the app will cache the user's inventory if they're offline or unauthenticated.
+- **Type:** `boolean`
+- **Default:** `true`
+
 ### `inventoryMaxItems`
 
 - The maximum number of items a user can add to the inventory.
