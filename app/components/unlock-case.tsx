@@ -17,6 +17,7 @@ import {
   ApiActionUnlockCaseUrl
 } from "~/routes/api.action.unlock-case._index";
 import { dispatchSyncError, sync } from "~/sync";
+import { unlockNonSpecialItem } from "~/utils/economy";
 import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
@@ -96,7 +97,7 @@ export function UnlockCase({
         wait(() => {
           setItems(
             range(32).map((_, index) =>
-              index === 28 ? unlockedItem : caseItem.unlockContainer()
+              index === 28 ? unlockedItem : unlockNonSpecialItem(caseItem)
             )
           );
           setIsDisplaying(true);

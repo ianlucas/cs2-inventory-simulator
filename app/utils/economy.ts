@@ -133,3 +133,14 @@ export function getRarityItemName(item: CS2EconomyItem) {
   }
   fail();
 }
+
+export function unlockNonSpecialItem(container: CS2EconomyItem) {
+  let attempt = 0;
+  while (true) {
+    const unlockedItem = container.unlockContainer();
+    if (!unlockedItem.special || attempt > 255) {
+      return unlockedItem;
+    }
+    attempt += 1;
+  }
+}
