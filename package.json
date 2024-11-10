@@ -24,9 +24,9 @@
     "@ianlucas/cs2-lib-inspect": "^3.0.0",
     "@ianlucas/remix-auth-steam": "^4.1.0",
     "@prisma/client": "^5.22.0",
-    "@remix-run/node": "^2.13.1",
-    "@remix-run/react": "^2.13.1",
-    "@remix-run/serve": "^2.13.1",
+    "@remix-run/node": "^2.14.0",
+    "@remix-run/react": "^2.14.0",
+    "@remix-run/serve": "^2.14.0",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.5.13",
@@ -44,7 +44,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.13.1",
+    "@remix-run/dev": "^2.14.0",
     "@testing-library/react": "^15.0.7",
     "@types/node": "^18.19.64",
     "@types/react": "^18.3.12",
