@@ -19,6 +19,7 @@ import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { findRequestUser } from "./auth.server";
 import { AppProvider } from "./components/app-context";
 import { Background } from "./components/background";
+import { Console } from "./components/console";
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { Inventory } from "./components/inventory";
@@ -153,6 +154,7 @@ export default function App() {
         <body className="overflow-y-scroll bg-stone-800">
           <Splash />
           <Background />
+          <Console />
           <SyncWarn />
           <ItemSelectorProvider>
             <Header />
