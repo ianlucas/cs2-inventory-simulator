@@ -32,3 +32,9 @@ export function isOurHostname() {
     window.location.hostname
   );
 }
+
+export function colorText(input: string) {
+  return input.replace(/{(\w+)}([^{}]*)/g, (_, color, text) => {
+    return `<span style="color: ${color};">${text}</span>`;
+  });
+}
