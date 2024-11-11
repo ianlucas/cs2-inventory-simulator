@@ -21,7 +21,19 @@ export default defineConfig({
   test: {
     environment: "happy-dom"
   },
-  plugins: [!process.env.VITEST && remix(), tsconfigPaths()],
+  plugins: [
+    !process.env.VITEST &&
+      remix({
+        future: {
+          v3_fetcherPersist: true,
+          v3_lazyRouteDiscovery: true,
+          v3_relativeSplatPath: true,
+          v3_singleFetch: true,
+          v3_throwAbortReason: true
+        }
+      }),
+    tsconfigPaths()
+  ],
   define: {
     __SPLASH_SCRIPT__: JSON.stringify(
       minify_sync(
