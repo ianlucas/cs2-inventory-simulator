@@ -145,7 +145,11 @@ export function Console() {
 
   useEffect(() => {
     function onKeyup(event: KeyboardEvent) {
-      if (event.code === "Backquote") {
+      const { activeElement } = document;
+      if (
+        event.code === "Backquote" &&
+        !(activeElement instanceof HTMLInputElement)
+      ) {
         toggleIsVisible();
       }
     }
