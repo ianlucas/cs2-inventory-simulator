@@ -3,10 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { LoaderFunctionArgs, SerializeFrom, json } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
+import { SerializeFrom } from "~/utils/misc";
 
 export const ApiActionResyncUrl = "/api/action/resync";
 
@@ -15,8 +16,8 @@ export type ApiActionResyncData = SerializeFrom<typeof loader>;
 export const loader = api(async ({ request }: LoaderFunctionArgs) => {
   await middleware(request);
   const { syncedAt, inventory } = await requireUser(request);
-  return json({
+  return {
     syncedAt: syncedAt.getTime(),
     inventory
-  });
+  };
 });

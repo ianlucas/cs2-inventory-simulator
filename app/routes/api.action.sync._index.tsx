@@ -9,7 +9,7 @@ import {
   CS2EconomyItem,
   CS2ItemType
 } from "@ianlucas/cs2-lib";
-import { ActionFunctionArgs, SerializeFrom, json } from "@remix-run/node";
+import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
@@ -18,6 +18,7 @@ import { middleware } from "~/http.server";
 import { expectRule, expectRuleNotContain } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
+import { SerializeFrom } from "~/utils/misc";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
   clientInventoryItemShape,
@@ -348,7 +349,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
               ...action.attributes,
               statTrak:
                 action.attributes.statTrak !== undefined
-                  ? inventory.get(action.uid).statTrak ?? 0
+                  ? (inventory.get(action.uid).statTrak ?? 0)
                   : undefined,
               nameTag: action.attributes.nameTag
             });
@@ -368,7 +369,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
       }
     }
   });
-  return json({
+  return {
     syncedAt: responseSyncedAt.getTime()
-  });
+  };
 });

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Economy, ensure } from "@ianlucas/cs2-lib";
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { middleware } from "~/http.server";
@@ -73,12 +73,12 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
         });
       }
     });
-    return json({
+    return {
       ...item.item,
       ...(language !== undefined
         ? global.__itemLocalizationByLanguage[language][item.id]
         : item.language)
-    });
+    };
   } catch {
     return badRequest;
   }

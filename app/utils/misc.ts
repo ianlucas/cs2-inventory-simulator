@@ -3,6 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { useLoaderData } from "@remix-run/react";
+
+export type SerializeFrom<T> = ReturnType<typeof useLoaderData<T>>;
+
 export function random<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }

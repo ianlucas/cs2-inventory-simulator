@@ -3,13 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { api } from "~/api.server";
 import { middleware } from "~/http.server";
 
 export const loader = api(async ({ request }: LoaderFunctionArgs) => {
   middleware(request);
-  return json(
+  return Response.json(
     {
       message:
         "Resource not found, please refer to https://github.com/ianlucas/cs2-inventory-simulator/blob/main/docs/api.md."
