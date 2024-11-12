@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { prisma } from "~/db.server";
@@ -14,7 +14,7 @@ import { API_SCOPE } from "~/models/api-credential.server";
 export const loader = api(async ({ request, params }: LoaderFunctionArgs) => {
   middleware(request);
   await isValidApiRequest(request, [API_SCOPE]);
-  return json(
+  return Response.json(
     await prisma.user.findUnique({
       include: {
         groups: true

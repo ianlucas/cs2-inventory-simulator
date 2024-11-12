@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { middleware } from "~/http.server";
@@ -31,7 +31,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
   if (!(await existsUser(userId))) {
     throw badRequest;
   }
-  return json({
+  return {
     token: await generateAuthToken({ apiKey, userId })
-  });
+  };
 });

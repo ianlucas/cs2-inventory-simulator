@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Inventory, CS2UnlockedItem } from "@ianlucas/cs2-lib";
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
@@ -54,8 +54,8 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
     userId,
     inventory.stringify()
   );
-  return json<ApiActionUnlockCaseActionData>({
+  return {
     unlockedItem,
     syncedAt: responseSyncedAt.getTime()
-  });
+  } satisfies ApiActionUnlockCaseActionData;
 });
