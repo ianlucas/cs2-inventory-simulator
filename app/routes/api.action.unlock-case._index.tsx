@@ -17,6 +17,7 @@ import {
 import { updateUserInventory } from "~/models/user.server";
 import { conflict, methodNotAllowed } from "~/responses.server";
 import { parseInventory } from "~/utils/inventory";
+import { json } from "~/utils/misc";
 import { nonNegativeInt, positiveInt } from "~/utils/shapes";
 
 export const ApiActionUnlockCaseUrl = "/api/action/unlock-case";
@@ -58,8 +59,8 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
     userId,
     inventory.stringify()
   );
-  return {
+  return json({
     unlockedItem,
     syncedAt: responseSyncedAt.getTime()
-  } satisfies ApiActionUnlockCaseActionData;
+  } satisfies ApiActionUnlockCaseActionData);
 });

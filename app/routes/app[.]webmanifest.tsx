@@ -5,11 +5,12 @@
 
 import { DEFAULT_APP_NAME } from "~/app-defaults";
 import { appName } from "~/models/rule.server";
+import { json } from "~/utils/misc";
 
 export async function loader() {
   const name = (await appName.get()) || DEFAULT_APP_NAME;
-  return new Response(
-    JSON.stringify({
+  return json(
+    {
       background_color: "#292524",
       display: "standalone",
       icons: [
@@ -41,6 +42,11 @@ export async function loader() {
       start_url: "index.html",
       orientation: "portrait",
       theme_color: "#292524"
-    })
+    },
+    {
+      headers: {
+        "Content-Type": "application/manifest+json"
+      }
+    }
   );
 }
