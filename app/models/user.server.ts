@@ -7,7 +7,7 @@ import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { badRequest, conflict } from "~/responses.server";
 import { parseInventory } from "~/utils/inventory";
-import { getRule } from "./rule.server";
+import { inventoryMaxItems, inventoryStorageUnitMaxItems } from "./rule.server";
 
 export async function getUserInventory(userId: string) {
   return (
@@ -113,8 +113,8 @@ export async function manipulateUserInventory({
 }) {
   const inventory = new CS2Inventory({
     data: parseInventory(rawInventory),
-    maxItems: await getRule("inventoryMaxItems", userId),
-    storageUnitMaxItems: await getRule("inventoryStorageUnitMaxItems", userId)
+    maxItems: await inventoryMaxItems.for(userId).get(),
+    storageUnitMaxItems: await inventoryStorageUnitMaxItems.for(userId).get()
   });
   try {
     await manipulate(inventory);

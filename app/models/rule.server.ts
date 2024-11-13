@@ -7,514 +7,437 @@ import { assert, fail } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "~/env.server";
+import { noop } from "~/utils/misc";
 
-const booleanRulesNames = [
-  "appCacheInventory",
-  "craftAllowNametag",
-  "craftAllowPatches",
-  "craftAllowSeed",
-  "craftAllowStatTrak",
-  "craftAllowStickers",
-  "craftAllowWear",
-  "editAllowNametag",
-  "editAllowPatches",
-  "editAllowSeed",
-  "editAllowStatTrak",
-  "editAllowStickers",
-  "editAllowWear",
-  "inventoryItemAllowApplyPatch",
-  "inventoryItemAllowApplySticker",
-  "inventoryItemAllowEdit",
-  "inventoryItemAllowInspectInGame",
-  "inventoryItemAllowRemovePatch",
-  "inventoryItemAllowScrapeSticker",
-  "inventoryItemAllowShare",
-  "inventoryItemAllowUnlockContainer"
-] as const;
-const numberRulesNames = [
-  "inventoryMaxItems",
-  "inventoryStorageUnitMaxItems"
-] as const;
-const numberArrayRulesNames = ["craftHideId", "editHideId"] as const;
-const stringRulesNames = [
-  "appCountry",
-  "appFaviconMimeType",
-  "appFaviconUrl",
-  "appFooterName",
-  "appLogoUrl",
-  "appName",
-  "appSeoDescription",
-  "appSeoImageUrl",
-  "appSeoTitle",
-  "steamApiKey",
-  "steamCallbackUrl"
-] as const;
-const stringArrayRulesName = [
-  "craftHideCategory",
-  "craftHideModel",
-  "craftHideType",
-  "editHideCategory",
-  "editHideModel",
-  "editHideType",
-  "inventoryItemEquipHideModel",
-  "inventoryItemEquipHideType"
-] as const;
+class RuleFor<RuleName extends string, RuleValue> {
+  constructor(private value: Promise<RuleValue>) {}
 
-export type BooleanRuleNames = (typeof booleanRulesNames)[number];
-export type NumberRuleNames = (typeof numberRulesNames)[number];
-export type NumberArrayRuleNames = (typeof numberArrayRulesNames)[number];
-export type StringRuleNames = (typeof stringRulesNames)[number];
-export type StringArrayRuleNames = (typeof stringArrayRulesName)[number];
-export type RuleNames =
-  | BooleanRuleNames
-  | NumberRuleNames
-  | NumberArrayRuleNames
-  | StringRuleNames
-  | StringArrayRuleNames;
-export type RuleTypes =
-  | "string"
-  | "boolean"
-  | "number"
-  | "string-array"
-  | "number-array";
+  async get() {
+    return await this.value;
+  }
 
-export async function getUserRuleOverwrite(userId: string, name: string) {
-  return (
-    await prisma.userRule.findUnique({
-      select: { value: true },
-      where: { name_userId: { userId, name } }
-    })
-  )?.value;
+  async truthy() {
+    assert((await this.value) === true);
+  }
+
+  async notContains(what: unknown) {
+    const value = await this.value;
+    assert(Array.isArray(value));
+    assert(!value.includes(what));
+  }
 }
 
-export async function getUserGroupRuleOverwrite(userId: string, name: string) {
-  return (
-    await prisma.userGroup.findFirst({
-      select: {
-        group: {
-          select: {
-            overwrites: {
-              select: { value: true },
-              where: { name }
+export class Rule<RuleName extends string, RuleValue> {
+  static instances: Rule<any, any>[] = [];
+  public defaultValue: RuleValue;
+  private type: RuleValue extends string
+    ? "string"
+    : RuleValue extends number
+      ? "number"
+      : RuleValue extends boolean
+        ? "boolean"
+        : RuleValue extends string[]
+          ? "string-array"
+          : RuleValue extends number[]
+            ? "number-array"
+            : never;
+  public name: RuleName;
+
+  constructor({
+    defaultValue,
+    name,
+    type
+  }: {
+    defaultValue: RuleValue;
+    name: RuleName;
+    type: Rule<RuleName, RuleValue>["type"];
+  }) {
+    this.defaultValue = defaultValue;
+    this.name = name;
+    this.type = type;
+    Rule.instances.push(this);
+  }
+
+  private async getUserRuleOverwrite(userId: string) {
+    return (
+      await prisma.userRule.findUnique({
+        select: { value: true },
+        where: { name_userId: { userId, name: this.name } }
+      })
+    )?.value;
+  }
+
+  private async getUserGroupRuleOverwrite(userId: string) {
+    return (
+      await prisma.userGroup.findFirst({
+        select: {
+          group: {
+            select: {
+              overwrites: {
+                select: { value: true },
+                where: { name: this.name }
+              }
             }
           }
+        },
+        where: { userId },
+        orderBy: {
+          group: {
+            priority: "desc"
+          }
         }
-      },
-      where: { userId },
-      orderBy: {
-        group: {
-          priority: "desc"
-        }
-      }
-    })
-  )?.group.overwrites[0]?.value;
-}
-
-export function getRule(
-  name: BooleanRuleNames,
-  userId?: string
-): Promise<boolean>;
-export function getRule(
-  name: StringRuleNames,
-  userId?: string
-): Promise<string>;
-export function getRule(
-  name: NumberRuleNames,
-  userId?: string
-): Promise<number>;
-export function getRule(
-  name: StringArrayRuleNames,
-  userId?: string
-): Promise<string[]>;
-export function getRule(
-  name: NumberArrayRuleNames,
-  userId?: string
-): Promise<number[]>;
-export function getRule(
-  name: RuleNames,
-  userId?: string
-): Promise<boolean | string | number | string[] | number[]>;
-export async function getRule(name: RuleNames, userId?: string) {
-  let value: string | undefined = undefined;
-  if (userId !== undefined) {
-    value =
-      (await getUserRuleOverwrite(userId, name)) ??
-      (await getUserGroupRuleOverwrite(userId, name));
-  }
-  if (value === undefined) {
-    value = (
-      await prisma.rule.findUniqueOrThrow({
-        select: { value: true },
-        where: { name }
       })
-    ).value;
+    )?.group.overwrites[0]?.value;
   }
-  if (booleanRulesNames.includes(name as BooleanRuleNames)) {
-    return value === "true";
-  }
-  if (numberRulesNames.includes(name as NumberRuleNames)) {
-    return Number(value);
-  }
-  if (stringRulesNames.includes(name as StringRuleNames)) {
-    return value.trim();
-  }
-  if (stringArrayRulesName.includes(name as StringArrayRuleNames)) {
-    return value
-      .split(";")
-      .map((value) => value.trim())
-      .filter((value) => value !== "");
-  }
-  if (numberArrayRulesNames.includes(name as NumberArrayRuleNames)) {
-    return value
-      .split(";")
-      .map((value) => value.trim())
-      .filter((value) => value !== "")
-      .map(Number);
-  }
-  fail("Rule not found or has invalid type.");
-}
 
-type RuleTypeMap = {
-  [name in RuleNames]: name extends BooleanRuleNames
-    ? boolean
-    : name extends StringRuleNames
-      ? string
-      : name extends NumberRuleNames
-        ? number
-        : name extends StringArrayRuleNames
-          ? string[]
-          : name extends NumberArrayRuleNames
-            ? number[]
-            : never;
-};
+  private toValue(str: string): RuleValue {
+    switch (this.type) {
+      case "string":
+        return str as RuleValue;
+      case "number":
+        return Number(str) as RuleValue;
+      case "boolean":
+        return (str === "true") as RuleValue;
+      case "string-array":
+        return str
+          .split(";")
+          .map((value) => value.trim())
+          .filter((value) => value !== "") as RuleValue;
+      case "number-array":
+        return str
+          .split(";")
+          .map((value) => value.trim())
+          .filter((value) => value !== "")
+          .map(Number) as RuleValue;
+      default:
+        fail();
+    }
+  }
 
-export async function getRules<Names extends RuleNames>(
-  names: Names[],
-  userId?: string
-) {
-  return Object.fromEntries(
-    await Promise.all(
-      names.map(async (name) => [name, await getRule(name, userId)])
-    )
-  ) as { [name in Names]: RuleTypeMap[name] };
-}
+  async register() {
+    if ((await prisma.rule.count({ where: { name: this.name } })) === 0) {
+      await this.set(this.defaultValue);
+    }
+  }
 
-export async function expectRule(
-  name: BooleanRuleNames,
-  toBe: boolean,
-  forUser?: string
-) {
-  assert(
-    (await getRule(name, forUser)) === toBe,
-    `Rule ${name} is not ${toBe}`
-  );
-}
+  async set(value: RuleValue) {
+    let strValue = String(value);
+    switch (this.type) {
+      case "number":
+        assert(strValue.match(/^\d+$/) !== null);
+        break;
 
-export async function expectRuleNotContain(
-  name: StringArrayRuleNames,
-  value: string,
-  forUser?: string
-): Promise<void>;
-export async function expectRuleNotContain(
-  name: NumberArrayRuleNames,
-  value: number,
-  forUser?: string
-): Promise<void>;
-export async function expectRuleNotContain(
-  name: StringArrayRuleNames | NumberArrayRuleNames,
-  value: string | number,
-  forUser?: string
-): Promise<void> {
-  if (typeof value === "string") {
-    assert(
-      !(await getRule(name as StringArrayRuleNames, forUser)).includes(value),
-      `Rule ${name} contains ${value}`
+      case "boolean":
+        assert(strValue === "true" || strValue === "false");
+        break;
+
+      case "string-array":
+        const transform = z.array(z.string()).safeParse(value);
+        assert(transform.success);
+        strValue = transform.data.join(";");
+        break;
+
+      case "number-array":
+        const transform2 = z.array(z.number()).safeParse(value);
+        assert(transform2.success);
+        strValue = transform2.data.join(";");
+        break;
+    }
+    prisma.rule
+      .upsert({
+        where: {
+          name: this.name
+        },
+        update: {
+          value: strValue
+        },
+        create: {
+          name: this.name,
+          type: this.type,
+          value: strValue
+        }
+      })
+      .then(noop);
+  }
+
+  async get() {
+    const value = (await prisma.rule.findUnique({ where: { name: this.name } }))
+      ?.value;
+    return value !== undefined ? this.toValue(value) : this.defaultValue;
+  }
+
+  for(userId: string): RuleFor<RuleName, RuleValue> {
+    return new RuleFor(
+      new Promise(async (resolve) => {
+        const value =
+          (await this.getUserRuleOverwrite(userId)) ??
+          (await this.getUserGroupRuleOverwrite(userId));
+        resolve(value !== undefined ? this.toValue(value) : await this.get());
+      })
     );
   }
-  if (typeof value === "number") {
-    assert(
-      !(await getRule(name as NumberArrayRuleNames, forUser)).includes(value),
-      `Rule ${name} contains ${value}`
-    );
-  }
 }
 
-export async function setRule({
-  type,
-  name,
-  input
-}: {
-  type: RuleTypes;
-  name: RuleNames;
-  input: unknown;
-}) {
-  let value = "";
-  switch (type) {
-    case "string":
-      assert(typeof input === "string", "invalid string");
-      value = input;
-      break;
-    case "boolean":
-      assert(typeof input === "boolean", "invalid boolean");
-      value = String(input);
-      break;
-    case "number":
-      assert(typeof input === "number", "invalid number");
-      value = String(input);
-      break;
-    case "string-array":
-      const transform = z.array(z.string()).safeParse(input);
-      assert(transform.success, "invalid string array");
-      value = transform.data.join(";");
-      break;
-    case "number-array":
-      const transform2 = z.array(z.number()).safeParse(input);
-      assert(transform2.success, "invalid number array");
-      value = transform2.data.join(";");
-      break;
-  }
-  const data = {
-    name,
-    type,
-    value
-  };
-  await prisma.rule.upsert({
-    update: data,
-    create: data,
-    where: { name }
-  });
-}
+export const inventoryMaxItems = new Rule({
+  name: "inventoryMaxItems",
+  type: "number",
+  defaultValue: 256
+});
 
-export async function addRule(data: {
-  name: RuleNames;
-  type: RuleTypes;
-  input: unknown;
-}) {
-  if ((await prisma.rule.count({ where: { name: data.name } })) > 0) {
-    return;
-  }
-  return await setRule(data);
-}
+export const inventoryStorageUnitMaxItems = new Rule({
+  name: "inventoryStorageUnitMaxItems",
+  type: "number",
+  defaultValue: 32
+});
 
-export async function setupRules() {
-  await addRule({
-    name: "inventoryMaxItems",
-    type: "number",
-    input: 256
-  });
-  await addRule({
-    name: "inventoryStorageUnitMaxItems",
-    type: "number",
-    input: 32
-  });
-  await addRule({
-    name: "appLogoUrl",
-    type: "string",
-    input: ""
-  });
-  await addRule({
-    name: "appFaviconUrl",
-    type: "string",
-    input: ""
-  });
-  await addRule({
-    name: "appFaviconMimeType",
-    type: "string",
-    input: ""
-  });
-  await addRule({
-    name: "appName",
-    type: "string",
-    input: ""
-  });
-  await addRule({
-    name: "appFooterName",
-    type: "string",
-    input: ""
-  });
-  await addRule({
-    name: "appSeoDescription",
-    type: "string",
-    input: ""
-  });
-  await addRule({
-    name: "appSeoImageUrl",
-    type: "string",
-    input: ""
-  });
-  await addRule({
-    name: "appSeoTitle",
-    type: "string",
-    input: ""
-  });
-  await addRule({
-    name: "appCountry",
-    type: "string",
-    input: "us"
-  });
-  await addRule({
-    name: "steamApiKey",
-    type: "string",
-    input: STEAM_API_KEY ?? "YOUR_STEAM_API_KEY_GOES_HERE"
-  });
-  await addRule({
-    name: "steamCallbackUrl",
-    type: "string",
-    input: STEAM_CALLBACK_URL ?? "http://localhost/sign-in/steam/callback"
-  });
-  await addRule({
-    name: "inventoryItemAllowEdit",
-    type: "boolean",
-    input: false
-  });
-  await addRule({
-    name: "craftHideCategory",
-    type: "string-array",
-    input: []
-  });
-  await addRule({
-    name: "craftHideType",
-    type: "string-array",
-    input: []
-  });
-  await addRule({
-    name: "craftHideModel",
-    type: "string-array",
-    input: []
-  });
-  await addRule({
-    name: "craftHideId",
-    type: "number-array",
-    input: []
-  });
-  await addRule({
-    name: "editHideCategory",
-    type: "string-array",
-    input: []
-  });
-  await addRule({
-    name: "editHideType",
-    type: "string-array",
-    input: []
-  });
-  await addRule({
-    name: "editHideModel",
-    type: "string-array",
-    input: []
-  });
-  await addRule({
-    name: "editHideId",
-    type: "number-array",
-    input: []
-  });
-  await addRule({
-    name: "inventoryItemAllowApplyPatch",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "inventoryItemAllowRemovePatch",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "inventoryItemAllowApplySticker",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "inventoryItemAllowScrapeSticker",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "inventoryItemAllowShare",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "inventoryItemEquipHideType",
-    type: "string-array",
-    input: []
-  });
-  await addRule({
-    name: "inventoryItemEquipHideModel",
-    type: "string-array",
-    input: []
-  });
-  await addRule({
-    name: "inventoryItemAllowUnlockContainer",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "appCacheInventory",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "craftAllowNametag",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "craftAllowSeed",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "craftAllowWear",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "craftAllowStatTrak",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "craftAllowStickers",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "craftAllowPatches",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "editAllowNametag",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "editAllowSeed",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "editAllowWear",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "editAllowStatTrak",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "editAllowStickers",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "editAllowPatches",
-    type: "boolean",
-    input: true
-  });
-  await addRule({
-    name: "inventoryItemAllowInspectInGame",
-    type: "boolean",
-    input: true
-  });
-}
+export const appLogoUrl = new Rule({
+  name: "appLogoUrl",
+  type: "string",
+  defaultValue: ""
+});
+
+export const appFaviconUrl = new Rule({
+  name: "appFaviconUrl",
+  type: "string",
+  defaultValue: ""
+});
+
+export const appFaviconMimeType = new Rule({
+  name: "appFaviconMimeType",
+  type: "string",
+  defaultValue: ""
+});
+
+export const appName = new Rule({
+  name: "appName",
+  type: "string",
+  defaultValue: ""
+});
+
+export const appFooterName = new Rule({
+  name: "appFooterName",
+  type: "string",
+  defaultValue: ""
+});
+
+export const appSeoDescription = new Rule({
+  name: "appSeoDescription",
+  type: "string",
+  defaultValue: ""
+});
+
+export const appSeoImageUrl = new Rule({
+  name: "appSeoImageUrl",
+  type: "string",
+  defaultValue: ""
+});
+
+export const appSeoTitle = new Rule({
+  name: "appSeoTitle",
+  type: "string",
+  defaultValue: ""
+});
+
+export const appCountry = new Rule({
+  name: "appCountry",
+  type: "string",
+  defaultValue: "us"
+});
+
+export const steamApiKey = new Rule({
+  name: "steamApiKey",
+  type: "string",
+  defaultValue: STEAM_API_KEY ?? "YOUR_STEAM_API_KEY_GOES_HERE"
+});
+
+export const steamCallbackUrl = new Rule({
+  name: "steamCallbackUrl",
+  type: "string",
+  defaultValue: STEAM_CALLBACK_URL ?? "http://localhost/sign-in/steam/callback"
+});
+
+export const inventoryItemAllowEdit = new Rule({
+  name: "inventoryItemAllowEdit",
+  type: "boolean",
+  defaultValue: false
+});
+
+export const craftHideCategory = new Rule({
+  name: "craftHideCategory",
+  type: "string-array",
+  defaultValue: [] as string[]
+});
+
+export const craftHideType = new Rule({
+  name: "craftHideType",
+  type: "string-array",
+  defaultValue: [] as string[]
+});
+
+export const craftHideModel = new Rule({
+  name: "craftHideModel",
+  type: "string-array",
+  defaultValue: [] as string[]
+});
+
+export const craftHideId = new Rule({
+  name: "craftHideId",
+  type: "number-array",
+  defaultValue: [] as number[]
+});
+
+export const editHideCategory = new Rule({
+  name: "editHideCategory",
+  type: "string-array",
+  defaultValue: [] as string[]
+});
+
+export const editHideType = new Rule({
+  name: "editHideType",
+  type: "string-array",
+  defaultValue: [] as string[]
+});
+
+export const editHideModel = new Rule({
+  name: "editHideModel",
+  type: "string-array",
+  defaultValue: [] as string[]
+});
+
+export const editHideId = new Rule({
+  name: "editHideId",
+  type: "number-array",
+  defaultValue: [] as number[]
+});
+
+export const inventoryItemAllowApplyPatch = new Rule({
+  name: "inventoryItemAllowApplyPatch",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const inventoryItemAllowRemovePatch = new Rule({
+  name: "inventoryItemAllowRemovePatch",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const inventoryItemAllowApplySticker = new Rule({
+  name: "inventoryItemAllowApplySticker",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const inventoryItemAllowScrapeSticker = new Rule({
+  name: "inventoryItemAllowScrapeSticker",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const inventoryItemAllowShare = new Rule({
+  name: "inventoryItemAllowShare",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const inventoryItemEquipHideType = new Rule({
+  name: "inventoryItemEquipHideType",
+  type: "string-array",
+  defaultValue: [] as string[]
+});
+
+export const inventoryItemEquipHideModel = new Rule({
+  name: "inventoryItemEquipHideModel",
+  type: "string-array",
+  defaultValue: [] as string[]
+});
+
+export const inventoryItemAllowUnlockContainer = new Rule({
+  name: "inventoryItemAllowUnlockContainer",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const appCacheInventory = new Rule({
+  name: "appCacheInventory",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowNametag = new Rule({
+  name: "craftAllowNametag",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowSeed = new Rule({
+  name: "craftAllowSeed",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowWear = new Rule({
+  name: "craftAllowWear",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowStatTrak = new Rule({
+  name: "craftAllowStatTrak",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowStickers = new Rule({
+  name: "craftAllowStickers",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowPatches = new Rule({
+  name: "craftAllowPatches",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowNametag = new Rule({
+  name: "editAllowNametag",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowSeed = new Rule({
+  name: "editAllowSeed",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowWear = new Rule({
+  name: "editAllowWear",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowStatTrak = new Rule({
+  name: "editAllowStatTrak",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowStickers = new Rule({
+  name: "editAllowStickers",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowPatches = new Rule({
+  name: "editAllowPatches",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const inventoryItemAllowInspectInGame = new Rule({
+  name: "inventoryItemAllowInspectInGame",
+  type: "boolean",
+  defaultValue: true
+});

@@ -31,7 +31,8 @@ import { SyncWarn } from "./components/sync-warn";
 import { BUILD_LAST_COMMIT } from "./env.server";
 import { middleware } from "./http.server";
 import { getLocalizationChecksum } from "./localization.server";
-import { getRule, getRules } from "./models/rule.server";
+import { getClientRules } from "./models/rule";
+import { steamCallbackUrl } from "./models/rule.server";
 import { getBackground } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
 import { getToggleable } from "./preferences/toggleable.server";
@@ -60,59 +61,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const user = await findRequestUser(request);
   const ipCountry = request.headers.get("CF-IPCountry");
   const { origin: appUrl, host: appSiteName } = new URL(
-    await getRule("steamCallbackUrl")
+    await steamCallbackUrl.get()
   );
   return typedjson({
     localization: {
       checksum: getLocalizationChecksum()
     },
     rules: {
-      ...(await getRules(
-        [
-          "appCacheInventory",
-          "appFaviconMimeType",
-          "appFaviconUrl",
-          "appFooterName",
-          "appLogoUrl",
-          "appName",
-          "appSeoDescription",
-          "appSeoImageUrl",
-          "appSeoTitle",
-          "craftAllowNametag",
-          "craftAllowPatches",
-          "craftAllowSeed",
-          "craftAllowStatTrak",
-          "craftAllowStickers",
-          "craftAllowWear",
-          "craftHideCategory",
-          "craftHideId",
-          "craftHideModel",
-          "craftHideType",
-          "editAllowNametag",
-          "editAllowPatches",
-          "editAllowSeed",
-          "editAllowStatTrak",
-          "editAllowStickers",
-          "editAllowWear",
-          "editHideCategory",
-          "editHideId",
-          "editHideModel",
-          "editHideType",
-          "inventoryItemAllowApplyPatch",
-          "inventoryItemAllowApplySticker",
-          "inventoryItemAllowEdit",
-          "inventoryItemAllowInspectInGame",
-          "inventoryItemAllowRemovePatch",
-          "inventoryItemAllowScrapeSticker",
-          "inventoryItemAllowShare",
-          "inventoryItemAllowUnlockContainer",
-          "inventoryItemEquipHideModel",
-          "inventoryItemEquipHideType",
-          "inventoryMaxItems",
-          "inventoryStorageUnitMaxItems"
-        ],
-        user?.id
-      )),
+      ...(await getClientRules(user?.id)),
       buildLastCommit: BUILD_LAST_COMMIT,
       meta: { appUrl, appSiteName }
     },

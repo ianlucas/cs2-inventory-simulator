@@ -42,3 +42,5 @@ export function colorText(input: string) {
     return `<span style="color: ${color};">${text}</span>`;
   });
 }
+
+export function noop() {}
