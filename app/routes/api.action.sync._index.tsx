@@ -42,7 +42,7 @@ import {
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
-import { SerializeFrom } from "~/utils/misc";
+import { json, SerializeFrom } from "~/utils/misc";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
   clientInventoryItemShape,
@@ -393,7 +393,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
       }
     }
   });
-  return {
+  return json({
     syncedAt: responseSyncedAt.getTime()
-  };
+  });
 });

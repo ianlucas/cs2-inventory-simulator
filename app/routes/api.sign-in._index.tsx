@@ -11,6 +11,7 @@ import { generateAuthToken } from "~/models/api-auth-token.server";
 import { API_AUTH_SCOPE, isApiKeyValid } from "~/models/api-credential.server";
 import { existsUser } from "~/models/user.server";
 import { badRequest, methodNotAllowed, unauthorized } from "~/responses.server";
+import { json } from "~/utils/misc";
 
 export const action = api(async ({ request }: ActionFunctionArgs) => {
   await middleware(request);
@@ -31,7 +32,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
   if (!(await existsUser(userId))) {
     throw badRequest;
   }
-  return {
+  return json({
     token: await generateAuthToken({ apiKey, userId })
-  };
+  });
 });

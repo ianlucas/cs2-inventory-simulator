@@ -15,7 +15,7 @@ import {
 } from "~/models/api-credential.server";
 import { findUniqueUser, manipulateUserInventory } from "~/models/user.server";
 import { badRequest, methodNotAllowed, unauthorized } from "~/responses.server";
-import { random } from "~/utils/misc";
+import { json, random } from "~/utils/misc";
 
 export const action = api(async ({ request }: ActionFunctionArgs) => {
   await middleware(request);
@@ -73,12 +73,12 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
         });
       }
     });
-    return {
+    return json({
       ...item.item,
       ...(language !== undefined
         ? global.__itemLocalizationByLanguage[language][item.id]
         : item.language)
-    };
+    });
   } catch {
     return badRequest;
   }

@@ -10,11 +10,12 @@ import { prisma } from "~/db.server";
 import { middleware } from "~/http.server";
 import { isValidApiRequest } from "~/middlewares/is-valid-api-request.server";
 import { API_SCOPE } from "~/models/api-credential.server";
+import { json } from "~/utils/misc";
 
 export const loader = api(async ({ request, params }: LoaderFunctionArgs) => {
   middleware(request);
   await isValidApiRequest(request, [API_SCOPE]);
-  return Response.json(
+  return json(
     await prisma.user.findUnique({
       include: {
         groups: true
