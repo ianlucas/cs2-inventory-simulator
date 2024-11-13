@@ -9,7 +9,7 @@ import { prisma } from "~/db.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "~/env.server";
 import { noop } from "~/utils/misc";
 
-class RuleFor<RuleName extends string, RuleValue> {
+class RuleFor<RuleValue> {
   constructor(private value: Promise<RuleValue>) {}
 
   async get() {
@@ -166,7 +166,7 @@ export class Rule<RuleName extends string, RuleValue> {
     return value !== undefined ? this.toValue(value) : this.defaultValue;
   }
 
-  for(userId: string): RuleFor<RuleName, RuleValue> {
+  for(userId: string): RuleFor<RuleValue> {
     return new RuleFor(
       new Promise(async (resolve) => {
         const value =
