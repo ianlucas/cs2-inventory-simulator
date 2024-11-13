@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { DEFAULT_APP_NAME } from "~/app-defaults";
-import { getRule } from "~/models/rule.server";
+import { appName } from "~/models/rule.server";
 
 export async function loader() {
-  const name = (await getRule("appName")) || DEFAULT_APP_NAME;
+  const name = (await appName.get()) || DEFAULT_APP_NAME;
   return new Response(
     JSON.stringify({
       background_color: "#292524",

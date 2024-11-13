@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { getRule } from "./models/rule.server";
+import { appLogoUrl } from "./models/rule.server";
 
 declare global {
   var __appLogoBase64Url: string | undefined;
@@ -11,7 +11,7 @@ declare global {
 
 export async function setupLogo() {
   try {
-    const url = await getRule("appLogoUrl");
+    const url = await appLogoUrl.get();
     if (url === "") {
       return;
     }
