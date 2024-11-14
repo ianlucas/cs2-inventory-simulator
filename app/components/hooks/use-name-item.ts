@@ -59,7 +59,6 @@ export function nameItemFactory(localize: ReturnType<typeof useLocalize>) {
         }
         return [model, name];
       case "craft-name":
-        console.log(item, name);
         return [name.length > 0 && !item.isAgent() ? name : model];
       case "default":
         return [model, name];
