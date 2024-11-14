@@ -3,7 +3,7 @@ FROM node:18-bullseye-slim AS base
 
 ENV NODE_ENV=production
 
-# Install Prisma dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y openssl git
 
 # Install dependencies
@@ -16,12 +16,18 @@ RUN npm install --include=dev
 # Generate Prisma client, add commit hash, and build the app
 FROM deps AS build
 
+ARG SOURCE_COMMIT
+ENV SOURCE_COMMIT=${SOURCE_COMMIT}
+
 COPY prisma ./prisma
 RUN npx prisma generate
 
-# Copy source code and capture the last Git commit hash
-COPY .git .git
-RUN git log -n 1 --pretty=format:%H > .build-last-commit
+COPY . .
+RUN if [ -d .git ]; then \
+      git log -n 1 --pretty=format:%H > .build-last-commit; \
+    elif [ -n "$SOURCE_COMMIT" ] && [ "$SOURCE_COMMIT" != "unknown" ]; then \
+      echo "$SOURCE_COMMIT" > .build-last-commit; \
+    fi
 RUN npm run build
 RUN rm -rf .git
 
