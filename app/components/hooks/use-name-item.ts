@@ -43,7 +43,7 @@ export function nameItemFactory(localize: ReturnType<typeof useLocalize>) {
         ? `${localize("InventoryItemStatTrak")} `
         : "";
     const quality = item.isMelee() && !item.free ? "★ " : "";
-    let [model, ...names] = item.name.split(" | ");
+    let [model, ...names] = item.name.split("|").map((s) => s.trim());
     let name = names.join(" | ");
     model = `${quality}${statTrak}${model}`;
     if (item.isAgent()) {
