@@ -19,6 +19,7 @@ import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { findRequestUser } from "./auth.server";
 import { AppProvider } from "./components/app-context";
 import { Background } from "./components/background";
+import { CloudflareAnalyticsScript } from "./components/cloudflare-analytics-script";
 import { Console } from "./components/console";
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
@@ -28,7 +29,7 @@ import { LocalizationScript } from "./components/localization-script";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
-import { BUILD_LAST_COMMIT } from "./env.server";
+import { BUILD_LAST_COMMIT, CLOUDFLARE_ANALYTICS_TOKEN } from "./env.server";
 import { middleware } from "./http.server";
 import { getLocalizationChecksum } from "./localization.server";
 import { getClientRules } from "./models/rule";
@@ -70,6 +71,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     rules: {
       ...(await getClientRules(user?.id)),
       buildLastCommit: BUILD_LAST_COMMIT,
+      cloudflareAnalyticsToken: CLOUDFLARE_ANALYTICS_TOKEN,
       meta: { appUrl, appSiteName }
     },
     preferences: {
@@ -121,6 +123,9 @@ export default function App() {
           <SyncIndicator />
           <ScrollRestoration />
           <LocalizationScript />
+          <CloudflareAnalyticsScript
+            token={appProps.rules.cloudflareAnalyticsToken}
+          />
           <Scripts />
         </body>
       </html>
