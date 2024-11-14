@@ -20,7 +20,7 @@ COPY prisma ./prisma
 RUN npx prisma generate
 
 # Copy source code and capture the last Git commit hash
-COPY . .
+COPY .git ./.git
 RUN git log -n 1 --pretty=format:%H > .build-last-commit
 RUN npm run build
 
