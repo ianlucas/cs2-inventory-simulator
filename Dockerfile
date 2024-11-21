@@ -11,7 +11,7 @@ FROM base AS deps
 
 WORKDIR /myapp
 COPY package.json package-lock.json ./
-RUN npm install --include=dev
+RUN npm ci --include=dev
 
 # Generate Prisma client, add commit hash, and build the app
 FROM deps AS build
