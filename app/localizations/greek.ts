@@ -120,7 +120,7 @@ export const greek = {
   InventoryItemUnequip: /* csgo_greek.txt */"Παρόπλιση",
   InventoryItemUnlockContainer: /* csgo_greek.txt */"Ξεκλείδωμα κιβωτίου",
   InventoryItemUseStorageUnit: /* csgo_greek.txt */"Έναρξη χρήσης κιβωτίου",
-  InventorySelectAnItem: /* csgo_greek.txt */"Επιλογή αντικειμένου για χρήση με:",
+  InventorySelectAnItem: /* csgo_greek.txt */"ΕΠΙΛΟΓΗ ΑΝΤΙΚΕΙΜΕΝΟΥ ΓΙΑ ΧΡΗΣΗ ΜΕ:",
   InventorySelectInspectContents: /* csgo_greek.txt */"Επιθεωρείτε τα περιεχόμενα από",
   InventorySelectItemToDeposit: /* csgo_greek.txt */"Επιλέξτε αντικείμενα για να μετακινήσετε σε",
   InventorySelectItemToRetrieve: /* csgo_greek.txt */"Επιλέξτε αντικείμενα για να λάβετε",

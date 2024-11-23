@@ -170,7 +170,7 @@ export const czech = {
   ItemWearMW: /* csgo_czech.txt */"Lehce opotřebený",
   ItemWearWW: /* csgo_czech.txt */"Silně opotřebený",
   RemovePatchRemove: /* csgo_czech.txt */"Odebrat nášivku",
-  RemovePatchRemoveDesc: /* csgo_czech.txt */"Potvrď odstranění této nášivky z agenta. Pamatuj však, že nášivka bude zničena.",
+  RemovePatchRemoveDesc: /* csgo_czech.txt */"Potvrď odebrání této nášivky z agenta. Pamatuj však, že nášivka bude zničena.",
   RemovePatchUse: /* csgo_czech.txt */"Odebrat nášivku",
   RemovePatchWarn: /* csgo_czech.txt */"Odebrat nášivku z:",
   RenameCancel: /* csgo_czech.txt */"Zrušit",
@@ -187,7 +187,7 @@ export const czech = {
   ScrapeStickerCancel: /* csgo_czech.txt */"Zrušit",
   ScrapeStickerClose: /* csgo_czech.txt */"Zavřít",
   ScrapeStickerRemove: /* csgo_czech.txt */"Odebrat samolepku",
-  ScrapeStickerRemoveDesc: /* csgo_czech.txt */"Pokud strhneš samolepku celou, navždy ji ze zbraně odstraníš a samolepka bude zničena.",
+  ScrapeStickerRemoveDesc: /* csgo_czech.txt */"Pokud strhneš samolepku celou, navždy ji ze zbraně odebereš a samolepka bude zničena.",
   ScrapeStickerUse: /* csgo_czech.txt */"Strhnout samolepku",
   ScrapeStickerWarn: /* csgo_czech.txt */"Strhnout samolepku z:",
   StickerPickerRemove: /* csgo_czech.txt */"Odebrat"

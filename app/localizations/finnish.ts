@@ -166,7 +166,7 @@ export const finnish = {
   ItemWeaponRarityUncommon: /* csgo_finnish.txt */"Teollistason",
   ItemWearBS: /* csgo_finnish.txt */"Reissussa rähjääntynyt",
   ItemWearFN: /* csgo_finnish.txt */"Suoraan tehtaalta",
-  ItemWearFT: /* csgo_finnish.txt */"Kentällä kokeiltu",
+  ItemWearFT: /* csgo_finnish.txt */"Käytössä kokeiltu",
   ItemWearMW: /* csgo_finnish.txt */"Vähän käytetty",
   ItemWearWW: /* csgo_finnish.txt */"Aikansa elänyt",
   RemovePatchRemove: /* csgo_finnish.txt */"Poista kangasmerkki",

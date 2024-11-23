@@ -187,7 +187,7 @@ export const vietnamese = {
   ScrapeStickerCancel: /* csgo_vietnamese.txt */"Hủy",
   ScrapeStickerClose: /* csgo_vietnamese.txt */"Đóng",
   ScrapeStickerRemove: /* csgo_vietnamese.txt */"Gỡ hình dán",
-  ScrapeStickerRemoveDesc: /* csgo_vietnamese.txt */"Cạo hình dán này lần nữa sẽ loại bỏ nó khỏi vật phẩm và hình dán sẽ bị hủy bỏ.",
+  ScrapeStickerRemoveDesc: /* csgo_vietnamese.txt */"Cào hình dán này lần nữa sẽ loại bỏ nó khỏi vật phẩm và hình dán sẽ bị hủy bỏ.",
   ScrapeStickerUse: /* csgo_vietnamese.txt */"Cào hình dán",
   ScrapeStickerWarn: /* csgo_vietnamese.txt */"Cào hình dán trên",
   StickerPickerRemove: /* csgo_vietnamese.txt */"Gỡ bỏ"

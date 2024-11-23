@@ -202,7 +202,7 @@ export const brazilian = {
   ItemWearWW: /* csgo_brazilian.txt */"Bem Desgastada",
   JavaScriptRequired: "Por favor, habilite o JavaScript e atualize a página.",
   RemovePatchRemove: /* csgo_brazilian.txt */"Remover emblema",
-  RemovePatchRemoveDesc: /* csgo_brazilian.txt */"Confirme que quer remover este emblema do seu agente. O emblema removido será destruído.",
+  RemovePatchRemoveDesc: /* csgo_brazilian.txt */"Confirme que deseja remover este emblema do seu agente. O emblema removido será destruído.",
   RemovePatchUse: /* csgo_brazilian.txt */"Remover emblema",
   RemovePatchWarn: /* csgo_brazilian.txt */"Remover um emblema de",
   RenameCancel: /* csgo_brazilian.txt */"Cancelar",

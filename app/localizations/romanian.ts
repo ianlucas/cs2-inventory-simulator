@@ -11,7 +11,7 @@ export const romanian = {
   ApplyPatchUse: /* csgo_romanian.txt */"Aplică ecusonul brodat",
   ApplyPatchWarn: /* csgo_romanian.txt */"Un ecuson brodat poate fi aplicat doar o dată",
   ApplyStickerCancel: /* csgo_romanian.txt */"Anulează",
-  ApplyStickerUse: /* csgo_romanian.txt */"Aplică abțibildul",
+  ApplyStickerUse: /* csgo_romanian.txt */"Lipește abțibildul",
   ApplyStickerUseOn: /* csgo_romanian.txt */"Folosește pe",
   ApplyStickerWarn: /* csgo_romanian.txt */"Un abțibild poate fi lipit doar o dată",
   CaseAdd: /* csgo_romanian.txt */"Adaugă",

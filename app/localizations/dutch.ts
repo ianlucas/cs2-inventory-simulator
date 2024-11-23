@@ -71,7 +71,7 @@ export const dutch = {
   InventoryFilterMedals: /* csgo_dutch.txt */"Medailles",
   InventoryFilterMelee: /* csgo_dutch.txt */"Slagwapen",
   InventoryFilterMidTier: /* csgo_dutch.txt */"Mid-Tier",
-  InventoryFilterMisc: /* csgo_dutch.txt */"Misc",
+  InventoryFilterMisc: /* csgo_dutch.txt */"Diversen",
   InventoryFilterMusicKits: /* csgo_dutch.txt */"Muzieksets",
   InventoryFilterNewest: /* csgo_dutch.txt */"Nieuwste",
   InventoryFilterPatches: /* csgo_dutch.txt */"Emblemen",

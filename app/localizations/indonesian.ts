@@ -170,7 +170,7 @@ export const indonesian = {
   ItemWearMW: /* csgo_indonesian.txt */"Seperti Baru",
   ItemWearWW: /* csgo_indonesian.txt */"Sering Digunakan",
   RemovePatchRemove: /* csgo_indonesian.txt */"Lepas Patch",
-  RemovePatchRemoveDesc: /* csgo_indonesian.txt */"Mohon konfirmasi bahwa kamu ingin melepas patch ini dari agent. Patch yang dilepas akan dihancurkan.",
+  RemovePatchRemoveDesc: /* csgo_indonesian.txt */"Harap konfirmasikan bahwa kamu ingin melepas patch ini dari agent. Patch yang dilepas akan dihancurkan.",
   RemovePatchUse: /* csgo_indonesian.txt */"Lepas Patch",
   RemovePatchWarn: /* csgo_indonesian.txt */"Lepas patch dari",
   RenameCancel: /* csgo_indonesian.txt */"Batal",
