@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
+import { clientGlobals, isServerContext, serverGlobals } from "~/globals";
 import type { SystemLocalizationTokens } from "~/localization.server";
 
 export const LOCALIZATION_LOADED_TYPE = "localizationloaded";
@@ -17,18 +18,18 @@ export function useLocalization({
 }) {
   function getSystemLocalizationMap() {
     return (
-      (typeof global !== "undefined"
-        ? global.__systemLocalizationByLanguage[language] ??
-          global.__systemLocalizationByLanguage.english
-        : window.__systemLocalizationMap) ?? {}
+      (isServerContext
+        ? (serverGlobals.systemLocalizationByLanguage[language] ??
+          serverGlobals.systemLocalizationByLanguage.english)
+        : clientGlobals.systemLocalizationMap) ?? {}
     );
   }
 
   function getItemLocalizationMap() {
     return (
-      (typeof global !== "undefined"
-        ? global.__itemLocalizationByLanguage[language]
-        : window.__itemLocalizationMap) ?? {}
+      (isServerContext
+        ? serverGlobals.itemLocalizationByLanguage[language]
+        : clientGlobals.itemLocalizationMap) ?? {}
     );
   }
 

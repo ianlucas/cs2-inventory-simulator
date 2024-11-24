@@ -6,6 +6,7 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { LOCALIZATION_LOADED_TYPE } from "~/components/hooks/use-localization";
+import { serverGlobals } from "~/globals";
 import { middleware } from "~/http.server";
 import { badRequest } from "~/responses.server";
 
@@ -16,9 +17,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .string()
       .transform((value) => value.split(".")[0].trim())
       .parse(params.language);
+    const systemLocalizationMap =
+      serverGlobals.systemLocalizationByLanguage[language] ??
+      serverGlobals.systemLocalizationByLanguage.english;
+    const itemLocalizationMap =
+      serverGlobals.itemLocalizationByLanguage[language] ??
+      serverGlobals.itemLocalizationByLanguage.english;
     return new Response(
-      `window.__systemLocalizationMap = ${JSON.stringify(global.__systemLocalizationByLanguage[language] ?? global.__systemLocalizationByLanguage.english)};
-  window.__itemLocalizationMap = ${JSON.stringify(global.__itemLocalizationByLanguage[language] ?? global.__itemLocalizationByLanguage.english)};
+      `window.InventorySimulator ??= {};
+  window.InventorySimulator.systemLocalizationMap = ${JSON.stringify(systemLocalizationMap)};
+  window.InventorySimulator.itemLocalizationMap = ${JSON.stringify(itemLocalizationMap)};
   window.dispatchEvent(new Event("${LOCALIZATION_LOADED_TYPE}"));`,
       {
         headers: {

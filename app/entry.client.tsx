@@ -7,10 +7,11 @@ import { CS2Economy, CS2_ITEMS } from "@ianlucas/cs2-lib";
 import { RemixBrowser } from "@remix-run/react";
 import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
+import { clientGlobals } from "./globals";
 
 CS2Economy.use({
   items: CS2_ITEMS,
-  language: window.__itemLocalizationMap
+  language: clientGlobals.itemLocalizationMap
 });
 
 startTransition(() => {
