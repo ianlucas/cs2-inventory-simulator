@@ -190,5 +190,6 @@ export const bulgarian = {
   ScrapeStickerRemoveDesc: /* csgo_bulgarian.txt */"По-нататъшното одраскване на този стикер ще го премахне от артикула и той ще бъде унищожен.",
   ScrapeStickerUse: /* csgo_bulgarian.txt */"Одраскване на стикер",
   ScrapeStickerWarn: /* csgo_bulgarian.txt */"Одраскване на стикер от",
+  SettingsMasterVolume: /* csgo_bulgarian.txt */"Основна сила на звука",
   StickerPickerRemove: /* csgo_bulgarian.txt */"Премахване"
 };

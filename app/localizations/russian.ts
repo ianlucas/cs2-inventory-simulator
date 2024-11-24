@@ -190,5 +190,6 @@ export const russian = {
   ScrapeStickerRemoveDesc: /* csgo_russian.txt */"Если поскрести эту наклейку еще раз, она исчезнет с предмета и будет уничтожена.",
   ScrapeStickerUse: /* csgo_russian.txt */"Поскрести наклейку",
   ScrapeStickerWarn: /* csgo_russian.txt */"Поскрести наклейку на",
+  SettingsMasterVolume: /* csgo_russian.txt */"Общая громкость",
   StickerPickerRemove: /* csgo_russian.txt */"Удалить"
 };

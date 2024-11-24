@@ -190,5 +190,6 @@ export const ukrainian = {
   ScrapeStickerRemoveDesc: /* csgo_ukrainian.txt */"Подальше дряпання наліпки здере її зі зброї, і наліпку буде знищено.",
   ScrapeStickerUse: /* csgo_ukrainian.txt */"Здерти наліпку",
   ScrapeStickerWarn: /* csgo_ukrainian.txt */"Здерти наліпку з",
+  SettingsMasterVolume: /* csgo_ukrainian.txt */"Загальна гучність",
   StickerPickerRemove: /* csgo_ukrainian.txt */"Вилучити"
 };

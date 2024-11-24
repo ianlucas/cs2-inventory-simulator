@@ -190,5 +190,6 @@ export const italian = {
   ScrapeStickerRemoveDesc: /* csgo_italian.txt */"Raschiare ulteriormente questo adesivo lo rimuoverà dall'oggetto e verrà distrutto.",
   ScrapeStickerUse: /* csgo_italian.txt */"Raschia adesivo",
   ScrapeStickerWarn: /* csgo_italian.txt */"Raschia un adesivo da",
+  SettingsMasterVolume: /* csgo_italian.txt */"Volume principale",
   StickerPickerRemove: /* csgo_italian.txt */"Rimuovi"
 };

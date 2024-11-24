@@ -190,5 +190,6 @@ export const greek = {
   ScrapeStickerRemoveDesc: /* csgo_greek.txt */"Ξύνοντας περισσότερο αυτό το αυτοκόλλητο θα αφαιρεθεί από το αντικείμενο και θα καταστραφεί.",
   ScrapeStickerUse: /* csgo_greek.txt */"Ξύσιμο αυτοκόλλητου",
   ScrapeStickerWarn: /* csgo_greek.txt */"Ξύσιμο αυτοκόλλητου από",
+  SettingsMasterVolume: /* csgo_greek.txt */"Κύρια ένταση",
   StickerPickerRemove: /* csgo_greek.txt */"Αφαίρεση"
 };

@@ -13,8 +13,10 @@ import {
   useLocalize,
   usePreferences
 } from "~/components/app-context";
+import { EditorRange } from "~/components/editor-range";
 import { EditorToggle } from "~/components/editor-toggle";
 import { useCheckbox } from "~/components/hooks/use-checkbox";
+import { useStorageState } from "~/components/hooks/use-storage-state";
 import { useSync } from "~/components/hooks/use-sync";
 import { LanguageSelect } from "~/components/language-select";
 import { Modal } from "~/components/modal";
@@ -53,6 +55,7 @@ export default function Settings() {
   const [hideFreeItems, setHideFreeItems] = useCheckbox(selectedHideFreeItems);
   const [language, setLanguage] = useState(selectedLanguage);
   const [statsForNerds, setStatsForNerds] = useCheckbox(selectedStatsForNerds);
+  const [volume, setVolume] = useStorageState("appVolume", 1);
 
   const submit = useSubmit();
   const navigate = useNavigate();
@@ -100,6 +103,16 @@ export default function Settings() {
         </div>
       </div>
       <div className="space-y-2 px-4">
+        <SettingsLabel label={localize("SettingsMasterVolume")}>
+          <EditorRange
+            format={(value) => `${(value * 100).toFixed(0)}%`}
+            max={1}
+            min={0}
+            onChange={setVolume}
+            step={0.01}
+            value={volume}
+          />
+        </SettingsLabel>
         <SettingsLabel label={localize("SettingsLanguage")}>
           <LanguageSelect
             languages={languages.map(({ name, countries }) => ({

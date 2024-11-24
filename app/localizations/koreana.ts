@@ -190,5 +190,6 @@ export const koreana = {
   ScrapeStickerRemoveDesc: /* csgo_koreana.txt */"이 상태에서 스티커를 긁어내면 아이템에서 스티커가 영원히 제거됩니다.",
   ScrapeStickerUse: /* csgo_koreana.txt */"스티커 긁어내기",
   ScrapeStickerWarn: /* csgo_koreana.txt */"에서 스티커 긁어내기",
+  SettingsMasterVolume: /* csgo_koreana.txt */"마스터 음량",
   StickerPickerRemove: /* csgo_koreana.txt */"제거"
 };

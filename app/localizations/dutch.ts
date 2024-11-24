@@ -190,5 +190,6 @@ export const dutch = {
   ScrapeStickerRemoveDesc: /* csgo_dutch.txt */"Als je deze sticker verder schraapt zal het worden verwijderd van het voorwerp en worden vernietigd.",
   ScrapeStickerUse: /* csgo_dutch.txt */"Sticker schrapen",
   ScrapeStickerWarn: /* csgo_dutch.txt */"Schraap een sticker van",
+  SettingsMasterVolume: /* csgo_dutch.txt */"Hoofdvolume",
   StickerPickerRemove: /* csgo_dutch.txt */"Verwijderen"
 };

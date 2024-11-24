@@ -190,5 +190,6 @@ export const thai = {
   ScrapeStickerRemoveDesc: /* csgo_thai.txt */"การขูดสติกเกอร์นี้มากไปกว่านี้จะเป็นการเอามันออกไปจากไอเท็มและมันจะถูกทำลาย",
   ScrapeStickerUse: /* csgo_thai.txt */"ขูดสติกเกอร์",
   ScrapeStickerWarn: /* csgo_thai.txt */"ขูดสติกเกอร์ออกจาก",
+  SettingsMasterVolume: /* csgo_thai.txt */"เสียงหลัก",
   StickerPickerRemove: /* csgo_thai.txt */"ลบ"
 };

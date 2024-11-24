@@ -190,5 +190,6 @@ export const french = {
   ScrapeStickerRemoveDesc: /* csgo_french.txt */"Gratter davantage ce sticker le supprimera de cet objet.",
   ScrapeStickerUse: /* csgo_french.txt */"Gratter le sticker",
   ScrapeStickerWarn: /* csgo_french.txt */"Gratter un sticker appliqué à",
+  SettingsMasterVolume: /* csgo_french.txt */"Volume principal",
   StickerPickerRemove: /* csgo_french.txt */"Supprimer"
 };

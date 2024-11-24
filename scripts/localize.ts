@@ -211,7 +211,8 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   ScrapeStickerRemoveDesc: "SFUI_Sticker_Remove_Desc",
   ScrapeStickerUse: "SFUI_InvContextMenu_can_stick_Wear_sticker",
   ScrapeStickerWarn: { token: "popup_can_stick_scrape_sticker", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}\<\/b>/, '') },
-  StickerPickerRemove: "Button_Remove",
+  SettingsMasterVolume: "SFUI_Settings_Master_Volume",
+  StickerPickerRemove: "Button_Remove"
 };
 
 assert(CS2_CSGO_PATH, "CS2_CSGO_PATH must be set.");

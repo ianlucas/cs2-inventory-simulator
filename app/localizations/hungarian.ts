@@ -190,5 +190,6 @@ export const hungarian = {
   ScrapeStickerRemoveDesc: /* csgo_hungarian.txt */"Tovább kaparva ezt a matricát az eltávolításra kerül a tárgyról, és megsemmisül.",
   ScrapeStickerUse: /* csgo_hungarian.txt */"Matrica kaparása",
   ScrapeStickerWarn: /* csgo_hungarian.txt */"Matrica lekaparása a(z)  tárgyról",
+  SettingsMasterVolume: /* csgo_hungarian.txt */"Fő hangerő",
   StickerPickerRemove: /* csgo_hungarian.txt */"Eltávolít"
 };

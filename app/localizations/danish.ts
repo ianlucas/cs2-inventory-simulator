@@ -190,5 +190,6 @@ export const danish = {
   ScrapeStickerRemoveDesc: /* csgo_danish.txt */"At skrabe dette klistermærke yderligere vil fjerne det fra genstanden, og det vil blive ødelagt.",
   ScrapeStickerUse: /* csgo_danish.txt */"Skrab klistermærke",
   ScrapeStickerWarn: /* csgo_danish.txt */"Skrab et klistermærke fra",
+  SettingsMasterVolume: /* csgo_danish.txt */"Primær lydstyrke",
   StickerPickerRemove: /* csgo_danish.txt */"Fjern"
 };
