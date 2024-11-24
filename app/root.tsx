@@ -122,11 +122,11 @@ export default function App() {
           <Footer />
           <SyncIndicator />
           <ScrollRestoration />
+          <LocalizationScript />
           <CloudflareAnalyticsScript
             token={appProps.rules.cloudflareAnalyticsToken}
           />
           <Scripts />
-          <LocalizationScript />
         </body>
       </html>
     </AppProvider>
