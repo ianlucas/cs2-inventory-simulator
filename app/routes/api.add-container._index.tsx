@@ -7,6 +7,7 @@ import { CS2Economy, ensure } from "@ianlucas/cs2-lib";
 import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
+import { serverGlobals } from "~/globals";
 import { middleware } from "~/http.server";
 import {
   API_SCOPE,
@@ -76,7 +77,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
     return json({
       ...item.item,
       ...(language !== undefined
-        ? global.__itemLocalizationByLanguage[language][item.id]
+        ? serverGlobals.itemLocalizationByLanguage[language][item.id]
         : item.language)
     });
   } catch {

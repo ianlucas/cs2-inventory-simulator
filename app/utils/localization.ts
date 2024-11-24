@@ -3,10 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { clientGlobals, isServerContext, serverGlobals } from "../globals";
+
 export function getSystemLocalization(key: string, language?: string) {
   return (
-    typeof global !== "undefined"
-      ? global.__systemLocalizationByLanguage[language ?? "english"]
-      : window.__systemLocalizationMap
+    isServerContext
+      ? serverGlobals.systemLocalizationByLanguage[language ?? "english"]
+      : clientGlobals.systemLocalizationMap
   )[key];
 }
