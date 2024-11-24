@@ -190,5 +190,6 @@ export const schinese = {
   ScrapeStickerRemoveDesc: /* csgo_schinese.txt */"如果您继续刮除印花，印花将从物品上移除并摧毁。",
   ScrapeStickerUse: /* csgo_schinese.txt */"刮去印花",
   ScrapeStickerWarn: /* csgo_schinese.txt */"从  上刮去一个印花",
+  SettingsMasterVolume: /* csgo_schinese.txt */"主音量",
   StickerPickerRemove: /* csgo_schinese.txt */"移除"
 };

@@ -190,5 +190,6 @@ export const romanian = {
   ScrapeStickerRemoveDesc: /* csgo_romanian.txt */"Dacă răzuiești în continuare acest abțibild, îl vei șterge de pe obiect și-l vei distruge.",
   ScrapeStickerUse: /* csgo_romanian.txt */"Răzuiește abțibildul",
   ScrapeStickerWarn: /* csgo_romanian.txt */"Răzuiește un abțibild de pe",
+  SettingsMasterVolume: /* csgo_romanian.txt */"Volum general",
   StickerPickerRemove: /* csgo_romanian.txt */"Șterge"
 };

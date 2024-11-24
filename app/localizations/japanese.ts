@@ -190,5 +190,6 @@ export const japanese = {
   ScrapeStickerRemoveDesc: /* csgo_japanese.txt */"さらにこのステッカーを削ると、アイテムから剥がされて破棄されます。",
   ScrapeStickerUse: /* csgo_japanese.txt */"ステッカーを削る",
   ScrapeStickerWarn: /* csgo_japanese.txt */"のステッカーを削る",
+  SettingsMasterVolume: /* csgo_japanese.txt */"マスターボリューム",
   StickerPickerRemove: /* csgo_japanese.txt */"削除"
 };

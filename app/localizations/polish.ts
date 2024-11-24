@@ -190,5 +190,6 @@ export const polish = {
   ScrapeStickerRemoveDesc: /* csgo_polish.txt */"Dalsze zdrapywanie naklejki doprowadzi do usunięcia jej z przedmiotu i zniszczenia.",
   ScrapeStickerUse: /* csgo_polish.txt */"Zdrap naklejkę",
   ScrapeStickerWarn: /* csgo_polish.txt */"Zdrap naklejkę z:",
+  SettingsMasterVolume: /* csgo_polish.txt */"Głośność ogólna",
   StickerPickerRemove: /* csgo_polish.txt */"Usuń"
 };

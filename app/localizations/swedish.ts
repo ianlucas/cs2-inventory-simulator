@@ -190,5 +190,6 @@ export const swedish = {
   ScrapeStickerRemoveDesc: /* csgo_swedish.txt */"Om du skrapar bort mer av det här klistermärket tas det bort från föremålet och förstörs.",
   ScrapeStickerUse: /* csgo_swedish.txt */"Skrapa klistermärke",
   ScrapeStickerWarn: /* csgo_swedish.txt */"Skrapa ett klistermärke från",
+  SettingsMasterVolume: /* csgo_swedish.txt */"Huvudvolym",
   StickerPickerRemove: /* csgo_swedish.txt */"Ta bort"
 };

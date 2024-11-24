@@ -190,5 +190,6 @@ export const finnish = {
   ScrapeStickerRemoveDesc: /* csgo_finnish.txt */"Seuraava raaputus poistaa tarran aseesta ja tuhoaa sen.",
   ScrapeStickerUse: /* csgo_finnish.txt */"Raaputa tarra",
   ScrapeStickerWarn: /* csgo_finnish.txt */"Raaputa tarraa aseessa",
+  SettingsMasterVolume: /* csgo_finnish.txt */"Yleinen äänenvoimakkuus",
   StickerPickerRemove: /* csgo_finnish.txt */"Poista"
 };

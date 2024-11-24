@@ -229,6 +229,7 @@ export const brazilian = {
   SettingsHideFilters: "Ocultar Filtros",
   SettingsHideFreeItems: "Ocultar Itens Gratuitos",
   SettingsLanguage: "Idioma",
+  SettingsMasterVolume: /* csgo_brazilian.txt */"Volume geral",
   SettingsRemoveAllItems: "Redefinir meu inventário",
   SettingsSave: "Salvar",
   SettingsStatsForNerds: "Estatísticas para Nerds",

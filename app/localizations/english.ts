@@ -262,6 +262,7 @@ export const english = {
   SettingsHideFilters: "Hide filters",
   SettingsHideFreeItems: "Hide default items",
   SettingsLanguage: "Language",
+  SettingsMasterVolume: /* csgo_english.txt */"Master Volume",
   SettingsRemoveAllItems: "Reset my inventory",
   SettingsSave: "Save",
   SettingsStatsForNerds: "Stats for nerds",

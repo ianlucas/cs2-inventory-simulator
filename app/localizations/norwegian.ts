@@ -190,5 +190,6 @@ export const norwegian = {
   ScrapeStickerRemoveDesc: /* csgo_norwegian.txt */"Hvis du skraper dette klistremerket mer, fjernes det fra gjenstanden, og det vil bli ødelagt.",
   ScrapeStickerUse: /* csgo_norwegian.txt */"Skrap klistremerke",
   ScrapeStickerWarn: /* csgo_norwegian.txt */"Fjern et klistremerke fra",
+  SettingsMasterVolume: /* csgo_norwegian.txt */"Hovedvolum",
   StickerPickerRemove: /* csgo_norwegian.txt */"Fjern"
 };

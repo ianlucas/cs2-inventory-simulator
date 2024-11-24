@@ -190,5 +190,6 @@ export const latam = {
   ScrapeStickerRemoveDesc: /* csgo_latam.txt */"Raspar más esta calcomanía hará que ésta sea eliminada del objeto y a continuación destruida.",
   ScrapeStickerUse: /* csgo_latam.txt */"Raspar calcomanía",
   ScrapeStickerWarn: /* csgo_latam.txt */"Raspar una calcomanía de",
+  SettingsMasterVolume: /* csgo_latam.txt */"Volumen general",
   StickerPickerRemove: /* csgo_latam.txt */"Eliminar"
 };

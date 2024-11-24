@@ -190,5 +190,6 @@ export const german = {
   ScrapeStickerRemoveDesc: /* csgo_german.txt */"Das weitere Abkratzen dieses Aufklebers zerstört ihn und entfernt ihn von dem Gegenstand.",
   ScrapeStickerUse: /* csgo_german.txt */"Aufkleber abkratzen",
   ScrapeStickerWarn: /* csgo_german.txt */"Aufkleber von  abkratzen",
+  SettingsMasterVolume: /* csgo_german.txt */"Gesamtlautstärke",
   StickerPickerRemove: /* csgo_german.txt */"Entfernen"
 };

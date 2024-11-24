@@ -190,5 +190,6 @@ export const czech = {
   ScrapeStickerRemoveDesc: /* csgo_czech.txt */"Pokud strhneš samolepku celou, navždy ji ze zbraně odebereš a samolepka bude zničena.",
   ScrapeStickerUse: /* csgo_czech.txt */"Strhnout samolepku",
   ScrapeStickerWarn: /* csgo_czech.txt */"Strhnout samolepku z:",
+  SettingsMasterVolume: /* csgo_czech.txt */"Celková hlasitost",
   StickerPickerRemove: /* csgo_czech.txt */"Odebrat"
 };

@@ -190,5 +190,6 @@ export const spanish = {
   ScrapeStickerRemoveDesc: /* csgo_spanish.txt */"Raspar más esta pegatina hará que ésta sea eliminada del artículo y a continuación destruida.",
   ScrapeStickerUse: /* csgo_spanish.txt */"Raspar pegatina",
   ScrapeStickerWarn: /* csgo_spanish.txt */"Raspar una pegatina de",
+  SettingsMasterVolume: /* csgo_spanish.txt */"Volumen general",
   StickerPickerRemove: /* csgo_spanish.txt */"Eliminar"
 };

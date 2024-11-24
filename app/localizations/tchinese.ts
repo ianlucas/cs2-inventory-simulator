@@ -190,5 +190,6 @@ export const tchinese = {
   ScrapeStickerRemoveDesc: /* csgo_tchinese.txt */"此貼紙被刮除至特定程度將會完全從武器上消失，且貼紙也會被摧毀。",
   ScrapeStickerUse: /* csgo_tchinese.txt */"刮除貼紙",
   ScrapeStickerWarn: /* csgo_tchinese.txt */"從  上刮除貼紙",
+  SettingsMasterVolume: /* csgo_tchinese.txt */"主音量",
   StickerPickerRemove: /* csgo_tchinese.txt */"移除"
 };

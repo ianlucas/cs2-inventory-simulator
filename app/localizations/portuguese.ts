@@ -222,6 +222,7 @@ export const portuguese = {
   SettingsHideFilters: "Ocultar Filtros",
   SettingsHideFreeItems: "Ocultar Itens Gratuitos",
   SettingsLanguage: "Idioma",
+  SettingsMasterVolume: /* csgo_portuguese.txt */"Volume global",
   SettingsRemoveAllItems: "Redefinir meu inventário",
   SettingsSave: "Salvar",
   SettingsStatsForNerds: "Estatísticas para Nerds",

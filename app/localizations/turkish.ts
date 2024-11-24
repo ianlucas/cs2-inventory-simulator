@@ -190,5 +190,6 @@ export const turkish = {
   ScrapeStickerRemoveDesc: /* csgo_turkish.txt */"Bu çıkartmayı daha fazla kazımak eşyadan sökülmesine neden olacak ve yok edilecek.",
   ScrapeStickerUse: /* csgo_turkish.txt */"Çıkartmayı Kazı",
   ScrapeStickerWarn: /* csgo_turkish.txt */"Çıkartmayı şundan kaldır:",
+  SettingsMasterVolume: /* csgo_turkish.txt */"Ana Ses",
   StickerPickerRemove: /* csgo_turkish.txt */"Kaldır"
 };

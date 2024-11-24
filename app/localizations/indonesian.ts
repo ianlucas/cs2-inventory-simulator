@@ -190,5 +190,6 @@ export const indonesian = {
   ScrapeStickerRemoveDesc: /* csgo_indonesian.txt */"Mengikis stiker lebih dari ini akan membuat stiker terlepas dari item, dan stiker akan dihancurkan.",
   ScrapeStickerUse: /* csgo_indonesian.txt */"Kikis Stiker",
   ScrapeStickerWarn: /* csgo_indonesian.txt */"Kikis stiker dari",
+  SettingsMasterVolume: /* csgo_indonesian.txt */"Volume Utama",
   StickerPickerRemove: /* csgo_indonesian.txt */"Hapus"
 };
