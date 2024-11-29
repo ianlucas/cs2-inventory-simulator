@@ -6,7 +6,7 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { middleware } from "~/http.server";
 
-export function loader({request}: LoaderFunctionArgs) {
+export function loader({ request }: LoaderFunctionArgs) {
   middleware(request);
   return redirect("/");
 }
