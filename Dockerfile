@@ -23,9 +23,11 @@ COPY prisma ./prisma
 RUN npx prisma generate
 
 COPY . .
-RUN [ -d .git ] && git log -n 1 --pretty=format:%H > .build-last-commit || \
-    [ -n "$SOURCE_COMMIT" ] && [ "$SOURCE_COMMIT" != "unknown" ] && \
-    echo "$SOURCE_COMMIT" > .build-last-commit
+RUN if [ -d .git ]; then \
+        git log -n 1 --pretty=format:%H > .build-last-commit; \
+    elif [ -n "${SOURCE_COMMIT:-}" ] && [ "${SOURCE_COMMIT:-}" != "unknown" ]; then \
+        echo "${SOURCE_COMMIT:-}" > .build-last-commit; \
+    fi
 RUN npm run build
 RUN rm -rf .git
 
