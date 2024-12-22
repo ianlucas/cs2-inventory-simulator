@@ -49,3 +49,8 @@ export function json<T>(data: T, init?: ResponseInit) {
   // todo: `Response.json` is not working for some reason.
   return new Response(JSON.stringify(data), init);
 }
+
+export function trim(value: string) {
+  value = value.trim();
+  return value.length > 0 ? value : undefined;
+}

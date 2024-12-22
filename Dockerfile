@@ -27,6 +27,8 @@ RUN if [ -d .git ]; then \
         git log -n 1 --pretty=format:%H > .build-last-commit; \
     elif [ -n "${SOURCE_COMMIT:-}" ] && [ "${SOURCE_COMMIT:-}" != "unknown" ]; then \
         echo "${SOURCE_COMMIT:-}" > .build-last-commit; \
+    else \
+        touch .build-last-commit; \
     fi
 RUN npm run build
 RUN rm -rf .git
