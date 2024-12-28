@@ -8,7 +8,7 @@ import { PassThrough } from "node:stream";
 import { CS2Economy, CS2_ITEMS } from "@ianlucas/cs2-lib";
 import english from "@ianlucas/cs2-lib/assets/localizations/items-english.json";
 import { createReadableStreamFromReadable } from "@react-router/node";
-import isbot from "isbot";
+import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import type { AppLoadContext, EntryContext } from "react-router";
 import { ServerRouter } from "react-router";
