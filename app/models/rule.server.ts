@@ -259,7 +259,7 @@ export const steamCallbackUrl = new Rule({
 export const inventoryItemAllowEdit = new Rule({
   name: "inventoryItemAllowEdit",
   type: "boolean",
-  defaultValue: false
+  defaultValue: true
 });
 
 export const craftHideCategory = new Rule({
