@@ -5,9 +5,8 @@
 
 import { faTrashCan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useNavigate, useSubmit } from "@remix-run/react";
 import { useState } from "react";
+import { Link, useNavigate, useSubmit } from "react-router";
 import {
   useInventory,
   useLocalize,
@@ -29,11 +28,12 @@ import { languages } from "~/data/languages";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/http.server";
 import { getMetaTitle } from "~/root-meta";
+import type { Route } from "./+types/settings._index";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
 
 export const meta = getMetaTitle("HeaderSettingsLabel");
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   await middleware(request);
   return null;
 }

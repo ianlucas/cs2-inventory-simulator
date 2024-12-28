@@ -3,20 +3,21 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { data } from "react-router";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/http.server";
-import { json, SerializeFrom } from "~/utils/misc";
+import { SerializeFrom } from "~/utils/misc";
+import type { Route } from "./+types/api.action.resync._index";
 
 export const ApiActionResyncUrl = "/api/action/resync";
 
 export type ApiActionResyncData = SerializeFrom<typeof loader>;
 
-export const loader = api(async ({ request }: LoaderFunctionArgs) => {
+export const loader = api(async ({ request }: Route.LoaderArgs) => {
   await middleware(request);
   const { syncedAt, inventory } = await requireUser(request);
-  return json({
+  return data({
     syncedAt: syncedAt.getTime(),
     inventory
   });

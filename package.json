@@ -3,15 +3,15 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix vite:build",
+    "build": "react-router build",
     "deploy": "npx @ianlucas/deploy@latest",
-    "dev": "remix vite:dev",
+    "dev": "react-router dev",
     "format": "prettier . --write",
     "localize": "tsx scripts/localize.ts && prettier app/localizations/*.ts --write",
     "postinstall": "if [ \"$NODE_ENV\" != \"production\" ]; then tsx scripts/postinstall.ts; fi",
-    "start": "remix-serve ./build/server/index.js",
+    "start": "react-router-serve ./build/server/index.js",
     "test": "vitest",
-    "typecheck": "tsc",
+    "typecheck": "react-router typegen && tsc",
     "upgrade": "npx npm-check-updates@latest --target minor -u"
   },
   "dependencies": {
@@ -23,11 +23,11 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@ianlucas/cs2-lib": "^5.8.7",
     "@ianlucas/cs2-lib-inspect": "^3.0.0",
-    "@ianlucas/remix-auth-steam": "^4.1.0",
+    "@ianlucas/remix-auth-steam": "^5.0.1",
     "@prisma/client": "^5.22.0",
-    "@remix-run/node": "^2.15.2",
-    "@remix-run/react": "^2.15.2",
-    "@remix-run/serve": "^2.15.2",
+    "@react-router/fs-routes": "^7.1.1",
+    "@react-router/node": "^7.0.0",
+    "@react-router/serve": "^7.0.0",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.5.13",
@@ -37,16 +37,15 @@
     "prisma": "^5.22.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "remix-auth": "^3.7.0",
-    "remix-typedjson": "^0.4.1",
-    "remix-utils": "^7.7.0",
+    "react-router": "^7.0.0",
+    "remix-auth": "^4.1.0",
+    "remix-utils": "^8.0.0",
     "steamapi": "^3.0.12",
     "tsx": "^4.19.2",
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.15.2",
-    "@testing-library/react": "^15.0.7",
+    "@react-router/dev": "^7.0.0",
     "@types/node": "^18.19.68",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
@@ -62,10 +61,5 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  },
-  "overrides": {
-    "@remix-run/server-runtime": {
-      "cookie": "^0.7.2"
-    }
   }
 }

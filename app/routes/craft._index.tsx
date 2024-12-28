@@ -10,12 +10,10 @@ import {
   CS2Economy,
   CS2EconomyItem
 } from "@ianlucas/cs2-lib";
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
 import lzstring from "lz-string";
 import { useState } from "react";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
+import { data, Link, useLoaderData, useNavigate } from "react-router";
 import { z } from "zod";
 import { useInventory, useLocalize } from "~/components/app-context";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
@@ -33,10 +31,11 @@ import { deleteEmptyProps } from "~/utils/misc";
 import { range } from "~/utils/number";
 import { baseInventoryItemProps } from "~/utils/shapes";
 import { playSound } from "~/utils/sound";
+import type { Route } from "./+types/craft._index";
 
 export const meta = getMetaTitle("HeaderCraftLabel");
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   await middleware(request);
   const url = new URL(request.url);
   const share = url.searchParams.get("share");
@@ -59,7 +58,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         ? JSON.parse(lzstring.decompressFromEncodedURIComponent(share))
         : undefined
     );
-  return typedjson({
+  return data({
     shared:
       shared !== undefined
         ? {
@@ -79,7 +78,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Craft() {
-  const { uid, shared } = useTypedLoaderData<typeof loader>();
+  const { uid, shared } = useLoaderData<typeof loader>();
   const isEditing = uid !== undefined;
   const isSharing = shared?.item !== undefined;
   const [inventory, setInventory] = useInventory();

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 
 export type SerializeFrom<T> = ReturnType<typeof useLoaderData<T>>;
 
@@ -44,11 +44,6 @@ export function colorText(input: string) {
 }
 
 export function noop() {}
-
-export function json<T>(data: T, init?: ResponseInit) {
-  // todo: `Response.json` is not working for some reason.
-  return new Response(JSON.stringify(data), init);
-}
 
 export function trim(value: string) {
   value = value.trim();

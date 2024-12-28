@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Session } from "@remix-run/node";
+import { Session } from "react-router";
 import { LanguageName, languageNames, languages } from "~/data/languages";
 import { appCountry } from "~/models/rule.server";
 

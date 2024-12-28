@@ -3,14 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { LoaderFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { LOCALIZATION_LOADED_TYPE } from "~/components/hooks/use-localization";
 import { serverGlobals } from "~/globals";
 import { middleware } from "~/http.server";
 import { badRequest } from "~/responses.server";
+import type { Route } from "./+types/localizations.$language[.]js._index";
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ request, params }: Route.LoaderArgs) {
   middleware(request);
   try {
     const language = z

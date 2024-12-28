@@ -4,8 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { fail } from "@ianlucas/cs2-lib";
-import { SessionStorage } from "@remix-run/server-runtime";
-import { AuthenticateOptions, Strategy } from "remix-auth";
+import { Strategy } from "remix-auth/strategy";
 import SteamAPI, { UserSummary } from "steamapi";
 import { z } from "zod";
 import {
@@ -16,13 +15,14 @@ import {
 import { steamApiKey } from "./models/rule.server";
 import { upsertUser } from "./models/user.server";
 
-export class ApiStrategy extends Strategy<
-  string,
-  {
+namespace ApiStrategy {
+  export type VerifyOptions = {
     request: Request;
     userId: string;
-  }
-> {
+  };
+}
+
+export class ApiStrategy extends Strategy<string, ApiStrategy.VerifyOptions> {
   name = "api";
 
   constructor() {
@@ -36,41 +36,22 @@ export class ApiStrategy extends Strategy<
     );
   }
 
-  async authenticate(
-    request: Request,
-    sessionStorage: SessionStorage,
-    options: AuthenticateOptions
-  ) {
-    try {
-      const url = new URL(request.url);
-      const token = z.string().parse(url.searchParams.get("token"));
-      const { exists, userId, valid } = await getAuthTokenDetails(token);
+  async authenticate(request: Request) {
+    const url = new URL(request.url);
+    const token = z.string().parse(url.searchParams.get("token"));
+    const { exists, userId, valid } = await getAuthTokenDetails(token);
 
-      if (!exists) {
-        fail("Invalid token.");
-      }
-
-      if (!valid) {
-        await clearExpiredAuthTokens(userId);
-        fail("Expired token.");
-      }
-
-      await clearAuthTokens(userId);
-
-      return this.success(
-        await this.verify({ userId, request }),
-        request,
-        sessionStorage,
-        options
-      );
-    } catch (error) {
-      return this.failure(
-        (error as Error)?.message ?? "An error occurred.",
-        request,
-        sessionStorage,
-        options,
-        new Error(JSON.stringify(error))
-      );
+    if (!exists) {
+      fail("Invalid token.");
     }
+
+    if (!valid) {
+      await clearExpiredAuthTokens(userId);
+      fail("Expired token.");
+    }
+
+    await clearAuthTokens(userId);
+
+    return await this.verify({ userId, request });
   }
 }

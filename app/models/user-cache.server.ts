@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2InventoryData } from "@ianlucas/cs2-lib";
-import { json } from "@remix-run/node";
+import { data } from "react-router";
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { res } from "~/responses.server";
@@ -34,7 +34,7 @@ export async function handleUserCachedResponse({
   });
   if (user === null) {
     throw mimeType === "application/json"
-      ? json(throwBody)
+      ? data(throwBody)
       : res(throwBody, mimeType);
   }
   const timestamp = await getUserSyncedAt(userId);
@@ -53,7 +53,7 @@ export async function handleUserCachedResponse({
   const inventory = parseInventory(await getUserInventory(userId));
   if (!inventory) {
     throw mimeType === "application/json"
-      ? json(throwBody)
+      ? data(throwBody)
       : res(throwBody, mimeType);
   }
   const generated = await generate(inventory, userId);

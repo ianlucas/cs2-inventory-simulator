@@ -5,7 +5,7 @@
 
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, useLocation } from "@remix-run/react";
+import { Link, useLocation } from "react-router";
 import clsx from "clsx";
 import { ComponentProps } from "react";
 

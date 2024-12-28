@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { MetaFunction } from "@remix-run/node";
+import { MetaFunction } from "react-router";
 import { loader as rootLoader } from "~/root";
 import { DEFAULT_APP_NAME } from "./app-defaults";
 import { getSystemLocalization } from "./utils/localization";

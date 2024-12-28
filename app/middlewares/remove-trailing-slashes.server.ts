@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 
 export async function removeTrailingSlashes(request: Request) {
   const url = new URL(request.url);

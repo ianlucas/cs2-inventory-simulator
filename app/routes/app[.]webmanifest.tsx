@@ -3,13 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { data } from "react-router";
 import { DEFAULT_APP_NAME } from "~/app-defaults";
 import { appName } from "~/models/rule.server";
-import { json } from "~/utils/misc";
 
 export async function loader() {
   const name = (await appName.get()) || DEFAULT_APP_NAME;
-  return json(
+  return data(
     {
       background_color: "#292524",
       display: "standalone",

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Session, createCookieSessionStorage } from "@remix-run/node";
+import { Session, createCookieSessionStorage } from "react-router";
 import { SESSION_SECRET } from "./env.server";
 
 export const sessionStorage = createCookieSessionStorage({
