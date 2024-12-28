@@ -9,7 +9,6 @@ import {
   CS2EconomyItem,
   CS2ItemType
 } from "@ianlucas/cs2-lib";
-import { data } from "react-router";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
@@ -42,7 +41,6 @@ import {
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
-import { SerializeFrom } from "~/utils/misc";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
   clientInventoryItemShape,
@@ -179,7 +177,9 @@ const actionShape = z
 
 export type ActionShape = z.infer<typeof actionShape>;
 
-export type ApiActionSyncData = SerializeFrom<typeof action>;
+export type ApiActionSyncData = {
+  syncedAt: number;
+};
 
 async function enforceCraftRulesForItem(
   idOrItem: number | CS2EconomyItem,
@@ -394,7 +394,10 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       }
     }
   });
-  return data({
+
+  return Response.json({
     syncedAt: responseSyncedAt.getTime()
-  });
+  } satisfies ApiActionSyncData);
 });
+
+export { loader } from "./api.$";

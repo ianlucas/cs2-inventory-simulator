@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Inventory, CS2UnlockedItem } from "@ianlucas/cs2-lib";
-import { data } from "react-router";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
@@ -59,8 +58,11 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     userId,
     inventory.stringify()
   );
-  return data({
+
+  return Response.json({
     unlockedItem,
     syncedAt: responseSyncedAt.getTime()
   } satisfies ApiActionUnlockCaseActionData);
 });
+
+export { loader } from "./api.$";

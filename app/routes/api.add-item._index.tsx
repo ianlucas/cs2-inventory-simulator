@@ -52,3 +52,5 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     return badRequest;
   }
 });
+
+export { loader } from "./api.$";

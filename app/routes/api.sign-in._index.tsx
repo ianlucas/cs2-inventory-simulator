@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { data } from "react-router";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { middleware } from "~/http.server";
@@ -32,7 +31,8 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (!(await existsUser(userId))) {
     throw badRequest;
   }
-  return data({
+
+  return Response.json({
     token: await generateAuthToken({ apiKey, userId })
   });
 });

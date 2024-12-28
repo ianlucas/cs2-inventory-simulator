@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Economy, ensure } from "@ianlucas/cs2-lib";
-import { data } from "react-router";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { serverGlobals } from "~/globals";
@@ -75,7 +74,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
         });
       }
     });
-    return data({
+    return Response.json({
       ...item.item,
       ...(language !== undefined
         ? serverGlobals.itemLocalizationByLanguage[language][item.id]
@@ -85,3 +84,5 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     return badRequest;
   }
 });
+
+export { loader } from "./api.$";

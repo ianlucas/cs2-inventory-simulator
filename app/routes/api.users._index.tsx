@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { data } from "react-router";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { prisma } from "~/db.server";
@@ -59,7 +58,7 @@ export const loader = api(async ({ request }: Route.LoaderArgs) => {
     },
     where
   });
-  return data({
+  return Response.json({
     results,
     controls: {
       count,

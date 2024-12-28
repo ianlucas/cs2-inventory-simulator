@@ -3,7 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import type { LinksFunction, LoaderFunctionArgs } from "react-router";
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  ShouldRevalidateFunctionArgs
+} from "react-router";
 import {
   data,
   Links,
@@ -56,6 +60,13 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
   { rel: "manifest", href: "/app.webmanifest" }
 ];
+
+export function shouldRevalidate({ currentUrl }: ShouldRevalidateFunctionArgs) {
+  if (currentUrl.pathname === "/craft") {
+    return false;
+  }
+  return true;
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);

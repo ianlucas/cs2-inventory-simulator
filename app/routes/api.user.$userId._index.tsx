@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { data } from "react-router";
 import { api } from "~/api.server";
 import { prisma } from "~/db.server";
 import { middleware } from "~/http.server";
@@ -15,7 +14,7 @@ export const loader = api(
   async ({ request, params: { userId } }: Route.LoaderArgs) => {
     middleware(request);
     await isValidApiRequest(request, [API_SCOPE]);
-    return data(
+    return Response.json(
       await prisma.user.findUnique({
         include: {
           groups: true
