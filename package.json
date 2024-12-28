@@ -26,8 +26,8 @@
     "@ianlucas/remix-auth-steam": "^5.0.1",
     "@prisma/client": "^6.1.0",
     "@react-router/fs-routes": "^7.1.1",
-    "@react-router/node": "^7.0.0",
-    "@react-router/serve": "^7.0.0",
+    "@react-router/node": "^7.1.1",
+    "@react-router/serve": "^7.1.1",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.5.13",
@@ -37,7 +37,7 @@
     "prisma": "^6.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router": "^7.0.0",
+    "react-router": "^7.1.1",
     "remix-auth": "^4.1.0",
     "remix-utils": "^8.0.0",
     "steamapi": "^3.0.12",
@@ -45,7 +45,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.0.0",
+    "@react-router/dev": "^7.1.1",
     "@types/node": "^18.19.68",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
