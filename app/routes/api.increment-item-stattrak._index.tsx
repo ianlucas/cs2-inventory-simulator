@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { middleware } from "~/http.server";
@@ -24,8 +23,9 @@ import {
   unauthorized
 } from "~/responses.server";
 import { nonNegativeInt } from "~/utils/shapes";
+import type { Route } from "./+types/api.increment-item-stattrak._index";
 
-export const action = api(async ({ request }: ActionFunctionArgs) => {
+export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
   if (request.method !== "POST") {
     throw methodNotAllowed;
@@ -60,3 +60,5 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
     return badRequest;
   }
 });
+
+export { loader } from "./api.$";

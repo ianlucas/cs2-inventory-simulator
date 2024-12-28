@@ -5,11 +5,10 @@
 
 import { DEFAULT_APP_NAME } from "~/app-defaults";
 import { appName } from "~/models/rule.server";
-import { json } from "~/utils/misc";
 
 export async function loader() {
   const name = (await appName.get()) || DEFAULT_APP_NAME;
-  return json(
+  return Response.json(
     {
       background_color: "#292524",
       display: "standalone",

@@ -3,13 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { authenticator } from "~/auth.server";
+import { redirect } from "react-router";
 import { middleware } from "~/http.server";
+import { destroySession, getSession } from "~/session.server";
+import type { Route } from "./+types/sign-out._index";
 
-export async function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
   await middleware(request);
-  return await authenticator.logout(request, {
-    redirectTo: "/"
+  const session = await getSession(request.headers.get("cookie"));
+  throw redirect("/login", {
+    headers: { "Set-Cookie": await destroySession(session) }
   });
 }

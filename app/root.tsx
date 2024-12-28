@@ -3,19 +3,24 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  ShouldRevalidateFunctionArgs
+} from "react-router";
 import {
+  data,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
   useRouteError
-} from "@remix-run/react";
+} from "react-router";
 
 import { faFrown } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { findRequestUser } from "./auth.server";
 import { AppProvider } from "./components/app-context";
 import { Background } from "./components/background";
@@ -56,6 +61,13 @@ export const links: LinksFunction = () => [
   { rel: "manifest", href: "/app.webmanifest" }
 ];
 
+export function shouldRevalidate({ currentUrl }: ShouldRevalidateFunctionArgs) {
+  if (currentUrl.pathname === "/craft") {
+    return false;
+  }
+  return true;
+}
+
 export async function loader({ request }: LoaderFunctionArgs) {
   await middleware(request);
   const session = await getSession(request.headers.get("Cookie"));
@@ -64,7 +76,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { origin: appUrl, host: appSiteName } = new URL(
     await steamCallbackUrl.get()
   );
-  return typedjson({
+  return data({
     localization: {
       checksum: getLocalizationChecksum()
     },
@@ -84,7 +96,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function App() {
-  const appProps = useTypedLoaderData<typeof loader>();
+  const appProps = useLoaderData<typeof loader>();
 
   return (
     <AppProvider {...appProps}>

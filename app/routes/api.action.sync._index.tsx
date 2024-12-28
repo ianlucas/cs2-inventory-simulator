@@ -9,7 +9,6 @@ import {
   CS2EconomyItem,
   CS2ItemType
 } from "@ianlucas/cs2-lib";
-import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
@@ -42,12 +41,12 @@ import {
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
-import { json, SerializeFrom } from "~/utils/misc";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
   clientInventoryItemShape,
   syncInventoryShape
 } from "~/utils/shapes.server";
+import type { Route } from "./+types/api.action.sync._index";
 
 const actionShape = z
   .object({
@@ -178,7 +177,9 @@ const actionShape = z
 
 export type ActionShape = z.infer<typeof actionShape>;
 
-export type ApiActionSyncData = SerializeFrom<typeof action>;
+export type ApiActionSyncData = {
+  syncedAt: number;
+};
 
 async function enforceCraftRulesForItem(
   idOrItem: number | CS2EconomyItem,
@@ -264,7 +265,7 @@ async function enforceEditRulesForInventoryItem(
   }
 }
 
-export const action = api(async ({ request }: ActionFunctionArgs) => {
+export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
   if (request.method !== "POST") {
     throw methodNotAllowed;
@@ -393,7 +394,10 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
       }
     }
   });
-  return json({
+
+  return Response.json({
     syncedAt: responseSyncedAt.getTime()
-  });
+  } satisfies ApiActionSyncData);
 });
+
+export { loader } from "./api.$";

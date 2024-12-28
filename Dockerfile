@@ -1,5 +1,5 @@
 # Adapted from Remix's Indie Stack
-FROM node:18-bullseye-slim AS base
+FROM node:20-bullseye-slim AS base
 
 ENV NODE_ENV=production
 

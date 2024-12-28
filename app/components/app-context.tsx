@@ -12,7 +12,6 @@ import {
   useEffect,
   useMemo
 } from "react";
-import { useTypedLoaderData } from "remix-typedjson";
 import { useInventoryFilterState } from "~/components/hooks/use-inventory-filter-state";
 import { useInventoryState } from "~/components/hooks/use-inventory-state";
 import { useLocalization } from "~/components/hooks/use-localization";
@@ -31,6 +30,7 @@ import {
   sortItemsByEquipped,
   transform
 } from "~/utils/inventory-transform";
+import { SerializeFrom } from "~/utils/misc";
 import { cacheAuthenticatedUserId } from "~/utils/user-cached-data";
 
 const AppContext = createContext<
@@ -40,7 +40,7 @@ const AppContext = createContext<
     items: TransformedInventoryItems;
     setInventory: (value: CS2Inventory) => void;
     localization: ReturnType<typeof useLocalization>;
-  } & ReturnType<typeof useTypedLoaderData<typeof loader>>
+  } & SerializeFrom<typeof loader>
 >(null!);
 
 export function useAppContext() {

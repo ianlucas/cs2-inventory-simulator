@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { middleware } from "~/http.server";
@@ -11,9 +10,9 @@ import { generateAuthToken } from "~/models/api-auth-token.server";
 import { API_AUTH_SCOPE, isApiKeyValid } from "~/models/api-credential.server";
 import { existsUser } from "~/models/user.server";
 import { badRequest, methodNotAllowed, unauthorized } from "~/responses.server";
-import { json } from "~/utils/misc";
+import type { Route } from "./+types/api.sign-in._index";
 
-export const action = api(async ({ request }: ActionFunctionArgs) => {
+export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
   if (request.method !== "POST") {
     throw methodNotAllowed;
@@ -32,7 +31,8 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
   if (!(await existsUser(userId))) {
     throw badRequest;
   }
-  return json({
+
+  return Response.json({
     token: await generateAuthToken({ apiKey, userId })
   });
 });

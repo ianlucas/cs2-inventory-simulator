@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2ItemType, CS2TeamValues } from "@ianlucas/cs2-lib";
-import { useNavigate } from "@remix-run/react";
+import { useNavigate } from "react-router";
 import { useApplyItemSticker } from "~/components/hooks/use-apply-item-sticker";
 import { useInspectItem } from "~/components/hooks/use-inspect-item";
 import { useRenameItem } from "~/components/hooks/use-rename-item";

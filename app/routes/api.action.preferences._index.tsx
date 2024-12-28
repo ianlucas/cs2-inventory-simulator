@@ -3,14 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  redirect
-} from "@remix-run/node";
+import { redirect } from "react-router";
 import { z } from "zod";
 import { api } from "~/api.server";
-import { authenticator } from "~/auth.server";
+import { getRequestUserId } from "~/auth.server";
 import { middleware } from "~/http.server";
 import {
   getUserPreferences,
@@ -23,12 +19,13 @@ import {
 import { isValidLanguage } from "~/preferences/language.server";
 import { methodNotAllowed } from "~/responses.server";
 import { assignToSession, commitSession, getSession } from "~/session.server";
+import type { Route } from "./+types/api.action.preferences._index";
 
 export const ApiActionPreferencesUrl = "/api/action/preferences";
 
-export const loader = api(async ({ request }: LoaderFunctionArgs) => {
+export const loader = api(async ({ request }: Route.LoaderArgs) => {
   await middleware(request);
-  const userId = await authenticator.isAuthenticated(request);
+  const userId = await getRequestUserId(request);
   if (!userId) {
     return redirect("/");
   }
@@ -50,12 +47,12 @@ export const loader = api(async ({ request }: LoaderFunctionArgs) => {
   });
 });
 
-export const action = api(async ({ request }: ActionFunctionArgs) => {
+export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
   if (request.method !== "POST") {
     throw methodNotAllowed;
   }
-  const userId = await authenticator.isAuthenticated(request);
+  const userId = await getRequestUserId(request);
   const preferences = z
     .object({
       background: z

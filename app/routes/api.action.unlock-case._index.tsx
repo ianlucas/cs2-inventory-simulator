@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Inventory, CS2UnlockedItem } from "@ianlucas/cs2-lib";
-import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
@@ -17,8 +16,8 @@ import {
 import { updateUserInventory } from "~/models/user.server";
 import { conflict, methodNotAllowed } from "~/responses.server";
 import { parseInventory } from "~/utils/inventory";
-import { json } from "~/utils/misc";
 import { nonNegativeInt, positiveInt } from "~/utils/shapes";
+import type { Route } from "./+types/api.action.unlock-case._index";
 
 export const ApiActionUnlockCaseUrl = "/api/action/unlock-case";
 
@@ -27,7 +26,7 @@ export type ApiActionUnlockCaseActionData = {
   unlockedItem: CS2UnlockedItem;
 };
 
-export const action = api(async ({ request }: ActionFunctionArgs) => {
+export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
   if (request.method !== "POST") {
     throw methodNotAllowed;
@@ -59,8 +58,11 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
     userId,
     inventory.stringify()
   );
-  return json({
+
+  return Response.json({
     unlockedItem,
     syncedAt: responseSyncedAt.getTime()
   } satisfies ApiActionUnlockCaseActionData);
 });
+
+export { loader } from "./api.$";

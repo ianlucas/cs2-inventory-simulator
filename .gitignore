@@ -1,5 +1,6 @@
 .build-last-commit
 .env
+.react-router/
 /.cache
 /build
 /prisma/dev.db

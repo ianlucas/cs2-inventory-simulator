@@ -3,8 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { vitePlugin as remix } from "@remix-run/dev";
-import { installGlobals } from "@remix-run/node";
+import { reactRouter } from "@react-router/dev/vite";
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import { minify_sync } from "terser";
@@ -12,28 +11,11 @@ import ts from "typescript";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-installGlobals();
-
 export default defineConfig({
   server: {
     port: 3000
   },
-  test: {
-    environment: "happy-dom"
-  },
-  plugins: [
-    !process.env.VITEST &&
-      remix({
-        future: {
-          v3_fetcherPersist: true,
-          v3_lazyRouteDiscovery: true,
-          v3_relativeSplatPath: true,
-          v3_singleFetch: true,
-          v3_throwAbortReason: true
-        }
-      }),
-    tsconfigPaths()
-  ],
+  plugins: [!process.env.VITEST && reactRouter(), tsconfigPaths()],
   define: {
     __SPLASH_SCRIPT__: JSON.stringify(
       minify_sync(

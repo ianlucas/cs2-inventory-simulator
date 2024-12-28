@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Economy, ensure } from "@ianlucas/cs2-lib";
-import { ActionFunctionArgs } from "@remix-run/node";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { serverGlobals } from "~/globals";
@@ -16,9 +15,10 @@ import {
 } from "~/models/api-credential.server";
 import { findUniqueUser, manipulateUserInventory } from "~/models/user.server";
 import { badRequest, methodNotAllowed, unauthorized } from "~/responses.server";
-import { json, random } from "~/utils/misc";
+import { random } from "~/utils/misc";
+import type { Route } from "./+types/api.add-container._index";
 
-export const action = api(async ({ request }: ActionFunctionArgs) => {
+export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
   if (request.method !== "POST") {
     throw methodNotAllowed;
@@ -74,7 +74,7 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
         });
       }
     });
-    return json({
+    return Response.json({
       ...item.item,
       ...(language !== undefined
         ? serverGlobals.itemLocalizationByLanguage[language][item.id]
@@ -84,3 +84,5 @@ export const action = api(async ({ request }: ActionFunctionArgs) => {
     return badRequest;
   }
 });
+
+export { loader } from "./api.$";
