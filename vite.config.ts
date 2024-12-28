@@ -15,9 +15,6 @@ export default defineConfig({
   server: {
     port: 3000
   },
-  test: {
-    environment: "happy-dom"
-  },
   plugins: [!process.env.VITEST && reactRouter(), tsconfigPaths()],
   define: {
     __SPLASH_SCRIPT__: JSON.stringify(
