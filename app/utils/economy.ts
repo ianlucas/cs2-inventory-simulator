@@ -18,7 +18,7 @@ import {
 } from "@ianlucas/cs2-lib";
 
 export const assetBaseUrl =
-  "https://cdn.statically.io/gh/ianlucas/cs2-lib/b1c950c7675a7398af59d7c66d9c42bca709d540/assets/images";
+  "https://cdn.statically.io/gh/ianlucas/cs2-lib/a2654e6265dd82bd9cdc7b6007af0514033c8efb/assets/images";
 
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
