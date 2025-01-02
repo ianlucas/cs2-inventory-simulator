@@ -225,15 +225,16 @@ export function InventoryItem({
                     label: localize("InventoryItemInspectInGame"),
                     onClick: ({ setClickLabel }) => {
                       const inspectLink = generateInspectLink(item);
-                      if (isCommandInspect(inspectLink)) {
-                        copyToClipboard(inspectLink);
-                        return setClickLabel(
-                          localize("InventoryItemInspectCopied")
-                        );
-                      }
-                      close(() => {
+                      const isCommand = isCommandInspect(inspectLink);
+                      copyToClipboard(inspectLink);
+                      if (!isCommand) {
                         window.location.assign(inspectLink);
-                      });
+                      }
+                      return setClickLabel(
+                        isCommand
+                          ? localize("InventoryItemInspectCopied")
+                          : localize("InventoryItemInspectURLCopied")
+                      );
                     }
                   }
                 ],
