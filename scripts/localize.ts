@@ -71,6 +71,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   EditorStatTrak: "CSGO_KillEater_Hud",
   EditorStickers: "Inv_Category_sticker",
   EditorWear: "Workshop_Preview_Wear",
+  GenericCancel: "Cancel",
   InspectClose: "GameUI_Close",
   InventoryApplyPatch: "SFUI_InvContextMenu_can_patch",
   InventoryApplySticker: "SFUI_InvContextMenu_can_sticker",
@@ -108,6 +109,8 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   InventoryFilterWeaponCases: "Inv_Category_weaponcase",
   InventoryItemContainsOne: "Econ_Revolving_Loot_List",
   InventoryItemDelete: "Button_Delete",
+  InventoryItemDeleteConfirm: "popup_delete_button",
+  InventoryItemDeleteConfirmDesc: "popup_delete_desc",
   InventoryItemEdit: "Button_Edit_nodots",
   InventoryItemEquip: "CSGOEcon_Equip",
   InventoryItemExterior: "inv_header_grade",
@@ -212,7 +215,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   ScrapeStickerUse: "SFUI_InvContextMenu_can_stick_Wear_sticker",
   ScrapeStickerWarn: { token: "popup_can_stick_scrape_sticker", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}\<\/b>/, '') },
   SettingsMasterVolume: "SFUI_Settings_Master_Volume",
-  StickerPickerRemove: "Button_Remove"
+  StickerPickerRemove: "Button_Remove",
 };
 
 assert(CS2_CSGO_PATH, "CS2_CSGO_PATH must be set.");
