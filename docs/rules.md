@@ -213,6 +213,12 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 - **Type:** `boolean`
 - **Default:** `true`
 
+### `craftMaxQuantity`
+
+- The maximum quantity an item can be crafted. There is no limit if the value is `0`.
+- **Type:** `number`
+- **Default:** `0`
+
 ### `editHideCategory`
 
 - Determines whether to hide a category from being editable.

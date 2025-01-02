@@ -127,7 +127,10 @@ export function ItemEditor({
       ? "InspectClose"
       : "EditorCancel";
 
-  maxQuantity ??= inventoryMaxQuantity;
+  maxQuantity =
+    maxQuantity !== undefined
+      ? Math.min(inventoryMaxQuantity, maxQuantity)
+      : inventoryMaxQuantity;
 
   function handleSubmit() {
     onSubmit({
