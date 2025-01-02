@@ -15,7 +15,7 @@ import lzstring from "lz-string";
 import { useState } from "react";
 import { data, Link, useLoaderData, useNavigate } from "react-router";
 import { z } from "zod";
-import { useInventory, useLocalize } from "~/components/app-context";
+import { useInventory, useLocalize, useRules } from "~/components/app-context";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
@@ -81,6 +81,7 @@ export default function Craft() {
   const { uid, shared } = useLoaderData<typeof loader>();
   const isEditing = uid !== undefined;
   const isSharing = shared?.item !== undefined;
+  const { craftMaxQuantity } = useRules();
   const [inventory, setInventory] = useInventory();
   const localize = useLocalize();
   const sync = useSync();
@@ -201,6 +202,7 @@ export default function Craft() {
           disabled={isSharing}
           type={isEditing ? "edit" : isSharing ? "share" : "craft"}
           item={selectedItem}
+          maxQuantity={craftMaxQuantity !== 0 ? craftMaxQuantity : undefined}
           onDismiss={handleReset}
           onSubmit={handleSubmit}
         />

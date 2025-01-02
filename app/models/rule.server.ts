@@ -400,6 +400,12 @@ export const craftAllowPatches = new Rule({
   defaultValue: true
 });
 
+export const craftMaxQuantity = new Rule({
+  name: "craftMaxQuantity",
+  type: "number",
+  defaultValue: 0
+});
+
 export const editAllowNametag = new Rule({
   name: "editAllowNametag",
   type: "boolean",

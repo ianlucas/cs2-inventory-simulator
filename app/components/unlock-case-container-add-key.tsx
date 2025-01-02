@@ -18,6 +18,8 @@ import { Modal } from "./modal";
 import { ModalButton } from "./modal-button";
 import { Select } from "./select";
 
+const KEY_MAX_QUANTITY = 20;
+
 export function UnlockCaseContainerAddKey({
   caseUid,
   neededKeyItem
@@ -31,7 +33,10 @@ export function UnlockCaseContainerAddKey({
   const { inventoryMaxItems } = useRules();
   const [amount, setAmount] = useState("1");
   const [isCrafting, toggleIsCrafting] = useToggle(false);
-  const maxQuantity = Math.min(inventoryMaxItems - inventory.size(), 20);
+  const maxQuantity = Math.min(
+    inventoryMaxItems - inventory.size(),
+    KEY_MAX_QUANTITY
+  );
 
   function craft({ quantity }: ItemEditorAttributes) {
     const inventoryItem = { id: neededKeyItem.id };
@@ -89,7 +94,7 @@ export function UnlockCaseContainerAddKey({
           <ItemEditor
             defaultQuantity={Number(amount)}
             item={neededKeyItem}
-            maxQuantity={maxQuantity}
+            maxQuantity={KEY_MAX_QUANTITY}
             onDismiss={toggleIsCrafting}
             onSubmit={craft}
             type="craft"
