@@ -122,6 +122,7 @@ export const english = {
   InventoryItemInspectFinishCatalog: /* csgo_english.txt */"Finish Catalog",
   InventoryItemInspectInGame: /* csgo_english.txt */"Inspect in Game...",
   InventoryItemInspectPatternTemplate: /* csgo_english.txt */"Pattern Template",
+  InventoryItemInspectURLCopied: "Link copied!",
   InventoryItemInspectWearRating: /* csgo_english.txt */"Wear Rating",
   InventoryItemMVPStatTrakCount: /* csgo_english.txt */"StatTrak™ Official Competitive MVPs:",
   InventoryItemNew: /* csgo_english.txt */"New!",
