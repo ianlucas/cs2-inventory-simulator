@@ -34,7 +34,11 @@ import { LocalizationScript } from "./components/localization-script";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
-import { BUILD_LAST_COMMIT, CLOUDFLARE_ANALYTICS_TOKEN } from "./env.server";
+import {
+  ASSETS_BASE_URL,
+  BUILD_LAST_COMMIT,
+  CLOUDFLARE_ANALYTICS_TOKEN
+} from "./env.server";
 import { middleware } from "./http.server";
 import { getLocalizationChecksum } from "./localization.server";
 import { getClientRules } from "./models/rule";
@@ -45,6 +49,7 @@ import { getToggleable } from "./preferences/toggleable.server";
 import { getSeoLinks, getSeoMeta } from "./root-seo";
 import { getSession } from "./session.server";
 import styles from "./tailwind.css?url";
+import { noempty } from "./utils/misc";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wdth,wght@0,62.5..100,400..800;1,62.5..100,400..800&display=swap";
@@ -82,6 +87,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
     rules: {
       ...(await getClientRules(user?.id)),
+      assetsBaseUrl: noempty(ASSETS_BASE_URL),
       buildLastCommit: BUILD_LAST_COMMIT,
       cloudflareAnalyticsToken: CLOUDFLARE_ANALYTICS_TOKEN,
       meta: { appUrl, appSiteName }

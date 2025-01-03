@@ -49,3 +49,11 @@ export function trim(value: string) {
   value = value.trim();
   return value.length > 0 ? value : undefined;
 }
+
+export function noempty(value: string | undefined) {
+  return value !== undefined
+    ? value.length > 0
+      ? value
+      : undefined
+    : undefined;
+}
