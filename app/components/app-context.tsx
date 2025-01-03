@@ -16,6 +16,7 @@ import { useInventoryFilterState } from "~/components/hooks/use-inventory-filter
 import { useInventoryState } from "~/components/hooks/use-inventory-state";
 import { useLocalization } from "~/components/hooks/use-localization";
 import { SyncAction } from "~/data/sync";
+import { clientGlobals } from "~/globals";
 import type { loader } from "~/root";
 import { pushToSync, sync } from "~/sync";
 import { updateEconomyLanguage } from "~/utils/economy";
@@ -112,6 +113,10 @@ export function AppProvider({
     checksum,
     language: preferences.language
   });
+
+  useEffect(() => {
+    clientGlobals.assetsBaseUrl = rules.assetsBaseUrl;
+  }, [rules.assetsBaseUrl]);
 
   useEffect(() => {
     cacheInventoryData(inventory.stringify());

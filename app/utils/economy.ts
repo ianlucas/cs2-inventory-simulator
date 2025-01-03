@@ -16,8 +16,9 @@ import {
   CS2_WEAR_FACTOR,
   fail
 } from "@ianlucas/cs2-lib";
+import { clientGlobals, isServerContext } from "~/globals";
 
-export const assetBaseUrl =
+export const defaultAssetsBaseUrl =
   "https://cdn.statically.io/gh/ianlucas/cs2-lib/a2654e6265dd82bd9cdc7b6007af0514033c8efb/assets/images";
 
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
@@ -38,6 +39,14 @@ export const RarityLabel = {
   [CS2RarityColor.Immortal]: "Immortal"
 } as const;
 
+export function getAssetsBaseUrl() {
+  return (
+    (isServerContext
+      ? process.env.ASSETS_BASE_URL
+      : clientGlobals.assetsBaseUrl) ?? defaultAssetsBaseUrl
+  );
+}
+
 export function updateEconomyLanguage(
   language: CS2ItemLocalizationByLanguage[string]
 ) {
@@ -52,15 +61,15 @@ export function isItemCountable(item: CS2EconomyItem) {
 }
 
 export function resolveItemImage(item: number | CS2EconomyItem, wear?: number) {
-  return CS2Economy.resolveItemImage(assetBaseUrl, item, wear);
+  return CS2Economy.resolveItemImage(getAssetsBaseUrl(), item, wear);
 }
 
 export function resolveCaseSpecialsImage(item: number | CS2EconomyItem) {
-  return CS2Economy.resolveContainerSpecialsImage(assetBaseUrl, item);
+  return CS2Economy.resolveContainerSpecialsImage(getAssetsBaseUrl(), item);
 }
 
 export function resolveCollectionImage(item: number | CS2EconomyItem) {
-  return CS2Economy.resolveCollectionImage(assetBaseUrl, item);
+  return CS2Economy.resolveCollectionImage(getAssetsBaseUrl(), item);
 }
 
 export const seedStringMaxLen = String(CS2_MAX_SEED).length;

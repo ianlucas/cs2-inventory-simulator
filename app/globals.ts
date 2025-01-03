@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { type CS2ItemLocalizationByLanguage } from "@ianlucas/cs2-lib";
-import type { SystemLocalizationByLanguage } from "~/localization.server";
+import { type SystemLocalizationByLanguage } from "~/localization.server";
 
 interface ServerGlobals {
   appLogoBase64Url: string | undefined;
@@ -20,6 +20,7 @@ interface ClientGlobals {
     render: () => void;
   };
 
+  assetsBaseUrl: string | undefined;
   itemLocalizationMap: CS2ItemLocalizationByLanguage[string];
   systemLocalizationMap: SystemLocalizationByLanguage[string];
 }
