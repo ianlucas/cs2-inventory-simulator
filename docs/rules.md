@@ -165,6 +165,12 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 - **Type:** `string-array`
 - **Usage example:** `agent;case` (Users won't be able to craft agent and case items.)
 
+### `craftHideFilterType`
+
+- Determines whether to hide a type from the "creating a craft..." prompt. This will NOT prevent the item from being added by the user when crafting/editing a weapon that may have stickers applied (unless enforced).
+- **Type:** `string-array`
+- **Usage example:** `sticker` (Users won't be able to see the "Sticker" item type when creating a craft)
+
 ### `craftHideModel`
 
 - Determines whether to hide a model when crafting an item. This also prevents the item from being added by the user.
