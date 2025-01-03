@@ -274,6 +274,12 @@ export const craftHideType = new Rule({
   defaultValue: [] as string[]
 });
 
+export const craftHideFilterType = new Rule({
+  name: "craftHideFilterType",
+  type: "string-array",
+  defaultValue: [] as string[]
+});
+
 export const craftHideModel = new Rule({
   name: "craftHideModel",
   type: "string-array",
