@@ -278,5 +278,14 @@ export const english = {
   SyncErrorContinue: "Try again",
   SyncErrorDesc: "An error occurred while syncing your changes.",
   SyncErrorTitle: "Sync Error",
-  SyncWarnText: "You are not authenticated, your changes will not by synchronized."
+  SyncWarnText: "You are not authenticated, your changes will not by synchronized.",
+  RemoveKeychainUse: /* csgo_english.txt */"Remove Keychain",
+  RemoveKeychainWarn: /* csgo_english.txt */"Remove keychain from",
+  RemoveKeychainRemove: "Remover keychain",
+  RemoveKeychainRemoveDesc: /* csgo_english.txt */"Please confirm that you would like to remove this keychain from this skin. It will be destroyed.",
+  InventoryApplyKeychain: "Apply Keychain",
+  InventoryItemRemoveKeychain: "Remove Keychain",
+  ApplyKeychainUse: "Apply Keychain",
+  ApplyKeychainWarn: "A keychain can only be applied once"
+
 };

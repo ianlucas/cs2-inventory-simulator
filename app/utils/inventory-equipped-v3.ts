@@ -22,6 +22,7 @@ interface BaseEconItem {
 
 interface WeaponEconItem extends BaseEconItem {
   legacy: boolean;
+  keychain?: { id: number; seed: number; x: number; y: number; z: number };
   nametag: string;
   stattrak: number;
   stickers: {
@@ -108,6 +109,7 @@ export async function generate(
           knives[team] = {
             def: data.def,
             legacy: false,
+            keychain: undefined,
             nametag: item.nameTag ?? "",
             paint: data.index ?? 0,
             seed: item.seed ?? CS2_MIN_SEED,
@@ -133,6 +135,13 @@ export async function generate(
           weapon[data.def] = {
             def: data.def,
             legacy: data.legacy ?? false,
+            keychain: item.keychain !== undefined ? {
+              id: item.keychain.id ?? 0,
+              seed: item.keychain.seed ?? 0,
+              x: item.keychain.x ?? 0,
+              y: item.keychain.y ?? 0,
+              z: item.keychain.z ?? 0
+            } : undefined,
             nametag: item.nameTag ?? "",
             paint: data.index ?? 0,
             seed: item.seed ?? CS2_MIN_SEED,

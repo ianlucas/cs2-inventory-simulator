@@ -21,6 +21,7 @@ export interface ItemSelectorContextProps {
   type:
     | "apply-item-patch"
     | "apply-item-sticker"
+    | "apply-item-keychain"
     | "deposit-to-storage-unit"
     | "inspect-storage-unit"
     | "rename-item"

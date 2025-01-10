@@ -9,6 +9,8 @@ import { english } from "./english";
 export const portuguese = {
   ...english,
   APIPageHeader: "API para programadores",
+  ApplyKeychainUse: "Aplicar chaveiro",
+  ApplyKeychainWarn: "Um chaveiro só pode ser aplicado uma vez",
   ApplyPatchUse: /* csgo_portuguese.txt */"Aplicar emblema",
   ApplyPatchWarn: /* csgo_portuguese.txt */"Um emblema só pode ser aplicado uma vez",
   ApplyStickerCancel: /* csgo_portuguese.txt */"Cancelar",
@@ -68,6 +70,7 @@ export const portuguese = {
   HeaderSignOutLabel: "Sair",
   HeaderSignedInAsLabel: "Entrou como",
   InspectClose: /* csgo_portuguese.txt */"Fechar",
+  InventoryApplyKeychain: "Aplicar chaveiro",
   InventoryApplyPatch: /* csgo_portuguese.txt */"Aplicar emblema",
   InventoryApplySticker: /* csgo_portuguese.txt */"Aplicar autocolante",
   InventoryFilterAgents: /* csgo_portuguese.txt */"Agentes",
@@ -121,6 +124,7 @@ export const portuguese = {
   InventoryItemNew: /* csgo_portuguese.txt */"Novo!",
   InventoryItemRareItem: /* csgo_portuguese.txt */"ou um item especial extremamente raro!",
   InventoryItemRarity: /* csgo_portuguese.txt */"Raridade:",
+  InventoryItemRemoveKeychain: "Remover chaveiro",
   InventoryItemRemovePatch: /* csgo_portuguese.txt */"Remover emblema",
   InventoryItemRename: /* csgo_portuguese.txt */"Renomear",
   InventoryItemRenameStorageUnit: /* csgo_portuguese.txt */"Editar nome",
@@ -197,6 +201,10 @@ export const portuguese = {
   ItemWearMW: /* csgo_portuguese.txt */"Com Pouco Uso",
   ItemWearWW: /* csgo_portuguese.txt */"Com Muito Uso",
   JavaScriptRequired: "Por favor, habilite o JavaScript e atualize a página.",
+  RemoveKeychainUse: /* csgo_portuguese.txt */"Remover chaveiro",
+  RemoveKeychainWarn: /* csgo_portuguese.txt */"Remover o chaveiro de",
+  RemoveKeychainRemove: "Remover chaveiro",
+  RemoveKeychainRemoveDesc: /* csgo_portuguese.txt */"Confirma que gostarias de remover este chaveiro da tua skin. O chaveiro será destruido.",
   RemovePatchRemove: /* csgo_portuguese.txt */"Remover emblema",
   RemovePatchRemoveDesc: /* csgo_portuguese.txt */"Confirma que gostarias de remover este emblema do teu agente. O emblema removido será destruído.",
   RemovePatchUse: /* csgo_portuguese.txt */"Remover emblema",
@@ -236,5 +244,6 @@ export const portuguese = {
   SyncErrorContinue: "Tentar novamente",
   SyncErrorDesc: "Não foi possível sincronizar as suas mudanças.",
   SyncErrorTitle: "Erro de sincronização",
-  SyncWarnText: "Você não está autenticado, suas mudanças não serão sincronizadas."
+  SyncWarnText: "Você não está autenticado, suas mudanças não serão sincronizadas.",
+
 };

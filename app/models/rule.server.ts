@@ -340,6 +340,18 @@ export const inventoryItemAllowScrapeSticker = new Rule({
   defaultValue: true
 });
 
+export const inventoryItemAllowApplyKeychain = new Rule({
+  name: "inventoryItemAllowApplyKeychain",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const inventoryItemAllowRemoveKeychain = new Rule({
+  name: "inventoryItemAllowRemoveKeychain",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const inventoryItemAllowShare = new Rule({
   name: "inventoryItemAllowShare",
   type: "boolean",
@@ -394,6 +406,12 @@ export const craftAllowStatTrak = new Rule({
   defaultValue: true
 });
 
+export const craftAllowKeychain = new Rule({
+  name: "craftAllowKeychain",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const craftAllowStickers = new Rule({
   name: "craftAllowStickers",
   type: "boolean",
@@ -436,6 +454,11 @@ export const editAllowStatTrak = new Rule({
   defaultValue: true
 });
 
+export const editAllowKeychain = new Rule({
+  name: "editAllowKeychain",
+  type: "boolean",
+  defaultValue: true
+});
 export const editAllowStickers = new Rule({
   name: "editAllowStickers",
   type: "boolean",

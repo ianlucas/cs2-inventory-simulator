@@ -39,6 +39,7 @@ export function InventoryItem({
   item,
   onApplyPatch,
   onApplySticker,
+  onApplyKeychain,
   onClick,
   onDepositToStorageUnit,
   onEdit,
@@ -47,6 +48,7 @@ export function InventoryItem({
   onInspectStorageUnit,
   onRemove,
   onRemovePatch,
+  onRemoveKeychain,
   onRename,
   onRenameStorageUnit,
   onRetrieveFromStorageUnit,
@@ -56,12 +58,14 @@ export function InventoryItem({
   onUnlockContainer,
   ownApplicablePatches,
   ownApplicableStickers,
+  ownApplicableKeychain,
   uid
 }: TransformedInventoryItem & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
   onApplyPatch?: (uid: number) => void;
   onApplySticker?: (uid: number) => void;
+  onApplyKeychain?: (uid: number) => void;
   onClick?: (uid: number) => void;
   onDepositToStorageUnit?: (uid: number) => void;
   onEdit?: (uid: number) => void;
@@ -70,6 +74,7 @@ export function InventoryItem({
   onInspectStorageUnit?: (uid: number) => void;
   onRemove?: (uid: number) => void;
   onRemovePatch?: (uid: number) => void;
+  onRemoveKeychain?: (uid: number) => void;
   onRename?: (uid: number) => void;
   onRenameStorageUnit?: (uid: number) => void;
   onRetrieveFromStorageUnit?: (uid: number) => void;
@@ -79,6 +84,7 @@ export function InventoryItem({
   onUnlockContainer?: (uid: number) => void;
   ownApplicablePatches?: boolean;
   ownApplicableStickers?: boolean;
+  ownApplicableKeychain?: boolean;
 }) {
   const [, copyToClipboard] = useCopyToClipboard();
   const localize = useLocalize();
@@ -89,10 +95,12 @@ export function InventoryItem({
     editHideType,
     inventoryItemAllowApplyPatch,
     inventoryItemAllowApplySticker,
+    inventoryItemAllowApplyKeychain,
     inventoryItemAllowEdit,
     inventoryItemAllowInspectInGame,
     inventoryItemAllowRemovePatch,
     inventoryItemAllowScrapeSticker,
+    inventoryItemAllowRemoveKeychain,
     inventoryItemAllowShare,
     inventoryItemAllowUnlockContainer,
     inventoryItemEquipHideModel,
@@ -158,6 +166,14 @@ export function InventoryItem({
     inventoryItemAllowScrapeSticker &&
     item.hasStickers() &&
     item.getStickersCount() > 0;
+  const canApplyKeychain =
+      inventoryItemAllowApplyKeychain &&
+      ownApplicableKeychain &&
+      ((item.hasKeychain() && item.keychain === undefined) || item.isKeychain())
+  const canRemoveKeychain =
+      inventoryItemAllowRemoveKeychain &&
+      item.hasKeychain() &&
+      item.keychain !== undefined;
   const canUnlockContainer =
     inventoryItemAllowUnlockContainer &&
     UNLOCKABLE_ITEM_TYPE.includes(item.type);
@@ -317,6 +333,16 @@ export function InventoryItem({
                     condition: canRemovePatch,
                     label: localize("InventoryItemRemovePatch"),
                     onClick: close(() => onRemovePatch?.(uid))
+                  },
+                  {
+                    condition: canApplyKeychain,
+                    label: localize("InventoryApplyKeychain"),
+                    onClick: close(() => onApplyKeychain?.(uid))
+                  },
+                  {
+                    condition: canRemoveKeychain,
+                    label: localize("InventoryItemRemoveKeychain"),
+                    onClick: close(() => onRemoveKeychain?.(uid))
                   }
                 ],
                 [

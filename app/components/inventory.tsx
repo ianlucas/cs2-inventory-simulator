@@ -39,6 +39,10 @@ import { RenameStorageUnit } from "./rename-storage-unit";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
+import {useRemoveItemKeychain} from "~/components/hooks/use-remove-item-keychain";
+import {useApplyItemKeychain} from "~/components/hooks/use-apply-item-keychain";
+import {RemoveItemKeychain} from "~/components/remove-item-keychain";
+import {ApplyItemKeychain} from "~/components/apply-item-keychain";
 
 export function Inventory() {
   const localize = useLocalize();
@@ -57,6 +61,10 @@ export function Inventory() {
   const ownApplicablePatches =
     items.filter(({ item }) => item.isPatch()).length > 0 &&
     items.filter(({ item }) => item.hasPatches()).length > 0;
+
+  const ownApplicableKeychain =
+      items.filter(({item}) => item.isKeychain()).length > 0 &&
+      items.filter(({item}) => item.hasKeychain() && item.keychain === undefined).length > 0;
 
   const {
     closeUnlockCase,
@@ -118,6 +126,20 @@ export function Inventory() {
     scrapeItemSticker
   } = useScrapeItemSticker();
 
+  const {
+    applyItemKeychain,
+    closeApplyItemKeychain,
+    handleApplyItemKeychain,
+    handleApplyItemKeychainSelect,
+    isApplyingItemKeychain
+  } = useApplyItemKeychain();
+
+  const {
+    closeRemoveItemKeychain,
+    handleRemoveItemKeychain,
+    isRemovingItemKeychain,
+    removeItemKeychain
+  } = useRemoveItemKeychain();
   const {
     closeSwapItemsStatTrak,
     handleSwapItemsStatTrak,
@@ -188,6 +210,9 @@ export function Inventory() {
         case "apply-item-sticker":
           setItemSelector(undefined);
           return handleApplyItemStickerSelect(uid);
+        case "apply-item-keychain":
+          setItemSelector(undefined);
+          return handleApplyItemKeychainSelect(uid);
         case "deposit-to-storage-unit":
           return handleDepositToStorageUnitSelect(uid);
         case "retrieve-from-storage-unit":
@@ -228,6 +253,7 @@ export function Inventory() {
                 : {
                     onApplyPatch: handleApplyItemPatch,
                     onApplySticker: handleApplyItemSticker,
+                    onApplyKeychain: handleApplyItemKeychain,
                     onDepositToStorageUnit: handleDepositToStorageUnit,
                     onEdit: handleEdit,
                     onEquip: handleEquip,
@@ -235,6 +261,7 @@ export function Inventory() {
                     onInspectStorageUnit: handleInspectStorageUnit,
                     onRemove: handleRemove,
                     onRemovePatch: handleRemoveItemPatch,
+                    onRemoveKeychain: handleRemoveItemKeychain,
                     onRename: handleRenameItem,
                     onRenameStorageUnit: handleRenameStorageUnit,
                     onRetrieveFromStorageUnit: handleRetrieveFromStorageUnit,
@@ -243,7 +270,8 @@ export function Inventory() {
                     onUnequip: handleUnequip,
                     onUnlockContainer: handleUnlockCase,
                     ownApplicablePatches,
-                    ownApplicableStickers
+                    ownApplicableStickers,
+                    ownApplicableKeychain
                   })}
             />
           </div>
@@ -291,6 +319,12 @@ export function Inventory() {
           {...scrapeItemSticker}
           onClose={closeScrapeItemSticker}
         />
+      )}
+      {isApplyingItemKeychain(applyItemKeychain) && (
+          <ApplyItemKeychain {...applyItemKeychain} onClose={closeApplyItemKeychain}/>
+      )}
+      {isRemovingItemKeychain(removeItemKeychain) && (
+          <RemoveItemKeychain {...removeItemKeychain} onClose={closeRemoveItemKeychain}/>
       )}
       {isSwapingItemsStatTrak(swapItemsStatTrak) && (
         <SwapItemsStatTrak

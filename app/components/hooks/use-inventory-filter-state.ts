@@ -122,6 +122,8 @@ export function useInventoryFilterState() {
             return item.isSticker();
           case "Graffiti":
             return item.isGraffiti();
+          case "Keychains":
+            return item.isKeychain();
         }
         break;
       case "Containers":

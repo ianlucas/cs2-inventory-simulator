@@ -15,6 +15,13 @@ export const baseInventoryItemProps = {
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
   id: nonNegativeInt.refine((id) => CS2Economy.items.has(id)),
+  keychain: z.object({
+    id: nonNegativeInt,
+    seed: nonNegativeInt.optional(),
+    x: z.number().finite().optional(),
+    y: z.number().finite().optional(),
+    z: z.number().finite().optional(),
+  }).optional(),
   nameTag: z
     .string()
     .max(20)

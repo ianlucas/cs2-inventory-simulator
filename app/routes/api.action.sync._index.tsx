@@ -32,10 +32,10 @@ import {
   editHideCategory,
   editHideId,
   editHideModel,
-  editHideType,
+  editHideType, inventoryItemAllowApplyKeychain,
   inventoryItemAllowApplyPatch,
   inventoryItemAllowApplySticker,
-  inventoryItemAllowEdit,
+  inventoryItemAllowEdit, inventoryItemAllowRemoveKeychain,
   inventoryItemAllowRemovePatch,
   inventoryItemAllowScrapeSticker
 } from "~/models/rule.server";
@@ -85,6 +85,13 @@ const actionShape = z
   )
   .or(
     z.object({
+      type: z.literal(SyncAction.ApplyItemKeychain),
+      keychainUid: nonNegativeInt,
+      targetUid: nonNegativeInt
+    })
+  )
+  .or(
+    z.object({
       type: z.literal(SyncAction.Equip),
       uid: nonNegativeInt,
       team: teamShape.optional()
@@ -123,6 +130,12 @@ const actionShape = z
       type: z.literal(SyncAction.ScrapeItemSticker),
       targetUid: nonNegativeInt,
       slot: nonNegativeInt
+    })
+  )
+  .or(
+    z.object({
+      type: z.literal(SyncAction.RemoveItemKeychain),
+      targetUid: nonNegativeInt
     })
   )
   .or(
@@ -321,9 +334,17 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
           case SyncAction.ApplyItemSticker:
             await inventoryItemAllowApplySticker.for(userId).truthy();
             inventory.applyItemSticker(
-              action.targetUid,
-              action.stickerUid,
-              action.slot
+                action.targetUid,
+                action.stickerUid,
+                action.slot
+            );
+            break;
+          case SyncAction.ApplyItemKeychain:
+            await inventoryItemAllowApplyKeychain.for(userId).truthy();
+            inventory.applyItemKeychain(
+                action.targetUid,
+                action.keychainUid,
+                {x: 0, y: 0, z: 0}
             );
             break;
           case SyncAction.Equip:
@@ -349,6 +370,10 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
           case SyncAction.ScrapeItemSticker:
             await inventoryItemAllowScrapeSticker.for(userId).truthy();
             inventory.scrapeItemSticker(action.targetUid, action.slot);
+            break;
+          case SyncAction.RemoveItemKeychain:
+            await inventoryItemAllowRemoveKeychain.for(userId).truthy();
+            inventory.removeItemKeychain(action.targetUid);
             break;
           case SyncAction.SwapItemsStatTrak:
             inventory.swapItemsStatTrak(

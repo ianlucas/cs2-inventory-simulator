@@ -112,6 +112,12 @@ export const ECONOMY_ITEM_FILTERS = [
     icon: "tool",
     label: "Tool" as const,
     type: CS2ItemType.Tool
+  },
+  {
+    hasModel: false,
+    icon: "keychain",
+    label: "Keychain" as const,
+    type: CS2ItemType.Keychain
   }
 ];
 
