@@ -67,6 +67,12 @@ export const ECONOMY_ITEM_FILTERS = [
   },
   {
     hasModel: false,
+    icon: "keychain",
+    label: "Keychain" as const,
+    type: CS2ItemType.Keychain
+  },
+  {
+    hasModel: false,
     icon: "agent",
     label: "Agent" as const,
     type: CS2ItemType.Agent
