@@ -22,6 +22,7 @@ export const UNLOCKABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
 export const EDITABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
   CS2ItemType.Agent,
   CS2ItemType.Gloves,
+  CS2ItemType.Keychain,
   CS2ItemType.Melee,
   CS2ItemType.MusicKit,
   CS2ItemType.Weapon
@@ -31,6 +32,7 @@ export const INSPECTABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
   CS2ItemType.Collectible,
   CS2ItemType.Gloves,
   CS2ItemType.Graffiti,
+  CS2ItemType.Keychain,
   CS2ItemType.Melee,
   CS2ItemType.MusicKit,
   CS2ItemType.Patch,

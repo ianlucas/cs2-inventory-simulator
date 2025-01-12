@@ -10,7 +10,6 @@ import {
   CS2Economy,
   CS2EconomyItem,
   CS2ItemType,
-  CS2_MAX_SEED,
   CS2_MAX_WEAR,
   CS2_MIN_SEED,
   CS2_MIN_WEAR,
@@ -20,11 +19,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import { useCheckbox } from "~/components/hooks/use-checkbox";
 import { useInput } from "~/components/hooks/use-input";
-import {
-  seedStringMaxLen,
-  wearStringMaxLen,
-  wearToString
-} from "~/utils/economy";
+import { wearStringMaxLen, wearToString } from "~/utils/economy";
 import { useLocalize } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
@@ -139,7 +134,9 @@ export function ItemEditor({
       nameTag: hasNameTag && nameTag.length > 0 ? nameTag : undefined,
       quantity,
       seed:
-        hasSeed && (!isCrafting || seed !== CS2_MIN_SEED) ? seed : undefined,
+        hasSeed && (!isCrafting || seed !== item.getMinimumSeed())
+          ? seed
+          : undefined,
       statTrak: hasStatTrak && statTrak === true ? statTrak : undefined,
       stickers: hasStickers
         ? Object.keys(stickers).length > 0
@@ -213,9 +210,9 @@ export function ItemEditor({
             <EditorStepRangeWithInput
               disabled={disabled}
               inputStyles="w-[74px]"
-              max={CS2_MAX_SEED}
-              maxLength={seedStringMaxLen}
-              min={CS2_MIN_SEED}
+              max={item.getMaximumSeed()}
+              maxLength={String(item.getMaximumSeed()).length}
+              min={item.getMinimumSeed()}
               onChange={setSeed}
               randomizable
               step={CS2_MIN_SEED}

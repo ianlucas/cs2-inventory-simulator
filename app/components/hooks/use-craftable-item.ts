@@ -116,7 +116,7 @@ export function useCraftableItem({
       (CS2Economy.safeValidateNametag(nameTag) || nameTag.length === 0));
   const isSeedValid =
     !itemHasSeed ||
-    ((!showSeed || canAddSeed) && CS2Economy.safeValidateSeed(seed));
+    ((!showSeed || canAddSeed) && CS2Economy.safeValidateSeed(seed, item));
   const isStickersValid = !itemHasStickers || !showStickers || canAddStickers;
   const isPatchesValid = !itemHasPatches || !showPatches || canAddPatches;
   const isStatTrakValid = !itemHasStatTrak || !showStatTrak || canAddStatTrak;

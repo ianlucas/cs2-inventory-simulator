@@ -19,7 +19,7 @@ import {
 import { clientGlobals, isServerContext } from "~/globals";
 
 export const defaultAssetsBaseUrl =
-  "https://cdn.statically.io/gh/ianlucas/cs2-lib/a2654e6265dd82bd9cdc7b6007af0514033c8efb/assets/images";
+  "https://cdn.statically.io/gh/ianlucas/cs2-lib/73bb942e95000da65a2f7148cd51d504248fb0af/assets/images";
 
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
@@ -127,6 +127,8 @@ export function getRarityItemName(item: CS2EconomyItem) {
       return "Sticker";
     case CS2ItemType.Agent:
       return "Agent";
+    case CS2ItemType.Keychain:
+      return "Charm";
     case CS2ItemType.Patch:
       return "Patch";
     case CS2ItemType.MusicKit:
