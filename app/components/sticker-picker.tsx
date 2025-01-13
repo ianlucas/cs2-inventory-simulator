@@ -135,7 +135,7 @@ export function StickerPicker({
             <button
               disabled={disabled}
               key={index}
-              className="relative overflow-hidden rounded bg-black/50"
+              className="relative cursor-default overflow-hidden rounded bg-black/50"
               onClick={handleClickSlot(index)}
             >
               {item !== undefined ? (

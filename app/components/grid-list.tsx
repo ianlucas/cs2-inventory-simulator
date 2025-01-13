@@ -25,7 +25,7 @@ export function GridList<T>({
   itemHeight,
   maxItemsIntoView = 6
 }: {
-  children: (item: T) => ReactNode;
+  children: (item: T, index: number) => ReactNode;
   className?: string;
   items: T[];
   hideScrollbar?: boolean;
@@ -173,7 +173,9 @@ export function GridList<T>({
         )}
         {range(maxItemsIntoView).map((index) => {
           const item = items[currentIndex + index];
-          return item !== undefined ? children(item) : null;
+          return item !== undefined
+            ? children(item, currentIndex + index)
+            : null;
         })}
       </div>
       <div
@@ -186,7 +188,10 @@ export function GridList<T>({
           <div
             className={clsx(
               "absolute w-full rounded bg-white/30",
-              (hideScrollbar || items.length === 0) && "opacity-0"
+              (hideScrollbar ||
+                items.length === 0 ||
+                items.length <= maxItemsIntoView) &&
+                "opacity-0"
             )}
             style={{
               height: scrollbarHeight,

@@ -30,7 +30,7 @@ export function Splash() {
       <div
         suppressHydrationWarning
         style={{
-          border: "1px solid #fff",
+          border: "1px solid transparent",
           borderRadius: "4px",
           minWidth: "216.859px",
           minHeight: "44px"
@@ -45,7 +45,14 @@ export function Splash() {
             style={{ margin: "auto", height: "2rem" }}
           />
         </div>
-        <div style={{ padding: "2px" }}>
+        <div
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.1)",
+            borderRadius: "2px",
+            overflow: "hidden",
+            padding: "2px"
+          }}
+        >
           <div
             suppressHydrationWarning
             id="splash-progress"

@@ -3,8 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
   CS2Economy,
@@ -13,7 +11,7 @@ import {
 import clsx from "clsx";
 import lzstring from "lz-string";
 import { useState } from "react";
-import { data, Link, useLoaderData, useNavigate } from "react-router";
+import { data, useLoaderData, useNavigate } from "react-router";
 import { z } from "zod";
 import { useInventory, useLocalize, useRules } from "~/components/app-context";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
@@ -21,7 +19,7 @@ import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
 import { ItemEditor, ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
-import { Modal } from "~/components/modal";
+import { Modal, ModalHeader } from "~/components/modal";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/http.server";
 import { getUserBasicData } from "~/models/user.server";
@@ -152,61 +150,56 @@ export default function Craft() {
   const isPickingItem = selectedItem === undefined;
 
   return (
-    <Modal
-      className={clsx(
-        "transition-[width]",
-        isPickingItem ? (isDesktop ? "w-[720px]" : "w-[540px]") : "w-[420px]"
-      )}
-    >
-      <div className="flex select-none items-center justify-between px-4 py-2 text-sm font-bold">
-        <span className="text-neutral-400">
-          {localize(
-            isSharing
-              ? "CraftSharedHeader"
-              : isPickingItem
-                ? "CraftSelectHeader"
-                : "CraftConfirmHeader"
+    <>
+      {!isSharing && (
+        <Modal
+          className={clsx(
+            isDesktop ? "min-w-[640px] max-w-[720px]" : "w-[540px]"
           )}
-        </span>
-        <div className="flex items-center">
-          <Link className="opacity-50 hover:opacity-100" to="/">
-            <FontAwesomeIcon icon={faXmark} className="h-4" />
-          </Link>
-        </div>
-      </div>
-      {shared?.user !== undefined && (
-        <div className="flex items-center gap-2 px-4 text-sm">
-          <span className="text-neutral-500">{localize("CraftBy")}</span>
-          <img
-            className="h-6 w-6 rounded-full"
-            src={shared.user.avatar}
-            alt={shared.user.name}
-            draggable={false}
+        >
+          <ModalHeader title={localize("CraftSelectHeader")} linkTo="/" />
+          <ItemPicker onPickItem={setSelectedItem} />
+        </Modal>
+      )}
+      {!isPickingItem && (
+        <Modal className="w-[420px] transition-[width]">
+          <ModalHeader
+            title={localize(
+              isSharing ? "CraftSharedHeader" : "CraftConfirmHeader"
+            )}
+            onClose={handleReset}
           />
-          <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
-            {shared.user.name}
-          </span>
-        </div>
+          {shared?.user !== undefined && (
+            <div className="flex items-center gap-2 px-4 text-sm">
+              <span className="text-neutral-500">{localize("CraftBy")}</span>
+              <img
+                className="h-6 w-6 rounded-full"
+                src={shared.user.avatar}
+                alt={shared.user.name}
+                draggable={false}
+              />
+              <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+                {shared.user.name}
+              </span>
+            </div>
+          )}
+          <ItemEditor
+            attributes={
+              isEditing
+                ? inventory.get(uid).asBase()
+                : isSharing
+                  ? shared.item
+                  : undefined
+            }
+            disabled={isSharing}
+            type={isEditing ? "edit" : isSharing ? "share" : "craft"}
+            item={selectedItem}
+            maxQuantity={craftMaxQuantity !== 0 ? craftMaxQuantity : undefined}
+            onDismiss={handleReset}
+            onSubmit={handleSubmit}
+          />
+        </Modal>
       )}
-      {isPickingItem ? (
-        <ItemPicker onPickItem={setSelectedItem} />
-      ) : (
-        <ItemEditor
-          attributes={
-            isEditing
-              ? inventory.get(uid).asBase()
-              : isSharing
-                ? shared.item
-                : undefined
-          }
-          disabled={isSharing}
-          type={isEditing ? "edit" : isSharing ? "share" : "craft"}
-          item={selectedItem}
-          maxQuantity={craftMaxQuantity !== 0 ? craftMaxQuantity : undefined}
-          onDismiss={handleReset}
-          onSubmit={handleSubmit}
-        />
-      )}
-    </Modal>
+    </>
   );
 }

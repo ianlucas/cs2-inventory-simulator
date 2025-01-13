@@ -12,11 +12,13 @@ import { TextSlider } from "./text-slider";
 export function ItemButton({
   bigger,
   ignoreRarityColor,
+  index,
   item,
   onClick
 }: {
   bigger?: boolean;
   ignoreRarityColor?: boolean;
+  index?: number;
   item: CS2EconomyItem;
   onClick?: (item: CS2EconomyItem) => void;
 }) {
@@ -40,8 +42,9 @@ export function ItemButton({
       onClick={handleClick}
       className={clsx(
         "font-display",
+        (index ?? 0) % 2 !== 0 ? "bg-black/10" : "bg-transparent",
         clickable &&
-          "relative overflow-hidden border-y-2 border-transparent bg-transparent transition-all hover:bg-black/20 active:bg-black/30",
+          "relative cursor-default overflow-hidden transition-all hover:bg-black/25 active:bg-black/30",
         !bigger && "block h-[64px] w-full pl-[2px] pr-4",
         bigger && "flex h-full w-full items-center justify-center"
       )}
@@ -54,7 +57,7 @@ export function ItemButton({
       >
         <ItemImage
           className={clsx(
-            "overflow-hidden bg-gradient-to-b from-neutral-500/10 to-neutral-300/10 group-hover:from-neutral-500 group-hover:to-neutral-300",
+            "overflow-hidden",
             !bigger && "aspect-[1.333] w-[82px]",
             bigger && "m-auto h-32"
           )}
