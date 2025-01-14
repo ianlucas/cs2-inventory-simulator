@@ -11,12 +11,14 @@ export function EditorSelect({
   onChange,
   options,
   placeholder,
+  styleless,
   value,
   ...rest
 }: Omit<ComponentProps<"select">, "onChange"> & {
   onChange: (value: string) => void;
   options: string[];
   placeholder?: string;
+  styleless?: boolean;
   value: string;
 }) {
   function handleChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -27,8 +29,8 @@ export function EditorSelect({
     <select
       {...rest}
       className={clsx(
-        "h-[24px] rounded bg-black/50 outline-none",
-        value === "" && "text-neutral-600",
+        !styleless && "h-[24px] rounded bg-black/50 outline-none",
+        !styleless && value === "" && "text-neutral-600",
         className
       )}
       onChange={handleChange}

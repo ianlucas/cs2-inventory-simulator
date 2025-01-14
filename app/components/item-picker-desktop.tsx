@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useItemPickerState } from "~/components/hooks/use-item-picker-state";
 import { ItemBrowser } from "~/components/item-browser";
 import { useLocalize } from "./app-context";
+import { IconInput } from "./icon-input";
 import { ItemPickerFilterDesktop } from "./item-picker-filter-desktop";
 
 export function ItemPickerDesktop({
@@ -37,18 +37,13 @@ export function ItemPickerDesktop({
           value={filter}
         />
         <div className="flex-1">
-          <label className="mb-2 flex items-center gap-2 bg-neutral-950/40 px-2 py-1">
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="h-4 text-neutral-500"
-            />
-            <input
-              value={query}
-              onChange={setQuery}
-              className="flex-1 bg-transparent placeholder-neutral-600 outline-none"
-              placeholder={localize("CraftSearchPlaceholder")}
-            />
-          </label>
+          <IconInput
+            icon={faMagnifyingGlass}
+            labelStyles="mb-2"
+            onChange={setQuery}
+            placeholder={localize("CraftSearchPlaceholder")}
+            value={query}
+          />
           <ItemBrowser
             ignoreRarityColor={ignoreRarityColor}
             items={items}

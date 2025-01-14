@@ -3,8 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faLongArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
   CS2Economy,
@@ -116,11 +114,7 @@ export function ItemEditor({
     type
   });
 
-  const dismissLabel = isCrafting
-    ? "EditorReset"
-    : isSharing
-      ? "InspectClose"
-      : "EditorCancel";
+  const dismissLabel = isSharing ? "InspectClose" : "EditorCancel";
 
   maxQuantity =
     maxQuantity !== undefined
@@ -279,12 +273,11 @@ export function ItemEditor({
         )}
       </div>
       <div className="mt-6 flex justify-center gap-2">
-        <ModalButton variant="secondary" onClick={onDismiss}>
-          {type === "craft" && (
-            <FontAwesomeIcon icon={faLongArrowLeft} className="mr-2 h-4" />
-          )}
-          {localize(dismissLabel)}
-        </ModalButton>
+        <ModalButton
+          variant="secondary"
+          onClick={onDismiss}
+          children={localize(dismissLabel)}
+        />
         {(!isSharing || craftable) && (
           <ModalButton
             children={localize(

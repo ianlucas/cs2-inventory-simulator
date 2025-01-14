@@ -6,8 +6,7 @@
 import {
   faMagnifyingGlass,
   faTag,
-  faTrashCan,
-  faXmark
+  faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,13 +28,13 @@ import {
 } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { useLocalize, useRules } from "./app-context";
-import { EditorInput } from "./editor-input";
-import { EditorSelect } from "./editor-select";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
+import { IconInput } from "./icon-input";
+import { IconSelect } from "./icon-select";
 import { ItemBrowser } from "./item-browser";
 import { ItemEditorLabel } from "./item-editor-label";
 import { ItemImage } from "./item-image";
-import { Modal } from "./modal";
+import { Modal, ModalHeader } from "./modal";
 
 export function StickerPicker({
   disabled,
@@ -158,38 +157,28 @@ export function StickerPicker({
         })}
       </div>
       <Modal className="w-[540px] pb-1" hidden={activeIndex === undefined} blur>
-        <div className="flex select-none justify-between px-4 py-2 font-bold">
-          <label className="text-sm text-neutral-400">
-            {localize("StickerPickerHeader")}
-          </label>
+        <ModalHeader
+          title={localize("StickerPickerHeader")}
+          onClose={handleCloseModal}
+        />
+        <div className="mb-4 mt-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
+          <IconInput
+            icon={faMagnifyingGlass}
+            labelStyles="flex-1"
+            onChange={setSearch}
+            placeholder={localize("StickerPickerSearchPlaceholder")}
+            value={search}
+          />
+          <IconSelect
+            icon={faTag}
+            className="w-[168px]"
+            onChange={setCategory}
+            options={categories}
+            placeholder={localize("StickerPickerFilterPlaceholder")}
+            value={category}
+          />
           <button
-            onClick={handleCloseModal}
-            className="cursor-default text-white/50 hover:text-white"
-          >
-            <FontAwesomeIcon icon={faXmark} className="h-4" />
-          </button>
-        </div>
-        <div className="mb-4 flex flex-col gap-2 px-2 lg:flex-row lg:items-center lg:pl-4 lg:pr-2">
-          <div className="flex flex-1 items-center gap-2">
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="h-4" />
-            <EditorInput
-              value={search}
-              onChange={setSearch}
-              placeholder={localize("StickerPickerSearchPlaceholder")}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faTag} className="h-4" />
-            <EditorSelect
-              className="w-[192px]"
-              onChange={setCategory}
-              options={categories}
-              placeholder={localize("StickerPickerFilterPlaceholder")}
-              value={category}
-            />
-          </div>
-          <button
-            className="flex h-[24px] cursor-default items-center gap-1 rounded px-2 text-red-500 transition hover:bg-black/30 active:bg-black/60"
+            className="flex h-8 cursor-default items-center gap-1 bg-black/10 px-2 text-neutral-300 transition hover:bg-black/30 hover:text-red-500 active:bg-black/60"
             onClick={handleRemoveSticker}
             title={localize("StickerPickerRemove")}
           >
