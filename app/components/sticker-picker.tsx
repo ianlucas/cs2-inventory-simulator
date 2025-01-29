@@ -16,9 +16,9 @@ import {
   CS2_MAX_STICKER_WEAR,
   CS2_MIN_STICKER_WEAR,
   CS2_STICKER_WEAR_FACTOR,
+  assert,
   ensure
 } from "@ianlucas/cs2-lib";
-import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
 import {
@@ -33,8 +33,10 @@ import { IconInput } from "./icon-input";
 import { IconSelect } from "./icon-select";
 import { ItemBrowser } from "./item-browser";
 import { ItemEditorLabel } from "./item-editor-label";
+import { ItemEditorName } from "./item-editor-name";
 import { ItemImage } from "./item-image";
 import { Modal, ModalHeader } from "./modal";
+import { ModalButton } from "./modal-button";
 
 export function StickerPicker({
   disabled,
@@ -57,6 +59,7 @@ export function StickerPicker({
   const stickers = useMemo(() => CS2Economy.getStickers().sort(sortByName), []);
   const categories = useMemo(() => CS2Economy.getStickerCategories(), []);
   const [wear, setWear] = useState(0);
+  const [selected, setSelected] = useState<CS2EconomyItem>();
 
   function handleClickSlot(index: number) {
     return function handleClickSlot() {
@@ -64,14 +67,24 @@ export function StickerPicker({
     };
   }
 
-  function handleAddSticker(item: CS2EconomyItem) {
+  function handleSelectSticker(item: CS2EconomyItem) {
+    setSelected(item);
+  }
+
+  function handleCloseSelectModal() {
+    setSelected(undefined);
+  }
+
+  function handleAddSticker() {
+    assert(selected);
     onChange({
       ...value,
       [ensure(activeIndex)]: {
-        id: item.id,
+        id: selected.id,
         wear
       }
     });
+    setSelected(undefined);
     setActiveIndex(undefined);
   }
 
@@ -161,7 +174,7 @@ export function StickerPicker({
           title={localize("StickerPickerHeader")}
           onClose={handleCloseModal}
         />
-        <div className="mb-4 mt-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
+        <div className="my-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
           <IconInput
             icon={faMagnifyingGlass}
             labelStyles="flex-1"
@@ -185,12 +198,18 @@ export function StickerPicker({
             <FontAwesomeIcon icon={faTrashCan} className="h-4" />
           </button>
         </div>
-        <div
-          className={clsx(
-            "m-auto w-[460px] select-none px-4 pb-4 lg:px-0",
-            filtered.length === 0 && "invisible"
-          )}
-        >
+        <ItemBrowser items={filtered} onClick={handleSelectSticker} />
+      </Modal>
+      {selected !== undefined && (
+        <Modal className="w-[360px]">
+          <ModalHeader
+            title={"Confirm selection"}
+            onClose={handleCloseSelectModal}
+          />
+          <ItemImage className="m-auto h-[192px] w-[256px]" item={selected} />
+          <div className="mb-4 text-center">
+            <ItemEditorName item={selected} />
+          </div>
           <ItemEditorLabel
             className="flex select-none items-center gap-4"
             label={localize("EditorStickerWear")}
@@ -213,9 +232,21 @@ export function StickerPicker({
               value={wear}
             />
           </ItemEditorLabel>
-        </div>
-        <ItemBrowser items={filtered} onClick={handleAddSticker} />
-      </Modal>
+          <div className="my-6 flex justify-center gap-2">
+            <ModalButton
+              variant="secondary"
+              onClick={handleCloseSelectModal}
+              children="Cancel"
+            />
+
+            <ModalButton
+              children="Pick"
+              onClick={handleAddSticker}
+              variant="primary"
+            />
+          </div>
+        </Modal>
+      )}
     </>
   );
 }
