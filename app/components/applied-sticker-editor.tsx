@@ -31,15 +31,15 @@ export function AppliedStickerEditor({
 }) {
   const localize = useLocalize();
 
-  const [data, onData] = useKeyValue(value);
+  const [attributes, mutateAttributes] = useKeyValue(value);
 
   useEffect(() => {
-    onChange?.(data);
-  }, [data]);
+    onChange?.(attributes);
+  }, [attributes]);
 
   return (
     <div className={clsx("m-auto select-none", className)}>
-      <EditorItemDisplay item={item} wear={data.wear} />
+      <EditorItemDisplay item={item} wear={attributes.wear} />
       <div className="space-y-1.5">
         <EditorLabel label={localize("EditorStickerWear")}>
           <EditorStepRangeWithInput
@@ -47,7 +47,7 @@ export function AppliedStickerEditor({
             max={CS2_MAX_STICKER_WEAR}
             maxLength={stickerWearStringMaxLen}
             min={CS2_MIN_STICKER_WEAR}
-            onChange={onData.update("wear")}
+            onChange={mutateAttributes.update("wear")}
             randomizable
             step={CS2_STICKER_WEAR_FACTOR}
             stepRangeStyles="flex-1"
@@ -56,7 +56,7 @@ export function AppliedStickerEditor({
             validate={(value) =>
               value >= CS2_MIN_STICKER_WEAR && value <= CS2_MAX_STICKER_WEAR
             }
-            value={data.wear}
+            value={attributes.wear}
           />
         </EditorLabel>
       </div>

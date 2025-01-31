@@ -57,11 +57,15 @@ const bodyFontUrl =
 const displayFontUrl =
   "https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600&display=swap";
 
+// Please consider donating :-(
+const displayFontIAmPayingFor = "https://use.typekit.net/ojo0ltc.css";
+
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   { rel: "preconnect", href: "https://fonts.gstatic.com" },
   { rel: "stylesheet", href: bodyFontUrl },
   { rel: "stylesheet", href: displayFontUrl },
+  { rel: "stylesheet", href: displayFontIAmPayingFor },
   { rel: "stylesheet", href: styles },
   { rel: "manifest", href: "/app.webmanifest" }
 ];

@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ["'Exo 2'", "sans-serif"],
+        display: ["'stratum-2-web'", "'Exo 2'", "sans-serif"],
         sans: ["'Noto Sans'", "sans-serif"],
         mono: [
           "ui-monospace",
@@ -25,13 +25,13 @@ export default {
         ]
       },
       fontSize: {
-        sm: "0.8rem",
-        base: "1rem",
-        xl: "1.25rem",
-        "2xl": "1.563rem",
-        "3xl": "1.953rem",
-        "4xl": "2.441rem",
-        "5xl": "3.052rem"
+        sm: "0.9rem",
+        base: "1.1rem",
+        xl: "1.35rem",
+        "2xl": "1.663rem",
+        "3xl": "2.053rem",
+        "4xl": "2.541rem",
+        "5xl": "3.152rem"
       }
     }
   },

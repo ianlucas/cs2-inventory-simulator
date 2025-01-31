@@ -40,8 +40,9 @@ export interface ItemEditorAttributes {
   wear?: number;
 }
 
-export function ItemEditorV2({
+export function ItemEditor({
   className,
+  defaultQuantity,
   isDisabled,
   isHideNameTag,
   isHidePatches,
@@ -56,6 +57,7 @@ export function ItemEditorV2({
   stickerFilter
 }: {
   className?: string;
+  defaultQuantity?: number;
   item: CS2InventoryItem | CS2EconomyItem;
   maxQuantity?: number;
   isDisabled?: boolean;
@@ -88,7 +90,7 @@ export function ItemEditorV2({
   const [data, onData] = useKeyValue({
     nameTag: defaults?.nameTag ?? "",
     patches: defaults?.patches ?? {},
-    quantity: 1,
+    quantity: defaultQuantity ?? 1,
     seed: defaults?.seed ?? minimumSeed,
     statTrak: defaults?.statTrak !== undefined,
     stickers: defaults?.stickers ?? {},

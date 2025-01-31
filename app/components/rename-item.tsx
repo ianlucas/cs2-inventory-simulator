@@ -3,7 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { CS2Economy } from "@ianlucas/cs2-lib";
+import { useToggle } from "@uidotdev/usehooks";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/components/hooks/use-input";
@@ -13,9 +16,10 @@ import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
 import { useInventory, useLocalize } from "./app-context";
-import { EditorInput } from "./editor-input";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
+import { ToolButton } from "./tool-button";
+import { ToolInput } from "./tool-input";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -33,8 +37,10 @@ export function RenameItem({
   const nameItemString = useNameItemString();
   const [inventory, setInventory] = useInventory();
   const [nameTag, setNameTag] = useInput("");
+  const [isConfirmed, toggleIsConfirmed] = useToggle();
 
   const inventoryItem = useInventoryItem(targetUid);
+  const isConfirmDisabled = nameTag.length === 0;
 
   function handleRename() {
     if (targetUid < 0 && inventoryItem.free) {
@@ -61,6 +67,16 @@ export function RenameItem({
     onClose();
   }
 
+  function handleToggleConfirm() {
+    toggleIsConfirmed();
+  }
+
+  useEffect(() => {
+    if (!isConfirmed) {
+      setNameTag("");
+    }
+  }, [isConfirmed]);
+
   return (
     <ClientOnly
       children={() =>
@@ -77,10 +93,10 @@ export function RenameItem({
                 className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
                 item={inventoryItem}
               />
-              <div className="flex lg:m-auto lg:mb-4 lg:max-w-[360px]">
-                <EditorInput
+              <div className="flex items-center justify-center gap-2 lg:m-auto lg:mb-4">
+                <ToolInput
                   autoFocus
-                  className="py-1 text-xl"
+                  className="text-2xl lg:max-w-[428px]"
                   maxLength={20}
                   onChange={setNameTag}
                   placeholder={localize("EditorNametagPlaceholder")}
@@ -88,6 +104,12 @@ export function RenameItem({
                     CS2Economy.safeValidateNametag(nameTag ?? "")
                   }
                   value={nameTag}
+                />
+                <ToolButton
+                  onClick={handleToggleConfirm}
+                  icon={isConfirmed ? faCircleXmark : faCheck}
+                  isBorderless={isConfirmed}
+                  disabled={isConfirmDisabled}
                 />
               </div>
               <UseItemFooter
@@ -97,7 +119,8 @@ export function RenameItem({
                       disabled={
                         (nameTag !== "" &&
                           !CS2Economy.safeValidateNametag(nameTag)) ||
-                        (nameTag === "" && inventoryItem.free)
+                        (nameTag === "" && inventoryItem.free) ||
+                        !isConfirmed
                       }
                       variant="primary"
                       onClick={handleRename}

@@ -12,6 +12,7 @@ import { z } from "zod";
 import { useInventory, useLocalize } from "~/components/app-context";
 import { CraftEdit } from "~/components/craft-edit";
 import { CraftNew } from "~/components/craft-new";
+import { CraftShareUser } from "~/components/craft-share-user";
 import { CraftView } from "~/components/craft-view";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useLockScroll } from "~/components/hooks/use-lock-scroll";
@@ -77,22 +78,25 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 export default function Craft() {
   const { uid, shared } = useLoaderData<typeof loader>();
+
   const isEditing = uid !== undefined;
   const isSharing = shared?.item !== undefined;
-  const [inventory, setInventory] = useInventory();
+  const isCrafting = !isEditing && !isSharing;
+
   const localize = useLocalize();
   const sync = useSync();
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState<CS2EconomyItem | undefined>(
+  const isDesktop = useIsDesktop();
+
+  const [inventory, setInventory] = useInventory();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [item, setItem] = useState<CS2EconomyItem | undefined>(
     isEditing
       ? inventory.get(uid)
       : isSharing
         ? createFakeInventoryItemFromBase(shared.item)
         : undefined
   );
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const isDesktop = useIsDesktop();
 
   useLockScroll();
 
@@ -101,14 +105,14 @@ export default function Craft() {
     statTrak,
     ...attributes
   }: ItemEditorAttributes) {
-    if (isSubmitting || selectedItem === undefined) {
+    if (isSubmitting || item === undefined) {
       return;
     }
     playSound("inventory_new_item_accept");
     setIsSubmitting(true);
 
     const inventoryItem = {
-      id: selectedItem.id,
+      id: item.id,
       statTrak: statTrak ? (0 as const) : undefined,
       ...attributes
     } satisfies CS2BaseInventoryItem;
@@ -129,7 +133,7 @@ export default function Craft() {
       return navigate("/");
     }
 
-    range(isItemCountable(selectedItem) ? quantity : 1).forEach(() => {
+    range(isItemCountable(item) ? quantity : 1).forEach(() => {
       setInventory(inventory.add(inventoryItem));
       sync({
         type: SyncAction.Add,
@@ -139,68 +143,51 @@ export default function Craft() {
     return navigate("/");
   }
 
-  function handleReset() {
+  function handleClose() {
     if (isEditing || isSharing) {
       return navigate("/");
     }
-    return setSelectedItem(undefined);
+    return setItem(undefined);
   }
 
-  const isPickingItem = selectedItem === undefined;
+  const editorProps =
+    item !== undefined
+      ? {
+          item,
+          onSubmit: handleSubmit,
+          onClose: handleClose
+        }
+      : undefined;
+  const hasItem = editorProps !== undefined;
+
+  const CraftComponent = isEditing
+    ? CraftEdit
+    : isSharing
+      ? CraftView
+      : CraftNew;
 
   return (
     <>
-      {!isEditing && !isSharing && (
+      {isCrafting && (
         <Modal
           className={clsx(
             isDesktop ? "min-w-[640px] max-w-[720px]" : "w-[540px]"
           )}
         >
           <ModalHeader title={localize("CraftSelectHeader")} linkTo="/" />
-          <ItemPicker onPickItem={setSelectedItem} />
+          <ItemPicker onPickItem={setItem} />
         </Modal>
       )}
-      {!isPickingItem && (
-        <Modal className="w-[420px] transition-[width]">
+      {hasItem && (
+        <Modal className="w-[420px]">
           <ModalHeader
             title={localize(
               isSharing ? "CraftSharedHeader" : "CraftConfirmHeader"
             )}
-            onClose={handleReset}
+            onClose={handleClose}
           />
-          {shared?.user !== undefined && (
-            <div className="flex items-center gap-2 px-4 py-2 text-sm">
-              <span className="text-neutral-500">{localize("CraftBy")}</span>
-              <img
-                className="h-6 w-6 rounded-full"
-                src={shared.user.avatar}
-                alt={shared.user.name}
-                draggable={false}
-              />
-              <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
-                {shared.user.name}
-              </span>
-            </div>
-          )}
-          {isEditing ? (
-            <CraftEdit
-              item={selectedItem}
-              onSubmit={handleSubmit}
-              onCancel={handleReset}
-            />
-          ) : isSharing ? (
-            <CraftView
-              item={selectedItem}
-              onCancel={handleReset}
-              onSubmit={handleSubmit}
-            />
-          ) : (
-            <CraftNew
-              item={selectedItem}
-              onSubmit={handleSubmit}
-              onCancel={handleReset}
-            />
-          )}
+          {shared?.user !== undefined && <CraftShareUser user={shared.user} />}
+          <CraftComponent {...editorProps} />
         </Modal>
       )}
     </>

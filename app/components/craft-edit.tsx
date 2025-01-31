@@ -10,16 +10,16 @@ import {
 } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useLocalize, useRules } from "./app-context";
-import { ItemEditorAttributes, ItemEditorV2 } from "./item-editor-v2";
+import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ModalButton } from "./modal-button";
 
 export function CraftEdit({
   item,
-  onCancel,
+  onClose,
   onSubmit
 }: {
   item: CS2InventoryItem | CS2EconomyItem;
-  onCancel: () => void;
+  onClose: () => void;
   onSubmit: (attributes: ItemEditorAttributes) => void;
 }) {
   const localize = useLocalize();
@@ -69,7 +69,7 @@ export function CraftEdit({
 
   return (
     <>
-      <ItemEditorV2
+      <ItemEditor
         className="px-4"
         isHideNameTag={isHideNameTag}
         isHidePatches={isHidePatches}
@@ -84,9 +84,9 @@ export function CraftEdit({
       />
       <div className="my-6 flex justify-center gap-2">
         <ModalButton
-          variant="secondary"
-          onClick={onCancel}
           children={localize("EditorCancel")}
+          onClick={onClose}
+          variant="secondary"
         />
         <ModalButton
           children={localize("EditorSave")}

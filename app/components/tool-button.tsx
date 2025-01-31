@@ -3,33 +3,28 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { ComponentProps } from "react";
 
-export function InventoryFilterButton({
-  active,
-  children,
-  shadowless,
+export function ToolButton({
+  icon,
+  isBorderless,
   ...props
 }: ComponentProps<"button"> & {
-  active?: boolean;
-  shadowless?: boolean;
+  icon: IconProp;
+  isBorderless?: boolean;
 }) {
   return (
     <button
       {...props}
       className={clsx(
-        "cursor-default rounded-sm px-2 py-1 font-display text-sm font-medium uppercase transition-all hover:bg-neutral-500/40",
-        active && "bg-cyan-600/40 text-cyan-400"
+        "cursor-default px-1.5 py-0.5 hover:bg-white/20 disabled:opacity-50",
+        !isBorderless && "border border-white/50"
       )}
     >
-      <span
-        className={clsx(
-          !active && !shadowless && "drop-shadow-[0_0_5px_rgba(0,0,0,1)]"
-        )}
-      >
-        {children}
-      </span>
+      <FontAwesomeIcon icon={icon} />
     </button>
   );
 }

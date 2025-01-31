@@ -49,6 +49,7 @@ export function Splash() {
           style={{
             backgroundColor: "rgba(0, 0, 0, 0.1)",
             borderRadius: "2px",
+            marginTop: "16px",
             overflow: "hidden",
             padding: "2px"
           }}
