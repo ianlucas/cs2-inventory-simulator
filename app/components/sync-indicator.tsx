@@ -16,7 +16,7 @@ import { getJson } from "~/utils/fetch";
 import { parseInventory } from "~/utils/inventory";
 import { useInventory, useLocalize, useRules } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
-import { Modal } from "./modal";
+import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
 
 export function SyncIndicator() {
@@ -76,13 +76,9 @@ export function SyncIndicator() {
             </div>
             {showSyncErrorModal && (
               <Modal fixed>
-                <div className="px-4 py-2 text-sm font-bold">
-                  <span className="text-neutral-400">
-                    {localize("SyncErrorTitle")}
-                  </span>
-                </div>
-                <p className="px-4">{localize("SyncErrorDesc")}</p>
-                <div className="mt-4 flex justify-end px-4 py-2">
+                <ModalHeader title={localize("SyncErrorTitle")} />
+                <p className="mt-2 px-4">{localize("SyncErrorDesc")}</p>
+                <div className="my-6 mt-4 flex justify-center px-4">
                   <ModalButton
                     disabled={disableContinueButton}
                     onClick={handleClose}

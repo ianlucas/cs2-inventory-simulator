@@ -16,7 +16,7 @@ import { useLocalize } from "./app-context";
 import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
-import { useKeyValue } from "./hooks/use-data";
+import { useKeyValues } from "./hooks/use-key-values";
 
 export function AppliedStickerEditor({
   className,
@@ -31,7 +31,7 @@ export function AppliedStickerEditor({
 }) {
   const localize = useLocalize();
 
-  const [attributes, mutateAttributes] = useKeyValue(value);
+  const [attributes, mutateAttributes] = useKeyValues(value);
 
   useEffect(() => {
     onChange?.(attributes);

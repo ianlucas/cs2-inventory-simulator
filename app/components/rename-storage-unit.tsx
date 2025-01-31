@@ -89,7 +89,7 @@ export function RenameStorageUnit({
                   className="text-2xl lg:max-w-[428px]"
                   maxLength={20}
                   onChange={setNameTag}
-                  placeholder={localize("EditorNametagPlaceholder")}
+                  placeholder={localize("InventoryItemRenamePlaceholder")}
                   validate={(nameTag) =>
                     CS2Economy.safeValidateNametag(nameTag ?? "")
                   }

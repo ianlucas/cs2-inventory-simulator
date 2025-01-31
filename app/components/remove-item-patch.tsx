@@ -13,7 +13,7 @@ import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
 import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
-import { Modal } from "./modal";
+import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
@@ -93,23 +93,20 @@ export function RemoveItemPatch({
               </div>
             </div>
             {confirmRemoveSlot !== undefined && (
-              <Modal fixed>
-                <div className="px-4 py-2 text-sm font-bold">
-                  <span className="text-neutral-400">
-                    {localize("RemovePatchRemove")}
-                  </span>
-                </div>
-                <p className="px-4">{localize("RemovePatchRemoveDesc")}</p>
-                <div className="flex justify-end px-4 py-2">
-                  <ModalButton
-                    onClick={handleConfirmScrape}
-                    variant="secondary"
-                    children={localize("RemovePatchRemove")}
-                  />
+              <Modal className="w-[480px]" fixed>
+                <ModalHeader title={localize("RemovePatchRemove")} />
+                <p className="mt-2 px-4">{localize("RemovePatchRemoveDesc")}</p>
+                <div className="my-6 flex justify-center gap-2 px-4">
+                  {" "}
                   <ModalButton
                     onClick={() => setConfirmRemoveSlot(undefined)}
                     variant="secondary"
                     children={localize("ScrapeStickerCancel")}
+                  />
+                  <ModalButton
+                    onClick={handleConfirmScrape}
+                    variant="primary"
+                    children={localize("RemovePatchRemove")}
                   />
                 </div>
               </Modal>

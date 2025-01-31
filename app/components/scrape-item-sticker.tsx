@@ -18,7 +18,7 @@ import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
 import { useInventory, useLocalize, usePreferences } from "./app-context";
 import { ItemImage } from "./item-image";
-import { Modal } from "./modal";
+import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
@@ -123,23 +123,21 @@ export function ScrapeItemSticker({
               </div>
             </div>
             {confirmScrapeIndex !== undefined && (
-              <Modal fixed>
-                <div className="px-4 py-2 text-sm font-bold">
-                  <span className="text-neutral-400">
-                    {localize("ScrapeStickerRemove")}
-                  </span>
-                </div>
-                <p className="px-4">{localize("ScrapeStickerRemoveDesc")}</p>
-                <div className="flex justify-end px-4 py-2">
-                  <ModalButton
-                    onClick={handleConfirmScrape}
-                    variant="secondary"
-                    children={localize("ScrapeStickerRemove")}
-                  />
+              <Modal className="w-[480px]" fixed>
+                <ModalHeader title={localize("ScrapeStickerRemove")} />
+                <p className="mt-2 px-4">
+                  {localize("ScrapeStickerRemoveDesc")}
+                </p>
+                <div className="my-6 flex justify-center gap-2 px-4">
                   <ModalButton
                     onClick={() => setConfirmScrapeIndex(undefined)}
                     variant="secondary"
                     children={localize("ScrapeStickerCancel")}
+                  />
+                  <ModalButton
+                    onClick={handleConfirmScrape}
+                    variant="primary"
+                    children={localize("ScrapeStickerRemove")}
                   />
                 </div>
               </Modal>

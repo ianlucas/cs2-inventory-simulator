@@ -1,6 +1,11 @@
-import { useState } from "react";
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 
-export function useKeyValue<T extends {}>(initialState: T) {
+import { ChangeEvent, useState } from "react";
+
+export function useKeyValues<T extends {}>(initialState: T) {
   const [state, setState] = useState(initialState);
   return [
     state,
@@ -15,7 +20,7 @@ export function useKeyValue<T extends {}>(initialState: T) {
       },
 
       input(key: keyof T) {
-        return function handler(event: React.ChangeEvent<HTMLInputElement>) {
+        return function handler(event: ChangeEvent<HTMLInputElement>) {
           setState((current) => ({
             ...current,
             [key]: event.target.value
@@ -24,7 +29,7 @@ export function useKeyValue<T extends {}>(initialState: T) {
       },
 
       checkbox(key: keyof T) {
-        return function handler(event: React.ChangeEvent<HTMLInputElement>) {
+        return function handler(event: ChangeEvent<HTMLInputElement>) {
           setState((current) => ({
             ...current,
             [key]: event.target.checked

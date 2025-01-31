@@ -42,7 +42,7 @@ export function Select<T extends { value: string }>({
     <div className="relative">
       <button
         className={clsx(
-          "flex cursor-default items-center gap-2 bg-black/20 px-2 py-1 hover:bg-black/40",
+          "flex cursor-default items-center gap-2 bg-black/20 px-2 py-1 hover:bg-black/40 focus:bg-black/40",
           isOpen
             ? direction === "down"
               ? "rounded-t"

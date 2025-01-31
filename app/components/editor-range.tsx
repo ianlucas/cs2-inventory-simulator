@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import clsx from "clsx";
 import { ChangeEvent } from "react";
 
 const defaultFormatter = (value: number) => value.toFixed(2);
@@ -10,6 +11,7 @@ const defaultFormatter = (value: number) => value.toFixed(2);
 export function EditorRange({
   format,
   onChange,
+  valueStyles,
   ...props
 }: {
   format?: (value: number) => string;
@@ -18,6 +20,7 @@ export function EditorRange({
   onChange: (value: number) => void;
   step: number;
   value: number;
+  valueStyles?: string;
 }) {
   format ??= defaultFormatter;
 
@@ -27,13 +30,15 @@ export function EditorRange({
 
   return (
     <div className="flex items-center gap-4">
+      <span className={clsx("text-sm", valueStyles)}>
+        {format(props.value)}
+      </span>
       <input
         {...props}
-        className="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-black/50 accent-white"
+        className="h-2 flex-1 appearance-none rounded-lg bg-black/50 accent-white active:accent-blue-500/50"
         onChange={handleChange}
         type="range"
       />
-      <span className="text-sm">{format(props.value)}</span>
     </div>
   );
 }

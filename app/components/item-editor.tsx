@@ -26,7 +26,7 @@ import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
-import { useKeyValue } from "./hooks/use-data";
+import { useKeyValues } from "./hooks/use-key-values";
 import { PatchPicker } from "./patch-picker";
 import { StickerPicker } from "./sticker-picker";
 
@@ -87,7 +87,7 @@ export function ItemEditor({
 
   const localize = useLocalize();
 
-  const [data, onData] = useKeyValue({
+  const [data, onData] = useKeyValues({
     nameTag: defaults?.nameTag ?? "",
     patches: defaults?.patches ?? {},
     quantity: defaultQuantity ?? 1,
@@ -211,8 +211,8 @@ export function ItemEditor({
             label={localize("EditorStatTrak")}
           >
             <EditorToggle
-              checkedLabel="Sim"
-              uncheckedLabel="Não"
+              checkedLabel={localize("GenericYes")}
+              uncheckedLabel={localize("GenericNo")}
               disabled={isDisabled}
               checked={data.statTrak}
               onChange={onData.checkbox("statTrak")}
