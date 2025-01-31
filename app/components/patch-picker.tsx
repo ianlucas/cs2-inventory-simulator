@@ -5,10 +5,8 @@
 
 import {
   faMagnifyingGlass,
-  faTrashCan,
-  faXmark
+  faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
   CS2Economy,
@@ -21,25 +19,24 @@ import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
 import { sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
-import { useLocalize, useRules } from "./app-context";
-import { EditorInput } from "./editor-input";
+import { useLocalize } from "./app-context";
+import { IconButton } from "./icon-button";
+import { IconInput } from "./icon-input";
 import { ItemBrowser } from "./item-browser";
 import { ItemImage } from "./item-image";
-import { Modal } from "./modal";
+import { Modal, ModalHeader } from "./modal";
 
 export function PatchPicker({
   disabled,
-  isCrafting,
   onChange,
+  patchFilter,
   value
 }: {
   disabled?: boolean;
-  isCrafting: boolean;
   onChange: (value: NonNullable<CS2BaseInventoryItem["patches"]>) => void;
+  patchFilter?: (item: CS2EconomyItem) => boolean;
   value: NonNullable<CS2BaseInventoryItem["patches"]>;
 }) {
-  const { craftHideId, craftHideCategory, editHideId, editHideCategory } =
-    useRules();
   const localize = useLocalize();
 
   const [search, setSearch] = useInput("");
@@ -77,24 +74,7 @@ export function PatchPicker({
   const filtered = useMemo(() => {
     const words = search.split(" ").map((word) => word.toLowerCase());
     return patches.filter((item) => {
-      if (isCrafting && craftHideId.includes(item.id)) {
-        return false;
-      }
-      if (
-        isCrafting &&
-        item.category !== undefined &&
-        craftHideCategory.includes(item.category)
-      ) {
-        return false;
-      }
-      if (!isCrafting && editHideId.includes(item.id)) {
-        return false;
-      }
-      if (
-        !isCrafting &&
-        item.category !== undefined &&
-        editHideCategory.includes(item.category)
-      ) {
+      if (patchFilter !== undefined && !patchFilter(item)) {
         return false;
       }
       const name = item.name.toLowerCase();
@@ -109,7 +89,7 @@ export function PatchPicker({
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="grid grid-cols-5 gap-2">
         {range(CS2_MAX_PATCHES).map((index) => {
           const patchId = value[index];
           const item =
@@ -118,51 +98,41 @@ export function PatchPicker({
             <button
               disabled={disabled}
               key={index}
-              className="relative overflow-hidden rounded bg-black/50"
+              className="relative aspect-[256/192] cursor-default overflow-hidden bg-neutral-950/40"
               onClick={handleClickSlot(index)}
             >
               {item !== undefined ? (
-                <ItemImage className="h-[51px] w-[68px]" item={item} />
+                <ItemImage className="aspect-[256/192]" item={item} />
               ) : (
-                <div className="flex h-[51px] w-[68px] items-center justify-center font-display font-bold text-neutral-700">
+                <div className="flex aspect-[256/192] items-center justify-center text-neutral-700">
                   {localize("StickerPickerNA")}
                 </div>
               )}
               {!disabled && (
-                <div className="absolute left-0 top-0 h-full w-full rounded border-[2.5px] border-transparent transition-all hover:border-white" />
+                <div className="absolute left-0 top-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
               )}
             </button>
           );
         })}
       </div>
       <Modal className="w-[540px] pb-1" hidden={activeIndex === undefined} blur>
-        <div className="flex select-none justify-between px-4 py-2 font-bold">
-          <label className="text-sm text-neutral-400">
-            {localize("PatchPickerHeader")}
-          </label>
-          <button
-            onClick={handleCloseModal}
-            className="cursor-default text-white/50 hover:text-white"
-          >
-            <FontAwesomeIcon icon={faXmark} className="h-4" />
-          </button>
-        </div>
-        <div className="mb-4 flex flex-col gap-2 px-2 lg:flex-row lg:items-center lg:pl-4 lg:pr-2">
-          <div className="flex flex-1 items-center gap-2">
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="h-4" />
-            <EditorInput
-              value={search}
-              onChange={setSearch}
-              placeholder={localize("PatchPickerSearchPlaceholder")}
-            />
-          </div>
-          <button
-            className="flex h-[24px] cursor-default items-center gap-1 rounded px-2 text-red-500 transition hover:bg-black/30 active:bg-black/60"
+        <ModalHeader
+          title={localize("PatchPickerHeader")}
+          onClose={handleCloseModal}
+        />
+        <div className="my-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
+          <IconInput
+            icon={faMagnifyingGlass}
+            labelStyles="flex-1"
+            onChange={setSearch}
+            placeholder={localize("PatchPickerSearchPlaceholder")}
+            value={search}
+          />
+          <IconButton
+            icon={faTrashCan}
             onClick={handleRemovePatch}
             title={localize("StickerPickerRemove")}
-          >
-            <FontAwesomeIcon icon={faTrashCan} className="h-4" />
-          </button>
+          />
         </div>
         <ItemBrowser items={filtered} onClick={handleAddPatch} />
       </Modal>

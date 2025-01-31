@@ -8,49 +8,39 @@ import {
   faTag,
   faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
-  CS2_MAX_STICKER_WEAR,
   CS2_MIN_STICKER_WEAR,
-  CS2_STICKER_WEAR_FACTOR,
   assert,
   ensure
 } from "@ianlucas/cs2-lib";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
-import {
-  sortByName,
-  stickerWearStringMaxLen,
-  stickerWearToString
-} from "~/utils/economy";
+import { sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
-import { useLocalize, useRules } from "./app-context";
-import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
+import { useLocalize } from "./app-context";
+import { AppliedStickerEditor } from "./applied-sticker-editor";
+import { IconButton } from "./icon-button";
 import { IconInput } from "./icon-input";
 import { IconSelect } from "./icon-select";
 import { ItemBrowser } from "./item-browser";
-import { ItemEditorLabel } from "./item-editor-label";
-import { ItemEditorName } from "./item-editor-name";
 import { ItemImage } from "./item-image";
 import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
 
 export function StickerPicker({
   disabled,
-  isCrafting,
   onChange,
+  stickerFilter,
   value
 }: {
   disabled?: boolean;
-  isCrafting: boolean;
   onChange: (value: NonNullable<CS2BaseInventoryItem["stickers"]>) => void;
+  stickerFilter?: (item: CS2EconomyItem) => boolean;
   value: NonNullable<CS2BaseInventoryItem["stickers"]>;
 }) {
-  const { craftHideId, craftHideCategory, editHideId, editHideCategory } =
-    useRules();
   const localize = useLocalize();
 
   const [category, setCategory] = useState("");
@@ -58,7 +48,9 @@ export function StickerPicker({
   const [activeIndex, setActiveIndex] = useState<number>();
   const stickers = useMemo(() => CS2Economy.getStickers().sort(sortByName), []);
   const categories = useMemo(() => CS2Economy.getStickerCategories(), []);
-  const [wear, setWear] = useState(0);
+  const [appliedStickerData, setAppliedStickerData] = useState({
+    wear: 0
+  });
   const [selected, setSelected] = useState<CS2EconomyItem>();
 
   function handleClickSlot(index: number) {
@@ -81,7 +73,7 @@ export function StickerPicker({
       ...value,
       [ensure(activeIndex)]: {
         id: selected.id,
-        wear
+        wear: appliedStickerData.wear
       }
     });
     setSelected(undefined);
@@ -102,24 +94,7 @@ export function StickerPicker({
   const filtered = useMemo(() => {
     const words = search.split(" ").map((word) => word.toLowerCase());
     return stickers.filter((item) => {
-      if (isCrafting && craftHideId.includes(item.id)) {
-        return false;
-      }
-      if (
-        isCrafting &&
-        item.category !== undefined &&
-        craftHideCategory.includes(item.category)
-      ) {
-        return false;
-      }
-      if (!isCrafting && editHideId.includes(item.id)) {
-        return false;
-      }
-      if (
-        !isCrafting &&
-        item.category !== undefined &&
-        editHideCategory.includes(item.category)
-      ) {
+      if (stickerFilter !== undefined && !stickerFilter(item)) {
         return false;
       }
       if (category !== "" && item.category !== category) {
@@ -137,7 +112,7 @@ export function StickerPicker({
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="grid grid-cols-4 gap-2">
         {range(4).map((index) => {
           const sticker = value[index];
           const stickerWear = sticker?.wear ?? CS2_MIN_STICKER_WEAR;
@@ -147,23 +122,23 @@ export function StickerPicker({
             <button
               disabled={disabled}
               key={index}
-              className="relative cursor-default overflow-hidden rounded bg-black/50"
+              className="relative aspect-[256/192] cursor-default overflow-hidden bg-neutral-950/40"
               onClick={handleClickSlot(index)}
             >
               {item !== undefined ? (
-                <ItemImage className="h-[64px] w-[85.33px]" item={item} />
+                <ItemImage className="aspect-[256/192]" item={item} />
               ) : (
-                <div className="flex h-[64px] w-[85.33px] items-center justify-center font-display font-bold text-neutral-700">
+                <div className="flex aspect-[256/192] items-center justify-center text-neutral-700">
                   {localize("StickerPickerNA")}
                 </div>
               )}
               {sticker !== undefined && (
-                <div className="text-outline-1 absolute bottom-0 right-1 font-display font-bold drop-shadow-lg">
+                <div className="text-outline-1 absolute bottom-0 right-1 text-sm font-bold drop-shadow-lg">
                   {(stickerWear * 100).toFixed(0)}%
                 </div>
               )}
               {!disabled && (
-                <div className="absolute left-0 top-0 h-full w-full rounded border-[3px] border-transparent transition-all hover:border-white" />
+                <div className="absolute left-0 top-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
               )}
             </button>
           );
@@ -190,48 +165,26 @@ export function StickerPicker({
             placeholder={localize("StickerPickerFilterPlaceholder")}
             value={category}
           />
-          <button
-            className="flex h-8 cursor-default items-center gap-1 bg-black/10 px-2 text-neutral-300 transition hover:bg-black/30 hover:text-red-500 active:bg-black/60"
+          <IconButton
+            icon={faTrashCan}
             onClick={handleRemoveSticker}
             title={localize("StickerPickerRemove")}
-          >
-            <FontAwesomeIcon icon={faTrashCan} className="h-4" />
-          </button>
+          />
         </div>
         <ItemBrowser items={filtered} onClick={handleSelectSticker} />
       </Modal>
       {selected !== undefined && (
-        <Modal className="w-[360px]">
+        <Modal className="w-[420px]">
           <ModalHeader
             title={"Confirm selection"}
             onClose={handleCloseSelectModal}
           />
-          <ItemImage className="m-auto h-[192px] w-[256px]" item={selected} />
-          <div className="mb-4 text-center">
-            <ItemEditorName item={selected} />
-          </div>
-          <ItemEditorLabel
-            className="flex select-none items-center gap-4"
-            label={localize("EditorStickerWear")}
-            labelStyles="w-[136px]"
-          >
-            <EditorStepRangeWithInput
-              inputStyles="w-[26px]"
-              max={CS2_MAX_STICKER_WEAR}
-              maxLength={stickerWearStringMaxLen}
-              min={CS2_MIN_STICKER_WEAR}
-              onChange={setWear}
-              randomizable
-              step={CS2_STICKER_WEAR_FACTOR}
-              stepRangeStyles="flex-1"
-              transform={stickerWearToString}
-              type="float"
-              validate={(value) =>
-                value >= CS2_MIN_STICKER_WEAR && value <= CS2_MAX_STICKER_WEAR
-              }
-              value={wear}
-            />
-          </ItemEditorLabel>
+          <AppliedStickerEditor
+            className="px-4"
+            item={selected}
+            onChange={setAppliedStickerData}
+            value={appliedStickerData}
+          />
           <div className="my-6 flex justify-center gap-2">
             <ModalButton
               variant="secondary"

@@ -24,11 +24,14 @@ export function IconInput({
   return (
     <label
       className={clsx(
-        "flex items-center gap-2 bg-neutral-950/40 px-2 py-1",
+        "group flex items-center gap-2 bg-neutral-950/40 px-2 py-1 ring-blue-500/50 has-[:focus]:ring-2",
         labelStyles
       )}
     >
-      <FontAwesomeIcon icon={icon} className="h-4 text-neutral-500" />
+      <FontAwesomeIcon
+        icon={icon}
+        className="h-4 text-neutral-500 group-focus-within:text-blue-500/50"
+      />
       <input
         value={value}
         onChange={onChange}

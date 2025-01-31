@@ -29,7 +29,7 @@ export function EditorStepRange({
       step={step}
       onChange={(event) => onChange(Number(event.target.value))}
       className={clsx(
-        "h-2 w-full cursor-pointer appearance-none rounded-lg bg-black/50 accent-white",
+        "h-2 w-full appearance-none rounded-lg bg-black/50 accent-white active:accent-blue-500/50",
         className
       )}
     />

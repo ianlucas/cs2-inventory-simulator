@@ -3,21 +3,20 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS2BaseInventoryItem,
-  CS2Economy,
-  CS2EconomyItem
-} from "@ianlucas/cs2-lib";
+import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import lzstring from "lz-string";
 import { useState } from "react";
 import { data, useLoaderData, useNavigate } from "react-router";
 import { z } from "zod";
-import { useInventory, useLocalize, useRules } from "~/components/app-context";
+import { useInventory, useLocalize } from "~/components/app-context";
+import { CraftEdit } from "~/components/craft-edit";
+import { CraftNew } from "~/components/craft-new";
+import { CraftView } from "~/components/craft-view";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
-import { ItemEditor, ItemEditorAttributes } from "~/components/item-editor";
+import { ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
 import { Modal, ModalHeader } from "~/components/modal";
 import { SyncAction } from "~/data/sync";
@@ -25,6 +24,7 @@ import { middleware } from "~/http.server";
 import { getUserBasicData } from "~/models/user.server";
 import { getMetaTitle } from "~/root-meta";
 import { isItemCountable } from "~/utils/economy";
+import { createFakeInventoryItemFromBase } from "~/utils/inventory";
 import { deleteEmptyProps } from "~/utils/misc";
 import { range } from "~/utils/number";
 import { baseInventoryItemProps } from "~/utils/shapes";
@@ -79,7 +79,6 @@ export default function Craft() {
   const { uid, shared } = useLoaderData<typeof loader>();
   const isEditing = uid !== undefined;
   const isSharing = shared?.item !== undefined;
-  const { craftMaxQuantity } = useRules();
   const [inventory, setInventory] = useInventory();
   const localize = useLocalize();
   const sync = useSync();
@@ -88,7 +87,7 @@ export default function Craft() {
     isEditing
       ? inventory.get(uid)
       : isSharing
-        ? CS2Economy.get(shared.item.id)
+        ? createFakeInventoryItemFromBase(shared.item)
         : undefined
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -151,7 +150,7 @@ export default function Craft() {
 
   return (
     <>
-      {!isSharing && (
+      {!isEditing && !isSharing && (
         <Modal
           className={clsx(
             isDesktop ? "min-w-[640px] max-w-[720px]" : "w-[540px]"
@@ -170,7 +169,7 @@ export default function Craft() {
             onClose={handleReset}
           />
           {shared?.user !== undefined && (
-            <div className="flex items-center gap-2 px-4 text-sm">
+            <div className="flex items-center gap-2 px-4 py-2 text-sm">
               <span className="text-neutral-500">{localize("CraftBy")}</span>
               <img
                 className="h-6 w-6 rounded-full"
@@ -183,21 +182,25 @@ export default function Craft() {
               </span>
             </div>
           )}
-          <ItemEditor
-            attributes={
-              isEditing
-                ? inventory.get(uid).asBase()
-                : isSharing
-                  ? shared.item
-                  : undefined
-            }
-            disabled={isSharing}
-            type={isEditing ? "edit" : isSharing ? "share" : "craft"}
-            item={selectedItem}
-            maxQuantity={craftMaxQuantity !== 0 ? craftMaxQuantity : undefined}
-            onDismiss={handleReset}
-            onSubmit={handleSubmit}
-          />
+          {isEditing ? (
+            <CraftEdit
+              item={selectedItem}
+              onSubmit={handleSubmit}
+              onCancel={handleReset}
+            />
+          ) : isSharing ? (
+            <CraftView
+              item={selectedItem}
+              onCancel={handleReset}
+              onSubmit={handleSubmit}
+            />
+          ) : (
+            <CraftNew
+              item={selectedItem}
+              onSubmit={handleSubmit}
+              onCancel={handleReset}
+            />
+          )}
         </Modal>
       )}
     </>

@@ -42,7 +42,7 @@ export function Modal({
             className={clsx(
               hidden ? "hidden" : fixed ? "fixed" : "absolute",
               animate && "opacity-0",
-              "left-0 top-0 z-50 flex min-h-full w-full select-none items-center justify-center bg-gradient-to-b from-black/50 to-transparent transition-opacity",
+              "left-0 top-0 z-50 flex min-h-full w-full select-none items-center justify-center bg-gradient-to-b from-black/15 to-transparent transition-opacity",
               blur && "bg-black/50 lg:bg-transparent lg:backdrop-blur-[2px]"
             )}
             ref={ref}

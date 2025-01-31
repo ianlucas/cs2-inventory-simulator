@@ -6,6 +6,7 @@
 import { faRandom } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { randomFloat, randomInt } from "@ianlucas/cs2-lib";
+import clsx from "clsx";
 import { useState } from "react";
 import { useLocalize } from "./app-context";
 import { EditorInput } from "./editor-input";
@@ -13,6 +14,7 @@ import { EditorStepRange } from "./editor-step-range";
 
 export function EditorStepRangeWithInput({
   disabled,
+  disabledInputStyles,
   inputStyles,
   max,
   maxLength,
@@ -27,6 +29,7 @@ export function EditorStepRangeWithInput({
   value
 }: {
   disabled?: boolean;
+  disabledInputStyles?: string;
   inputStyles: string;
   max: number;
   maxLength: number;
@@ -73,10 +76,11 @@ export function EditorStepRangeWithInput({
   return (
     <>
       <EditorInput
+        className={clsx(
+          disabled ? (disabledInputStyles ?? inputStyles) : inputStyles
+        )}
         disabled={disabled}
         inflexible
-        unstyled
-        className={inputStyles}
         maxLength={maxLength}
         onChange={handleTextChange}
         onBlur={handleTextBlur}
@@ -97,7 +101,7 @@ export function EditorStepRangeWithInput({
         <button
           onClick={handleRandomClick}
           title={localize("EditorRandom")}
-          className="flex cursor-default items-center rounded border border-neutral-600/30 p-1 text-neutral-400 transition-all hover:border-neutral-200 hover:text-neutral-200"
+          className="flex cursor-default items-center rounded border border-neutral-600/30 p-1 text-neutral-400 hover:border-blue-500/50 hover:text-blue-500/50"
         >
           <FontAwesomeIcon className="h-3" icon={faRandom} />
         </button>
