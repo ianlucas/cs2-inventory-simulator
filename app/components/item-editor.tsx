@@ -87,7 +87,7 @@ export function ItemEditor({
 
   const localize = useLocalize();
 
-  const [data, onData] = useKeyValues({
+  const attributes = useKeyValues({
     nameTag: defaults?.nameTag ?? "",
     patches: defaults?.patches ?? {},
     quantity: defaultQuantity ?? 1,
@@ -100,39 +100,47 @@ export function ItemEditor({
   useEffect(() => {
     onChange?.({
       nameTag: hasNameTag
-        ? data.nameTag.length > 0
-          ? data.nameTag
+        ? attributes.value.nameTag.length > 0
+          ? attributes.value.nameTag
           : undefined
         : undefined,
-      patches: hasPatches && hasKeys(data.patches) ? data.patches : undefined,
-      quantity: data.quantity,
+      patches:
+        hasPatches && hasKeys(attributes.value.patches)
+          ? attributes.value.patches
+          : undefined,
+      quantity: attributes.value.quantity,
       seed: hasSeed
-        ? data.seed !== CS2_MIN_SEED
-          ? data.seed
+        ? attributes.value.seed !== CS2_MIN_SEED
+          ? attributes.value.seed
           : undefined
         : undefined,
-      statTrak: hasStatTrak && data.statTrak ? data.statTrak : undefined,
+      statTrak:
+        hasStatTrak && attributes.value.statTrak
+          ? attributes.value.statTrak
+          : undefined,
       stickers:
-        hasStickers && hasKeys(data.stickers) ? data.stickers : undefined,
+        hasStickers && hasKeys(attributes.value.stickers)
+          ? attributes.value.stickers
+          : undefined,
       wear: hasWear
-        ? data.wear !== CS2_MIN_WEAR
-          ? data.wear
+        ? attributes.value.wear !== CS2_MIN_WEAR
+          ? attributes.value.wear
           : undefined
         : undefined
     });
-  }, [data]);
+  }, [attributes]);
 
   return (
     <div className={clsx("m-auto select-none", className)}>
-      <EditorItemDisplay item={item} wear={data.wear} />
+      <EditorItemDisplay item={item} wear={attributes.value.wear} />
       <div className="space-y-1.5">
         {hasStickers && (
           <EditorLabel block label={localize("EditorStickers")}>
             <StickerPicker
               stickerFilter={stickerFilter}
               disabled={isDisabled}
-              value={data.stickers}
-              onChange={onData.update("stickers")}
+              value={attributes.value.stickers}
+              onChange={attributes.update("stickers")}
             />
           </EditorLabel>
         )}
@@ -141,8 +149,8 @@ export function ItemEditor({
             <PatchPicker
               patchFilter={patchFilter}
               disabled={isDisabled}
-              value={data.patches}
-              onChange={onData.update("patches")}
+              value={attributes.value.patches}
+              onChange={attributes.update("patches")}
             />
           </EditorLabel>
         )}
@@ -155,14 +163,14 @@ export function ItemEditor({
               className={clsx("w-full", isDisabled && "text-right")}
               disabled={isDisabled}
               maxLength={20}
-              onChange={onData.input("nameTag")}
+              onChange={attributes.input("nameTag")}
               placeholder={
                 isDisabled ? "N/A" : localize("EditorNametagPlaceholder")
               }
               validate={(nameTag) =>
                 CS2Economy.safeValidateNametag(nameTag ?? "")
               }
-              value={data.nameTag}
+              value={attributes.value.nameTag}
             />
           </EditorLabel>
         )}
@@ -175,13 +183,13 @@ export function ItemEditor({
               max={item.getMaximumSeed()}
               maxLength={String(item.getMaximumSeed()).length}
               min={minimumSeed}
-              onChange={onData.update("seed")}
+              onChange={attributes.update("seed")}
               randomizable
               step={CS2_MIN_SEED}
               stepRangeStyles="flex-1"
               type="int"
               validate={(value) => CS2Economy.safeValidateSeed(value, item)}
-              value={data.seed}
+              value={attributes.value.seed}
             />
           </EditorLabel>
         )}
@@ -194,14 +202,14 @@ export function ItemEditor({
               max={item.getMaximumWear()}
               maxLength={wearStringMaxLen}
               min={minimumWear}
-              onChange={onData.update("wear")}
+              onChange={attributes.update("wear")}
               randomizable
               step={CS2_WEAR_FACTOR}
               stepRangeStyles="flex-1"
               transform={wearToString}
               type="float"
               validate={(value) => CS2Economy.safeValidateWear(value, item)}
-              value={data.wear}
+              value={attributes.value.wear}
             />
           </EditorLabel>
         )}
@@ -214,8 +222,8 @@ export function ItemEditor({
               checkedLabel={localize("GenericYes")}
               uncheckedLabel={localize("GenericNo")}
               disabled={isDisabled}
-              checked={data.statTrak}
-              onChange={onData.checkbox("statTrak")}
+              checked={attributes.value.statTrak}
+              onChange={attributes.checkbox("statTrak")}
             />
           </EditorLabel>
         )}
@@ -229,12 +237,12 @@ export function ItemEditor({
               max={maxQuantity}
               maxLength={String(maxQuantity).length}
               min={1}
-              onChange={onData.update("quantity")}
+              onChange={attributes.update("quantity")}
               step={1}
               stepRangeStyles="flex-1"
               type="int"
               validate={(value) => value >= 1 && value <= maxQuantity}
-              value={data.quantity}
+              value={attributes.value.quantity}
             />
           </EditorLabel>
         )}
