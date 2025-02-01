@@ -15,6 +15,7 @@ import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
+import { Overlay } from "./overlay";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -59,39 +60,37 @@ export function RemoveItemPatch({
       children={() =>
         createPortal(
           <>
-            <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
-              <div>
-                <UseItemHeader
-                  title={localize("ScrapeStickerUse")}
-                  warning={localize("RemovePatchWarn")}
-                  warningItem={nameItemString(item)}
-                />
-                <ItemImage
-                  className="m-auto aspect-[1.33333] max-w-[512px]"
-                  item={item}
-                />
-                <div className="flex justify-center">
-                  {item.somePatches().map(([slot, id]) => (
-                    <button key={slot} className="group">
-                      <ItemImage
-                        className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
-                        onClick={() => setConfirmRemoveSlot(slot)}
-                        item={CS2Economy.getById(id)}
-                      />
-                    </button>
-                  ))}
-                </div>
-                <UseItemFooter
-                  right={
-                    <ModalButton
-                      children={localize("ScrapeStickerClose")}
-                      onClick={onClose}
-                      variant="secondary"
+            <Overlay>
+              <UseItemHeader
+                title={localize("ScrapeStickerUse")}
+                warning={localize("RemovePatchWarn")}
+                warningItem={nameItemString(item)}
+              />
+              <ItemImage
+                className="m-auto aspect-[1.33333] max-w-[512px]"
+                item={item}
+              />
+              <div className="flex justify-center">
+                {item.somePatches().map(([slot, id]) => (
+                  <button key={slot} className="group">
+                    <ItemImage
+                      className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
+                      onClick={() => setConfirmRemoveSlot(slot)}
+                      item={CS2Economy.getById(id)}
                     />
-                  }
-                />
+                  </button>
+                ))}
               </div>
-            </div>
+              <UseItemFooter
+                right={
+                  <ModalButton
+                    children={localize("ScrapeStickerClose")}
+                    onClick={onClose}
+                    variant="secondary"
+                  />
+                }
+              />
+            </Overlay>
             {confirmRemoveSlot !== undefined && (
               <Modal className="w-[480px]" fixed>
                 <ModalHeader title={localize("RemovePatchRemove")} />

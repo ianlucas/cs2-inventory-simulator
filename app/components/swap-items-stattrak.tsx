@@ -12,6 +12,7 @@ import { SyncAction } from "~/data/sync";
 import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
+import { Overlay } from "./overlay";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -55,51 +56,49 @@ export function SwapItemsStatTrak({
     <ClientOnly
       children={() =>
         createPortal(
-          <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div>
-              <UseItemHeader
-                actionDesc={localize("ItemSwapStatTrakDesc")}
-                title={localize("ItemSwapStatTrakUse")}
-                warning={localize("ItemSwapStatTrakWarn")}
-              />
-              <div className="mt-16 flex items-center justify-center gap-10">
-                {items.map(({ item, value }, index) => (
-                  <div className="flex flex-col justify-center" key={index}>
-                    <ItemImage
-                      className="aspect-[1.33333] max-w-[256px]"
-                      item={item}
+          <Overlay>
+            <UseItemHeader
+              actionDesc={localize("ItemSwapStatTrakDesc")}
+              title={localize("ItemSwapStatTrakUse")}
+              warning={localize("ItemSwapStatTrakWarn")}
+            />
+            <div className="mt-16 flex items-center justify-center gap-10">
+              {items.map(({ item, value }, index) => (
+                <div className="flex flex-col justify-center" key={index}>
+                  <ItemImage
+                    className="aspect-[1.33333] max-w-[256px]"
+                    item={item}
+                  />
+                  <div className="relative m-auto">
+                    <img
+                      className="h-[128px]"
+                      src="/images/stattrak-module.png"
+                      draggable={false}
                     />
-                    <div className="relative m-auto">
-                      <img
-                        className="h-[128px]"
-                        src="/images/stattrak-module.png"
-                        draggable={false}
-                      />
-                      <span className="absolute top-[22%] w-full text-center font-display text-3xl text-orange-500">
-                        {String(value).padStart(6, "0")}
-                      </span>
-                    </div>
+                    <span className="absolute top-[22%] w-full text-center font-display text-3xl text-orange-500">
+                      {String(value).padStart(6, "0")}
+                    </span>
                   </div>
-                ))}
-              </div>
-              <UseItemFooter
-                right={
-                  <>
-                    <ModalButton
-                      variant="primary"
-                      onClick={handleAccept}
-                      children={localize("ItemSwapStatTrakAccept")}
-                    />
-                    <ModalButton
-                      variant="secondary"
-                      onClick={onClose}
-                      children={localize("ItemSwapStatTrakClose")}
-                    />
-                  </>
-                }
-              />
+                </div>
+              ))}
             </div>
-          </div>,
+            <UseItemFooter
+              right={
+                <>
+                  <ModalButton
+                    variant="primary"
+                    onClick={handleAccept}
+                    children={localize("ItemSwapStatTrakAccept")}
+                  />
+                  <ModalButton
+                    variant="secondary"
+                    onClick={onClose}
+                    children={localize("ItemSwapStatTrakClose")}
+                  />
+                </>
+              }
+            />
+          </Overlay>,
           document.body
         )
       }

@@ -18,6 +18,7 @@ import { SyncAction } from "~/data/sync";
 import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
+import { Overlay } from "./overlay";
 import { ToolButton } from "./tool-button";
 import { ToolInput } from "./tool-input";
 import { UseItemFooter } from "./use-item-footer";
@@ -68,67 +69,65 @@ export function RenameStorageUnit({
     <ClientOnly
       children={() =>
         createPortal(
-          <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div>
-              <UseItemHeader
-                actionDesc={localize("RenameStorageUnitEnterName")}
-                actionItem={nameItemString(item)}
-                title={localize("RenameStorageUnitUse")}
-                warning={
-                  isStartUsingStorageUnit
-                    ? localize("RenameStorageUnitFirstNameWarn")
-                    : localize("RenameStorageUnitNewNameWarn")
+          <Overlay>
+            <UseItemHeader
+              actionDesc={localize("RenameStorageUnitEnterName")}
+              actionItem={nameItemString(item)}
+              title={localize("RenameStorageUnitUse")}
+              warning={
+                isStartUsingStorageUnit
+                  ? localize("RenameStorageUnitFirstNameWarn")
+                  : localize("RenameStorageUnitNewNameWarn")
+              }
+            />
+            <ItemImage
+              className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
+              item={item}
+            />
+            <div className="flex items-center justify-center gap-2 lg:m-auto lg:mb-4">
+              <ToolInput
+                autoFocus
+                className="text-2xl lg:max-w-[428px]"
+                maxLength={20}
+                onChange={setNameTag}
+                placeholder={localize("InventoryItemRenamePlaceholder")}
+                validate={(nameTag) =>
+                  CS2Economy.safeValidateNametag(nameTag ?? "")
                 }
+                value={nameTag}
               />
-              <ItemImage
-                className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
-                item={item}
-              />
-              <div className="flex items-center justify-center gap-2 lg:m-auto lg:mb-4">
-                <ToolInput
-                  autoFocus
-                  className="text-2xl lg:max-w-[428px]"
-                  maxLength={20}
-                  onChange={setNameTag}
-                  placeholder={localize("InventoryItemRenamePlaceholder")}
-                  validate={(nameTag) =>
-                    CS2Economy.safeValidateNametag(nameTag ?? "")
-                  }
-                  value={nameTag}
-                />
-                <ToolButton
-                  onClick={handleToggleConfirm}
-                  icon={isConfirmed ? faCircleXmark : faCheck}
-                  isBorderless={isConfirmed}
-                  disabled={isConfirmDisabled}
-                  tooltip={
-                    isConfirmDisabled || isInvalid
-                      ? localize("InventoryItemRenameInvalidTooltip")
-                      : isConfirmed
-                        ? localize("InventoryItemRenameClearTooltip")
-                        : undefined
-                  }
-                />
-              </div>
-              <UseItemFooter
-                right={
-                  <>
-                    <ModalButton
-                      disabled={nameTag === "" || isInvalid || !isConfirmed}
-                      variant="primary"
-                      onClick={handleRename}
-                      children={localize("RenameStorageUnitRename")}
-                    />
-                    <ModalButton
-                      variant="secondary"
-                      onClick={onClose}
-                      children={localize("RenameStorageUnitClose")}
-                    />
-                  </>
+              <ToolButton
+                onClick={handleToggleConfirm}
+                icon={isConfirmed ? faCircleXmark : faCheck}
+                isBorderless={isConfirmed}
+                disabled={isConfirmDisabled}
+                tooltip={
+                  isConfirmDisabled || isInvalid
+                    ? localize("InventoryItemRenameInvalidTooltip")
+                    : isConfirmed
+                      ? localize("InventoryItemRenameClearTooltip")
+                      : undefined
                 }
               />
             </div>
-          </div>,
+            <UseItemFooter
+              right={
+                <>
+                  <ModalButton
+                    disabled={nameTag === "" || isInvalid || !isConfirmed}
+                    variant="primary"
+                    onClick={handleRename}
+                    children={localize("RenameStorageUnitRename")}
+                  />
+                  <ModalButton
+                    variant="secondary"
+                    onClick={onClose}
+                    children={localize("RenameStorageUnitClose")}
+                  />
+                </>
+              }
+            />
+          </Overlay>,
           document.body
         )
       }

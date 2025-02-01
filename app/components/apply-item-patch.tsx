@@ -17,6 +17,7 @@ import { playSound } from "~/utils/sound";
 import { useInventory, useLocalize } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
+import { Overlay } from "./overlay";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -56,65 +57,63 @@ export function ApplyItemPatch({
     <ClientOnly
       children={() =>
         createPortal(
-          <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div>
-              <UseItemHeader
-                actionDesc={localize("ApplyStickerUseOn")}
-                actionItem={nameItemString(targetItem)}
-                title={localize("ApplyPatchUse")}
-                warning={localize("ApplyPatchWarn")}
-              />
-              <ItemImage
-                className="m-auto aspect-[1.33333] max-w-[512px]"
-                item={targetItem}
-              />
-              <div className="flex items-center justify-center">
-                {targetItem.allPatches().map(([xslot, patchId]) =>
-                  patchId !== undefined || xslot === slot ? (
-                    <ItemImage
-                      key={xslot}
-                      className="h-[126px] w-[168px]"
-                      item={
-                        patchId !== undefined
-                          ? CS2Economy.getById(patchId)
-                          : stickerItem
-                      }
-                    />
-                  ) : (
-                    <button
-                      key={xslot}
-                      className="group flex h-[126px] w-[168px] items-center justify-center"
-                      onClick={() => {
-                        setSlot(xslot);
-                        playSound("buttonclick");
-                      }}
-                    >
-                      <div className="rounded-md border-2 border-white/20 p-4 px-6 transition group-hover:border-white/80">
-                        <FontAwesomeIcon className="h-4" icon={faPlus} />
-                      </div>
-                    </button>
-                  )
-                )}
-              </div>
-              <UseItemFooter
-                right={
-                  <>
-                    <ModalButton
-                      children={localize("ApplyPatchUse")}
-                      disabled={slot === undefined}
-                      onClick={handleApplyPatch}
-                      variant="primary"
-                    />
-                    <ModalButton
-                      children={localize("ApplyStickerCancel")}
-                      onClick={onClose}
-                      variant="secondary"
-                    />
-                  </>
-                }
-              />
+          <Overlay>
+            <UseItemHeader
+              actionDesc={localize("ApplyStickerUseOn")}
+              actionItem={nameItemString(targetItem)}
+              title={localize("ApplyPatchUse")}
+              warning={localize("ApplyPatchWarn")}
+            />
+            <ItemImage
+              className="m-auto aspect-[1.33333] max-w-[512px]"
+              item={targetItem}
+            />
+            <div className="flex items-center justify-center">
+              {targetItem.allPatches().map(([xslot, patchId]) =>
+                patchId !== undefined || xslot === slot ? (
+                  <ItemImage
+                    key={xslot}
+                    className="h-[126px] w-[168px]"
+                    item={
+                      patchId !== undefined
+                        ? CS2Economy.getById(patchId)
+                        : stickerItem
+                    }
+                  />
+                ) : (
+                  <button
+                    key={xslot}
+                    className="group flex h-[126px] w-[168px] items-center justify-center"
+                    onClick={() => {
+                      setSlot(xslot);
+                      playSound("buttonclick");
+                    }}
+                  >
+                    <div className="rounded-md border-2 border-white/20 p-4 px-6 transition group-hover:border-white/80">
+                      <FontAwesomeIcon className="h-4" icon={faPlus} />
+                    </div>
+                  </button>
+                )
+              )}
             </div>
-          </div>,
+            <UseItemFooter
+              right={
+                <>
+                  <ModalButton
+                    children={localize("ApplyPatchUse")}
+                    disabled={slot === undefined}
+                    onClick={handleApplyPatch}
+                    variant="primary"
+                  />
+                  <ModalButton
+                    children={localize("ApplyStickerCancel")}
+                    onClick={onClose}
+                    variant="secondary"
+                  />
+                </>
+              }
+            />
+          </Overlay>,
           document.body
         )
       }

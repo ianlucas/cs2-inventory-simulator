@@ -20,6 +20,7 @@ import { useInventory, useLocalize, usePreferences } from "./app-context";
 import { ItemImage } from "./item-image";
 import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
+import { Overlay } from "./overlay";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -80,48 +81,46 @@ export function ScrapeItemSticker({
       children={() =>
         createPortal(
           <>
-            <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
-              <div>
-                <UseItemHeader
-                  title={localize("ScrapeStickerUse")}
-                  warning={localize("ScrapeStickerWarn")}
-                  warningItem={nameItemString(item)}
-                />
-                <ItemImage
-                  className="m-auto aspect-[1.33333] max-w-[512px]"
-                  item={item}
-                />
-                <div className="flex justify-center">
-                  {item.someStickers().map(([index, { id, wear }]) => (
-                    <button key={index} className="group">
-                      <ItemImage
-                        className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
-                        onClick={() => handleScrapeSticker(index)}
-                        style={{
-                          filter: `grayscale(${wear ?? 0})`,
-                          opacity: `${1 - (wear ?? 0)}`
-                        }}
-                        item={CS2Economy.getById(id)}
-                      />
-                      {statsForNerds && (
-                        <div className="text-sm font-bold text-neutral-300 transition-all group-hover:scale-150">
-                          {((wear ?? 0) * 100).toFixed(0)}%
-                        </div>
-                      )}
-                    </button>
-                  ))}
-                </div>
-                <UseItemFooter
-                  right={
-                    <ModalButton
-                      children={localize("ScrapeStickerClose")}
-                      onClick={onClose}
-                      variant="secondary"
+            <Overlay>
+              <UseItemHeader
+                title={localize("ScrapeStickerUse")}
+                warning={localize("ScrapeStickerWarn")}
+                warningItem={nameItemString(item)}
+              />
+              <ItemImage
+                className="m-auto aspect-[1.33333] max-w-[512px]"
+                item={item}
+              />
+              <div className="flex justify-center">
+                {item.someStickers().map(([index, { id, wear }]) => (
+                  <button key={index} className="group">
+                    <ItemImage
+                      className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
+                      onClick={() => handleScrapeSticker(index)}
+                      style={{
+                        filter: `grayscale(${wear ?? 0})`,
+                        opacity: `${1 - (wear ?? 0)}`
+                      }}
+                      item={CS2Economy.getById(id)}
                     />
-                  }
-                />
+                    {statsForNerds && (
+                      <div className="text-sm font-bold text-neutral-300 transition-all group-hover:scale-150">
+                        {((wear ?? 0) * 100).toFixed(0)}%
+                      </div>
+                    )}
+                  </button>
+                ))}
               </div>
-            </div>
+              <UseItemFooter
+                right={
+                  <ModalButton
+                    children={localize("ScrapeStickerClose")}
+                    onClick={onClose}
+                    variant="secondary"
+                  />
+                }
+              />
+            </Overlay>
             {confirmScrapeIndex !== undefined && (
               <Modal className="w-[480px]" fixed>
                 <ModalHeader title={localize("ScrapeStickerRemove")} />
