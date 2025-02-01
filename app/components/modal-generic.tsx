@@ -5,7 +5,7 @@
 
 import { createPortal } from "react-dom";
 import { createRoot } from "react-dom/client";
-import { Modal } from "./modal";
+import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
 
 export async function alert({
@@ -21,11 +21,9 @@ export async function alert({
   root.render(
     createPortal(
       <Modal className="w-[550px]" fixed>
-        <div className="px-4 py-2 text-sm font-bold">
-          <span className="text-neutral-400">{titleText}</span>
-        </div>
-        <p className="px-4">{bodyText}</p>
-        <div className="flex justify-end px-4 py-2">
+        <ModalHeader title={titleText} />
+        <p className="mt-2 px-4 text-sm">{bodyText}</p>
+        <div className="my-6 flex justify-center px-4">
           <ModalButton
             onClick={() => root.unmount()}
             variant="secondary"
@@ -54,11 +52,9 @@ export async function confirm({
     root.render(
       createPortal(
         <Modal className="w-[550px]" fixed blur>
-          <div className="px-4 py-2 text-sm font-bold">
-            <span className="text-neutral-400">{titleText}</span>
-          </div>
-          <p className="whitespace-pre px-4">{bodyText}</p>
-          <div className="flex justify-end gap-2 px-4 py-2">
+          <ModalHeader title={titleText} />
+          <p className="whitespace-pre px-4 pt-2 text-sm">{bodyText}</p>
+          <div className="my-6 flex justify-center gap-2 px-4">
             <ModalButton
               onClick={() => {
                 root.unmount();

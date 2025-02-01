@@ -7,29 +7,36 @@ import clsx from "clsx";
 import { ComponentProps } from "react";
 import { TextSlider } from "./text-slider";
 
-export function ItemEditorLabel({
+export function EditorLabel({
+  block,
   children,
-  direction,
+  isDisabled,
   label,
-  labelStyles,
   ...props
 }: ComponentProps<"div"> & {
-  direction?: "left" | "right";
+  block?: boolean;
+  isDisabled?: boolean;
   label: string;
-  labelStyles?: string;
 }) {
-  direction ??= "right";
   return (
-    <div {...props}>
-      <div
+    <div
+      {...props}
+      className={clsx(
+        !block &&
+          clsx("flex items-center gap-2 pl-3", isDisabled ? "pr-3" : "pr-1.5"),
+        block && "px-1.5",
+        "rounded bg-neutral-800/50 py-1.5"
+      )}
+    >
+      <label
         className={clsx(
-          "select-none whitespace-nowrap font-display font-bold text-neutral-500",
-          direction === "left" ? "text-left" : "text-right",
-          labelStyles !== undefined ? labelStyles : "w-[76.33px] lg:w-[136px]"
+          !block && "flex w-[138px]",
+          block && "block pl-1.5",
+          "select-none items-center whitespace-nowrap font-display font-bold text-neutral-400"
         )}
       >
         <TextSlider text={label} />
-      </div>
+      </label>
       {children}
     </div>
   );

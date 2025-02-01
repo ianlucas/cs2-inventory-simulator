@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
   CS2Inventory,
@@ -48,7 +49,7 @@ export function parseInventory(inventory?: string | null) {
   }
 }
 
-const fakeInventory = new CS2Inventory({});
+const fakeInventory = new CS2Inventory();
 export function createFakeInventoryItem(
   props: CS2EconomyItem,
   item?: Partial<CS2InventoryItem>
@@ -61,6 +62,15 @@ export function createFakeInventoryItem(
   );
   Object.assign(inventoryItem, item);
   return inventoryItem;
+}
+
+export function createFakeInventoryItemFromBase(item: CS2BaseInventoryItem) {
+  return new CS2InventoryItem(
+    fakeInventory,
+    -1,
+    item,
+    CS2Economy.getById(item.id)
+  );
 }
 
 export function getFreeItemsToDisplay(hideFreeItems = false) {

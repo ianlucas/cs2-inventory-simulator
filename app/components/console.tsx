@@ -20,6 +20,7 @@ import { useStorageState } from "./hooks/use-storage-state";
 type Command = (params: {
   args: string[];
   println: (message: string) => void;
+  clear: () => void;
 }) => Promise<void>;
 
 const commands: Record<string, Command> = {};
@@ -43,6 +44,8 @@ addCommand("iam", async ({ args, println }) => {
     }, 2000);
   });
 });
+
+addCommand("clear", async ({ clear }) => clear());
 
 export function Console() {
   const [isVisible, toggleIsVisible] = useToggle(false);
@@ -70,7 +73,7 @@ export function Console() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (isThinking || input.length === 0) {
+    if (isThinking) {
       return;
     }
     setIsThinking(true);
@@ -78,14 +81,15 @@ export function Console() {
     const args = input.trim().split(" ");
     const command = args[0];
     if (command !== undefined) {
-      println(`] ${input}`);
+      println(`{gray}] ${input}`);
       const handler = commands[command];
       if (handler !== undefined) {
         await handler({
           args,
-          println
+          println,
+          clear: () => setBuffer([])
         });
-      } else {
+      } else if (command !== "") {
         println(`{red}Command "${command}" not found.`);
       }
     } else {
@@ -173,7 +177,7 @@ export function Console() {
         className="flex select-none items-center bg-neutral-950/95 px-2 py-1 pr-1 font-display font-bold text-white"
         ref={handleRef}
       >
-        <div className="flex-1">Inventory Simulator's CONSOLE</div>
+        <div className="flex-1">CONSOLE</div>
         <button
           className="flex cursor-default items-center justify-center p-1 hover:bg-neutral-800/50"
           onClick={() => toggleIsVisible()}

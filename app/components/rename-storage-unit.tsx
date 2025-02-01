@@ -3,7 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { CS2Economy } from "@ianlucas/cs2-lib";
+import { useToggle } from "@uidotdev/usehooks";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInput } from "~/components/hooks/use-input";
@@ -12,9 +16,11 @@ import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
 import { useInventory, useLocalize } from "./app-context";
-import { EditorInput } from "./editor-input";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
+import { Overlay } from "./overlay";
+import { ToolButton } from "./tool-button";
+import { ToolInput } from "./tool-input";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -34,6 +40,10 @@ export function RenameStorageUnit({
   const { nameTag: defaultValue } = item;
   const isStartUsingStorageUnit = defaultValue === undefined;
   const [nameTag, setNameTag] = useInput(defaultValue ?? "");
+  const [isConfirmed, toggleIsConfirmed] = useToggle();
+
+  const isConfirmDisabled = nameTag.length === 0;
+  const isInvalid = !CS2Economy.safeValidateNametag(nameTag);
 
   function handleRename() {
     sync({
@@ -45,61 +55,79 @@ export function RenameStorageUnit({
     onClose();
   }
 
+  function handleToggleConfirm() {
+    toggleIsConfirmed();
+  }
+
+  useEffect(() => {
+    if (!isConfirmed) {
+      setNameTag("");
+    }
+  }, [isConfirmed]);
+
   return (
     <ClientOnly
       children={() =>
         createPortal(
-          <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div>
-              <UseItemHeader
-                actionDesc={localize("RenameStorageUnitEnterName")}
-                actionItem={nameItemString(item)}
-                title={localize("RenameStorageUnitUse")}
-                warning={
-                  isStartUsingStorageUnit
-                    ? localize("RenameStorageUnitFirstNameWarn")
-                    : localize("RenameStorageUnitNewNameWarn")
+          <Overlay>
+            <UseItemHeader
+              actionDesc={localize("RenameStorageUnitEnterName")}
+              actionItem={nameItemString(item)}
+              title={localize("RenameStorageUnitUse")}
+              warning={
+                isStartUsingStorageUnit
+                  ? localize("RenameStorageUnitFirstNameWarn")
+                  : localize("RenameStorageUnitNewNameWarn")
+              }
+            />
+            <ItemImage
+              className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
+              item={item}
+            />
+            <div className="flex items-center justify-center gap-2 lg:m-auto lg:mb-4">
+              <ToolInput
+                autoFocus
+                className="text-2xl lg:max-w-[428px]"
+                maxLength={20}
+                onChange={setNameTag}
+                placeholder={localize("InventoryItemRenamePlaceholder")}
+                validate={(nameTag) =>
+                  CS2Economy.safeValidateNametag(nameTag ?? "")
                 }
+                value={nameTag}
               />
-              <ItemImage
-                className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
-                item={item}
-              />
-              <div className="flex lg:m-auto lg:mb-4 lg:max-w-[360px]">
-                <EditorInput
-                  autoFocus
-                  className="py-1 text-xl"
-                  maxLength={20}
-                  onChange={setNameTag}
-                  placeholder={localize("EditorNametagPlaceholder")}
-                  validate={(nameTag) =>
-                    CS2Economy.safeValidateNametag(nameTag ?? "")
-                  }
-                  value={nameTag}
-                />
-              </div>
-              <UseItemFooter
-                right={
-                  <>
-                    <ModalButton
-                      disabled={
-                        nameTag === "" ||
-                        !CS2Economy.safeValidateNametag(nameTag)
-                      }
-                      variant="primary"
-                      onClick={handleRename}
-                      children={localize("RenameStorageUnitRename")}
-                    />
-                    <ModalButton
-                      variant="secondary"
-                      onClick={onClose}
-                      children={localize("RenameStorageUnitClose")}
-                    />
-                  </>
+              <ToolButton
+                onClick={handleToggleConfirm}
+                icon={isConfirmed ? faCircleXmark : faCheck}
+                isBorderless={isConfirmed}
+                disabled={isConfirmDisabled}
+                tooltip={
+                  isConfirmDisabled || isInvalid
+                    ? localize("InventoryItemRenameInvalidTooltip")
+                    : isConfirmed
+                      ? localize("InventoryItemRenameClearTooltip")
+                      : undefined
                 }
               />
             </div>
-          </div>,
+            <UseItemFooter
+              right={
+                <>
+                  <ModalButton
+                    disabled={nameTag === "" || isInvalid || !isConfirmed}
+                    variant="primary"
+                    onClick={handleRename}
+                    children={localize("RenameStorageUnitRename")}
+                  />
+                  <ModalButton
+                    variant="secondary"
+                    onClick={onClose}
+                    children={localize("RenameStorageUnitClose")}
+                  />
+                </>
+              }
+            />
+          </Overlay>,
           document.body
         )
       }

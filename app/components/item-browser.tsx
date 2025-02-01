@@ -20,9 +20,10 @@ export function ItemBrowser({
 }) {
   return (
     <GridList itemHeight={64} maxItemsIntoView={maxItemsIntoView} items={items}>
-      {(item) => (
+      {(item, index) => (
         <ItemButton
           ignoreRarityColor={ignoreRarityColor}
+          index={index}
           item={item}
           key={item.id}
           onClick={onClick}

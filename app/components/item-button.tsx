@@ -12,16 +12,18 @@ import { TextSlider } from "./text-slider";
 export function ItemButton({
   bigger,
   ignoreRarityColor,
+  index,
   item,
   onClick
 }: {
   bigger?: boolean;
   ignoreRarityColor?: boolean;
+  index?: number;
   item: CS2EconomyItem;
   onClick?: (item: CS2EconomyItem) => void;
 }) {
   const nameItem = useNameItem();
-  const [name] = nameItem(item, "craft-name");
+  const [model, name] = nameItem(item, "editor-name");
   const clickable = onClick !== undefined;
   const showAltname =
     item.altName !== undefined &&
@@ -40,8 +42,9 @@ export function ItemButton({
       onClick={handleClick}
       className={clsx(
         "font-display",
+        (index ?? 0) % 2 !== 0 ? "bg-black/10" : "bg-transparent",
         clickable &&
-          "relative overflow-hidden border-y-2 border-transparent bg-transparent transition-all hover:bg-black/20 active:bg-black/30",
+          "relative cursor-default overflow-hidden hover:bg-black/25 active:bg-black/30",
         !bigger && "block h-[64px] w-full pl-[2px] pr-4",
         bigger && "flex h-full w-full items-center justify-center"
       )}
@@ -54,7 +57,7 @@ export function ItemButton({
       >
         <ItemImage
           className={clsx(
-            "overflow-hidden bg-gradient-to-b from-neutral-500/10 to-neutral-300/10 group-hover:from-neutral-500 group-hover:to-neutral-300",
+            "overflow-hidden drop-shadow-[0_0_1px_rgba(0,0,0,1)]",
             !bigger && "aspect-[1.333] w-[82px]",
             bigger && "m-auto h-32"
           )}
@@ -62,14 +65,20 @@ export function ItemButton({
           key={item.image}
         />
         <div
-          className={clsx("w-0 min-w-0 flex-1 text-left", !bigger && "ml-4")}
+          className={clsx(
+            "w-0 min-w-0 flex-1 text-left drop-shadow-[0_0_1px_rgba(0,0,0,1)]",
+            !bigger && "ml-4"
+          )}
         >
+          <div className="text-xs leading-3 text-neutral-400">
+            <TextSlider text={model} />
+          </div>
           <div style={{ color: ignoreRarityColor ? undefined : item.rarity }}>
             <TextSlider text={name} />
           </div>
           {showAltname && item.altName !== undefined && (
             <TextSlider
-              className="text-sm text-neutral-400"
+              className="text-sm leading-3 text-neutral-200"
               text={item.altName}
             />
           )}

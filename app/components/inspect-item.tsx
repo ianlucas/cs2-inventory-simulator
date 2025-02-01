@@ -21,6 +21,7 @@ import { InfoIcon } from "./info-icon";
 import { ItemCollectionImage } from "./item-collection-image";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
+import { Overlay } from "./overlay";
 import { UseItemFooter } from "./use-item-footer";
 
 export function InspectItem({
@@ -59,91 +60,86 @@ export function InspectItem({
     <ClientOnly
       children={() =>
         createPortal(
-          <div className="fixed left-0 top-0 z-50 flex h-full w-full select-none items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="m-auto lg:w-[1024px]">
-              <div className="flex items-center justify-center">
-                <div
-                  className="flex items-center justify-center gap-2 border-b-4 px-1 pb-2"
-                  style={{ borderColor: item.rarity }}
-                >
-                  {item.collection !== undefined && (
-                    <ItemCollectionImage className="h-16" item={item} />
-                  )}
-                  <div className="font-display">
-                    <div className="text-3xl">{nameItemString(item)}</div>
-                    {item.collectionName !== undefined && (
-                      <div className="-mt-2 text-neutral-300">
-                        {item.collectionName}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="relative mx-auto inline-block">
-                  <ItemImage
-                    className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
-                    item={item}
-                  />
-                  {item.stickers !== undefined && (
-                    <div className="absolute bottom-0 left-0 flex items-center justify-center">
-                      {item.someStickers().map(([index, { id, wear }]) => (
-                        <span className="inline-block" key={index}>
-                          <ItemImage
-                            className="aspect-[1.33333] w-[128px]"
-                            item={CS2Economy.getById(id)}
-                            style={{
-                              filter: `grayscale(${wear ?? 0})`,
-                              opacity: `${1 - (wear ?? 0)}`
-                            }}
-                          />
-                          {statsForNerds && (
-                            <div className="text-sm font-bold text-neutral-300 transition-all group-hover:scale-150">
-                              {((wear ?? 0) * 100).toFixed(0)}%
-                            </div>
-                          )}
-                        </span>
-                      ))}
+          <Overlay className="m-auto lg:w-[1024px]">
+            <div className="flex items-center justify-center">
+              <div
+                className="flex items-center justify-center gap-2 border-b-4 px-1 pb-2"
+                style={{ borderColor: item.rarity }}
+              >
+                {item.collection !== undefined && (
+                  <ItemCollectionImage className="h-16" item={item} />
+                )}
+                <div className="font-display">
+                  <div className="text-3xl">{nameItemString(item)}</div>
+                  {item.collectionName !== undefined && (
+                    <div className="-mt-2 text-neutral-300">
+                      {item.collectionName}
                     </div>
                   )}
                 </div>
               </div>
-              <UseItemFooter
-                left={
-                  <>
-                    {hasInfo && (
-                      <ModalButton
-                        variant="secondary"
-                        forwardRef={ref}
-                        {...getHoverReferenceProps()}
-                      >
-                        <InfoIcon className="h-6" />
-                      </ModalButton>
-                    )}
-                    {hasShare && (
-                      <ModalButton
-                        variant="secondary"
-                        onClick={handleClickShare}
-                      >
-                        <FontAwesomeIcon
-                          icon={clickedShare ? faCheck : faShareNodes}
-                          className="h-6"
+            </div>
+            <div className="text-center">
+              <div className="relative mx-auto inline-block">
+                <ItemImage
+                  className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
+                  item={item}
+                />
+                {item.stickers !== undefined && (
+                  <div className="absolute bottom-0 left-0 flex items-center justify-center">
+                    {item.someStickers().map(([index, { id, wear }]) => (
+                      <span className="inline-block" key={index}>
+                        <ItemImage
+                          className="aspect-[1.33333] w-[128px]"
+                          item={CS2Economy.getById(id)}
+                          style={{
+                            filter: `grayscale(${wear ?? 0})`,
+                            opacity: `${1 - (wear ?? 0)}`
+                          }}
                         />
-                      </ModalButton>
-                    )}
-                  </>
-                }
-                right={
-                  <>
+                        {statsForNerds && (
+                          <div className="text-sm font-bold text-neutral-300 transition-all group-hover:scale-150">
+                            {((wear ?? 0) * 100).toFixed(0)}%
+                          </div>
+                        )}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            <UseItemFooter
+              left={
+                <>
+                  {hasInfo && (
                     <ModalButton
                       variant="secondary"
-                      onClick={onClose}
-                      children={localize("InspectClose")}
-                    />
-                  </>
-                }
-              />
-            </div>
+                      forwardRef={ref}
+                      {...getHoverReferenceProps()}
+                    >
+                      <InfoIcon className="h-6" />
+                    </ModalButton>
+                  )}
+                  {hasShare && (
+                    <ModalButton variant="secondary" onClick={handleClickShare}>
+                      <FontAwesomeIcon
+                        icon={clickedShare ? faCheck : faShareNodes}
+                        className="h-6"
+                      />
+                    </ModalButton>
+                  )}
+                </>
+              }
+              right={
+                <>
+                  <ModalButton
+                    variant="secondary"
+                    onClick={onClose}
+                    children={localize("InspectClose")}
+                  />
+                </>
+              }
+            />
             {hasInfo && isHoverOpen && (
               <FloatingFocusManager context={hoverContext} modal={false}>
                 <div
@@ -173,7 +169,7 @@ export function InspectItem({
                 </div>
               </FloatingFocusManager>
             )}
-          </div>,
+          </Overlay>,
           document.body
         )
       }

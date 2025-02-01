@@ -57,3 +57,11 @@ export function noempty(value: string | undefined) {
       : undefined
     : undefined;
 }
+
+export function hasKeys(obj: Record<any, any>) {
+  return Object.keys(obj).length > 0;
+}
+
+export function toArrayIf<T>(value: T, condition: (value: T) => boolean) {
+  return condition(value) ? [value] : [];
+}

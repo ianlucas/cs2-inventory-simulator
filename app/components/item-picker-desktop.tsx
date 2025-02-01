@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useItemPickerState } from "~/components/hooks/use-item-picker-state";
 import { ItemBrowser } from "~/components/item-browser";
 import { useLocalize } from "./app-context";
+import { IconInput } from "./icon-input";
 import { ItemPickerFilterDesktop } from "./item-picker-filter-desktop";
 
 export function ItemPickerDesktop({
@@ -30,35 +30,26 @@ export function ItemPickerDesktop({
 
   return (
     <div className="pb-2">
-      <div className="flex justify-end">
-        <div className="flex w-[calc(100%-220px)] items-center gap-2 px-6">
-          <FontAwesomeIcon
-            icon={faMagnifyingGlass}
-            className="h-4 text-neutral-500"
-          />
-          <input
-            value={query}
-            onChange={setQuery}
-            className="flex-1 rounded bg-neutral-950/40 px-3 py-1 placeholder-neutral-600 outline-none"
-            placeholder={localize("CraftSearchPlaceholder")}
-          />
-        </div>
-      </div>
       <div className="mt-2 flex gap-2">
         <ItemPickerFilterDesktop
           categories={categories}
           onChange={handleCategoryClick}
           value={filter}
         />
-        <div className="flex flex-1 items-center">
-          <div className="w-full">
-            <ItemBrowser
-              ignoreRarityColor={ignoreRarityColor}
-              items={items}
-              maxItemsIntoView={8}
-              onClick={handleItemClick}
-            />
-          </div>
+        <div className="flex-1">
+          <IconInput
+            icon={faMagnifyingGlass}
+            labelStyles="mb-2"
+            onChange={setQuery}
+            placeholder={localize("CraftSearchPlaceholder")}
+            value={query}
+          />
+          <ItemBrowser
+            ignoreRarityColor={ignoreRarityColor}
+            items={items}
+            maxItemsIntoView={8}
+            onClick={handleItemClick}
+          />
         </div>
       </div>
     </div>

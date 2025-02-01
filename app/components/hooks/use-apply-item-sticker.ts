@@ -32,7 +32,7 @@ export function useApplyItemSticker() {
 
   function handleApplyItemStickerSelect(uid: number) {
     assert(itemSelector !== undefined);
-    const isSticker = inventory.get(uid).isSticker();
+    const isSticker = uid >= 0 ? inventory.get(uid).isSticker() : false;
     return setApplyItemSticker({
       targetUid: !isSticker ? uid : itemSelector.uid,
       stickerUid: isSticker ? uid : itemSelector.uid

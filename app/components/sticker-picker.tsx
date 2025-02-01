@@ -6,50 +6,41 @@
 import {
   faMagnifyingGlass,
   faTag,
-  faTrashCan,
-  faXmark
+  faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
-  CS2_MAX_STICKER_WEAR,
   CS2_MIN_STICKER_WEAR,
-  CS2_STICKER_WEAR_FACTOR,
+  assert,
   ensure
 } from "@ianlucas/cs2-lib";
-import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
-import {
-  sortByName,
-  stickerWearStringMaxLen,
-  stickerWearToString
-} from "~/utils/economy";
+import { sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
-import { useLocalize, useRules } from "./app-context";
-import { EditorInput } from "./editor-input";
-import { EditorSelect } from "./editor-select";
-import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
+import { useLocalize } from "./app-context";
+import { AppliedStickerEditor } from "./applied-sticker-editor";
+import { IconButton } from "./icon-button";
+import { IconInput } from "./icon-input";
+import { IconSelect } from "./icon-select";
 import { ItemBrowser } from "./item-browser";
-import { ItemEditorLabel } from "./item-editor-label";
 import { ItemImage } from "./item-image";
-import { Modal } from "./modal";
+import { Modal, ModalHeader } from "./modal";
+import { ModalButton } from "./modal-button";
 
 export function StickerPicker({
   disabled,
-  isCrafting,
   onChange,
+  stickerFilter,
   value
 }: {
   disabled?: boolean;
-  isCrafting: boolean;
   onChange: (value: NonNullable<CS2BaseInventoryItem["stickers"]>) => void;
+  stickerFilter?: (item: CS2EconomyItem) => boolean;
   value: NonNullable<CS2BaseInventoryItem["stickers"]>;
 }) {
-  const { craftHideId, craftHideCategory, editHideId, editHideCategory } =
-    useRules();
   const localize = useLocalize();
 
   const [category, setCategory] = useState("");
@@ -57,7 +48,10 @@ export function StickerPicker({
   const [activeIndex, setActiveIndex] = useState<number>();
   const stickers = useMemo(() => CS2Economy.getStickers().sort(sortByName), []);
   const categories = useMemo(() => CS2Economy.getStickerCategories(), []);
-  const [wear, setWear] = useState(0);
+  const [appliedStickerData, setAppliedStickerData] = useState({
+    wear: 0
+  });
+  const [selected, setSelected] = useState<CS2EconomyItem>();
 
   function handleClickSlot(index: number) {
     return function handleClickSlot() {
@@ -65,14 +59,24 @@ export function StickerPicker({
     };
   }
 
-  function handleAddSticker(item: CS2EconomyItem) {
+  function handleSelectSticker(item: CS2EconomyItem) {
+    setSelected(item);
+  }
+
+  function handleCloseSelectModal() {
+    setSelected(undefined);
+  }
+
+  function handleAddSticker() {
+    assert(selected);
     onChange({
       ...value,
       [ensure(activeIndex)]: {
-        id: item.id,
-        wear
+        id: selected.id,
+        wear: appliedStickerData.wear
       }
     });
+    setSelected(undefined);
     setActiveIndex(undefined);
   }
 
@@ -90,24 +94,7 @@ export function StickerPicker({
   const filtered = useMemo(() => {
     const words = search.split(" ").map((word) => word.toLowerCase());
     return stickers.filter((item) => {
-      if (isCrafting && craftHideId.includes(item.id)) {
-        return false;
-      }
-      if (
-        isCrafting &&
-        item.category !== undefined &&
-        craftHideCategory.includes(item.category)
-      ) {
-        return false;
-      }
-      if (!isCrafting && editHideId.includes(item.id)) {
-        return false;
-      }
-      if (
-        !isCrafting &&
-        item.category !== undefined &&
-        editHideCategory.includes(item.category)
-      ) {
+      if (stickerFilter !== undefined && !stickerFilter(item)) {
         return false;
       }
       if (category !== "" && item.category !== category) {
@@ -125,7 +112,7 @@ export function StickerPicker({
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="grid grid-cols-4 gap-2">
         {range(4).map((index) => {
           const sticker = value[index];
           const stickerWear = sticker?.wear ?? CS2_MIN_STICKER_WEAR;
@@ -135,98 +122,83 @@ export function StickerPicker({
             <button
               disabled={disabled}
               key={index}
-              className="relative overflow-hidden rounded bg-black/50"
+              className="relative aspect-[256/192] cursor-default overflow-hidden bg-neutral-950/40"
               onClick={handleClickSlot(index)}
             >
               {item !== undefined ? (
-                <ItemImage className="h-[64px] w-[85.33px]" item={item} />
+                <ItemImage className="aspect-[256/192]" item={item} />
               ) : (
-                <div className="flex h-[64px] w-[85.33px] items-center justify-center font-display font-bold text-neutral-700">
+                <div className="flex aspect-[256/192] items-center justify-center text-neutral-700">
                   {localize("StickerPickerNA")}
                 </div>
               )}
               {sticker !== undefined && (
-                <div className="text-outline-1 absolute bottom-0 right-1 font-display font-bold drop-shadow-lg">
+                <div className="text-outline-1 absolute bottom-0 right-1 text-sm font-bold drop-shadow-lg">
                   {(stickerWear * 100).toFixed(0)}%
                 </div>
               )}
               {!disabled && (
-                <div className="absolute left-0 top-0 h-full w-full rounded border-[3px] border-transparent transition-all hover:border-white" />
+                <div className="absolute left-0 top-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
               )}
             </button>
           );
         })}
       </div>
       <Modal className="w-[540px] pb-1" hidden={activeIndex === undefined} blur>
-        <div className="flex select-none justify-between px-4 py-2 font-bold">
-          <label className="text-sm text-neutral-400">
-            {localize("StickerPickerHeader")}
-          </label>
-          <button
-            onClick={handleCloseModal}
-            className="cursor-default text-white/50 hover:text-white"
-          >
-            <FontAwesomeIcon icon={faXmark} className="h-4" />
-          </button>
-        </div>
-        <div className="mb-4 flex flex-col gap-2 px-2 lg:flex-row lg:items-center lg:pl-4 lg:pr-2">
-          <div className="flex flex-1 items-center gap-2">
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="h-4" />
-            <EditorInput
-              value={search}
-              onChange={setSearch}
-              placeholder={localize("StickerPickerSearchPlaceholder")}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <FontAwesomeIcon icon={faTag} className="h-4" />
-            <EditorSelect
-              className="w-[192px]"
-              onChange={setCategory}
-              options={categories}
-              placeholder={localize("StickerPickerFilterPlaceholder")}
-              value={category}
-            />
-          </div>
-          <button
-            className="flex h-[24px] cursor-default items-center gap-1 rounded px-2 text-red-500 transition hover:bg-black/30 active:bg-black/60"
+        <ModalHeader
+          title={localize("StickerPickerHeader")}
+          onClose={handleCloseModal}
+        />
+        <div className="my-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
+          <IconInput
+            icon={faMagnifyingGlass}
+            labelStyles="flex-1"
+            onChange={setSearch}
+            placeholder={localize("StickerPickerSearchPlaceholder")}
+            value={search}
+          />
+          <IconSelect
+            icon={faTag}
+            className="w-[168px]"
+            onChange={setCategory}
+            options={categories}
+            placeholder={localize("StickerPickerFilterPlaceholder")}
+            value={category}
+          />
+          <IconButton
+            icon={faTrashCan}
             onClick={handleRemoveSticker}
             title={localize("StickerPickerRemove")}
-          >
-            <FontAwesomeIcon icon={faTrashCan} className="h-4" />
-          </button>
+          />
         </div>
-        <div
-          className={clsx(
-            "m-auto w-[460px] select-none px-4 pb-4 lg:px-0",
-            filtered.length === 0 && "invisible"
-          )}
-        >
-          <ItemEditorLabel
-            className="flex select-none items-center gap-4"
-            label={localize("EditorStickerWear")}
-            labelStyles="w-[136px]"
-          >
-            <EditorStepRangeWithInput
-              inputStyles="w-[26px]"
-              max={CS2_MAX_STICKER_WEAR}
-              maxLength={stickerWearStringMaxLen}
-              min={CS2_MIN_STICKER_WEAR}
-              onChange={setWear}
-              randomizable
-              step={CS2_STICKER_WEAR_FACTOR}
-              stepRangeStyles="flex-1"
-              transform={stickerWearToString}
-              type="float"
-              validate={(value) =>
-                value >= CS2_MIN_STICKER_WEAR && value <= CS2_MAX_STICKER_WEAR
-              }
-              value={wear}
-            />
-          </ItemEditorLabel>
-        </div>
-        <ItemBrowser items={filtered} onClick={handleAddSticker} />
+        <ItemBrowser items={filtered} onClick={handleSelectSticker} />
       </Modal>
+      {selected !== undefined && (
+        <Modal className="w-[420px]">
+          <ModalHeader
+            title={localize("EditorConfirmPick")}
+            onClose={handleCloseSelectModal}
+          />
+          <AppliedStickerEditor
+            className="px-4"
+            item={selected}
+            onChange={setAppliedStickerData}
+            value={appliedStickerData}
+          />
+          <div className="my-6 flex justify-center gap-2">
+            <ModalButton
+              children={localize("EditorCancel")}
+              onClick={handleCloseSelectModal}
+              variant="secondary"
+            />
+            <ModalButton
+              children={localize("EditorPick")}
+              onClick={handleAddSticker}
+              variant="primary"
+            />
+          </div>
+        </Modal>
+      )}
     </>
   );
 }
