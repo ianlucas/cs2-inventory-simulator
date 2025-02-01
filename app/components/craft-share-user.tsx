@@ -16,7 +16,7 @@ export function CraftShareUser({
   const localize = useLocalize();
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 text-sm">
+    <div className="m-auto flex w-full max-w-[calc(100%-2rem)] items-center justify-center gap-2 px-4 pt-2 text-xs">
       <span className="text-neutral-500">{localize("CraftBy")}</span>
       <img
         className="h-6 w-6 rounded-full"
@@ -24,7 +24,7 @@ export function CraftShareUser({
         alt={name}
         draggable={false}
       />
-      <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
+      <span className="overflow-hidden text-ellipsis whitespace-nowrap">
         {name}
       </span>
     </div>

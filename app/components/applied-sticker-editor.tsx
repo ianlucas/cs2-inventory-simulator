@@ -35,7 +35,7 @@ export function AppliedStickerEditor({
 
   useEffect(() => {
     onChange?.(attributes.value);
-  }, [attributes]);
+  }, [attributes.value]);
 
   return (
     <div className={clsx("m-auto select-none", className)}>

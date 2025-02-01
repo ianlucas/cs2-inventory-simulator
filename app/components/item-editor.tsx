@@ -128,7 +128,7 @@ export function ItemEditor({
           : undefined
         : undefined
     });
-  }, [attributes]);
+  }, [attributes.value]);
 
   return (
     <div className={clsx("m-auto select-none", className)}>

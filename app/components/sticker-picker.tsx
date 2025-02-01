@@ -176,7 +176,7 @@ export function StickerPicker({
       {selected !== undefined && (
         <Modal className="w-[420px]">
           <ModalHeader
-            title={"Confirm selection"}
+            title={localize("EditorConfirmPick")}
             onClose={handleCloseSelectModal}
           />
           <AppliedStickerEditor
@@ -193,7 +193,7 @@ export function StickerPicker({
             />
 
             <ModalButton
-              children="Pick"
+              children={localize("EditorPick")}
               onClick={handleAddSticker}
               variant="primary"
             />
