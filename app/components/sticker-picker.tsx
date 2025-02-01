@@ -187,11 +187,10 @@ export function StickerPicker({
           />
           <div className="my-6 flex justify-center gap-2">
             <ModalButton
-              variant="secondary"
+              children={localize("EditorCancel")}
               onClick={handleCloseSelectModal}
-              children="Cancel"
+              variant="secondary"
             />
-
             <ModalButton
               children={localize("EditorPick")}
               onClick={handleAddSticker}
