@@ -129,6 +129,8 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   InventoryItemRarity: "inv_header_rarity",
   InventoryItemRemovePatch: "popup_remove_patch_button",
   InventoryItemRename: { token: "RT_Rn_A", transform: (value) => replace(value, '%s1', '') },
+  InventoryItemRenameClearTooltip: "tooltip_nameable_clear",
+  InventoryItemRenameInvalidTooltip: "tooltip_nameable_invalid",
   InventoryItemRenamePlaceholder: "nameable_textentry_placeholder",
   InventoryItemRenameStorageUnit: "inv_context_yourcasket",
   InventoryItemScrapeSticker: "popup_remove_sticker_button",

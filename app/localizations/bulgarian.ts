@@ -108,6 +108,8 @@ export const bulgarian = {
   InventoryItemRarity: /* csgo_bulgarian.txt */"Рядкост:",
   InventoryItemRemovePatch: /* csgo_bulgarian.txt */"Премахване на нашивка",
   InventoryItemRename: /* csgo_bulgarian.txt */"Преименуване на",
+  InventoryItemRenameClearTooltip: /* csgo_bulgarian.txt */"Стартиране наново.",
+  InventoryItemRenameInvalidTooltip: /* csgo_bulgarian.txt */"Моля, предоставете валидно име.",
   InventoryItemRenamePlaceholder: /* csgo_bulgarian.txt */"Ново име",
   InventoryItemRenameStorageUnit: /* csgo_bulgarian.txt */"Промяна на етикета",
   InventoryItemScrapeSticker: /* csgo_bulgarian.txt */"Одраскване на стикер",

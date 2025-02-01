@@ -42,6 +42,7 @@ export function RenameStorageUnit({
   const [isConfirmed, toggleIsConfirmed] = useToggle();
 
   const isConfirmDisabled = nameTag.length === 0;
+  const isInvalid = !CS2Economy.safeValidateNametag(nameTag);
 
   function handleRename() {
     sync({
@@ -100,17 +101,20 @@ export function RenameStorageUnit({
                   icon={isConfirmed ? faCircleXmark : faCheck}
                   isBorderless={isConfirmed}
                   disabled={isConfirmDisabled}
+                  tooltip={
+                    isConfirmDisabled || isInvalid
+                      ? localize("InventoryItemRenameInvalidTooltip")
+                      : isConfirmed
+                        ? localize("InventoryItemRenameClearTooltip")
+                        : undefined
+                  }
                 />
               </div>
               <UseItemFooter
                 right={
                   <>
                     <ModalButton
-                      disabled={
-                        nameTag === "" ||
-                        !CS2Economy.safeValidateNametag(nameTag) ||
-                        !isConfirmed
-                      }
+                      disabled={nameTag === "" || isInvalid || !isConfirmed}
                       variant="primary"
                       onClick={handleRename}
                       children={localize("RenameStorageUnitRename")}

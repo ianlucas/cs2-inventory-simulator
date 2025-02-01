@@ -108,6 +108,8 @@ export const dutch = {
   InventoryItemRarity: /* csgo_dutch.txt */"Zeldzaamheid:",
   InventoryItemRemovePatch: /* csgo_dutch.txt */"Embleem verwijderen",
   InventoryItemRename: /* csgo_dutch.txt */"andere naam geven",
+  InventoryItemRenameClearTooltip: /* csgo_dutch.txt */"Opnieuw beginnen.",
+  InventoryItemRenameInvalidTooltip: /* csgo_dutch.txt */"Geef een geldige naam op.",
   InventoryItemRenamePlaceholder: /* csgo_dutch.txt */"Nieuwe naam",
   InventoryItemRenameStorageUnit: /* csgo_dutch.txt */"Label wijzigen",
   InventoryItemScrapeSticker: /* csgo_dutch.txt */"Sticker schrapen",

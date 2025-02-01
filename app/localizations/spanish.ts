@@ -108,6 +108,8 @@ export const spanish = {
   InventoryItemRarity: /* csgo_spanish.txt */"Rareza:",
   InventoryItemRemovePatch: /* csgo_spanish.txt */"Eliminar parche",
   InventoryItemRename: /* csgo_spanish.txt */"Renombrar",
+  InventoryItemRenameClearTooltip: /* csgo_spanish.txt */"Empezar de nuevo.",
+  InventoryItemRenameInvalidTooltip: /* csgo_spanish.txt */"Introduce un nombre válido.",
   InventoryItemRenamePlaceholder: /* csgo_spanish.txt */"Nuevo nombre",
   InventoryItemRenameStorageUnit: /* csgo_spanish.txt */"Cambiar etiqueta",
   InventoryItemScrapeSticker: /* csgo_spanish.txt */"Raspar pegatina",

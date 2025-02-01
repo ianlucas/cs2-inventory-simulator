@@ -108,6 +108,8 @@ export const tchinese = {
   InventoryItemRarity: /* csgo_tchinese.txt */"稀有度：",
   InventoryItemRemovePatch: /* csgo_tchinese.txt */"移除布章",
   InventoryItemRename: /* csgo_tchinese.txt */"重新命名",
+  InventoryItemRenameClearTooltip: /* csgo_tchinese.txt */"重新開始。",
+  InventoryItemRenameInvalidTooltip: /* csgo_tchinese.txt */"請提供有效的名稱。",
   InventoryItemRenamePlaceholder: /* csgo_tchinese.txt */"新名稱",
   InventoryItemRenameStorageUnit: /* csgo_tchinese.txt */"更改標籤",
   InventoryItemScrapeSticker: /* csgo_tchinese.txt */"刮除貼紙",

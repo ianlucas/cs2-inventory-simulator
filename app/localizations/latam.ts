@@ -108,6 +108,8 @@ export const latam = {
   InventoryItemRarity: /* csgo_latam.txt */"Rareza:",
   InventoryItemRemovePatch: /* csgo_latam.txt */"Quitar parche",
   InventoryItemRename: /* csgo_latam.txt */"Renombrar",
+  InventoryItemRenameClearTooltip: /* csgo_latam.txt */"Empezar de nuevo.",
+  InventoryItemRenameInvalidTooltip: /* csgo_latam.txt */"Introduce un nombre válido.",
   InventoryItemRenamePlaceholder: /* csgo_latam.txt */"Nuevo nombre",
   InventoryItemRenameStorageUnit: /* csgo_latam.txt */"Cambiar etiqueta",
   InventoryItemScrapeSticker: /* csgo_latam.txt */"Raspar calcomanía",

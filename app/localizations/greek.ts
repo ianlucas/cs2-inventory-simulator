@@ -108,6 +108,8 @@ export const greek = {
   InventoryItemRarity: /* csgo_greek.txt */"Σπανιότητα:",
   InventoryItemRemovePatch: /* csgo_greek.txt */"Αφαίρεση διακριτικού",
   InventoryItemRename: /* csgo_greek.txt */"Μετονομασία",
+  InventoryItemRenameClearTooltip: /* csgo_greek.txt */"Ξεκινήστε από την αρχή.",
+  InventoryItemRenameInvalidTooltip: /* csgo_greek.txt */"Εισαγάγετε ένα έγκυρο όνομα.",
   InventoryItemRenamePlaceholder: /* csgo_greek.txt */"Νέο όνομα",
   InventoryItemRenameStorageUnit: /* csgo_greek.txt */"Αλλαγή ετικέτας",
   InventoryItemScrapeSticker: /* csgo_greek.txt */"Ξύσιμο αυτοκόλλητου",

@@ -108,6 +108,8 @@ export const norwegian = {
   InventoryItemRarity: /* csgo_norwegian.txt */"Sjeldenhet:",
   InventoryItemRemovePatch: /* csgo_norwegian.txt */"Fjern lapp",
   InventoryItemRename: /* csgo_norwegian.txt */"Gi nytt navn til",
+  InventoryItemRenameClearTooltip: /* csgo_norwegian.txt */"Start på nytt.",
+  InventoryItemRenameInvalidTooltip: /* csgo_norwegian.txt */"Angi et gyldig navn.",
   InventoryItemRenamePlaceholder: /* csgo_norwegian.txt */"Nytt navn",
   InventoryItemRenameStorageUnit: /* csgo_norwegian.txt */"Endre etikett",
   InventoryItemScrapeSticker: /* csgo_norwegian.txt */"Skrap klistremerke",

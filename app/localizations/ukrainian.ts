@@ -108,6 +108,8 @@ export const ukrainian = {
   InventoryItemRarity: /* csgo_ukrainian.txt */"Рідкість:",
   InventoryItemRemovePatch: /* csgo_ukrainian.txt */"Вилучити нашивку",
   InventoryItemRename: /* csgo_ukrainian.txt */"Перейменувати",
+  InventoryItemRenameClearTooltip: /* csgo_ukrainian.txt */"Почати з початку.",
+  InventoryItemRenameInvalidTooltip: /* csgo_ukrainian.txt */"Будь ласка, вкажіть правильну назву.",
   InventoryItemRenamePlaceholder: /* csgo_ukrainian.txt */"Нова назва",
   InventoryItemRenameStorageUnit: /* csgo_ukrainian.txt */"Змінити бирку",
   InventoryItemScrapeSticker: /* csgo_ukrainian.txt */"Подряпати наліпку",

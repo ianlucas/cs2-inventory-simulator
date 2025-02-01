@@ -7,17 +7,18 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { ComponentProps } from "react";
+import { ButtonWithTooltip } from "./button-with-tooltip";
 
 export function ToolButton({
   icon,
   isBorderless,
   ...props
-}: ComponentProps<"button"> & {
+}: ComponentProps<typeof ButtonWithTooltip> & {
   icon: IconProp;
   isBorderless?: boolean;
 }) {
   return (
-    <button
+    <ButtonWithTooltip
       {...props}
       className={clsx(
         "cursor-default px-1.5 py-0.5 hover:bg-white/20 disabled:opacity-50",
@@ -25,6 +26,6 @@ export function ToolButton({
       )}
     >
       <FontAwesomeIcon icon={icon} />
-    </button>
+    </ButtonWithTooltip>
   );
 }

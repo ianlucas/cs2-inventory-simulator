@@ -108,6 +108,8 @@ export const swedish = {
   InventoryItemRarity: /* csgo_swedish.txt */"Raritet:",
   InventoryItemRemovePatch: /* csgo_swedish.txt */"Ta bort tygmärke",
   InventoryItemRename: /* csgo_swedish.txt */"Byt namn på",
+  InventoryItemRenameClearTooltip: /* csgo_swedish.txt */"Börja om.",
+  InventoryItemRenameInvalidTooltip: /* csgo_swedish.txt */"Ange ett giltigt namn.",
   InventoryItemRenamePlaceholder: /* csgo_swedish.txt */"Nytt namn",
   InventoryItemRenameStorageUnit: /* csgo_swedish.txt */"Ändra etikett",
   InventoryItemScrapeSticker: /* csgo_swedish.txt */"Skrapa klistermärke",

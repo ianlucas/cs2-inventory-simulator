@@ -108,6 +108,8 @@ export const czech = {
   InventoryItemRarity: /* csgo_czech.txt */"Vzácnost:",
   InventoryItemRemovePatch: /* csgo_czech.txt */"Odebrat nášivku",
   InventoryItemRename: /* csgo_czech.txt */"Změnit název",
+  InventoryItemRenameClearTooltip: /* csgo_czech.txt */"Začít znovu.",
+  InventoryItemRenameInvalidTooltip: /* csgo_czech.txt */"Zadej platný název.",
   InventoryItemRenamePlaceholder: /* csgo_czech.txt */"Nový název",
   InventoryItemRenameStorageUnit: /* csgo_czech.txt */"Změnit štítek",
   InventoryItemScrapeSticker: /* csgo_czech.txt */"Strhnout samolepku",

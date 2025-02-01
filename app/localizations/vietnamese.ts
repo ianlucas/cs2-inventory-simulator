@@ -108,6 +108,8 @@ export const vietnamese = {
   InventoryItemRarity: /* csgo_vietnamese.txt */"Độ hiếm:",
   InventoryItemRemovePatch: /* csgo_vietnamese.txt */"Gỡ phù hiệu",
   InventoryItemRename: /* csgo_vietnamese.txt */"Đổi tên",
+  InventoryItemRenameClearTooltip: /* csgo_vietnamese.txt */"Bắt đầu lại.",
+  InventoryItemRenameInvalidTooltip: /* csgo_vietnamese.txt */"Vui lòng cho một tên hợp lệ.",
   InventoryItemRenamePlaceholder: /* csgo_vietnamese.txt */"Tên mới",
   InventoryItemRenameStorageUnit: /* csgo_vietnamese.txt */"Đổi nhãn",
   InventoryItemScrapeSticker: /* csgo_vietnamese.txt */"Cào hình dán",

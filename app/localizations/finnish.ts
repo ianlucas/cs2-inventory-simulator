@@ -108,6 +108,8 @@ export const finnish = {
   InventoryItemRarity: /* csgo_finnish.txt */"Harvinaisuus:",
   InventoryItemRemovePatch: /* csgo_finnish.txt */"Poista kangasmerkki",
   InventoryItemRename: /* csgo_finnish.txt */"Nimeä uudelleen",
+  InventoryItemRenameClearTooltip: /* csgo_finnish.txt */"Aloita alusta.",
+  InventoryItemRenameInvalidTooltip: /* csgo_finnish.txt */"Anna kelvollinen nimi.",
   InventoryItemRenamePlaceholder: /* csgo_finnish.txt */"Uusi nimi",
   InventoryItemRenameStorageUnit: /* csgo_finnish.txt */"Vaihda nimike",
   InventoryItemScrapeSticker: /* csgo_finnish.txt */"Raaputa tarra",

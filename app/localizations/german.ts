@@ -108,6 +108,8 @@ export const german = {
   InventoryItemRarity: /* csgo_german.txt */"Seltenheit:",
   InventoryItemRemovePatch: /* csgo_german.txt */"Aufnäher entfernen",
   InventoryItemRename: /* csgo_german.txt */"umbenennen",
+  InventoryItemRenameClearTooltip: /* csgo_german.txt */"Von vorne anfangen.",
+  InventoryItemRenameInvalidTooltip: /* csgo_german.txt */"Bitte geben Sie einen gültigen Namen ein.",
   InventoryItemRenamePlaceholder: /* csgo_german.txt */"Neuer Name",
   InventoryItemRenameStorageUnit: /* csgo_german.txt */"Beschreibung ändern",
   InventoryItemScrapeSticker: /* csgo_german.txt */"Aufkleber abkratzen",

@@ -108,6 +108,8 @@ export const japanese = {
   InventoryItemRarity: /* csgo_japanese.txt */"希少性:",
   InventoryItemRemovePatch: /* csgo_japanese.txt */"パッチを剥がす",
   InventoryItemRename: /* csgo_japanese.txt */"の名前を変更",
+  InventoryItemRenameClearTooltip: /* csgo_japanese.txt */"やり直してください。",
+  InventoryItemRenameInvalidTooltip: /* csgo_japanese.txt */"有効な名前を入力してください。",
   InventoryItemRenamePlaceholder: /* csgo_japanese.txt */"新しい名前",
   InventoryItemRenameStorageUnit: /* csgo_japanese.txt */"ラベルを変更する",
   InventoryItemScrapeSticker: /* csgo_japanese.txt */"ステッカーを削る",

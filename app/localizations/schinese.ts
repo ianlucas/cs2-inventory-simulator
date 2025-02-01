@@ -108,6 +108,8 @@ export const schinese = {
   InventoryItemRarity: /* csgo_schinese.txt */"稀有度：",
   InventoryItemRemovePatch: /* csgo_schinese.txt */"移除布章",
   InventoryItemRename: /* csgo_schinese.txt */"重命名",
+  InventoryItemRenameClearTooltip: /* csgo_schinese.txt */"重新开始。",
+  InventoryItemRenameInvalidTooltip: /* csgo_schinese.txt */"请提供有效的名称。",
   InventoryItemRenamePlaceholder: /* csgo_schinese.txt */"新名称",
   InventoryItemRenameStorageUnit: /* csgo_schinese.txt */"更改标签",
   InventoryItemScrapeSticker: /* csgo_schinese.txt */"刮去印花",

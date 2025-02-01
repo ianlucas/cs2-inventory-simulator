@@ -108,6 +108,8 @@ export const indonesian = {
   InventoryItemRarity: /* csgo_indonesian.txt */"Kelangkaan:",
   InventoryItemRemovePatch: /* csgo_indonesian.txt */"Lepas Patch",
   InventoryItemRename: /* csgo_indonesian.txt */"Ganti nama",
+  InventoryItemRenameClearTooltip: /* csgo_indonesian.txt */"Ulang.",
+  InventoryItemRenameInvalidTooltip: /* csgo_indonesian.txt */"Silakan berikan nama yang valid.",
   InventoryItemRenamePlaceholder: /* csgo_indonesian.txt */"Nama baru",
   InventoryItemRenameStorageUnit: /* csgo_indonesian.txt */"Ganti Label",
   InventoryItemScrapeSticker: /* csgo_indonesian.txt */"Kikis Stiker",

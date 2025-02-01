@@ -108,6 +108,8 @@ export const koreana = {
   InventoryItemRarity: /* csgo_koreana.txt */"희귀도:",
   InventoryItemRemovePatch: /* csgo_koreana.txt */"패치 제거하기",
   InventoryItemRename: /* csgo_koreana.txt */"이름 바꾸기",
+  InventoryItemRenameClearTooltip: /* csgo_koreana.txt */"다시 시작하세요.",
+  InventoryItemRenameInvalidTooltip: /* csgo_koreana.txt */"유효한 이름을 입력하세요.",
   InventoryItemRenamePlaceholder: /* csgo_koreana.txt */"새 이름",
   InventoryItemRenameStorageUnit: /* csgo_koreana.txt */"이름 변경",
   InventoryItemScrapeSticker: /* csgo_koreana.txt */"스티커 긁어내기",

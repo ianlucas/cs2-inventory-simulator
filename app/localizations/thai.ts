@@ -108,6 +108,8 @@ export const thai = {
   InventoryItemRarity: /* csgo_thai.txt */"ความหายาก:",
   InventoryItemRemovePatch: /* csgo_thai.txt */"ถอดแพตช์ปัก",
   InventoryItemRename: /* csgo_thai.txt */"เปลี่ยนชื่อ",
+  InventoryItemRenameClearTooltip: /* csgo_thai.txt */"เริ่มต้นใหม่",
+  InventoryItemRenameInvalidTooltip: /* csgo_thai.txt */"กรุณาระบุชื่อให้ถูกต้อง",
   InventoryItemRenamePlaceholder: /* csgo_thai.txt */"ชื่อใหม่",
   InventoryItemRenameStorageUnit: /* csgo_thai.txt */"เปลี่ยนป้ายชื่อ",
   InventoryItemScrapeSticker: /* csgo_thai.txt */"ขูดสติกเกอร์",

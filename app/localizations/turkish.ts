@@ -108,6 +108,8 @@ export const turkish = {
   InventoryItemRarity: /* csgo_turkish.txt */"Nadirlik:",
   InventoryItemRemovePatch: /* csgo_turkish.txt */"Yamayı Sök",
   InventoryItemRename: /* csgo_turkish.txt */"Yeniden Adlandır",
+  InventoryItemRenameClearTooltip: /* csgo_turkish.txt */"Baştan başla.",
+  InventoryItemRenameInvalidTooltip: /* csgo_turkish.txt */"Lütfen geçerli bir isim girin.",
   InventoryItemRenamePlaceholder: /* csgo_turkish.txt */"Yeni isim",
   InventoryItemRenameStorageUnit: /* csgo_turkish.txt */"Etiketi Değiştir",
   InventoryItemScrapeSticker: /* csgo_turkish.txt */"Çıkartmayı Kazı",

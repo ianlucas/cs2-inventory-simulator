@@ -108,6 +108,8 @@ export const russian = {
   InventoryItemRarity: /* csgo_russian.txt */"Редкость:",
   InventoryItemRemovePatch: /* csgo_russian.txt */"Снять нашивку",
   InventoryItemRename: /* csgo_russian.txt */"Переименовать",
+  InventoryItemRenameClearTooltip: /* csgo_russian.txt */"Начать сначала.",
+  InventoryItemRenameInvalidTooltip: /* csgo_russian.txt */"Введите допустимое имя.",
   InventoryItemRenamePlaceholder: /* csgo_russian.txt */"Новое название",
   InventoryItemRenameStorageUnit: /* csgo_russian.txt */"Сменить ярлык",
   InventoryItemScrapeSticker: /* csgo_russian.txt */"Поскрести наклейку",

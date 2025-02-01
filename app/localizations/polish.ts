@@ -108,6 +108,8 @@ export const polish = {
   InventoryItemRarity: /* csgo_polish.txt */"Rzadkość:",
   InventoryItemRemovePatch: /* csgo_polish.txt */"Usuń naszywkę",
   InventoryItemRename: /* csgo_polish.txt */"Zmień nazwę:",
+  InventoryItemRenameClearTooltip: /* csgo_polish.txt */"Zacznij od nowa.",
+  InventoryItemRenameInvalidTooltip: /* csgo_polish.txt */"Wprowadź poprawną nazwę.",
   InventoryItemRenamePlaceholder: /* csgo_polish.txt */"Nowa nazwa",
   InventoryItemRenameStorageUnit: /* csgo_polish.txt */"Zmień nazwę",
   InventoryItemScrapeSticker: /* csgo_polish.txt */"Zdrap naklejkę",

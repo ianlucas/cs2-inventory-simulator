@@ -134,6 +134,8 @@ export const english = {
   InventoryItemRarity: /* csgo_english.txt */"Rarity:",
   InventoryItemRemovePatch: /* csgo_english.txt */"Remove Patch",
   InventoryItemRename: /* csgo_english.txt */"Rename",
+  InventoryItemRenameClearTooltip: /* csgo_english.txt */"Start over.",
+  InventoryItemRenameInvalidTooltip: /* csgo_english.txt */"Please provide a valid name.",
   InventoryItemRenamePlaceholder: /* csgo_english.txt */"New name",
   InventoryItemRenameStorageUnit: /* csgo_english.txt */"Change Label",
   InventoryItemScrapeSticker: /* csgo_english.txt */"Scrape Sticker",

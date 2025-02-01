@@ -133,6 +133,8 @@ export const brazilian = {
   InventoryItemRarity: /* csgo_brazilian.txt */"Raridade:",
   InventoryItemRemovePatch: /* csgo_brazilian.txt */"Remover emblema",
   InventoryItemRename: /* csgo_brazilian.txt */"Renomear",
+  InventoryItemRenameClearTooltip: /* csgo_brazilian.txt */"Começar do zero.",
+  InventoryItemRenameInvalidTooltip: /* csgo_brazilian.txt */"Informe um nome válido.",
   InventoryItemRenamePlaceholder: /* csgo_brazilian.txt */"Novo nome",
   InventoryItemRenameStorageUnit: /* csgo_brazilian.txt */"Renomear",
   InventoryItemScrapeSticker: /* csgo_brazilian.txt */"Raspar adesivo",

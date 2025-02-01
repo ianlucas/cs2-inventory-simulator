@@ -108,6 +108,8 @@ export const romanian = {
   InventoryItemRarity: /* csgo_romanian.txt */"Raritate:",
   InventoryItemRemovePatch: /* csgo_romanian.txt */"Înlătură ecusonul brodat",
   InventoryItemRename: /* csgo_romanian.txt */"Redenumește",
+  InventoryItemRenameClearTooltip: /* csgo_romanian.txt */"Resetează.",
+  InventoryItemRenameInvalidTooltip: /* csgo_romanian.txt */"Te rugăm să oferi un nume valid.",
   InventoryItemRenamePlaceholder: /* csgo_romanian.txt */"Noul nume",
   InventoryItemRenameStorageUnit: /* csgo_romanian.txt */"Schimbă denumirea",
   InventoryItemScrapeSticker: /* csgo_romanian.txt */"Răzuiește abțibildul",

@@ -127,6 +127,8 @@ export const portuguese = {
   InventoryItemRarity: /* csgo_portuguese.txt */"Raridade:",
   InventoryItemRemovePatch: /* csgo_portuguese.txt */"Remover emblema",
   InventoryItemRename: /* csgo_portuguese.txt */"Renomear",
+  InventoryItemRenameClearTooltip: /* csgo_portuguese.txt */"Recomeçar.",
+  InventoryItemRenameInvalidTooltip: /* csgo_portuguese.txt */"Introduz um nome válido.",
   InventoryItemRenamePlaceholder: /* csgo_portuguese.txt */"Nome novo",
   InventoryItemRenameStorageUnit: /* csgo_portuguese.txt */"Editar nome",
   InventoryItemScrapeSticker: /* csgo_portuguese.txt */"Raspar autocolante",

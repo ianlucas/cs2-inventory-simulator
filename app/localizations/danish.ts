@@ -108,6 +108,8 @@ export const danish = {
   InventoryItemRarity: /* csgo_danish.txt */"Sjældenhed:",
   InventoryItemRemovePatch: /* csgo_danish.txt */"Fjern lap",
   InventoryItemRename: /* csgo_danish.txt */"Omdøb",
+  InventoryItemRenameClearTooltip: /* csgo_danish.txt */"Start forfra.",
+  InventoryItemRenameInvalidTooltip: /* csgo_danish.txt */"Indtast venligst et gyldigt navn.",
   InventoryItemRenamePlaceholder: /* csgo_danish.txt */"Nyt navn",
   InventoryItemRenameStorageUnit: /* csgo_danish.txt */"Omdøb",
   InventoryItemScrapeSticker: /* csgo_danish.txt */"Skrab klistermærke",

@@ -108,6 +108,8 @@ export const hungarian = {
   InventoryItemRarity: /* csgo_hungarian.txt */"Ritkaság:",
   InventoryItemRemovePatch: /* csgo_hungarian.txt */"Felvarró eltávolítása",
   InventoryItemRename: /* csgo_hungarian.txt */"átnevezése",
+  InventoryItemRenameClearTooltip: /* csgo_hungarian.txt */"Újrakezdés.",
+  InventoryItemRenameInvalidTooltip: /* csgo_hungarian.txt */"Kérjük, adj meg egy érvényes nevet.",
   InventoryItemRenamePlaceholder: /* csgo_hungarian.txt */"Új név",
   InventoryItemRenameStorageUnit: /* csgo_hungarian.txt */"Címkeváltoztatás",
   InventoryItemScrapeSticker: /* csgo_hungarian.txt */"Matrica kaparása",
