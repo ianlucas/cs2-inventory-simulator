@@ -5,6 +5,7 @@
 
 import { CS2EconomyItem, CS2ItemType } from "@ianlucas/cs2-lib";
 import { useState } from "react";
+import { toArrayIf } from "~/utils/misc";
 import { useInventory, useLocalize, useRules } from "./app-context";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ModalButton } from "./modal-button";
@@ -37,10 +38,10 @@ export function CraftNew({
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
 
   const inventoryMaxQuantity = inventoryMaxItems - inventory.size();
-  const maxQuantity =
-    inventoryMaxItems !== 0
-      ? Math.min(craftMaxQuantity, inventoryMaxQuantity)
-      : inventoryMaxQuantity;
+  const maxQuantity = Math.min(
+    inventoryMaxQuantity,
+    ...toArrayIf(craftMaxQuantity, (n) => n > 0)
+  );
 
   const isHideNameTag = !craftAllowNametag;
   const isHideSeed = !craftAllowSeed;
