@@ -29,8 +29,8 @@ export function UnlockCaseContainerBackground({
   return (
     <div
       className={clsx(
-        "fixed left-0 top-0 flex h-full w-full items-center justify-center transition-all",
-        !canUnlock && "blur-sm",
+        "fixed top-0 left-0 flex h-full w-full items-center justify-center transition-all",
+        !canUnlock && "blur-xs",
         canUnlock && "blur-[1px]"
       )}
       style={{

@@ -75,7 +75,7 @@ export function ButtonWithTooltip({
             {...getFloatingProps()}
           >
             <div
-              className="rounded bg-neutral-900/90 px-4 py-3.5 text-xs text-neutral-200 shadow"
+              className="rounded-sm bg-neutral-900/90 px-4 py-3.5 text-xs text-neutral-200 shadow-sm"
               style={styles}
             >
               {tooltip}

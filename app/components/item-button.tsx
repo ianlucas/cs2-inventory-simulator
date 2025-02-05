@@ -45,7 +45,7 @@ export function ItemButton({
         (index ?? 0) % 2 !== 0 ? "bg-black/10" : "bg-transparent",
         clickable &&
           "relative cursor-default overflow-hidden hover:bg-black/25 active:bg-black/30",
-        !bigger && "block h-[64px] w-full pl-[2px] pr-4",
+        !bigger && "block h-[64px] w-full pr-4 pl-[2px]",
         bigger && "flex h-full w-full items-center justify-center"
       )}
     >

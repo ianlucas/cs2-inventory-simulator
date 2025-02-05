@@ -42,14 +42,14 @@ export function Modal({
             className={clsx(
               hidden ? "hidden" : fixed ? "fixed" : "absolute",
               animate && "opacity-0",
-              "left-0 top-0 z-50 flex min-h-full w-full select-none items-center justify-center bg-gradient-to-b from-black/15 to-transparent transition-opacity",
+              "top-0 left-0 z-50 flex min-h-full w-full items-center justify-center bg-linear-to-b from-black/15 to-transparent transition-opacity select-none",
               blur && "bg-black/50 lg:bg-transparent lg:backdrop-blur-[2px]"
             )}
             ref={ref}
           >
             <div
               className={clsx(
-                "min-h-[inherit] rounded border border-white/30 bg-neutral-900 bg-opacity-[0.98] text-white shadow-lg drop-shadow-lg lg:backdrop-blur-sm",
+                "min-h-[inherit] rounded-sm border border-white/30 bg-neutral-900/98 text-white shadow-lg drop-shadow-lg lg:backdrop-blur-xs",
                 className
               )}
             >
@@ -73,26 +73,26 @@ export function ModalHeader({
   title: string;
 }) {
   return (
-    <div className="select-none bg-gradient-to-t from-black/30 to-transparent px-1 py-1 pr-2">
-      <div className="flex items-center justify-between bg-gradient-to-r from-blue-500/30 to-transparent py-1 pl-2">
+    <div className="bg-linear-to-t from-black/30 to-transparent px-1 py-1 pr-2 select-none">
+      <div className="flex items-center justify-between bg-linear-to-r from-blue-500/30 to-transparent py-1 pl-2">
         <span className="font-display text-[0.9rem] font-bold text-neutral-200">
           {title}
         </span>
         <div className="flex items-center">
           {linkTo !== undefined && (
             <Link
-              className="h-4 px-2 opacity-50 transition hover:opacity-100"
+              className="flex h-4 px-2 opacity-50 transition hover:opacity-100"
               to={linkTo}
             >
-              <FontAwesomeIcon icon={faXmark} className="block h-4 w-4" />
+              <FontAwesomeIcon icon={faXmark} className="h-4 w-4" />
             </Link>
           )}
           {onClose !== undefined && (
             <button
-              className="h-4 cursor-default px-2 opacity-50 transition hover:opacity-100"
+              className="flex h-4 cursor-default px-2 opacity-50 transition hover:opacity-100"
               onClick={onClose}
             >
-              <FontAwesomeIcon icon={faXmark} className="block h-4 w-4" />
+              <FontAwesomeIcon icon={faXmark} className="h-4 w-4" />
             </button>
           )}
         </div>

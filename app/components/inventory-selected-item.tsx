@@ -40,14 +40,14 @@ export function InventorySelectedItem({
   const item = inventory.get(uid);
 
   return (
-    <div className="m-auto w-full px-4 pb-4 text-xs drop-shadow lg:flex lg:w-[1024px] lg:items-center lg:px-0 lg:pb-0 lg:text-base">
+    <div className="m-auto w-full px-4 pb-4 text-xs drop-shadow-sm lg:flex lg:w-[1024px] lg:items-center lg:px-0 lg:pb-0 lg:text-base">
       <button
         className="px-2 py-1 hover:bg-black/30 active:bg-black/70"
         onClick={onDismiss}
       >
         <FontAwesomeIcon icon={faArrowLeft} className="h-5" />
       </button>
-      <div className="flex flex-1 select-none items-center justify-center gap-3">
+      <div className="flex flex-1 items-center justify-center gap-3 select-none">
         <strong>{localize(getLabelToken(itemSelector?.type))}</strong>
         <img draggable={false} className="h-12" src={resolveItemImage(item)} />
         <span className="text-neutral-300">

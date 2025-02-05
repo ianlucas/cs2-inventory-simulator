@@ -30,7 +30,7 @@ export function ToolInput({
     <input
       {...props}
       className={clsx(
-        "border border-white/35 font-display tracking-widest placeholder-neutral-700 outline-none placeholder:font-sans placeholder:tracking-normal disabled:bg-transparent disabled:px-0 disabled:text-white",
+        "font-display border border-white/35 tracking-widest placeholder-neutral-700 outline-hidden placeholder:font-sans placeholder:tracking-normal disabled:bg-transparent disabled:px-0 disabled:text-white",
         !inflexible && "w-0 min-w-0 flex-1",
         !unstyled && "px-2 py-1",
         invalid

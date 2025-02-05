@@ -213,7 +213,7 @@ export function Inventory() {
           onDismiss={dismissSelectItem}
         />
       )}
-      <div className="m-auto grid w-full select-none px-2 [grid-gap:1em] [grid-template-columns:repeat(auto-fit,minmax(154px,1fr))] lg:my-8 lg:w-[1024px] lg:px-0">
+      <div className="m-auto grid w-full [grid-template-columns:repeat(auto-fit,minmax(154px,1fr))] px-2 [grid-gap:1em] select-none lg:my-8 lg:w-[1024px] lg:px-0">
         {displayedItems.map((item) => (
           <div key={item.uid} className="flex items-start justify-center">
             <InventoryItem
@@ -251,8 +251,8 @@ export function Inventory() {
         <InventoryGridPlaceholder />
       </div>
       {displayedItems.length === 0 && (
-        <div className="m-auto flex select-none justify-center lg:w-[1024px]">
-          <div className="flex w-full items-center justify-center gap-2 bg-gradient-to-r from-transparent via-black/30 to-transparent py-1">
+        <div className="m-auto flex justify-center select-none lg:w-[1024px]">
+          <div className="flex w-full items-center justify-center gap-2 bg-linear-to-r from-transparent via-black/30 to-transparent py-1">
             <InfoIcon className="h-4" />
             {localize("InventoryNoItemsToDisplay")}
           </div>

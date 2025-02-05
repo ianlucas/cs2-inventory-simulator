@@ -37,11 +37,11 @@ export function UnlockCaseContainerUnlocked({
   const item = CS2Economy.getById(id);
 
   return (
-    <div className="flex h-full w-full items-center justify-center text-center drop-shadow">
+    <div className="flex h-full w-full items-center justify-center text-center drop-shadow-sm">
       <div>
         <div className="px-4 text-2xl">
           <span
-            className="border-b-4 pb-2 font-display font-medium leading-10 tracking-wider drop-shadow"
+            className="font-display border-b-4 pb-2 leading-10 font-medium tracking-wider drop-shadow-sm"
             style={{ borderColor: item.rarity }}
           >
             {nameItemString(createFakeInventoryItem(item, attributes))}

@@ -169,12 +169,12 @@ export function Console() {
 
   return (
     <div
-      className="fixed left-2 top-2 z-[9999] flex min-h-[240px] min-w-[360px] resize flex-col overflow-hidden rounded-sm border border-black/80 bg-neutral-950/90 text-sm drop-shadow-lg backdrop-blur"
+      className="fixed top-2 left-2 z-9999 flex min-h-[240px] min-w-[360px] resize flex-col overflow-hidden rounded-xs border border-black/80 bg-neutral-950/90 text-sm drop-shadow-lg backdrop-blur-sm"
       style={{ height: consoleSize.height, width: consoleSize.width }}
       ref={containerRef}
     >
       <div
-        className="flex select-none items-center bg-neutral-950/95 px-2 py-1 pr-1 font-display font-bold text-white"
+        className="font-display flex items-center bg-neutral-950/95 px-2 py-1 pr-1 font-bold text-white select-none"
         ref={handleRef}
       >
         <div className="flex-1">CONSOLE</div>
@@ -186,7 +186,7 @@ export function Console() {
         </button>
       </div>
       <div
-        className="flex-1 overflow-hidden overflow-x-auto overflow-y-scroll whitespace-pre-wrap font-mono text-sm"
+        className="flex-1 overflow-hidden overflow-x-auto overflow-y-scroll font-mono text-sm whitespace-pre-wrap"
         ref={outputRef}
       >
         {buffer.map((line, no) => (
@@ -196,7 +196,7 @@ export function Console() {
       <form onSubmit={handleSubmit}>
         <input
           autoFocus
-          className="w-full bg-black px-1 font-mono text-sm text-white outline-none placeholder:text-neutral-600"
+          className="w-full bg-black px-1 font-mono text-sm text-white outline-hidden placeholder:text-neutral-600"
           onChange={handleChange}
           placeholder="Type a command..."
           value={input}

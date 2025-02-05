@@ -101,7 +101,7 @@ export function EditorStepRangeWithInput({
         <button
           onClick={handleRandomClick}
           title={localize("EditorRandom")}
-          className="flex cursor-default items-center rounded border border-neutral-600/30 p-1 text-neutral-400 hover:border-blue-500/50 hover:text-blue-500/50"
+          className="flex cursor-default items-center rounded-sm border border-neutral-600/30 p-1 text-neutral-400 hover:border-blue-500/50 hover:text-blue-500/50"
         >
           <FontAwesomeIcon className="h-3" icon={faRandom} />
         </button>

@@ -12,7 +12,7 @@ export function Footer() {
   const { buildLastCommit, appFooterName } = useRules();
 
   return (
-    <footer className="my-8 select-none text-sm text-neutral-400 drop-shadow-sm">
+    <footer className="my-8 text-sm text-neutral-400 drop-shadow-xs select-none">
       <div className="text-center text-sm">
         <span>
           &copy; {new Date().getFullYear()}{" "}

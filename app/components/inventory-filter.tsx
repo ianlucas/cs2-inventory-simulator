@@ -49,7 +49,7 @@ export function InventoryFilter() {
         ))}
       </div>
       <div
-        className="mx-auto flex w-[1024px] items-center justify-center gap-2 overflow-hidden bg-gradient-to-b from-black/20 to-transparent transition-all"
+        className="mx-auto flex w-[1024px] items-center justify-center gap-2 overflow-hidden bg-linear-to-b from-black/20 to-transparent transition-all"
         style={{
           height: hasSecondaryFilters ? 40 : 0,
           paddingTop: hasSecondaryFilters ? "0.375rem" : 0,
@@ -75,9 +75,9 @@ export function InventoryFilter() {
             />
             <input
               className={clsx(
-                "flex-1 border-b-2 border-white bg-transparent placeholder-neutral-400 outline-none transition-all",
+                "flex-1 border-b-2 border-white bg-transparent placeholder-neutral-400 outline-hidden transition-all",
                 search.length === 0 &&
-                  "opacity-0 focus:opacity-100 group-hover:opacity-100"
+                  "opacity-0 group-hover:opacity-100 focus:opacity-100"
               )}
               onChange={setSearch}
               placeholder={localize("InventoryFilterSearch")}
@@ -85,7 +85,7 @@ export function InventoryFilter() {
             />
           </div>
         </div>
-        <div className="flex items-center gap-3 font-display">
+        <div className="font-display flex items-center gap-3">
           <FontAwesomeIcon
             className="h-4 text-white"
             icon={faArrowDownWideShort}

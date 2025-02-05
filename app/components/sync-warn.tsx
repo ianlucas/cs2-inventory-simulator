@@ -17,7 +17,7 @@ export function SyncWarn() {
     <ClientOnly
       children={() =>
         user === undefined && didUserAuthenticateInThisBrowser() ? (
-          <div className="flex select-none items-center justify-center gap-4 bg-red-500/50 px-4 py-2 text-sm text-white lg:gap-2 lg:px-0 lg:text-sm lg:font-bold">
+          <div className="flex items-center justify-center gap-4 bg-red-500/50 px-4 py-2 text-sm text-white select-none lg:gap-2 lg:px-0 lg:text-sm lg:font-bold">
             <FontAwesomeIcon icon={faExclamationTriangle} className="h-4" />
             {localize("SyncWarnText")}
           </div>

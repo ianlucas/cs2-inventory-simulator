@@ -24,7 +24,7 @@ export function IconInput({
   return (
     <label
       className={clsx(
-        "group flex items-center gap-2 bg-neutral-950/40 px-2 py-1 ring-blue-500/50 has-[:focus]:ring-2",
+        "group flex items-center gap-2 bg-neutral-950/40 px-2 py-1 ring-blue-500/50 has-focus:ring-2",
         labelStyles
       )}
     >
@@ -35,7 +35,7 @@ export function IconInput({
       <input
         value={value}
         onChange={onChange}
-        className="flex-1 bg-transparent placeholder-neutral-600 outline-none"
+        className="flex-1 bg-transparent placeholder-neutral-600 outline-hidden"
         placeholder={placeholder}
       />
     </label>

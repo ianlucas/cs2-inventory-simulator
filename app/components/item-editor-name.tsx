@@ -14,7 +14,7 @@ export function ItemEditorName({ item }: { item: CS2EconomyItem }) {
   const [model, name] = nameItem(item, "editor-name");
 
   return (
-    <div className="bg-gradient-to-r from-transparent via-black/30 to-transparent font-display">
+    <div className="font-display bg-linear-to-r from-transparent via-black/30 to-transparent">
       {has(model) && <div className="text-sm text-neutral-400">{model}</div>}
       <div
         className={clsx(has(model) && "-mt-2", "font-bold")}
