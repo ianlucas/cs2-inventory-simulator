@@ -75,7 +75,7 @@ export function SwapItemsStatTrak({
                       src="/images/stattrak-module.png"
                       draggable={false}
                     />
-                    <span className="absolute top-[22%] w-full text-center font-display text-3xl text-orange-500">
+                    <span className="font-display absolute top-[22%] w-full text-center text-3xl text-orange-500">
                       {String(value).padStart(6, "0")}
                     </span>
                   </div>

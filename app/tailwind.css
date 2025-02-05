@@ -3,9 +3,40 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-display: "stratum-2-web", "Exo 2", sans-serif;
+  --font-sans: "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Cascadia Code,
+    Consolas, Liberation Mono, Courier New, monospace;
+
+  --text-sm: 0.9rem;
+  --text-base: 1.1rem;
+  --text-xl: 1.35rem;
+  --text-2xl: 1.663rem;
+  --text-3xl: 2.053rem;
+  --text-4xl: 2.541rem;
+  --text-5xl: 3.152rem;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 :root {
   color-scheme: dark;

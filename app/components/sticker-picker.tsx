@@ -122,23 +122,23 @@ export function StickerPicker({
             <button
               disabled={disabled}
               key={index}
-              className="relative aspect-[256/192] cursor-default overflow-hidden bg-neutral-950/40"
+              className="relative aspect-256/192 cursor-default overflow-hidden bg-neutral-950/40"
               onClick={handleClickSlot(index)}
             >
               {item !== undefined ? (
-                <ItemImage className="aspect-[256/192]" item={item} />
+                <ItemImage className="aspect-256/192" item={item} />
               ) : (
-                <div className="flex aspect-[256/192] items-center justify-center text-neutral-700">
+                <div className="flex aspect-256/192 items-center justify-center text-neutral-700">
                   {localize("StickerPickerNA")}
                 </div>
               )}
               {sticker !== undefined && (
-                <div className="text-outline-1 absolute bottom-0 right-1 text-sm font-bold drop-shadow-lg">
+                <div className="text-outline-1 absolute right-1 bottom-0 text-sm font-bold drop-shadow-lg">
                   {(stickerWear * 100).toFixed(0)}%
                 </div>
               )}
               {!disabled && (
-                <div className="absolute left-0 top-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
+                <div className="absolute top-0 left-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
               )}
             </button>
           );

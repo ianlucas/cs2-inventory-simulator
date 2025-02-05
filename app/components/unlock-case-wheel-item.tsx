@@ -31,7 +31,7 @@ export function UnlockCaseWheelItem({
       />
       <img
         title={index.toString()}
-        className="absolute left-0 top-0 h-full w-full"
+        className="absolute top-0 left-0 h-full w-full"
         src={
           unlockedItem.special
             ? resolveCaseSpecialsImage(caseItem)

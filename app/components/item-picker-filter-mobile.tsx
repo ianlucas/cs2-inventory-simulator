@@ -30,7 +30,7 @@ export function ItemPickerFilterMobile({
         <button
           key={index}
           className={clsx(
-            "rounded bg-opacity-50 px-2 font-display font-bold transition-all hover:text-neutral-200",
+            "font-display rounded-sm px-2 font-bold transition-all hover:text-neutral-200",
             !(
               filter.category === value.category && filter.type === value.type
             ) && "text-neutral-400",

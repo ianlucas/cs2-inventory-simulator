@@ -30,9 +30,9 @@ export function EditorInput({
     <input
       {...props}
       className={clsx(
-        "placeholder-neutral-700 outline-none disabled:bg-transparent disabled:px-0 disabled:text-white",
+        "placeholder-neutral-700 outline-hidden disabled:bg-transparent disabled:px-0 disabled:text-white",
         !inflexible && "w-0 min-w-0 flex-1",
-        !unstyled && "px-2 py-1 focus:ring-2",
+        !unstyled && "px-2 py-1 focus:ring-2 focus:ring-blue-500/50",
         invalid
           ? "bg-red-500/50"
           : unstyled

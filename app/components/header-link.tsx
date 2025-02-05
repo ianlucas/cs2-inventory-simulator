@@ -46,7 +46,7 @@ export function HeaderLink({
           {content}
         </span>
         {disabledText && (
-          <div className="pointer-events-none absolute left-1/2 top-[100%] whitespace-nowrap bg-black/50 px-1 opacity-0 transition-all group-hover:opacity-100">
+          <div className="pointer-events-none absolute top-[100%] left-1/2 bg-black/50 px-1 whitespace-nowrap opacity-0 transition-all group-hover:opacity-100">
             {disabledText}
           </div>
         )}

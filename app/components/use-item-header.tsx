@@ -19,8 +19,8 @@ export function UseItemHeader({
   warningItem?: string;
 }) {
   return (
-    <div className="text-center drop-shadow">
-      <div className="font-display text-3xl font-medium leading-10 tracking-wider">
+    <div className="text-center drop-shadow-sm">
+      <div className="font-display text-3xl leading-10 font-medium tracking-wider">
         {title}
       </div>
       {actionDesc !== undefined && (

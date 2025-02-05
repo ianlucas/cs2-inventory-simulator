@@ -171,7 +171,7 @@ export default function Craft() {
       {isCrafting && (
         <Modal
           className={clsx(
-            isDesktop ? "min-w-[640px] max-w-[720px]" : "w-[540px]"
+            isDesktop ? "max-w-[720px] min-w-[640px]" : "w-[540px]"
           )}
         >
           <ModalHeader title={localize("CraftSelectHeader")} linkTo="/" />

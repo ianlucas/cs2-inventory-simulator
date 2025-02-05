@@ -179,7 +179,7 @@ export function ErrorBoundary() {
             </a>
           </p>
           {error?.stack !== undefined && (
-            <pre className="relative mt-4 max-h-[128px] overflow-hidden text-ellipsis text-sm after:pointer-events-none after:absolute after:left-0 after:top-0 after:block after:h-full after:w-full after:bg-gradient-to-b after:from-transparent after:to-blue-500 after:content-['']">
+            <pre className="relative mt-4 max-h-[128px] overflow-hidden text-sm text-ellipsis after:pointer-events-none after:absolute after:top-0 after:left-0 after:block after:h-full after:w-full after:bg-linear-to-b after:from-transparent after:to-blue-500 after:content-['']">
               {error.stack}
             </pre>
           )}

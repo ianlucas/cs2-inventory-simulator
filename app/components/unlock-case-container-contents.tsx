@@ -33,7 +33,7 @@ export function UnlockCaseContainerContents({
 
   return (
     <div
-      className="absolute w-full -translate-y-full rounded [transition:all_cubic-bezier(0.4,0,0.2,1)_1s]"
+      className="absolute w-full rounded-sm [transition:all_cubic-bezier(0.4,0,0.2,1)_1s]"
       style={{
         transform: `translateY(${translateY}px)`,
         opacity

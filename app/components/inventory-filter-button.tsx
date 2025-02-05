@@ -19,7 +19,7 @@ export function InventoryFilterButton({
     <button
       {...props}
       className={clsx(
-        "cursor-default rounded-sm px-2 py-1 font-display text-sm font-medium uppercase transition-all hover:bg-neutral-500/40",
+        "font-display cursor-default rounded-xs px-2 py-1 text-sm font-medium uppercase transition-all hover:bg-neutral-500/40",
         active && "bg-cyan-600/40 text-cyan-400"
       )}
     >

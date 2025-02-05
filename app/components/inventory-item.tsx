@@ -207,7 +207,7 @@ export function InventoryItem({
       {!isFreeInventoryItem && !disableContextMenu && isClickOpen && (
         <FloatingFocusManager context={clickContext} modal={false}>
           <div
-            className="z-20 w-[192px] rounded bg-neutral-800 py-2 font-display text-sm text-white outline-none"
+            className="font-display z-20 w-[192px] rounded-sm bg-neutral-800 py-2 text-sm text-white outline-hidden"
             ref={clickRefs.setFloating}
             style={clickStyles}
             {...getClickFloatingProps()}

@@ -47,7 +47,7 @@ export function Select<T extends { value: string }>({
             ? direction === "down"
               ? "rounded-t"
               : "rounded-b"
-            : "rounded",
+            : "rounded-sm",
           className ?? "min-w-[253px]"
         )}
         onClick={() => setIsOpen(true)}

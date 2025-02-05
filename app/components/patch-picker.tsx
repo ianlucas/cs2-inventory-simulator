@@ -98,18 +98,18 @@ export function PatchPicker({
             <button
               disabled={disabled}
               key={index}
-              className="relative aspect-[256/192] cursor-default overflow-hidden bg-neutral-950/40"
+              className="relative aspect-256/192 cursor-default overflow-hidden bg-neutral-950/40"
               onClick={handleClickSlot(index)}
             >
               {item !== undefined ? (
-                <ItemImage className="aspect-[256/192]" item={item} />
+                <ItemImage className="aspect-256/192" item={item} />
               ) : (
-                <div className="flex aspect-[256/192] items-center justify-center text-neutral-700">
+                <div className="flex aspect-256/192 items-center justify-center text-neutral-700">
                   {localize("StickerPickerNA")}
                 </div>
               )}
               {!disabled && (
-                <div className="absolute left-0 top-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
+                <div className="absolute top-0 left-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
               )}
             </button>
           );

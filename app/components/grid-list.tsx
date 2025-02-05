@@ -164,7 +164,7 @@ export function GridList<T>({
       >
         {items.length === 0 && (
           <div
-            className="flex select-none items-center justify-center gap-2 bg-gradient-to-r from-transparent via-black/30 to-transparent"
+            className="flex items-center justify-center gap-2 bg-linear-to-r from-transparent via-black/30 to-transparent select-none"
             style={{ height: itemHeight }}
           >
             <InfoIcon className="h-4" />
@@ -179,7 +179,7 @@ export function GridList<T>({
         })}
       </div>
       <div
-        className="absolute right-0 top-0 h-full w-2"
+        className="absolute top-0 right-0 h-full w-2"
         onClick={handleScrollbarClick}
         onMouseDown={handleMouseDown}
         ref={scrollbar}
@@ -187,7 +187,7 @@ export function GridList<T>({
         <div className="relative h-full w-1/2 overflow-hidden">
           <div
             className={clsx(
-              "absolute w-full rounded bg-white/30",
+              "absolute w-full rounded-sm bg-white/30",
               (hideScrollbar ||
                 items.length === 0 ||
                 items.length <= maxItemsIntoView) &&

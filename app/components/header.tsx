@@ -56,7 +56,7 @@ export function Header() {
   return (
     <div
       className={clsx(
-        "sticky left-0 top-0 z-20 w-full font-display backdrop-blur transition-all before:absolute before:inset-0 before:-z-10 before:bg-gradient-to-b before:from-neutral-800/60 before:to-transparent before:transition-all before:content-['']",
+        "font-display sticky top-0 left-0 z-20 w-full backdrop-blur-sm transition-all before:absolute before:inset-0 before:-z-10 before:bg-linear-to-b before:from-neutral-800/60 before:to-transparent before:transition-all before:content-['']",
         isOnTop ? "before:opacity-0" : "before:opacity-1"
       )}
     >
@@ -75,7 +75,7 @@ export function Header() {
         </div>
         {(isDesktop || isMenuOpen) && (
           <div className="absolute left-0 mt-2 w-full flex-1 px-4 lg:static lg:mt-0 lg:w-auto lg:p-0">
-            <nav className="rounded bg-stone-800 p-2 text-sm lg:flex lg:items-center lg:gap-4 lg:bg-transparent lg:p-0">
+            <nav className="rounded-sm bg-stone-800 p-2 text-sm lg:flex lg:items-center lg:gap-4 lg:bg-transparent lg:p-0">
               <HeaderLink
                 to="/"
                 icon={faBoxesStacked}

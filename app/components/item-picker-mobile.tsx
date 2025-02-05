@@ -43,11 +43,11 @@ export function ItemPickerMobile({
         <input
           value={query}
           onChange={setQuery}
-          className="flex-1 rounded bg-neutral-950/40 px-3 py-1 placeholder-neutral-600 outline-none"
+          className="flex-1 rounded-sm bg-neutral-950/40 px-3 py-1 placeholder-neutral-600 outline-hidden"
           placeholder={localize("CraftSearchPlaceholder")}
         />
       </div>
-      <div className="pb-2 pt-1">
+      <div className="pt-1 pb-2">
         <ItemBrowser
           items={items}
           onClick={handleItemClick}

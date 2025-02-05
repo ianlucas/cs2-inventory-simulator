@@ -20,7 +20,7 @@ export function ModalButton({
     <button
       className={clsx([
         className,
-        "flex h-9 cursor-default items-center rounded-sm px-3 font-display font-bold uppercase drop-shadow-lg transition [font-stretch:62.5%]",
+        "font-display flex h-9 cursor-default items-center rounded-xs px-3 font-bold uppercase [font-stretch:62.5%] drop-shadow-lg transition",
         variant === "primary" &&
           "bg-green-700/80 text-neutral-200 hover:bg-green-600 disabled:bg-green-900 disabled:text-green-600",
         variant === "secondary" &&

@@ -12,7 +12,7 @@ export function SettingsLabel({
   label: string;
 }) {
   return (
-    <div className="flex h-12 items-center justify-between rounded bg-neutral-800/50 px-3 py-1.5">
+    <div className="flex h-12 items-center justify-between rounded-sm bg-neutral-800/50 px-3 py-1.5">
       <label className="font-display font-bold text-neutral-400">{label}</label>
       <div {...props} />
     </div>

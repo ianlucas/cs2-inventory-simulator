@@ -38,12 +38,12 @@ export function InventoryItemTile({
 
   return (
     <div className="w-[154px]">
-      <div className="group relative bg-gradient-to-b from-neutral-600 to-neutral-400 p-[1px]">
-        <div className="bg-gradient-to-b from-neutral-500 to-neutral-300 px-1">
+      <div className="group relative bg-linear-to-b from-neutral-600 to-neutral-400 p-[1px]">
+        <div className="bg-linear-to-b from-neutral-500 to-neutral-300 px-1">
           <ItemImage className="h-[108px] w-[144px]" item={item} />
         </div>
         {isNew && (
-          <div className="absolute left-[1px] top-[1px] bg-sky-600 px-1 py-1 text-[10px] font-bold text-sky-200 shadow-lg transition-all group-hover:text-white">
+          <div className="absolute top-[1px] left-[1px] bg-sky-600 px-1 py-1 text-[10px] font-bold text-sky-200 shadow-lg transition-all group-hover:text-white">
             {localize("InventoryItemNew")}
           </div>
         )}
@@ -70,7 +70,7 @@ export function InventoryItemTile({
           </div>
         )}
         {equipped !== undefined && (
-          <div className="absolute right-0 top-0 flex items-center gap-1 p-2">
+          <div className="absolute top-0 right-0 flex items-center gap-1 p-2">
             {equipped.map((color, colorIndex) =>
               typeof color === "string" ? (
                 <FontAwesomeIcon
@@ -84,16 +84,16 @@ export function InventoryItemTile({
         )}
         {onClick !== undefined && (
           <button
-            className="absolute left-0 top-0 h-full w-full border-4 border-transparent transition-all hover:border-white"
+            className="absolute top-0 left-0 h-full w-full border-4 border-transparent transition-all hover:border-white"
             onClick={onClick}
           />
         )}
       </div>
       <div
-        className="h-1 shadow shadow-black/50"
+        className="h-1 shadow-sm shadow-black/50"
         style={{ backgroundColor: item.rarity }}
       />
-      <div className="mt-1 break-words font-display text-[12px] leading-3 text-white drop-shadow-[0_0_1px_rgba(0,0,0,1)]">
+      <div className="font-display mt-1 text-[12px] leading-3 break-words text-white drop-shadow-[0_0_1px_rgba(0,0,0,1)]">
         {has(model) && <div className="font-bold">{model}</div>}
         {has(name) && <div>{name}</div>}
       </div>

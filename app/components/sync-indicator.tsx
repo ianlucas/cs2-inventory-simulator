@@ -69,7 +69,7 @@ export function SyncIndicator() {
         createPortal(
           <>
             <div
-              className="pointer-events-none fixed bottom-8 right-8 transition-all"
+              className="pointer-events-none fixed right-8 bottom-8 transition-all"
               style={{ opacity }}
             >
               <FillSpinner />

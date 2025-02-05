@@ -72,7 +72,7 @@ export function UnlockCaseContainer({
             className="lg:max-w-[1024px]"
             left={
               keyItem !== undefined ? (
-                <div className="flex items-center gap-2 font-display text-lg">
+                <div className="font-display flex items-center gap-2 text-lg">
                   <ItemImage className="h-14" item={keyItem} />
                   <span>
                     {localize("CaseUse")}{" "}
@@ -81,7 +81,7 @@ export function UnlockCaseContainer({
                 </div>
               ) : (
                 neededKeyItem !== undefined && (
-                  <div className="flex items-center gap-2 font-display text-lg">
+                  <div className="font-display flex items-center gap-2 text-lg">
                     <ItemImage className="h-14" item={neededKeyItem} />
                     <span>
                       {localize("CaseNeed")}{" "}
