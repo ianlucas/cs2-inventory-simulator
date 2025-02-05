@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { config } from "@fortawesome/fontawesome-svg-core";
+import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
 import { CS2Economy, CS2_ITEMS } from "@ianlucas/cs2-lib";
 import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
@@ -15,7 +15,7 @@ CS2Economy.use({
   language: clientGlobals.itemLocalizationMap
 });
 
-config.replacementClass = "";
+fontAwesomeConfig.replacementClass = "";
 
 startTransition(() => {
   hydrateRoot(
