@@ -143,6 +143,7 @@ export const ukrainian = {
   ItemRarityLegendary: /* csgo_ukrainian.txt */"екзотичний предмет",
   ItemRarityMythical: /* csgo_ukrainian.txt */"цікавий предмет",
   ItemRarityNameAgent: /* csgo_ukrainian.txt */"Агент",
+  ItemRarityNameC4: /* csgo_ukrainian.txt */"Бомба",
   ItemRarityNameCharm: /* csgo_ukrainian.txt */"Брелок",
   ItemRarityNameCollectible: /* csgo_ukrainian.txt */"Колекційний предмет",
   ItemRarityNameContainer: /* csgo_ukrainian.txt */"Контейнер",

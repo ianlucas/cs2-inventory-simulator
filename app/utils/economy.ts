@@ -19,7 +19,7 @@ import {
 import { clientGlobals, isServerContext } from "~/globals";
 
 export const defaultAssetsBaseUrl =
-  "https://cdn.statically.io/gh/ianlucas/cs2-lib/2db8999cf58f27d64d19cb852b63549f07e1a958/assets/images";
+  "https://cdn.statically.io/gh/ianlucas/cs2-lib/6599e8f55d262882b79fbcfad7c795e67aa13538/assets/images";
 
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
@@ -29,7 +29,9 @@ export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Sticker,
   CS2ItemType.Tool
 ];
+
 export const RarityLabel = {
+  [CS2RarityColor.Default]: "Default",
   [CS2RarityColor.Common]: "Common",
   [CS2RarityColor.Uncommon]: "Uncommon",
   [CS2RarityColor.Rare]: "Rare",
@@ -99,6 +101,8 @@ export function sortByName(a: CS2EconomyItem, b: CS2EconomyItem) {
 
 export function getRarityItemName(item: CS2EconomyItem) {
   switch (true) {
+    case item.isC4():
+      return "C4";
     case item.isPistol():
       return "Pistol";
     case item.isSniperRifle():

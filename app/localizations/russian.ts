@@ -143,6 +143,7 @@ export const russian = {
   ItemRarityLegendary: /* csgo_russian.txt */"экзотичного вида",
   ItemRarityMythical: /* csgo_russian.txt */"примечательного типа",
   ItemRarityNameAgent: /* csgo_russian.txt */"Агент",
+  ItemRarityNameC4: /* csgo_russian.txt */"C4",
   ItemRarityNameCharm: /* csgo_russian.txt */"Брелок",
   ItemRarityNameCollectible: /* csgo_russian.txt */"Сувенир",
   ItemRarityNameContainer: /* csgo_russian.txt */"Контейнер",

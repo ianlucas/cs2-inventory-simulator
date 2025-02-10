@@ -143,6 +143,7 @@ export const hungarian = {
   ItemRarityLegendary: /* csgo_hungarian.txt */"Egzotikus",
   ItemRarityMythical: /* csgo_hungarian.txt */"Figyelemre méltó",
   ItemRarityNameAgent: /* csgo_hungarian.txt */"Ügynök",
+  ItemRarityNameC4: /* csgo_hungarian.txt */"C4",
   ItemRarityNameCharm: /* csgo_hungarian.txt */"Talizmán",
   ItemRarityNameCollectible: /* csgo_hungarian.txt */"Gyűjthető",
   ItemRarityNameContainer: /* csgo_hungarian.txt */"Tároló",

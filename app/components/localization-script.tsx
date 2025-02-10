@@ -19,7 +19,9 @@ export function LocalizationScript() {
     script.type = "text/javascript";
     document.body.appendChild(script);
     return () => {
-      document.body.removeChild(script);
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
     };
   }, [checksum, language]);
 

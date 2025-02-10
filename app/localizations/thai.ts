@@ -143,6 +143,7 @@ export const thai = {
   ItemRarityLegendary: /* csgo_thai.txt */"Exotic",
   ItemRarityMythical: /* csgo_thai.txt */"Remarkable",
   ItemRarityNameAgent: /* csgo_thai.txt */"เจ้าหน้าที่",
+  ItemRarityNameC4: /* csgo_thai.txt */"C4",
   ItemRarityNameCharm: /* csgo_thai.txt */"พวงกุญแจ",
   ItemRarityNameCollectible: /* csgo_thai.txt */"ของสะสม",
   ItemRarityNameContainer: /* csgo_thai.txt */"กล่อง",

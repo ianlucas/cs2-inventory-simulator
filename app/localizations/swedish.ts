@@ -143,6 +143,7 @@ export const swedish = {
   ItemRarityLegendary: /* csgo_swedish.txt */"Exotisk",
   ItemRarityMythical: /* csgo_swedish.txt */"Enastående",
   ItemRarityNameAgent: /* csgo_swedish.txt */"Agent",
+  ItemRarityNameC4: /* csgo_swedish.txt */"C4",
   ItemRarityNameCharm: /* csgo_swedish.txt */"Hänge",
   ItemRarityNameCollectible: /* csgo_swedish.txt */"Samlingsobjekt",
   ItemRarityNameContainer: /* csgo_swedish.txt */"Behållare",

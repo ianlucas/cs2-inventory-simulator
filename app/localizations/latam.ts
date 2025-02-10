@@ -143,6 +143,7 @@ export const latam = {
   ItemRarityLegendary: /* csgo_latam.txt */"de aspecto exótico",
   ItemRarityMythical: /* csgo_latam.txt */"singular",
   ItemRarityNameAgent: /* csgo_latam.txt */"Agente",
+  ItemRarityNameC4: /* csgo_latam.txt */"C4",
   ItemRarityNameCharm: /* csgo_latam.txt */"Colgante",
   ItemRarityNameCollectible: /* csgo_latam.txt */"Coleccionable",
   ItemRarityNameContainer: /* csgo_latam.txt */"Contenedor",

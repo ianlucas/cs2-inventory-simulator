@@ -143,6 +143,7 @@ export const dutch = {
   ItemRarityLegendary: /* csgo_dutch.txt */"Exotisch",
   ItemRarityMythical: /* csgo_dutch.txt */"Opmerkelijk",
   ItemRarityNameAgent: /* csgo_dutch.txt */"Agent",
+  ItemRarityNameC4: /* csgo_dutch.txt */"C4",
   ItemRarityNameCharm: /* csgo_dutch.txt */"Hangertje",
   ItemRarityNameCollectible: /* csgo_dutch.txt */"Verzamelvoorwerp",
   ItemRarityNameContainer: /* csgo_dutch.txt */"Container",

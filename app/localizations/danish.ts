@@ -143,6 +143,7 @@ export const danish = {
   ItemRarityLegendary: /* csgo_danish.txt */"Eksotisk",
   ItemRarityMythical: /* csgo_danish.txt */"Bemærkelsesværdig",
   ItemRarityNameAgent: /* csgo_danish.txt */"Agent",
+  ItemRarityNameC4: /* csgo_danish.txt */"C4",
   ItemRarityNameCharm: /* csgo_danish.txt */"Vedhæng",
   ItemRarityNameCollectible: /* csgo_danish.txt */"Samleobjekt",
   ItemRarityNameContainer: /* csgo_danish.txt */"Beholder",

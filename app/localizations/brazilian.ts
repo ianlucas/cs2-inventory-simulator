@@ -175,6 +175,7 @@ export const brazilian = {
   ItemRarityLegendary: /* csgo_brazilian.txt */"Exótico",
   ItemRarityMythical: /* csgo_brazilian.txt */"Notável",
   ItemRarityNameAgent: /* csgo_brazilian.txt */"Agente",
+  ItemRarityNameC4: /* csgo_brazilian.txt */"C4",
   ItemRarityNameCharm: /* csgo_brazilian.txt */"Chaveiro",
   ItemRarityNameCollectible: /* csgo_brazilian.txt */"Colecionável",
   ItemRarityNameContainer: /* csgo_brazilian.txt */"Recipiente",

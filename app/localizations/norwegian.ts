@@ -143,6 +143,7 @@ export const norwegian = {
   ItemRarityLegendary: /* csgo_norwegian.txt */"Eksotisk",
   ItemRarityMythical: /* csgo_norwegian.txt */"Spesielt",
   ItemRarityNameAgent: /* csgo_norwegian.txt */"Agent",
+  ItemRarityNameC4: /* csgo_norwegian.txt */"C4",
   ItemRarityNameCharm: /* csgo_norwegian.txt */"Anheng",
   ItemRarityNameCollectible: /* csgo_norwegian.txt */"Samleobjekt",
   ItemRarityNameContainer: /* csgo_norwegian.txt */"Beholder",

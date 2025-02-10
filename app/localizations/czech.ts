@@ -143,6 +143,7 @@ export const czech = {
   ItemRarityLegendary: /* csgo_czech.txt */"Exotická",
   ItemRarityMythical: /* csgo_czech.txt */"Významná",
   ItemRarityNameAgent: /* csgo_czech.txt */"Agent",
+  ItemRarityNameC4: /* csgo_czech.txt */"C4",
   ItemRarityNameCharm: /* csgo_czech.txt */"Přívěsek",
   ItemRarityNameCollectible: /* csgo_czech.txt */"Vyznamenání",
   ItemRarityNameContainer: /* csgo_czech.txt */"Bedna",

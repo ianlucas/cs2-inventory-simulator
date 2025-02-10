@@ -143,6 +143,7 @@ export const greek = {
   ItemRarityLegendary: /* csgo_greek.txt */"Exotic",
   ItemRarityMythical: /* csgo_greek.txt */"Remarkable",
   ItemRarityNameAgent: /* csgo_greek.txt */"Πράκτορας",
+  ItemRarityNameC4: /* csgo_greek.txt */"C4",
   ItemRarityNameCharm: /* csgo_greek.txt */"Γούρι",
   ItemRarityNameCollectible: /* csgo_greek.txt */"Συλλεκτικό",
   ItemRarityNameContainer: /* csgo_greek.txt */"Κιβώτιο",

@@ -164,6 +164,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   ItemRarityLegendary: "Rarity_Legendary",
   ItemRarityMythical: "Rarity_Mythical",
   ItemRarityNameAgent: "Type_CustomPlayer",
+  ItemRarityNameC4: "CSGO_Type_C4",
   ItemRarityNameCharm: "CSGO_Tool_Keychain",
   ItemRarityNameCollectible: "CSGO_Type_Collectible",
   ItemRarityNameContainer: "CSGO_Type_WeaponCase",

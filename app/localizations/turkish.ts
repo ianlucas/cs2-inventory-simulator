@@ -143,6 +143,7 @@ export const turkish = {
   ItemRarityLegendary: /* csgo_turkish.txt */"Egzotik",
   ItemRarityMythical: /* csgo_turkish.txt */"Dikkat Çekici",
   ItemRarityNameAgent: /* csgo_turkish.txt */"Ajan",
+  ItemRarityNameC4: /* csgo_turkish.txt */"C4",
   ItemRarityNameCharm: /* csgo_turkish.txt */"Süs",
   ItemRarityNameCollectible: /* csgo_turkish.txt */"Koleksiyon Öğesi",
   ItemRarityNameContainer: /* csgo_turkish.txt */"Kasa",
