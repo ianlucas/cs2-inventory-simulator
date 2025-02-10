@@ -8,8 +8,9 @@
 @theme {
   --font-display: "stratum-2-web", "Exo 2", sans-serif;
   --font-sans: "Noto Sans", sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Cascadia Code,
-    Consolas, Liberation Mono, Courier New, monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Cascadia Code, Consolas,
+    Liberation Mono, Courier New, monospace;
 
   --text-sm: 0.9rem;
   --text-base: 1.1rem;
