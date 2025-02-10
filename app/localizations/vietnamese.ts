@@ -143,6 +143,7 @@ export const vietnamese = {
   ItemRarityLegendary: /* csgo_vietnamese.txt */"Ngoại nhập",
   ItemRarityMythical: /* csgo_vietnamese.txt */"Ấn tượng",
   ItemRarityNameAgent: /* csgo_vietnamese.txt */"Đặc vụ",
+  ItemRarityNameC4: /* csgo_vietnamese.txt */"C4",
   ItemRarityNameCharm: /* csgo_vietnamese.txt */"Móc treo",
   ItemRarityNameCollectible: /* csgo_vietnamese.txt */"Vật phẩm thu thập",
   ItemRarityNameContainer: /* csgo_vietnamese.txt */"Đồ chứa",

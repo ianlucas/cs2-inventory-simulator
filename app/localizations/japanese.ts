@@ -143,6 +143,7 @@ export const japanese = {
   ItemRarityLegendary: /* csgo_japanese.txt */"エキゾチック",
   ItemRarityMythical: /* csgo_japanese.txt */"リマーカブル",
   ItemRarityNameAgent: /* csgo_japanese.txt */"エージェント",
+  ItemRarityNameC4: /* csgo_japanese.txt */"C4",
   ItemRarityNameCharm: /* csgo_japanese.txt */"チャーム",
   ItemRarityNameCollectible: /* csgo_japanese.txt */"コレクティブル",
   ItemRarityNameContainer: /* csgo_japanese.txt */"コンテナ",

@@ -143,6 +143,7 @@ export const tchinese = {
   ItemRarityLegendary: /* csgo_tchinese.txt */"特製",
   ItemRarityMythical: /* csgo_tchinese.txt */"神話",
   ItemRarityNameAgent: /* csgo_tchinese.txt */"幹員",
+  ItemRarityNameC4: /* csgo_tchinese.txt */"C4",
   ItemRarityNameCharm: /* csgo_tchinese.txt */"吊飾",
   ItemRarityNameCollectible: /* csgo_tchinese.txt */"收集品",
   ItemRarityNameContainer: /* csgo_tchinese.txt */"箱子",

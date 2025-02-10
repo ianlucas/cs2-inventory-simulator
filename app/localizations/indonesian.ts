@@ -143,6 +143,7 @@ export const indonesian = {
   ItemRarityLegendary: /* csgo_indonesian.txt */"Eksotis",
   ItemRarityMythical: /* csgo_indonesian.txt */"Istimewa",
   ItemRarityNameAgent: /* csgo_indonesian.txt */"Agen",
+  ItemRarityNameC4: /* csgo_indonesian.txt */"C4",
   ItemRarityNameCharm: /* csgo_indonesian.txt */"Gantungan",
   ItemRarityNameCollectible: /* csgo_indonesian.txt */"Item Koleksi",
   ItemRarityNameContainer: /* csgo_indonesian.txt */"Kontainer",

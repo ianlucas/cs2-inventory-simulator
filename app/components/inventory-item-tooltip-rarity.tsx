@@ -11,7 +11,7 @@ import { InventoryItemTooltipInfo } from "./inventory-item-tooltip-info";
 export function InventoryItemTooltipRarity({ item }: { item: CS2EconomyItem }) {
   const localize = useLocalize();
 
-  const rarityType = item.isPaintable() ? "Weapon" : "";
+  const rarityType = item.isPaintable() || item.isC4() ? "Weapon" : "";
   const rarityLabel = RarityLabel[item.rarity];
   const rarityKey = `Item${rarityType}Rarity${rarityLabel}` as const;
   const nameKey = `ItemRarityName${getRarityItemName(item)}` as const;

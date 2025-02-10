@@ -143,6 +143,7 @@ export const finnish = {
   ItemRarityLegendary: /* csgo_finnish.txt */"Eksoottinen",
   ItemRarityMythical: /* csgo_finnish.txt */"Huomattava",
   ItemRarityNameAgent: /* csgo_finnish.txt */"agentti",
+  ItemRarityNameC4: /* csgo_finnish.txt */"C4",
   ItemRarityNameCharm: /* csgo_finnish.txt */"Riipus",
   ItemRarityNameCollectible: /* csgo_finnish.txt */"keräilyesine",
   ItemRarityNameContainer: /* csgo_finnish.txt */"säiliö",

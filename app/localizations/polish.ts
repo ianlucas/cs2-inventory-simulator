@@ -143,6 +143,7 @@ export const polish = {
   ItemRarityLegendary: /* csgo_polish.txt */"egzotycznego pochodzenia",
   ItemRarityMythical: /* csgo_polish.txt */"nadzwyczajnej rzadkości",
   ItemRarityNameAgent: /* csgo_polish.txt */"Agent",
+  ItemRarityNameC4: /* csgo_polish.txt */"C4",
   ItemRarityNameCharm: /* csgo_polish.txt */"Przywieszka",
   ItemRarityNameCollectible: /* csgo_polish.txt */"Przedmiot kolekcjonerski",
   ItemRarityNameContainer: /* csgo_polish.txt */"Pojemnik",

@@ -143,6 +143,7 @@ export const french = {
   ItemRarityLegendary: /* csgo_french.txt */"Exotique",
   ItemRarityMythical: /* csgo_french.txt */"Remarquable",
   ItemRarityNameAgent: /* csgo_french.txt */"Agent",
+  ItemRarityNameC4: /* csgo_french.txt */"C4",
   ItemRarityNameCharm: /* csgo_french.txt */"Porte-bonheur",
   ItemRarityNameCollectible: /* csgo_french.txt */"Collector",
   ItemRarityNameContainer: /* csgo_french.txt */"Conteneur",

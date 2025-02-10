@@ -143,6 +143,7 @@ export const bulgarian = {
   ItemRarityLegendary: /* csgo_bulgarian.txt */"Екзотичен тип",
   ItemRarityMythical: /* csgo_bulgarian.txt */"Забележителен тип",
   ItemRarityNameAgent: /* csgo_bulgarian.txt */"Агент",
+  ItemRarityNameC4: /* csgo_bulgarian.txt */"C4",
   ItemRarityNameCharm: /* csgo_bulgarian.txt */"Джунджурия",
   ItemRarityNameCollectible: /* csgo_bulgarian.txt */"Колекционерско",
   ItemRarityNameContainer: /* csgo_bulgarian.txt */"Контейнер",

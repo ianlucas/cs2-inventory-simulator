@@ -143,6 +143,7 @@ export const koreana = {
   ItemRarityLegendary: /* csgo_koreana.txt */"특급",
   ItemRarityMythical: /* csgo_koreana.txt */"최고급",
   ItemRarityNameAgent: /* csgo_koreana.txt */"요원",
+  ItemRarityNameC4: /* csgo_koreana.txt */"C4",
   ItemRarityNameCharm: /* csgo_koreana.txt */"참 장식",
   ItemRarityNameCollectible: /* csgo_koreana.txt */"수집품",
   ItemRarityNameContainer: /* csgo_koreana.txt */"상자",

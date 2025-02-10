@@ -143,6 +143,7 @@ export const romanian = {
   ItemRarityLegendary: /* csgo_romanian.txt */"Exotic(ă)",
   ItemRarityMythical: /* csgo_romanian.txt */"Remarcabil(ă)",
   ItemRarityNameAgent: /* csgo_romanian.txt */"Agent",
+  ItemRarityNameC4: /* csgo_romanian.txt */"C4",
   ItemRarityNameCharm: /* csgo_romanian.txt */"Breloc",
   ItemRarityNameCollectible: /* csgo_romanian.txt */"De colecție",
   ItemRarityNameContainer: /* csgo_romanian.txt */"Container",
