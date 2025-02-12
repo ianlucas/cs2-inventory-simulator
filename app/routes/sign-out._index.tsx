@@ -11,7 +11,7 @@ import type { Route } from "./+types/sign-out._index";
 export async function loader({ request }: Route.LoaderArgs) {
   await middleware(request);
   const session = await getSession(request.headers.get("cookie"));
-  throw redirect("/login", {
+  throw redirect("/", {
     headers: { "Set-Cookie": await destroySession(session) }
   });
 }

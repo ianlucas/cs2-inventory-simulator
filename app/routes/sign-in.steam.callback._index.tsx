@@ -24,6 +24,13 @@ export async function loader({ request }: Route.LoaderArgs) {
     if (error instanceof Error) {
       throw redirect("/");
     }
+    if (typeof error === "object" && error !== null) {
+      if ("message" in error && typeof error.message === "string") {
+        throw new Error(`Steam OpenID: ${error.message}`);
+      }
+    }
     throw error;
   }
 }
+
+export { ErrorBoundary as default } from "~/components/error-boundary";
