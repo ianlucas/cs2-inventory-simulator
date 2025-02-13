@@ -32,11 +32,13 @@ import { ModalButton } from "./modal-button";
 
 export function StickerPicker({
   disabled,
+  forItem,
   onChange,
   stickerFilter,
   value
 }: {
   disabled?: boolean;
+  forItem?: CS2EconomyItem;
   onChange: (value: NonNullable<CS2BaseInventoryItem["stickers"]>) => void;
   stickerFilter?: (item: CS2EconomyItem) => boolean;
   value: NonNullable<CS2BaseInventoryItem["stickers"]>;
@@ -49,7 +51,9 @@ export function StickerPicker({
   const stickers = useMemo(() => CS2Economy.getStickers().sort(sortByName), []);
   const categories = useMemo(() => CS2Economy.getStickerCategories(), []);
   const [appliedStickerData, setAppliedStickerData] = useState({
-    wear: 0
+    wear: 0,
+    x: 0,
+    y: 0
   });
   const [selected, setSelected] = useState<CS2EconomyItem>();
 
@@ -180,9 +184,12 @@ export function StickerPicker({
             onClose={handleCloseSelectModal}
           />
           <AppliedStickerEditor
+            slot={activeIndex}
             className="px-4"
+            forItem={forItem}
             item={selected}
             onChange={setAppliedStickerData}
+            stickers={value}
             value={appliedStickerData}
           />
           <div className="my-6 flex justify-center gap-2">

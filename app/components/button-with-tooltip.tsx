@@ -69,7 +69,7 @@ export function ButtonWithTooltip({
       <FloatingPortal>
         {tooltip !== undefined && isOpen && isMounted && (
           <div
-            className="z-50"
+            className="z-80"
             ref={refs.setFloating}
             style={floatingStyles}
             {...getFloatingProps()}
@@ -78,6 +78,7 @@ export function ButtonWithTooltip({
               className="rounded-sm bg-neutral-900/90 px-4 py-3.5 text-xs text-neutral-200 shadow-sm"
               style={styles}
             >
+              hello
               {tooltip}
             </div>
           </div>
