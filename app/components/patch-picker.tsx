@@ -89,7 +89,7 @@ export function PatchPicker({
 
   return (
     <>
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-5 gap-1">
         {range(CS2_MAX_PATCHES).map((index) => {
           const patchId = value[index];
           const item =
