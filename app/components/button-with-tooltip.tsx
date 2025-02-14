@@ -78,7 +78,6 @@ export function ButtonWithTooltip({
               className="rounded-sm bg-neutral-900/90 px-4 py-3.5 text-xs text-neutral-200 shadow-sm"
               style={styles}
             >
-              hello
               {tooltip}
             </div>
           </div>

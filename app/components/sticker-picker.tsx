@@ -5,13 +5,16 @@
 
 import {
   faMagnifyingGlass,
+  faPen,
   faTag,
   faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
+  CS2_MAX_STICKERS,
   CS2_MIN_STICKER_WEAR,
   assert,
   ensure
@@ -22,6 +25,7 @@ import { sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { useLocalize } from "./app-context";
 import { AppliedStickerEditor } from "./applied-sticker-editor";
+import { ButtonWithTooltip } from "./button-with-tooltip";
 import { IconButton } from "./icon-button";
 import { IconInput } from "./icon-input";
 import { IconSelect } from "./icon-select";
@@ -116,35 +120,44 @@ export function StickerPicker({
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-2">
-        {range(4).map((index) => {
+      <div className="grid grid-cols-5 gap-1">
+        {range(CS2_MAX_STICKERS).map((index) => {
           const sticker = value[index];
           const stickerWear = sticker?.wear ?? CS2_MIN_STICKER_WEAR;
           const item =
             sticker !== undefined ? CS2Economy.getById(sticker.id) : undefined;
           return (
-            <button
-              disabled={disabled}
-              key={index}
-              className="relative aspect-256/192 cursor-default overflow-hidden bg-neutral-950/40"
-              onClick={handleClickSlot(index)}
-            >
-              {item !== undefined ? (
-                <ItemImage className="aspect-256/192" item={item} />
-              ) : (
-                <div className="flex aspect-256/192 items-center justify-center text-neutral-700">
-                  {localize("StickerPickerNA")}
-                </div>
+            <div className="relative aspect-256/192" key={index}>
+              <button
+                disabled={disabled}
+                className="absolute h-full w-full cursor-default overflow-hidden bg-neutral-950/40"
+                onClick={handleClickSlot(index)}
+              >
+                {item !== undefined ? (
+                  <ItemImage className="aspect-256/192" item={item} />
+                ) : (
+                  <div className="flex aspect-256/192 items-center justify-center text-neutral-700">
+                    {localize("StickerPickerNA")}
+                  </div>
+                )}
+                {sticker !== undefined && (
+                  <div className="text-outline-1 absolute right-1 bottom-0 text-sm font-bold drop-shadow-lg">
+                    {(stickerWear * 100).toFixed(0)}%
+                  </div>
+                )}
+                {!disabled && (
+                  <div className="absolute top-0 left-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
+                )}
+              </button>
+              {item !== undefined && (
+                <ButtonWithTooltip
+                  className="absolute bottom-1 left-1 hover:bg-blue-500/50"
+                  tooltip="Edit_"
+                >
+                  <FontAwesomeIcon icon={faPen} className="h-3" />
+                </ButtonWithTooltip>
               )}
-              {sticker !== undefined && (
-                <div className="text-outline-1 absolute right-1 bottom-0 text-sm font-bold drop-shadow-lg">
-                  {(stickerWear * 100).toFixed(0)}%
-                </div>
-              )}
-              {!disabled && (
-                <div className="absolute top-0 left-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
-              )}
-            </button>
+            </div>
           );
         })}
       </div>
