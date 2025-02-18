@@ -33,8 +33,8 @@ import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
 import {
   ASSETS_BASE_URL,
-  BUILD_LAST_COMMIT,
-  CLOUDFLARE_ANALYTICS_TOKEN
+  CLOUDFLARE_ANALYTICS_TOKEN,
+  SOURCE_COMMIT
 } from "./env.server";
 import { middleware } from "./http.server";
 import { getLocalizationChecksum } from "./localization.server";
@@ -89,8 +89,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     rules: {
       ...(await getClientRules(user?.id)),
       assetsBaseUrl: noempty(ASSETS_BASE_URL),
-      buildLastCommit: BUILD_LAST_COMMIT,
       cloudflareAnalyticsToken: CLOUDFLARE_ANALYTICS_TOKEN,
+      sourceCommit: SOURCE_COMMIT,
       meta: { appUrl, appSiteName }
     },
     preferences: {

@@ -1,49 +1,22 @@
-# Adapted from Remix's Indie Stack
-FROM node:20-bullseye-slim AS base
+FROM node:20-alpine AS development-dependencies-env
+COPY . /app
+WORKDIR /app
+RUN npm ci
 
-ENV NODE_ENV=production
+FROM node:20-alpine AS production-dependencies-env
+COPY ./package.json package-lock.json prisma /app/
+WORKDIR /app
+RUN npm ci --omit=dev && npx prisma generate
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y openssl git
-
-# Install dependencies
-FROM base AS deps
-
-WORKDIR /myapp
-COPY package.json package-lock.json ./
-RUN npm ci --include=dev
-
-# Generate Prisma client, add commit hash, and build the app
-FROM deps AS build
-
-ARG SOURCE_COMMIT
-ENV SOURCE_COMMIT=${SOURCE_COMMIT}
-
-COPY prisma ./prisma
-RUN npx prisma generate
-
-COPY . .
-RUN if [ -d .git ]; then \
-        git log -n 1 --pretty=format:%H > .build-last-commit; \
-    elif [ -n "${SOURCE_COMMIT:-}" ] && [ "${SOURCE_COMMIT:-}" != "unknown" ]; then \
-        echo "${SOURCE_COMMIT:-}" > .build-last-commit; \
-    else \
-        touch .build-last-commit; \
-    fi
+FROM node:20-alpine AS build-env
+COPY . /app/
+COPY --from=development-dependencies-env /app/node_modules /app/node_modules
+WORKDIR /app
 RUN npm run build
-RUN rm -rf .git
 
-# Production image with minimal footprint
-FROM base
-
-WORKDIR /myapp
-
-COPY --from=deps /myapp/node_modules /myapp/node_modules
-COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
-COPY --from=build /myapp/build /myapp/build
-COPY --from=build /myapp/public /myapp/public
-COPY --from=build /myapp/package.json /myapp/package.json
-COPY --from=build /myapp/start.sh /myapp/.build-last-commit /myapp
-COPY --from=build /myapp/prisma /myapp/prisma
-
-ENTRYPOINT [ "./start.sh" ]
+FROM node:20-alpine
+COPY ./package.json package-lock.json start.sh prisma /app/
+COPY --from=production-dependencies-env /app/node_modules /app/node_modules
+COPY --from=build-env /app/build /app/build
+WORKDIR /app
+ENTRYPOINT ["./start.sh"]
