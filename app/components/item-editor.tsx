@@ -137,6 +137,7 @@ export function ItemEditor({
         {hasStickers && (
           <EditorLabel block label={localize("EditorStickers")}>
             <StickerPicker
+              forItem={item}
               stickerFilter={stickerFilter}
               disabled={isDisabled}
               value={attributes.value.stickers}
