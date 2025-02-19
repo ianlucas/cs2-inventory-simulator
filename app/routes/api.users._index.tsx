@@ -12,7 +12,7 @@ import { API_SCOPE } from "~/models/api-credential.server";
 import type { Route } from "./+types/api.users._index";
 
 export const loader = api(async ({ request }: Route.LoaderArgs) => {
-  middleware(request);
+  await middleware(request);
   await isValidApiRequest(request, [API_SCOPE]);
   const url = new URL(request.url);
   const page = z

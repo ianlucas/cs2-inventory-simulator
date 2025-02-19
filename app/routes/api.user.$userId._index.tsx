@@ -12,7 +12,7 @@ import type { Route } from "./+types/api.user.$userId._index";
 
 export const loader = api(
   async ({ request, params: { userId } }: Route.LoaderArgs) => {
-    middleware(request);
+    await middleware(request);
     await isValidApiRequest(request, [API_SCOPE]);
     return Response.json(
       await prisma.user.findUnique({

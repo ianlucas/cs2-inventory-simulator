@@ -11,7 +11,7 @@ import { badRequest } from "~/responses.server";
 import type { Route } from "./+types/localizations.$language[.]js._index";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
-  middleware(request);
+  await middleware(request);
   try {
     const language = z
       .string()
