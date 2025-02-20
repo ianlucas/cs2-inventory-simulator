@@ -64,7 +64,7 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 | `editAllowStickerX` | Can the user define Sticker X offset when editing? | `boolean` | `true` |
 | `editAllowStickerY` | Can the user define Sticker Y offset when editing? | `boolean` | `true` |
 
-> **CAUTION**  
+> [!CAUTION]  
 > Both `steamApiKey` and `steamCallbackUrl` are required for authentication to work.
 
 ## Rule overwriting
