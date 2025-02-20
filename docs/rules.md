@@ -7,283 +7,65 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 
 ## Current rules
 
-### `appName`
-
-- Name of the app. If empty, uses Inventory Simulator's default value.
-- **Type:** `string`
-- **Default:** _Empty_
-
-### `appFooterName`
-
-- Name in the footer of the app. If empty, uses Inventory Simulator's default value.
-- **Type:** `string`
-- **Default:** _Empty_
-
-### `appLogoUrl`
-
-- URL of the app's logo. If empty, uses Inventory Simulator's logo. Server must be restarted if changed.
-- **Type:** `string`
-- **Default:** _Empty_
-
-### `appFaviconUrl`
-
-- URL of the app's favicon. If empty, uses Inventory Simulator's favicon.
-- **Type:** `string`
-- **Default:** _Empty_
-
-### `appFaviconMimeType`
-
-- MIME type of the app's favicon. If empty, uses Inventory Simulator's favicon MIME type.
-- **Type:** `string`
-- **Default:** _Empty_
-
-### `appSeoDescription`
-
-- SEO description for the app. If empty, uses Inventory Simulator's default value.
-- **Type:** `string`
-- **Default:** _Empty_
-
-### `appSeoImageUrl`
-
-- SEO image for the app. If empty, uses Inventory Simulator's default value.
-- **Type:** `string`
-- **Default:** _Empty_
-
-### `appSeoTitle`
-
-- SEO title for the app. If empty, uses Inventory Simulator's default value.
-- **Type:** `string`
-- **Default:** _Empty_
-
-### `appCountry`
-
-- Country of the application (ISO-3166-1 alpha-2 code). This will change the language of the application if it's available for the respective country (e.g. `br` uses `brazilian` translation).
-- **Type:** `string`
-- **Default:** `us`
-
-### `steamApiKey`
-
-- Steam API Key is used to retrieve user information from Steam.
-- **Type:** `string`
-- **Default:** Either environment variable `STEAM_API_KEY` or `YOUR_STEAM_API_KEY_GOES_HERE`.
-
-### `steamCallbackUrl`
-
-- This URL is called to validate the user's authentication on Steam.
-- **Type:** `string`
-- **Expected value:** `https://your.domain/sign-in/steam/callback`
-- **Default:** Either environment variable `STEAM_CALLBACK_URL` or `http://localhost/sign-in/steam/callback`.
+| Name | Description | Type | Default |
+| --- | --- | --- | --- |
+| `appName` | Name of the app. If empty, uses Inventory Simulator's default value. | `string` | _Empty_ |
+| `appFooterName` | Name in the footer of the app. If empty, uses Inventory Simulator's default value. | `string` | _Empty_ |
+| `appLogoUrl` | URL of the app's logo. If empty, uses Inventory Simulator's logo. Restart required. | `string` | _Empty_ |
+| `appFaviconUrl` | URL of the app's favicon. If empty, uses Inventory Simulator's favicon. | `string` | _Empty_ |
+| `appFaviconMimeType` | MIME type of the app's favicon. If empty, uses Inventory Simulator's favicon MIME type. | `string` | _Empty_ |
+| `appSeoDescription` | SEO description for the app. If empty, uses Inventory Simulator's default value. | `string` | _Empty_ |
+| `appSeoImageUrl` | SEO image for the app. If empty, uses Inventory Simulator's default value. | `string` | _Empty_ |
+| `appSeoTitle` | SEO title for the app. If empty, uses Inventory Simulator's default value. | `string` | _Empty_ |
+| `appCountry` | Country of the application (ISO-3166-1 alpha-2 code). Changes language if available. | `string` | `us` |
+| `steamApiKey` | Steam API Key is used to retrieve user information from Steam. | `string` | Env var or `YOUR_STEAM_API_KEY_GOES_HERE` |
+| `steamCallbackUrl` | URL to validate Steam authentication. | `string` | Env var or `http://localhost/sign-in/steam/callback` |
+| `appCacheInventory` | Cache user's inventory if offline or unauthenticated. | `boolean` | `true` |
+| `inventoryMaxItems` | Max number of items a user can add to inventory. | `number` | `256` |
+| `inventoryStorageUnitMaxItems` | Max items a storage unit can store. | `number` | `32` |
+| `inventoryItemAllowEdit` | Can the user edit an inventory item? | `boolean` | `false` |
+| `inventoryItemAllowApplySticker` | Can the user apply stickers to inventory items? | `boolean` | `true` |
+| `inventoryItemAllowScrapeSticker` | Can the user scrape stickers from inventory items? | `boolean` | `true` |
+| `inventoryItemAllowApplyPatch` | Can the user apply patches to inventory items? | `boolean` | `true` |
+| `inventoryItemAllowRemovePatch` | Can the user remove patches from inventory items? | `boolean` | `true` |
+| `inventoryItemAllowUnlockContainer` | Can the user unlock container inventory items? | `boolean` | `true` |
+| `inventoryItemAllowInspectInGame` | Can the user inspect an item in-game? | `boolean` | `true` |
+| `inventoryItemAllowShare` | Can the user share an inventory item? | `boolean` | `true` |
+| `inventoryItemEquipHideModel` | Prevents equipping certain models. Example: `knife_flip;bayonet`. | `string-array` | _Empty_ |
+| `inventoryItemEquipHideType` | Prevents equipping certain types. Example: `agent;weapon`. | `string-array` | _Empty_ |
+| `craftHideCategory` | Hides a category from crafting. Example: `secondary;rifle`. | `string-array` | _Empty_ |
+| `craftHideType` | Hides a type from crafting. Example: `agent;case`. | `string-array` | _Empty_ |
+| `craftHideFilterType` | Hides type from crafting prompt. Example: `sticker`. | `string-array` | _Empty_ |
+| `craftHideModel` | Hides a model from crafting. Example: `knife_flip;bayonet`. | `string-array` | _Empty_ |
+| `craftHideId` | Hides a specific item from crafting. Example: `307`. | `number-array` | _Empty_ |
+| `craftAllowNametag` | Can the user define Name tag when crafting? | `boolean` | `true` |
+| `craftAllowSeed` | Can the user define Seed when crafting? | `boolean` | `true` |
+| `craftAllowStatTrak` | Can the user define StatTrak when crafting? | `boolean` | `true` |
+| `craftAllowStickers` | Can the user define Stickers when crafting? | `boolean` | `true` |
+| `craftAllowPatches` | Can the user define Patches when crafting? | `boolean` | `true` |
+| `craftAllowWear` | Can the user define Wear when crafting? | `boolean` | `true` |
+| `craftMaxQuantity` | Max quantity of an item that can be crafted. `0` means no limit. | `number` | `0` |
+| `craftAllowStickerRotation` | Can the user define Sticker Rotation when crafting? | `boolean` | `true` |
+| `craftAllowStickerWear` | Can the user define Sticker Wear when crafting? | `boolean` | `true` |
+| `craftAllowStickerX` | Can the user define Sticker X offset when crafting? | `boolean` | `true` |
+| `craftAllowStickerY` | Can the user define Sticker Y offset when crafting? | `boolean` | `true` |
+| `editHideCategory` | Hides a category from being edited. Example: `secondary;rifle`. | `string-array` | _Empty_ |
+| `editHideType` | Hides a type from being edited. Example: `sticker;weapon`. | `string-array` | _Empty_ |
+| `editHideModel` | Hides a model from being edited. Example: `knife_flip;bayonet`. | `string-array` | _Empty_ |
+| `editHideId` | Hides a specific item from being edited. Example: `307`. | `number-array` | _Empty_ |
+| `editAllowNametag` | Can the user define Name tag when editing? | `boolean` | `true` |
+| `editAllowSeed` | Can the user define Seed when editing? | `boolean` | `true` |
+| `editAllowStatTrak` | Can the user define StatTrak when editing? | `boolean` | `true` |
+| `editAllowStickers` | Can the user define Stickers when editing? | `boolean` | `true` |
+| `editAllowPatches` | Can the user define Patches when editing? | `boolean` | `true` |
+| `editAllowWear` | Can the user define Wear when editing? | `boolean` | `true` |
+| `editAllowStickerRotation` | Can the user define Sticker Rotation when editing? | `boolean` | `true` |
+| `editAllowStickerWear` | Can the user define Sticker Wear when editing? | `boolean` | `true` |
+| `editAllowStickerX` | Can the user define Sticker X offset when editing? | `boolean` | `true` |
+| `editAllowStickerY` | Can the user define Sticker Y offset when editing? | `boolean` | `true` |
 
 > [!CAUTION]  
 > Both `steamApiKey` and `steamCallbackUrl` are required for authentication to work.
-
-### `appCacheInventory`
-
-- Indicates whether the app will cache the user's inventory if they're offline or unauthenticated.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `inventoryMaxItems`
-
-- The maximum number of items a user can add to the inventory.
-- **Type:** `number`
-- **Default:** `256`
-
-### `inventoryStorageUnitMaxItems`
-
-- The maximum number of items a storage unit can store.
-- **Type:** `number`
-- **Default:** `32`
-
-### `inventoryItemAllowEdit`
-
-- Indicates whether the user can edit an inventory item.
-- **Type:** `boolean`
-- **Default:** `false`
-
-### `inventoryItemAllowApplySticker`
-
-- Indicates whether the user can apply sticker to an inventory item.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `inventoryItemAllowScrapeSticker`
-
-- Indicates whether the user can scrape sticker in an inventory item.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `inventoryItemAllowApplyPatch`
-
-- Indicates whether the user can apply patch to an inventory item.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `inventoryItemAllowRemovePatch`
-
-- Indicates whether the user can remove patch in an inventory item.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `inventoryItemAllowUnlockContainer`
-
-- Indicates whether the user can unlock a container inventory item.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `inventoryItemAllowInspectInGame`
-
-- Indicates whether the user can inspect an item in-game.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `inventoryItemAllowShare`
-
-- Indicates whether the user can share an inventory item.
-
-### `inventoryItemEquipHideModel`
-
-- Determines whether to disallow an item model from being equipped by the user.
-- **Type:** `string-array`
-- **Usage example:** `knife_flip;bayonet` (Users won't be able to equip flip and bayonet knives.)
-
-### `inventoryItemEquipHideType`
-
-- Determines whether to disallow an item type from being equipped by the user.
-- **Type:** `string-array`
-- **Usage example:** `agent;weapon` (Users won't be able to equip agent and weapon items.)
-
-### `craftHideCategory`
-
-- Determines whether to hide a category when crafting an item. This also prevents the item from being added by the user.
-- **Type:** `string-array`
-- **Usage example:** `secondary;rifle` (Users won't be able to craft secondary and rifle items.)
-
-### `craftHideType`
-
-- Determines whether to hide a type when crafting an item. This also prevents the item from being added by the user.
-- **Type:** `string-array`
-- **Usage example:** `agent;case` (Users won't be able to craft agent and case items.)
-
-### `craftHideFilterType`
-
-- Determines whether to hide a type from the "crafting an item..." prompt. This will NOT prevent the item from being added by the user when crafting/editing a weapon that may have stickers applied (unless enforced).
-- **Type:** `string-array`
-- **Usage example:** `sticker` (Users won't be able to see the "Sticker" item type when crafting an item)
-
-### `craftHideModel`
-
-- Determines whether to hide a model when crafting an item. This also prevents the item from being added by the user.
-- **Type:** `string-array`
-- **Usage example:** `knife_flip;bayonet` (Users won't be able to craft flip and bayonet knives.)
-
-### `craftHideId`
-
-- Determines whether to hide an item when crafting. This also prevents the item from being added by the user.
-- **Type:** `number-array`
-- **Usage example:** `307` (Users won't be able to craft AWP | Dragon Lore.)
-
-### `craftAllowNametag`
-
-- Indicates whether the user can define Name tag when crafting.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `craftAllowSeed`
-
-- Indicates whether the user can define Seed when crafting.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `craftAllowStatTrak`
-
-- Indicates whether the user can define StatTrak when crafting.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `craftAllowStickers`
-
-- Indicates whether the user can define Stickers when crafting.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `craftAllowPatches`
-
-- Indicates whether the user can define Patches when crafting.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `craftAllowWear`
-
-- Indicates whether the user can define Wear when crafting.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `craftMaxQuantity`
-
-- The maximum quantity an item can be crafted. There is no limit if the value is `0`.
-- **Type:** `number`
-- **Default:** `0`
-
-### `editHideCategory`
-
-- Determines whether to hide a category from being editable.
-- **Type:** `string-array`
-- **Usage example:** `secondary;rifle` (Users won't be able to edit secondary and rifle items.)
-
-### `editHideType`
-
-- Determines whether to hide a type from being editable.
-- **Type:** `string-array`
-- **Usage example:** `sticker;weapon` (Users won't be able to edit sticker and weapon items.)
-
-### `editHideModel`
-
-- Determines whether to hide a model from being editable.
-- **Type:** `string-array`
-- **Usage example:** `knife_flip;bayonet` (Users won't be able to edit flip and bayonet knives.)
-
-### `editHideId`
-
-- Determines whether to hide an item from being editable.
-- **Type:** `number-array`
-- **Usage example:** `307` (Users won't be able to edit AWP | Dragon Lore.)
-
-### `editAllowNametag`
-
-- Indicates whether the user can define Name tag when editing.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `editAllowSeed`
-
-- Indicates whether the user can define Seed when editing.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `editAllowStatTrak`
-
-- Indicates whether the user can define StatTrak when editing.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `editAllowStickers`
-
-- Indicates whether the user can define Stickers when editing.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `editAllowPatches`
-
-- Indicates whether the user can define Patches when editing.
-- **Type:** `boolean`
-- **Default:** `true`
-
-### `editAllowWear`
-
-- Indicates whether the user can define Wear when editing.
-- **Type:** `boolean`
-- **Default:** `true`
 
 ## Rule overwriting
 

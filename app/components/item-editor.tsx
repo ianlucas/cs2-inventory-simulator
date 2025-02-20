@@ -48,7 +48,11 @@ export function ItemEditor({
   isHidePatches,
   isHideSeed,
   isHideStatTrak,
+  isHideStickerRotation,
   isHideStickers,
+  isHideStickerWear,
+  isHideStickerX,
+  isHideStickerY,
   isHideWear,
   item,
   maxQuantity,
@@ -62,11 +66,15 @@ export function ItemEditor({
   maxQuantity?: number;
   isDisabled?: boolean;
   isHideNameTag?: boolean;
-  isHideSeed?: boolean;
-  isHideWear?: boolean;
-  isHideStatTrak?: boolean;
-  isHideStickers?: boolean;
   isHidePatches?: boolean;
+  isHideSeed?: boolean;
+  isHideStatTrak?: boolean;
+  isHideStickerRotation?: boolean;
+  isHideStickers?: boolean;
+  isHideStickerWear?: boolean;
+  isHideStickerX?: boolean;
+  isHideStickerY?: boolean;
+  isHideWear?: boolean;
   onChange?: (data: ItemEditorAttributes) => void;
   stickerFilter?: (item: CS2EconomyItem) => boolean;
   patchFilter?: (item: CS2EconomyItem) => boolean;
@@ -137,10 +145,15 @@ export function ItemEditor({
         {hasStickers && (
           <EditorLabel block label={localize("EditorStickers")}>
             <StickerPicker
-              stickerFilter={stickerFilter}
               disabled={isDisabled}
-              value={attributes.value.stickers}
+              forItem={item}
+              isHideStickerRotation={isHideStickerRotation}
+              isHideStickerWear={isHideStickerWear}
+              isHideStickerX={isHideStickerX}
+              isHideStickerY={isHideStickerY}
               onChange={attributes.update("stickers")}
+              stickerFilter={stickerFilter}
+              value={attributes.value.stickers}
             />
           </EditorLabel>
         )}

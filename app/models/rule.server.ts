@@ -412,6 +412,30 @@ export const craftMaxQuantity = new Rule({
   defaultValue: 0
 });
 
+export const craftAllowStickerWear = new Rule({
+  name: "craftAllowStickerWear",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowStickerRotation = new Rule({
+  name: "craftAllowStickerRotation",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowStickerX = new Rule({
+  name: "craftAllowStickerX",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowStickerY = new Rule({
+  name: "craftAllowStickerY",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const editAllowNametag = new Rule({
   name: "editAllowNametag",
   type: "boolean",
@@ -450,6 +474,30 @@ export const editAllowPatches = new Rule({
 
 export const inventoryItemAllowInspectInGame = new Rule({
   name: "inventoryItemAllowInspectInGame",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowStickerWear = new Rule({
+  name: "editAllowStickerWear",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowStickerRotation = new Rule({
+  name: "editAllowStickerRotation",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowStickerX = new Rule({
+  name: "editAllowStickerX",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowStickerY = new Rule({
+  name: "editAllowStickerY",
   type: "boolean",
   defaultValue: true
 });

@@ -7,7 +7,8 @@ import {
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
-  CS2ItemType
+  CS2ItemType,
+  RecordValue
 } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { api } from "~/api.server";
@@ -18,7 +19,11 @@ import {
   craftAllowNametag,
   craftAllowSeed,
   craftAllowStatTrak,
+  craftAllowStickerRotation,
   craftAllowStickers,
+  craftAllowStickerWear,
+  craftAllowStickerX,
+  craftAllowStickerY,
   craftAllowWear,
   craftHideCategory,
   craftHideId,
@@ -27,7 +32,11 @@ import {
   editAllowNametag,
   editAllowSeed,
   editAllowStatTrak,
+  editAllowStickerRotation,
   editAllowStickers,
+  editAllowStickerWear,
+  editAllowStickerX,
+  editAllowStickerY,
   editAllowWear,
   editHideCategory,
   editHideId,
@@ -198,6 +207,29 @@ async function enforceCraftRulesForItem(
   }
 }
 
+async function enforceCraftRulesForStickerAttributes(
+  {
+    wear,
+    rotation,
+    x,
+    y
+  }: RecordValue<NonNullable<CS2BaseInventoryItem["stickers"]>>,
+  userId: string
+) {
+  if (wear !== undefined) {
+    await craftAllowStickerWear.for(userId).truthy();
+  }
+  if (rotation !== undefined) {
+    await craftAllowStickerRotation.for(userId).truthy();
+  }
+  if (x !== undefined) {
+    await craftAllowStickerX.for(userId).truthy();
+  }
+  if (y !== undefined) {
+    await craftAllowStickerY.for(userId).truthy();
+  }
+}
+
 async function enforceCraftRulesForInventoryItem(
   { stickers, statTrak, wear, seed, nameTag }: Partial<CS2BaseInventoryItem>,
   userId: string
@@ -207,6 +239,7 @@ async function enforceCraftRulesForInventoryItem(
     await craftHideType.for(userId).notContains(CS2ItemType.Sticker);
     for (const sticker of Object.values(stickers)) {
       await enforceCraftRulesForItem(sticker.id, userId);
+      await enforceCraftRulesForStickerAttributes(sticker, userId);
     }
   }
   if (statTrak !== undefined) {
@@ -249,6 +282,7 @@ async function enforceEditRulesForInventoryItem(
     await editHideType.for(userId).notContains(CS2ItemType.Sticker);
     for (const sticker of Object.values(stickers)) {
       await enforceEditRulesForItem(sticker.id, userId);
+      await enforceEditRulesForStickerAttributes(sticker, userId);
     }
   }
   if (statTrak !== undefined) {
@@ -262,6 +296,29 @@ async function enforceEditRulesForInventoryItem(
   }
   if (nameTag !== undefined) {
     await editAllowNametag.for(userId).truthy();
+  }
+}
+
+async function enforceEditRulesForStickerAttributes(
+  {
+    wear,
+    rotation,
+    x,
+    y
+  }: RecordValue<NonNullable<CS2BaseInventoryItem["stickers"]>>,
+  userId: string
+) {
+  if (wear !== undefined) {
+    await editAllowStickerWear.for(userId).truthy();
+  }
+  if (rotation !== undefined) {
+    await editAllowStickerRotation.for(userId).truthy();
+  }
+  if (x !== undefined) {
+    await editAllowStickerX.for(userId).truthy();
+  }
+  if (y !== undefined) {
+    await editAllowStickerY.for(userId).truthy();
   }
 }
 
@@ -286,16 +343,16 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       for (const action of actions) {
         switch (action.type) {
           case SyncAction.Add:
-            await enforceCraftRulesForInventoryItem(action.item, userId);
             await enforceCraftRulesForItem(action.item.id, userId);
+            await enforceCraftRulesForInventoryItem(action.item, userId);
             inventory.add(action.item);
             break;
           case SyncAction.AddFromCache:
             if (rawInventory === null && !addedFromCache) {
               for (const item of Object.values(action.data.items)) {
                 try {
-                  await enforceCraftRulesForInventoryItem(item, userId);
                   await enforceCraftRulesForItem(item.id, userId);
+                  await enforceCraftRulesForInventoryItem(item, userId);
                   inventory.add(item);
                 } catch {}
               }

@@ -26,8 +26,11 @@ interface WeaponEconItem extends BaseEconItem {
   stattrak: number;
   stickers: {
     def: number;
+    rotation?: number;
     slot: number;
     wear: number;
+    x?: number;
+    y?: number;
   }[];
   uid: number;
 }
@@ -138,9 +141,12 @@ export async function generate(
             seed: item.seed ?? CS2_MIN_SEED,
             stattrak: item.statTrak ?? -1,
             stickers: item.someStickers().map(([index, sticker]) => ({
+              def: CS2Economy.getById(sticker.id).index ?? 0,
+              rotation: sticker.rotation,
               slot: index,
               wear: sticker.wear ?? CS2_MIN_STICKER_WEAR,
-              def: CS2Economy.getById(sticker.id).index ?? 0
+              x: sticker.x,
+              y: sticker.y
             })),
             uid: item.uid,
             wear: item.getWear()

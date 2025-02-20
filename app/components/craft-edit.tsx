@@ -28,7 +28,11 @@ export function CraftEdit({
     editAllowPatches,
     editAllowSeed,
     editAllowStatTrak,
+    editAllowStickerRotation,
     editAllowStickers,
+    editAllowStickerWear,
+    editAllowStickerX,
+    editAllowStickerY,
     editAllowWear,
     editHideCategory,
     editHideId,
@@ -41,6 +45,10 @@ export function CraftEdit({
   const isHideSeed = !editAllowSeed;
   const isHideStatTrak = !editAllowStatTrak;
   const isHideWear = !editAllowWear;
+  const isHideStickerRotation = !editAllowStickerRotation;
+  const isHideStickerWear = !editAllowStickerWear;
+  const isHideStickerX = !editAllowStickerX;
+  const isHideStickerY = !editAllowStickerY;
 
   const isHidePatches =
     !editAllowPatches || editHideType.includes(CS2ItemType.Patch);
@@ -75,7 +83,11 @@ export function CraftEdit({
         isHidePatches={isHidePatches}
         isHideSeed={isHideSeed}
         isHideStatTrak={isHideStatTrak}
+        isHideStickerRotation={isHideStickerRotation}
         isHideStickers={isHideStickers}
+        isHideStickerWear={isHideStickerWear}
+        isHideStickerX={isHideStickerX}
+        isHideStickerY={isHideStickerY}
         isHideWear={isHideWear}
         item={item}
         onChange={setAttributes}

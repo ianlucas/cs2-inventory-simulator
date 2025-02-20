@@ -12,6 +12,10 @@ import {
   CS2RarityColor,
   CS2_ITEMS,
   CS2_MAX_SEED,
+  CS2_MAX_STICKER_ROTATION,
+  CS2_MAX_STICKER_WEAR,
+  CS2_MIN_STICKER_ROTATION,
+  CS2_MIN_STICKER_WEAR,
   CS2_STICKER_WEAR_FACTOR,
   CS2_WEAR_FACTOR,
   fail
@@ -74,9 +78,16 @@ export function resolveCollectionImage(item: number | CS2EconomyItem) {
   return CS2Economy.resolveCollectionImage(getAssetsBaseUrl(), item);
 }
 
+export const minStickerOffset = -2;
+export const maxStickerOffset = 2;
+export const stickerOffsetFactor = 0.001;
 export const seedStringMaxLen = String(CS2_MAX_SEED).length;
 export const wearStringMaxLen = String(CS2_WEAR_FACTOR).length;
 export const stickerWearStringMaxLen = String(CS2_STICKER_WEAR_FACTOR).length;
+export const stickerOffsetStringMaxLen = String(stickerOffsetFactor).length;
+export const stickerRotationStringMaxLen = String(
+  CS2_MAX_STICKER_ROTATION
+).length;
 
 export function wearToString(wear: number) {
   return wear.toFixed(wearStringMaxLen - 2);
@@ -84,6 +95,34 @@ export function wearToString(wear: number) {
 
 export function stickerWearToString(wear: number) {
   return wear.toFixed(stickerWearStringMaxLen - 2);
+}
+
+export function validateStickerWear(wear: number) {
+  return (
+    String(wear).length <= stickerWearStringMaxLen &&
+    wear >= CS2_MIN_STICKER_WEAR &&
+    wear <= CS2_MAX_STICKER_WEAR
+  );
+}
+
+export function stickerOffsetToString(offset: number) {
+  return offset.toFixed(stickerOffsetStringMaxLen - 2);
+}
+
+export function validateStickerOffset(offset: number) {
+  return (
+    String(offset).length <= stickerOffsetStringMaxLen + (offset > 0 ? 0 : 1) &&
+    offset >= minStickerOffset &&
+    offset <= maxStickerOffset
+  );
+}
+
+export function validateStickerRotation(rotation: number) {
+  return (
+    String(rotation).length <= stickerRotationStringMaxLen &&
+    rotation >= CS2_MIN_STICKER_ROTATION &&
+    rotation <= CS2_MAX_STICKER_ROTATION
+  );
 }
 
 export function createFakeItem(
