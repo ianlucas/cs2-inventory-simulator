@@ -51,6 +51,7 @@ type GetUserInventoryResponse = {
             number,
             {
               id: number;
+              rotation?: number;
               wear?: number;
               x?: number;
               y?: number;
@@ -91,8 +92,11 @@ interface WeaponEconItem extends BaseEconItem {
   stattrak: number;
   stickers: {
     def: number;
+    rotation?: number;
     slot: number;
     wear: number;
+    x?: number;
+    y?: number;
   }[];
   uid: number;
 }
