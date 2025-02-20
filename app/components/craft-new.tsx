@@ -21,16 +21,20 @@ export function CraftNew({
 }) {
   const localize = useLocalize();
   const {
-    craftMaxQuantity,
     craftAllowNametag,
     craftAllowPatches,
     craftAllowSeed,
     craftAllowStatTrak,
+    craftAllowStickerRotation,
     craftAllowStickers,
+    craftAllowStickerWear,
+    craftAllowStickerX,
+    craftAllowStickerY,
     craftAllowWear,
     craftHideCategory,
     craftHideId,
     craftHideType,
+    craftMaxQuantity,
     inventoryMaxItems
   } = useRules();
 
@@ -47,6 +51,10 @@ export function CraftNew({
   const isHideSeed = !craftAllowSeed;
   const isHideStatTrak = !craftAllowStatTrak;
   const isHideWear = !craftAllowWear;
+  const isHideStickerRotation = !craftAllowStickerRotation;
+  const isHideStickerWear = !craftAllowStickerWear;
+  const isHideStickerX = !craftAllowStickerX;
+  const isHideStickerY = !craftAllowStickerY;
 
   const isHidePatches =
     !craftAllowPatches || craftHideType.includes(CS2ItemType.Patch);
@@ -81,7 +89,11 @@ export function CraftNew({
         isHidePatches={isHidePatches}
         isHideSeed={isHideSeed}
         isHideStatTrak={isHideStatTrak}
+        isHideStickerRotation={isHideStickerRotation}
         isHideStickers={isHideStickers}
+        isHideStickerWear={isHideStickerWear}
+        isHideStickerX={isHideStickerX}
+        isHideStickerY={isHideStickerY}
         isHideWear={isHideWear}
         item={item}
         maxQuantity={maxQuantity}

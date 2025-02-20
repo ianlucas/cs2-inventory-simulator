@@ -37,12 +37,20 @@ import { ModalButton } from "./modal-button";
 export function StickerPicker({
   disabled,
   forItem,
+  isHideStickerRotation,
+  isHideStickerWear,
+  isHideStickerX,
+  isHideStickerY,
   onChange,
   stickerFilter,
   value
 }: {
   disabled?: boolean;
   forItem?: CS2EconomyItem;
+  isHideStickerRotation?: boolean;
+  isHideStickerWear?: boolean;
+  isHideStickerX?: boolean;
+  isHideStickerY?: boolean;
   onChange: (value: NonNullable<CS2BaseInventoryItem["stickers"]>) => void;
   stickerFilter?: (item: CS2EconomyItem) => boolean;
   value: NonNullable<CS2BaseInventoryItem["stickers"]>;
@@ -55,15 +63,37 @@ export function StickerPicker({
   const stickers = useMemo(() => CS2Economy.getStickers().sort(sortByName), []);
   const categories = useMemo(() => CS2Economy.getStickerCategories(), []);
   const [appliedStickerData, setAppliedStickerData] = useState({
+    rotation: 0,
     wear: 0,
     x: 0,
     y: 0
   });
   const [selected, setSelected] = useState<CS2EconomyItem>();
+  const [isEditing, setIsEditing] = useState(false);
+  const canEditStickerAttributes =
+    !isHideStickerRotation &&
+    !isHideStickerWear &&
+    !isHideStickerX &&
+    !isHideStickerY;
 
   function handleClickSlot(index: number) {
     return function handleClickSlot() {
       setActiveIndex(index);
+    };
+  }
+
+  function handleClickEditSlot(index: number) {
+    return function handleClickSlot() {
+      const { id, rotation, wear, x, y } = value[index];
+      setAppliedStickerData({
+        rotation: rotation ?? 0,
+        wear: wear ?? 0,
+        x: x ?? 0,
+        y: y ?? 0
+      });
+      setActiveIndex(index);
+      setSelected(CS2Economy.getById(id));
+      setIsEditing(true);
     };
   }
 
@@ -72,7 +102,11 @@ export function StickerPicker({
   }
 
   function handleCloseSelectModal() {
+    if (isEditing) {
+      setActiveIndex(undefined);
+    }
     setSelected(undefined);
+    setIsEditing(false);
   }
 
   function handleAddSticker() {
@@ -81,11 +115,15 @@ export function StickerPicker({
       ...value,
       [ensure(activeIndex)]: {
         id: selected.id,
-        wear: appliedStickerData.wear
+        rotation: appliedStickerData.rotation || undefined,
+        wear: appliedStickerData.wear || undefined,
+        x: appliedStickerData.x || undefined,
+        y: appliedStickerData.y || undefined
       }
     });
     setSelected(undefined);
     setActiveIndex(undefined);
+    setIsEditing(false);
   }
 
   function handleRemoveSticker() {
@@ -93,10 +131,12 @@ export function StickerPicker({
     delete updated[ensure(activeIndex)];
     onChange(updated);
     setActiveIndex(undefined);
+    setIsEditing(false);
   }
 
   function handleCloseModal() {
     setActiveIndex(undefined);
+    setIsEditing(false);
   }
 
   const filtered = useMemo(() => {
@@ -120,7 +160,12 @@ export function StickerPicker({
 
   return (
     <>
-      <div className="grid grid-cols-5 gap-1">
+      <div
+        className="grid gap-1"
+        style={{
+          gridTemplateColumns: `repeat(${CS2_MAX_STICKERS}, minmax(0, 1fr))`
+        }}
+      >
         {range(CS2_MAX_STICKERS).map((index) => {
           const sticker = value[index];
           const stickerWear = sticker?.wear ?? CS2_MIN_STICKER_WEAR;
@@ -149,10 +194,11 @@ export function StickerPicker({
                   <div className="absolute top-0 left-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
                 )}
               </button>
-              {item !== undefined && (
+              {item !== undefined && !disabled && (
                 <ButtonWithTooltip
+                  onClick={handleClickEditSlot(index)}
                   className="absolute bottom-1 left-1 hover:bg-blue-500/50"
-                  tooltip="Edit_"
+                  tooltip={localize("EditorStickerEdit")}
                 >
                   <FontAwesomeIcon icon={faPen} className="h-3" />
                 </ButtonWithTooltip>
@@ -161,7 +207,11 @@ export function StickerPicker({
           );
         })}
       </div>
-      <Modal className="w-[540px] pb-1" hidden={activeIndex === undefined} blur>
+      <Modal
+        className="w-[540px] pb-1"
+        hidden={activeIndex === undefined || isEditing}
+        blur
+      >
         <ModalHeader
           title={localize("StickerPickerHeader")}
           onClose={handleCloseModal}
@@ -196,15 +246,17 @@ export function StickerPicker({
             title={localize("EditorConfirmPick")}
             onClose={handleCloseSelectModal}
           />
-          <AppliedStickerEditor
-            slot={activeIndex}
-            className="px-4"
-            forItem={forItem}
-            item={selected}
-            onChange={setAppliedStickerData}
-            stickers={value}
-            value={appliedStickerData}
-          />
+          {canEditStickerAttributes && (
+            <AppliedStickerEditor
+              slot={activeIndex}
+              className="px-4"
+              forItem={forItem}
+              item={selected}
+              onChange={setAppliedStickerData}
+              stickers={value}
+              value={appliedStickerData}
+            />
+          )}
           <div className="my-6 flex justify-center gap-2">
             <ModalButton
               children={localize("EditorCancel")}

@@ -5,6 +5,11 @@
 
 import { CS2Economy } from "@ianlucas/cs2-lib";
 import { z } from "zod";
+import {
+  validateStickerOffset,
+  validateStickerRotation,
+  validateStickerWear
+} from "./economy";
 
 export const nonNegativeInt = z.number().int().nonnegative().finite().safe();
 export const positiveInt = z.number().int().positive().finite().safe();
@@ -28,9 +33,25 @@ export const baseInventoryItemProps = {
     .record(
       z.object({
         id: nonNegativeInt,
-        wear: nonNegativeFloat.optional(),
-        x: z.number().finite().optional(),
-        y: z.number().finite().optional()
+        rotation: positiveInt
+          .optional()
+          .refine(
+            (rotation) =>
+              rotation === undefined || validateStickerRotation(rotation)
+          ),
+        wear: nonNegativeFloat
+          .optional()
+          .refine((wear) => wear === undefined || validateStickerWear(wear)),
+        x: z
+          .number()
+          .finite()
+          .optional()
+          .refine((x) => x === undefined || validateStickerOffset(x)),
+        y: z
+          .number()
+          .finite()
+          .optional()
+          .refine((y) => y === undefined || validateStickerOffset(y))
       })
     )
     .optional(),

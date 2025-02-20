@@ -6,7 +6,9 @@
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  CS2_MAX_STICKER_ROTATION,
   CS2_MAX_STICKER_WEAR,
+  CS2_MIN_STICKER_ROTATION,
   CS2_MIN_STICKER_WEAR,
   CS2_STICKER_WEAR_FACTOR,
   CS2EconomyItem
@@ -18,7 +20,19 @@ import {
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useEffect } from "react";
-import { stickerWearStringMaxLen, stickerWearToString } from "~/utils/economy";
+import {
+  maxStickerOffset,
+  minStickerOffset,
+  stickerOffsetFactor,
+  stickerOffsetStringMaxLen,
+  stickerOffsetToString,
+  stickerRotationStringMaxLen,
+  stickerWearStringMaxLen,
+  stickerWearToString,
+  validateStickerOffset,
+  validateStickerRotation,
+  validateStickerWear
+} from "~/utils/economy";
 import { createFakeInventoryItemFromBase } from "~/utils/inventory";
 import { useLocalize } from "./app-context";
 import { ButtonWithTooltip } from "./button-with-tooltip";
@@ -31,6 +45,10 @@ import { useTimedState } from "./hooks/use-timed-state";
 export function AppliedStickerEditor({
   className,
   forItem,
+  isHideStickerRotation,
+  isHideStickerWear,
+  isHideStickerX,
+  isHideStickerY,
   item,
   onChange,
   slot,
@@ -39,11 +57,23 @@ export function AppliedStickerEditor({
 }: {
   className?: string;
   forItem?: CS2EconomyItem;
+  isHideStickerRotation?: boolean;
+  isHideStickerWear?: boolean;
+  isHideStickerX?: boolean;
+  isHideStickerY?: boolean;
   item: CS2EconomyItem;
-  onChange?: (data: { wear: number; x: number; y: number }) => void;
+  onChange?: (data: {
+    rotation: number;
+    wear: number;
+    x: number;
+    y: number;
+  }) => void;
   slot?: number;
-  stickers?: Record<string, { wear?: number; x?: number; y?: number }>;
-  value: { wear: number; x: number; y: number };
+  stickers?: Record<
+    string,
+    { wear?: number; rotation?: number; x?: number; y?: number }
+  >;
+  value: { wear: number; rotation: number; x: number; y: number };
 }) {
   const localize = useLocalize();
   const [, copyToClipboard] = useCopyToClipboard();
@@ -86,59 +116,82 @@ export function AppliedStickerEditor({
     <div className={clsx("m-auto select-none", className)}>
       <EditorItemDisplay item={item} wear={attributes.value.wear} />
       <div className="space-y-1.5">
-        <EditorLabel label={localize("EditorStickerWear")}>
-          <EditorStepRangeWithInput
-            inputStyles="w-24 min-w-0"
-            max={CS2_MAX_STICKER_WEAR}
-            maxLength={stickerWearStringMaxLen}
-            min={CS2_MIN_STICKER_WEAR}
-            onChange={attributes.update("wear")}
-            randomizable
-            step={CS2_STICKER_WEAR_FACTOR}
-            stepRangeStyles="flex-1"
-            transform={stickerWearToString}
-            type="float"
-            validate={(value) =>
-              value >= CS2_MIN_STICKER_WEAR && value <= CS2_MAX_STICKER_WEAR
-            }
-            value={attributes.value.wear}
-          />
-        </EditorLabel>
-        <EditorLabel label={"X Offset_"}>
-          <EditorStepRangeWithInput
-            inputStyles="w-24 min-w-0"
-            max={2}
-            maxLength={5}
-            min={-2}
-            onChange={attributes.update("x")}
-            randomizable
-            step={0.0000001}
-            stepRangeStyles="flex-1"
-            transform={(value) => value.toFixed(5 - 2)}
-            type="float"
-            validate={(value) => value >= -2 && value <= 2}
-            value={attributes.value.x}
-          />
-        </EditorLabel>
-        <EditorLabel label={"X Offset_"}>
-          <EditorStepRangeWithInput
-            inputStyles="w-24 min-w-0"
-            max={2}
-            maxLength={5}
-            min={-2}
-            onChange={attributes.update("y")}
-            randomizable
-            step={0.0000001}
-            stepRangeStyles="flex-1"
-            transform={(value) => value.toFixed(5 - 2)}
-            type="float"
-            validate={(value) => value >= -2 && value <= 2}
-            value={attributes.value.y}
-          />
-        </EditorLabel>
+        {!isHideStickerWear && (
+          <EditorLabel label={localize("EditorWear")}>
+            <EditorStepRangeWithInput
+              inputStyles="w-24 min-w-0"
+              max={CS2_MAX_STICKER_WEAR}
+              maxLength={stickerWearStringMaxLen}
+              min={CS2_MIN_STICKER_WEAR}
+              onChange={attributes.update("wear")}
+              randomizable
+              step={CS2_STICKER_WEAR_FACTOR}
+              stepRangeStyles="flex-1"
+              transform={stickerWearToString}
+              type="float"
+              validate={validateStickerWear}
+              value={attributes.value.wear}
+            />
+          </EditorLabel>
+        )}
+        {!isHideStickerX && (
+          <EditorLabel label={localize("EditorStickerX")}>
+            <EditorStepRangeWithInput
+              inputStyles="w-24 min-w-0"
+              max={maxStickerOffset}
+              maxLength={stickerOffsetStringMaxLen}
+              min={minStickerOffset}
+              onChange={attributes.update("x")}
+              randomizable
+              step={stickerOffsetFactor}
+              stepRangeStyles="flex-1"
+              transform={stickerOffsetToString}
+              type="float"
+              validate={validateStickerOffset}
+              value={attributes.value.x}
+            />
+          </EditorLabel>
+        )}
+        {!isHideStickerY && (
+          <EditorLabel label={localize("EditorStickerY")}>
+            <EditorStepRangeWithInput
+              inputStyles="w-24 min-w-0"
+              max={maxStickerOffset}
+              maxLength={stickerOffsetStringMaxLen}
+              min={minStickerOffset}
+              onChange={attributes.update("y")}
+              randomizable
+              step={stickerOffsetFactor}
+              stepRangeStyles="flex-1"
+              transform={stickerOffsetToString}
+              type="float"
+              validate={validateStickerOffset}
+              value={attributes.value.y}
+            />
+          </EditorLabel>
+        )}
+        {!isHideStickerRotation && (
+          <EditorLabel label={localize("EditorStickerRotation")}>
+            <EditorStepRangeWithInput
+              inputStyles="w-24 min-w-0"
+              max={CS2_MAX_STICKER_ROTATION}
+              maxLength={stickerRotationStringMaxLen}
+              min={CS2_MIN_STICKER_ROTATION}
+              onChange={attributes.update("rotation")}
+              randomizable
+              step={1}
+              stepRangeStyles="flex-1"
+              type="int"
+              validate={validateStickerRotation}
+              value={attributes.value.rotation}
+            />
+          </EditorLabel>
+        )}
         <div className="flex justify-end">
           <ButtonWithTooltip
-            tooltip={copied ? "Copied to the clipboard_" : "Preview_"}
+            tooltip={localize(
+              copied ? "EditorCopiedToClipboard" : "EditorPreview"
+            )}
             className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
             onClick={handlePreview}
           >
