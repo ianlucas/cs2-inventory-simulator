@@ -31,7 +31,11 @@ import { InventoryFilter } from "./inventory-filter";
 import { useItemSelector } from "./item-selector-context";
 import { Logo } from "./logo";
 
-export function Header() {
+export function Header({
+  showInventoryFilter
+}: {
+  showInventoryFilter?: boolean;
+}) {
   const user = useUser();
   const [inventory] = useInventory();
   const { hideFilters } = usePreferences();
@@ -142,7 +146,9 @@ export function Header() {
           </div>
         )}
       </div>
-      {!hideFilters && !isSelectingAnItem && <InventoryFilter />}
+      {showInventoryFilter && !hideFilters && !isSelectingAnItem && (
+        <InventoryFilter />
+      )}
     </div>
   );
 }
