@@ -25,6 +25,7 @@ import { CloudflareAnalyticsScript } from "./components/cloudflare-analytics-scr
 import { Console } from "./components/console";
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
+import { useRootLayout } from "./components/hooks/use-root-layout";
 import { Inventory } from "./components/inventory";
 import { ItemSelectorProvider } from "./components/item-selector-context";
 import { LocalizationScript } from "./components/localization-script";
@@ -104,6 +105,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function App() {
   const appProps = useLoaderData<typeof loader>();
+  const { footer, header, inventory } = useRootLayout();
 
   return (
     <AppProvider {...appProps}>
@@ -134,12 +136,14 @@ export default function App() {
           <Background />
           <Console />
           <SyncWarn />
-          <ItemSelectorProvider>
-            <Header />
-            <Inventory />
-          </ItemSelectorProvider>
+          {(header || inventory) && (
+            <ItemSelectorProvider>
+              {header && <Header showInventoryFilter={inventory} />}
+              {inventory && <Inventory />}
+            </ItemSelectorProvider>
+          )}
           <Outlet />
-          <Footer />
+          {footer && <Footer />}
           <SyncIndicator />
           <ScrollRestoration />
 
