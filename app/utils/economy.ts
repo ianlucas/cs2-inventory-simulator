@@ -23,7 +23,7 @@ import {
 import { clientGlobals, isServerContext } from "~/globals";
 
 export const defaultAssetsBaseUrl =
-  "https://cdn.statically.io/gh/ianlucas/cs2-lib/6599e8f55d262882b79fbcfad7c795e67aa13538/assets/images";
+  "https://cdn.statically.io/gh/ianlucas/cs2-lib/6c1b383f6ddd4867b6c320d74fca3775df3b6c0a/assets/images";
 
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
