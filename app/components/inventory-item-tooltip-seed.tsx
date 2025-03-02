@@ -4,14 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2_MIN_SEED } from "@ianlucas/cs2-lib";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 
 export function InventoryItemTooltipSeed({ seed }: { seed?: number }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
   return (
     <div>
       <strong className="text-neutral-400">
-        {localize("InventoryItemSeed")}
+        {translate("InventoryItemSeed")}
       </strong>{" "}
       {seed ?? CS2_MIN_SEED}
     </div>

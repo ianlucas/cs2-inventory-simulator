@@ -5,7 +5,6 @@
 
 import { CS2EconomyItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { ComponentProps } from "react";
-import { resolveItemImage } from "~/utils/economy";
 
 export function ItemImage({
   item,
@@ -19,10 +18,7 @@ export function ItemImage({
     <img
       alt={item.name}
       draggable={false}
-      src={resolveItemImage(
-        item,
-        wear ?? (item instanceof CS2InventoryItem ? item.getWear() : undefined)
-      )}
+      src={item.getImage(wear)}
       {...props}
     />
   );

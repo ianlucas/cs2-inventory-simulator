@@ -5,7 +5,7 @@
 
 import clsx from "clsx";
 import { EconomyItemFilter } from "~/utils/economy-filters";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { ItemPickerFilterIcon } from "./item-picker-filter-icon";
 import { TextSlider } from "./text-slider";
 
@@ -18,7 +18,7 @@ export function ItemPickerFilterDesktop({
   onChange: (newValue: EconomyItemFilter) => void;
   value: EconomyItemFilter;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   function handleClick(filter: EconomyItemFilter) {
     return function handleClick() {
@@ -52,7 +52,7 @@ export function ItemPickerFilterDesktop({
                 )}
               />
               <div className="font-display min-w-0 flex-1 font-bold whitespace-nowrap drop-shadow-sm">
-                <TextSlider text={localize(`Category${filter.label}`)} />
+                <TextSlider text={translate(`Category${filter.label}`)} />
               </div>
             </button>
           );

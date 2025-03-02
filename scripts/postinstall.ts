@@ -27,7 +27,7 @@ try {
     utilsEconomyPath,
     contents.replace(
       /"[^"]+cdn.statically.io[^"]+"/,
-      `"https://cdn.statically.io/gh/ianlucas/cs2-lib/${sha}/assets/images"`
+      `"https://cdn.statically.io/gh/ianlucas/cs2-lib/${sha}/assets"`
     )
   );
 } catch (error) {

@@ -9,8 +9,8 @@ import { useState } from "react";
 import { useNavigate, useSubmit } from "react-router";
 import {
   useInventory,
-  useLocalize,
-  usePreferences
+  usePreferences,
+  useTranslate
 } from "~/components/app-context";
 import { EditorRange } from "~/components/editor-range";
 import { EditorToggle } from "~/components/editor-toggle";
@@ -47,7 +47,7 @@ export default function Settings() {
     statsForNerds: selectedStatsForNerds
   } = usePreferences();
   const [inventory, setInventory] = useInventory();
-  const localize = useLocalize();
+  const translate = useTranslate();
   const sync = useSync();
 
   const [background, setBackground] = useState(selectedBackground ?? "");
@@ -79,10 +79,10 @@ export default function Settings() {
   async function handleRemoveAllItems() {
     if (
       await confirm({
-        titleText: localize("SettingsRemoveAllItems"),
-        bodyText: localize("SettingsConfirmRemoveAllItems"),
-        cancelText: localize("EditorCancel"),
-        confirmText: localize("InventoryItemStorageUnitEmptyClose")
+        titleText: translate("SettingsRemoveAllItems"),
+        bodyText: translate("SettingsConfirmRemoveAllItems"),
+        cancelText: translate("EditorCancel"),
+        confirmText: translate("InventoryItemStorageUnitEmptyClose")
       })
     ) {
       inventory.removeAll();
@@ -94,9 +94,9 @@ export default function Settings() {
 
   return (
     <Modal className="w-[540px]">
-      <ModalHeader title={localize("SettingsHeader")} linkTo="/" />
+      <ModalHeader title={translate("SettingsHeader")} linkTo="/" />
       <div className="mt-2 space-y-2 px-2">
-        <SettingsLabel label={localize("SettingsMasterVolume")}>
+        <SettingsLabel label={translate("SettingsMasterVolume")}>
           <EditorRange
             format={(value) => (value * 100).toFixed(0).toString()}
             max={1}
@@ -107,7 +107,7 @@ export default function Settings() {
             valueStyles="w-5 text-right"
           />
         </SettingsLabel>
-        <SettingsLabel label={localize("SettingsLanguage")}>
+        <SettingsLabel label={translate("SettingsLanguage")}>
           <LanguageSelect
             languages={languages.map(({ name, countries }) => ({
               name,
@@ -117,13 +117,13 @@ export default function Settings() {
             onChange={setLanguage}
           />
         </SettingsLabel>
-        <SettingsLabel label={localize("SettingsBackground")}>
+        <SettingsLabel label={translate("SettingsBackground")}>
           <Select
             value={background ?? ""}
             onChange={setBackground}
             options={[
               {
-                label: localize("SettingsBackgroundRandom"),
+                label: translate("SettingsBackgroundRandom"),
                 value: ""
               },
               ...backgrounds
@@ -131,13 +131,13 @@ export default function Settings() {
             children={({ label }) => label}
           />
         </SettingsLabel>
-        <SettingsLabel label={localize("SettingsStatsForNerds")}>
+        <SettingsLabel label={translate("SettingsStatsForNerds")}>
           <EditorToggle checked={statsForNerds} onChange={setStatsForNerds} />
         </SettingsLabel>
-        <SettingsLabel label={localize("SettingsHideFreeItems")}>
+        <SettingsLabel label={translate("SettingsHideFreeItems")}>
           <EditorToggle checked={hideFreeItems} onChange={setHideFreeItems} />
         </SettingsLabel>
-        <SettingsLabel label={localize("SettingsHideFilters")}>
+        <SettingsLabel label={translate("SettingsHideFilters")}>
           <EditorToggle checked={hideFilters} onChange={setHideFilters} />
         </SettingsLabel>
         {inventory.size() > 0 && (
@@ -146,13 +146,13 @@ export default function Settings() {
             onClick={handleRemoveAllItems}
           >
             <FontAwesomeIcon icon={faTrashCan} className="h-4" />
-            {localize("SettingsRemoveAllItems")}
+            {translate("SettingsRemoveAllItems")}
           </button>
         )}
       </div>
       <div className="my-6 flex justify-center gap-2 px-4">
         <ModalButton
-          children={localize("SettingsSave")}
+          children={translate("SettingsSave")}
           onClick={handleSubmit}
           variant="primary"
         />

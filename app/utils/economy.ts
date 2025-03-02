@@ -6,7 +6,7 @@
 import {
   CS2Economy,
   CS2EconomyItem,
-  CS2ItemLocalizationByLanguage,
+  CS2ItemTranslationByLanguage,
   CS2ItemType,
   CS2ItemTypeValues,
   CS2RarityColor,
@@ -20,10 +20,9 @@ import {
   CS2_WEAR_FACTOR,
   fail
 } from "@ianlucas/cs2-lib";
-import { clientGlobals, isServerContext } from "~/globals";
 
 export const defaultAssetsBaseUrl =
-  "https://cdn.statically.io/gh/ianlucas/cs2-lib/6c1b383f6ddd4867b6c320d74fca3775df3b6c0a/assets/images";
+  "https://cdn.statically.io/gh/ianlucas/cs2-lib/cfc07711c2fc1d05fc77934bb70a5e197829ce61/assets";
 
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
@@ -45,16 +44,8 @@ export const RarityLabel = {
   [CS2RarityColor.Immortal]: "Immortal"
 } as const;
 
-export function getAssetsBaseUrl() {
-  return (
-    (isServerContext
-      ? process.env.ASSETS_BASE_URL
-      : clientGlobals.assetsBaseUrl) ?? defaultAssetsBaseUrl
-  );
-}
-
 export function updateEconomyLanguage(
-  language: CS2ItemLocalizationByLanguage[string]
+  language: CS2ItemTranslationByLanguage[string]
 ) {
   CS2Economy.use({
     items: CS2_ITEMS,
@@ -64,18 +55,6 @@ export function updateEconomyLanguage(
 
 export function isItemCountable(item: CS2EconomyItem) {
   return COUNTABLE_ITEM_TYPES.includes(item.type);
-}
-
-export function resolveItemImage(item: number | CS2EconomyItem, wear?: number) {
-  return CS2Economy.resolveItemImage(getAssetsBaseUrl(), item, wear);
-}
-
-export function resolveCaseSpecialsImage(item: number | CS2EconomyItem) {
-  return CS2Economy.resolveContainerSpecialsImage(getAssetsBaseUrl(), item);
-}
-
-export function resolveCollectionImage(item: number | CS2EconomyItem) {
-  return CS2Economy.resolveCollectionImage(getAssetsBaseUrl(), item);
 }
 
 export const minStickerOffset = -2;

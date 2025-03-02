@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { createFakeInventoryItem } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { UnlockCaseAttribute } from "./unlock-case-attribute";
@@ -23,7 +23,7 @@ export function UnlockCaseContainerUnlocked({
   onClose: () => void;
   unlockedItem: CS2UnlockedItem;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const nameItemString = useNameItemString();
   const [revealScale, setRevealScale] = useState(0);
 
@@ -63,18 +63,18 @@ export function UnlockCaseContainerUnlocked({
           left={
             <div className="flex items-center gap-8">
               <UnlockCaseAttribute
-                label={localize("CaseWear")}
+                label={translate("CaseWear")}
                 value={attributes.wear}
               />
               <UnlockCaseAttribute
-                label={localize("CaseSeed")}
+                label={translate("CaseSeed")}
                 value={attributes.seed}
               />
             </div>
           }
           right={
             <ModalButton
-              children={localize("CaseClose")}
+              children={translate("CaseClose")}
               onClick={onClose}
               variant="secondary"
             />

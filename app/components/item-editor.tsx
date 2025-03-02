@@ -20,7 +20,7 @@ import {
   wearToString
 } from "~/utils/economy";
 import { hasKeys } from "~/utils/misc";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
@@ -93,7 +93,7 @@ export function ItemEditor({
   const minimumSeed = item.getMinimumSeed();
   const minimumWear = item.getMinimumWear();
 
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   const attributes = useKeyValues({
     nameTag: defaults?.nameTag ?? "",
@@ -143,7 +143,7 @@ export function ItemEditor({
       <EditorItemDisplay item={item} wear={attributes.value.wear} />
       <div className="space-y-1.5">
         {hasStickers && (
-          <EditorLabel block label={localize("EditorStickers")}>
+          <EditorLabel block label={translate("EditorStickers")}>
             <StickerPicker
               disabled={isDisabled}
               forItem={item}
@@ -158,7 +158,7 @@ export function ItemEditor({
           </EditorLabel>
         )}
         {hasPatches && (
-          <EditorLabel block label={localize("EditorPatches")}>
+          <EditorLabel block label={translate("EditorPatches")}>
             <PatchPicker
               patchFilter={patchFilter}
               disabled={isDisabled}
@@ -170,7 +170,7 @@ export function ItemEditor({
         {hasNameTag && (
           <EditorLabel
             isDisabled={isDisabled}
-            label={localize("EditorNametag")}
+            label={translate("EditorNametag")}
           >
             <EditorInput
               className={clsx("w-full", isDisabled && "text-right")}
@@ -178,7 +178,7 @@ export function ItemEditor({
               maxLength={20}
               onChange={attributes.input("nameTag")}
               placeholder={
-                isDisabled ? "N/A" : localize("EditorNametagPlaceholder")
+                isDisabled ? "N/A" : translate("EditorNametagPlaceholder")
               }
               validate={(nameTag) =>
                 CS2Economy.safeValidateNametag(nameTag ?? "")
@@ -188,7 +188,7 @@ export function ItemEditor({
           </EditorLabel>
         )}
         {hasSeed && (
-          <EditorLabel isDisabled={isDisabled} label={localize("EditorSeed")}>
+          <EditorLabel isDisabled={isDisabled} label={translate("EditorSeed")}>
             <EditorStepRangeWithInput
               disabled={isDisabled}
               inputStyles="w-24 min-w-0"
@@ -207,7 +207,7 @@ export function ItemEditor({
           </EditorLabel>
         )}
         {hasWear && (
-          <EditorLabel isDisabled={isDisabled} label={localize("EditorWear")}>
+          <EditorLabel isDisabled={isDisabled} label={translate("EditorWear")}>
             <EditorStepRangeWithInput
               disabled={isDisabled}
               inputStyles="w-24 min-w-0"
@@ -229,11 +229,11 @@ export function ItemEditor({
         {hasStatTrak && (
           <EditorLabel
             isDisabled={isDisabled}
-            label={localize("EditorStatTrak")}
+            label={translate("EditorStatTrak")}
           >
             <EditorToggle
-              checkedLabel={localize("GenericYes")}
-              uncheckedLabel={localize("GenericNo")}
+              checkedLabel={translate("GenericYes")}
+              uncheckedLabel={translate("GenericNo")}
               disabled={isDisabled}
               checked={attributes.value.statTrak}
               onChange={attributes.checkbox("statTrak")}
@@ -243,7 +243,7 @@ export function ItemEditor({
         {hasQuantity && (
           <EditorLabel
             isDisabled={isDisabled}
-            label={localize("EditorQuantity")}
+            label={translate("EditorQuantity")}
           >
             <EditorStepRangeWithInput
               inputStyles="w-24 min-w-0"

@@ -9,7 +9,7 @@ import lzstring from "lz-string";
 import { useState } from "react";
 import { data, useLoaderData, useNavigate } from "react-router";
 import { z } from "zod";
-import { useInventory, useLocalize } from "~/components/app-context";
+import { useInventory, useTranslate } from "~/components/app-context";
 import { CraftEdit } from "~/components/craft-edit";
 import { CraftNew } from "~/components/craft-new";
 import { CraftShareUser } from "~/components/craft-share-user";
@@ -83,7 +83,7 @@ export default function Craft() {
   const isSharing = shared?.item !== undefined;
   const isCrafting = !isEditing && !isSharing;
 
-  const localize = useLocalize();
+  const translate = useTranslate();
   const sync = useSync();
   const navigate = useNavigate();
   const isDesktop = useIsDesktop();
@@ -174,14 +174,14 @@ export default function Craft() {
             isDesktop ? "max-w-[720px] min-w-[640px]" : "w-[540px]"
           )}
         >
-          <ModalHeader title={localize("CraftSelectHeader")} linkTo="/" />
+          <ModalHeader title={translate("CraftSelectHeader")} linkTo="/" />
           <ItemPicker onPickItem={setItem} />
         </Modal>
       )}
       {hasItem && (
         <Modal className="w-[420px]">
           <ModalHeader
-            title={localize(
+            title={translate(
               isSharing ? "CraftSharedHeader" : "CraftConfirmHeader"
             )}
             onClose={handleClose}

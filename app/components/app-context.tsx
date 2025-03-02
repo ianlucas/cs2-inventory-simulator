@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Inventory, CS2InventorySpec } from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2Inventory, CS2InventorySpec } from "@ianlucas/cs2-lib";
 import {
   ContextType,
   ReactNode,
@@ -14,12 +14,11 @@ import {
 } from "react";
 import { useInventoryFilterState } from "~/components/hooks/use-inventory-filter-state";
 import { useInventoryState } from "~/components/hooks/use-inventory-state";
-import { useLocalization } from "~/components/hooks/use-localization";
+import { useTranslation } from "~/components/hooks/use-translation";
 import { SyncAction } from "~/data/sync";
-import { clientGlobals } from "~/globals";
 import type { loader } from "~/root";
 import { pushToSync, sync } from "~/sync";
-import { updateEconomyLanguage } from "~/utils/economy";
+import { defaultAssetsBaseUrl, updateEconomyLanguage } from "~/utils/economy";
 import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
 import {
   cacheInventoryData,
@@ -40,7 +39,7 @@ const AppContext = createContext<
     inventoryFilter: ReturnType<typeof useInventoryFilterState>;
     items: TransformedInventoryItems;
     setInventory: (value: CS2Inventory) => void;
-    localization: ReturnType<typeof useLocalization>;
+    translation: ReturnType<typeof useTranslation>;
   } & SerializeFrom<typeof loader>
 >(null!);
 
@@ -48,8 +47,8 @@ export function useAppContext() {
   return useContext(AppContext);
 }
 
-export function useLocalize() {
-  return useAppContext().localization.localize;
+export function useTranslate() {
+  return useAppContext().translation.translate;
 }
 
 export function useRules() {
@@ -77,22 +76,22 @@ export function useInventoryFilter() {
   return useAppContext().inventoryFilter;
 }
 
-export function useLocalizationChecksum() {
-  return useAppContext().localization.checksum;
+export function useTranslationChecksum() {
+  return useAppContext().translation.checksum;
 }
 
 export function AppProvider({
   children,
   preferences,
   rules,
-  localization: { checksum },
+  translation: { checksum },
   user
 }: Omit<
   ContextType<typeof AppContext>,
-  "inventory" | "inventoryFilter" | "items" | "localization" | "setInventory"
+  "inventory" | "inventoryFilter" | "items" | "translation" | "setInventory"
 > & {
   children: ReactNode;
-  localization: {
+  translation: {
     checksum: string;
   };
 }) {
@@ -109,13 +108,13 @@ export function AppProvider({
     () => new CS2Inventory(inventorySpec)
   );
   const inventoryFilter = useInventoryFilterState();
-  const localization = useLocalization({
+  const translation = useTranslation({
     checksum,
     language: preferences.language
   });
 
   useEffect(() => {
-    clientGlobals.assetsBaseUrl = rules.assetsBaseUrl;
+    CS2Economy.baseUrl = rules.assetsBaseUrl ?? defaultAssetsBaseUrl;
   }, [rules.assetsBaseUrl]);
 
   useEffect(() => {
@@ -145,7 +144,7 @@ export function AppProvider({
   }, [user]);
 
   useEffect(() => {
-    updateEconomyLanguage(localization.items);
+    updateEconomyLanguage(translation.items);
     reactSetInventory(
       (inventory) =>
         new CS2Inventory({
@@ -153,7 +152,7 @@ export function AppProvider({
           data: inventory.getData()
         })
     );
-  }, [localization.items]);
+  }, [translation.items]);
 
   const items = useMemo(
     () =>
@@ -186,7 +185,7 @@ export function AppProvider({
         inventory,
         inventoryFilter,
         items,
-        localization,
+        translation: translation,
         preferences,
         rules,
         setInventory,

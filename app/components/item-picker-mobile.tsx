@@ -9,7 +9,7 @@ import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useItemPickerState } from "~/components/hooks/use-item-picker-state";
 import { ItemBrowser } from "~/components/item-browser";
 import { ItemPickerFilterMobile } from "~/components/item-picker-filter-mobile";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 
 export function ItemPickerMobile({
   onPickItem
@@ -26,7 +26,7 @@ export function ItemPickerMobile({
     query,
     setQuery
   } = useItemPickerState({ onPickItem });
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   return (
     <>
@@ -44,7 +44,7 @@ export function ItemPickerMobile({
           value={query}
           onChange={setQuery}
           className="flex-1 rounded-sm bg-neutral-950/40 px-3 py-1 placeholder-neutral-600 outline-hidden"
-          placeholder={localize("CraftSearchPlaceholder")}
+          placeholder={translate("CraftSearchPlaceholder")}
         />
       </div>
       <div className="pt-1 pb-2">

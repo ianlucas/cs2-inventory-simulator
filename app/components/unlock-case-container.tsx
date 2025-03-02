@@ -5,7 +5,7 @@
 
 import { CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
 import { useNameItemString } from "~/components/hooks/use-name-item";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -41,7 +41,7 @@ export function UnlockCaseContainer({
   onClose: () => void;
   onUnlock: () => void;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const nameItemString = useNameItemString();
   const needsToAddKey = keyItem === undefined && neededKeyItem !== undefined;
 
@@ -53,10 +53,10 @@ export function UnlockCaseContainer({
       />
       <div className="flex w-full flex-col justify-center gap-4">
         <UseItemHeader
-          actionDesc={localize("CaseUnlock")}
+          actionDesc={translate("CaseUnlock")}
           actionItem={nameItemString(caseItem)}
-          title={localize("CaseUnlockContainer")}
-          warning={localize("CaseOnceWarn")}
+          title={translate("CaseUnlockContainer")}
+          warning={translate("CaseOnceWarn")}
         />
         <UnlockCaseWheel
           caseItem={caseItem}
@@ -75,7 +75,7 @@ export function UnlockCaseContainer({
                 <div className="font-display flex items-center gap-2 text-lg">
                   <ItemImage className="h-14" item={keyItem} />
                   <span>
-                    {localize("CaseUse")}{" "}
+                    {translate("CaseUse")}{" "}
                     <strong>{nameItemString(keyItem)}</strong>
                   </span>
                 </div>
@@ -84,7 +84,7 @@ export function UnlockCaseContainer({
                   <div className="font-display flex items-center gap-2 text-lg">
                     <ItemImage className="h-14" item={neededKeyItem} />
                     <span>
-                      {localize("CaseNeed")}{" "}
+                      {translate("CaseNeed")}{" "}
                       <strong>{nameItemString(neededKeyItem)}</strong>
                     </span>
                   </div>
@@ -100,7 +100,7 @@ export function UnlockCaseContainer({
                   />
                 ) : canUnlock && !isSyncing ? (
                   <ModalButton
-                    children={localize("CaseUnlockContainer")}
+                    children={translate("CaseUnlockContainer")}
                     disabled={!canUnlock}
                     onClick={onUnlock}
                     variant="primary"
@@ -109,7 +109,7 @@ export function UnlockCaseContainer({
                   <FillSpinner className="mx-4" />
                 )}
                 <ModalButton
-                  children={localize("CaseClose")}
+                  children={translate("CaseClose")}
                   disabled={isSyncing}
                   onClick={onClose}
                   variant="secondary"

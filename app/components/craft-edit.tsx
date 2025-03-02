@@ -9,7 +9,7 @@ import {
   CS2ItemType
 } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { useLocalize, useRules } from "./app-context";
+import { useRules, useTranslate } from "./app-context";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ModalButton } from "./modal-button";
 
@@ -22,7 +22,7 @@ export function CraftEdit({
   onClose: () => void;
   onSubmit: (attributes: ItemEditorAttributes) => void;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const {
     editAllowNametag,
     editAllowPatches,
@@ -96,12 +96,12 @@ export function CraftEdit({
       />
       <div className="my-6 flex justify-center gap-2">
         <ModalButton
-          children={localize("EditorCancel")}
+          children={translate("EditorCancel")}
           onClick={onClose}
           variant="secondary"
         />
         <ModalButton
-          children={localize("EditorSave")}
+          children={translate("EditorSave")}
           onClick={handleSubmit}
           variant="primary"
         />

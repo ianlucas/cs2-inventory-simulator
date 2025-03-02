@@ -15,7 +15,7 @@ import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
-import { useInventory, useLocalize } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -32,7 +32,7 @@ export function RenameStorageUnit({
   uid: number;
 }) {
   const [inventory, setInventory] = useInventory();
-  const localize = useLocalize();
+  const translate = useTranslate();
   const sync = useSync();
   const nameItemString = useNameItemString();
 
@@ -71,13 +71,13 @@ export function RenameStorageUnit({
         createPortal(
           <Overlay>
             <UseItemHeader
-              actionDesc={localize("RenameStorageUnitEnterName")}
+              actionDesc={translate("RenameStorageUnitEnterName")}
               actionItem={nameItemString(item)}
-              title={localize("RenameStorageUnitUse")}
+              title={translate("RenameStorageUnitUse")}
               warning={
                 isStartUsingStorageUnit
-                  ? localize("RenameStorageUnitFirstNameWarn")
-                  : localize("RenameStorageUnitNewNameWarn")
+                  ? translate("RenameStorageUnitFirstNameWarn")
+                  : translate("RenameStorageUnitNewNameWarn")
               }
             />
             <ItemImage
@@ -90,7 +90,7 @@ export function RenameStorageUnit({
                 className="text-2xl lg:max-w-[428px]"
                 maxLength={20}
                 onChange={setNameTag}
-                placeholder={localize("InventoryItemRenamePlaceholder")}
+                placeholder={translate("InventoryItemRenamePlaceholder")}
                 validate={(nameTag) =>
                   CS2Economy.safeValidateNametag(nameTag ?? "")
                 }
@@ -103,9 +103,9 @@ export function RenameStorageUnit({
                 disabled={isConfirmDisabled}
                 tooltip={
                   isConfirmDisabled || isInvalid
-                    ? localize("InventoryItemRenameInvalidTooltip")
+                    ? translate("InventoryItemRenameInvalidTooltip")
                     : isConfirmed
-                      ? localize("InventoryItemRenameClearTooltip")
+                      ? translate("InventoryItemRenameClearTooltip")
                       : undefined
                 }
               />
@@ -117,12 +117,12 @@ export function RenameStorageUnit({
                     disabled={nameTag === "" || isInvalid || !isConfirmed}
                     variant="primary"
                     onClick={handleRename}
-                    children={localize("RenameStorageUnitRename")}
+                    children={translate("RenameStorageUnitRename")}
                   />
                   <ModalButton
                     variant="secondary"
                     onClick={onClose}
-                    children={localize("RenameStorageUnitClose")}
+                    children={translate("RenameStorageUnitClose")}
                   />
                 </>
               }

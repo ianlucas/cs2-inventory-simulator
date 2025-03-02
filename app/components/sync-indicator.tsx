@@ -14,13 +14,13 @@ import {
 import { sync } from "~/sync";
 import { getJson } from "~/utils/fetch";
 import { parseInventory } from "~/utils/inventory";
-import { useInventory, useLocalize, useRules } from "./app-context";
+import { useInventory, useRules, useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
 
 export function SyncIndicator() {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const { inventoryMaxItems, inventoryStorageUnitMaxItems } = useRules();
   const [, setInventory] = useInventory();
   const [opacity, setOpacity] = useState(0);
@@ -76,8 +76,8 @@ export function SyncIndicator() {
             </div>
             {showSyncErrorModal && (
               <Modal fixed>
-                <ModalHeader title={localize("SyncErrorTitle")} />
-                <p className="mt-2 px-4">{localize("SyncErrorDesc")}</p>
+                <ModalHeader title={translate("SyncErrorTitle")} />
+                <p className="mt-2 px-4">{translate("SyncErrorDesc")}</p>
                 <div className="my-6 mt-4 flex justify-center px-4">
                   <ModalButton
                     disabled={disableContinueButton}
@@ -89,7 +89,7 @@ export function SyncIndicator() {
                           <FillSpinner />
                         </span>
                       ) : (
-                        localize("SyncErrorContinue")
+                        translate("SyncErrorContinue")
                       )
                     }
                   />

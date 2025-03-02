@@ -15,7 +15,7 @@ import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { wearToString } from "~/utils/economy";
 import { getInventoryItemShareUrl } from "~/utils/inventory";
-import { useLocalize, usePreferences, useUser } from "./app-context";
+import { usePreferences, useTranslate, useUser } from "./app-context";
 import { useTimedState } from "./hooks/use-timed-state";
 import { InfoIcon } from "./info-icon";
 import { ItemCollectionImage } from "./item-collection-image";
@@ -32,7 +32,7 @@ export function InspectItem({
   uid: number;
 }) {
   const [, copyToClipboard] = useCopyToClipboard();
-  const localize = useLocalize();
+  const translate = useTranslate();
   const nameItemString = useNameItemString();
   const item = useInventoryItem(uid);
   const { statsForNerds } = usePreferences();
@@ -135,7 +135,7 @@ export function InspectItem({
                   <ModalButton
                     variant="secondary"
                     onClick={onClose}
-                    children={localize("InspectClose")}
+                    children={translate("InspectClose")}
                   />
                 </>
               }
@@ -150,19 +150,19 @@ export function InspectItem({
                 >
                   <div>
                     <strong>
-                      {localize("InventoryItemInspectFinishCatalog")}:
+                      {translate("InventoryItemInspectFinishCatalog")}:
                     </strong>{" "}
                     {item.index}
                   </div>
                   <div>
                     <strong>
-                      {localize("InventoryItemInspectPatternTemplate")}:
+                      {translate("InventoryItemInspectPatternTemplate")}:
                     </strong>{" "}
                     {item.seed ?? CS2_MIN_SEED}
                   </div>
                   <div>
                     <strong>
-                      {localize("InventoryItemInspectWearRating")}:
+                      {translate("InventoryItemInspectWearRating")}:
                     </strong>{" "}
                     {wearToString(item.getWear())}
                   </div>

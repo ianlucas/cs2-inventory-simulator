@@ -8,7 +8,7 @@ import { fail } from "assert";
 import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 import { CS2_CSGO_PATH } from "~/env.server";
-import { SystemLocalizationByLanguage } from "~/localization.server";
+import { SystemTranslationByLanguage } from "~/translation.server";
 
 function replace(
   str: string,
@@ -274,13 +274,13 @@ function readCsgoLanguage(include?: string[]) {
   return languages;
 }
 
-function writeLocalizationFile(
+function writeTranslationFile(
   lang: string,
-  localizations: Record<string, Record<string, string>>
+  translations: Record<string, Record<string, string>>
 ) {
-  const localization = localizations[lang];
-  const dist = `app/localizations/${lang}.ts`;
-  const sortedKeys = Object.keys(localization).sort();
+  const translation = translations[lang];
+  const dist = `app/translations/${lang}.ts`;
+  const sortedKeys = Object.keys(translation).sort();
   // prettier-ignore
   writeFileSync(
     resolve(process.cwd(), dist),
@@ -294,7 +294,7 @@ ${lang !== 'english' ? 'import { english } from "./english";\n' : ''}
 export const ${lang} = {
 ${lang !== 'english' ? '  ...english,' : ''}
 ${sortedKeys.map(key => (
-`  ${key}: ${STRINGS_FROM_GAME[key] !== undefined ? `/* csgo_${lang}.txt */` : ''}${JSON.stringify(localization[key])}`
+`  ${key}: ${STRINGS_FROM_GAME[key] !== undefined ? `/* csgo_${lang}.txt */` : ''}${JSON.stringify(translation[key])}`
 )).join(',\n')}
 };`);
   console.log(`Wrote '${dist}'`);
@@ -308,27 +308,27 @@ async function main() {
   ];
   const find = (language: (typeof languages)[string], key: string) =>
     language[key.toLowerCase()];
-  const systemLocalizationByLanguage: SystemLocalizationByLanguage = {};
+  const systemTranslationByLanguage: SystemTranslationByLanguage = {};
   for (const lang of langs) {
     console.log(`Processing '${lang}'...`);
     const language = languages[lang];
-    const localizationPath = resolve(
+    const translationPath = resolve(
       process.cwd(),
-      `app/localizations/${lang}.ts`
+      `app/translations/${lang}.ts`
     );
-    systemLocalizationByLanguage[lang] = (await import(localizationPath))[lang];
-    const localizationMap = systemLocalizationByLanguage[lang];
+    systemTranslationByLanguage[lang] = (await import(translationPath))[lang];
+    const translationMap = systemTranslationByLanguage[lang];
     for (const [key, value] of Object.entries(STRINGS_FROM_GAME)) {
       if (typeof value === "string") {
-        localizationMap[key] =
-          find(language, value) ?? systemLocalizationByLanguage.english[key];
+        translationMap[key] =
+          find(language, value) ?? systemTranslationByLanguage.english[key];
       } else if (Array.isArray(value)) {
-        localizationMap[key] = value
+        translationMap[key] = value
           .map((token) => {
             if (token.charAt(0) === "#") {
               return (
                 find(language, token.substring(1)) ??
-                systemLocalizationByLanguage.english[key]
+                systemTranslationByLanguage.english[key]
               );
             }
             return token;
@@ -336,25 +336,25 @@ async function main() {
           .join("");
       } else {
         const { token, transform } = value;
-        const localized = find(language, token);
-        localizationMap[key] =
-          localized !== undefined
-            ? transform(localized, lang).trim()
-            : systemLocalizationByLanguage.english[key];
+        const translated = find(language, token);
+        translationMap[key] =
+          translated !== undefined
+            ? transform(translated, lang).trim()
+            : systemTranslationByLanguage.english[key];
       }
-      assert(localizationMap[key] !== undefined, `Missing key '${key}'`);
+      assert(translationMap[key] !== undefined, `Missing key '${key}'`);
     }
     if (lang !== "english") {
-      for (const key of Object.keys(localizationMap)) {
+      for (const key of Object.keys(translationMap)) {
         if (
-          localizationMap[key] === systemLocalizationByLanguage.english[key] &&
+          translationMap[key] === systemTranslationByLanguage.english[key] &&
           !Object.keys(STRINGS_FROM_GAME).includes(key)
         ) {
-          delete localizationMap[key];
+          delete translationMap[key];
         }
       }
     }
-    writeLocalizationFile(lang, systemLocalizationByLanguage);
+    writeTranslationFile(lang, systemTranslationByLanguage);
   }
 }
 

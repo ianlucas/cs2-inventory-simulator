@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2ItemType, CS2ItemTypeValues } from "@ianlucas/cs2-lib";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 
 export function InventoryItemTooltipStatTrak({
   statTrak,
@@ -13,15 +13,15 @@ export function InventoryItemTooltipStatTrak({
   statTrak?: number;
   type: CS2ItemTypeValues;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   return (
     <div className="mt-4">
       <div className="text-blue-300">
-        {localize("InventoryItemStatTrakDesc")}
+        {translate("InventoryItemStatTrakDesc")}
       </div>
       <div className="mt-4 text-orange-400">
-        {localize(
+        {translate(
           type === CS2ItemType.MusicKit
             ? "InventoryItemMVPStatTrakCount"
             : "InventoryItemStatTrakCount"

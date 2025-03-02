@@ -5,7 +5,7 @@
 
 import { ComponentProps } from "react";
 import { LanguageName } from "~/data/languages";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { Select } from "./select";
 
 export function LanguageSelect({
@@ -18,7 +18,7 @@ export function LanguageSelect({
     country: string;
   }[];
 } & Omit<ComponentProps<typeof Select>, "children" | "options">) {
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   return (
     <Select
@@ -26,7 +26,7 @@ export function LanguageSelect({
       onChange={onChange}
       options={languages.map(({ name, country }) => ({
         flag: country.toUpperCase(),
-        label: localize(`Language$${name}`),
+        label: translate(`Language$${name}`),
         value: name
       }))}
       children={({ flag, label }) => (

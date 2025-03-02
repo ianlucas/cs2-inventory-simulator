@@ -9,7 +9,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useCounter } from "~/components/hooks/use-counter";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
-import { useInventory, useLocalize } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -28,7 +28,7 @@ export function SwapItemsStatTrak({
   toolUid: number;
 }) {
   const [inventory, setInventory] = useInventory();
-  const localize = useLocalize();
+  const translate = useTranslate();
   const sync = useSync();
 
   function handleAccept() {
@@ -58,9 +58,9 @@ export function SwapItemsStatTrak({
         createPortal(
           <Overlay>
             <UseItemHeader
-              actionDesc={localize("ItemSwapStatTrakDesc")}
-              title={localize("ItemSwapStatTrakUse")}
-              warning={localize("ItemSwapStatTrakWarn")}
+              actionDesc={translate("ItemSwapStatTrakDesc")}
+              title={translate("ItemSwapStatTrakUse")}
+              warning={translate("ItemSwapStatTrakWarn")}
             />
             <div className="mt-16 flex items-center justify-center gap-10">
               {items.map(({ item, value }, index) => (
@@ -88,12 +88,12 @@ export function SwapItemsStatTrak({
                   <ModalButton
                     variant="primary"
                     onClick={handleAccept}
-                    children={localize("ItemSwapStatTrakAccept")}
+                    children={translate("ItemSwapStatTrakAccept")}
                   />
                   <ModalButton
                     variant="secondary"
                     onClick={onClose}
-                    children={localize("ItemSwapStatTrakClose")}
+                    children={translate("ItemSwapStatTrakClose")}
                   />
                 </>
               }

@@ -34,7 +34,7 @@ import {
   validateStickerWear
 } from "~/utils/economy";
 import { createFakeInventoryItemFromBase } from "~/utils/inventory";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
@@ -75,7 +75,7 @@ export function AppliedStickerEditor({
   >;
   value: { wear: number; rotation: number; x: number; y: number };
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const [, copyToClipboard] = useCopyToClipboard();
   const [copied, triggerCopied] = useTimedState();
 
@@ -117,7 +117,7 @@ export function AppliedStickerEditor({
       <EditorItemDisplay item={item} wear={attributes.value.wear} />
       <div className="space-y-1.5">
         {!isHideStickerWear && (
-          <EditorLabel label={localize("EditorWear")}>
+          <EditorLabel label={translate("EditorWear")}>
             <EditorStepRangeWithInput
               inputStyles="w-24 min-w-0"
               max={CS2_MAX_STICKER_WEAR}
@@ -135,7 +135,7 @@ export function AppliedStickerEditor({
           </EditorLabel>
         )}
         {!isHideStickerX && (
-          <EditorLabel label={localize("EditorStickerX")}>
+          <EditorLabel label={translate("EditorStickerX")}>
             <EditorStepRangeWithInput
               inputStyles="w-24 min-w-0"
               max={maxStickerOffset}
@@ -153,7 +153,7 @@ export function AppliedStickerEditor({
           </EditorLabel>
         )}
         {!isHideStickerY && (
-          <EditorLabel label={localize("EditorStickerY")}>
+          <EditorLabel label={translate("EditorStickerY")}>
             <EditorStepRangeWithInput
               inputStyles="w-24 min-w-0"
               max={maxStickerOffset}
@@ -171,7 +171,7 @@ export function AppliedStickerEditor({
           </EditorLabel>
         )}
         {!isHideStickerRotation && (
-          <EditorLabel label={localize("EditorStickerRotation")}>
+          <EditorLabel label={translate("EditorStickerRotation")}>
             <EditorStepRangeWithInput
               inputStyles="w-24 min-w-0"
               max={CS2_MAX_STICKER_ROTATION}
@@ -189,7 +189,7 @@ export function AppliedStickerEditor({
         )}
         <div className="flex justify-end">
           <ButtonWithTooltip
-            tooltip={localize(
+            tooltip={translate(
               copied ? "EditorCopiedToClipboard" : "EditorPreview"
             )}
             className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"

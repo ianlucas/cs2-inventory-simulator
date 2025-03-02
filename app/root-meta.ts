@@ -6,7 +6,7 @@
 import { MetaFunction } from "react-router";
 import { loader as rootLoader } from "~/root";
 import { DEFAULT_APP_NAME } from "./app-defaults";
-import { getSystemLocalization } from "./utils/localization";
+import { getSystemTranslation } from "./utils/translation";
 
 export function getMetaTitle(
   key?: string
@@ -16,7 +16,7 @@ export function getMetaTitle(
     const appName = rootData?.data?.rules.appName || DEFAULT_APP_NAME;
     const pageTitle =
       key !== undefined
-        ? getSystemLocalization(key, rootData?.data?.preferences.language)
+        ? getSystemTranslation(key, rootData?.data?.preferences.language)
         : undefined;
     return [
       { title: `${pageTitle !== undefined ? `${pageTitle} - ` : ""}${appName}` }

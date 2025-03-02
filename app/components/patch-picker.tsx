@@ -19,7 +19,7 @@ import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
 import { sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { IconButton } from "./icon-button";
 import { IconInput } from "./icon-input";
 import { ItemBrowser } from "./item-browser";
@@ -37,7 +37,7 @@ export function PatchPicker({
   patchFilter?: (item: CS2EconomyItem) => boolean;
   value: NonNullable<CS2BaseInventoryItem["patches"]>;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   const [search, setSearch] = useInput("");
   const [activeIndex, setActiveIndex] = useState<number>();
@@ -105,7 +105,7 @@ export function PatchPicker({
                 <ItemImage className="aspect-256/192" item={item} />
               ) : (
                 <div className="flex aspect-256/192 items-center justify-center text-neutral-700">
-                  {localize("StickerPickerNA")}
+                  {translate("StickerPickerNA")}
                 </div>
               )}
               {!disabled && (
@@ -117,7 +117,7 @@ export function PatchPicker({
       </div>
       <Modal className="w-[540px] pb-1" hidden={activeIndex === undefined} blur>
         <ModalHeader
-          title={localize("PatchPickerHeader")}
+          title={translate("PatchPickerHeader")}
           onClose={handleCloseModal}
         />
         <div className="my-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
@@ -125,13 +125,13 @@ export function PatchPicker({
             icon={faMagnifyingGlass}
             labelStyles="flex-1"
             onChange={setSearch}
-            placeholder={localize("PatchPickerSearchPlaceholder")}
+            placeholder={translate("PatchPickerSearchPlaceholder")}
             value={search}
           />
           <IconButton
             icon={faTrashCan}
             onClick={handleRemovePatch}
-            title={localize("StickerPickerRemove")}
+            title={translate("StickerPickerRemove")}
           />
         </div>
         <ItemBrowser items={filtered} onClick={handleAddPatch} />

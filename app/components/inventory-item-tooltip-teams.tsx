@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Team, CS2TeamValues } from "@ianlucas/cs2-lib";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { InventoryItemTooltipInfo } from "./inventory-item-tooltip-info";
 
 export function InventoryItemTooltipTeams({
@@ -12,7 +12,7 @@ export function InventoryItemTooltipTeams({
 }: {
   teams?: CS2TeamValues[];
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   const hasCT = teams?.includes(CS2Team.CT);
   const hasT = teams?.includes(CS2Team.T);
@@ -21,14 +21,14 @@ export function InventoryItemTooltipTeams({
   return (
     <InventoryItemTooltipInfo
       className="flex items-center gap-1"
-      label={localize("InventoryItemTeam")}
+      label={translate("InventoryItemTeam")}
     >
       {hasCT && <img src="/images/vectors/ct.svg" className="h-4" alt="CT" />}
       {hasT && <img src="/images/vectors/t.svg" className="h-4" alt="T" />}
       <span>
         {hasAny
-          ? localize("InventoryItemTeamAny")
-          : localize(`InventoryItemTeam${hasCT ? "CT" : "T"}`)}
+          ? translate("InventoryItemTeamAny")
+          : translate(`InventoryItemTeam${hasCT ? "CT" : "T"}`)}
       </span>
     </InventoryItemTooltipInfo>
   );

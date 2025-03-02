@@ -11,7 +11,7 @@ import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
-import { useInventory, useLocalize } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
@@ -27,7 +27,7 @@ export function RemoveItemPatch({
   uid: number;
 }) {
   const nameItemString = useNameItemString();
-  const localize = useLocalize();
+  const translate = useTranslate();
   const sync = useSync();
 
   const [inventory, setInventory] = useInventory();
@@ -62,8 +62,8 @@ export function RemoveItemPatch({
           <>
             <Overlay>
               <UseItemHeader
-                title={localize("ScrapeStickerUse")}
-                warning={localize("RemovePatchWarn")}
+                title={translate("ScrapeStickerUse")}
+                warning={translate("RemovePatchWarn")}
                 warningItem={nameItemString(item)}
               />
               <ItemImage
@@ -84,7 +84,7 @@ export function RemoveItemPatch({
               <UseItemFooter
                 right={
                   <ModalButton
-                    children={localize("ScrapeStickerClose")}
+                    children={translate("ScrapeStickerClose")}
                     onClick={onClose}
                     variant="secondary"
                   />
@@ -93,19 +93,21 @@ export function RemoveItemPatch({
             </Overlay>
             {confirmRemoveSlot !== undefined && (
               <Modal className="w-[480px]" fixed>
-                <ModalHeader title={localize("RemovePatchRemove")} />
-                <p className="mt-2 px-4">{localize("RemovePatchRemoveDesc")}</p>
+                <ModalHeader title={translate("RemovePatchRemove")} />
+                <p className="mt-2 px-4">
+                  {translate("RemovePatchRemoveDesc")}
+                </p>
                 <div className="my-6 flex justify-center gap-2 px-4">
                   {" "}
                   <ModalButton
                     onClick={() => setConfirmRemoveSlot(undefined)}
                     variant="secondary"
-                    children={localize("ScrapeStickerCancel")}
+                    children={translate("ScrapeStickerCancel")}
                   />
                   <ModalButton
                     onClick={handleConfirmScrape}
                     variant="primary"
-                    children={localize("RemovePatchRemove")}
+                    children={translate("RemovePatchRemove")}
                   />
                 </div>
               </Modal>

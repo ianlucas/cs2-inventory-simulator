@@ -5,11 +5,11 @@
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { RarityLabel, getRarityItemName } from "~/utils/economy";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { InventoryItemTooltipInfo } from "./inventory-item-tooltip-info";
 
 export function InventoryItemTooltipRarity({ item }: { item: CS2EconomyItem }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   const rarityType = item.isPaintable() || item.isC4() ? "Weapon" : "";
   const rarityLabel = RarityLabel[item.rarity];
@@ -19,9 +19,9 @@ export function InventoryItemTooltipRarity({ item }: { item: CS2EconomyItem }) {
   return (
     <InventoryItemTooltipInfo
       style={{ color: item.rarity }}
-      label={localize("InventoryItemRarity")}
+      label={translate("InventoryItemRarity")}
     >
-      {localize("ItemRarityFormat", localize(rarityKey), localize(nameKey))}
+      {translate("ItemRarityFormat", translate(rarityKey), translate(nameKey))}
     </InventoryItemTooltipInfo>
   );
 }

@@ -15,7 +15,7 @@ import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
-import { useInventory, useLocalize } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -33,7 +33,7 @@ export function RenameItem({
   targetUid: number;
   toolUid: number;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const sync = useSync();
   const nameItemString = useNameItemString();
   const [inventory, setInventory] = useInventory();
@@ -85,10 +85,10 @@ export function RenameItem({
         createPortal(
           <Overlay>
             <UseItemHeader
-              actionDesc={localize("RenameEnterName")}
+              actionDesc={translate("RenameEnterName")}
               actionItem={nameItemString(inventoryItem)}
-              title={localize("RenameUse")}
-              warning={localize("RenameWarn")}
+              title={translate("RenameUse")}
+              warning={translate("RenameWarn")}
             />
             <ItemImage
               className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
@@ -100,7 +100,7 @@ export function RenameItem({
                 className="text-2xl lg:max-w-[428px]"
                 maxLength={20}
                 onChange={setNameTag}
-                placeholder={localize("InventoryItemRenamePlaceholder")}
+                placeholder={translate("InventoryItemRenamePlaceholder")}
                 validate={(nameTag) =>
                   CS2Economy.safeValidateNametag(nameTag ?? "")
                 }
@@ -113,9 +113,9 @@ export function RenameItem({
                 disabled={isConfirmDisabled}
                 tooltip={
                   isConfirmDisabled || isInvalid
-                    ? localize("InventoryItemRenameInvalidTooltip")
+                    ? translate("InventoryItemRenameInvalidTooltip")
                     : isConfirmed
-                      ? localize("InventoryItemRenameClearTooltip")
+                      ? translate("InventoryItemRenameClearTooltip")
                       : undefined
                 }
               />
@@ -131,12 +131,12 @@ export function RenameItem({
                     }
                     variant="primary"
                     onClick={handleRename}
-                    children={localize("RenameRename")}
+                    children={translate("RenameRename")}
                   />
                   <ModalButton
                     variant="secondary"
                     onClick={onClose}
-                    children={localize("RenameCancel")}
+                    children={translate("RenameCancel")}
                   />
                 </>
               }

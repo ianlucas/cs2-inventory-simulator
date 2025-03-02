@@ -6,21 +6,21 @@
 import { PassThrough } from "node:stream";
 
 import { CS2Economy, CS2_ITEMS } from "@ianlucas/cs2-lib";
-import english from "@ianlucas/cs2-lib/assets/localizations/items-english.json";
+import { english } from "@ianlucas/cs2-lib/translations";
 import { createReadableStreamFromReadable } from "@react-router/node";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import type { AppLoadContext, EntryContext } from "react-router";
 import { ServerRouter } from "react-router";
-import { setupLocalization } from "./localization.server";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule";
 import { setupPurge } from "./routines/setup-purge";
+import { setupTranslation } from "./translation.server";
 
 const ABORT_DELAY = 5_000;
 
 CS2Economy.use({ items: CS2_ITEMS, language: english });
-setupLocalization();
+setupTranslation();
 setupPurge();
 setupRules().then(() => setupLogo());
 
