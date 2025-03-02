@@ -12,7 +12,7 @@ import { clientGlobals } from "./globals";
 
 CS2Economy.use({
   items: CS2_ITEMS,
-  language: clientGlobals.itemLocalizationMap
+  language: clientGlobals.itemTranslationMap
 });
 
 fontAwesomeConfig.replacementClass = "";

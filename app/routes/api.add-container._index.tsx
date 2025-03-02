@@ -77,7 +77,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     return Response.json({
       ...item.item,
       ...(language !== undefined
-        ? serverGlobals.itemLocalizationByLanguage[language][item.id]
+        ? serverGlobals.itemTranslationByLanguage[language][item.id]
         : item.language)
     });
   } catch {

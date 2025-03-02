@@ -10,7 +10,7 @@ import { dispatchAppEvent } from "~/app";
 import { SyncAction } from "~/data/sync";
 import { toArrayIf } from "~/utils/misc";
 import { range } from "~/utils/number";
-import { useInventory, useLocalize, useRules } from "./app-context";
+import { useInventory, useRules, useTranslate } from "./app-context";
 import { useSync } from "./hooks/use-sync";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { Modal, ModalHeader } from "./modal";
@@ -26,7 +26,7 @@ export function UnlockCaseContainerAddKey({
   caseUid: number;
   neededKeyItem: CS2EconomyItem;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const sync = useSync();
   const [inventory, setInventory] = useInventory();
   const { craftMaxQuantity, inventoryMaxItems } = useRules();
@@ -79,14 +79,14 @@ export function UnlockCaseContainerAddKey({
         optionsStyles="max-h-[256px] overflow-y-scroll"
       />
       <ModalButton
-        children={localize("CaseAdd")}
+        children={translate("CaseAdd")}
         variant="primary"
         onClick={handleClose}
       />
       {isCrafting && (
         <Modal className="w-[420px]" fixed>
           <ModalHeader
-            title={localize("CaseAddKeyConfirm")}
+            title={translate("CaseAddKeyConfirm")}
             onClose={handleClose}
           />
           <ItemEditor
@@ -98,12 +98,12 @@ export function UnlockCaseContainerAddKey({
           />
           <div className="my-6 flex justify-center gap-2">
             <ModalButton
-              children={localize("EditorCancel")}
+              children={translate("EditorCancel")}
               onClick={handleClose}
               variant="secondary"
             />
             <ModalButton
-              children={localize("EditorCraft")}
+              children={translate("EditorCraft")}
               onClick={handleCraft}
               variant="primary"
             />

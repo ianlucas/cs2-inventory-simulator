@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Economy, CS2EconomyItem, CS2_ITEMS } from "@ianlucas/cs2-lib";
-import english from "@ianlucas/cs2-lib/assets/localizations/items-english.json";
+import { english } from "@ianlucas/cs2-lib/translations";
 import { describe, expect, test } from "vitest";
 import { createFakeInventoryItem } from "~/utils/inventory";
 import { has } from "~/utils/misc";
@@ -15,8 +15,8 @@ CS2Economy.use({
   language: english
 });
 
-const localize = (token: string, ...values: string[]) => "statTrak™";
-const nameItem = nameItemFactory(localize);
+const translate = (token: string, ...values: string[]) => "statTrak™";
+const nameItem = nameItemFactory(translate);
 const nameItemString = (...args: Parameters<typeof nameItem>) =>
   nameItem(...args)
     .filter((value) => has(value))

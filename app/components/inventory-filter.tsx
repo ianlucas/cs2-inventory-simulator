@@ -14,12 +14,12 @@ import {
   INVENTORY_SECONDARY_FILTERS,
   INVENTORY_SORTERS
 } from "~/utils/inventory-filters";
-import { useInventoryFilter, useLocalize } from "./app-context";
+import { useInventoryFilter, useTranslate } from "./app-context";
 import { InventoryFilterButton } from "./inventory-filter-button";
 import { Select } from "./select";
 
 export function InventoryFilter() {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const {
     handlePrimaryClick,
     handleSecondaryClick,
@@ -41,7 +41,7 @@ export function InventoryFilter() {
         {INVENTORY_PRIMARY_FILTERS.map((value, index) => (
           <InventoryFilterButton
             active={index === primaryIndex}
-            children={localize(`InventoryFilter${value}`)}
+            children={translate(`InventoryFilter${value}`)}
             key={value}
             onClick={handlePrimaryClick(index)}
             shadowless
@@ -60,7 +60,7 @@ export function InventoryFilter() {
           <InventoryFilterButton
             active={secondaryIndexes[primaryIndex] === index}
             key={value}
-            children={localize(`InventoryFilter${value}`)}
+            children={translate(`InventoryFilter${value}`)}
             onClick={handleSecondaryClick(index)}
             shadowless
           />
@@ -80,7 +80,7 @@ export function InventoryFilter() {
                   "opacity-0 group-hover:opacity-100 focus:opacity-100"
               )}
               onChange={setSearch}
-              placeholder={localize("InventoryFilterSearch")}
+              placeholder={translate("InventoryFilterSearch")}
               value={search}
             />
           </div>
@@ -97,7 +97,7 @@ export function InventoryFilter() {
             noMaxHeight
             onChange={setSorter}
             options={INVENTORY_SORTERS.map(({ label, value }) => ({
-              label: localize(`InventoryFilter${label}`),
+              label: translate(`InventoryFilter${label}`),
               value
             }))}
             value={sorter}

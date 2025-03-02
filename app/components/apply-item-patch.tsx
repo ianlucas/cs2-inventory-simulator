@@ -14,7 +14,7 @@ import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
-import { useInventory, useLocalize } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -31,7 +31,7 @@ export function ApplyItemPatch({
   patchUid: number;
 }) {
   const [inventory, setInventory] = useInventory();
-  const localize = useLocalize();
+  const translate = useTranslate();
   const sync = useSync();
   const nameItemString = useNameItemString();
 
@@ -59,10 +59,10 @@ export function ApplyItemPatch({
         createPortal(
           <Overlay>
             <UseItemHeader
-              actionDesc={localize("ApplyStickerUseOn")}
+              actionDesc={translate("ApplyStickerUseOn")}
               actionItem={nameItemString(targetItem)}
-              title={localize("ApplyPatchUse")}
-              warning={localize("ApplyPatchWarn")}
+              title={translate("ApplyPatchUse")}
+              warning={translate("ApplyPatchWarn")}
             />
             <ItemImage
               className="m-auto aspect-[1.33333] max-w-[512px]"
@@ -100,13 +100,13 @@ export function ApplyItemPatch({
               right={
                 <>
                   <ModalButton
-                    children={localize("ApplyPatchUse")}
+                    children={translate("ApplyPatchUse")}
                     disabled={slot === undefined}
                     onClick={handleApplyPatch}
                     variant="primary"
                   />
                   <ModalButton
-                    children={localize("ApplyStickerCancel")}
+                    children={translate("ApplyStickerCancel")}
                     onClick={onClose}
                     variant="secondary"
                   />

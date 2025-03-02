@@ -10,7 +10,7 @@ import {
   assert,
   ensure
 } from "@ianlucas/cs2-lib";
-import english from "@ianlucas/cs2-lib/assets/localizations/items-english.json";
+import { english } from "@ianlucas/cs2-lib/translations";
 import { prisma } from "~/db.server";
 
 CS2Economy.use({ items: CS2_ITEMS, language: english });

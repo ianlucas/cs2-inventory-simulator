@@ -4,17 +4,17 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { wearToString } from "~/utils/economy";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 
 export function InventoryItemTooltipWear({ wear }: { wear: number }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const left = `${wear * 100}%`;
 
   return (
     <div>
       <div>
         <strong className="text-neutral-400">
-          {localize("InventoryItemWear")}
+          {translate("InventoryItemWear")}
         </strong>{" "}
         {wearToString(wear)}
       </div>

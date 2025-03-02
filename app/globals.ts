@@ -3,13 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { type CS2ItemLocalizationByLanguage } from "@ianlucas/cs2-lib";
-import { type SystemLocalizationByLanguage } from "~/localization.server";
+import { type CS2ItemTranslationByLanguage } from "@ianlucas/cs2-lib";
+import { type SystemTranslationByLanguage } from "~/translation.server";
 
 interface ServerGlobals {
   appLogoBase64Url: string | undefined;
-  itemLocalizationByLanguage: CS2ItemLocalizationByLanguage;
-  systemLocalizationByLanguage: SystemLocalizationByLanguage;
+  itemTranslationByLanguage: CS2ItemTranslationByLanguage;
+  systemTranslationByLanguage: SystemTranslationByLanguage;
 }
 
 interface ClientGlobals {
@@ -20,9 +20,8 @@ interface ClientGlobals {
     render: () => void;
   };
 
-  assetsBaseUrl: string | undefined;
-  itemLocalizationMap: CS2ItemLocalizationByLanguage[string];
-  systemLocalizationMap: SystemLocalizationByLanguage[string];
+  itemTranslationMap: CS2ItemTranslationByLanguage[string];
+  systemTranslationMap: SystemTranslationByLanguage[string];
 }
 
 type Globals = ServerGlobals & ClientGlobals;

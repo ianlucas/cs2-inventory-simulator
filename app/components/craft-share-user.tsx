@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 
 export function CraftShareUser({
   user: { avatar, name }
@@ -13,11 +13,11 @@ export function CraftShareUser({
     name: string;
   };
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   return (
     <div className="m-auto flex w-full max-w-[calc(100%-2rem)] items-center justify-center gap-2 px-4 pt-2 text-xs">
-      <span className="text-neutral-500">{localize("CraftBy")}</span>
+      <span className="text-neutral-500">{translate("CraftBy")}</span>
       <img
         className="h-6 w-6 rounded-full"
         src={avatar}

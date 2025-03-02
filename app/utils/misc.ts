@@ -50,7 +50,7 @@ export function trim(value: string) {
   return value.length > 0 ? value : undefined;
 }
 
-export function noempty(value: string | undefined) {
+export function nonEmptyString(value: string | undefined) {
   return value !== undefined
     ? value.length > 0
       ? value

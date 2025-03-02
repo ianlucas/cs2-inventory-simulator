@@ -21,8 +21,8 @@ import { useIsOnTop } from "~/components/hooks/use-is-on-top";
 import { ECONOMY_ITEM_FILTERS } from "~/utils/economy-filters";
 import {
   useInventory,
-  useLocalize,
   usePreferences,
+  useTranslate,
   useUser
 } from "./app-context";
 import { DonateHeaderLink } from "./donate-header-link";
@@ -39,7 +39,7 @@ export function Header({
   const user = useUser();
   const [inventory] = useInventory();
   const { hideFilters } = usePreferences();
-  const localize = useLocalize();
+  const translate = useTranslate();
   const [itemSelector] = useItemSelector();
   const craftFilter = useCraftFilterRules();
   const [isMenuOpen, toggleIsMenuOpen] = useToggle(false);
@@ -83,19 +83,19 @@ export function Header({
               <HeaderLink
                 to="/"
                 icon={faBoxesStacked}
-                label={localize("HeaderInventoryLabel")}
+                label={translate("HeaderInventoryLabel")}
                 onClick={closeMenu}
               />
               <HeaderLink
                 disabled={isCraftDisabled}
                 disabledText={
                   isInventoryFull
-                    ? localize("HeaderCraftInventoryFull")
-                    : localize("HeaderCraftCannotCraft")
+                    ? translate("HeaderCraftInventoryFull")
+                    : translate("HeaderCraftCannotCraft")
                 }
                 to="/craft"
                 icon={faHammer}
-                label={localize("HeaderCraftLabel")}
+                label={translate("HeaderCraftLabel")}
                 onClick={closeMenu}
               />
               {user === undefined ? (
@@ -103,7 +103,7 @@ export function Header({
                   <HeaderLink
                     to="/sign-in"
                     icon={faSteam}
-                    label={localize("HeaderSignInLabel")}
+                    label={translate("HeaderSignInLabel")}
                   />
                   <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
@@ -111,7 +111,7 @@ export function Header({
                       to="/settings"
                       icon={faCog}
                       onClick={closeMenu}
-                      label={localize("HeaderSettingsLabel")}
+                      label={translate("HeaderSettingsLabel")}
                     />
                   </div>
                 </>
@@ -119,7 +119,7 @@ export function Header({
                 <>
                   <HeaderLink
                     icon={faRightFromBracket}
-                    label={localize("HeaderSignOutLabel")}
+                    label={translate("HeaderSignOutLabel")}
                     onClick={closeMenu}
                     to="/sign-out"
                   />
@@ -127,7 +127,7 @@ export function Header({
                     <DonateHeaderLink />
                     <HeaderLink to="/settings" onClick={closeMenu}>
                       <span className="text-neutral-400">
-                        {localize("HeaderSignedInAsLabel")}
+                        {translate("HeaderSignedInAsLabel")}
                       </span>
                       <span className="max-w-[256px] overflow-hidden text-ellipsis whitespace-nowrap">
                         {user.name}

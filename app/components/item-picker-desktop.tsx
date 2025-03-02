@@ -7,7 +7,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useItemPickerState } from "~/components/hooks/use-item-picker-state";
 import { ItemBrowser } from "~/components/item-browser";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { IconInput } from "./icon-input";
 import { ItemPickerFilterDesktop } from "./item-picker-filter-desktop";
 
@@ -26,7 +26,7 @@ export function ItemPickerDesktop({
     query,
     setQuery
   } = useItemPickerState({ onPickItem });
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   return (
     <div className="pb-2">
@@ -41,7 +41,7 @@ export function ItemPickerDesktop({
             icon={faMagnifyingGlass}
             labelStyles="mb-2"
             onChange={setQuery}
-            placeholder={localize("CraftSearchPlaceholder")}
+            placeholder={translate("CraftSearchPlaceholder")}
             value={query}
           />
           <ItemBrowser

@@ -14,7 +14,7 @@ import {
   WheelEvent
 } from "react";
 import { range } from "~/utils/number";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
 
 export function GridList<T>({
@@ -32,7 +32,7 @@ export function GridList<T>({
   itemHeight: number;
   maxItemsIntoView?: number;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   const [scrollbarHeight, setScrollbarHeight] = useState(0);
   const [scrollbarTop, setScrollbarTop] = useState(0);
@@ -168,7 +168,7 @@ export function GridList<T>({
             style={{ height: itemHeight }}
           >
             <InfoIcon className="h-4" />
-            {localize("GridItemNoItemsToDisplay")}
+            {translate("GridItemNoItemsToDisplay")}
           </div>
         )}
         {range(maxItemsIntoView).map((index) => {

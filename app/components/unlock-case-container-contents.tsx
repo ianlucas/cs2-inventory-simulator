@@ -5,7 +5,7 @@
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { ElementRef, useEffect, useRef, useState } from "react";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { InventoryItemTile } from "./inventory-item-tile";
 import { InventoryItemTileSpecial } from "./inventory-item-tile-special";
 
@@ -16,7 +16,7 @@ export function UnlockCaseContainerContents({
   caseItem: CS2EconomyItem;
   hideCaseContents: boolean;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const [translateY, setTranslateY] = useState(0);
   const [opacity, setOpacity] = useState(0);
 
@@ -41,7 +41,7 @@ export function UnlockCaseContainerContents({
       ref={ref}
     >
       <div className="m-auto lg:max-w-[1024px]">
-        <h2 className="my-2">{localize("CaseContainsOne")}</h2>
+        <h2 className="my-2">{translate("CaseContainsOne")}</h2>
         <div className="flex h-[320px] flex-wrap gap-3 overflow-y-scroll pb-4">
           {[
             ...caseItem

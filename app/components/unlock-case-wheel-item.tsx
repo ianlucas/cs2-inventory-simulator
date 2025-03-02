@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Economy, CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
-import { resolveCaseSpecialsImage, resolveItemImage } from "~/utils/economy";
 
 export function UnlockCaseWheelItem({
   caseItem,
@@ -33,9 +32,7 @@ export function UnlockCaseWheelItem({
         title={index.toString()}
         className="absolute top-0 left-0 h-full w-full"
         src={
-          unlockedItem.special
-            ? resolveCaseSpecialsImage(caseItem)
-            : resolveItemImage(item)
+          unlockedItem.special ? caseItem.getSpecialsImage() : item.getImage()
         }
       />
     </div>

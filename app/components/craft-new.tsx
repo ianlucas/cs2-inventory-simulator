@@ -6,7 +6,7 @@
 import { CS2EconomyItem, CS2ItemType } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { toArrayIf } from "~/utils/misc";
-import { useInventory, useLocalize, useRules } from "./app-context";
+import { useInventory, useRules, useTranslate } from "./app-context";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ModalButton } from "./modal-button";
 
@@ -19,7 +19,7 @@ export function CraftNew({
   onClose: () => void;
   onSubmit: (attributes: ItemEditorAttributes) => void;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const {
     craftAllowNametag,
     craftAllowPatches,
@@ -103,12 +103,12 @@ export function CraftNew({
       />
       <div className="my-6 flex justify-center gap-2">
         <ModalButton
-          children={localize("EditorCancel")}
+          children={translate("EditorCancel")}
           onClick={onClose}
           variant="secondary"
         />
         <ModalButton
-          children={localize("EditorCraft")}
+          children={translate("EditorCraft")}
           onClick={handleSubmit}
           variant="primary"
         />

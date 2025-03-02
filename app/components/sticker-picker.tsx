@@ -23,7 +23,7 @@ import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
 import { sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { AppliedStickerEditor } from "./applied-sticker-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { IconButton } from "./icon-button";
@@ -55,7 +55,7 @@ export function StickerPicker({
   stickerFilter?: (item: CS2EconomyItem) => boolean;
   value: NonNullable<CS2BaseInventoryItem["stickers"]>;
 }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   const [category, setCategory] = useState("");
   const [search, setSearch] = useInput("");
@@ -182,7 +182,7 @@ export function StickerPicker({
                   <ItemImage className="aspect-256/192" item={item} />
                 ) : (
                   <div className="flex aspect-256/192 items-center justify-center text-neutral-700">
-                    {localize("StickerPickerNA")}
+                    {translate("StickerPickerNA")}
                   </div>
                 )}
                 {sticker !== undefined && (
@@ -198,7 +198,7 @@ export function StickerPicker({
                 <ButtonWithTooltip
                   onClick={handleClickEditSlot(index)}
                   className="absolute bottom-1 left-1 hover:bg-blue-500/50"
-                  tooltip={localize("EditorStickerEdit")}
+                  tooltip={translate("EditorStickerEdit")}
                 >
                   <FontAwesomeIcon icon={faPen} className="h-3" />
                 </ButtonWithTooltip>
@@ -213,7 +213,7 @@ export function StickerPicker({
         blur
       >
         <ModalHeader
-          title={localize("StickerPickerHeader")}
+          title={translate("StickerPickerHeader")}
           onClose={handleCloseModal}
         />
         <div className="my-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
@@ -221,7 +221,7 @@ export function StickerPicker({
             icon={faMagnifyingGlass}
             labelStyles="flex-1"
             onChange={setSearch}
-            placeholder={localize("StickerPickerSearchPlaceholder")}
+            placeholder={translate("StickerPickerSearchPlaceholder")}
             value={search}
           />
           <IconSelect
@@ -229,13 +229,13 @@ export function StickerPicker({
             className="w-[168px]"
             onChange={setCategory}
             options={categories}
-            placeholder={localize("StickerPickerFilterPlaceholder")}
+            placeholder={translate("StickerPickerFilterPlaceholder")}
             value={category}
           />
           <IconButton
             icon={faTrashCan}
             onClick={handleRemoveSticker}
-            title={localize("StickerPickerRemove")}
+            title={translate("StickerPickerRemove")}
           />
         </div>
         <ItemBrowser items={filtered} onClick={handleSelectSticker} />
@@ -243,7 +243,7 @@ export function StickerPicker({
       {selected !== undefined && (
         <Modal className="w-[420px]">
           <ModalHeader
-            title={localize("EditorConfirmPick")}
+            title={translate("EditorConfirmPick")}
             onClose={handleCloseSelectModal}
           />
           {canEditStickerAttributes && (
@@ -259,12 +259,12 @@ export function StickerPicker({
           )}
           <div className="my-6 flex justify-center gap-2">
             <ModalButton
-              children={localize("EditorCancel")}
+              children={translate("EditorCancel")}
               onClick={handleCloseSelectModal}
               variant="secondary"
             />
             <ModalButton
-              children={localize("EditorPick")}
+              children={translate("EditorPick")}
               onClick={handleAddSticker}
               variant="primary"
             />

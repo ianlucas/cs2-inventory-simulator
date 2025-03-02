@@ -16,7 +16,7 @@ import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
-import { useInventory, useLocalize, usePreferences } from "./app-context";
+import { useInventory, usePreferences, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
@@ -35,7 +35,7 @@ export function ScrapeItemSticker({
   const { statsForNerds } = usePreferences();
   const [inventory, setInventory] = useInventory();
 
-  const localize = useLocalize();
+  const translate = useTranslate();
   const sync = useSync();
 
   const [confirmScrapeIndex, setConfirmScrapeIndex] = useState<number>();
@@ -83,8 +83,8 @@ export function ScrapeItemSticker({
           <>
             <Overlay>
               <UseItemHeader
-                title={localize("ScrapeStickerUse")}
-                warning={localize("ScrapeStickerWarn")}
+                title={translate("ScrapeStickerUse")}
+                warning={translate("ScrapeStickerWarn")}
                 warningItem={nameItemString(item)}
               />
               <ItemImage
@@ -114,7 +114,7 @@ export function ScrapeItemSticker({
               <UseItemFooter
                 right={
                   <ModalButton
-                    children={localize("ScrapeStickerClose")}
+                    children={translate("ScrapeStickerClose")}
                     onClick={onClose}
                     variant="secondary"
                   />
@@ -123,20 +123,20 @@ export function ScrapeItemSticker({
             </Overlay>
             {confirmScrapeIndex !== undefined && (
               <Modal className="w-[480px]" fixed>
-                <ModalHeader title={localize("ScrapeStickerRemove")} />
+                <ModalHeader title={translate("ScrapeStickerRemove")} />
                 <p className="mt-2 px-4">
-                  {localize("ScrapeStickerRemoveDesc")}
+                  {translate("ScrapeStickerRemoveDesc")}
                 </p>
                 <div className="my-6 flex justify-center gap-2 px-4">
                   <ModalButton
                     onClick={() => setConfirmScrapeIndex(undefined)}
                     variant="secondary"
-                    children={localize("ScrapeStickerCancel")}
+                    children={translate("ScrapeStickerCancel")}
                   />
                   <ModalButton
                     onClick={handleConfirmScrape}
                     variant="primary"
-                    children={localize("ScrapeStickerRemove")}
+                    children={translate("ScrapeStickerRemove")}
                   />
                 </div>
               </Modal>

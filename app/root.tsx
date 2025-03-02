@@ -28,17 +28,16 @@ import { Header } from "./components/header";
 import { useRootLayout } from "./components/hooks/use-root-layout";
 import { Inventory } from "./components/inventory";
 import { ItemSelectorProvider } from "./components/item-selector-context";
-import { LocalizationScript } from "./components/localization-script";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
+import { TranslationScript } from "./components/translation-script";
 import {
   ASSETS_BASE_URL,
   CLOUDFLARE_ANALYTICS_TOKEN,
   SOURCE_COMMIT
 } from "./env.server";
 import { middleware } from "./http.server";
-import { getLocalizationChecksum } from "./localization.server";
 import { getClientRules } from "./models/rule";
 import { steamCallbackUrl } from "./models/rule.server";
 import { getBackground } from "./preferences/background.server";
@@ -47,7 +46,8 @@ import { getToggleable } from "./preferences/toggleable.server";
 import { getSeoLinks, getSeoMeta } from "./root-seo";
 import { getSession } from "./session.server";
 import styles from "./tailwind.css?url";
-import { noempty } from "./utils/misc";
+import { getTranslationChecksum } from "./translation.server";
+import { nonEmptyString } from "./utils/misc";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wdth,wght@0,62.5..100,400..800;1,62.5..100,400..800&display=swap";
@@ -84,12 +84,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     await steamCallbackUrl.get()
   );
   return data({
-    localization: {
-      checksum: getLocalizationChecksum()
+    translation: {
+      checksum: getTranslationChecksum()
     },
     rules: {
       ...(await getClientRules(user?.id)),
-      assetsBaseUrl: noempty(ASSETS_BASE_URL),
+      assetsBaseUrl: nonEmptyString(ASSETS_BASE_URL),
       cloudflareAnalyticsToken: CLOUDFLARE_ANALYTICS_TOKEN,
       sourceCommit: SOURCE_COMMIT,
       meta: { appUrl, appSiteName }
@@ -116,7 +116,7 @@ export default function App() {
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <LocalizationScript />
+          <TranslationScript />
           <Meta />
           <Links />
           <link

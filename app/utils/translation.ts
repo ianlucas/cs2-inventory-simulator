@@ -5,10 +5,10 @@
 
 import { clientGlobals, isServerContext, serverGlobals } from "../globals";
 
-export function getSystemLocalization(key: string, language?: string) {
+export function getSystemTranslation(key: string, language?: string) {
   return (
     isServerContext
-      ? serverGlobals.systemLocalizationByLanguage[language ?? "english"]
-      : clientGlobals.systemLocalizationMap
+      ? serverGlobals.systemTranslationByLanguage[language ?? "english"]
+      : clientGlobals.systemTranslationMap
   )[key];
 }

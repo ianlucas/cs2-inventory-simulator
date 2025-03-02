@@ -20,8 +20,8 @@ import {
   useInventory,
   useInventoryFilter,
   useInventoryItems,
-  useLocalize,
-  usePreferences
+  usePreferences,
+  useTranslate
 } from "./app-context";
 import { ApplyItemPatch } from "./apply-item-patch";
 import { ApplyItemSticker } from "./apply-item-sticker";
@@ -41,7 +41,7 @@ import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
 
 export function Inventory() {
-  const localize = useLocalize();
+  const translate = useTranslate();
   const sync = useSync();
   const items = useInventoryItems();
   const { filterItems } = useInventoryFilter();
@@ -213,7 +213,7 @@ export function Inventory() {
           onDismiss={dismissSelectItem}
         />
       )}
-      <div className="m-auto grid w-full [grid-template-columns:repeat(auto-fit,minmax(154px,1fr))] px-2 [grid-gap:1em] select-none lg:my-8 lg:w-[1024px] lg:px-0">
+      <div className="m-auto grid w-full [grid-template-columns:repeat(auto-fit,minmax(154px,1fr))] px-2 select-none [grid-gap:1em] lg:my-8 lg:w-[1024px] lg:px-0">
         {displayedItems.map((item) => (
           <div key={item.uid} className="flex items-start justify-center">
             <InventoryItem
@@ -254,7 +254,7 @@ export function Inventory() {
         <div className="m-auto flex justify-center select-none lg:w-[1024px]">
           <div className="flex w-full items-center justify-center gap-2 bg-linear-to-r from-transparent via-black/30 to-transparent py-1">
             <InfoIcon className="h-4" />
-            {localize("InventoryNoItemsToDisplay")}
+            {translate("InventoryNoItemsToDisplay")}
           </div>
         </div>
       )}

@@ -4,15 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Economy } from "@ianlucas/cs2-lib";
-import { useLocalize } from "./app-context";
+import { useTranslate } from "./app-context";
 import { InventoryItemTooltipInfo } from "./inventory-item-tooltip-info";
 
 export function InventoryItemTooltipExterior({ wear }: { wear: number }) {
-  const localize = useLocalize();
+  const translate = useTranslate();
 
   return (
-    <InventoryItemTooltipInfo label={localize("InventoryItemExterior")}>
-      {localize(`ItemWear${CS2Economy.getWearFromValue(wear)}`)}
+    <InventoryItemTooltipInfo label={translate("InventoryItemExterior")}>
+      {translate(`ItemWear${CS2Economy.getWearFromValue(wear)}`)}
     </InventoryItemTooltipInfo>
   );
 }
