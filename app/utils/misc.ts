@@ -65,3 +65,15 @@ export function hasKeys(obj: Record<any, any>) {
 export function toArrayIf<T>(value: T, condition: (value: T) => boolean) {
   return condition(value) ? [value] : [];
 }
+
+export function interpolate(
+  inputMin: number,
+  inputMax: number,
+  outputMin: number,
+  outputMax: number
+) {
+  return (value: number) => {
+    const slope = (outputMax - outputMin) / (inputMax - inputMin);
+    return outputMin + slope * (value - inputMin);
+  };
+}

@@ -12,6 +12,10 @@ export function useRootLayout(): {
 } {
   const location = useLocation();
 
+  if (location.pathname === "/tools/item-viewer") {
+    return {};
+  }
+
   return {
     footer: true,
     header: true,
