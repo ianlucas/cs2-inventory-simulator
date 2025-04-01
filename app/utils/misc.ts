@@ -65,3 +65,14 @@ export function hasKeys(obj: Record<any, any>) {
 export function toArrayIf<T>(value: T, condition: (value: T) => boolean) {
   return condition(value) ? [value] : [];
 }
+
+export function tryOrDefault<T, R = undefined>(
+  getValue: () => T,
+  defaultValue?: R
+) {
+  try {
+    return getValue();
+  } catch {
+    return defaultValue;
+  }
+}
