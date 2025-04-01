@@ -26,7 +26,7 @@ import { getUserBasicData } from "~/models/user.server";
 import { getMetaTitle } from "~/root-meta";
 import { isItemCountable } from "~/utils/economy";
 import { createFakeInventoryItemFromBase } from "~/utils/inventory";
-import { deleteEmptyProps } from "~/utils/misc";
+import { deleteEmptyProps, tryOrDefault } from "~/utils/misc";
 import { range } from "~/utils/number";
 import { baseInventoryItemProps } from "~/utils/shapes";
 import { playSound } from "~/utils/sound";
@@ -92,7 +92,7 @@ export default function Craft() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [item, setItem] = useState<CS2EconomyItem | undefined>(
     isEditing
-      ? inventory.get(uid)
+      ? tryOrDefault(() => inventory.get(uid))
       : isSharing
         ? createFakeInventoryItemFromBase(shared.item)
         : undefined
