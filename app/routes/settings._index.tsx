@@ -43,6 +43,7 @@ export default function Settings() {
     background: selectedBackground,
     hideFilters: selectedHideFilters,
     hideFreeItems: selectedHideFreeItems,
+    hideNewItemLabel: selectedHideNewItemLabel,
     language: selectedLanguage,
     statsForNerds: selectedStatsForNerds
   } = usePreferences();
@@ -53,6 +54,9 @@ export default function Settings() {
   const [background, setBackground] = useState(selectedBackground ?? "");
   const [hideFilters, setHideFilters] = useCheckbox(selectedHideFilters);
   const [hideFreeItems, setHideFreeItems] = useCheckbox(selectedHideFreeItems);
+  const [hideNewItemLabel, setHideNewItemLabel] = useCheckbox(
+    selectedHideNewItemLabel
+  );
   const [language, setLanguage] = useState(selectedLanguage);
   const [statsForNerds, setStatsForNerds] = useCheckbox(selectedStatsForNerds);
   const [volume, setVolume] = useStorageState("appVolume", 1);
@@ -64,8 +68,9 @@ export default function Settings() {
     submit(
       {
         background,
-        hideFreeItems,
         hideFilters,
+        hideFreeItems,
+        hideNewItemLabel,
         language,
         statsForNerds
       },
@@ -139,6 +144,12 @@ export default function Settings() {
         </SettingsLabel>
         <SettingsLabel label={translate("SettingsHideFilters")}>
           <EditorToggle checked={hideFilters} onChange={setHideFilters} />
+        </SettingsLabel>
+        <SettingsLabel label={translate("SettingsHideNewLabel")}>
+          <EditorToggle
+            checked={hideNewItemLabel}
+            onChange={setHideNewItemLabel}
+          />
         </SettingsLabel>
         {inventory.size() > 0 && (
           <button

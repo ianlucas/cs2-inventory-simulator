@@ -6,6 +6,8 @@
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
+import { isNewItem } from "~/utils/economy";
+import { usePreferences, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { TextSlider } from "./text-slider";
 
@@ -22,6 +24,8 @@ export function ItemButton({
   item: CS2EconomyItem;
   onClick?: (item: CS2EconomyItem) => void;
 }) {
+  const translate = useTranslate();
+  const { hideNewItemLabel } = usePreferences();
   const nameItem = useNameItem();
   const [model, name] = nameItem(item, "editor-name");
   const clickable = onClick !== undefined;
@@ -51,7 +55,7 @@ export function ItemButton({
     >
       <div
         className={clsx(
-          "group overflow-hidden text-ellipsis whitespace-nowrap",
+          "group relative overflow-hidden text-ellipsis whitespace-nowrap",
           !bigger && "flex items-center"
         )}
       >
@@ -83,6 +87,12 @@ export function ItemButton({
             />
           )}
         </div>
+        {!hideNewItemLabel && isNewItem(item) && (
+          <div
+            className="absolute bottom-1.5 left-1.5 rounded bg-blue-500/15 px-1 text-[0.5rem] font-bold text-white uppercase backdrop-blur"
+            children={translate("InventoryItemNew")}
+          />
+        )}
       </div>
     </button>
   );

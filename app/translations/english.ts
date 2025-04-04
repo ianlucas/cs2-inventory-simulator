@@ -282,6 +282,7 @@ export const english = {
   SettingsHeader: "Settings",
   SettingsHideFilters: "Hide filters",
   SettingsHideFreeItems: "Hide default items",
+  SettingsHideNewLabel: "Hide \"New\" label when crafting an item",
   SettingsLanguage: "Language",
   SettingsMasterVolume: /* csgo_english.txt */"Master Volume",
   SettingsRemoveAllItems: "Reset my inventory",

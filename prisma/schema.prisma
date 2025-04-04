@@ -5,7 +5,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource db {
@@ -42,6 +42,7 @@ model UserPreference {
   background String?
   hideFilters String?
   hideFreeItems String?
+  hideNewItemLabel String?
   language String?
   statsForNerds String?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
