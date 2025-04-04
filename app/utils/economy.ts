@@ -57,6 +57,8 @@ export function isItemCountable(item: CS2EconomyItem) {
   return COUNTABLE_ITEM_TYPES.includes(item.type);
 }
 
+export const newItemStartingId = 13146;
+export const newItemEndAt = 1745020304385;
 export const minStickerOffset = -2;
 export const maxStickerOffset = 2;
 export const stickerOffsetFactor = 0.001;
@@ -176,4 +178,8 @@ export function unlockNonSpecialItem(container: CS2EconomyItem) {
     }
     attempt += 1;
   }
+}
+
+export function isNewItem(item: CS2EconomyItem) {
+  return item.id >= newItemStartingId && newItemEndAt > Date.now();
 }

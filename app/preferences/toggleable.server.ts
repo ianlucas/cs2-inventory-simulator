@@ -7,8 +7,9 @@ import { Session } from "react-router";
 
 export async function getToggleable(session: Session) {
   return {
-    statsForNerds: session.get("statsForNerds") === "true" || false,
+    hideFilters: session.get("hideFilters") === "true" || false,
     hideFreeItems: session.get("hideFreeItems") === "true" || false,
-    hideFilters: session.get("hideFilters") === "true" || false
+    hideNewItemLabel: session.get("hideNewItemLabel") === "true" || false,
+    statsForNerds: session.get("statsForNerds") === "true" || false
   };
 }

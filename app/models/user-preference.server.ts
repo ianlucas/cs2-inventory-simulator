@@ -7,10 +7,11 @@ import { prisma } from "~/db.server";
 
 type UserPreferenceKeys =
   | "background"
-  | "language"
-  | "statsForNerds"
+  | "hideFilters"
   | "hideFreeItems"
-  | "hideFilters";
+  | "hideNewItemLabel"
+  | "language"
+  | "statsForNerds";
 
 export async function getUserPreference(
   userId: string,
