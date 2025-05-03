@@ -101,6 +101,7 @@ interface WeaponEconItem extends BaseEconItem {
   uid: number;
 }
 interface AgentItem {
+  def?: number;
   model: string;
   patches: number[];
   vofallback: boolean;

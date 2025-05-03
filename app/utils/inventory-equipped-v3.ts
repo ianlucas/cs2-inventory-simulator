@@ -36,6 +36,7 @@ interface WeaponEconItem extends BaseEconItem {
 }
 
 interface AgentItem {
+  def?: number;
   model: string;
   patches: number[];
   vofallback: boolean;
@@ -157,6 +158,7 @@ export async function generate(
           assert(data.model);
           assert(data.voPrefix);
           agents[team] = {
+            def: data.def,
             model: data.model,
             patches: data
               .allPatches()
