@@ -56,7 +56,7 @@ export function UnlockCase({
   const [canUnlock, setCanUnlock] = useState(true);
   const [unlockedItem, setUnlockedItem] = useState<CS2UnlockedItem>();
   const [hideCaseContents, setHideCaseContents] = useState(false);
-  const unlockedItemRef = useRef<CS2UnlockedItem>();
+  const unlockedItemRef = useRef<CS2UnlockedItem>(undefined);
 
   const caseItem = useInventoryItem(caseUid);
   const neededKeyItem =

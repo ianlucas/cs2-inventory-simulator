@@ -12,8 +12,8 @@ export function useDetectCollision({
   then
 }: {
   disabled?: boolean;
-  target: RefObject<Element>;
-  hits: RefObject<Element>;
+  target: RefObject<Element | null>;
+  hits: RefObject<Element | null>;
   then: () => void;
 }) {
   useEffect(() => {

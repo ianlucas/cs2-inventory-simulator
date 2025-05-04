@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2EconomyItem, CS2UnlockedItem, randomInt } from "@ianlucas/cs2-lib";
-import { ElementRef, useRef, useState } from "react";
+import { ComponentRef, useRef, useState } from "react";
 import { useDetectCollision } from "~/components/hooks/use-detect-collision";
 import { useResponsiveScale } from "~/components/hooks/use-responsive-scale";
 import { playSound } from "~/utils/sound";
@@ -19,8 +19,8 @@ export function UnlockCaseWheel({
   isDisplaying: boolean;
   items: CS2UnlockedItem[];
 }) {
-  const targetRef = useRef<ElementRef<"div">>(null);
-  const hitsRef = useRef<ElementRef<"div">>(null);
+  const targetRef = useRef<ComponentRef<"div">>(null);
+  const hitsRef = useRef<ComponentRef<"div">>(null);
   const scale = useResponsiveScale();
   const [offset] = useState(randomInt(188, 440));
   const scaleY = isDisplaying ? 1 : 0;
