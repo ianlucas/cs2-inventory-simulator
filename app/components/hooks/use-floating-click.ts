@@ -46,7 +46,7 @@ export function useFloatingClick<RT extends ReferenceType = ReferenceType>(
   const ignoreMouse = false;
   const keyboardHandlers = true;
 
-  const pointerTypeRef = useRef<"mouse" | "pen" | "touch">();
+  const pointerTypeRef = useRef<"mouse" | "pen" | "touch">(undefined);
   const didKeyDownRef = useRef(false);
 
   return useMemo(() => {
