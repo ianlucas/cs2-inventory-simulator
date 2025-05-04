@@ -4,7 +4,7 @@ If you are looking into self-hosting your own Inventory Simulator instance, chec
 
 ## Steps for building and starting the app
 
-1. Have at least Node 18.x installed in your system.
+1. Have at least Node 20.x installed in your system.
 2. Have a Postgres database instance up and running. Figure that out first before building the app.
 3. Rename `.env.example` to `.env` with the proper environment variable values, including the database URL.
 4. `npm install` to install dependencies.
