@@ -8,23 +8,34 @@ import { CS2Economy, CS2_ITEMS } from "@ianlucas/cs2-lib";
 import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { HydratedRouter } from "react-router/dom";
+import { TRANSLATION_LOADED_TYPE } from "./components/hooks/use-translation";
 import { clientGlobals } from "./globals";
 
-CS2Economy.use({
-  items: CS2_ITEMS,
-  language: clientGlobals.itemTranslationMap
-});
+function hydrate() {
+  window.removeEventListener(TRANSLATION_LOADED_TYPE, hydrate);
 
-fontAwesomeConfig.replacementClass = "";
+  CS2Economy.use({
+    items: CS2_ITEMS,
+    language: clientGlobals.itemTranslationMap
+  });
 
-startTransition(() => {
-  hydrateRoot(
-    document,
-    <StrictMode>
-      <HydratedRouter />
-    </StrictMode>
-  );
-});
+  fontAwesomeConfig.replacementClass = "";
+
+  startTransition(() => {
+    hydrateRoot(
+      document,
+      <StrictMode>
+        <HydratedRouter />
+      </StrictMode>
+    );
+  });
+}
+
+if (clientGlobals.isTranslationLoaded) {
+  hydrate();
+} else {
+  window.addEventListener(TRANSLATION_LOADED_TYPE, hydrate);
+}
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/scripts/service-worker.js");

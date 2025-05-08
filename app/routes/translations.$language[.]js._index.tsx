@@ -25,6 +25,7 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       serverGlobals.itemTranslationByLanguage.english;
     return new Response(
       `window.InventorySimulator ??= {};
+  window.InventorySimulator.isTranslationLoaded = true;
   window.InventorySimulator.systemTranslationMap = ${JSON.stringify(systemTranslationMap)};
   window.InventorySimulator.itemTranslationMap = ${JSON.stringify(itemTranslationMap)};
   window.dispatchEvent(new Event("${TRANSLATION_LOADED_TYPE}"));`,
