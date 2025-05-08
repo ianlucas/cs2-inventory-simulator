@@ -22,7 +22,7 @@ import {
 } from "@ianlucas/cs2-lib";
 
 export const defaultAssetsBaseUrl =
-  "https://cdn.statically.io/gh/ianlucas/cs2-lib/b3964228bae55913ec28eb8625ae5d7cff965c6b/assets";
+  "https://cdn.statically.io/gh/ianlucas/cs2-lib/33e95ed730bffcb63f107941a7ec48d0e9a41e9a/assets";
 
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
@@ -57,8 +57,8 @@ export function isItemCountable(item: CS2EconomyItem) {
   return COUNTABLE_ITEM_TYPES.includes(item.type);
 }
 
-export const newItemStartingId = 13146;
-export const newItemEndAt = 1745020304385;
+export const newItemStartingId = 13315;
+export const newItemEndAt = 1748553811780;
 export const minStickerOffset = -2;
 export const maxStickerOffset = 2;
 export const stickerOffsetFactor = 0.001;
