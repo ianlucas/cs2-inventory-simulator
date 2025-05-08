@@ -12,9 +12,6 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  build: {
-    minify: false
-  },
   server: {
     port: 3000
   },
