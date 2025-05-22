@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Economy, CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
+import { cdn } from "~/utils/economy";
 
 export function UnlockCaseWheelItem({
   caseItem,
@@ -31,9 +32,9 @@ export function UnlockCaseWheelItem({
       <img
         title={index.toString()}
         className="absolute top-0 left-0 h-full w-full"
-        src={
+        src={cdn(
           unlockedItem.special ? caseItem.getSpecialsImage() : item.getImage()
-        }
+        )}
       />
     </div>
   );

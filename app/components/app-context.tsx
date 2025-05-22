@@ -18,7 +18,7 @@ import { useTranslation } from "~/components/hooks/use-translation";
 import { SyncAction } from "~/data/sync";
 import type { loader } from "~/root";
 import { pushToSync, sync } from "~/sync";
-import { defaultAssetsBaseUrl, updateEconomyLanguage } from "~/utils/economy";
+import { updateEconomyLanguage } from "~/utils/economy";
 import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
 import {
   cacheInventoryData,
@@ -114,7 +114,7 @@ export function AppProvider({
   });
 
   useEffect(() => {
-    CS2Economy.baseUrl = rules.assetsBaseUrl ?? defaultAssetsBaseUrl;
+    CS2Economy.baseUrl = rules.assetsBaseUrl ?? CS2Economy.baseUrl;
   }, [rules.assetsBaseUrl]);
 
   useEffect(() => {
