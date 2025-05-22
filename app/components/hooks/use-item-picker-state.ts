@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import {
   ECONOMY_ITEM_FILTERS,
   EconomyItemFilter,
+  getAllPaidItems,
   getBaseItems,
   getPaidItems
 } from "~/utils/economy-filters";
@@ -45,23 +46,32 @@ export function useItemPickerState({
     setModel(item.model);
   }
 
-  const items = useMemo(
-    () =>
-      (model === undefined ? getBaseItems(filter) : getPaidItems(filter, model))
-        .filter(({ altName, name }) => {
-          if (query.length < 2) {
-            return true;
-          }
-          const queryLower = query.toLocaleLowerCase();
-          return (
-            name.toLocaleLowerCase().includes(queryLower) ||
-            altName?.toLocaleLowerCase().includes(queryLower)
-          );
-        })
-        .filter(isItemCraftable)
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    [filter, model, query]
-  );
+  function filterItem({ altName, name }: CS2EconomyItem) {
+    if (query.length < 2) {
+      return true;
+    }
+    return query
+      .toLocaleLowerCase()
+      .split(" ")
+      .every(
+        (word) =>
+          name.toLocaleLowerCase().includes(word) ||
+          altName?.toLocaleLowerCase().includes(word) ||
+          false
+      );
+  }
+
+  const items = useMemo(() => {
+    let items = (
+      model === undefined ? getBaseItems(filter) : getPaidItems(filter, model)
+    ).filter(filterItem);
+    if (items.length === 0 && query.length >= 3) {
+      items = getAllPaidItems().filter(filterItem);
+    }
+    return items
+      .filter(isItemCraftable)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [filter, model, query]);
 
   const ignoreRarityColor = model === undefined && filter.hasModel;
 
