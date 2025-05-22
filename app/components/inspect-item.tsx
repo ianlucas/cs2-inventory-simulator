@@ -18,7 +18,6 @@ import { getInventoryItemShareUrl } from "~/utils/inventory";
 import { usePreferences, useTranslate, useUser } from "./app-context";
 import { useTimedState } from "./hooks/use-timed-state";
 import { InfoIcon } from "./info-icon";
-import { ItemCollectionImage } from "./item-collection-image";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -67,7 +66,7 @@ export function InspectItem({
                 style={{ borderColor: item.rarity }}
               >
                 {item.collection !== undefined && (
-                  <ItemCollectionImage className="h-16" item={item} />
+                  <ItemImage className="h-16" item={item} type="collection" />
                 )}
                 <div className="font-display">
                   <div className="text-3xl">{nameItemString(item)}</div>

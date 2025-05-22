@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
-import { useWindowSize } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useState } from "react";
 import { ItemImage } from "./item-image";
@@ -16,14 +15,10 @@ export function UnlockCaseContainerBackground({
   canUnlock: boolean;
   caseItem: CS2EconomyItem;
 }) {
-  const { width } = useWindowSize();
   const [scale, setScale] = useState(0);
 
   function handleLoad() {
-    if (width === null) {
-      return;
-    }
-    setScale(width >= 768 ? 2 : 1);
+    setScale(window.innerWidth >= 768 ? 2 : 1);
   }
 
   return (

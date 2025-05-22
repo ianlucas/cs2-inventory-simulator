@@ -5,7 +5,7 @@
 
 import { CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { useNameItemString } from "~/components/hooks/use-name-item";
-import { ItemCollectionImage } from "./item-collection-image";
+import { ItemImage } from "./item-image";
 
 export function InventoryItemTooltipName({ item }: { item: CS2InventoryItem }) {
   const nameItemString = useNameItemString();
@@ -16,7 +16,7 @@ export function InventoryItemTooltipName({ item }: { item: CS2InventoryItem }) {
 
   return (
     <div className="flex items-center gap-1">
-      <ItemCollectionImage className="h-10" item={item} />
+      <ItemImage className="h-10" item={item} type="collection" />
       <div className="flex-1">
         <div className="font-bold">{nameItemString(item)}</div>
         <div>{item.collectionName}</div>

@@ -6,8 +6,8 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNameItemString } from "~/components/hooks/use-name-item";
-import { cdn } from "~/utils/economy";
 import { useInventory, useTranslate } from "./app-context";
+import { ItemImage } from "./item-image";
 import {
   ItemSelectorContextProps,
   useItemSelector
@@ -49,7 +49,7 @@ export function InventorySelectedItem({
       </button>
       <div className="flex flex-1 items-center justify-center gap-3 select-none">
         <strong>{translate(getLabelToken(itemSelector?.type))}</strong>
-        <img draggable={false} className="h-12" src={cdn(item.getImage())} />
+        <ItemImage className="h-12" item={item} />
         <span className="text-neutral-300">
           {nameItemString(item, "inventory-name")}
         </span>

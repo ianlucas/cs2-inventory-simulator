@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
-import { cdn, createFakeItem } from "~/utils/economy";
+import { createFakeItem, getCDNUrl } from "~/utils/economy";
 import { useTranslate } from "./app-context";
 import { InventoryItemTile } from "./inventory-item-tile";
 
@@ -19,7 +19,7 @@ export function InventoryItemTileSpecial({
     <InventoryItemTile
       item={createFakeItem(containerItem, {
         name: `Container | ${translate("CaseRareItem")}`,
-        image: cdn(containerItem.getSpecialsImage()),
+        image: getCDNUrl(containerItem.getSpecialsImage()),
         rarity: "#e4ae39"
       })}
     />

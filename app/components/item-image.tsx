@@ -7,7 +7,7 @@ import { CS2EconomyItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { ComponentProps, useEffect, useState } from "react";
 import { isServerContext } from "~/globals";
-import { cdn } from "~/utils/economy";
+import { getCDNUrl } from "~/utils/economy";
 import { noop } from "~/utils/misc";
 import { FillSpinner } from "./fill-spinner";
 
@@ -17,14 +17,25 @@ export function ItemImage({
   className,
   item,
   lazy,
+  onLoad,
+  type,
   wear,
   ...props
-}: ComponentProps<"img"> & {
+}: Omit<ComponentProps<"img">, "onLoad"> & {
   item: CS2EconomyItem | CS2InventoryItem;
   lazy?: boolean;
+  onLoad?: () => void;
+  type?: "default" | "collection" | "specials";
   wear?: number;
 }) {
-  const url = cdn(item.getImage(wear));
+  type ??= "default";
+  const url = getCDNUrl(
+    type === "default"
+      ? item.getImage(wear)
+      : type === "collection"
+        ? item.getCollectionImage()
+        : item.getSpecialsImage()
+  );
   const [loaded, setLoaded] = useState(
     cached.includes(url) || url.includes("steamcommunity")
   );
@@ -51,6 +62,12 @@ export function ItemImage({
       };
     }
   }, [lazy, loaded]);
+
+  useEffect(() => {
+    if (loaded) {
+      onLoad?.();
+    }
+  }, [loaded]);
 
   if (!loaded) {
     return (
