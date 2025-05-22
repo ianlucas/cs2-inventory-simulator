@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2BaseInventoryItem, CS2Economy } from "@ianlucas/cs2-lib";
-import { z } from "zod";
+import { z, ZodObject } from "zod";
 import { baseInventoryItemProps, nonNegativeInt } from "./shapes";
 
 const clientInventoryItemProps = {
@@ -43,7 +43,7 @@ function legit({
 }
 
 function refine(
-  inventoryItem: z.infer<Zod.ZodObject<typeof syncInventoryItemProps>>
+  inventoryItem: z.infer<ZodObject<typeof syncInventoryItemProps>>
 ) {
   if (!legit(inventoryItem)) {
     return false;

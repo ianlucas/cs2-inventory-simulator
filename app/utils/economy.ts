@@ -21,8 +21,7 @@ import {
   fail
 } from "@ianlucas/cs2-lib";
 
-export const defaultAssetsBaseUrl =
-  "https://cdn.statically.io/gh/ianlucas/cs2-lib/33e95ed730bffcb63f107941a7ec48d0e9a41e9a/assets";
+export const cdnQueryString = "?v=6.1.1";
 
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
@@ -182,4 +181,8 @@ export function unlockNonSpecialItem(container: CS2EconomyItem) {
 
 export function isNewItem(item: CS2EconomyItem) {
   return item.id >= newItemStartingId && newItemEndAt > Date.now();
+}
+
+export function cdn(url: string) {
+  return url + cdnQueryString;
 }

@@ -5,6 +5,7 @@
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { ComponentProps } from "react";
+import { cdn } from "~/utils/economy";
 
 export function ItemCollectionImage({
   item,
@@ -16,7 +17,7 @@ export function ItemCollectionImage({
     <img
       alt={item.name}
       draggable={false}
-      src={item.getCollectionImage()}
+      src={cdn(item.getCollectionImage())}
       {...props}
     />
   );
