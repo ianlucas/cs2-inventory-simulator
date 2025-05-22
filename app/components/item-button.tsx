@@ -66,6 +66,7 @@ export function ItemButton({
             bigger && "m-auto h-32"
           )}
           item={item}
+          lazy
           key={item.image}
         />
         <div
