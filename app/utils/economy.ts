@@ -183,6 +183,6 @@ export function isNewItem(item: CS2EconomyItem) {
   return item.id >= newItemStartingId && newItemEndAt > Date.now();
 }
 
-export function cdn(url: string) {
+export function getCDNUrl(url: string) {
   return url + cdnQueryString;
 }

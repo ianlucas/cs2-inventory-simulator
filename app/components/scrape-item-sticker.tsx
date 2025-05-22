@@ -87,15 +87,12 @@ export function ScrapeItemSticker({
                 warning={translate("ScrapeStickerWarn")}
                 warningItem={nameItemString(item)}
               />
-              <ItemImage
-                className="m-auto aspect-[1.33333] max-w-[512px]"
-                item={item}
-              />
+              <ItemImage className="m-auto max-w-[512px]" item={item} />
               <div className="flex justify-center">
                 {item.someStickers().map(([index, { id, wear }]) => (
                   <button key={index} className="group">
                     <ItemImage
-                      className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
+                      className="w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
                       onClick={() => handleScrapeSticker(index)}
                       style={{
                         filter: `grayscale(${wear ?? 0})`,

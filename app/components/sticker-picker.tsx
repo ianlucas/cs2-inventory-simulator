@@ -179,9 +179,9 @@ export function StickerPicker({
                 onClick={handleClickSlot(index)}
               >
                 {item !== undefined ? (
-                  <ItemImage className="aspect-256/192" item={item} />
+                  <ItemImage item={item} />
                 ) : (
-                  <div className="flex aspect-256/192 items-center justify-center text-neutral-700">
+                  <div className="flex items-center justify-center text-neutral-700">
                     {translate("StickerPickerNA")}
                   </div>
                 )}

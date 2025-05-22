@@ -91,7 +91,7 @@ export function RenameItem({
               warning={translate("RenameWarn")}
             />
             <ItemImage
-              className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
+              className="m-auto my-8 max-w-[512px]"
               item={inventoryItem}
             />
             <div className="flex items-center justify-center gap-2 lg:m-auto lg:mb-4">

@@ -18,7 +18,6 @@ import { getInventoryItemShareUrl } from "~/utils/inventory";
 import { usePreferences, useTranslate, useUser } from "./app-context";
 import { useTimedState } from "./hooks/use-timed-state";
 import { InfoIcon } from "./info-icon";
-import { ItemCollectionImage } from "./item-collection-image";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -67,7 +66,7 @@ export function InspectItem({
                 style={{ borderColor: item.rarity }}
               >
                 {item.collection !== undefined && (
-                  <ItemCollectionImage className="h-16" item={item} />
+                  <ItemImage className="h-16" item={item} type="collection" />
                 )}
                 <div className="font-display">
                   <div className="text-3xl">{nameItemString(item)}</div>
@@ -81,16 +80,13 @@ export function InspectItem({
             </div>
             <div className="text-center">
               <div className="relative mx-auto inline-block">
-                <ItemImage
-                  className="m-auto my-8 aspect-[1.33333] max-w-[512px]"
-                  item={item}
-                />
+                <ItemImage className="m-auto my-8 max-w-[512px]" item={item} />
                 {item.stickers !== undefined && (
                   <div className="absolute bottom-0 left-0 flex items-center justify-center">
                     {item.someStickers().map(([index, { id, wear }]) => (
                       <span className="inline-block" key={index}>
                         <ItemImage
-                          className="aspect-[1.33333] w-[128px]"
+                          className="w-[128px]"
                           item={CS2Economy.getById(id)}
                           style={{
                             filter: `grayscale(${wear ?? 0})`,

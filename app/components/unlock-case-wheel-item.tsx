@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Economy, CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
-import { cdn } from "~/utils/economy";
+import { ItemImage } from "./item-image";
 
 export function UnlockCaseWheelItem({
   caseItem,
@@ -16,6 +16,9 @@ export function UnlockCaseWheelItem({
   unlockedItem: CS2UnlockedItem;
 }) {
   const item = CS2Economy.getById(unlockedItem.id);
+  const display = unlockedItem.special
+    ? { item: caseItem, type: "specials" as const }
+    : { item, type: "default" as const };
 
   return (
     <div
@@ -29,13 +32,7 @@ export function UnlockCaseWheelItem({
         className="absolute bottom-0 left-0 h-2 w-full"
         style={{ backgroundColor: item.rarity }}
       />
-      <img
-        title={index.toString()}
-        className="absolute top-0 left-0 h-full w-full"
-        src={cdn(
-          unlockedItem.special ? caseItem.getSpecialsImage() : item.getImage()
-        )}
-      />
+      <ItemImage className="absolute top-0 left-0 h-full w-full" {...display} />
     </div>
   );
 }

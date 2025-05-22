@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Economy, CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { createFakeInventoryItem } from "~/utils/inventory";
 import { playSound } from "~/utils/sound";
@@ -26,13 +26,20 @@ export function UnlockCaseContainerUnlocked({
   const translate = useTranslate();
   const nameItemString = useNameItemString();
   const [revealScale, setRevealScale] = useState(0);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   function handleLoad() {
-    setRevealScale(1);
-    playSound(
-      `case_awarded_${rarity as "common" | "uncommon" | "rare" | "mythical" | "legendary" | "ancient"}`
-    );
+    timeoutRef.current = setTimeout(() => {
+      setRevealScale(1);
+      playSound(
+        `case_awarded_${rarity as "common" | "uncommon" | "rare" | "mythical" | "legendary" | "ancient"}`
+      );
+    }, 256);
   }
+
+  useEffect(() => {
+    return () => clearTimeout(timeoutRef.current);
+  });
 
   const item = CS2Economy.getById(id);
 
@@ -52,7 +59,7 @@ export function UnlockCaseContainerUnlocked({
           <span>{nameItemString(caseItem)}</span>
         </div>
         <ItemImage
-          className="m-auto my-4 [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
+          className="m-auto my-4 max-w-[512px] [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
           item={item}
           style={{ transform: `scale(${revealScale})` }}
           onLoad={handleLoad}

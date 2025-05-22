@@ -7,23 +7,35 @@ import { CS2EconomyItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { ComponentProps, useEffect, useState } from "react";
 import { isServerContext } from "~/globals";
-import { cdn } from "~/utils/economy";
+import { getCDNUrl } from "~/utils/economy";
 import { noop } from "~/utils/misc";
 import { FillSpinner } from "./fill-spinner";
 
 let cached: string[] = [];
 
 export function ItemImage({
+  className,
   item,
   lazy,
+  onLoad,
+  type,
   wear,
   ...props
-}: ComponentProps<"img"> & {
+}: Omit<ComponentProps<"img">, "onLoad"> & {
   item: CS2EconomyItem | CS2InventoryItem;
   lazy?: boolean;
+  onLoad?: () => void;
+  type?: "default" | "collection" | "specials";
   wear?: number;
 }) {
-  const url = cdn(item.getImage(wear));
+  type ??= "default";
+  const url = getCDNUrl(
+    type === "default"
+      ? item.getImage(wear)
+      : type === "collection"
+        ? item.getCollectionImage()
+        : item.getSpecialsImage()
+  );
   const [loaded, setLoaded] = useState(
     cached.includes(url) || url.includes("steamcommunity")
   );
@@ -51,13 +63,19 @@ export function ItemImage({
     }
   }, [lazy, loaded]);
 
+  useEffect(() => {
+    if (loaded) {
+      onLoad?.();
+    }
+  }, [loaded]);
+
   if (!loaded) {
     return (
       <div
         {...props}
         className={clsx(
-          "relative flex items-center justify-center",
-          props.className
+          "relative flex aspect-256/192 items-center justify-center",
+          className
         )}
       >
         <FillSpinner className="opacity-50" />
@@ -65,5 +83,13 @@ export function ItemImage({
     );
   }
 
-  return <img alt={item.name} draggable={false} src={url} {...props} />;
+  return (
+    <img
+      alt={item.name}
+      draggable={false}
+      src={url}
+      {...props}
+      className={clsx("aspect-256/192", className)}
+    />
+  );
 }
