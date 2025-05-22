@@ -14,6 +14,7 @@ import { FillSpinner } from "./fill-spinner";
 let cached: string[] = [];
 
 export function ItemImage({
+  className,
   item,
   lazy,
   wear,
@@ -56,8 +57,8 @@ export function ItemImage({
       <div
         {...props}
         className={clsx(
-          "relative flex items-center justify-center",
-          props.className
+          "relative flex aspect-256/192 items-center justify-center",
+          className
         )}
       >
         <FillSpinner className="opacity-50" />
@@ -65,5 +66,13 @@ export function ItemImage({
     );
   }
 
-  return <img alt={item.name} draggable={false} src={url} {...props} />;
+  return (
+    <img
+      alt={item.name}
+      draggable={false}
+      src={url}
+      {...props}
+      className={clsx("aspect-256/192", className)}
+    />
+  );
 }

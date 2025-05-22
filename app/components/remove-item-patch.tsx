@@ -66,15 +66,12 @@ export function RemoveItemPatch({
                 warning={translate("RemovePatchWarn")}
                 warningItem={nameItemString(item)}
               />
-              <ItemImage
-                className="m-auto aspect-[1.33333] max-w-[512px]"
-                item={item}
-              />
+              <ItemImage className="m-auto max-w-[512px]" item={item} />
               <div className="flex justify-center">
                 {item.somePatches().map(([slot, id]) => (
                   <button key={slot} className="group">
                     <ItemImage
-                      className="h-[126px] w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
+                      className="w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
                       onClick={() => setConfirmRemoveSlot(slot)}
                       item={CS2Economy.getById(id)}
                     />

@@ -37,11 +37,7 @@ export function UnlockCaseContainerBackground({
         transform: `scale(${scale})`
       }}
     >
-      <ItemImage
-        className="h-[198px] w-[256px]"
-        item={caseItem}
-        onLoad={handleLoad}
-      />
+      <ItemImage className="w-[256px]" item={caseItem} onLoad={handleLoad} />
     </div>
   );
 }

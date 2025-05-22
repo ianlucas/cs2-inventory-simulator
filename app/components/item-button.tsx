@@ -62,7 +62,7 @@ export function ItemButton({
         <ItemImage
           className={clsx(
             "overflow-hidden drop-shadow-[0_0_1px_rgba(0,0,0,1)]",
-            !bigger && "aspect-[1.333] w-[82px]",
+            !bigger && "w-[82px]",
             bigger && "m-auto h-32"
           )}
           item={item}

@@ -76,17 +76,14 @@ export function ApplyItemSticker({
               title={translate("ApplyStickerUse")}
               warning={translate("ApplyStickerWarn")}
             />
-            <ItemImage
-              className="m-auto aspect-[1.33333] max-w-[512px]"
-              item={targetItem}
-            />
+            <ItemImage className="m-auto max-w-[512px]" item={targetItem} />
             <div className="flex items-center justify-center">
               {targetItem.allStickers().map(([xslot, sticker]) =>
                 xslot === 4 ? undefined : sticker !== undefined ||
                   xslot === slot ? (
                   <ItemImage
                     key={xslot}
-                    className="h-[126px] w-[168px]"
+                    className="w-[168px]"
                     item={
                       sticker !== undefined
                         ? CS2Economy.getById(sticker.id)

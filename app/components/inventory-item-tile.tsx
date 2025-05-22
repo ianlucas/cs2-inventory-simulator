@@ -40,7 +40,7 @@ export function InventoryItemTile({
     <div className="w-[154px]">
       <div className="group relative bg-linear-to-b from-neutral-600 to-neutral-400 p-[1px]">
         <div className="bg-linear-to-b from-neutral-500 to-neutral-300 px-1">
-          <ItemImage className="h-[108px] w-[144px]" item={item} />
+          <ItemImage className="w-[144px]" item={item} />
         </div>
         {isNew && (
           <div className="absolute top-[1px] left-[1px] bg-sky-600 px-1 py-1 text-[10px] font-bold text-sky-200 shadow-lg transition-all group-hover:text-white">
