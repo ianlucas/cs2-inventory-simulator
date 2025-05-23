@@ -55,6 +55,7 @@ export function InventoryItemTooltip({
 
   return (
     <div
+      role="tooltip"
       className={clsx(
         "z-20 max-w-[396px] rounded-sm bg-neutral-900/95 px-6 py-4 text-xs text-white outline-hidden",
         !isContainer && "lg:w-[396px]"

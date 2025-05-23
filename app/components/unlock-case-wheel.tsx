@@ -45,8 +45,8 @@ export function UnlockCaseWheel({
         className="relative h-[496.8px] w-[1269.980px] [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
         style={{ transform: `scaleY(${scaleY})` }}
       >
-        <div className="absolute top-0 left-0 flex h-full w-full items-center justify-center opacity-90 blur-[2px] [-webkit-mask-image:radial-gradient(circle_closest-side,#fff0_246px,#000_246px)]">
-          <div className="h-[192px] w-[1269.980px] overflow-hidden [-webkit-mask-image:linear-gradient(to_left,#fff0_0%,#000_10%,#000_90%,#fff0_100%)]">
+        <div className="absolute top-0 left-0 flex h-full w-full items-center justify-center [mask-image:radial-gradient(circle_closest-side,#fff0_246px,#000_246px)] opacity-90 blur-[2px]">
+          <div className="h-[192px] w-[1269.980px] overflow-hidden [mask-image:linear-gradient(to_left,#fff0_0%,#000_10%,#000_90%,#fff0_100%)]">
             <UnlockCaseWheelItems
               items={items}
               caseItem={caseItem}
