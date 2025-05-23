@@ -76,24 +76,16 @@ export function useInventoryFilter() {
   return useAppContext().inventoryFilter;
 }
 
-export function useTranslationChecksum() {
-  return useAppContext().translation.checksum;
-}
-
 export function AppProvider({
   children,
   preferences,
   rules,
-  translation: { checksum },
   user
 }: Omit<
   ContextType<typeof AppContext>,
   "inventory" | "inventoryFilter" | "items" | "translation" | "setInventory"
 > & {
   children: ReactNode;
-  translation: {
-    checksum: string;
-  };
 }) {
   const inventorySpec = {
     data: user?.inventory
@@ -109,7 +101,6 @@ export function AppProvider({
   );
   const inventoryFilter = useInventoryFilterState();
   const translation = useTranslation({
-    checksum,
     language: preferences.language
   });
 

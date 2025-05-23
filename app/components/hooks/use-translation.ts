@@ -9,13 +9,7 @@ import type { SystemTranslationTokens } from "~/translation.server";
 
 export const TRANSLATION_LOADED_TYPE = "translationloaded";
 
-export function useTranslation({
-  language,
-  checksum
-}: {
-  language: string;
-  checksum: string;
-}) {
+export function useTranslation({ language }: { language: string }) {
   function getSystemTranslationMap() {
     return (
       (isServerContext
@@ -59,5 +53,5 @@ export function useTranslation({
     };
   }, []);
 
-  return { system: systemMap, items: itemMap, translate, checksum };
+  return { system: systemMap, items: itemMap, translate };
 }

@@ -46,7 +46,6 @@ import { getToggleable } from "./preferences/toggleable.server";
 import { getSeoLinks, getSeoMeta } from "./root-seo";
 import { getSession } from "./session.server";
 import styles from "./tailwind.css?url";
-import { getTranslationChecksum } from "./translation.server";
 import { nonEmptyString } from "./utils/misc";
 
 const bodyFontUrl =
@@ -84,9 +83,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     await steamCallbackUrl.get()
   );
   return data({
-    translation: {
-      checksum: getTranslationChecksum()
-    },
     rules: {
       ...(await getClientRules(user?.id)),
       assetsBaseUrl: nonEmptyString(ASSETS_BASE_URL),

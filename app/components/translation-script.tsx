@@ -4,13 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
-import { usePreferences, useTranslationChecksum } from "./app-context";
+import { cdnQueryString } from "~/utils/economy";
+import { usePreferences } from "./app-context";
 
 export function TranslationScript() {
-  const checksum = useTranslationChecksum();
   const { language } = usePreferences();
   const [isInitialized, setIsInitialized] = useState(false);
-  const translationUrl = `/translations/${language}.${checksum}.js`;
+  const translationUrl = `/translations/${language}.js${cdnQueryString}`;
 
   useEffect(() => {
     setIsInitialized(true);
@@ -23,7 +23,7 @@ export function TranslationScript() {
         document.body.removeChild(script);
       }
     };
-  }, [checksum, language]);
+  }, [language]);
 
   if (isInitialized) {
     return null;
