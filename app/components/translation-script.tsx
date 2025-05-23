@@ -4,13 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
-import { cdnQueryString } from "~/utils/economy";
 import { usePreferences } from "./app-context";
 
 export function TranslationScript() {
   const { language } = usePreferences();
   const [isInitialized, setIsInitialized] = useState(false);
-  const translationUrl = `/translations/${language}.js${cdnQueryString}`;
+  const translationUrl = `/translations/${language}.${__TRANSLATION_CHECKSUM__}.js`;
 
   useEffect(() => {
     setIsInitialized(true);
