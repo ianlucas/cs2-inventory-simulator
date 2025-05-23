@@ -21,7 +21,7 @@ import {
   fail
 } from "@ianlucas/cs2-lib";
 
-export const cdnQueryString = "?v=6.1.1";
+export const cdnQueryString = "?v=6.1.2";
 
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
@@ -56,8 +56,8 @@ export function isItemCountable(item: CS2EconomyItem) {
   return COUNTABLE_ITEM_TYPES.includes(item.type);
 }
 
-export const newItemStartingId = 13315;
-export const newItemEndAt = 1748553811780;
+export const newItemStartingId = 13320;
+export const newItemEndAt = 1749177182156;
 export const minStickerOffset = -2;
 export const maxStickerOffset = 2;
 export const stickerOffsetFactor = 0.001;
