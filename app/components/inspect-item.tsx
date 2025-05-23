@@ -139,6 +139,7 @@ export function InspectItem({
             {hasInfo && isHoverOpen && (
               <FloatingFocusManager context={hoverContext} modal={false}>
                 <div
+                  role="tooltip"
                   className="z-20 max-w-[320px] space-y-3 rounded-sm bg-neutral-900/95 px-6 py-4 text-sm text-white outline-hidden"
                   ref={hoverRefs.setFloating}
                   style={hoverStyles}

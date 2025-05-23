@@ -69,6 +69,7 @@ export function ButtonWithTooltip({
       <FloatingPortal>
         {tooltip !== undefined && isOpen && isMounted && (
           <div
+            role="tooltip"
             className="z-80"
             ref={refs.setFloating}
             style={floatingStyles}
