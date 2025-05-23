@@ -3,13 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { english as libEnglish } from "@ianlucas/cs2-lib/translations";
 import { reactRouter } from "@react-router/dev/vite";
+import { createHash } from "crypto";
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import { minify_sync } from "terser";
 import ts from "typescript";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { english as appEnglish } from "./app/translations/english";
 
 export default defineConfig({
   server: {
@@ -32,6 +35,12 @@ export default defineConfig({
           }
         ).outputText
       ).code
+    ),
+    __TRANSLATION_CHECKSUM__: JSON.stringify(
+      createHash("sha256")
+        .update(JSON.stringify(appEnglish) + JSON.stringify(libEnglish))
+        .digest("hex")
+        .substring(0, 7)
     )
   }
 });
