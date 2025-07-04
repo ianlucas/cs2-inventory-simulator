@@ -21,8 +21,6 @@ import {
   fail
 } from "@ianlucas/cs2-lib";
 
-export const cdnQueryString = "?v=6.1.2";
-
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
   CS2ItemType.Graffiti,
@@ -181,8 +179,4 @@ export function unlockNonSpecialItem(container: CS2EconomyItem) {
 
 export function isNewItem(item: CS2EconomyItem) {
   return item.id >= newItemStartingId && newItemEndAt > Date.now();
-}
-
-export function getCDNUrl(url: string) {
-  return url + cdnQueryString;
 }
