@@ -7,7 +7,6 @@ import { CS2EconomyItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { ComponentProps, useEffect, useState } from "react";
 import { isServerContext } from "~/globals";
-import { getCDNUrl } from "~/utils/economy";
 import { noop } from "~/utils/misc";
 import { FillSpinner } from "./fill-spinner";
 
@@ -29,13 +28,13 @@ export function ItemImage({
   wear?: number;
 }) {
   type ??= "default";
-  const url = getCDNUrl(
+  const url =
     type === "default"
       ? item.getImage(wear)
       : type === "collection"
         ? item.getCollectionImage()
-        : item.getSpecialsImage()
-  );
+        : item.getSpecialsImage();
+
   const [loaded, setLoaded] = useState(
     cached.includes(url) || url.includes("steamcommunity")
   );
