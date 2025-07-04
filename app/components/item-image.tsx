@@ -34,7 +34,7 @@ export function ItemImage({
       : type === "collection"
         ? item.getCollectionImage()
         : item.getSpecialsImage();
-  console.log(url);
+
   const [loaded, setLoaded] = useState(
     cached.includes(url) || url.includes("steamcommunity")
   );
