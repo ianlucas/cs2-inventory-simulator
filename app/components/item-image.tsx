@@ -54,7 +54,7 @@ export function ItemImage({
           })
           .catch(noop);
       }
-      const idx = setTimeout(fetchImage, lazy ? 500 : 1);
+      const idx = setTimeout(fetchImage, lazy ? 16 : 1);
       return () => {
         clearTimeout(idx);
         controller?.abort();
