@@ -22,7 +22,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@ianlucas/cs2-lib": "^7.1.0",
     "@ianlucas/cs2-lib-inspect": "^5.0.0",
-    "@ianlucas/remix-auth-steam": "^5.0.1",
+    "@ianlucas/remix-auth-steam": "^6.0.0",
     "@prisma/client": "^6.12.0",
     "@react-router/fs-routes": "^7.6.3",
     "@react-router/node": "^7.6.3",

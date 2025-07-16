@@ -23,6 +23,7 @@ import { AppProvider } from "./components/app-context";
 import { Background } from "./components/background";
 import { CloudflareAnalyticsScript } from "./components/cloudflare-analytics-script";
 import { Console } from "./components/console";
+import { ErrorAlert } from "./components/error-alert";
 import { Footer } from "./components/footer";
 import { Header } from "./components/header";
 import { useRootLayout } from "./components/hooks/use-root-layout";
@@ -146,6 +147,7 @@ export default function App() {
           <CloudflareAnalyticsScript
             token={appProps.rules.cloudflareAnalyticsToken}
           />
+          <ErrorAlert />
           <Scripts />
         </body>
       </html>
