@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { SteamStrategy as BaseSteamStrategy } from "@ianlucas/remix-auth-steam";
+import SteamAPI, { type UserSummary } from "steamapi";
 import { steamApiKey, steamCallbackUrl } from "./models/rule.server";
 import { upsertUser } from "./models/user.server";
 
@@ -11,11 +12,14 @@ export class SteamStrategy extends BaseSteamStrategy<string> {
   constructor() {
     super(
       async () => ({
-        returnURL: await steamCallbackUrl.get(),
-        apiKey: await steamApiKey.get(),
-        onError: console.error
+        returnURL: await steamCallbackUrl.get()
       }),
-      async ({ user }) => await upsertUser(user)
+      async ({ userID }) =>
+        await upsertUser(
+          (await new SteamAPI(await steamApiKey.get()).getUserSummary(
+            userID
+          )) as UserSummary
+        )
     );
   }
 }

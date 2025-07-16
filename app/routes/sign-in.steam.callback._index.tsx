@@ -21,17 +21,9 @@ export async function loader({ request }: Route.LoaderArgs) {
       }
     });
   } catch (error) {
-    if (error instanceof Error) {
-      throw redirect("/");
-    }
-    if (
-      !(error instanceof Response) &&
-      typeof error === "object" &&
-      error !== null
-    ) {
-      if ("message" in error && typeof error.message === "string") {
-        throw new Error(`Steam OpenID: ${error.message}`);
-      }
+    if (!(error instanceof Response)) {
+      console.error(error);
+      throw redirect("/?error=FailedToValidate");
     }
     throw error;
   }
