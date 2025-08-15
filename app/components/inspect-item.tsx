@@ -8,11 +8,13 @@ import { faCheck, faShareNodes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2Economy, CS2_MIN_SEED } from "@ianlucas/cs2-lib";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/components/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
+import { clientGlobals } from "~/globals";
 import { wearToString } from "~/utils/economy";
 import { getInventoryItemShareUrl } from "~/utils/inventory";
 import { usePreferences, useTranslate, useUser } from "./app-context";
@@ -46,6 +48,13 @@ export function InspectItem({
     ref
   } = useInspectFloating();
   const [clickedShare, triggerClickedShare] = useTimedState();
+
+  useEffect(() => {
+    clientGlobals.inspectedItem = item;
+    return () => {
+      clientGlobals.inspectedItem = undefined;
+    };
+  }, []);
 
   const hasInfo = item.hasSeed() && item.hasWear();
   const hasShare = item.isPaintable();

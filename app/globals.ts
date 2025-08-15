@@ -23,6 +23,8 @@ interface ClientGlobals {
   isTranslationLoaded?: boolean;
   itemTranslationMap: CS2ItemTranslationByLanguage[string];
   systemTranslationMap: SystemTranslationByLanguage[string];
+
+  inspectedItem?: unknown;
 }
 
 type Globals = ServerGlobals & ClientGlobals;
