@@ -15,21 +15,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v5
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
+          node-version: 20.x
+          registry-url: "https://registry.npmjs.org"
+          cache: "npm"
+
+      - name: Install
         run: npm ci
-      - name: Typecheck code
+
+      - name: Typecheck
         run: npm run typecheck
-      - name: Run tests
+
+      - name: Test
         run: npm run test
-      - name: Build application
+
+      - name: Build
         run: npm run build

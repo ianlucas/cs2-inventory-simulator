@@ -1,0 +1,80 @@
+name: dependencies
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20.x
+          registry-url: "https://registry.npmjs.org"
+          cache: "npm"
+
+      - name: Determine update type
+        id: update_type
+        run: |
+          DAY_OF_WEEK=$(date +%u)
+          if [ "$DAY_OF_WEEK" -eq 1 ]; then
+            echo "target=major" >> $GITHUB_OUTPUT
+            echo "description=major" >> $GITHUB_OUTPUT
+          else
+            echo "target=minor" >> $GITHUB_OUTPUT
+            echo "description=minor" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upgrade dependencies
+        id: upgrade
+        run: |
+          if [ "${{ steps.update_type.outputs.target }}" == "major" ]; then
+            npx npm-check-updates@latest --target latest --reject @types/node -u
+          else
+            npx npm-check-updates@latest --target minor -u
+          fi
+
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes detected"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          rm package-lock.json
+          npm install
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+
+      - name: Configure Git
+        if: steps.upgrade.outputs.has_changes == 'true'
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Commit and push changes
+        if: steps.upgrade.outputs.has_changes == 'true'
+        id: commit_main
+        run: |
+          BRANCH_NAME="chore/update-dependencies-$(date +%s)"
+          git checkout -b "$BRANCH_NAME"
+          git add .
+          git commit -m "chore: update dependencies"
+          git push origin "$BRANCH_NAME"
+
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "Committed changes to branch $BRANCH_NAME" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create pull request
+        if: steps.upgrade.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          gh pr create \
+            --base main \
+            --head "${{ steps.commit_main.outputs.branch_name }}" \
+            --title "chore: update dependencies" \
+            --body "Dependencies ${{ steps.update_type.outputs.description }} upgrade" \
+            --fill
