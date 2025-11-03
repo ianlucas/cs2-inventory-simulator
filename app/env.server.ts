@@ -4,7 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { assert } from "@ianlucas/cs2-lib";
-import "dotenv/config";
+import dotenv from "dotenv";
+
+dotenv.config({
+  quiet: true
+});
 
 assert(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 export const SESSION_SECRET = process.env.SESSION_SECRET;
