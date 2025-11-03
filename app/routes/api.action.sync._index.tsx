@@ -57,132 +57,99 @@ import {
 } from "~/utils/shapes.server";
 import type { Route } from "./+types/api.action.sync._index";
 
-const actionShape = z
-  .object({
+const actionShape = z.discriminatedUnion("type", [
+  z.object({
     type: z.literal(SyncAction.Add),
     item: clientInventoryItemShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.AddFromCache),
+    data: syncInventoryShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.AddWithNametag),
+    toolUid: nonNegativeInt,
+    itemId: nonNegativeInt,
+    nameTag: z.string()
+  }),
+  z.object({
+    type: z.literal(SyncAction.ApplyItemPatch),
+    patchUid: nonNegativeInt,
+    slot: nonNegativeInt,
+    targetUid: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.ApplyItemSticker),
+    slot: nonNegativeInt,
+    stickerUid: nonNegativeInt,
+    targetUid: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.Equip),
+    uid: nonNegativeInt,
+    team: teamShape.optional()
+  }),
+  z.object({
+    type: z.literal(SyncAction.Unequip),
+    uid: nonNegativeInt,
+    team: teamShape.optional()
+  }),
+  z.object({
+    type: z.literal(SyncAction.RenameItem),
+    toolUid: nonNegativeInt,
+    targetUid: nonNegativeInt,
+    nameTag: z.string().optional()
+  }),
+  z.object({
+    type: z.literal(SyncAction.Remove),
+    uid: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.RemoveItemPatch),
+    targetUid: nonNegativeInt,
+    slot: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.ScrapeItemSticker),
+    targetUid: nonNegativeInt,
+    slot: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.SwapItemsStatTrak),
+    fromUid: nonNegativeInt,
+    toUid: nonNegativeInt,
+    toolUid: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.RenameStorageUnit),
+    uid: nonNegativeInt,
+    nameTag: z.string()
+  }),
+  z.object({
+    depositUids: z.array(nonNegativeInt).max(1),
+    type: z.literal(SyncAction.DepositToStorageUnit),
+    uid: nonNegativeInt
+  }),
+  z.object({
+    retrieveUids: z.array(nonNegativeInt).max(1),
+    type: z.literal(SyncAction.RetrieveFromStorageUnit),
+    uid: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.Edit),
+    uid: nonNegativeInt,
+    attributes: clientInventoryItemShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.AddWithSticker),
+    itemId: nonNegativeInt,
+    slot: nonNegativeInt,
+    stickerUid: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.RemoveAllItems)
   })
-  .or(
-    z.object({
-      type: z.literal(SyncAction.AddFromCache),
-      data: syncInventoryShape
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.AddWithNametag),
-      toolUid: nonNegativeInt,
-      itemId: nonNegativeInt,
-      nameTag: z.string()
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.ApplyItemPatch),
-      patchUid: nonNegativeInt,
-      slot: nonNegativeInt,
-      targetUid: nonNegativeInt
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.ApplyItemSticker),
-      slot: nonNegativeInt,
-      stickerUid: nonNegativeInt,
-      targetUid: nonNegativeInt
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.Equip),
-      uid: nonNegativeInt,
-      team: teamShape.optional()
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.Unequip),
-      uid: nonNegativeInt,
-      team: teamShape.optional()
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.RenameItem),
-      toolUid: nonNegativeInt,
-      targetUid: nonNegativeInt,
-      nameTag: z.string().optional()
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.Remove),
-      uid: nonNegativeInt
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.RemoveItemPatch),
-      targetUid: nonNegativeInt,
-      slot: nonNegativeInt
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.ScrapeItemSticker),
-      targetUid: nonNegativeInt,
-      slot: nonNegativeInt
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.SwapItemsStatTrak),
-      fromUid: nonNegativeInt,
-      toUid: nonNegativeInt,
-      toolUid: nonNegativeInt
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.RenameStorageUnit),
-      uid: nonNegativeInt,
-      nameTag: z.string()
-    })
-  )
-  .or(
-    z.object({
-      depositUids: z.array(nonNegativeInt).max(1),
-      type: z.literal(SyncAction.DepositToStorageUnit),
-      uid: nonNegativeInt
-    })
-  )
-  .or(
-    z.object({
-      retrieveUids: z.array(nonNegativeInt).max(1),
-      type: z.literal(SyncAction.RetrieveFromStorageUnit),
-      uid: nonNegativeInt
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.Edit),
-      uid: nonNegativeInt,
-      attributes: clientInventoryItemShape
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.AddWithSticker),
-      itemId: nonNegativeInt,
-      slot: nonNegativeInt,
-      stickerUid: nonNegativeInt
-    })
-  )
-  .or(
-    z.object({
-      type: z.literal(SyncAction.RemoveAllItems)
-    })
-  );
+]);
 
 export type ActionShape = z.infer<typeof actionShape>;
 

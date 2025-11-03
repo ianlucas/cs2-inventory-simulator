@@ -25,7 +25,8 @@ export const baseInventoryItemProps = {
     .max(20)
     .optional()
     .transform((nameTag) => CS2Economy.trimNametag(nameTag))
-    .refine((nameTag) => CS2Economy.safeValidateNametag(nameTag)),
+    .refine((nameTag) => CS2Economy.safeValidateNametag(nameTag))
+    .optional(),
   patches: z.record(z.string(), nonNegativeInt).optional(),
   seed: positiveInt.optional(),
   statTrak: z.literal(0).optional(),
@@ -45,12 +46,10 @@ export const baseInventoryItemProps = {
           .refine((wear) => wear === undefined || validateStickerWear(wear)),
         x: z
           .number()
-          .finite()
           .optional()
           .refine((x) => x === undefined || validateStickerOffset(x)),
         y: z
           .number()
-          .finite()
           .optional()
           .refine((y) => y === undefined || validateStickerOffset(y))
       })
