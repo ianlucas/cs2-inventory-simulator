@@ -26,11 +26,12 @@ export const baseInventoryItemProps = {
     .optional()
     .transform((nameTag) => CS2Economy.trimNametag(nameTag))
     .refine((nameTag) => CS2Economy.safeValidateNametag(nameTag)),
-  patches: z.record(nonNegativeInt).optional(),
+  patches: z.record(z.string(), nonNegativeInt).optional(),
   seed: positiveInt.optional(),
   statTrak: z.literal(0).optional(),
   stickers: z
     .record(
+      z.string(),
       z.object({
         id: nonNegativeInt,
         rotation: positiveInt
@@ -74,13 +75,15 @@ const baseServerInventoryItemProps = {
 const serverInventoryItemProps = {
   ...baseServerInventoryItemProps,
   containerId: nonNegativeInt.optional(),
-  storage: z.record(z.object(baseServerInventoryItemProps)).optional()
+  storage: z
+    .record(z.string(), z.object(baseServerInventoryItemProps))
+    .optional()
 };
 
 export const serverInventoryItemShape = z.object(serverInventoryItemProps);
 
 export const serverInventoryShape = z.object({
-  items: z.record(serverInventoryItemShape),
+  items: z.record(z.string(), serverInventoryItemShape),
   version: nonNegativeInt
 });
 

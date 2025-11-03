@@ -15,6 +15,7 @@ const syncInventoryItemProps = {
   ...clientInventoryItemProps,
   storage: z
     .record(
+      z.string(),
       z.object({
         ...clientInventoryItemProps
       })
@@ -67,12 +68,12 @@ export const syncInventoryItemShape = z
   .refine(refine);
 
 export const clientInventoryShape = z.object({
-  items: z.record(clientInventoryItemShape),
+  items: z.record(z.string(), clientInventoryItemShape),
   version: nonNegativeInt
 });
 
 export const syncInventoryShape = z.object({
-  items: z.record(syncInventoryItemShape),
+  items: z.record(z.string(), syncInventoryItemShape),
   version: nonNegativeInt
 });
 
