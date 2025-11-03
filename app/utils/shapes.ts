@@ -25,12 +25,14 @@ export const baseInventoryItemProps = {
     .max(20)
     .optional()
     .transform((nameTag) => CS2Economy.trimNametag(nameTag))
-    .refine((nameTag) => CS2Economy.safeValidateNametag(nameTag)),
-  patches: z.record(nonNegativeInt).optional(),
+    .refine((nameTag) => CS2Economy.safeValidateNametag(nameTag))
+    .optional(),
+  patches: z.record(z.string(), nonNegativeInt).optional(),
   seed: positiveInt.optional(),
   statTrak: z.literal(0).optional(),
   stickers: z
     .record(
+      z.string(),
       z.object({
         id: nonNegativeInt,
         rotation: positiveInt
@@ -44,12 +46,10 @@ export const baseInventoryItemProps = {
           .refine((wear) => wear === undefined || validateStickerWear(wear)),
         x: z
           .number()
-          .finite()
           .optional()
           .refine((x) => x === undefined || validateStickerOffset(x)),
         y: z
           .number()
-          .finite()
           .optional()
           .refine((y) => y === undefined || validateStickerOffset(y))
       })
@@ -74,13 +74,15 @@ const baseServerInventoryItemProps = {
 const serverInventoryItemProps = {
   ...baseServerInventoryItemProps,
   containerId: nonNegativeInt.optional(),
-  storage: z.record(z.object(baseServerInventoryItemProps)).optional()
+  storage: z
+    .record(z.string(), z.object(baseServerInventoryItemProps))
+    .optional()
 };
 
 export const serverInventoryItemShape = z.object(serverInventoryItemProps);
 
 export const serverInventoryShape = z.object({
-  items: z.record(serverInventoryItemShape),
+  items: z.record(z.string(), serverInventoryItemShape),
   version: nonNegativeInt
 });
 
