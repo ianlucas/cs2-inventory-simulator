@@ -7,3 +7,4 @@
 /prisma/dev.db-journal
 /public/build
 node_modules
+.idea

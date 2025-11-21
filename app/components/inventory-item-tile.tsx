@@ -38,8 +38,8 @@ export function InventoryItemTile({
 
   return (
     <div className="w-[154px]">
-      <div className="group relative bg-linear-to-b from-neutral-600 to-neutral-400 p-[1px]">
-        <div className="bg-linear-to-b from-neutral-500 to-neutral-300 px-1">
+      <div className="group relative bg-linear-to-b from-neutral-900 to-neutral-600 p-[1px] cursor-pointer">
+        <div className="bg-linear-to-b from-neutral-800 to-neutral-700 px-1">
           <ItemImage className="w-[144px]" item={item} />
         </div>
         {isNew && (

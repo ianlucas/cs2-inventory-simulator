@@ -19,13 +19,7 @@ import { useCraftFilterRules } from "~/components/hooks/use-craft-filter-rules";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useIsOnTop } from "~/components/hooks/use-is-on-top";
 import { ECONOMY_ITEM_FILTERS } from "~/utils/economy-filters";
-import {
-  useInventory,
-  usePreferences,
-  useTranslate,
-  useUser
-} from "./app-context";
-import { DonateHeaderLink } from "./donate-header-link";
+import { useInventory, usePreferences, useTranslate, useUser } from "./app-context";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
 import { useItemSelector } from "./item-selector-context";
@@ -106,7 +100,6 @@ export function Header({
                     label={translate("HeaderSignInLabel")}
                   />
                   <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
-                    <DonateHeaderLink />
                     <HeaderLink
                       to="/settings"
                       icon={faCog}
@@ -124,7 +117,6 @@ export function Header({
                     to="/sign-out"
                   />
                   <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
-                    <DonateHeaderLink />
                     <HeaderLink to="/settings" onClick={closeMenu}>
                       <span className="text-neutral-400">
                         {translate("HeaderSignedInAsLabel")}
