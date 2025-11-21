@@ -9,10 +9,14 @@ import { getSession } from "~/session.server";
 import { ApiStrategy } from "./api-strategy.server";
 import { findUniqueUser } from "./models/user.server";
 import { SteamStrategy } from "./steam-strategy.server";
+import { ThirdPartyStrategy } from "./third-party-strategy.server";
 
 export const authenticator = new Authenticator<string>();
 
-authenticator.use(new SteamStrategy(), "steam").use(new ApiStrategy(), "api");
+authenticator
+  .use(new SteamStrategy(), "steam")
+  .use(new ApiStrategy(), "api")
+  .use(new ThirdPartyStrategy(), "third-party");
 
 export async function getRequestUserId(request: Request) {
   const session = await getSession(request.headers.get("cookie"));

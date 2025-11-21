@@ -13,6 +13,8 @@ dotenv.config({
 assert(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 export const SESSION_SECRET = process.env.SESSION_SECRET;
 
+export const THIRD_PARTY_SECRET = process.env.THIRD_PARTY_SECRET ?? "";
+
 export const {
   ASSETS_BASE_URL,
   CLOUDFLARE_ANALYTICS_TOKEN,
