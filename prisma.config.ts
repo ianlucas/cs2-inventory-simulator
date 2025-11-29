@@ -3,12 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { defineConfig } from "prisma/config";
-import { DATABASE_URL } from "./app/env.server.js";
+import dotenv from "dotenv";
+import { defineConfig, env } from "prisma/config";
+
+dotenv.config({
+  quiet: true
+});
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
   datasource: {
-    url: DATABASE_URL
+    url: env("DATABASE_URL")
   }
 });

@@ -10,7 +10,8 @@ dotenv.config({
   quiet: true
 });
 
-export const DATABASE_URL = process.env.DATABASE_URL ?? "";
+assert(process.env.DATABASE_URL, "DATABASE_URL must be set");
+export const DATABASE_URL = process.env.DATABASE_URL;
 
 assert(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 export const SESSION_SECRET = process.env.SESSION_SECRET;
