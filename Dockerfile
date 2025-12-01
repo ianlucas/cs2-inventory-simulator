@@ -1,7 +1,7 @@
 FROM node:22-alpine AS development-dependencies-env
 COPY . /app
 WORKDIR /app
-RUN npm ci
+RUN npm ci && npx prisma generate
 
 FROM node:22-alpine AS production-dependencies-env
 COPY ./package.json package-lock.json prisma /app/
