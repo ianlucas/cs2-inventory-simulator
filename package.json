@@ -47,7 +47,7 @@
   "devDependencies": {
     "@react-router/dev": "^7.10.1",
     "@tailwindcss/postcss": "^4.1.18",
-    "@types/node": "^22.19.2",
+    "@types/node": "^22.19.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "happy-dom": "^20.0.11",
