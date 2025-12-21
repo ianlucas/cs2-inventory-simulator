@@ -54,8 +54,8 @@ export function isItemCountable(item: CS2EconomyItem) {
   return COUNTABLE_ITEM_TYPES.includes(item.type);
 }
 
-export const newItemStartingId = 14428;
-export const newItemEndAt = 1764207206506;
+export const newItemStartingId = 15256;
+export const newItemEndAt = 1767569897270;
 export const minStickerOffset = -2;
 export const maxStickerOffset = 2;
 export const stickerOffsetFactor = 0.001;
