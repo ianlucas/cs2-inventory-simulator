@@ -32,6 +32,7 @@
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.6.4",
     "dotenv": "^17.2.3",
+    "hash-object": "^5.0.1",
     "isbot": "^5.1.32",
     "lz-string": "^1.5.0",
     "prisma": "^7.2.0",
