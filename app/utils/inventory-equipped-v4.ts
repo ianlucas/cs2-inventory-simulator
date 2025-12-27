@@ -83,7 +83,7 @@ export async function generate(
         case CS2ItemType.MusicKit:
           assert(data.index);
           musicKit = {
-            def: data.index,
+            musicId: data.index,
             stattrak: item.statTrak ?? -1,
             uid: item.uid
           };
