@@ -2,6 +2,7 @@
 .env
 .react-router/
 /.cache
+/app/generated/prisma
 /build
 /prisma/dev.db
 /prisma/dev.db-journal

@@ -41,6 +41,7 @@ export default defineConfig({
         .update(JSON.stringify(appEnglish) + JSON.stringify(libEnglish))
         .digest("hex")
         .substring(0, 7)
-    )
+    ),
+    __SOURCE_COMMIT__: JSON.stringify(process.env.SOURCE_COMMIT)
   }
 });

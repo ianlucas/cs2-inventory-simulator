@@ -24,7 +24,8 @@ const INVENTORY_ITEM_TYPE_ORDER = {
   [CS2ItemType.Container]: 10,
   [CS2ItemType.Key]: 11,
   [CS2ItemType.Tool]: 12,
-  [CS2ItemType.Stub]: 13
+  [CS2ItemType.Utility]: 13,
+  [CS2ItemType.Stub]: 14
 } as const;
 
 export function transform(
