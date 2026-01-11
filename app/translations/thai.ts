@@ -179,7 +179,7 @@ export const thai = {
   ItemWeaponRarityCommon: /* csgo_thai.txt */"เกรดผู้บริโภค",
   ItemWeaponRarityDefault: /* csgo_thai.txt */"พื้นฐาน",
   ItemWeaponRarityImmortal: /* csgo_thai.txt */"Contraband",
-  ItemWeaponRarityLegendary: /* csgo_thai.txt */"ปกปิด",
+  ItemWeaponRarityLegendary: /* csgo_thai.txt */"ลับเฉพาะ",
   ItemWeaponRarityMythical: /* csgo_thai.txt */"หวงห้าม",
   ItemWeaponRarityRare: /* csgo_thai.txt */"เกรดมาตรฐานทางทหาร",
   ItemWeaponRarityUncommon: /* csgo_thai.txt */"เกรดอุตสาหกรรม",

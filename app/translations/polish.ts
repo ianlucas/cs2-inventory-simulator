@@ -107,7 +107,7 @@ export const polish = {
   InventoryItemInspect: /* csgo_polish.txt */"Zbadaj",
   InventoryItemInspectFinishCatalog: /* csgo_polish.txt */"Nr w katalogu wykończenia",
   InventoryItemInspectInGame: /* csgo_polish.txt */"Zbadaj w grze...",
-  InventoryItemInspectPatternTemplate: /* csgo_polish.txt */"Wzór szablonu",
+  InventoryItemInspectPatternTemplate: /* csgo_polish.txt */"Szablon wzoru",
   InventoryItemInspectWearRating: /* csgo_polish.txt */"Współczynnik zużycia",
   InventoryItemMVPStatTrakCount: /* csgo_polish.txt */"Turniejowe MVP (StatTrak™):",
   InventoryItemNew: /* csgo_polish.txt */"Nowe!",

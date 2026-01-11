@@ -82,7 +82,7 @@ export const swedish = {
   InventoryFilterGraphicArt: /* csgo_swedish.txt */"GRAFIK",
   InventoryFilterMedals: /* csgo_swedish.txt */"Medaljer",
   InventoryFilterMelee: /* csgo_swedish.txt */"Närstrid",
-  InventoryFilterMidTier: /* csgo_swedish.txt */"Mid-Tier",
+  InventoryFilterMidTier: /* csgo_swedish.txt */"Mellanvapen",
   InventoryFilterMisc: /* csgo_swedish.txt */"Övrigt",
   InventoryFilterMusicKits: /* csgo_swedish.txt */"Musikpaket",
   InventoryFilterNewest: /* csgo_swedish.txt */"Nyaste",

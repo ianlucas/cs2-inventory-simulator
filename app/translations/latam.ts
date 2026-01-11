@@ -19,7 +19,7 @@ export const latam = {
   CaseContainsOne: /* csgo_latam.txt */"Contiene uno de los siguientes objetos:",
   CaseNeed: /* csgo_latam.txt */"Esta acción requiere un/a",
   CaseOnceWarn: /* csgo_latam.txt */"Este contenedor solo se puede abrir una vez",
-  CaseRareItem: /* csgo_latam.txt */"★ Objeto especial raro ★",
+  CaseRareItem: /* csgo_latam.txt */"★ Artículo especial raro ★",
   CaseUnlock: /* csgo_latam.txt */"Abrir",
   CaseUnlockContainer: /* csgo_latam.txt */"Abrir contenedor",
   CaseUse: /* csgo_latam.txt */"Utilizar",
