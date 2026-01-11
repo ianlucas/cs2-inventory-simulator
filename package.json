@@ -48,8 +48,8 @@
   "devDependencies": {
     "@react-router/dev": "^7.12.0",
     "@tailwindcss/postcss": "^4.1.18",
-    "@types/node": "^22.19.3",
-    "@types/react": "^19.2.7",
+    "@types/node": "^22.19.5",
+    "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
     "happy-dom": "^20.1.0",
     "prettier": "^3.7.4",
