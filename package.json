@@ -23,19 +23,19 @@
     "@ianlucas/cs2-lib": "^7.18.0",
     "@ianlucas/cs2-lib-inspect": "^5.0.0",
     "@ianlucas/remix-auth-steam": "^6.1.0",
-    "@prisma/adapter-pg": "^7.2.0",
-    "@prisma/client": "^7.2.0",
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
     "@react-router/fs-routes": "^7.12.0",
     "@react-router/node": "^7.12.0",
     "@react-router/serve": "^7.12.0",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
-    "country-flag-icons": "^1.6.4",
+    "country-flag-icons": "^1.6.7",
     "dotenv": "^17.2.3",
     "hash-object": "^5.0.1",
     "isbot": "^5.1.33",
     "lz-string": "^1.5.0",
-    "prisma": "^7.2.0",
+    "prisma": "^7.3.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router": "^7.12.0",
@@ -43,7 +43,7 @@
     "remix-utils": "^9.0.0",
     "steamapi": "^3.1.4",
     "tsx": "^4.21.0",
-    "zod": "^4.3.5"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@react-router/dev": "^7.12.0",
@@ -51,15 +51,15 @@
     "@types/node": "^22.19.7",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
-    "happy-dom": "^20.3.4",
-    "prettier": "^3.8.0",
+    "happy-dom": "^20.3.6",
+    "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.1.18",
     "terser": "^5.46.0",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^6.0.4",
-    "vitest": "^4.0.17"
+    "vitest": "^4.0.18"
   },
   "engines": {
     "node": ">=20.0.0"
