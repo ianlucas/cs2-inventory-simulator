@@ -9,5 +9,15 @@ import type { Route } from "./+types/$";
 
 export async function loader({ request }: Route.LoaderArgs) {
   await middleware(request);
+  const url = new URL(request.url);
+  if (url.pathname.startsWith("/assets")) {
+    return new Response(null, {
+      status: 404,
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        "CDN-Cache-Control": "no-store"
+      }
+    });
+  }
   return redirect("/");
 }
