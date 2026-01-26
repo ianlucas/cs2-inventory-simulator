@@ -50,7 +50,7 @@
     "@types/node": "^22.19.7",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
-    "happy-dom": "^20.3.7",
+    "happy-dom": "^20.3.9",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.1.18",
