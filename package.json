@@ -18,7 +18,7 @@
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
     "@fortawesome/free-regular-svg-icons": "^7.1.0",
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
-    "@fortawesome/react-fontawesome": "^3.1.1",
+    "@fortawesome/react-fontawesome": "^3.2.0",
     "@ianlucas/cs2-lib": "^7.20.0",
     "@ianlucas/cs2-lib-inspect": "^5.0.0",
     "@ianlucas/remix-auth-steam": "^6.1.0",
