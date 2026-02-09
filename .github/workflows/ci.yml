@@ -1,0 +1,137 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "docs/**"
+  pull_request:
+    paths-ignore:
+      - "docs/**"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish"
+        required: true
+      draft:
+        description: "Draft release"
+        type: boolean
+        default: false
+      prerelease:
+        description: "Pre-release"
+        type: boolean
+        default: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install
+        run: npm ci
+
+      - name: Generate Prisma Types
+        run: npx prisma generate
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Cleanup
+        if: inputs.version
+        run: rm -rf build node_modules
+
+      - name: Set up Docker Buildx
+        if: inputs.version
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        if: inputs.version
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        if: inputs.version
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            # Set version tag from release
+            type=semver,pattern={{version}},value=${{ inputs.version }}
+            # Set 'latest' for regular releases, 'next' for pre-releases
+            type=raw,value=latest,enable=${{ !inputs.prerelease }}
+            type=raw,value=next,enable=${{ inputs.prerelease }}
+
+      - name: Build and push Docker image
+        if: inputs.version
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            SOURCE_COMMIT=${{ github.sha }}
+
+      - name: Generate Changelog
+        if: inputs.version
+        run: |
+          git log --reverse $(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || git rev-list --max-parents=0 HEAD)..HEAD --pretty=format:"* %s (%h)" > CHANGELOG.md
+        continue-on-error: true
+
+      - name: Create Release
+        if: inputs.version
+        run: |
+          FLAGS=""
+          if [ "${{ inputs.draft }}" = "true" ]; then FLAGS="$FLAGS --draft"; fi
+          if [ "${{ inputs.prerelease }}" = "true" ]; then FLAGS="$FLAGS --prerelease"; fi
+          gh release create "v${{ inputs.version }}" $FLAGS --title "v${{ inputs.version }}" --notes-file CHANGELOG.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  cleanup-old-images:
+    if: inputs.version
+    runs-on: ubuntu-latest
+    needs: ci
+    permissions:
+      packages: write
+
+    steps:
+      - name: Delete old package versions
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ github.repository }}
+          package-type: container
+          min-versions-to-keep: 16
+          delete-only-untagged-versions: false
+          ignore-versions: "^(latest|next)$"

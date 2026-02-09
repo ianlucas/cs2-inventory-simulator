@@ -1,6 +1,7 @@
-name: dependencies
+name: Dependencies
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
 
@@ -9,14 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 20.x
+          node-version: "24"
           registry-url: "https://registry.npmjs.org"
-          cache: "npm"
 
       - name: Determine update type
         id: update_type
@@ -34,9 +34,9 @@ jobs:
         id: upgrade
         run: |
           if [ "${{ steps.update_type.outputs.target }}" == "major" ]; then
-            npx npm-check-updates@latest --target latest --reject @types/node -u
+            NCU_JSON=$(npx npm-check-updates@latest --target latest --reject @types/node -u --jsonUpgraded 2>/dev/null)
           else
-            npx npm-check-updates@latest --target minor -u
+            NCU_JSON=$(npx npm-check-updates@latest --target minor -u --jsonUpgraded 2>/dev/null)
           fi
 
           if [ -z "$(git status --porcelain)" ]; then
@@ -44,9 +44,21 @@ jobs:
             echo "has_changes=false" >> $GITHUB_OUTPUT
             exit 0
           fi
+
+          TITLE=$(echo "$NCU_JSON" | node -e "
+            const json = require('fs').readFileSync('/dev/stdin', 'utf8');
+            const deps = JSON.parse(json);
+            const entries = Object.entries(deps).map(([k, v]) => '\`' + k + '@' + v.replace(/[\^~]/, '') + '\`');
+            const max = 5;
+            let title = 'Bump ' + entries.slice(0, max).join(', ');
+            if (entries.length > max) title += ' and ' + (entries.length - max) + ' more';
+            process.stdout.write(title);
+          ")
+
           rm package-lock.json
           npm install
           echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
 
       - name: Configure Git
         if: steps.upgrade.outputs.has_changes == 'true'
@@ -54,27 +66,33 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
 
+      - name: Handle existing branch
+        if: steps.upgrade.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
+        run: |
+          if git ls-remote --exit-code --heads origin update-dependencies > /dev/null 2>&1; then
+            gh pr close update-dependencies --delete-branch || true
+          fi
+
       - name: Commit and push changes
         if: steps.upgrade.outputs.has_changes == 'true'
-        id: commit_main
+        env:
+          TITLE: ${{ steps.upgrade.outputs.title }}
         run: |
-          BRANCH_NAME="chore/update-dependencies-$(date +%s)"
-          git checkout -b "$BRANCH_NAME"
+          git checkout -b update-dependencies
           git add .
-          git commit -m "chore: update dependencies"
-          git push origin "$BRANCH_NAME"
-
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
-          echo "Committed changes to branch $BRANCH_NAME" >> $GITHUB_STEP_SUMMARY
+          git commit -m "$TITLE"
+          git push origin update-dependencies
 
       - name: Create pull request
         if: steps.upgrade.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.REPO_TOKEN }}
+          TITLE: ${{ steps.upgrade.outputs.title }}
         run: |
           gh pr create \
             --base main \
-            --head "${{ steps.commit_main.outputs.branch_name }}" \
-            --title "chore: update dependencies" \
-            --body "Dependencies ${{ steps.update_type.outputs.description }} upgrade" \
-            --fill
+            --head update-dependencies \
+            --title "$TITLE" \
+            --body "Dependencies ${{ steps.update_type.outputs.description }} upgrade"
