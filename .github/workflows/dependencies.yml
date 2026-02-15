@@ -49,7 +49,7 @@ jobs:
             const json = require('fs').readFileSync('/dev/stdin', 'utf8');
             const deps = JSON.parse(json);
             const entries = Object.entries(deps).map(([k, v]) => '\`' + k + '@' + v.replace(/[\^~]/, '') + '\`');
-            const max = 5;
+            const max = 2;
             let title = 'Bump ' + entries.slice(0, max).join(', ');
             if (entries.length > max) title += ' and ' + (entries.length - max) + ' more';
             process.stdout.write(title);
