@@ -79,13 +79,15 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
   }
   return CS2Economy.filterItems({
     free: true
-  }).map((item, index) => ({
-    equipped: [],
-    item: createFakeInventoryItem(item, {
+  })
+    .filter((item) => item.type !== CS2ItemType.Utility)
+    .map((item, index) => ({
+      equipped: [],
+      item: createFakeInventoryItem(item, {
+        uid: -1 * (index + 1)
+      }),
       uid: -1 * (index + 1)
-    }),
-    uid: -1 * (index + 1)
-  }));
+    }));
 }
 
 export function getInventoryItemShareUrl(
