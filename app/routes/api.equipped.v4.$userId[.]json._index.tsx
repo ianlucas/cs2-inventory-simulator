@@ -50,7 +50,6 @@ export const loader = api(
           }
         );
       },
-      mimeType: "application/json",
       throwBody: {},
       url: ApiEquippedV4UserIdJsonUrl,
       userId

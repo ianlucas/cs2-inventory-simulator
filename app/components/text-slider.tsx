@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ElementRef, useEffect, useRef } from "react";
+import { ComponentRef, useEffect, useRef } from "react";
 
 export function TextSlider({
   className,
@@ -12,8 +12,8 @@ export function TextSlider({
   className?: string;
   text: string;
 }) {
-  const wrapperElement = useRef<ElementRef<"div">>(null);
-  const textElement = useRef<ElementRef<"div">>(null);
+  const wrapperElement = useRef<ComponentRef<"div">>(null);
+  const textElement = useRef<ComponentRef<"div">>(null);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
@@ -36,7 +36,7 @@ export function TextSlider({
           frame++;
           break;
 
-        case 1:
+        case 1: {
           duration = text.length * 50; // 50 ms per letter.
           const translation = -(textWidth - wrapperWidth);
           textElement.current.style.transitionProperty = "transform";
@@ -44,6 +44,7 @@ export function TextSlider({
           textElement.current.style.transform = `translateX(${translation}px)`;
           frame++;
           break;
+        }
 
         case 2:
           duration = 400;

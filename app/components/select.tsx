@@ -5,6 +5,7 @@
 
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ensure } from "@ianlucas/cs2-lib";
 import { useClickAway } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { ReactNode, useState } from "react";
@@ -33,10 +34,10 @@ export function Select<T extends { value: string }>({
   children ??= ({ value }) => value;
   direction ??= "down";
   const [isOpen, setIsOpen] = useState(false);
-  const ref = useClickAway(() => {
+  const ref = useClickAway<HTMLDivElement>(() => {
     setIsOpen(false);
   });
-  const selected = options.find((option) => option.value === value)!;
+  const selected = ensure(options.find((option) => option.value === value));
 
   return (
     <div className="relative">
@@ -48,7 +49,7 @@ export function Select<T extends { value: string }>({
               ? "rounded-t"
               : "rounded-b"
             : "rounded-sm",
-          className ?? "min-w-[253px]"
+          className ?? "min-w-63.25"
         )}
         onClick={() => setIsOpen(true)}
       >
@@ -67,11 +68,11 @@ export function Select<T extends { value: string }>({
                 : "rounded-t"
               : undefined,
             direction === "up" && "bottom-full",
-            className ?? "min-w-[253px]",
-            !noMaxHeight && "max-h-[128px] overflow-y-scroll",
+            className ?? "min-w-63.25",
+            !noMaxHeight && "max-h-32 overflow-y-scroll",
             optionsStyles
           )}
-          ref={ref as any}
+          ref={ref}
         >
           {options.map((option) => {
             return (

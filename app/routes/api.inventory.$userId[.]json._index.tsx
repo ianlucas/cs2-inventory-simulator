@@ -18,7 +18,6 @@ export const loader = api(
       generate(inventory) {
         return inventory;
       },
-      mimeType: "application/json",
       throwBody: [],
       url: ApiInventoryUserIdUrl,
       userId

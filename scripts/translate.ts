@@ -33,7 +33,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   ApplyPatchWarn: "SFUI_InvUse_Warning_use_can_stick_patch",
   ApplyStickerCancel: "Cancel_Button",
   ApplyStickerUse: "popup_can_stick_title_sticker",
-  ApplyStickerUseOn: { token: "popup_can_stick_desc", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}\<\/b>/, '') },
+  ApplyStickerUseOn: { token: "popup_can_stick_desc", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}<\/b>/, '') },
   ApplyStickerWarn: "SFUI_InvUse_Warning_use_can_stick_sticker",
   CaseAdd: "Button_Add",
   CaseClose: "GameUI_Close",
@@ -212,7 +212,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   RemovePatchRemove: "SFUI_InvContextMenu_can_stick_Wear_full_patch",
   RemovePatchRemoveDesc: "SFUI_Patch_Remove_Desc",
   RemovePatchUse: "SFUI_Patch_Remove",
-  RemovePatchWarn: { token: "popup_can_stick_scrape_full_patch", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}\<\/b>/, '') },
+  RemovePatchWarn: { token: "popup_can_stick_scrape_full_patch", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}<\/b>/, '') },
   RenameCancel: "Cancel_Button",
   RenameEnterName: { token: "popup_nameable_desc", transform: (value) => replace(value, '<b>{s:itemname}</b>', '') },
   RenameRename: { token: "RT_Rn_A", transform: (value) => replace(value, '%s1', '') },
@@ -229,14 +229,14 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   ScrapeStickerRemove: "SFUI_InvContextMenu_can_stick_Wear_full_sticker",
   ScrapeStickerRemoveDesc: "SFUI_Sticker_Remove_Desc",
   ScrapeStickerUse: "SFUI_InvContextMenu_can_stick_Wear_sticker",
-  ScrapeStickerWarn: { token: "popup_can_stick_scrape_sticker", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}\<\/b>/, '') },
+  ScrapeStickerWarn: { token: "popup_can_stick_scrape_sticker", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}<\/b>/, '') },
   SettingsMasterVolume: "SFUI_Settings_Master_Volume",
   StickerPickerRemove: "Button_Remove",
 };
 
 assert(CS2_CSGO_PATH, "CS2_CSGO_PATH must be set.");
 const CS2_RESOURCE_PATH = resolve(CS2_CSGO_PATH, "resource");
-const LANGUAGE_FILE_RE = /csgo_([^\._]+)\.txt$/;
+const LANGUAGE_FILE_RE = /csgo_([^._]+)\.txt$/;
 
 function readCsgoLanguage(include?: string[]) {
   const languages = {} as Record<string, Record<string, string>>;

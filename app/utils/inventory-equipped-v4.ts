@@ -115,7 +115,7 @@ export async function generate(
             wear: item.getWear()
           });
           break;
-        case CS2ItemType.Weapon:
+        case CS2ItemType.Weapon: {
           assert(data.def);
           const weapon = team === CS2Team.CT ? ctWeapons : tWeapons;
           weapon[data.def] = hash({
@@ -136,6 +136,7 @@ export async function generate(
             wear: item.getWear()
           });
           break;
+        }
         case CS2ItemType.Agent:
           assert(team);
           agents[team] = hash({

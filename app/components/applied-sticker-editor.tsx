@@ -80,7 +80,6 @@ export function AppliedStickerEditor({
   const [copied, triggerCopied] = useTimedState();
 
   const attributes = useKeyValues(value);
-  const isDisabled = false;
   const canPreviewItem =
     slot !== undefined && forItem !== undefined && stickers !== undefined;
 

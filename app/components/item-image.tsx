@@ -10,7 +10,7 @@ import { isServerContext } from "~/globals";
 import { noop } from "~/utils/misc";
 import { FillSpinner } from "./fill-spinner";
 
-let cached: string[] = [];
+const cached: string[] = [];
 
 export function ItemImage({
   className,

@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { ensure } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
@@ -29,13 +30,13 @@ export function useSwapItemsStatTrak() {
     const selectedItem = inventory.get(uid);
     if (swapItemsStatTrak?.fromUid !== undefined) {
       setSwapItemsStatTrak((existing) => ({
-        ...existing!,
+        ...ensure(existing),
         toUid: uid
       }));
-    } else {
+    } else if (itemSelector !== undefined) {
       setSwapItemsStatTrak({
         fromUid: uid,
-        toolUid: itemSelector!.uid
+        toolUid: itemSelector.uid
       });
       setItemSelector({
         uid: uid,

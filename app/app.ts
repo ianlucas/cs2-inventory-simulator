@@ -14,6 +14,6 @@ export function dispatchAppEvent(
   name: "unlockcase",
   payload: UnlockCaseEventData
 ): void;
-export function dispatchAppEvent(name: string, payload: any) {
+export function dispatchAppEvent(name: string, payload: unknown) {
   app.dispatchEvent(new CustomEvent(name, { detail: payload }));
 }

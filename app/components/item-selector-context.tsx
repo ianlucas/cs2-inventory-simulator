@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { ensure } from "@ianlucas/cs2-lib";
 import {
   Dispatch,
   ReactNode,
@@ -36,10 +37,13 @@ const ItemSelectorContext = createContext<{
   setItemSelector: Dispatch<
     SetStateAction<ItemSelectorContextProps | undefined>
   >;
-}>(null!);
+} | null>(null);
 
 export function useItemSelectorContext() {
-  return useContext(ItemSelectorContext);
+  return ensure(
+    useContext(ItemSelectorContext),
+    "Item selector context is not available."
+  );
 }
 
 export function useItemSelector() {

@@ -46,6 +46,7 @@ const splash = {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 window.InventorySimulator ??= {} as any;
 if (window.InventorySimulator.splash === undefined) {
   window.InventorySimulator.splash = splash;

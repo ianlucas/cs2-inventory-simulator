@@ -10,7 +10,7 @@ import { english } from "@ianlucas/cs2-lib/translations";
 import { createReadableStreamFromReadable } from "@react-router/node";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
-import type { AppLoadContext, EntryContext } from "react-router";
+import type { EntryContext } from "react-router";
 import { ServerRouter } from "react-router";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule";
@@ -28,8 +28,7 @@ export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  reactRouterContext: EntryContext,
-  _: AppLoadContext
+  reactRouterContext: EntryContext
 ) {
   return isbot(request.headers.get("user-agent"))
     ? handleBotRequest(

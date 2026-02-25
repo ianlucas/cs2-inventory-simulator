@@ -13,28 +13,28 @@ import { getUserInventory, getUserSyncedAt } from "./user.server";
 export async function handleUserCachedResponse({
   args,
   generate,
-  mimeType,
   throwBody,
   url,
   userId
 }: {
   args: string | null;
   generate:
-    | ((inventory: CS2InventoryData, userId: string) => any)
-    | ((inventory: CS2InventoryData, userId: string) => Promise<any>);
-  throwBody: any;
-  mimeType: string;
+    | ((inventory: CS2InventoryData, userId: string) => unknown)
+    | ((inventory: CS2InventoryData, userId: string) => Promise<unknown>);
+  throwBody: object | string;
   url: string;
   userId: string;
 }) {
+  const mimeType =
+    typeof throwBody === "string" ? "text/html" : "application/json";
   const user = await prisma.user.findFirst({
     select: { id: true },
     where: { id: userId }
   });
   if (user === null) {
-    throw mimeType === "application/json"
-      ? Response.json(throwBody)
-      : res(throwBody, mimeType);
+    throw typeof throwBody === "string"
+      ? res(throwBody, mimeType)
+      : Response.json(throwBody);
   }
   const timestamp = await getUserSyncedAt(userId);
   const cache = await prisma.userCache.findFirst({
@@ -51,9 +51,9 @@ export async function handleUserCachedResponse({
   }
   const inventory = parseInventory(await getUserInventory(userId));
   if (!inventory) {
-    throw mimeType === "application/json"
-      ? Response.json(throwBody)
-      : res(throwBody, mimeType);
+    throw typeof throwBody === "string"
+      ? res(throwBody, mimeType)
+      : Response.json(throwBody);
   }
   const generated = await generate(inventory, userId);
   const body =

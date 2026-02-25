@@ -26,10 +26,12 @@ export function useRenameItem() {
   }
 
   function handleRenameItemSelect(uid: number) {
-    return setRenameItem({
-      targetUid: uid,
-      toolUid: itemSelector!.uid
-    });
+    if (itemSelector !== undefined) {
+      return setRenameItem({
+        targetUid: uid,
+        toolUid: itemSelector.uid
+      });
+    }
   }
 
   function closeRenameItem() {
