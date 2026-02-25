@@ -29,9 +29,12 @@ export function dispatchSyncError() {
 }
 
 async function doSync() {
-  let actions = [] as typeof sync.queue;
+  const actions = [] as typeof sync.queue;
   while (sync.queue[0]) {
-    actions.push(sync.queue.shift()!);
+    const action = sync.queue.shift();
+    if (action !== undefined) {
+      actions.push(action);
+    }
   }
   sync.dispatchEvent(new Event("syncstart"));
   if (actions.length > 0) {

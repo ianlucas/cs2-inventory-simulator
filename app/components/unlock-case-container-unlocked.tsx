@@ -59,14 +59,14 @@ export function UnlockCaseContainerUnlocked({
           <span>{nameItemString(caseItem)}</span>
         </div>
         <ItemImage
-          className="m-auto my-4 max-w-[512px] [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
+          className="m-auto my-4 max-w-lg [transition:all_cubic-bezier(0.4,0,0.2,1)_250ms]"
           item={item}
           style={{ transform: `scale(${revealScale})` }}
           onLoad={handleLoad}
           wear={attributes.wear}
         />
         <UseItemFooter
-          className="lg:min-w-[1024px]"
+          className="lg:min-w-5xl"
           left={
             <div className="flex items-center gap-8">
               <UnlockCaseAttribute

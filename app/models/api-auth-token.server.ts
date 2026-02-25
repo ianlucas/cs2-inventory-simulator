@@ -43,15 +43,14 @@ export async function clearExpiredAuthTokens(userId: string) {
 }
 
 export async function getAuthTokenDetails(token: string) {
-  const authToken = await prisma.apiAuthToken.findFirst({
+  const details = await prisma.apiAuthToken.findFirst({
     select: { userId: true, createdAt: true },
     where: { token }
   });
   return {
-    exists: authToken !== null,
-    userId: authToken?.userId!,
+    details,
     valid:
-      authToken?.createdAt !== undefined &&
-      authToken.createdAt.getTime() > Date.now() - 60000
+      details?.createdAt !== undefined &&
+      details.createdAt.getTime() > Date.now() - 60000
   };
 }

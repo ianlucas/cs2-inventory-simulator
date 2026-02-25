@@ -15,14 +15,12 @@ import {
 import { steamApiKey } from "./models/rule.server";
 import { upsertUser } from "./models/user.server";
 
-namespace ApiStrategy {
-  export type VerifyOptions = {
-    request: Request;
-    userId: string;
-  };
-}
+type ApiStrategyVerifyOptions = {
+  request: Request;
+  userId: string;
+};
 
-export class ApiStrategy extends Strategy<string, ApiStrategy.VerifyOptions> {
+export class ApiStrategy extends Strategy<string, ApiStrategyVerifyOptions> {
   name = "api";
 
   constructor() {
@@ -39,19 +37,15 @@ export class ApiStrategy extends Strategy<string, ApiStrategy.VerifyOptions> {
   async authenticate(request: Request) {
     const url = new URL(request.url);
     const token = z.string().parse(url.searchParams.get("token"));
-    const { exists, userId, valid } = await getAuthTokenDetails(token);
-
-    if (!exists) {
+    const { details, valid } = await getAuthTokenDetails(token);
+    if (!details) {
       fail("Invalid token.");
     }
-
     if (!valid) {
-      await clearExpiredAuthTokens(userId);
+      await clearExpiredAuthTokens(details.userId);
       fail("Expired token.");
     }
-
-    await clearAuthTokens(userId);
-
-    return await this.verify({ userId, request });
+    await clearAuthTokens(details.userId);
+    return await this.verify({ userId: details.userId, request });
   }
 }

@@ -3,12 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { ReactNode } from "react";
+
 export function UnlockCaseAttribute({
   label,
   value
 }: {
   label: string;
-  value?: any;
+  value?: ReactNode;
 }) {
   return value !== undefined ? (
     <div>

@@ -23,7 +23,7 @@ export function EditorStepRangeWithInput({
   randomizable,
   step,
   stepRangeStyles,
-  transform,
+  transform = String,
   type,
   validate,
   value
@@ -43,7 +43,6 @@ export function EditorStepRangeWithInput({
   validate: (value: number) => boolean;
   value: number;
 }) {
-  transform = transform !== undefined ? transform : String;
   const [text, setText] = useState(transform(value));
   const translate = useTranslate();
 
@@ -59,18 +58,18 @@ export function EditorStepRangeWithInput({
 
   function handleTextBlur() {
     if (!text || !validate(Number(text))) {
-      setText(transform!(value));
+      setText(transform(value));
     }
   }
 
   function handleChange(value: number) {
     onChange(value);
-    setText(transform!(value));
+    setText(transform(value));
   }
 
   function handleRandomClick() {
     const value = type === "int" ? randomInt(min, max) : randomFloat(min, max);
-    handleChange(Number(transform!(value)));
+    handleChange(Number(transform(value)));
   }
 
   return (

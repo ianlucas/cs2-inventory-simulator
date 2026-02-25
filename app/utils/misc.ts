@@ -11,7 +11,7 @@ export function random<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-export function safeParseJson(json: string): any {
+export function safeParseJson(json: string) {
   try {
     return JSON.parse(json);
   } catch {
@@ -19,10 +19,10 @@ export function safeParseJson(json: string): any {
   }
 }
 
-export function deleteEmptyProps(obj: any) {
+export function deleteEmptyProps<T extends object>(obj: T) {
   for (const key of Object.keys(obj)) {
-    if (obj[key] === undefined) {
-      delete obj[key];
+    if (obj[key as keyof T] === undefined) {
+      delete obj[key as keyof T];
     }
   }
 }
@@ -58,7 +58,7 @@ export function nonEmptyString(value: string | undefined) {
     : undefined;
 }
 
-export function hasKeys(obj: Record<any, any>) {
+export function hasKeys(obj: object) {
   return Object.keys(obj).length > 0;
 }
 

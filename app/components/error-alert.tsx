@@ -19,12 +19,14 @@ export function ErrorAlert() {
   }
 
   useEffect(() => {
-    const errorKey = searchParams.get("error");
+    const errorKey = searchParams.get("error") as
+      | "FailedToAuth"
+      | "FailedToValidate";
     if (errorKey !== null) {
       searchParams.delete("error");
       setError({
-        title: translate(`ErrorAlert${errorKey}Title` as any),
-        body: translate(`ErrorAlert${errorKey}` as any)
+        title: translate(`ErrorAlert${errorKey}Title`),
+        body: translate(`ErrorAlert${errorKey}`)
       });
       setSearchParams(new URLSearchParams(searchParams));
     }
@@ -35,7 +37,7 @@ export function ErrorAlert() {
   }
 
   return (
-    <Modal className="w-[550px]" fixed>
+    <Modal className="w-137.5" fixed>
       <ModalHeader title={error.title} />
       <p className="mt-2 px-4 text-sm">{error.body}</p>
       <div className="my-6 flex justify-center px-4">

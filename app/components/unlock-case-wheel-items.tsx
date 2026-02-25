@@ -20,15 +20,15 @@ export const UnlockCaseWheelItems = forwardRef(function Items(
     items: CS2UnlockedItem[];
     translateX: number;
   },
-  ref: ForwardedRef<Element>
+  ref: ForwardedRef<HTMLDivElement>
 ) {
   return (
     <div
       className={clsx(
-        "h-[192px] whitespace-nowrap",
+        "h-48 whitespace-nowrap",
         !instant && "[transition:all_6s_cubic-bezier(0,0.11,0.33,1)_0s]"
       )}
-      ref={ref as any}
+      ref={ref}
       style={{ transform: `translate(${translateX}px, 0)` }}
     >
       {items.map((item, index) => (

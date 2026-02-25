@@ -64,7 +64,7 @@ export async function setupRules() {
   );
 }
 
-export async function getRules<T extends Record<string, Rule<any, any>>>(
+export async function getRules<T extends Record<string, Rule<string, unknown>>>(
   rules: T,
   userId?: string
 ): Promise<{

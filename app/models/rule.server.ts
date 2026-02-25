@@ -28,7 +28,7 @@ class RuleFor<RuleValue> {
 }
 
 export class Rule<RuleName extends string, RuleValue> {
-  static instances: Rule<any, any>[] = [];
+  static instances: Rule<string, unknown>[] = [];
   public defaultValue: RuleValue;
   private type: RuleValue extends string
     ? "string"
@@ -131,17 +131,19 @@ export class Rule<RuleName extends string, RuleValue> {
         assert(strValue === "true" || strValue === "false");
         break;
 
-      case "string-array":
+      case "string-array": {
         const transform = z.array(z.string()).safeParse(value);
         assert(transform.success);
         strValue = transform.data.join(";");
         break;
+      }
 
-      case "number-array":
-        const transform2 = z.array(z.number()).safeParse(value);
-        assert(transform2.success);
-        strValue = transform2.data.join(";");
+      case "number-array": {
+        const transform = z.array(z.number()).safeParse(value);
+        assert(transform.success);
+        strValue = transform.data.join(";");
         break;
+      }
     }
     prisma.rule
       .upsert({
@@ -168,12 +170,9 @@ export class Rule<RuleName extends string, RuleValue> {
 
   for(userId: string): RuleFor<RuleValue> {
     return new RuleFor(
-      new Promise(async (resolve) => {
-        const value =
-          (await this.getUserRuleOverwrite(userId)) ??
-          (await this.getUserGroupRuleOverwrite(userId));
-        resolve(value !== undefined ? this.toValue(value) : await this.get());
-      })
+      this.getUserRuleOverwrite(userId)
+        .then((v) => v ?? this.getUserGroupRuleOverwrite(userId))
+        .then((v) => (v !== undefined ? this.toValue(v) : this.get()))
     );
   }
 }

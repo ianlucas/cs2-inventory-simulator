@@ -12,10 +12,11 @@ function preventDefault(event: Event) {
   event.preventDefault();
 }
 
+// TODO Review the need of these error flags.
 function getSupportsPassive() {
   let supportsPassive = false;
   try {
-    // @ts-ignore
+    // @ts-expect-error Function signature.
     window.addEventListener(
       "test",
       null,
@@ -25,7 +26,7 @@ function getSupportsPassive() {
         }
       })
     );
-  } catch (e) {}
+  } catch (ex) {}
   return supportsPassive;
 }
 
@@ -49,9 +50,9 @@ function disableScroll() {
 function enableScroll() {
   const { wheelEvent, wheelOpt } = getWheelArgs();
   window.removeEventListener("DOMMouseScroll", preventDefault, false);
-  // @ts-ignore
+  // @ts-expect-error Function signature.
   window.removeEventListener(wheelEvent, preventDefault, wheelOpt);
-  // @ts-ignore
+  // @ts-expect-error Function signature.
   window.removeEventListener("touchmove", preventDefault, wheelOpt);
 }
 

@@ -18,8 +18,8 @@ export function useDetectCollision({
 }) {
   useEffect(() => {
     if (target.current && hits.current && !disabled) {
-      let lastCollisionId = "";
-      let idx: ReturnType<typeof setTimeout> = null!;
+      let lastCollisionId: string | null = null;
+      let idx: ReturnType<typeof setTimeout> | undefined = undefined;
       function check() {
         if (target.current && hits.current && !disabled) {
           const targetRect = target.current.getBoundingClientRect();
@@ -32,8 +32,9 @@ export function useDetectCollision({
               childRect.top < targetRect.bottom &&
               childRect.bottom > targetRect.top
             ) {
-              if (lastCollisionId !== child.getAttribute("data-id")) {
-                lastCollisionId = child.getAttribute("data-id")!;
+              const dataId = child.getAttribute("data-id");
+              if (lastCollisionId !== dataId) {
+                lastCollisionId = dataId;
                 then();
               }
             }

@@ -131,7 +131,7 @@ export async function generate(
             wear: item.getWear()
           };
           break;
-        case CS2ItemType.Weapon:
+        case CS2ItemType.Weapon: {
           assert(data.def);
           const weapon = team === CS2Team.CT ? ctWeapons : tWeapons;
           weapon[data.def] = {
@@ -153,6 +153,7 @@ export async function generate(
             wear: item.getWear()
           };
           break;
+        }
         case CS2ItemType.Agent:
           assert(team);
           assert(data.model);
@@ -162,7 +163,7 @@ export async function generate(
             model: data.model,
             patches: data
               .allPatches()
-              .map(([_, patch]) =>
+              .map(([, patch]) =>
                 patch !== undefined ? (CS2Economy.getById(patch).index ?? 0) : 0
               ),
             vofallback: data.voFallback ?? false,

@@ -3,7 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2Inventory, CS2InventorySpec } from "@ianlucas/cs2-lib";
+import {
+  CS2Economy,
+  CS2Inventory,
+  CS2InventorySpec,
+  ensure
+} from "@ianlucas/cs2-lib";
 import {
   ContextType,
   ReactNode,
@@ -34,17 +39,21 @@ import { SerializeFrom } from "~/utils/misc";
 import { cacheAuthenticatedUserId } from "~/utils/user-cached-data";
 
 const AppContext = createContext<
-  {
-    inventory: CS2Inventory;
-    inventoryFilter: ReturnType<typeof useInventoryFilterState>;
-    items: TransformedInventoryItems;
-    setInventory: (value: CS2Inventory) => void;
-    translation: ReturnType<typeof useTranslation>;
-  } & SerializeFrom<typeof loader>
->(null!);
+  | ({
+      inventory: CS2Inventory;
+      inventoryFilter: ReturnType<typeof useInventoryFilterState>;
+      items: TransformedInventoryItems;
+      setInventory: (value: CS2Inventory) => void;
+      translation: ReturnType<typeof useTranslation>;
+    } & SerializeFrom<typeof loader>)
+  | null
+>(null);
 
 export function useAppContext() {
-  return useContext(AppContext);
+  return ensure(
+    useContext(AppContext),
+    "Application context is not available."
+  );
 }
 
 export function useTranslate() {
@@ -82,7 +91,7 @@ export function AppProvider({
   rules,
   user
 }: Omit<
-  ContextType<typeof AppContext>,
+  NonNullable<ContextType<typeof AppContext>>,
   "inventory" | "inventoryFilter" | "items" | "translation" | "setInventory"
 > & {
   children: ReactNode;

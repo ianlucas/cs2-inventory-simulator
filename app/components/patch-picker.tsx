@@ -115,7 +115,7 @@ export function PatchPicker({
           );
         })}
       </div>
-      <Modal className="w-[540px] pb-1" hidden={activeIndex === undefined} blur>
+      <Modal className="w-135 pb-1" hidden={activeIndex === undefined} blur>
         <ModalHeader
           title={translate("PatchPickerHeader")}
           onClose={handleCloseModal}

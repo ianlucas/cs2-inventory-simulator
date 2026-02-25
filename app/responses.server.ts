@@ -27,7 +27,7 @@ export const conflict = new Response(null, {
   status: 409
 });
 
-export function res(body: string, mimeType: string) {
+export function res(body: BodyInit | null | undefined, mimeType: string) {
   return new Response(body, {
     headers: { "Content-Type": mimeType }
   });

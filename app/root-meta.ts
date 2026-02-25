@@ -10,7 +10,7 @@ import { getSystemTranslation } from "./utils/translation";
 
 export function getMetaTitle(
   key?: string
-): MetaFunction<any, { root: typeof rootLoader }> {
+): MetaFunction<unknown, { root: typeof rootLoader }> {
   return function meta({ matches }) {
     const rootData = matches.find((match) => match.id === "root");
     const appName = rootData?.data?.rules.appName || DEFAULT_APP_NAME;

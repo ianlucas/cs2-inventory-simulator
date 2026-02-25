@@ -5,7 +5,7 @@
 
 import { ChangeEvent, useState } from "react";
 
-export function useKeyValues<T extends {}>(initialState: T) {
+export function useKeyValues<T extends object>(initialState: T) {
   const [value, setValue] = useState(initialState);
   return {
     value,

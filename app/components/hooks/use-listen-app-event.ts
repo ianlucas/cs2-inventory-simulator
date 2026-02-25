@@ -10,9 +10,9 @@ export function useListenAppEvent(
   name: "unlockcase",
   callback: (payload: UnlockCaseEventData) => void
 ): void;
-export function useListenAppEvent(
+export function useListenAppEvent<T extends object>(
   name: string,
-  callback: (payload: any) => void
+  callback: (payload: T) => void
 ) {
   function listener(event: Event) {
     callback((event as CustomEvent).detail);
