@@ -15,7 +15,7 @@ export function Overlay({
   isWrapperless?: boolean;
 }) {
   return (
-    <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/60 backdrop-blur-xs select-none">
+    <div className="fixed top-0 left-0 z-50 flex size-full  items-center justify-center bg-black/60 backdrop-blur-xs select-none">
       {isWrapperless ? children : <div className={className}>{children}</div>}
     </div>
   );

@@ -20,7 +20,7 @@ export function InventoryItemTooltipWear({ wear }: { wear: number }) {
       </div>
       <div className="relative h-1 w-[128px] bg-[linear-gradient(90deg,#3b818f_0,#3b818f_7%,#83b135_0,#83b135_15%,#d7be47_0,#d7be47_38%,#f08140_0,#f08140_45%,#ec4f3d_0,#ec4f3d)]">
         <div
-          className="absolute -top-0.5 h-1.5 w-[1px] bg-white"
+          className="absolute -top-0.5 h-1.5 w-px bg-white"
           style={{ left }}
         />
       </div>

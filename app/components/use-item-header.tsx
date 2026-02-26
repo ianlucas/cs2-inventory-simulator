@@ -20,7 +20,7 @@ export function UseItemHeader({
 }) {
   return (
     <div className="text-center drop-shadow-sm">
-      <div className="font-display text-3xl leading-10 font-medium tracking-wider">
+      <div className="font-display text-3xl/10  font-medium tracking-wider">
         {title}
       </div>
       {actionDesc !== undefined && (

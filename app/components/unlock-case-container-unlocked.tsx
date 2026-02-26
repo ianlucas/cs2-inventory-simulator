@@ -44,7 +44,7 @@ export function UnlockCaseContainerUnlocked({
   const item = CS2Economy.getById(id);
 
   return (
-    <div className="flex h-full w-full items-center justify-center text-center drop-shadow-sm">
+    <div className="flex size-full  items-center justify-center text-center drop-shadow-sm">
       <div>
         <div className="px-4 text-2xl">
           <span
