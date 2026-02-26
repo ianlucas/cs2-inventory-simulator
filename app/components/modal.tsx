@@ -43,7 +43,7 @@ export function Modal({
               hidden ? "hidden" : fixed ? "fixed" : "absolute",
               animate && "opacity-0",
               "top-0 left-0 z-50 flex min-h-full w-full items-center justify-center bg-linear-to-b from-black/15 to-transparent transition-opacity select-none",
-              blur && "bg-black/50 lg:bg-transparent lg:backdrop-blur-[2px]"
+              blur && "bg-black/50 lg:bg-transparent lg:backdrop-blur-0.5"
             )}
             ref={ref}
           >

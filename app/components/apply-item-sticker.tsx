@@ -76,14 +76,14 @@ export function ApplyItemSticker({
               title={translate("ApplyStickerUse")}
               warning={translate("ApplyStickerWarn")}
             />
-            <ItemImage className="m-auto max-w-[512px]" item={targetItem} />
+            <ItemImage className="m-auto max-w-128" item={targetItem} />
             <div className="flex items-center justify-center">
               {targetItem.allStickers().map(([xslot, sticker]) =>
                 xslot === 4 ? undefined : sticker !== undefined ||
                   xslot === slot ? (
                   <ItemImage
                     key={xslot}
-                    className="w-[168px]"
+                    className="w-42"
                     item={
                       sticker !== undefined
                         ? CS2Economy.getById(sticker.id)
@@ -93,7 +93,7 @@ export function ApplyItemSticker({
                 ) : (
                   <button
                     key={xslot}
-                    className="group flex h-[126px] w-[168px] items-center justify-center"
+                    className="group flex h-31.5 w-42 items-center justify-center"
                     onClick={() => {
                       setSlot(xslot);
                       playSound("sticker_apply");

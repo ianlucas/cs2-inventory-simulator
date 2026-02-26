@@ -80,11 +80,11 @@ export function RenameStorageUnit({
                   : translate("RenameStorageUnitNewNameWarn")
               }
             />
-            <ItemImage className="m-auto my-8 max-w-[512px]" item={item} />
+            <ItemImage className="m-auto my-8 max-w-128" item={item} />
             <div className="flex items-center justify-center gap-2 lg:m-auto lg:mb-4">
               <ToolInput
                 autoFocus
-                className="text-2xl lg:max-w-[428px]"
+                className="text-2xl lg:max-w-107"
                 maxLength={20}
                 onChange={setNameTag}
                 placeholder={translate("InventoryItemRenamePlaceholder")}

@@ -64,13 +64,13 @@ export function ApplyItemPatch({
               title={translate("ApplyPatchUse")}
               warning={translate("ApplyPatchWarn")}
             />
-            <ItemImage className="m-auto max-w-[512px]" item={targetItem} />
+            <ItemImage className="m-auto max-w-128" item={targetItem} />
             <div className="flex items-center justify-center">
               {targetItem.allPatches().map(([xslot, patchId]) =>
                 patchId !== undefined || xslot === slot ? (
                   <ItemImage
                     key={xslot}
-                    className="w-[168px]"
+                    className="w-42"
                     item={
                       patchId !== undefined
                         ? CS2Economy.getById(patchId)
@@ -80,7 +80,7 @@ export function ApplyItemPatch({
                 ) : (
                   <button
                     key={xslot}
-                    className="group flex h-[126px] w-[168px] items-center justify-center"
+                    className="group flex h-31.5 w-42 items-center justify-center"
                     onClick={() => {
                       setSlot(xslot);
                       playSound("buttonclick");

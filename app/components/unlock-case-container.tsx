@@ -69,7 +69,7 @@ export function UnlockCaseContainer({
             hideCaseContents={hideCaseContents}
           />
           <UseItemFooter
-            className="lg:max-w-[1024px]"
+            className="lg:max-w-256"
             left={
               keyItem !== undefined ? (
                 <div className="font-display flex items-center gap-2 text-lg">

@@ -208,7 +208,7 @@ export function StickerPicker({
         })}
       </div>
       <Modal
-        className="w-[540px] pb-1"
+        className="w-135 pb-1"
         hidden={activeIndex === undefined || isEditing}
         blur
       >
@@ -226,7 +226,7 @@ export function StickerPicker({
           />
           <IconSelect
             icon={faTag}
-            className="w-[168px]"
+            className="w-42"
             onChange={setCategory}
             options={categories}
             placeholder={translate("StickerPickerFilterPlaceholder")}
@@ -241,7 +241,7 @@ export function StickerPicker({
         <ItemBrowser items={filtered} onClick={handleSelectSticker} />
       </Modal>
       {selected !== undefined && (
-        <Modal className="w-[420px]">
+        <Modal className="w-105">
           <ModalHeader
             title={translate("EditorConfirmPick")}
             onClose={handleCloseSelectModal}

@@ -65,10 +65,10 @@ export function SwapItemsStatTrak({
             <div className="mt-16 flex items-center justify-center gap-10">
               {items.map(({ item, value }, index) => (
                 <div className="flex flex-col justify-center" key={index}>
-                  <ItemImage className="max-w-[256px]" item={item} />
+                  <ItemImage className="max-w-64" item={item} />
                   <div className="relative m-auto">
                     <img
-                      className="h-[128px]"
+                      className="h-32"
                       src="/images/stattrak-module.png"
                       draggable={false}
                     />

@@ -23,7 +23,7 @@ export function UnlockCaseWheelItem({
   return (
     <div
       data-id={index}
-      className="relative ml-4 inline-block h-[192px] w-[256px] first-of-type:ml-0"
+      className="relative ml-4 inline-block h-48 w-64 first-of-type:ml-0"
       style={{
         backgroundImage: `linear-gradient(180deg, #8a8a8a 0%, #8a8a8a 60%, ${item.rarity} 92%, #000 100%)`
       }}

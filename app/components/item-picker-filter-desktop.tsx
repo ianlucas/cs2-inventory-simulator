@@ -27,7 +27,7 @@ export function ItemPickerFilterDesktop({
   }
 
   return (
-    <div className="flex max-w-[220px] min-w-[168px]">
+    <div className="flex max-w-55 min-w-42">
       <div className="w-full rounded-tr rounded-br bg-black/10 pb-1.5">
         {categories.map((filter, index) => {
           const isActive =

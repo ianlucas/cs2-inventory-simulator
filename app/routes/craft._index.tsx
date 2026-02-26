@@ -171,7 +171,7 @@ export default function Craft() {
       {isCrafting && (
         <Modal
           className={clsx(
-            isDesktop ? "max-w-[720px] min-w-[640px]" : "w-[540px]"
+            isDesktop ? "max-w-180 min-w-160" : "w-135"
           )}
         >
           <ModalHeader title={translate("CraftSelectHeader")} linkTo="/" />
@@ -179,7 +179,7 @@ export default function Craft() {
         </Modal>
       )}
       {hasItem && (
-        <Modal className="w-[420px]">
+        <Modal className="w-105">
           <ModalHeader
             title={translate(
               isSharing ? "CraftSharedHeader" : "CraftConfirmHeader"

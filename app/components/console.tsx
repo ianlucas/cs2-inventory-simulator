@@ -169,7 +169,7 @@ export function Console() {
 
   return (
     <div
-      className="fixed top-2 left-2 z-9999 flex min-h-[240px] min-w-[360px] resize flex-col overflow-hidden rounded-xs border border-black/80 bg-neutral-950/90 text-sm drop-shadow-lg backdrop-blur-sm"
+      className="fixed top-2 left-2 z-9999 flex min-h-60 min-w-90 resize flex-col overflow-hidden rounded-xs border border-black/80 bg-neutral-950/90 text-sm drop-shadow-lg backdrop-blur-sm"
       style={{ height: consoleSize.height, width: consoleSize.width }}
       ref={containerRef}
     >

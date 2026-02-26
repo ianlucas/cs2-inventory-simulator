@@ -98,7 +98,7 @@ export default function Settings() {
   }
 
   return (
-    <Modal className="w-[540px]">
+    <Modal className="w-135">
       <ModalHeader title={translate("SettingsHeader")} linkTo="/" />
       <div className="mt-2 space-y-2 px-2">
         <SettingsLabel label={translate("SettingsMasterVolume")}>

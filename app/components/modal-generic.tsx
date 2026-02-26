@@ -20,7 +20,7 @@ export async function alert({
   const root = createRoot(document.createElement("div"));
   root.render(
     createPortal(
-      <Modal className="w-[550px]" fixed>
+      <Modal className="w-137.5" fixed>
         <ModalHeader title={titleText} />
         <p className="mt-2 px-4 text-sm">{bodyText}</p>
         <div className="my-6 flex justify-center px-4">
@@ -51,7 +51,7 @@ export async function confirm({
     const root = createRoot(document.createElement("div"));
     root.render(
       createPortal(
-        <Modal className="w-[550px]" fixed blur>
+        <Modal className="w-137.5" fixed blur>
           <ModalHeader title={titleText} />
           <p className="px-4 pt-2 text-sm whitespace-pre">{bodyText}</p>
           <div className="my-6 flex justify-center gap-2 px-4">

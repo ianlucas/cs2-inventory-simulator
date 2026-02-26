@@ -49,7 +49,7 @@ export function Footer() {
               </p>
             </div>
           ) : (
-            <div className="text-center text-[10px]">
+            <div className="text-center text-2.5">
               powered by{" "}
               <a
                 href="https://github.com/ianlucas/cs2-inventory-simulator"

@@ -18,7 +18,7 @@ export function EditorItemDisplay({
   return (
     <>
       <ItemImage
-        className="m-auto w-[256px]"
+        className="m-auto w-64"
         item={item}
         wear={item.hasWear() ? wear : undefined}
       />
