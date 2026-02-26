@@ -30,7 +30,7 @@ export function ErrorBoundary() {
             </a>
           </p>
           {error?.stack !== undefined && (
-            <pre className="relative mt-4 max-h-32 overflow-hidden text-sm text-ellipsis after:pointer-events-none after:absolute after:top-0 after:left-0 after:block after:size-full  after:bg-linear-to-b after:from-transparent after:to-blue-500 after:content-['']">
+            <pre className="relative mt-4 max-h-32 overflow-hidden text-sm text-ellipsis after:pointer-events-none after:absolute after:top-0 after:left-0 after:block after:size-full after:bg-linear-to-b after:from-transparent after:to-blue-500 after:content-['']">
               {error.stack}
             </pre>
           )}

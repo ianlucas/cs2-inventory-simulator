@@ -182,7 +182,7 @@ export function Console() {
           className="flex cursor-default items-center justify-center p-1 hover:bg-neutral-800/50"
           onClick={() => toggleIsVisible()}
         >
-          <FontAwesomeIcon className="size-4 " icon={faXmark} />
+          <FontAwesomeIcon className="size-4" icon={faXmark} />
         </button>
       </div>
       <div

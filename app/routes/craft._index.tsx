@@ -169,11 +169,7 @@ export default function Craft() {
   return (
     <>
       {isCrafting && (
-        <Modal
-          className={clsx(
-            isDesktop ? "max-w-180 min-w-160" : "w-135"
-          )}
-        >
+        <Modal className={clsx(isDesktop ? "max-w-180 min-w-160" : "w-135")}>
           <ModalHeader title={translate("CraftSelectHeader")} linkTo="/" />
           <ItemPicker onPickItem={setItem} />
         </Modal>

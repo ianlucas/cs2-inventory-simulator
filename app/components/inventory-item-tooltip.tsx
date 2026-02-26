@@ -64,7 +64,7 @@ export function InventoryItemTooltip({
       {...props}
     >
       <InventoryItemTooltipName item={item} />
-      <div className="mt-2.5 grid grid-cols-[auto_1fr] items-center gap-1 border-y  border-neutral-700/70 p-2">
+      <div className="mt-2.5 grid grid-cols-[auto_1fr] items-center gap-1 border-y border-neutral-700/70 p-2">
         <InventoryItemTooltipRarity item={item} />
         {hasWear && <InventoryItemTooltipExterior wear={wear} />}
         {hasTeams && <InventoryItemTooltipTeams teams={teams} />}

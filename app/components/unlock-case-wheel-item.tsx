@@ -32,7 +32,7 @@ export function UnlockCaseWheelItem({
         className="absolute bottom-0 left-0 h-2 w-full"
         style={{ backgroundColor: item.rarity }}
       />
-      <ItemImage className="absolute top-0 left-0 size-full " {...display} />
+      <ItemImage className="absolute top-0 left-0 size-full" {...display} />
     </div>
   );
 }

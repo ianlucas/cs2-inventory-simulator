@@ -109,7 +109,7 @@ export function PatchPicker({
                 </div>
               )}
               {!disabled && (
-                <div className="absolute top-0 left-0 size-full  border-2 border-transparent hover:border-blue-500/50" />
+                <div className="absolute top-0 left-0 size-full border-2 border-transparent hover:border-blue-500/50" />
               )}
             </button>
           );
