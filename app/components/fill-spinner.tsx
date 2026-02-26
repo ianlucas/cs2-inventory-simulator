@@ -9,7 +9,7 @@ export function FillSpinner({ className }: { className?: string }) {
   return (
     <div
       className={clsx(
-        "relative h-6 w-6 rounded-[50%] border-4 border-transparent before:absolute before:inset-[-4px] before:animate-[fill-spinner_1s_infinite_linear] before:rounded-[50%] before:border-4 before:border-white before:content-['']",
+        "relative size-6  rounded-[50%] border-4 border-transparent before:absolute before:inset-[-4px] before:animate-[fill-spinner_1s_infinite_linear] before:rounded-[50%] before:border-4 before:border-white before:content-['']",
         className
       )}
     />

@@ -87,7 +87,7 @@ export function ScrapeItemSticker({
                 warning={translate("ScrapeStickerWarn")}
                 warningItem={nameItemString(item)}
               />
-              <ItemImage className="m-auto max-w-128" item={item} />
+              <ItemImage className="m-auto max-w-lg" item={item} />
               <div className="flex justify-center">
                 {item.someStickers().map(([index, { id, wear }]) => (
                   <button key={index} className="group">

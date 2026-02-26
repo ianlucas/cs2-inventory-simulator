@@ -76,7 +76,7 @@ export function ApplyItemSticker({
               title={translate("ApplyStickerUse")}
               warning={translate("ApplyStickerWarn")}
             />
-            <ItemImage className="m-auto max-w-128" item={targetItem} />
+            <ItemImage className="m-auto max-w-lg" item={targetItem} />
             <div className="flex items-center justify-center">
               {targetItem.allStickers().map(([xslot, sticker]) =>
                 xslot === 4 ? undefined : sticker !== undefined ||

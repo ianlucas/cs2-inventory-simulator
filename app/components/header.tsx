@@ -64,7 +64,7 @@ export function Header({
         isOnTop ? "before:opacity-0" : "before:opacity-1"
       )}
     >
-      <div className="m-auto p-4  text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] lg:flex lg:w-256 lg:items-center lg:gap-8 lg:px-0">
+      <div className="m-auto p-4  text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] lg:flex lg:w-5xl lg:items-center lg:gap-8 lg:px-0">
         <div className="flex items-center justify-between">
           <Logo className="h-8" />
           <button

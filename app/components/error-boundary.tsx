@@ -18,7 +18,7 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body className="flex h-screen w-screen items-center justify-center bg-blue-500 font-mono text-white">
-        <div className="lg:w-256">
+        <div className="lg:w-5xl">
           <FontAwesomeIcon icon={faFrown} className="h-16" />
           <h1 className="mt-4 text-lg font-bold">
             Inventory Simulator Application Error

@@ -40,7 +40,7 @@ export function UnlockCaseContainerContents({
       }}
       ref={ref}
     >
-      <div className="m-auto lg:max-w-256">
+      <div className="m-auto lg:max-w-5xl">
         <h2 className="my-2">{translate("CaseContainsOne")}</h2>
         <div className="flex h-80 flex-wrap gap-3 overflow-y-scroll pb-4">
           {[

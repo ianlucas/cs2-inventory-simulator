@@ -66,7 +66,7 @@ export function RemoveItemPatch({
                 warning={translate("RemovePatchWarn")}
                 warningItem={nameItemString(item)}
               />
-              <ItemImage className="m-auto max-w-128" item={item} />
+              <ItemImage className="m-auto max-w-lg" item={item} />
               <div className="flex justify-center">
                 {item.somePatches().map(([slot, id]) => (
                   <button key={slot} className="group">

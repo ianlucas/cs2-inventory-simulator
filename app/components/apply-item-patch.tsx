@@ -64,7 +64,7 @@ export function ApplyItemPatch({
               title={translate("ApplyPatchUse")}
               warning={translate("ApplyPatchWarn")}
             />
-            <ItemImage className="m-auto max-w-128" item={targetItem} />
+            <ItemImage className="m-auto max-w-lg" item={targetItem} />
             <div className="flex items-center justify-center">
               {targetItem.allPatches().map(([xslot, patchId]) =>
                 patchId !== undefined || xslot === slot ? (

@@ -80,7 +80,7 @@ export function RenameStorageUnit({
                   : translate("RenameStorageUnitNewNameWarn")
               }
             />
-            <ItemImage className="m-auto my-8 max-w-128" item={item} />
+            <ItemImage className="m-auto my-8 max-w-lg" item={item} />
             <div className="flex items-center justify-center gap-2 lg:m-auto lg:mb-4">
               <ToolInput
                 autoFocus

@@ -37,7 +37,7 @@ export function InventoryFilter() {
 
   return (
     <div className="hidden lg:block">
-      <div className="mx-auto flex w-256 items-center justify-center gap-2 rounded-t bg-neutral-900/30 py-2">
+      <div className="mx-auto flex w-5xl items-center justify-center gap-2 rounded-t bg-neutral-900/30 py-2">
         {INVENTORY_PRIMARY_FILTERS.map((value, index) => (
           <InventoryFilterButton
             active={index === primaryIndex}
@@ -49,7 +49,7 @@ export function InventoryFilter() {
         ))}
       </div>
       <div
-        className="mx-auto flex w-256 items-center justify-center gap-2 overflow-hidden bg-linear-to-b from-black/20 to-transparent transition-all"
+        className="mx-auto flex w-5xl items-center justify-center gap-2 overflow-hidden bg-linear-to-b from-black/20 to-transparent transition-all"
         style={{
           height: hasSecondaryFilters ? 40 : 0,
           paddingTop: hasSecondaryFilters ? "0.375rem" : 0,
@@ -66,7 +66,7 @@ export function InventoryFilter() {
           />
         ))}
       </div>
-      <div className="m-auto flex w-256 items-center py-1.5">
+      <div className="m-auto flex w-5xl items-center py-1.5">
         <div className="flex-1">
           <div className="group flex w-80 items-center gap-4">
             <FontAwesomeIcon
