@@ -18,8 +18,8 @@ export function UseItemFooter({
   return (
     <div
       className={clsx(
-        className ?? "max-w-[1024px] lg:w-[1024px]",
-        "m-auto flex min-h-[63px] items-center justify-between border-t border-t-white/10 pt-1.5 drop-shadow-sm"
+        className ?? "max-w-5xl lg:w-5xl",
+        "m-auto flex min-h-15.75 items-center justify-between border-t border-t-white/10 pt-1.5 drop-shadow-sm"
       )}
     >
       {left}

@@ -175,7 +175,7 @@ export function StickerPicker({
             <div className="relative aspect-256/192" key={index}>
               <button
                 disabled={disabled}
-                className="absolute h-full w-full cursor-default overflow-hidden bg-neutral-950/40"
+                className="absolute size-full cursor-default overflow-hidden bg-neutral-950/40"
                 onClick={handleClickSlot(index)}
               >
                 {item !== undefined ? (
@@ -191,7 +191,7 @@ export function StickerPicker({
                   </div>
                 )}
                 {!disabled && (
-                  <div className="absolute top-0 left-0 h-full w-full border-2 border-transparent hover:border-blue-500/50" />
+                  <div className="absolute top-0 left-0 size-full border-2 border-transparent hover:border-blue-500/50" />
                 )}
               </button>
               {item !== undefined && !disabled && (
@@ -208,7 +208,7 @@ export function StickerPicker({
         })}
       </div>
       <Modal
-        className="w-[540px] pb-1"
+        className="w-135 pb-1"
         hidden={activeIndex === undefined || isEditing}
         blur
       >
@@ -226,7 +226,7 @@ export function StickerPicker({
           />
           <IconSelect
             icon={faTag}
-            className="w-[168px]"
+            className="w-42"
             onChange={setCategory}
             options={categories}
             placeholder={translate("StickerPickerFilterPlaceholder")}
@@ -241,7 +241,7 @@ export function StickerPicker({
         <ItemBrowser items={filtered} onClick={handleSelectSticker} />
       </Modal>
       {selected !== undefined && (
-        <Modal className="w-[420px]">
+        <Modal className="w-105">
           <ModalHeader
             title={translate("EditorConfirmPick")}
             onClose={handleCloseSelectModal}

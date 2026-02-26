@@ -66,12 +66,12 @@ export function RemoveItemPatch({
                 warning={translate("RemovePatchWarn")}
                 warningItem={nameItemString(item)}
               />
-              <ItemImage className="m-auto max-w-[512px]" item={item} />
+              <ItemImage className="m-auto max-w-lg" item={item} />
               <div className="flex justify-center">
                 {item.somePatches().map(([slot, id]) => (
                   <button key={slot} className="group">
                     <ItemImage
-                      className="w-[168px] scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
+                      className="w-42 scale-90 drop-shadow-lg transition-all group-hover:scale-100 group-active:scale-125"
                       onClick={() => setConfirmRemoveSlot(slot)}
                       item={CS2Economy.getById(id)}
                     />
@@ -89,7 +89,7 @@ export function RemoveItemPatch({
               />
             </Overlay>
             {confirmRemoveSlot !== undefined && (
-              <Modal className="w-[480px]" fixed>
+              <Modal className="w-120" fixed>
                 <ModalHeader title={translate("RemovePatchRemove")} />
                 <p className="mt-2 px-4">
                   {translate("RemovePatchRemoveDesc")}

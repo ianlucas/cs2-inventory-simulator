@@ -57,14 +57,14 @@ export function InventoryItemTooltip({
     <div
       role="tooltip"
       className={clsx(
-        "z-20 max-w-[396px] rounded-sm bg-neutral-900/95 px-6 py-4 text-xs text-white outline-hidden",
-        !isContainer && "lg:w-[396px]"
+        "z-20 max-w-99 rounded-sm bg-neutral-900/95 px-6 py-4 text-xs text-white outline-hidden",
+        !isContainer && "lg:w-99"
       )}
       ref={forwardRef}
       {...props}
     >
       <InventoryItemTooltipName item={item} />
-      <div className="mt-2.5 grid [grid-template-columns:auto_1fr] items-center gap-1 border-t border-b border-neutral-700/70 p-2">
+      <div className="mt-2.5 grid grid-cols-[auto_1fr] items-center gap-1 border-y border-neutral-700/70 p-2">
         <InventoryItemTooltipRarity item={item} />
         {hasWear && <InventoryItemTooltipExterior wear={wear} />}
         {hasTeams && <InventoryItemTooltipTeams teams={teams} />}
