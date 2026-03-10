@@ -33,7 +33,7 @@ export function LanguageSelect({
         <>
           <img
             src={`/images/flags/${flag}.svg`}
-            className="h-4 w-6"
+            className="h-[16px] w-[24px]"
             alt={label}
             title={label}
             draggable={false}
