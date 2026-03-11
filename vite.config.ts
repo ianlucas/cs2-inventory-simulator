@@ -38,7 +38,9 @@ export default defineConfig({
     ),
     __TRANSLATION_CHECKSUM__: JSON.stringify(
       createHash("sha256")
-        .update(JSON.stringify(appEnglish) + JSON.stringify(libEnglish))
+        .update(
+          JSON.stringify(appEnglish) + JSON.stringify(libEnglish) + "{v2}"
+        )
         .digest("hex")
         .substring(0, 7)
     ),
