@@ -37,10 +37,10 @@ export function InventoryItemTile({
     currDate - inventoryItem.updatedAt < 120;
 
   return (
-    <div className="w-[154px]">
+    <div className="w-38.5">
       <div className="group relative bg-linear-to-b from-neutral-600 to-neutral-400 p-px">
         <div className="bg-linear-to-b from-neutral-500 to-neutral-300 px-1">
-          <ItemImage className="w-[144px]" item={item} />
+          <ItemImage className="w-36" item={item} />
         </div>
         {isNew && (
           <div className="absolute top-px left-px bg-sky-600 px-1 py-1 text-[10px] font-bold text-sky-200 shadow-lg transition-all group-hover:text-white">

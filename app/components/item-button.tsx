@@ -49,7 +49,7 @@ export function ItemButton({
         (index ?? 0) % 2 !== 0 ? "bg-black/10" : "bg-transparent",
         clickable &&
           "relative cursor-default overflow-hidden hover:bg-black/25 active:bg-black/30",
-        !bigger && "block h-[64px] w-full pr-4 pl-[2px]",
+        !bigger && "block h-16 w-full pr-4 pl-0.5",
         bigger && "flex h-full w-full items-center justify-center"
       )}
     >
@@ -62,7 +62,7 @@ export function ItemButton({
         <ItemImage
           className={clsx(
             "overflow-hidden drop-shadow-[0_0_1px_rgba(0,0,0,1)]",
-            !bigger && "w-[82px]",
+            !bigger && "w-20.5",
             bigger && "m-auto h-32"
           )}
           item={item}
@@ -90,7 +90,7 @@ export function ItemButton({
         </div>
         {!hideNewItemLabel && isNewItem(item) && (
           <div
-            className="absolute bottom-1.5 left-1.5 rounded bg-blue-500/15 px-1 text-[0.5rem] font-bold text-white uppercase backdrop-blur"
+            className="absolute bottom-1.5 left-1.5 rounded bg-sky-400/40 px-1 text-[0.5rem] font-extrabold text-white uppercase backdrop-blur"
             children={translate("InventoryItemNew")}
           />
         )}
