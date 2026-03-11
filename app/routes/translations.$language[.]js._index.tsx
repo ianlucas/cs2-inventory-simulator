@@ -7,7 +7,6 @@ import { z } from "zod";
 import { TRANSLATION_LOADED_TYPE } from "~/components/hooks/use-translation";
 import { serverGlobals } from "~/globals";
 import { middleware } from "~/http.server";
-import { badRequest } from "~/responses.server";
 import type { Route } from "./+types/translations.$language[.]js._index";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -25,9 +24,9 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       serverGlobals.itemTranslationByLanguage.english;
     return new Response(
       `window.InventorySimulator ??= {};
-  window.InventorySimulator.isTranslationLoaded = true;
   window.InventorySimulator.systemTranslationMap = ${JSON.stringify(systemTranslationMap)};
   window.InventorySimulator.itemTranslationMap = ${JSON.stringify(itemTranslationMap)};
+  window.InventorySimulator.isTranslationLoaded = true;
   window.dispatchEvent(new Event("${TRANSLATION_LOADED_TYPE}"));`,
       {
         headers: {
@@ -37,6 +36,12 @@ export async function loader({ request, params }: Route.LoaderArgs) {
       }
     );
   } catch {
-    return badRequest;
+    return new Response(null, {
+      status: 400,
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        "CDN-Cache-Control": "no-store"
+      }
+    });
   }
 }
