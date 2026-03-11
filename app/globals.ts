@@ -36,7 +36,7 @@ declare global {
   }
 }
 
-export const isServerContext = typeof global !== "undefined";
+export const isServerContext = typeof window === "undefined";
 
 const context = isServerContext ? global : window;
 if (context.InventorySimulator === undefined) {
