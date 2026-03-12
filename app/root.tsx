@@ -32,7 +32,6 @@ import { ItemSelectorProvider } from "./components/item-selector-context";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
-import { TranslationScript } from "./components/translation-script";
 import {
   ASSETS_BASE_URL,
   CLOUDFLARE_ANALYTICS_TOKEN,
@@ -107,13 +106,13 @@ export default function App() {
   return (
     <AppProvider {...appProps}>
       <html
+        data-language={appProps.preferences.language}
         lang={appProps.preferences.lang}
         onContextMenu={(event) => event.preventDefault()}
       >
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <TranslationScript />
           <Meta />
           <Links />
           <link

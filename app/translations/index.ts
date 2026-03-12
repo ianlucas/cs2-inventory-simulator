@@ -14,6 +14,7 @@ export { french } from "~/translations/french";
 export { german } from "~/translations/german";
 export { greek } from "~/translations/greek";
 export { hungarian } from "~/translations/hungarian";
+export { indonesian } from "~/translations/indonesian";
 export { italian } from "~/translations/italian";
 export { japanese } from "~/translations/japanese";
 export { koreana } from "~/translations/koreana";
