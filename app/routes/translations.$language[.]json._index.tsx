@@ -4,10 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { z } from "zod";
-import { TRANSLATION_LOADED_TYPE } from "~/components/hooks/use-translation";
 import { serverGlobals } from "~/globals";
 import { middleware } from "~/http.server";
-import type { Route } from "./+types/translations.$language[.]js._index";
+import type { Route } from "./+types/translations.$language[.]json._index";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   await middleware(request);
@@ -22,15 +21,10 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     const itemTranslationMap =
       serverGlobals.itemTranslationByLanguage[language] ??
       serverGlobals.itemTranslationByLanguage.english;
-    return new Response(
-      `window.InventorySimulator ??= {};
-  window.InventorySimulator.systemTranslationMap = ${JSON.stringify(systemTranslationMap)};
-  window.InventorySimulator.itemTranslationMap = ${JSON.stringify(itemTranslationMap)};
-  window.InventorySimulator.isTranslationLoaded = true;
-  window.dispatchEvent(new Event("${TRANSLATION_LOADED_TYPE}"));`,
+    return Response.json(
+      { systemTranslationMap, itemTranslationMap },
       {
         headers: {
-          "Content-Type": "application/javascript; charset=utf-8",
           "Cache-Control": "public, max-age=31536000, immutable"
         }
       }

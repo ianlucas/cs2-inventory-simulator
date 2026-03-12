@@ -8,12 +8,10 @@ import { CS2Economy, CS2_ITEMS } from "@ianlucas/cs2-lib";
 import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { HydratedRouter } from "react-router/dom";
-import { TRANSLATION_LOADED_TYPE } from "./components/hooks/use-translation";
 import { clientGlobals } from "./globals";
+import { fetchTranslation } from "./utils/translation-api";
 
 function hydrate() {
-  window.removeEventListener(TRANSLATION_LOADED_TYPE, hydrate);
-
   const { itemTranslationMap } = clientGlobals;
   if (
     typeof itemTranslationMap !== "object" ||
@@ -44,11 +42,20 @@ function hydrate() {
   });
 }
 
-if (clientGlobals.isTranslationLoaded) {
+async function loadTranslationsAndHydrate() {
+  const language = document.documentElement.dataset.language ?? "english";
+  try {
+    const { systemTranslationMap, itemTranslationMap } =
+      await fetchTranslation(language);
+    clientGlobals.systemTranslationMap = systemTranslationMap;
+    clientGlobals.itemTranslationMap = itemTranslationMap;
+  } catch (error) {
+    console.error("[InventorySimulator] Failed to load translations:", error);
+  }
   hydrate();
-} else {
-  window.addEventListener(TRANSLATION_LOADED_TYPE, hydrate);
 }
+
+loadTranslationsAndHydrate();
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/scripts/service-worker.js");

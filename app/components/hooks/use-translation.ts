@@ -6,8 +6,7 @@
 import { useEffect, useState } from "react";
 import { clientGlobals, isServerContext, serverGlobals } from "~/globals";
 import type { SystemTranslationTokens } from "~/translation.server";
-
-export const TRANSLATION_LOADED_TYPE = "translationloaded";
+import { fetchTranslation } from "~/utils/translation-api";
 
 export function useTranslation({ language }: { language: string }) {
   function getSystemTranslationMap() {
@@ -40,18 +39,22 @@ export function useTranslation({ language }: { language: string }) {
   }
 
   useEffect(() => {
-    function handleTranslationLoaded() {
-      setSystemMap(getSystemTranslationMap());
-      setItemMap(getItemTranslationMap());
-    }
-    window.addEventListener(TRANSLATION_LOADED_TYPE, handleTranslationLoaded);
+    let cancelled = false;
+    fetchTranslation(language)
+      .then(({ systemTranslationMap, itemTranslationMap }) => {
+        if (cancelled) {
+          return;
+        }
+        clientGlobals.systemTranslationMap = systemTranslationMap;
+        clientGlobals.itemTranslationMap = itemTranslationMap;
+        setSystemMap(systemTranslationMap);
+        setItemMap(itemTranslationMap);
+      })
+      .catch(() => {});
     return () => {
-      window.removeEventListener(
-        TRANSLATION_LOADED_TYPE,
-        handleTranslationLoaded
-      );
+      cancelled = true;
     };
-  }, []);
+  }, [language]);
 
   return { system: systemMap, items: itemMap, translate };
 }

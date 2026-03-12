@@ -20,7 +20,6 @@ interface ClientGlobals {
     render: () => void;
   };
 
-  isTranslationLoaded?: boolean;
   itemTranslationMap: CS2ItemTranslationByLanguage[string];
   systemTranslationMap: SystemTranslationByLanguage[string];
 
