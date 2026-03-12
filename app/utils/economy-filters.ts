@@ -146,6 +146,7 @@ export function getPaidItems({ type }: EconomyItemFilter, model: string) {
 
 export function getAllPaidItems() {
   return CS2Economy.itemsAsArray.filter(
-    ({ base, type }) => type === CS2ItemType.Melee || !base
+    ({ base, type }) =>
+      type !== CS2ItemType.Stub && (type === CS2ItemType.Melee || !base)
   );
 }

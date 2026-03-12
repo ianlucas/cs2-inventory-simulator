@@ -75,9 +75,11 @@ export function ItemButton({
             !bigger && "ml-4"
           )}
         >
-          <div className="text-xs leading-3 text-neutral-400">
-            <TextSlider text={model} />
-          </div>
+          {model !== "" && (
+            <div className="text-xs leading-3 text-neutral-400">
+              <TextSlider text={model} />
+            </div>
+          )}
           <div style={{ color: ignoreRarityColor ? undefined : item.rarity }}>
             <TextSlider text={name} />
           </div>
