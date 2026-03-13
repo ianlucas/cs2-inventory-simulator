@@ -22,6 +22,7 @@ import { ECONOMY_ITEM_FILTERS } from "~/utils/economy-filters";
 import {
   useInventory,
   usePreferences,
+  useRules,
   useTranslate,
   useUser
 } from "./app-context";
@@ -45,6 +46,7 @@ export function Header({
   const [isMenuOpen, toggleIsMenuOpen] = useToggle(false);
   const isDesktop = useIsDesktop();
   const isOnTop = useIsOnTop();
+  const { appHideLogo, appHideAuth } = useRules();
 
   function closeMenu() {
     toggleIsMenuOpen(false);
@@ -64,9 +66,14 @@ export function Header({
         isOnTop ? "before:opacity-0" : "before:opacity-1"
       )}
     >
-      <div className="m-auto px-4 py-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] lg:flex lg:w-[1024px] lg:items-center lg:gap-8 lg:px-0">
-        <div className="flex items-center justify-between">
-          <Logo className="h-8" />
+      <div className="m-auto px-4 py-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] lg:flex lg:w-5xl lg:items-center lg:gap-8 lg:px-0">
+        <div
+          className={clsx(
+            "flex items-center justify-between",
+            appHideLogo && "lg:hidden"
+          )}
+        >
+          {!appHideLogo && <Logo className="h-8" />}
           <button
             className="px-2 py-1 lg:hidden"
             onClick={() => toggleIsMenuOpen()}
@@ -100,11 +107,13 @@ export function Header({
               />
               {user === undefined ? (
                 <>
-                  <HeaderLink
-                    to="/sign-in"
-                    icon={faSteam}
-                    label={translate("HeaderSignInLabel")}
-                  />
+                  {!appHideAuth && (
+                    <HeaderLink
+                      to="/sign-in"
+                      icon={faSteam}
+                      label={translate("HeaderSignInLabel")}
+                    />
+                  )}
                   <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
                     <HeaderLink
@@ -117,12 +126,14 @@ export function Header({
                 </>
               ) : (
                 <>
-                  <HeaderLink
-                    icon={faRightFromBracket}
-                    label={translate("HeaderSignOutLabel")}
-                    onClick={closeMenu}
-                    to="/sign-out"
-                  />
+                  {!appHideAuth && (
+                    <HeaderLink
+                      icon={faRightFromBracket}
+                      label={translate("HeaderSignOutLabel")}
+                      onClick={closeMenu}
+                      to="/sign-out"
+                    />
+                  )}
                   <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
                     <HeaderLink to="/settings" onClick={closeMenu}>

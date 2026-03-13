@@ -500,3 +500,15 @@ export const editAllowStickerY = new Rule({
   type: "boolean",
   defaultValue: true
 });
+
+export const appHideLogo = new Rule({
+  name: "appHideLogo",
+  type: "boolean",
+  defaultValue: false
+});
+
+export const appHideAuth = new Rule({
+  name: "appHideAuth",
+  type: "boolean",
+  defaultValue: false
+});
