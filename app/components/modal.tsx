@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { ComponentRef, ReactNode, useEffect, useRef, useState } from "react";
@@ -60,6 +61,37 @@ export function Modal({
         )
       }
     />
+  );
+}
+
+export function ModalNav({
+  items
+}: {
+  items: {
+    icon: IconDefinition;
+    isActive: boolean;
+    label: string;
+    onClick: () => void;
+  }[];
+}) {
+  return (
+    <nav className="bg-black/30 px-1 pb-1 text-xs text-neutral-400">
+      {items.map(({ label, onClick, icon, isActive }) => (
+        <button
+          key={label}
+          className={clsx(
+            "flex items-center gap-1.5 px-2 py-1 transition-all",
+            isActive
+              ? "bg-neutral-950/50 text-neutral-300"
+              : "hover:bg-neutral-950/50 hover:text-neutral-300"
+          )}
+          onClick={onClick}
+        >
+          <FontAwesomeIcon className="h-3" icon={icon} />
+          {label}
+        </button>
+      ))}
+    </nav>
   );
 }
 

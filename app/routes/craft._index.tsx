@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import lzstring from "lz-string";
@@ -23,7 +22,7 @@ import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
 import { ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
-import { Modal, ModalHeader } from "~/components/modal";
+import { Modal, ModalHeader, ModalNav } from "~/components/modal";
 import { ModalButton } from "~/components/modal-button";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/http.server";
@@ -190,20 +189,16 @@ export default function Craft() {
       {isCrafting && (
         <Modal className={clsx(isDesktop ? "max-w-180 min-w-160" : "w-135")}>
           <ModalHeader title={translate("CraftSelectHeader")} closeTo="/" />
-          <nav className="bg-black/30 px-1 pb-1 text-xs text-neutral-400">
-            <button
-              className={clsx(
-                "flex items-center gap-1.5 px-2 py-1 transition-all",
-                isImportFromInspectLink
-                  ? "bg-neutral-950/50 text-neutral-300"
-                  : "hover:bg-neutral-950/50 hover:text-neutral-300"
-              )}
-              onClick={handleImportFromInspectLinkOpen}
-            >
-              <FontAwesomeIcon className="h-3" icon={faLink} />
-              Import from inspect link
-            </button>
-          </nav>
+          <ModalNav
+            items={[
+              {
+                icon: faLink,
+                isActive: isImportFromInspectLink,
+                label: "Import from inspect link",
+                onClick: handleImportFromInspectLinkOpen
+              }
+            ]}
+          />
           <ItemPicker onPickItem={setItem} />
         </Modal>
       )}
