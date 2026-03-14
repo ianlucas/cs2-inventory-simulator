@@ -27,6 +27,10 @@ export const conflict = new Response(null, {
   status: 409
 });
 
+export const tooManyRequests = new Response(null, {
+  status: 429
+});
+
 export const internalServerError = new Response(null, {
   status: 500
 });

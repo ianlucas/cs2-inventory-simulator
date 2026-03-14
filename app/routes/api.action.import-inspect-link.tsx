@@ -14,18 +14,30 @@ import { api } from "~/api.server";
 import { getRequestUserId } from "~/auth.server";
 import { fetchCSFloatItemInfo } from "~/csfloat.server";
 import { middleware } from "~/http.server";
-import { badRequest, methodNotAllowed } from "~/responses.server";
+import {
+  badRequest,
+  methodNotAllowed,
+  tooManyRequests
+} from "~/responses.server";
 import { isValidInspectLink } from "~/utils/economy";
 import type { Route } from "./+types/api.action.import-inspect-link";
+
+// Grows larger as application lives, something to look out.
+const lastRequestByUser = new Map<string, number>();
 
 export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
   if (request.method !== "POST") {
     throw methodNotAllowed;
   }
-  if (!(await getRequestUserId(request))) {
+  const userId = await getRequestUserId(request);
+  if (!userId) {
     throw badRequest;
   }
+  if (Date.now() - (lastRequestByUser.get(userId) ?? 0) < 1000) {
+    throw tooManyRequests;
+  }
+  lastRequestByUser.set(userId, Date.now());
   const { inspectLink } = z
     .object({
       inspectLink: z.string().refine((value) => isValidInspectLink(value))

@@ -49,6 +49,7 @@ function useImportInspectLink() {
 
 const errorMessages: Record<number, string> = {
   400: "The inspect link is invalid.",
+  429: "Please wait a bit before importing another inspect link.",
   500: "We can't import this type of inspect link right now.",
   502: "Failed to fetch inspect link data, please try again.",
   503: "We can't import this type of inspect link right now."
