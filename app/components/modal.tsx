@@ -64,11 +64,11 @@ export function Modal({
 }
 
 export function ModalHeader({
-  linkTo,
+  closeTo,
   onClose,
   title
 }: {
-  linkTo?: string;
+  closeTo?: string;
   onClose?: () => void;
   title: string;
 }) {
@@ -79,10 +79,10 @@ export function ModalHeader({
           {title}
         </span>
         <div className="flex items-center">
-          {linkTo !== undefined && (
+          {closeTo !== undefined && (
             <Link
               className="flex h-4 px-2 opacity-50 transition hover:opacity-100"
-              to={linkTo}
+              to={closeTo}
             >
               <FontAwesomeIcon icon={faXmark} className="h-4 w-4" />
             </Link>

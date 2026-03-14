@@ -3,6 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faLink } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import lzstring from "lz-string";
@@ -14,17 +16,20 @@ import { CraftEdit } from "~/components/craft-edit";
 import { CraftNew } from "~/components/craft-new";
 import { CraftShareUser } from "~/components/craft-share-user";
 import { CraftView } from "~/components/craft-view";
+import { EditorInput } from "~/components/editor-input";
+import { FillSpinner } from "~/components/fill-spinner";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
 import { ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
 import { Modal, ModalHeader } from "~/components/modal";
+import { ModalButton } from "~/components/modal-button";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/http.server";
 import { getUserBasicData } from "~/models/user.server";
 import { getMetaTitle } from "~/root-meta";
-import { isItemCountable } from "~/utils/economy";
+import { isItemCountable, isValidInspectLink } from "~/utils/economy";
 import { createFakeInventoryItemFromBase } from "~/utils/inventory";
 import { deleteEmptyProps, tryOrDefault } from "~/utils/misc";
 import { range } from "~/utils/number";
@@ -90,6 +95,8 @@ export default function Craft() {
 
   const [inventory, setInventory] = useInventory();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isImportFromInspectLink, setIsImportFromInspectLink] = useState(false);
+  const [inspectLink, setInspectLink] = useState("");
   const [item, setItem] = useState<CS2EconomyItem | undefined>(
     isEditing
       ? tryOrDefault(() => inventory.get(uid))
@@ -150,6 +157,15 @@ export default function Craft() {
     return setItem(undefined);
   }
 
+  function handleImportFromInspectLinkOpen() {
+    setInspectLink("");
+    setIsImportFromInspectLink(true);
+  }
+
+  function handleImportFromInspectLinkClose() {
+    setIsImportFromInspectLink(false);
+  }
+
   const editorProps =
     item !== undefined
       ? {
@@ -166,20 +182,33 @@ export default function Craft() {
       ? CraftView
       : CraftNew;
 
+  const canInspectLink = isValidInspectLink(inspectLink);
+  const isImportingInspectLink = true;
+
   return (
     <>
       {isCrafting && (
-        <Modal
-          className={clsx(
-            isDesktop ? "max-w-[720px] min-w-[640px]" : "w-[540px]"
-          )}
-        >
-          <ModalHeader title={translate("CraftSelectHeader")} linkTo="/" />
+        <Modal className={clsx(isDesktop ? "max-w-180 min-w-160" : "w-135")}>
+          <ModalHeader title={translate("CraftSelectHeader")} closeTo="/" />
+          <nav className="bg-black/30 px-1 pb-1 text-xs text-neutral-400">
+            <button
+              className={clsx(
+                "flex items-center gap-1.5 px-2 py-1 transition-all",
+                isImportFromInspectLink
+                  ? "bg-neutral-950/50 text-neutral-300"
+                  : "hover:bg-neutral-950/50 hover:text-neutral-300"
+              )}
+              onClick={handleImportFromInspectLinkOpen}
+            >
+              <FontAwesomeIcon className="h-3" icon={faLink} />
+              Import from inspect link
+            </button>
+          </nav>
           <ItemPicker onPickItem={setItem} />
         </Modal>
       )}
       {hasItem && (
-        <Modal className="w-[420px]">
+        <Modal className="w-105">
           <ModalHeader
             title={translate(
               isSharing ? "CraftSharedHeader" : "CraftConfirmHeader"
@@ -188,6 +217,54 @@ export default function Craft() {
           />
           {shared?.user !== undefined && <CraftShareUser user={shared.user} />}
           <CraftComponent {...editorProps} />
+        </Modal>
+      )}
+      {isImportFromInspectLink && (
+        <Modal className="w-105">
+          <ModalHeader title="Import from a inspect link" />
+          <div className="p-2">
+            <EditorInput
+              readOnly={isImportingInspectLink}
+              className="w-full"
+              placeholder="Paste the inspect link here..."
+              validate={(value) =>
+                value === undefined || value === "" || isValidInspectLink(value)
+              }
+              onChange={(event) => setInspectLink(event.target.value)}
+              value={inspectLink}
+            />
+          </div>
+          <div className="my-6 flex justify-center gap-2">
+            <ModalButton
+              onClick={handleImportFromInspectLinkClose}
+              children={translate("EditorCancel")}
+              variant="secondary"
+              disabled={isImportingInspectLink}
+            />
+            <ModalButton
+              children={
+                <>
+                  <div
+                    className={clsx(
+                      "absolute top-0 left-0 flex h-full w-full items-center justify-center transition-all",
+                      isImportingInspectLink ? "opacity-100" : "opacity-0"
+                    )}
+                  >
+                    <FillSpinner />
+                  </div>
+                  <span
+                    className={
+                      isImportingInspectLink ? "opacity-0" : "opacity-100"
+                    }
+                  >
+                    Import
+                  </span>
+                </>
+              }
+              variant="primary"
+              disabled={!canInspectLink || isImportingInspectLink}
+            />
+          </div>
         </Modal>
       )}
     </>
