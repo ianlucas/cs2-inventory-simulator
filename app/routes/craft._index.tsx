@@ -12,23 +12,21 @@ import { data, useLoaderData, useNavigate } from "react-router";
 import { z } from "zod";
 import { useInventory, useTranslate } from "~/components/app-context";
 import { CraftEdit } from "~/components/craft-edit";
+import { CraftImportInspectLink } from "~/components/craft-import-inspect-link";
 import { CraftNew } from "~/components/craft-new";
 import { CraftShareUser } from "~/components/craft-share-user";
 import { CraftView } from "~/components/craft-view";
-import { EditorInput } from "~/components/editor-input";
-import { FillSpinner } from "~/components/fill-spinner";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
 import { ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
 import { Modal, ModalHeader, ModalNav } from "~/components/modal";
-import { ModalButton } from "~/components/modal-button";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/http.server";
 import { getUserBasicData } from "~/models/user.server";
 import { getMetaTitle } from "~/root-meta";
-import { isItemCountable, isValidInspectLink } from "~/utils/economy";
+import { isItemCountable } from "~/utils/economy";
 import { createFakeInventoryItemFromBase } from "~/utils/inventory";
 import { deleteEmptyProps, tryOrDefault } from "~/utils/misc";
 import { range } from "~/utils/number";
@@ -95,7 +93,6 @@ export default function Craft() {
   const [inventory, setInventory] = useInventory();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isImportFromInspectLink, setIsImportFromInspectLink] = useState(false);
-  const [inspectLink, setInspectLink] = useState("");
   const [item, setItem] = useState<CS2EconomyItem | undefined>(
     isEditing
       ? tryOrDefault(() => inventory.get(uid))
@@ -157,7 +154,6 @@ export default function Craft() {
   }
 
   function handleImportFromInspectLinkOpen() {
-    setInspectLink("");
     setIsImportFromInspectLink(true);
   }
 
@@ -180,9 +176,6 @@ export default function Craft() {
     : isSharing
       ? CraftView
       : CraftNew;
-
-  const canInspectLink = isValidInspectLink(inspectLink);
-  const isImportingInspectLink = true;
 
   return (
     <>
@@ -216,50 +209,7 @@ export default function Craft() {
       )}
       {isImportFromInspectLink && (
         <Modal className="w-105">
-          <ModalHeader title="Import from a inspect link" />
-          <div className="p-2">
-            <EditorInput
-              readOnly={isImportingInspectLink}
-              className="w-full"
-              placeholder="Paste the inspect link here..."
-              validate={(value) =>
-                value === undefined || value === "" || isValidInspectLink(value)
-              }
-              onChange={(event) => setInspectLink(event.target.value)}
-              value={inspectLink}
-            />
-          </div>
-          <div className="my-6 flex justify-center gap-2">
-            <ModalButton
-              onClick={handleImportFromInspectLinkClose}
-              children={translate("EditorCancel")}
-              variant="secondary"
-              disabled={isImportingInspectLink}
-            />
-            <ModalButton
-              children={
-                <>
-                  <div
-                    className={clsx(
-                      "absolute top-0 left-0 flex h-full w-full items-center justify-center transition-all",
-                      isImportingInspectLink ? "opacity-100" : "opacity-0"
-                    )}
-                  >
-                    <FillSpinner />
-                  </div>
-                  <span
-                    className={
-                      isImportingInspectLink ? "opacity-0" : "opacity-100"
-                    }
-                  >
-                    Import
-                  </span>
-                </>
-              }
-              variant="primary"
-              disabled={!canInspectLink || isImportingInspectLink}
-            />
-          </div>
+          <CraftImportInspectLink onClose={handleImportFromInspectLinkClose} />
         </Modal>
       )}
     </>
