@@ -195,8 +195,6 @@ export function normalizeInspectLink(link: string) {
 }
 
 export function isValidInspectLink(link: string) {
-  link = normalizeInspectLink(link);
-  console.log(link);
   return (
     isCommandInspect(link) ||
     isSteamInspectLink(link) ||

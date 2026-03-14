@@ -512,3 +512,15 @@ export const appHideAuth = new Rule({
   type: "boolean",
   defaultValue: false
 });
+
+export const csFloatUrl = new Rule({
+  name: "csFloatUrl",
+  type: "string",
+  defaultValue: ""
+});
+
+export const csFloatHeaders = new Rule({
+  name: "csFloatHeaders",
+  type: "string-array",
+  defaultValue: []
+});

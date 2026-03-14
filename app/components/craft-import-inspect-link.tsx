@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import clsx from "clsx";
-import { useState } from "react";
-import { isValidInspectLink } from "~/utils/economy";
+import { useMemo, useState } from "react";
+import { isValidInspectLink, normalizeInspectLink } from "~/utils/economy";
 import { useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { FillSpinner } from "./fill-spinner";
@@ -15,7 +15,14 @@ import { ModalButton } from "./modal-button";
 export function CraftImportInspectLink({ onClose }: { onClose: () => void }) {
   const translate = useTranslate();
   const [inspectLink, setInspectLink] = useState("");
-  const canInspectLink = isValidInspectLink(inspectLink);
+  const normalizedInspectLink = useMemo(
+    () => normalizeInspectLink(inspectLink),
+    [inspectLink]
+  );
+  const canInspectLink = useMemo(
+    () => isValidInspectLink(normalizedInspectLink),
+    [normalizedInspectLink]
+  );
   const isImportingInspectLink = false;
 
   return (
@@ -27,7 +34,9 @@ export function CraftImportInspectLink({ onClose }: { onClose: () => void }) {
           className="w-full"
           placeholder="Paste the inspect link here..."
           validate={(value) =>
-            value === undefined || value === "" || isValidInspectLink(value)
+            value === undefined ||
+            value === "" ||
+            isValidInspectLink(normalizeInspectLink(value))
           }
           onChange={(event) => setInspectLink(event.target.value)}
           value={inspectLink}
