@@ -6,6 +6,7 @@
 import { CS2Economy } from "@ianlucas/cs2-lib";
 import {
   isSteamInspectLink,
+  parseCSFloatItemInfo,
   parseInspectLink
 } from "@ianlucas/cs2-lib-inspect";
 import z from "zod";
@@ -31,7 +32,10 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     })
     .parse(await request.json());
   if (isSteamInspectLink(inspectLink)) {
-    return await fetchCSFloatItemInfo(inspectLink);
+    return parseCSFloatItemInfo(
+      CS2Economy,
+      (await fetchCSFloatItemInfo(inspectLink)).iteminfo
+    );
   }
   try {
     return parseInspectLink(CS2Economy, inspectLink);
