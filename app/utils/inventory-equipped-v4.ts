@@ -127,6 +127,7 @@ export async function generate(
             stickers: item.someStickers().map(([index, sticker]) => ({
               def: CS2Economy.getById(sticker.id).index ?? 0,
               rotation: sticker.rotation,
+              schema: sticker.schema,
               slot: index,
               wear: sticker.wear ?? CS2_MIN_STICKER_WEAR,
               x: sticker.x,

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy } from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2_MAX_STICKERS } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import {
   validateStickerOffset,
@@ -44,6 +44,14 @@ export const baseInventoryItemProps = {
         wear: nonNegativeFloat
           .optional()
           .refine((wear) => wear === undefined || validateStickerWear(wear)),
+        schema: z
+          .number()
+          .int()
+          .min(0)
+          .optional()
+          .refine(
+            (schema) => schema === undefined || schema <= CS2_MAX_STICKERS - 1
+          ),
         x: z
           .number()
           .optional()

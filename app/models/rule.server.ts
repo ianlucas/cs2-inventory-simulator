@@ -435,6 +435,12 @@ export const craftAllowStickerY = new Rule({
   defaultValue: true
 });
 
+export const craftAllowStickerSchema = new Rule({
+  name: "craftAllowStickerSchema",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const editAllowNametag = new Rule({
   name: "editAllowNametag",
   type: "boolean",
@@ -501,6 +507,12 @@ export const editAllowStickerY = new Rule({
   defaultValue: true
 });
 
+export const editAllowStickerSchema = new Rule({
+  name: "editAllowStickerSchema",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const appHideLogo = new Rule({
   name: "appHideLogo",
   type: "boolean",
@@ -511,4 +523,22 @@ export const appHideAuth = new Rule({
   name: "appHideAuth",
   type: "boolean",
   defaultValue: false
+});
+
+export const csFloatUrl = new Rule({
+  name: "csFloatUrl",
+  type: "string",
+  defaultValue: ""
+});
+
+export const csFloatHeaders = new Rule({
+  name: "csFloatHeaders",
+  type: "string-array",
+  defaultValue: []
+});
+
+export const craftAllowImportInspectLink = new Rule({
+  name: "craftAllowImportInspectLink",
+  type: "boolean",
+  defaultValue: true
 });

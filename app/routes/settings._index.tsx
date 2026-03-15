@@ -99,7 +99,7 @@ export default function Settings() {
 
   return (
     <Modal className="w-[540px]">
-      <ModalHeader title={translate("SettingsHeader")} linkTo="/" />
+      <ModalHeader title={translate("SettingsHeader")} closeTo="/" />
       <div className="mt-2 space-y-2 px-2">
         <SettingsLabel label={translate("SettingsMasterVolume")}>
           <EditorRange

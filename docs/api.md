@@ -30,6 +30,8 @@ type GetUserInventoryResponse = {
         number,
         {
           id: number;
+          rotation?: number;
+          schema?: number;
           wear?: number;
           x?: number;
           y?: number;
@@ -52,6 +54,7 @@ type GetUserInventoryResponse = {
             {
               id: number;
               rotation?: number;
+              schema?: number;
               wear?: number;
               x?: number;
               y?: number;
@@ -72,7 +75,7 @@ type GetUserInventoryResponse = {
 ## Get user equipped items
 
 ```http
-GET https://inventory.cstrike.app/api/equipped/v3/{steamID64}.json
+GET https://inventory.cstrike.app/api/equipped/v4/{steamID64}.json
 ```
 
 ### Response
@@ -80,51 +83,71 @@ GET https://inventory.cstrike.app/api/equipped/v3/{steamID64}.json
 - Returns `200` (`application/json`).
 
 ```typescript
-interface BaseEconItem {
+interface MeleeEconItem {
   def: number;
+  hash: string;
+  nametag: string;
+  paint: number;
+  seed: number;
+  stattrak: number;
+  stickers: [];
+  uid: number;
+  wear: number;
+}
+interface GlovesEconItem {
+  def: number;
+  hash: string;
   paint: number;
   seed: number;
   wear: number;
 }
-interface WeaponEconItem extends BaseEconItem {
-  legacy: boolean;
+interface WeaponEconItem {
+  def: number;
+  hash: string;
   nametag: string;
+  paint: number;
+  seed: number;
   stattrak: number;
   stickers: {
     def: number;
     rotation?: number;
+    schema?: number;
     slot: number;
     wear: number;
     x?: number;
     y?: number;
   }[];
   uid: number;
+  wear: number;
 }
-interface AgentItem {
-  def?: number;
-  model: string;
-  patches: number[];
-  vofallback: boolean;
-  vofemale: boolean;
-  voprefix: string;
-}
-interface MusicKitItem {
+interface AgentEconItem {
   def: number;
+  hash: string;
+  stickers: {
+    def: number;
+    slot: number;
+  }[];
+}
+interface MusicKitEconItem {
+  musicId: number;
   stattrak: number;
   uid: number;
 }
-interface GraffitiItem {
+interface CollectibleEconItem {
+  def: number;
+}
+interface GraffitiEconItem {
   def: number;
   tint: number;
 }
 type GetUserEquippedItemsResponse = {
-  agents?: Record<number, AgentItem>;
+  agents?: Record<number, AgentEconItem>;
+  collectible?: CollectibleEconItem;
   ctWeapons?: Record<number, WeaponEconItem>;
-  gloves?: Record<number, BaseEconItem>;
-  graffiti?: GraffitiItem;
-  knives?: Record<number, WeaponEconItem>;
-  musicKit?: MusicKitItem;
-  pin?: number;
+  gloves?: Record<number, GlovesEconItem>;
+  graffiti?: GraffitiEconItem;
+  knives?: Record<number, MeleeEconItem>;
+  musicKit?: MusicKitEconItem;
   tWeapons?: Record<number, WeaponEconItem>;
 };
 ```
@@ -181,6 +204,8 @@ type PostAddItemRequest = {
           string,
           {
             id: number;
+            rotation?: number | undefined;
+            schema?: number | undefined;
             wear?: number | undefined;
             x?: number | undefined;
             y?: number | undefined;
@@ -232,7 +257,6 @@ type PostAddContainerResponse = {
   altName?: string | undefined;
   base?: boolean | undefined;
   baseId?: number | undefined;
-  category?: string | undefined;
   category?: string | undefined;
   collection?: string | undefined;
   collectionDesc?: string | undefined;

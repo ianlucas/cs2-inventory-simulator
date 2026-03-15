@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { ComponentRef, ReactNode, useEffect, useRef, useState } from "react";
@@ -63,12 +64,50 @@ export function Modal({
   );
 }
 
+export function ModalNav({
+  items
+}: {
+  items: (
+    | {
+        icon: IconDefinition;
+        isActive: boolean;
+        label: string;
+        onClick: () => void;
+      }
+    | false
+  )[];
+}) {
+  const visibleItems = items.filter((item) => item !== false);
+  if (visibleItems.length === 0) {
+    return null;
+  }
+  return (
+    <nav className="bg-black/30 px-1 pb-1 text-xs text-neutral-400">
+      {visibleItems.map(({ label, onClick, icon, isActive }) => (
+        <button
+          key={label}
+          className={clsx(
+            "flex items-center gap-1.5 px-2 py-1 transition-all",
+            isActive
+              ? "bg-neutral-950/50 text-neutral-300"
+              : "hover:bg-neutral-950/50 hover:text-neutral-300"
+          )}
+          onClick={onClick}
+        >
+          <FontAwesomeIcon className="h-3" icon={icon} />
+          {label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
 export function ModalHeader({
-  linkTo,
+  closeTo,
   onClose,
   title
 }: {
-  linkTo?: string;
+  closeTo?: string;
   onClose?: () => void;
   title: string;
 }) {
@@ -79,10 +118,10 @@ export function ModalHeader({
           {title}
         </span>
         <div className="flex items-center">
-          {linkTo !== undefined && (
+          {closeTo !== undefined && (
             <Link
               className="flex h-4 px-2 opacity-50 transition hover:opacity-100"
-              to={linkTo}
+              to={closeTo}
             >
               <FontAwesomeIcon icon={faXmark} className="h-4 w-4" />
             </Link>

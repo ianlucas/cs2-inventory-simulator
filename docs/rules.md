@@ -18,12 +18,14 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 | `appSeoImageUrl` | SEO image for the app. If empty, uses Inventory Simulator's default value. | `string` | _Empty_ |
 | `appSeoTitle` | SEO title for the app. If empty, uses Inventory Simulator's default value. | `string` | _Empty_ |
 | `appCountry` | Country of the application (ISO-3166-1 alpha-2 code). Changes language if available. | `string` | `us` |
+| `appCacheInventory` | Cache user's inventory if offline or unauthenticated. | `boolean` | `true` |
+| `appHideLogo` | Hide the logo in the app. | `boolean` | `false` |
+| `appHideAuth` | Hide authentication controls in the app. | `boolean` | `false` |
 | `steamApiKey` | Steam API Key is used to retrieve user information from Steam. | `string` | Env var or `YOUR_STEAM_API_KEY_GOES_HERE` |
 | `steamCallbackUrl` | URL to validate Steam authentication. | `string` | Env var or `http://localhost/sign-in/steam/callback` |
-| `appCacheInventory` | Cache user's inventory if offline or unauthenticated. | `boolean` | `true` |
 | `inventoryMaxItems` | Max number of items a user can add to inventory. | `number` | `256` |
 | `inventoryStorageUnitMaxItems` | Max items a storage unit can store. | `number` | `32` |
-| `inventoryItemAllowEdit` | Can the user edit an inventory item? | `boolean` | `false` |
+| `inventoryItemAllowEdit` | Can the user edit an inventory item? | `boolean` | `true` |
 | `inventoryItemAllowApplySticker` | Can the user apply stickers to inventory items? | `boolean` | `true` |
 | `inventoryItemAllowScrapeSticker` | Can the user scrape stickers from inventory items? | `boolean` | `true` |
 | `inventoryItemAllowApplyPatch` | Can the user apply patches to inventory items? | `boolean` | `true` |
@@ -49,6 +51,8 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 | `craftAllowStickerWear` | Can the user define Sticker Wear when crafting? | `boolean` | `true` |
 | `craftAllowStickerX` | Can the user define Sticker X offset when crafting? | `boolean` | `true` |
 | `craftAllowStickerY` | Can the user define Sticker Y offset when crafting? | `boolean` | `true` |
+| `craftAllowStickerSchema` | Can the user define Sticker Schema when crafting? | `boolean` | `true` |
+| `craftAllowImportInspectLink` | Can the user import items from inspect links when crafting? | `boolean` | `true` |
 | `editHideCategory` | Hides a category from being edited. Example: `secondary;rifle`. | `string-array` | _Empty_ |
 | `editHideType` | Hides a type from being edited. Example: `sticker;weapon`. | `string-array` | _Empty_ |
 | `editHideModel` | Hides a model from being edited. Example: `knife_flip;bayonet`. | `string-array` | _Empty_ |
@@ -63,6 +67,9 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 | `editAllowStickerWear` | Can the user define Sticker Wear when editing? | `boolean` | `true` |
 | `editAllowStickerX` | Can the user define Sticker X offset when editing? | `boolean` | `true` |
 | `editAllowStickerY` | Can the user define Sticker Y offset when editing? | `boolean` | `true` |
+| `editAllowStickerSchema` | Can the user define Sticker Schema when editing? | `boolean` | `true` |
+| `csFloatUrl` | CSFloat API URL for item inspection integration. | `string` | _Empty_ |
+| `csFloatHeaders` | CSFloat API request headers. Example: `Authorization;Bearer MyAPIToken`. | `string-array` | _Empty_ |
 
 > [!CAUTION]  
 > Both `steamApiKey` and `steamCallbackUrl` are required for authentication to work.

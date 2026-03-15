@@ -15,11 +15,13 @@ import { EditorStepRange } from "./editor-step-range";
 export function EditorStepRangeWithInput({
   disabled,
   disabledInputStyles,
+  emptyValue,
   inputStyles,
   max,
   maxLength,
   min,
   onChange,
+  placeholder,
   randomizable,
   step,
   stepRangeStyles,
@@ -30,11 +32,13 @@ export function EditorStepRangeWithInput({
 }: {
   disabled?: boolean;
   disabledInputStyles?: string;
+  emptyValue?: number;
   inputStyles: string;
   max: number;
   maxLength: number;
   min: number;
   onChange: (value: number) => void;
+  placeholder?: string;
   randomizable?: boolean;
   step: number;
   stepRangeStyles: string;
@@ -43,13 +47,19 @@ export function EditorStepRangeWithInput({
   validate: (value: number) => boolean;
   value: number;
 }) {
-  const [text, setText] = useState(transform(value));
+  const [text, setText] = useState(
+    emptyValue !== undefined && value === emptyValue ? "" : transform(value)
+  );
   const translate = useTranslate();
 
   function handleTextChange({
     target: { value: text }
   }: React.ChangeEvent<HTMLInputElement>) {
     setText(text);
+    if (!text && emptyValue !== undefined) {
+      onChange(emptyValue);
+      return;
+    }
     const value = Number(text);
     if (text && validate(value)) {
       onChange(value);
@@ -57,14 +67,21 @@ export function EditorStepRangeWithInput({
   }
 
   function handleTextBlur() {
+    if (!text && emptyValue !== undefined) {
+      return;
+    }
     if (!text || !validate(Number(text))) {
-      setText(transform(value));
+      setText(
+        emptyValue !== undefined && value === emptyValue ? "" : transform(value)
+      );
     }
   }
 
   function handleChange(value: number) {
     onChange(value);
-    setText(transform(value));
+    setText(
+      emptyValue !== undefined && value === emptyValue ? "" : transform(value)
+    );
   }
 
   function handleRandomClick() {
@@ -83,7 +100,10 @@ export function EditorStepRangeWithInput({
         maxLength={maxLength}
         onChange={handleTextChange}
         onBlur={handleTextBlur}
-        validate={(wearText) => validate(Number(wearText))}
+        placeholder={placeholder}
+        validate={(wearText) =>
+          (!wearText && emptyValue !== undefined) || validate(Number(wearText))
+        }
         value={text}
       />
       {!disabled && (

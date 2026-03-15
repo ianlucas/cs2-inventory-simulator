@@ -26,6 +26,7 @@ export function CraftNew({
     craftAllowSeed,
     craftAllowStatTrak,
     craftAllowStickerRotation,
+    craftAllowStickerSchema,
     craftAllowStickers,
     craftAllowStickerWear,
     craftAllowStickerX,
@@ -52,6 +53,7 @@ export function CraftNew({
   const isHideStatTrak = !craftAllowStatTrak;
   const isHideWear = !craftAllowWear;
   const isHideStickerRotation = !craftAllowStickerRotation;
+  const isHideStickerSchema = !craftAllowStickerSchema;
   const isHideStickerWear = !craftAllowStickerWear;
   const isHideStickerX = !craftAllowStickerX;
   const isHideStickerY = !craftAllowStickerY;
@@ -90,6 +92,7 @@ export function CraftNew({
         isHideSeed={isHideSeed}
         isHideStatTrak={isHideStatTrak}
         isHideStickerRotation={isHideStickerRotation}
+        isHideStickerSchema={isHideStickerSchema}
         isHideStickers={isHideStickers}
         isHideStickerWear={isHideStickerWear}
         isHideStickerX={isHideStickerX}
