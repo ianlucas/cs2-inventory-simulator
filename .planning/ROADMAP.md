@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
  (completed 2026-03-15)
 - [x] **Phase 2: Server Rules** - Public server rules page for players (completed 2026-03-15)
 - [x] **Phase 3: Homepage** - Live server list (gamedig), cards, grid/table toggle, player modal (completed 2026-03-15)
-- [ ] **Phase 4: Buy VIP** - VIP info and prices; Bynogame link and PayTR purchase
+- [x] **Phase 4: Buy VIP** - VIP info and prices; Bynogame link and PayTR purchase (completed 2026-03-15)
 - [ ] **Phase 5: Admin Panel** - Manage VIPs, bans, mutes, server info (Steam + admin flag)
 
 ## Phase Details
@@ -70,12 +70,12 @@ Plans:
   1. User can open the Buy VIP page and see VIP information and prices
   2. User can follow a link to Bynogame for external purchase
   3. User can complete a VIP purchase on-site via PayTR integration
-**Plans:** 2/3 plans complete
+**Plans:** 3/3 plans complete
 
 Plans:
 - [x] 04-01-PLAN.md — PayTR callback (Bildirim URL): hash verify, MySQL VIP insert, idempotency; PayTR env + hash utils; VIP table schema doc ✓ 04-01-SUMMARY.md
 - [x] 04-02-PLAN.md — VIP data (vip-packages.ts), /vip page, header+footer link, Bynogame link from env ✓ 04-02-SUMMARY.md
-- [ ] 04-03-PLAN.md — PayTR get-token API + iframe on VIP page (token request, vip_pending, iframeResizer)
+- [x] 04-03-PLAN.md — PayTR get-token API + iframe on VIP page (token request, vip_pending, iframeResizer) ✓ 04-03-SUMMARY.md
 
 ### Phase 5: Admin Panel
 **Goal**: Admins can manage VIPs, bans, mutes, and server info using existing Steam auth and admin flag.
