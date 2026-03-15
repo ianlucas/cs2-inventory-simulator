@@ -49,6 +49,7 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 | `craftAllowStickerWear` | Can the user define Sticker Wear when crafting? | `boolean` | `true` |
 | `craftAllowStickerX` | Can the user define Sticker X offset when crafting? | `boolean` | `true` |
 | `craftAllowStickerY` | Can the user define Sticker Y offset when crafting? | `boolean` | `true` |
+| `craftAllowStickerSchema` | Can the user define Sticker Schema when crafting? | `boolean` | `true` |
 | `editHideCategory` | Hides a category from being edited. Example: `secondary;rifle`. | `string-array` | _Empty_ |
 | `editHideType` | Hides a type from being edited. Example: `sticker;weapon`. | `string-array` | _Empty_ |
 | `editHideModel` | Hides a model from being edited. Example: `knife_flip;bayonet`. | `string-array` | _Empty_ |
@@ -63,6 +64,7 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 | `editAllowStickerWear` | Can the user define Sticker Wear when editing? | `boolean` | `true` |
 | `editAllowStickerX` | Can the user define Sticker X offset when editing? | `boolean` | `true` |
 | `editAllowStickerY` | Can the user define Sticker Y offset when editing? | `boolean` | `true` |
+| `editAllowStickerSchema` | Can the user define Sticker Schema when editing? | `boolean` | `true` |
 
 > [!CAUTION]  
 > Both `steamApiKey` and `steamCallbackUrl` are required for authentication to work.

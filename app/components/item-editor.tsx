@@ -49,6 +49,7 @@ export function ItemEditor({
   isHideSeed,
   isHideStatTrak,
   isHideStickerRotation,
+  isHideStickerSchema,
   isHideStickers,
   isHideStickerWear,
   isHideStickerX,
@@ -70,6 +71,7 @@ export function ItemEditor({
   isHideSeed?: boolean;
   isHideStatTrak?: boolean;
   isHideStickerRotation?: boolean;
+  isHideStickerSchema?: boolean;
   isHideStickers?: boolean;
   isHideStickerWear?: boolean;
   isHideStickerX?: boolean;
@@ -148,6 +150,7 @@ export function ItemEditor({
               disabled={isDisabled}
               forItem={item}
               isHideStickerRotation={isHideStickerRotation}
+              isHideStickerSchema={isHideStickerSchema}
               isHideStickerWear={isHideStickerWear}
               isHideStickerX={isHideStickerX}
               isHideStickerY={isHideStickerY}

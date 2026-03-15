@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2_MAX_STICKER_ROTATION,
   CS2_MAX_STICKER_WEAR,
+  CS2_MAX_STICKERS,
   CS2_MIN_STICKER_ROTATION,
   CS2_MIN_STICKER_WEAR,
   CS2_STICKER_WEAR_FACTOR,
@@ -27,10 +28,12 @@ import {
   stickerOffsetStringMaxLen,
   stickerOffsetToString,
   stickerRotationStringMaxLen,
+  stickerSchemaStringMaxLen,
   stickerWearStringMaxLen,
   stickerWearToString,
   validateStickerOffset,
   validateStickerRotation,
+  validateStickerSchema,
   validateStickerWear
 } from "~/utils/economy";
 import { createFakeInventoryItemFromBase } from "~/utils/inventory";
@@ -46,6 +49,7 @@ export function AppliedStickerEditor({
   className,
   forItem,
   isHideStickerRotation,
+  isHideStickerSchema,
   isHideStickerWear,
   isHideStickerX,
   isHideStickerY,
@@ -58,12 +62,14 @@ export function AppliedStickerEditor({
   className?: string;
   forItem?: CS2EconomyItem;
   isHideStickerRotation?: boolean;
+  isHideStickerSchema?: boolean;
   isHideStickerWear?: boolean;
   isHideStickerX?: boolean;
   isHideStickerY?: boolean;
   item: CS2EconomyItem;
   onChange?: (data: {
     rotation: number;
+    schema: number;
     wear: number;
     x: number;
     y: number;
@@ -71,9 +77,9 @@ export function AppliedStickerEditor({
   slot?: number;
   stickers?: Record<
     string,
-    { wear?: number; rotation?: number; x?: number; y?: number }
+    { wear?: number; rotation?: number; schema?: number; x?: number; y?: number }
   >;
-  value: { wear: number; rotation: number; x: number; y: number };
+  value: { wear: number; rotation: number; schema: number; x: number; y: number };
 }) {
   const translate = useTranslate();
   const [, copyToClipboard] = useCopyToClipboard();
@@ -183,6 +189,24 @@ export function AppliedStickerEditor({
               type="int"
               validate={validateStickerRotation}
               value={attributes.value.rotation}
+            />
+          </EditorLabel>
+        )}
+        {!isHideStickerSchema && (
+          <EditorLabel label={translate("EditorStickerSchema")}>
+            <EditorStepRangeWithInput
+              emptyValue={-1}
+              inputStyles="w-24 min-w-0"
+              max={CS2_MAX_STICKERS - 1}
+              maxLength={stickerSchemaStringMaxLen}
+              min={-1}
+              onChange={attributes.update("schema")}
+              placeholder={translate("EditorStickerSchemaPlaceholder")}
+              step={1}
+              stepRangeStyles="flex-1"
+              type="int"
+              validate={validateStickerSchema}
+              value={attributes.value.schema}
             />
           </EditorLabel>
         )}

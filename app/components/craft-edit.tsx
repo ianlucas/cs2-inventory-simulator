@@ -29,6 +29,7 @@ export function CraftEdit({
     editAllowSeed,
     editAllowStatTrak,
     editAllowStickerRotation,
+    editAllowStickerSchema,
     editAllowStickers,
     editAllowStickerWear,
     editAllowStickerX,
@@ -46,6 +47,7 @@ export function CraftEdit({
   const isHideStatTrak = !editAllowStatTrak;
   const isHideWear = !editAllowWear;
   const isHideStickerRotation = !editAllowStickerRotation;
+  const isHideStickerSchema = !editAllowStickerSchema;
   const isHideStickerWear = !editAllowStickerWear;
   const isHideStickerX = !editAllowStickerX;
   const isHideStickerY = !editAllowStickerY;
@@ -84,6 +86,7 @@ export function CraftEdit({
         isHideSeed={isHideSeed}
         isHideStatTrak={isHideStatTrak}
         isHideStickerRotation={isHideStickerRotation}
+        isHideStickerSchema={isHideStickerSchema}
         isHideStickers={isHideStickers}
         isHideStickerWear={isHideStickerWear}
         isHideStickerX={isHideStickerX}

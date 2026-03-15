@@ -435,6 +435,12 @@ export const craftAllowStickerY = new Rule({
   defaultValue: true
 });
 
+export const craftAllowStickerSchema = new Rule({
+  name: "craftAllowStickerSchema",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const editAllowNametag = new Rule({
   name: "editAllowNametag",
   type: "boolean",
@@ -497,6 +503,12 @@ export const editAllowStickerX = new Rule({
 
 export const editAllowStickerY = new Rule({
   name: "editAllowStickerY",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowStickerSchema = new Rule({
+  name: "editAllowStickerSchema",
   type: "boolean",
   defaultValue: true
 });

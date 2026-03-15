@@ -64,6 +64,8 @@ export const english = {
   EditorStatTrak: /* csgo_english.txt */"StatTrak™",
   EditorStickerEdit: /* csgo_english.txt */"Edit",
   EditorStickerRotation: /* csgo_english.txt */"Rotation",
+  EditorStickerSchema: "Schema",
+  EditorStickerSchemaPlaceholder: "None",
   EditorStickerWear: "Sticker wear",
   EditorStickerX: /* csgo_english.txt */"X Offset",
   EditorStickerY: /* csgo_english.txt */"Y Offset",
