@@ -42,3 +42,11 @@ export async function requireUser(request: Request) {
   }
   return user;
 }
+
+export async function isAdmin(request: Request): Promise<boolean> {
+  const userId = await getRequestUserId(request);
+  if (!userId) return false;
+  const ids = process.env.ADMIN_STEAM_IDS ?? "";
+  const list = ids.split(",").map((s) => s.trim()).filter(Boolean);
+  return list.includes(userId);
+}

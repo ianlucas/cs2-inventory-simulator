@@ -27,6 +27,8 @@ export const conflict = new Response(null, {
   status: 409
 });
 
+export const forbidden = new Response(null, { status: 403 });
+
 export function res(body: BodyInit | null | undefined, mimeType: string) {
   return new Response(body, {
     headers: { "Content-Type": mimeType }
