@@ -94,6 +94,12 @@ function serverPing(server: ServerListItem): string {
 
 type SelectedServer = { host: string; port: number } | null;
 
+function toSelectedServer(server: ServerListItem): SelectedServer {
+  const host = (server as { host?: string }).host ?? "";
+  const port = (server as { port?: number }).port ?? DEFAULT_PORT;
+  return { host, port };
+}
+
 export default function Index() {
   const { servers } = useLoaderData<typeof loader>();
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -190,7 +196,16 @@ export default function Index() {
               {servers.map((server, i) => (
                 <tr
                   key={i}
-                  className="border-b border-stone-600/30 last:border-b-0"
+                  className="cursor-pointer border-b border-stone-600/30 last:border-b-0 transition hover:bg-stone-700/50"
+                  onClick={() => setSelectedServer(toSelectedServer(server))}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelectedServer(toSelectedServer(server));
+                    }
+                  }}
                 >
                   <td className="px-4 py-3 text-white">
                     {serverDisplayName(server)}
