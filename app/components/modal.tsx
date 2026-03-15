@@ -67,16 +67,20 @@ export function Modal({
 export function ModalNav({
   items
 }: {
-  items: {
+  items: ({
     icon: IconDefinition;
     isActive: boolean;
     label: string;
     onClick: () => void;
-  }[];
+  } | false)[];
 }) {
+  const visibleItems = items.filter((item) => item !== false);
+  if (visibleItems.length === 0) {
+    return null;
+  }
   return (
     <nav className="bg-black/30 px-1 pb-1 text-xs text-neutral-400">
-      {items.map(({ label, onClick, icon, isActive }) => (
+      {visibleItems.map(({ label, onClick, icon, isActive }) => (
         <button
           key={label}
           className={clsx(

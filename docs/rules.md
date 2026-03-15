@@ -52,6 +52,7 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 | `craftAllowStickerX` | Can the user define Sticker X offset when crafting? | `boolean` | `true` |
 | `craftAllowStickerY` | Can the user define Sticker Y offset when crafting? | `boolean` | `true` |
 | `craftAllowStickerSchema` | Can the user define Sticker Schema when crafting? | `boolean` | `true` |
+| `craftAllowImportInspectLink` | Can the user import items from inspect links when crafting? | `boolean` | `true` |
 | `editHideCategory` | Hides a category from being edited. Example: `secondary;rifle`. | `string-array` | _Empty_ |
 | `editHideType` | Hides a type from being edited. Example: `sticker;weapon`. | `string-array` | _Empty_ |
 | `editHideModel` | Hides a model from being edited. Example: `knife_flip;bayonet`. | `string-array` | _Empty_ |

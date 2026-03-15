@@ -536,3 +536,9 @@ export const csFloatHeaders = new Rule({
   type: "string-array",
   defaultValue: []
 });
+
+export const craftAllowImportInspectLink = new Rule({
+  name: "craftAllowImportInspectLink",
+  type: "boolean",
+  defaultValue: true
+});

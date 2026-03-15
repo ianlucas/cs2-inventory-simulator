@@ -10,7 +10,7 @@ import lzstring from "lz-string";
 import { useState } from "react";
 import { data, useLoaderData, useNavigate } from "react-router";
 import { z } from "zod";
-import { useInventory, useTranslate } from "~/components/app-context";
+import { useInventory, useRules, useTranslate } from "~/components/app-context";
 import { CraftEdit } from "~/components/craft-edit";
 import { CraftImportInspectLink } from "~/components/craft-import-inspect-link";
 import { CraftNew } from "~/components/craft-new";
@@ -90,6 +90,7 @@ export default function Craft() {
   const navigate = useNavigate();
   const isDesktop = useIsDesktop();
 
+  const { craftAllowImportInspectLink } = useRules();
   const [inventory, setInventory] = useInventory();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isImportFromInspectLink, setIsImportFromInspectLink] = useState(false);
@@ -189,7 +190,7 @@ export default function Craft() {
           <ModalHeader title={translate("CraftSelectHeader")} closeTo="/" />
           <ModalNav
             items={[
-              {
+              craftAllowImportInspectLink && {
                 icon: faLink,
                 isActive: isImportFromInspectLink,
                 label: translate("CraftImportNavLabel"),

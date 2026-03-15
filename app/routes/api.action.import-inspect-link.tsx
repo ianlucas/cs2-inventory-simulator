@@ -14,6 +14,7 @@ import { api } from "~/api.server";
 import { getRequestUserId } from "~/auth.server";
 import { fetchCSFloatItemInfo } from "~/csfloat.server";
 import { middleware } from "~/http.server";
+import { craftAllowImportInspectLink } from "~/models/rule.server";
 import {
   badRequest,
   methodNotAllowed,
@@ -32,6 +33,9 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   }
   const userId = await getRequestUserId(request);
   if (!userId) {
+    throw badRequest;
+  }
+  if (!(await craftAllowImportInspectLink.for(userId).get())) {
     throw badRequest;
   }
   if (Date.now() - (lastRequestByUser.get(userId) ?? 0) < 1000) {
