@@ -3,15 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS2BaseInventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { isValidInspectLink, normalizeInspectLink } from "~/utils/economy";
 import { useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { FillSpinner } from "./fill-spinner";
-import { alert } from "./modal-generic";
 import { ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
+import { alert } from "./modal-generic";
 
 function useImportInspectLink() {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +56,13 @@ const errorMessages: Record<number, string> = {
   503: "We can't import this type of inspect link right now."
 };
 
-export function CraftImportInspectLink({ onClose }: { onClose: () => void }) {
+export function CraftImportInspectLink({
+  onClose,
+  onImport
+}: {
+  onClose: () => void;
+  onImport: (item: CS2BaseInventoryItem) => void;
+}) {
   const translate = useTranslate();
   const [inspectLink, setInspectLink] = useState("");
   const normalizedInspectLink = useMemo(
@@ -83,7 +90,7 @@ export function CraftImportInspectLink({ onClose }: { onClose: () => void }) {
       });
       return;
     }
-    console.log(result.data);
+    onImport(result.data);
   }
 
   return (

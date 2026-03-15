@@ -161,6 +161,11 @@ export default function Craft() {
     setIsImportFromInspectLink(false);
   }
 
+  function handleInspectLinkImport(item: CS2BaseInventoryItem) {
+    setIsImportFromInspectLink(false);
+    setItem(createFakeInventoryItemFromBase(item));
+  }
+
   const editorProps =
     item !== undefined
       ? {
@@ -209,7 +214,10 @@ export default function Craft() {
       )}
       {isImportFromInspectLink && (
         <Modal className="w-105">
-          <CraftImportInspectLink onClose={handleImportFromInspectLinkClose} />
+          <CraftImportInspectLink
+            onImport={handleInspectLinkImport}
+            onClose={handleImportFromInspectLinkClose}
+          />
         </Modal>
       )}
     </>
