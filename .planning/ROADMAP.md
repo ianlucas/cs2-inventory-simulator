@@ -59,7 +59,7 @@ Plans:
 
 Plans:
 - [x] 03-01-PLAN.md — Data foundation: servers config, map thumbnails, hide inventory on /, index loader (gamedig) ✓ 03-01-SUMMARY.md
-- [ ] 03-02-PLAN.md — Server list UI: vertical cards with map background, grid/table toggle (default grid)
+- [x] 03-02-PLAN.md — Server list UI: vertical cards with map background, grid/table toggle (default grid) ✓ 03-02-SUMMARY.md
 - [ ] 03-03-PLAN.md — Player modal on card click (resource route + useFetcher, Modal + ModalHeader)
 
 ### Phase 4: Buy VIP
