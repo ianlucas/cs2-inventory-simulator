@@ -12,7 +12,7 @@ Deliver the hub and VIP layer in five phases: establish the dual-database founda
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Data (Dual database)** - MySQL for VIP, bans, mutes; PostgreSQL unchanged
+- [x] **Phase 1: Data (Dual database)** - MySQL for VIP, bans, mutes; PostgreSQL unchanged (completed 2026-03-15)
 - [ ] **Phase 2: Server Rules** - Public server rules page for players
 - [ ] **Phase 3: Homepage** - Live server list (gamedig), cards, grid/table toggle, player modal
 - [ ] **Phase 4: Buy VIP** - VIP info and prices; Bynogame link and PayTR purchase
@@ -28,7 +28,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. VIP, bans, and mutes can be persisted and read from a separate MySQL database
   2. Existing PostgreSQL flows (inventory, users, rules) continue to work unchanged
   3. There is no schema or connection mixing between the two databases
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [x] 01-01-PLAN.md — MySQL connection layer (MYSQL_URL, mysql.server.ts, getMySQLPool, unit tests); Postgres untouched ✓ 01-01-SUMMARY.md
@@ -82,7 +82,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Data (Dual database) | 0/1 | Not started | - |
+| 1. Data (Dual database) | 0/1 | Complete    | 2026-03-15 |
 | 2. Server Rules | 0/0 | Not started | - |
 | 3. Homepage | 0/0 | Not started | - |
 | 4. Buy VIP | 0/0 | Not started | - |
