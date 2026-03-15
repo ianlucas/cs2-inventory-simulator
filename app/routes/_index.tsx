@@ -7,9 +7,13 @@ import { useEffect, useState } from "react";
 import { useFetcher, useLoaderData } from "react-router";
 import { GameDig } from "gamedig";
 import { middleware } from "~/http.server";
-import { SERVER_LIST } from "~/data/servers";
+import { getServerListForDisplay } from "~/admin/servers.server";
 import { getMetaTitle } from "~/root-meta";
-import { Modal, ModalHeader } from "~/components/modal";
+import { Modal } from "~/components/modal";
+import {
+  ServerDetailModal,
+  type ServerDetailPlayer
+} from "~/components/server-detail-modal";
 import { ServerCard } from "~/components/server-card";
 import type { Route } from "./+types/_index";
 
@@ -36,25 +40,28 @@ const DEFAULT_PORT = 27015;
 export async function loader({ request }: Route.LoaderArgs) {
   await middleware(request);
 
+  const serverEntries = await getServerListForDisplay();
   const gamedig = new GameDig();
   const results = await Promise.allSettled(
-    SERVER_LIST.map((s) =>
+    serverEntries.map((s) =>
       gamedig.query({
         type: "counterstrike2",
         host: s.host,
-        port: s.port ?? DEFAULT_PORT
+        port: s.port ?? DEFAULT_PORT,
+        requestRules: false
       })
     )
   );
 
   const servers: ServerListItem[] = results.map((result, i) => {
-    const entry = SERVER_LIST[i];
+    const entry = serverEntries[i];
     const port = entry?.port ?? DEFAULT_PORT;
     const host = entry?.host ?? "";
+    const gamemode = entry?.gamemode;
     if (result.status === "fulfilled") {
-      return { ...result.value, host, port };
+      return { ...result.value, host, port, gamemode };
     }
-    return { offline: true as const, host, port };
+    return { offline: true as const, host, port, gamemode };
   });
 
   return { servers };
@@ -104,7 +111,7 @@ export default function Index() {
   const { servers } = useLoaderData<typeof loader>();
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [selectedServer, setSelectedServer] = useState<SelectedServer>(null);
-  const fetcher = useFetcher<{ players?: Array<{ name?: string; raw?: Record<string, unknown> }> }>();
+  const fetcher = useFetcher<{ players?: ServerDetailPlayer[] }>();
 
   useEffect(() => {
     if (!selectedServer) return;
@@ -113,10 +120,20 @@ export default function Index() {
   }, [selectedServer]);
 
   const hasServers = Array.isArray(servers) && servers.length > 0;
-  const players = fetcher.data?.players ?? [];
-  const sortedPlayers = [...players].sort((a, b) =>
-    (a.name ?? "").localeCompare(b.name ?? "")
-  );
+  const players: ServerDetailPlayer[] = fetcher.data?.players ?? [];
+  const selectedServerInfo =
+    selectedServer &&
+    servers.find(
+      (s) =>
+        (s as { host?: string }).host === selectedServer.host &&
+        (s as { port?: number }).port === selectedServer.port
+    );
+  const connectString =
+    selectedServerInfo != null
+      ? serverConnect(selectedServerInfo)
+      : selectedServer
+        ? `${selectedServer.host}:${selectedServer.port}`
+        : "";
 
   return (
     <div className="m-auto max-w-6xl px-4 py-8">
@@ -230,25 +247,45 @@ export default function Index() {
       )}
 
       <Modal hidden={!selectedServer} blur>
-        <ModalHeader
-          title="Players"
+        <ServerDetailModal
+          server={
+            selectedServerInfo
+              ? {
+                  name: serverDisplayName(selectedServerInfo),
+                  map:
+                    "offline" in selectedServerInfo
+                      ? undefined
+                      : selectedServerInfo.map,
+                  numplayers:
+                    "offline" in selectedServerInfo
+                      ? undefined
+                      : selectedServerInfo.numplayers,
+                  maxplayers:
+                    "offline" in selectedServerInfo
+                      ? undefined
+                      : selectedServerInfo.maxplayers,
+                  ping:
+                    "offline" in selectedServerInfo
+                      ? undefined
+                      : selectedServerInfo.ping,
+                  connect: serverConnect(selectedServerInfo),
+                  host: (selectedServerInfo as { host?: string }).host,
+                  port: (selectedServerInfo as { port?: number }).port,
+                  gamemode: (selectedServerInfo as { gamemode?: string }).gamemode,
+                  offline:
+                    "offline" in selectedServerInfo &&
+                    selectedServerInfo.offline
+                }
+              : null
+          }
+          players={players}
+          connect={connectString}
+          loading={fetcher.state === "loading"}
           onClose={() => setSelectedServer(null)}
+          onCopyIp={(ip) => {
+            void navigator.clipboard.writeText(ip);
+          }}
         />
-        <div className="min-w-[200px] px-4 py-3">
-          {fetcher.state === "loading" ? (
-            <p className="text-neutral-400">Loading players…</p>
-          ) : sortedPlayers.length === 0 ? (
-            <p className="text-neutral-400">No players</p>
-          ) : (
-            <ul className="space-y-1.5 text-sm text-white">
-              {sortedPlayers.map((player, i) => (
-                <li key={i}>
-                  {player.name?.trim() ? player.name : "—"}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
       </Modal>
     </div>
   );

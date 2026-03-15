@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { useEffect, useState } from "react";
 import { Link, useFetcher, useLoaderData } from "react-router";
 import { getMetaTitle } from "~/root-meta";
 import {
@@ -20,6 +21,13 @@ import {
   type AddMuteParams,
   type MuteType
 } from "~/admin/mutes.server";
+import {
+  listServers,
+  addServer,
+  updateServer,
+  removeServer,
+  type ServerRow
+} from "~/admin/servers.server";
 import type { Route } from "./+types/admin._index";
 
 export const meta = getMetaTitle("Admin");
@@ -27,8 +35,12 @@ export const meta = getMetaTitle("Admin");
 const ADMIN_ID_PLACEHOLDER = 0;
 
 export async function loader(_args: Route.LoaderArgs) {
-  const [bans, mutes] = await Promise.all([listBans(), listMutes()]);
-  return { bans, mutes };
+  const [bans, mutes, servers] = await Promise.all([
+    listBans(),
+    listMutes(),
+    listServers()
+  ]);
+  return { bans, mutes, servers };
 }
 
 export async function action({ request }: Route.ActionArgs) {
@@ -104,6 +116,42 @@ export async function action({ request }: Route.ActionArgs) {
     return result;
   }
 
+  if (intent === "add-server") {
+    const host = String(formData.get("host") ?? "").trim();
+    const portRaw = formData.get("port");
+    const port = portRaw !== null && portRaw !== "" ? Number(portRaw) : undefined;
+    const gamemode = (formData.get("gamemode") as string)?.trim() || undefined;
+    if (!host) return { ok: false, error: "Host is required." };
+    const result = await addServer({ host, port, gamemode });
+    return result;
+  }
+
+  if (intent === "update-server") {
+    const id = Number(formData.get("id"));
+    if (!id) return { ok: false, error: "Server ID is required." };
+    const host = (formData.get("host") as string)?.trim();
+    const portRaw = formData.get("port");
+    const port = portRaw !== null && portRaw !== "" ? Number(portRaw) : undefined;
+    const gamemode = (formData.get("gamemode") as string)?.trim();
+    const sortOrderRaw = formData.get("sort_order");
+    const sort_order =
+      sortOrderRaw !== null && sortOrderRaw !== "" ? Number(sortOrderRaw) : undefined;
+    const result = await updateServer(id, {
+      ...(host !== undefined && { host }),
+      ...(port !== undefined && { port }),
+      ...(gamemode !== undefined && { gamemode }),
+      ...(sort_order !== undefined && { sort_order })
+    });
+    return result;
+  }
+
+  if (intent === "remove-server") {
+    const id = Number(formData.get("id"));
+    if (!id) return { ok: false, error: "Server ID is required." };
+    const result = await removeServer(id);
+    return result;
+  }
+
   return { ok: false, error: "Unknown action." };
 }
 
@@ -125,7 +173,7 @@ function formatDate(value: string | null): string {
 }
 
 export default function AdminIndex() {
-  const { bans, mutes } = useLoaderData<typeof loader>();
+  const { bans, mutes, servers } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const actionError =
     fetcher.data && "ok" in fetcher.data && !fetcher.data.ok
@@ -376,8 +424,69 @@ export default function AdminIndex() {
         </section>
 
         <section id="servers" className="rounded-xl border border-stone-600/50 bg-stone-900/80 px-6 py-4">
-          <h2 className="font-display text-lg font-medium text-white mb-2">Server info</h2>
-          <p className="text-neutral-400 text-sm">Server configuration and status. (Placeholder)</p>
+          <h2 className="font-display text-lg font-medium text-white mb-2">Servers</h2>
+          {actionError &&
+            ["add-server", "update-server", "remove-server"].includes(
+              String(fetcher.formData?.get("intent") ?? "")
+            ) && <p className="text-red-400 text-sm mb-2">{actionError}</p>}
+          <fetcher.Form method="post" className="mb-4 flex flex-wrap gap-3 items-end">
+            <input type="hidden" name="intent" value="add-server" />
+            <input
+              type="text"
+              name="host"
+              placeholder="Host (IP or hostname)"
+              required
+              className="rounded border border-stone-600 bg-stone-800 px-3 py-2 text-sm text-white placeholder-neutral-500 min-w-[140px]"
+            />
+            <input
+              type="number"
+              name="port"
+              placeholder="Port (optional)"
+              className="rounded border border-stone-600 bg-stone-800 px-3 py-2 text-sm text-white placeholder-neutral-500 w-24"
+            />
+            <input
+              type="text"
+              name="gamemode"
+              placeholder="Gamemode (optional)"
+              className="rounded border border-stone-600 bg-stone-800 px-3 py-2 text-sm text-white placeholder-neutral-500 min-w-[100px]"
+            />
+            <button
+              type="submit"
+              disabled={fetcher.state !== "idle"}
+              className="rounded bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50"
+            >
+              {fetcher.state !== "idle" && fetcher.formData?.get("intent") === "add-server"
+                ? "Adding…"
+                : "Add server"}
+            </button>
+          </fetcher.Form>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm text-neutral-300">
+              <thead>
+                <tr className="border-b border-stone-600">
+                  <th className="py-2 pr-2 font-medium text-white">Host</th>
+                  <th className="py-2 pr-2 font-medium text-white">Port</th>
+                  <th className="py-2 pr-2 font-medium text-white">Gamemode</th>
+                  <th className="py-2 pr-2 font-medium text-white">Sort order</th>
+                  <th className="py-2 pr-2 font-medium text-white">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {servers.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-4 text-neutral-500">
+                      No servers. Add one above or configure MySQL server_list; homepage uses
+                      app/data/servers fallback when empty.
+                    </td>
+                  </tr>
+                ) : (
+                  servers.map((row: ServerRow) => (
+                    <ServerRowWithActions key={row.id} server={row} fetcher={fetcher} />
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </section>
       </div>
     </div>
@@ -419,5 +528,132 @@ function UnmuteForm({ muteId, fetcher }: { muteId: number; fetcher: ReturnType<t
         {isUnmuting && fetcher.state !== "idle" ? "Unmuting…" : "Unmute"}
       </button>
     </fetcher.Form>
+  );
+}
+
+function ServerRowWithActions({
+  server,
+  fetcher
+}: {
+  server: ServerRow;
+  fetcher: ReturnType<typeof useFetcher<typeof action>>;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [host, setHost] = useState(server.host);
+  const [port, setPort] = useState(String(server.port ?? ""));
+  const [gamemode, setGamemode] = useState(server.gamemode ?? "");
+  const [sortOrder, setSortOrder] = useState(String(server.sort_order ?? ""));
+
+  const isUpdating =
+    fetcher.formData?.get("intent") === "update-server" &&
+    Number(fetcher.formData?.get("id")) === server.id;
+  const isRemoving =
+    fetcher.formData?.get("intent") === "remove-server" &&
+    Number(fetcher.formData?.get("id")) === server.id;
+
+  useEffect(() => {
+    setHost(server.host);
+    setPort(String(server.port ?? ""));
+    setGamemode(server.gamemode ?? "");
+    setSortOrder(String(server.sort_order ?? ""));
+  }, [server.id, server.host, server.port, server.gamemode, server.sort_order]);
+
+  useEffect(() => {
+    if (editing && fetcher.state === "idle" && fetcher.data && "ok" in fetcher.data && fetcher.data.ok) {
+      setEditing(false);
+    }
+  }, [editing, fetcher.state, fetcher.data]);
+
+  if (editing) {
+    return (
+      <tr className="border-b border-stone-700/50">
+        <td className="py-2 pr-2">
+          <input
+            type="text"
+            value={host}
+            onChange={(e) => setHost(e.target.value)}
+            className="rounded border border-stone-600 bg-stone-800 px-2 py-1 text-sm text-white w-full min-w-[120px]"
+          />
+        </td>
+        <td className="py-2 pr-2">
+          <input
+            type="number"
+            value={port}
+            onChange={(e) => setPort(e.target.value)}
+            placeholder="—"
+            className="rounded border border-stone-600 bg-stone-800 px-2 py-1 text-sm text-white w-20"
+          />
+        </td>
+        <td className="py-2 pr-2">
+          <input
+            type="text"
+            value={gamemode}
+            onChange={(e) => setGamemode(e.target.value)}
+            className="rounded border border-stone-600 bg-stone-800 px-2 py-1 text-sm text-white min-w-[80px]"
+          />
+        </td>
+        <td className="py-2 pr-2">
+          <input
+            type="number"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="rounded border border-stone-600 bg-stone-800 px-2 py-1 text-sm text-white w-16"
+          />
+        </td>
+        <td className="py-2 pr-2 flex gap-1">
+          <fetcher.Form method="post" className="inline">
+            <input type="hidden" name="intent" value="update-server" />
+            <input type="hidden" name="id" value={server.id} />
+            <input type="hidden" name="host" value={host} />
+            <input type="hidden" name="port" value={port || ""} />
+            <input type="hidden" name="gamemode" value={gamemode} />
+            <input type="hidden" name="sort_order" value={sortOrder || ""} />
+            <button
+              type="submit"
+              disabled={fetcher.state !== "idle"}
+              className="rounded bg-amber-600/80 px-2 py-1 text-xs font-medium text-white hover:bg-amber-500 disabled:opacity-50"
+            >
+              {isUpdating && fetcher.state !== "idle" ? "Saving…" : "Save"}
+            </button>
+          </fetcher.Form>
+          <button
+            type="button"
+            onClick={() => setEditing(false)}
+            className="rounded bg-stone-600 px-2 py-1 text-xs font-medium text-white hover:bg-stone-500"
+          >
+            Cancel
+          </button>
+        </td>
+      </tr>
+    );
+  }
+
+  return (
+    <tr className="border-b border-stone-700/50">
+      <td className="py-2 pr-2">{server.host}</td>
+      <td className="py-2 pr-2">{server.port ?? "—"}</td>
+      <td className="py-2 pr-2">{server.gamemode ?? "—"}</td>
+      <td className="py-2 pr-2">{server.sort_order ?? "—"}</td>
+      <td className="py-2 pr-2 flex gap-1">
+        <button
+          type="button"
+          onClick={() => setEditing(true)}
+          className="rounded bg-stone-600 px-2 py-1 text-xs font-medium text-neutral-200 hover:bg-stone-500"
+        >
+          Edit
+        </button>
+        <fetcher.Form method="post" className="inline">
+          <input type="hidden" name="intent" value="remove-server" />
+          <input type="hidden" name="id" value={server.id} />
+          <button
+            type="submit"
+            disabled={fetcher.state !== "idle"}
+            className="rounded bg-red-900/80 px-2 py-1 text-xs font-medium text-red-200 hover:bg-red-800 disabled:opacity-50"
+          >
+            {isRemoving && fetcher.state !== "idle" ? "Removing…" : "Remove"}
+          </button>
+        </fetcher.Form>
+      </td>
+    </tr>
   );
 }
