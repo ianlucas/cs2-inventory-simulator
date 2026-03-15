@@ -28,7 +28,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. VIP, bans, and mutes can be persisted and read from a separate MySQL database
   2. Existing PostgreSQL flows (inventory, users, rules) continue to work unchanged
   3. There is no schema or connection mixing between the two databases
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 01-01-PLAN.md — MySQL connection layer (MYSQL_URL, mysql.server.ts, getMySQLPool, unit tests); Postgres untouched
 
 ### Phase 2: Server Rules
 **Goal**: Users can view a public server rules page.
@@ -79,7 +82,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Data (Dual database) | 0/0 | Not started | - |
+| 1. Data (Dual database) | 0/1 | Not started | - |
 | 2. Server Rules | 0/0 | Not started | - |
 | 3. Homepage | 0/0 | Not started | - |
 | 4. Buy VIP | 0/0 | Not started | - |
