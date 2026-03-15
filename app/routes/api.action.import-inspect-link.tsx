@@ -51,7 +51,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (isSteamInspectLink(inspectLink)) {
     return parseCSFloatItemInfo(
       CS2Economy,
-      (await fetchCSFloatItemInfo(inspectLink)).iteminfo
+      await fetchCSFloatItemInfo(inspectLink)
     );
   }
   try {

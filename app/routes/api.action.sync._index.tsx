@@ -20,6 +20,7 @@ import {
   craftAllowSeed,
   craftAllowStatTrak,
   craftAllowStickerRotation,
+  craftAllowStickerSchema,
   craftAllowStickers,
   craftAllowStickerWear,
   craftAllowStickerX,
@@ -33,6 +34,7 @@ import {
   editAllowSeed,
   editAllowStatTrak,
   editAllowStickerRotation,
+  editAllowStickerSchema,
   editAllowStickers,
   editAllowStickerWear,
   editAllowStickerX,
@@ -179,7 +181,8 @@ async function enforceCraftRulesForStickerAttributes(
     wear,
     rotation,
     x,
-    y
+    y,
+    schema
   }: RecordValue<NonNullable<CS2BaseInventoryItem["stickers"]>>,
   userId: string
 ) {
@@ -194,6 +197,9 @@ async function enforceCraftRulesForStickerAttributes(
   }
   if (y !== undefined) {
     await craftAllowStickerY.for(userId).truthy();
+  }
+  if (schema !== undefined) {
+    await craftAllowStickerSchema.for(userId).truthy();
   }
 }
 
@@ -271,7 +277,8 @@ async function enforceEditRulesForStickerAttributes(
     wear,
     rotation,
     x,
-    y
+    y,
+    schema
   }: RecordValue<NonNullable<CS2BaseInventoryItem["stickers"]>>,
   userId: string
 ) {
@@ -286,6 +293,9 @@ async function enforceEditRulesForStickerAttributes(
   }
   if (y !== undefined) {
     await editAllowStickerY.for(userId).truthy();
+  }
+  if (schema !== undefined) {
+    await editAllowStickerSchema.for(userId).truthy();
   }
 }
 

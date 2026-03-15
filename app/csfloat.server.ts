@@ -41,7 +41,7 @@ export async function fetchCSFloatItemInfo(inspectLink: string) {
     throw badGateway;
   }
   try {
-    return (await response.json()) as { iteminfo: CSFloatItemInfo };
+    return ((await response.json()) as { iteminfo: CSFloatItemInfo }).iteminfo;
   } catch {
     throw badGateway;
   }
