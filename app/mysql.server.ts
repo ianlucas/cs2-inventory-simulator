@@ -5,11 +5,10 @@
 
 import * as mysql from "mysql2/promise";
 
-import { MYSQL_URL } from "./env.server";
 import { singleton } from "./singleton.server";
 
 export function getMySQLPool(): mysql.Pool | null {
-  const url = MYSQL_URL;
+  const url = process.env.MYSQL_URL ?? undefined;
   if (url === undefined || url === "") {
     return null;
   }
