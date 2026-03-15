@@ -12,8 +12,9 @@ Deliver the hub and VIP layer in five phases: establish the dual-database founda
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [x] **Phase 1: Data (Dual database)** - MySQL for VIP, bans, mutes; PostgreSQL unchanged (completed 2026-03-15)
-- [ ] **Phase 2: Server Rules** - Public server rules page for players
+- [x] **Phase 1: Data (Dual database)** - MySQL for VIP, bans, mutes; PostgreSQL unchanged
+ (completed 2026-03-15)
+- [x] **Phase 2: Server Rules** - Public server rules page for players (completed 2026-03-15)
 - [ ] **Phase 3: Homepage** - Live server list (gamedig), cards, grid/table toggle, player modal
 - [ ] **Phase 4: Buy VIP** - VIP info and prices; Bynogame link and PayTR purchase
 - [ ] **Phase 5: Admin Panel** - Manage VIPs, bans, mutes, server info (Steam + admin flag)
@@ -40,10 +41,10 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. User can open a server rules page from the app
   2. Page displays server rules for players (e.g. no cheating, be respectful)
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
-- [ ] 02-01-PLAN.md — Public /rules page (static sections, header+footer links, translation key, route test)
+- [x] 02-01-PLAN.md — Public /rules page (static sections, header+footer links, translation key, route test) ✓ 02-01-SUMMARY.md
 
 ### Phase 3: Homepage
 **Goal**: Users see a live server list with rich display and player detail.

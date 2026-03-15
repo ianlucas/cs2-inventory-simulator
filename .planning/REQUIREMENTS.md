@@ -24,7 +24,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Server Rules
 
-- [ ] **RULES-01**: User can view a public server rules page showing rules for players (e.g. no cheating, be respectful)
+- [x] **RULES-01**: User can view a public server rules page showing rules for players (e.g. no cheating, be respectful)
 
 ### Buy VIP
 
@@ -63,7 +63,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | DATA-01 | Phase 1 | Complete (01-01) |
 | DATA-02 | Phase 1 | Complete (01-01) |
-| RULES-01 | Phase 2 | Pending |
+| RULES-01 | Phase 2 | Complete (02-01) |
 | HOME-01 | Phase 3 | Pending |
 | HOME-02 | Phase 3 | Pending |
 | HOME-03 | Phase 3 | Pending |
