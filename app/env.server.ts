@@ -19,6 +19,11 @@ export const SESSION_SECRET = process.env.SESSION_SECRET;
 export const MYSQL_URL = process.env.MYSQL_URL ?? undefined;
 export const BYNOGAME_VIP_URL = process.env.BYNOGAME_VIP_URL ?? undefined;
 
+export const PAYTR_MERCHANT_ID = process.env.PAYTR_MERCHANT_ID ?? undefined;
+export const PAYTR_MERCHANT_KEY = process.env.PAYTR_MERCHANT_KEY ?? undefined;
+export const PAYTR_MERCHANT_SALT = process.env.PAYTR_MERCHANT_SALT ?? undefined;
+export const PAYTR_TEST_MODE = process.env.PAYTR_TEST_MODE ?? undefined;
+
 export const {
   ASSETS_BASE_URL,
   CLOUDFLARE_ANALYTICS_TOKEN,
