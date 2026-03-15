@@ -5,7 +5,8 @@
 
 import { CS2BaseInventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
+import { useImportInspectLinkFetcher } from "~/routes/api.action.import-inspect-link";
 import { isValidInspectLink, normalizeInspectLink } from "~/utils/economy";
 import { useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
@@ -21,40 +22,6 @@ const importErrorMapping = {
   502: "CraftImportError502",
   503: "CraftImportError500"
 } as const;
-
-function useImportInspectLink() {
-  const [isLoading, setIsLoading] = useState(false);
-  const abortControllerRef = useRef<AbortController | null>(null);
-
-  useEffect(() => {
-    return () => {
-      abortControllerRef.current?.abort();
-    };
-  }, []);
-
-  async function importInspectLink(inspectLink: string) {
-    abortControllerRef.current?.abort();
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/action/import-inspect-link", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ inspectLink }),
-        signal: controller.signal
-      });
-      return {
-        status: response.status,
-        data: response.ok ? await response.json() : null
-      };
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  return { importInspectLink, isLoading };
-}
 
 export function CraftImportInspectLink({
   onClose,
@@ -73,8 +40,8 @@ export function CraftImportInspectLink({
     () => isValidInspectLink(normalizedInspectLink),
     [normalizedInspectLink]
   );
-  const { importInspectLink, isLoading: isImportingInspectLink } =
-    useImportInspectLink();
+  const { submit: importInspectLink, isLoading: isImporting } =
+    useImportInspectLinkFetcher();
 
   async function handleImport() {
     const result = await importInspectLink(normalizedInspectLink);
@@ -101,7 +68,7 @@ export function CraftImportInspectLink({
       <ModalHeader title={translate("CraftImportHeader")} />
       <div className="p-1">
         <EditorInput
-          readOnly={isImportingInspectLink}
+          readOnly={isImporting}
           className="w-full"
           placeholder={translate("CraftImportPlaceholder")}
           validate={(value) =>
@@ -118,7 +85,7 @@ export function CraftImportInspectLink({
           onClick={onClose}
           children={translate("EditorCancel")}
           variant="secondary"
-          disabled={isImportingInspectLink}
+          disabled={isImporting}
         />
         <ModalButton
           onClick={handleImport}
@@ -127,20 +94,18 @@ export function CraftImportInspectLink({
               <div
                 className={clsx(
                   "absolute top-0 left-0 flex h-full w-full items-center justify-center transition-all",
-                  isImportingInspectLink ? "opacity-100" : "opacity-0"
+                  isImporting ? "opacity-100" : "opacity-0"
                 )}
               >
                 <FillSpinner />
               </div>
-              <span
-                className={isImportingInspectLink ? "opacity-0" : "opacity-100"}
-              >
+              <span className={isImporting ? "opacity-0" : "opacity-100"}>
                 {translate("CraftImportButton")}
               </span>
             </>
           }
           variant="primary"
-          disabled={!canInspectLink || isImportingInspectLink}
+          disabled={!canInspectLink || isImporting}
         />
       </div>
     </>
