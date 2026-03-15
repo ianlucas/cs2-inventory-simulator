@@ -25,6 +25,10 @@ export function Footer() {
         <Link to="/rules" className="underline hover:text-white">
           {translate("HeaderRulesLabel")}
         </Link>
+        {" · "}
+        <Link to="/vip" className="underline hover:text-white">
+          {translate("HeaderVipLabel")}
+        </Link>
       </div>
       <ClientOnly
         children={() =>

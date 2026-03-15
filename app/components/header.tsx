@@ -8,7 +8,9 @@ import {
   faBarsStaggered,
   faBoxesStacked,
   faCog,
+  faCrown,
   faHammer,
+  faHouse,
   faRightFromBracket,
   faScroll,
   faXmark
@@ -90,6 +92,12 @@ export function Header({
             <nav className="rounded-sm bg-stone-800 p-2 text-sm lg:flex lg:items-center lg:gap-4 lg:bg-transparent lg:p-0">
               <HeaderLink
                 to="/"
+                icon={faHouse}
+                label={translate("HeaderHomeLabel")}
+                onClick={closeMenu}
+              />
+              <HeaderLink
+                to="/inventory"
                 icon={faBoxesStacked}
                 label={translate("HeaderInventoryLabel")}
                 onClick={closeMenu}
@@ -124,6 +132,12 @@ export function Header({
                       label={translate("HeaderRulesLabel")}
                     />
                     <HeaderLink
+                      to="/vip"
+                      icon={faCrown}
+                      onClick={closeMenu}
+                      label={translate("HeaderVipLabel")}
+                    />
+                    <HeaderLink
                       to="/settings"
                       icon={faCog}
                       onClick={closeMenu}
@@ -148,6 +162,12 @@ export function Header({
                       icon={faScroll}
                       onClick={closeMenu}
                       label={translate("HeaderRulesLabel")}
+                    />
+                    <HeaderLink
+                      to="/vip"
+                      icon={faCrown}
+                      onClick={closeMenu}
+                      label={translate("HeaderVipLabel")}
                     />
                     <HeaderLink to="/settings" onClick={closeMenu}>
                       <span className="text-neutral-400">
