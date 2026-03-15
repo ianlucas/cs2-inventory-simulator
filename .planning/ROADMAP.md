@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md — MySQL connection layer (MYSQL_URL, mysql.server.ts, getMySQLPool, unit tests); Postgres untouched
+- [x] 01-01-PLAN.md — MySQL connection layer (MYSQL_URL, mysql.server.ts, getMySQLPool, unit tests); Postgres untouched ✓ 01-01-SUMMARY.md
 
 ### Phase 2: Server Rules
 **Goal**: Users can view a public server rules page.

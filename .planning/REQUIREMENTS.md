@@ -34,8 +34,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Data (Dual Database)
 
-- [ ] **DATA-01**: VIP, bans, and mutes are stored in a separate MySQL database
-- [ ] **DATA-02**: MySQL integration does not affect existing PostgreSQL usage (inventory, users, rules)
+- [x] **DATA-01**: VIP, bans, and mutes are stored in a separate MySQL database
+- [x] **DATA-02**: MySQL integration does not affect existing PostgreSQL usage (inventory, users, rules)
 
 ## v2 Requirements
 
@@ -61,8 +61,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete (01-01) |
+| DATA-02 | Phase 1 | Complete (01-01) |
 | RULES-01 | Phase 2 | Pending |
 | HOME-01 | Phase 3 | Pending |
 | HOME-02 | Phase 3 | Pending |
