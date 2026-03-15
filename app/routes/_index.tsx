@@ -3,12 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useState } from "react";
-import { useLoaderData } from "react-router";
+import { useEffect, useState } from "react";
+import { useFetcher, useLoaderData } from "react-router";
 import { GameDig } from "gamedig";
 import { middleware } from "~/http.server";
 import { SERVER_LIST } from "~/data/servers";
 import { getMetaTitle } from "~/root-meta";
+import { Modal, ModalHeader } from "~/components/modal";
 import { ServerCard } from "~/components/server-card";
 import type { Route } from "./+types/_index";
 
@@ -49,10 +50,11 @@ export async function loader({ request }: Route.LoaderArgs) {
   const servers: ServerListItem[] = results.map((result, i) => {
     const entry = SERVER_LIST[i];
     const port = entry?.port ?? DEFAULT_PORT;
+    const host = entry?.host ?? "";
     if (result.status === "fulfilled") {
-      return result.value;
+      return { ...result.value, host, port };
     }
-    return { offline: true as const, host: entry?.host ?? "", port };
+    return { offline: true as const, host, port };
   });
 
   return { servers };
@@ -90,11 +92,25 @@ function serverPing(server: ServerListItem): string {
   return server.ping != null ? `${server.ping} ms` : "—";
 }
 
+type SelectedServer = { host: string; port: number } | null;
+
 export default function Index() {
   const { servers } = useLoaderData<typeof loader>();
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [selectedServer, setSelectedServer] = useState<SelectedServer>(null);
+  const fetcher = useFetcher<{ players?: Array<{ name?: string; raw?: Record<string, unknown> }> }>();
+
+  useEffect(() => {
+    if (!selectedServer) return;
+    const url = `/api/servers/players?host=${encodeURIComponent(selectedServer.host)}&port=${selectedServer.port}`;
+    fetcher.load(url);
+  }, [selectedServer]);
 
   const hasServers = Array.isArray(servers) && servers.length > 0;
+  const players = fetcher.data?.players ?? [];
+  const sortedPlayers = [...players].sort((a, b) =>
+    (a.name ?? "").localeCompare(b.name ?? "")
+  );
 
   return (
     <div className="m-auto max-w-6xl px-4 py-8">
@@ -136,7 +152,15 @@ export default function Index() {
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {servers.map((server, i) => (
             <li key={i}>
-              <ServerCard server={server} />
+              <ServerCard
+                server={server}
+                onSelect={(s) =>
+                  setSelectedServer({
+                    host: s.host ?? "",
+                    port: s.port ?? DEFAULT_PORT
+                  })
+                }
+              />
             </li>
           ))}
         </ul>
@@ -189,6 +213,28 @@ export default function Index() {
           </table>
         </div>
       )}
+
+      <Modal hidden={!selectedServer} blur>
+        <ModalHeader
+          title="Players"
+          onClose={() => setSelectedServer(null)}
+        />
+        <div className="min-w-[200px] px-4 py-3">
+          {fetcher.state === "loading" ? (
+            <p className="text-neutral-400">Loading players…</p>
+          ) : sortedPlayers.length === 0 ? (
+            <p className="text-neutral-400">No players</p>
+          ) : (
+            <ul className="space-y-1.5 text-sm text-white">
+              {sortedPlayers.map((player, i) => (
+                <li key={i}>
+                  {player.name?.trim() ? player.name : "—"}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 }
