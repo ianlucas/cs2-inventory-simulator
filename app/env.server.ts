@@ -17,6 +17,7 @@ assert(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 export const SESSION_SECRET = process.env.SESSION_SECRET;
 
 export const MYSQL_URL = process.env.MYSQL_URL ?? undefined;
+export const BYNOGAME_VIP_URL = process.env.BYNOGAME_VIP_URL ?? undefined;
 
 export const {
   ASSETS_BASE_URL,
