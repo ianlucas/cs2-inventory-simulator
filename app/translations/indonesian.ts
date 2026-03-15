@@ -82,6 +82,7 @@ export const indonesian = {
   HeaderCraftInventoryFull: "Inventaris kamu penuh.",
   HeaderDonate: "Donasi",
   HeaderInventoryLabel: "Inventaris",
+  HeaderRulesLabel: "Aturan",
   HeaderSettingsLabel: "Pengaturan",
   HeaderSignInLabel: "Masuk untuk sinkronisasi",
   HeaderSignOutLabel: "Keluar",

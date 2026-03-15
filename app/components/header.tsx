@@ -10,6 +10,7 @@ import {
   faCog,
   faHammer,
   faRightFromBracket,
+  faScroll,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -117,6 +118,12 @@ export function Header({
                   <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
                     <HeaderLink
+                      to="/rules"
+                      icon={faScroll}
+                      onClick={closeMenu}
+                      label={translate("HeaderRulesLabel")}
+                    />
+                    <HeaderLink
                       to="/settings"
                       icon={faCog}
                       onClick={closeMenu}
@@ -136,6 +143,12 @@ export function Header({
                   )}
                   <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
+                    <HeaderLink
+                      to="/rules"
+                      icon={faScroll}
+                      onClick={closeMenu}
+                      label={translate("HeaderRulesLabel")}
+                    />
                     <HeaderLink to="/settings" onClick={closeMenu}>
                       <span className="text-neutral-400">
                         {translate("HeaderSignedInAsLabel")}

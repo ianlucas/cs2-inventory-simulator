@@ -84,6 +84,7 @@ export const german = {
   HeaderCraftLabel: "Gegenstand herstellen",
   HeaderDonate: "Spenden",
   HeaderInventoryLabel: "Inventar",
+  HeaderRulesLabel: "Regeln",
   HeaderSettingsLabel: "Einstellungen",
   HeaderSignInLabel: "Anmelden zum Synchronisieren",
   HeaderSignOutLabel: "Abmelden",

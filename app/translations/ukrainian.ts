@@ -84,6 +84,7 @@ export const ukrainian = {
   HeaderCraftLabel: "Створити предмети",
   HeaderDonate: "Підтримати",
   HeaderInventoryLabel: "Інвентар",
+  HeaderRulesLabel: "Правила",
   HeaderSettingsLabel: "Налаштування",
   HeaderSignInLabel: "Увійти",
   HeaderSignOutLabel: "Вийти",

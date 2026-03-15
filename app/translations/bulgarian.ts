@@ -84,6 +84,7 @@ export const bulgarian = {
   HeaderCraftLabel: "Изработка на артикул",
   HeaderDonate: "Дарение",
   HeaderInventoryLabel: "Инвентар",
+  HeaderRulesLabel: "Правила",
   HeaderSettingsLabel: "Настройки",
   HeaderSignInLabel: "Влезте за синхронизация",
   HeaderSignOutLabel: "Изход",

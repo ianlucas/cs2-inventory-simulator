@@ -84,6 +84,7 @@ export const japanese = {
   HeaderCraftLabel: "アイテムをクラフト",
   HeaderDonate: "寄付",
   HeaderInventoryLabel: "インベントリ",
+  HeaderRulesLabel: "ルール",
   HeaderSettingsLabel: "設定",
   HeaderSignInLabel: "同期するにはサインイン",
   HeaderSignOutLabel: "サインアウト",

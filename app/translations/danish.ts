@@ -84,6 +84,7 @@ export const danish = {
   HeaderCraftLabel: "Fremstil genstand",
   HeaderDonate: "Donér",
   HeaderInventoryLabel: "Inventar",
+  HeaderRulesLabel: "Regler",
   HeaderSettingsLabel: "Indstillinger",
   HeaderSignInLabel: "Log ind for at synkronisere",
   HeaderSignOutLabel: "Log ud",

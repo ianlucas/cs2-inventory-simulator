@@ -84,6 +84,7 @@ export const spanish = {
   HeaderCraftLabel: "Crear objetos",
   HeaderDonate: "Donar",
   HeaderInventoryLabel: "Inventario",
+  HeaderRulesLabel: "Reglas",
   HeaderSettingsLabel: "Ajustes",
   HeaderSignInLabel: "Iniciar sesión",
   HeaderSignOutLabel: "Cerrar sesión",

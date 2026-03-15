@@ -84,6 +84,7 @@ export const vietnamese = {
   HeaderCraftLabel: "Chế tạo vật phẩm",
   HeaderDonate: "Quyên góp",
   HeaderInventoryLabel: "Kho đồ",
+  HeaderRulesLabel: "Quy tắc",
   HeaderSettingsLabel: "Cài đặt",
   HeaderSignInLabel: "Đăng nhập",
   HeaderSignOutLabel: "Đăng xuất",

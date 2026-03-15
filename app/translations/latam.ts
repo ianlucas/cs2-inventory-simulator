@@ -84,6 +84,7 @@ export const latam = {
   HeaderCraftLabel: "Crear objeto",
   HeaderDonate: "Donar",
   HeaderInventoryLabel: "Inventario",
+  HeaderRulesLabel: "Reglas",
   HeaderSettingsLabel: "Configuración",
   HeaderSignInLabel: "Iniciar sesión para sincronizar",
   HeaderSignOutLabel: "Cerrar sesión",

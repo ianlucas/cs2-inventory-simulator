@@ -84,6 +84,7 @@ export const romanian = {
   HeaderCraftLabel: "Creează obiecte",
   HeaderDonate: "Donează",
   HeaderInventoryLabel: "Inventar",
+  HeaderRulesLabel: "Reguli",
   HeaderSettingsLabel: "Setări",
   HeaderSignInLabel: "Autentifică-te",
   HeaderSignOutLabel: "Deconectare",

@@ -84,6 +84,7 @@ export const czech = {
   HeaderCraftLabel: "Vytvořit předmět",
   HeaderDonate: "Přispět",
   HeaderInventoryLabel: "Inventář",
+  HeaderRulesLabel: "Pravidla",
   HeaderSettingsLabel: "Nastavení",
   HeaderSignInLabel: "Přihlásit se k synchronizaci",
   HeaderSignOutLabel: "Odhlásit se",

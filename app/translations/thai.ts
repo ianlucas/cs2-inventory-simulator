@@ -84,6 +84,7 @@ export const thai = {
   HeaderCraftLabel: "สร้างไอเท็ม",
   HeaderDonate: "บริจาค",
   HeaderInventoryLabel: "คลัง",
+  HeaderRulesLabel: "กฎ",
   HeaderSettingsLabel: "การตั้งค่า",
   HeaderSignInLabel: "เข้าสู่ระบบ",
   HeaderSignOutLabel: "ออกจากระบบ",

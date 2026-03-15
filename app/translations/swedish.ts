@@ -84,6 +84,7 @@ export const swedish = {
   HeaderCraftLabel: "Skapa föremål",
   HeaderDonate: "Donera",
   HeaderInventoryLabel: "Inventarium",
+  HeaderRulesLabel: "Regler",
   HeaderSettingsLabel: "Inställningar",
   HeaderSignInLabel: "Logga in",
   HeaderSignOutLabel: "Logga ut",

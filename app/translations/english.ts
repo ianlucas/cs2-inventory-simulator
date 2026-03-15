@@ -83,6 +83,7 @@ export const english = {
   HeaderCraftLabel: "Craft Item",
   HeaderDonate: "Donate",
   HeaderInventoryLabel: "Inventory",
+  HeaderRulesLabel: "Rules",
   HeaderSettingsLabel: "Settings",
   HeaderSignInLabel: "Sign-in to sync",
   HeaderSignOutLabel: "Sign out",

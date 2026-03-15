@@ -84,6 +84,7 @@ export const hungarian = {
   HeaderCraftLabel: "Tárgy készítése",
   HeaderDonate: "Adományozás",
   HeaderInventoryLabel: "Raktár",
+  HeaderRulesLabel: "Szabályok",
   HeaderSettingsLabel: "Beállítások",
   HeaderSignInLabel: "Bejelentkezés szinkronizáláshoz",
   HeaderSignOutLabel: "Kijelentkezés",

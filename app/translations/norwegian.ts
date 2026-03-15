@@ -84,6 +84,7 @@ export const norwegian = {
   HeaderCraftLabel: "Lag gjenstand",
   HeaderDonate: "Doner",
   HeaderInventoryLabel: "Lager",
+  HeaderRulesLabel: "Regler",
   HeaderSettingsLabel: "Innstillinger",
   HeaderSignInLabel: "Logg på for å synkronisere",
   HeaderSignOutLabel: "Logg ut",

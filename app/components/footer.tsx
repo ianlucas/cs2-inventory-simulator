@@ -3,13 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { Link } from "react-router";
 import { ClientOnly } from "remix-utils/client-only";
 import { DEFAULT_APP_FOOTER_NAME } from "~/app-defaults";
 import { isOurHostname } from "~/utils/misc";
-import { useRules } from "./app-context";
+import { useRules, useTranslate } from "./app-context";
 
 export function Footer() {
   const { appFooterName } = useRules();
+  const translate = useTranslate();
   const sourceCommit = __SOURCE_COMMIT__;
 
   return (
@@ -19,6 +21,10 @@ export function Footer() {
           &copy; {new Date().getFullYear()}{" "}
           {appFooterName || DEFAULT_APP_FOOTER_NAME}
         </span>
+        {" · "}
+        <Link to="/rules" className="underline hover:text-white">
+          {translate("HeaderRulesLabel")}
+        </Link>
       </div>
       <ClientOnly
         children={() =>

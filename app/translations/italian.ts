@@ -84,6 +84,7 @@ export const italian = {
   HeaderCraftLabel: "Crea oggetto",
   HeaderDonate: "Dona",
   HeaderInventoryLabel: "Inventario",
+  HeaderRulesLabel: "Regole",
   HeaderSettingsLabel: "Impostazioni",
   HeaderSignInLabel: "Accedi per sincronizzare",
   HeaderSignOutLabel: "Esci",

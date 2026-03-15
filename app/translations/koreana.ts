@@ -84,6 +84,7 @@ export const koreana = {
   HeaderCraftLabel: "아이템 제작",
   HeaderDonate: "기부",
   HeaderInventoryLabel: "보관함",
+  HeaderRulesLabel: "규칙",
   HeaderSettingsLabel: "설정",
   HeaderSignInLabel: "동기화를 위해 로그인",
   HeaderSignOutLabel: "로그아웃",

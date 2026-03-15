@@ -84,6 +84,7 @@ export const schinese = {
   HeaderCraftLabel: "制作物品",
   HeaderDonate: "捐赠",
   HeaderInventoryLabel: "库存",
+  HeaderRulesLabel: "规则",
   HeaderSettingsLabel: "设置",
   HeaderSignInLabel: "登录",
   HeaderSignOutLabel: "登出",

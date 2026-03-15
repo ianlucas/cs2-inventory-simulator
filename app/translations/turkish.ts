@@ -84,6 +84,7 @@ export const turkish = {
   HeaderCraftLabel: "Eşya oluştur",
   HeaderDonate: "Bağış yap",
   HeaderInventoryLabel: "Envanter",
+  HeaderRulesLabel: "Kurallar",
   HeaderSettingsLabel: "Ayarlar",
   HeaderSignInLabel: "Giriş yap",
   HeaderSignOutLabel: "Çıkış yap",

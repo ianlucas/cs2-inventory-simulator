@@ -82,6 +82,7 @@ export const brazilian = {
   HeaderCraftLabel: "Criar Item",
   HeaderDonate: "Doar",
   HeaderInventoryLabel: "Inventário",
+  HeaderRulesLabel: "Regras",
   HeaderSettingsLabel: "Configurações",
   HeaderSignInLabel: "Entrar e sincronizar",
   HeaderSignOutLabel: "Sair",

@@ -84,6 +84,7 @@ export const french = {
   HeaderCraftLabel: "Créer un objet",
   HeaderDonate: "Faire un don",
   HeaderInventoryLabel: "Inventaire",
+  HeaderRulesLabel: "Règles",
   HeaderSettingsLabel: "Paramètres",
   HeaderSignInLabel: "Se connecter pour synchroniser",
   HeaderSignOutLabel: "Se déconnecter",

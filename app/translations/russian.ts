@@ -84,6 +84,7 @@ export const russian = {
   HeaderCraftLabel: "Создать предметы",
   HeaderDonate: "Поддержать",
   HeaderInventoryLabel: "Инвентарь",
+  HeaderRulesLabel: "Правила",
   HeaderSettingsLabel: "Настройки",
   HeaderSignInLabel: "Войти",
   HeaderSignOutLabel: "Выйти",

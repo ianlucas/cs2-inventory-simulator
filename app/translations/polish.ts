@@ -84,6 +84,7 @@ export const polish = {
   HeaderCraftLabel: "Stwórz przedmiot",
   HeaderDonate: "Wspomóż",
   HeaderInventoryLabel: "Ekwipunek",
+  HeaderRulesLabel: "Zasady",
   HeaderSettingsLabel: "Ustawienia",
   HeaderSignInLabel: "Zaloguj się, aby synchronizować",
   HeaderSignOutLabel: "Wyloguj",

@@ -84,6 +84,7 @@ export const greek = {
   HeaderCraftLabel: "Κατασκευή αντικειμένου",
   HeaderDonate: "Δωρεά",
   HeaderInventoryLabel: "Λίστα αντικειμένων",
+  HeaderRulesLabel: "Κανόνες",
   HeaderSettingsLabel: "Ρυθμίσεις",
   HeaderSignInLabel: "Σύνδεση για συγχρονισμό",
   HeaderSignOutLabel: "Αποσύνδεση",

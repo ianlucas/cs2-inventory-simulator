@@ -84,6 +84,7 @@ export const tchinese = {
   HeaderCraftLabel: "製作物品",
   HeaderDonate: "捐贈",
   HeaderInventoryLabel: "庫存",
+  HeaderRulesLabel: "規則",
   HeaderSettingsLabel: "設定",
   HeaderSignInLabel: "登入",
   HeaderSignOutLabel: "登出",

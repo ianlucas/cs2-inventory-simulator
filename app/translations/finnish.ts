@@ -84,6 +84,7 @@ export const finnish = {
   HeaderCraftLabel: "Valmista esine",
   HeaderDonate: "Lahjoita",
   HeaderInventoryLabel: "Varusteluettelo",
+  HeaderRulesLabel: "Säännöt",
   HeaderSettingsLabel: "Asetukset",
   HeaderSignInLabel: "Kirjaudu synkronoidaksesi",
   HeaderSignOutLabel: "Kirjaudu ulos",

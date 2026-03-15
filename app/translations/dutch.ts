@@ -84,6 +84,7 @@ export const dutch = {
   HeaderCraftLabel: "Voorwerp maken",
   HeaderDonate: "Doneren",
   HeaderInventoryLabel: "Inventaris",
+  HeaderRulesLabel: "Regels",
   HeaderSettingsLabel: "Instellingen",
   HeaderSignInLabel: "Inloggen om te synchroniseren",
   HeaderSignOutLabel: "Uitloggen",
