@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRotateLeft, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2_MAX_STICKER_ROTATION,
@@ -44,6 +44,7 @@ import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { useKeyValues } from "./hooks/use-key-values";
 import { useTimedState } from "./hooks/use-timed-state";
+import { confirm } from "./modal-generic";
 
 export function AppliedStickerEditor({
   className,
@@ -122,6 +123,25 @@ export function AppliedStickerEditor({
       triggerCopied();
     } else {
       window.location.assign(inspectLink);
+    }
+  }
+
+  async function handleReset() {
+    if (
+      await confirm({
+        titleText: translate("EditorReset"),
+        bodyText: "Do you want to reset the attributes?",
+        cancelText: translate("GenericCancel"),
+        confirmText: translate("GenericYes")
+      })
+    ) {
+      attributes.setValue({
+        rotation: 0,
+        schema: -1,
+        wear: 0,
+        x: 0,
+        y: 0
+      });
     }
   }
 
@@ -222,7 +242,14 @@ export function AppliedStickerEditor({
             />
           </EditorLabel>
         )}
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-1">
+          <ButtonWithTooltip
+            tooltip={translate("EditorReset")}
+            className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
+            onClick={handleReset}
+          >
+            <FontAwesomeIcon icon={faArrowRotateLeft} className="h-4" />
+          </ButtonWithTooltip>
           <ButtonWithTooltip
             tooltip={translate(
               copied ? "EditorCopiedToClipboard" : "EditorPreview"
