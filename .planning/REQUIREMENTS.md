@@ -20,7 +20,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **ADMN-02**: Admin can manage VIPs (view, add, remove or equivalent)
 - [ ] **ADMN-03**: Admin can manage bans
 - [ ] **ADMN-04**: Admin can manage mutes
-- [ ] **ADMN-05**: Admin can view and edit server info
+- [x] **ADMN-05**: Admin can view and edit server info
 
 ### Server Rules
 
@@ -75,7 +75,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMN-02 | Phase 5 | Pending |
 | ADMN-03 | Phase 5 | Pending |
 | ADMN-04 | Phase 5 | Pending |
-| ADMN-05 | Phase 5 | Pending |
+| ADMN-05 | Phase 5 | Complete (05-04) |
 
 **Coverage:**
 - v1 requirements: 14 total

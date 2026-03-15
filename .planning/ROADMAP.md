@@ -87,7 +87,13 @@ Plans:
   3. Admin can manage bans
   4. Admin can manage mutes
   5. Admin can view and edit server info
-**Plans**: TBD
+**Plans:** 4/4 plans complete
+
+Plans:
+- [x] 05-01-PLAN.md — Admin gate and layout (isAdmin via ADMIN_STEAM_IDS, admin route 403, dashboard with nav) ✓ 05-01-SUMMARY.md
+- [x] 05-02-PLAN.md — VIP management (list/add/remove from MySQL vip table; admin VIP section) ✓ 05-02-SUMMARY.md
+- [x] 05-03-PLAN.md — Bans and mutes (mevcut MySQL ban/mute tabloları, list/add/remove; admin bölümleri) ✓ 05-03-SUMMARY.md
+- [x] 05-04-PLAN.md — Server info view and edit (mevcut MySQL server tablosu, getServerListForDisplay, homepage fallback, admin CRUD) ✓ 05-04-SUMMARY.md
 
 ## Progress
 
