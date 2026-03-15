@@ -21,10 +21,10 @@ import {
   tooManyRequests
 } from "~/responses.server";
 import { isValidInspectLink } from "~/utils/economy";
+import { RateLimiter } from "~/utils/rate-limiter.server";
 import type { Route } from "./+types/api.action.import-inspect-link";
 
-// Grows larger as application lives, something to look out.
-const lastRequestByUser = new Map<string, number>();
+const rateLimiter = new RateLimiter(1000);
 
 export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
@@ -38,10 +38,10 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (!(await craftAllowImportInspectLink.for(userId).get())) {
     throw badRequest;
   }
-  if (Date.now() - (lastRequestByUser.get(userId) ?? 0) < 1000) {
+  if (rateLimiter.isLimited(userId)) {
     throw tooManyRequests;
   }
-  lastRequestByUser.set(userId, Date.now());
+  rateLimiter.consume(userId);
   const { inspectLink } = z
     .object({
       inspectLink: z.string().refine((value) => isValidInspectLink(value))
