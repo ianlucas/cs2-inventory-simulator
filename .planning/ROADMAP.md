@@ -70,7 +70,7 @@ Plans:
   1. User can open the Buy VIP page and see VIP information and prices
   2. User can follow a link to Bynogame for external purchase
   3. User can complete a VIP purchase on-site via PayTR integration
-**Plans:** 1/3 plans complete
+**Plans:** 2/3 plans complete
 
 Plans:
 - [x] 04-01-PLAN.md — PayTR callback (Bildirim URL): hash verify, MySQL VIP insert, idempotency; PayTR env + hash utils; VIP table schema doc ✓ 04-01-SUMMARY.md

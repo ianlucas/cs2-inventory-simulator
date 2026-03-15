@@ -20,13 +20,13 @@ progress:
 See: .planning/PROJECT.md (updated 2025-03-15)
 
 **Core value:** Players and admins get one place to see server status, rules, and VIP purchase options; admins can manage VIPs, bans, and mutes without touching the inventory simulator's data or flows.
-**Current focus:** Phase 4 — Buy VIP (plan 01 complete)
+**Current focus:** Phase 4 — Buy VIP (plans 01 & 02 complete)
 
 ## Current Position
 
 Phase: 4 of 5 (Buy VIP)
-Plan: 1 of 3 in current phase (04-01 complete)
-Status: Plan 04-01 complete
+Plan: 2 of 3 in current phase (04-01, 04-02 complete)
+Status: Plan 04-01 executed this run
 Last activity: 2026-03-15 — 04-01 executed
 
 Progress: [████████--] 75%
