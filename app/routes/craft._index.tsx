@@ -192,7 +192,7 @@ export default function Craft() {
               {
                 icon: faLink,
                 isActive: isImportFromInspectLink,
-                label: "Import from inspect link",
+                label: translate("CraftImportNavLabel"),
                 onClick: handleImportFromInspectLinkOpen
               }
             ]}

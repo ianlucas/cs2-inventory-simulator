@@ -14,6 +14,14 @@ import { ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
 import { alert } from "./modal-generic";
 
+const importErrorMapping = {
+  400: "CraftImportError400",
+  429: "CraftImportError429",
+  500: "CraftImportError500",
+  502: "CraftImportError502",
+  503: "CraftImportError500"
+} as const;
+
 function useImportInspectLink() {
   const [isLoading, setIsLoading] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -48,14 +56,6 @@ function useImportInspectLink() {
   return { importInspectLink, isLoading };
 }
 
-const errorMessages: Record<number, string> = {
-  400: "The inspect link is invalid.",
-  429: "Please wait a bit before importing another inspect link.",
-  500: "We can't import this type of inspect link right now.",
-  502: "Failed to fetch inspect link data, please try again.",
-  503: "We can't import this type of inspect link right now."
-};
-
 export function CraftImportInspectLink({
   onClose,
   onImport
@@ -83,10 +83,13 @@ export function CraftImportInspectLink({
     }
     if (!result.data) {
       await alert({
-        titleText: "Import failed",
-        bodyText:
-          errorMessages[result.status] ?? "An unexpected error occurred.",
-        closeText: "OK"
+        titleText: translate("CraftImportFailedTitle"),
+        bodyText: translate(
+          importErrorMapping[
+            result.status as keyof typeof importErrorMapping
+          ] ?? "CraftImportErrorUnknown"
+        ),
+        closeText: translate("CraftImportFailedClose")
       });
       return;
     }
@@ -95,12 +98,12 @@ export function CraftImportInspectLink({
 
   return (
     <>
-      <ModalHeader title="Import from a inspect link" />
+      <ModalHeader title={translate("CraftImportHeader")} />
       <div className="p-1">
         <EditorInput
           readOnly={isImportingInspectLink}
           className="w-full"
-          placeholder="Paste the inspect link here..."
+          placeholder={translate("CraftImportPlaceholder")}
           validate={(value) =>
             value === undefined ||
             value === "" ||
@@ -132,7 +135,7 @@ export function CraftImportInspectLink({
               <span
                 className={isImportingInspectLink ? "opacity-0" : "opacity-100"}
               >
-                Import
+                {translate("CraftImportButton")}
               </span>
             </>
           }
