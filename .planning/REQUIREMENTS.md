@@ -9,7 +9,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Homepage
 
-- [ ] **HOME-01**: User can see server list on homepage with live data from gamedig (CS2 servers)
+- [x] **HOME-01**: User can see server list on homepage with live data from gamedig (CS2 servers)
 - [ ] **HOME-02**: Server list displays as vertical cards with map background (fixed CS2 map thumbnails) and server data on top
 - [ ] **HOME-03**: User can toggle server list display between grid and table style
 - [ ] **HOME-04**: User can open a modal showing players on the server by clicking a server card
@@ -64,7 +64,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-01 | Phase 1 | Complete (01-01) |
 | DATA-02 | Phase 1 | Complete (01-01) |
 | RULES-01 | Phase 2 | Complete (02-01) |
-| HOME-01 | Phase 3 | Pending |
+| HOME-01 | Phase 3 | Complete (03-01) |
 | HOME-02 | Phase 3 | Pending |
 | HOME-03 | Phase 3 | Pending |
 | HOME-04 | Phase 3 | Pending |

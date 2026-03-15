@@ -55,7 +55,12 @@ Plans:
   2. Each server is shown as a vertical card with map background (fixed CS2 map thumbnails) and server data
   3. User can switch between grid and table display for the server list
   4. User can click a server and see a modal with the current player list
-**Plans**: TBD
+**Plans:** 3 plans
+
+Plans:
+- [x] 03-01-PLAN.md — Data foundation: servers config, map thumbnails, hide inventory on /, index loader (gamedig) ✓ 03-01-SUMMARY.md
+- [ ] 03-02-PLAN.md — Server list UI: vertical cards with map background, grid/table toggle (default grid)
+- [ ] 03-03-PLAN.md — Player modal on card click (resource route + useFetcher, Modal + ModalHeader)
 
 ### Phase 4: Buy VIP
 **Goal**: Users can view VIP offer and purchase via Bynogame link or PayTR.

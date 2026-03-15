@@ -2,31 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Completed 02-01-PLAN.md (Server rules page)
-last_updated: "2026-03-15T10:11:39.559Z"
-last_activity: 2026-03-15 — 02-01 executed
+status: in_progress
+stopped_at: Completed 03-01-PLAN.md (Homepage data foundation)
+last_updated: "2026-03-15T13:50:00.000Z"
+last_activity: 2026-03-15 — 03-01 executed
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 2
-  completed_plans: 2
----
-
----
-gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: completed
-stopped_at: Completed 02-01-PLAN.md (Server rules page)
-last_updated: "2026-03-15T13:06:00.000Z"
-last_activity: 2026-03-15 — 02-01 executed
-progress:
-  total_phases: 5
-  completed_phases: 2
-  total_plans: 2
-  completed_plans: 2
-  percent: 100
+  total_plans: 3
+  completed_plans: 3
+  percent: 60
 ---
 
 # Project State
@@ -36,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2025-03-15)
 
 **Core value:** Players and admins get one place to see server status, rules, and VIP purchase options; admins can manage VIPs, bans, and mutes without touching the inventory simulator's data or flows.
-**Current focus:** Phase 2 — Server Rules (complete)
+**Current focus:** Phase 3 — Homepage (plan 01 complete)
 
 ## Current Position
 
-Phase: 2 of 5 (Server Rules)
-Plan: 1 of 1 in current phase
-Status: Plan 02-01 complete
-Last activity: 2026-03-15 — 02-01 executed
+Phase: 3 of 5 (Homepage)
+Plan: 1 of 3 in current phase (03-01 complete)
+Status: Plan 03-01 complete
+Last activity: 2026-03-15 — 03-01 executed
 
-Progress: [██████████] 100%
+Progress: [██████----] 60%
 
 ## Performance Metrics
 
@@ -82,5 +67,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-15
-Stopped at: Completed 02-01-PLAN.md (Server rules page)
+Stopped at: Completed 03-01-PLAN.md (Homepage data foundation)
 Resume file: None
