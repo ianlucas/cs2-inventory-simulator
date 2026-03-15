@@ -3,15 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 03-03-PLAN.md (Player modal on card click)
-last_updated: "2026-03-15T15:00:00.000Z"
-last_activity: 2026-03-15 — 03-03 executed
+stopped_at: Completed 04-01-PLAN.md (PayTR callback, hash utils, VIP schema)
+last_updated: "2026-03-15T16:00:00.000Z"
+last_activity: 2026-03-15 — 04-01 executed
 progress:
   total_phases: 5
-  completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
-  percent: 75
+  completed_phases: 3
+  total_plans: 8
+  completed_plans: 7
 ---
 
 # Project State
@@ -21,14 +20,14 @@ progress:
 See: .planning/PROJECT.md (updated 2025-03-15)
 
 **Core value:** Players and admins get one place to see server status, rules, and VIP purchase options; admins can manage VIPs, bans, and mutes without touching the inventory simulator's data or flows.
-**Current focus:** Phase 3 — Homepage (plan 03 complete)
+**Current focus:** Phase 4 — Buy VIP (plan 01 complete)
 
 ## Current Position
 
-Phase: 3 of 5 (Homepage)
-Plan: 3 of 3 in current phase (03-03 complete)
-Status: Plan 03-03 complete
-Last activity: 2026-03-15 — 03-03 executed
+Phase: 4 of 5 (Buy VIP)
+Plan: 1 of 3 in current phase (04-01 complete)
+Status: Plan 04-01 complete
+Last activity: 2026-03-15 — 04-01 executed
 
 Progress: [████████--] 75%
 
@@ -67,5 +66,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-15
-Stopped at: Completed 03-03-PLAN.md (Player modal on card click)
+Stopped at: Completed 04-01-PLAN.md (PayTR callback, hash utils, VIP schema)
 Resume file: None

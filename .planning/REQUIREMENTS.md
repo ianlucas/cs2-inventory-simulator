@@ -28,8 +28,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Buy VIP
 
-- [ ] **VIP-01**: User can view Buy VIP page with VIP information and prices
-- [ ] **VIP-02**: User can open Bynogame purchase via external link from Buy VIP page
+- [x] **VIP-01**: User can view Buy VIP page with VIP information and prices
+- [x] **VIP-02**: User can open Bynogame purchase via external link from Buy VIP page
 - [ ] **VIP-03**: User can purchase VIP directly on site via PayTR integration
 
 ### Data (Dual Database)
@@ -68,8 +68,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HOME-02 | Phase 3 | Pending |
 | HOME-03 | Phase 3 | Pending |
 | HOME-04 | Phase 3 | Complete (03-03) |
-| VIP-01 | Phase 4 | Pending |
-| VIP-02 | Phase 4 | Pending |
+| VIP-01 | Phase 4 | Complete (04-02) |
+| VIP-02 | Phase 4 | Complete (04-02) |
 | VIP-03 | Phase 4 | Pending |
 | ADMN-01 | Phase 5 | Pending |
 | ADMN-02 | Phase 5 | Pending |
