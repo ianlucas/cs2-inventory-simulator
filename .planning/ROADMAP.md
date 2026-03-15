@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Data (Dual database)** - MySQL for VIP, bans, mutes; PostgreSQL unchanged
  (completed 2026-03-15)
 - [x] **Phase 2: Server Rules** - Public server rules page for players (completed 2026-03-15)
-- [ ] **Phase 3: Homepage** - Live server list (gamedig), cards, grid/table toggle, player modal
+- [x] **Phase 3: Homepage** - Live server list (gamedig), cards, grid/table toggle, player modal (completed 2026-03-15)
 - [ ] **Phase 4: Buy VIP** - VIP info and prices; Bynogame link and PayTR purchase
 - [ ] **Phase 5: Admin Panel** - Manage VIPs, bans, mutes, server info (Steam + admin flag)
 
@@ -55,12 +55,12 @@ Plans:
   2. Each server is shown as a vertical card with map background (fixed CS2 map thumbnails) and server data
   3. User can switch between grid and table display for the server list
   4. User can click a server and see a modal with the current player list
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 
 Plans:
 - [x] 03-01-PLAN.md — Data foundation: servers config, map thumbnails, hide inventory on /, index loader (gamedig) ✓ 03-01-SUMMARY.md
 - [x] 03-02-PLAN.md — Server list UI: vertical cards with map background, grid/table toggle (default grid) ✓ 03-02-SUMMARY.md
-- [ ] 03-03-PLAN.md — Player modal on card click (resource route + useFetcher, Modal + ModalHeader)
+- [x] 03-03-PLAN.md — Player modal on card click (resource route + useFetcher, Modal + ModalHeader) ✓ 03-03-SUMMARY.md
 
 ### Phase 4: Buy VIP
 **Goal**: Users can view VIP offer and purchase via Bynogame link or PayTR.
