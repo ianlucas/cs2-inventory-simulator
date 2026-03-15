@@ -112,7 +112,9 @@ export function validateStickerRotation(rotation: number) {
 export const stickerSchemaStringMaxLen = String(CS2_MAX_STICKERS - 1).length;
 
 export function validateStickerSchema(schema: number) {
-  return Number.isInteger(schema) && schema >= 0 && schema <= CS2_MAX_STICKERS - 1;
+  return (
+    Number.isInteger(schema) && schema >= 0 && schema <= CS2_MAX_STICKERS - 1
+  );
 }
 
 export function createFakeItem(

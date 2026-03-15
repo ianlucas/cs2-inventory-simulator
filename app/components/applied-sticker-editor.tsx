@@ -77,9 +77,21 @@ export function AppliedStickerEditor({
   slot?: number;
   stickers?: Record<
     string,
-    { wear?: number; rotation?: number; schema?: number; x?: number; y?: number }
+    {
+      wear?: number;
+      rotation?: number;
+      schema?: number;
+      x?: number;
+      y?: number;
+    }
   >;
-  value: { wear: number; rotation: number; schema: number; x: number; y: number };
+  value: {
+    wear: number;
+    rotation: number;
+    schema: number;
+    x: number;
+    y: number;
+  };
 }) {
   const translate = useTranslate();
   const [, copyToClipboard] = useCopyToClipboard();

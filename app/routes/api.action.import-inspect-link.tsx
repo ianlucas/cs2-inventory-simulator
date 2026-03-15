@@ -21,11 +21,26 @@ import {
   methodNotAllowed,
   tooManyRequests
 } from "~/responses.server";
-import { isValidInspectLink } from "~/utils/economy";
+import { isValidInspectLink, stickerOffsetFactor } from "~/utils/economy";
+import { truncate } from "~/utils/number";
 import { RateLimiter } from "~/utils/rate-limiter.server";
 import type { Route } from "./+types/api.action.import-inspect-link";
 
 const rateLimiter = new RateLimiter(1000);
+
+function postParseInventoryItem(item: CS2BaseInventoryItem) {
+  if (item.stickers !== undefined) {
+    for (const sticker of Object.values(item.stickers)) {
+      if (sticker.x !== undefined) {
+        sticker.x = truncate(sticker.x, stickerOffsetFactor);
+      }
+      if (sticker.y !== undefined) {
+        sticker.y = truncate(sticker.y, stickerOffsetFactor);
+      }
+    }
+  }
+  return item;
+}
 
 export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
@@ -49,13 +64,12 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     })
     .parse(await request.json());
   if (isSteamInspectLink(inspectLink)) {
-    return parseCSFloatItemInfo(
-      CS2Economy,
-      await fetchCSFloatItemInfo(inspectLink)
+    return postParseInventoryItem(
+      parseCSFloatItemInfo(CS2Economy, await fetchCSFloatItemInfo(inspectLink))
     );
   }
   try {
-    return parseInspectLink(CS2Economy, inspectLink);
+    return postParseInventoryItem(parseInspectLink(CS2Economy, inspectLink));
   } catch {
     throw badRequest;
   }

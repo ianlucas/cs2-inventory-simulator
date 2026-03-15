@@ -49,7 +49,9 @@ export const baseInventoryItemProps = {
           .int()
           .min(0)
           .optional()
-          .refine((schema) => schema === undefined || schema <= CS2_MAX_STICKERS - 1),
+          .refine(
+            (schema) => schema === undefined || schema <= CS2_MAX_STICKERS - 1
+          ),
         x: z
           .number()
           .optional()

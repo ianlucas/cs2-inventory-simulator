@@ -67,12 +67,15 @@ export function Modal({
 export function ModalNav({
   items
 }: {
-  items: ({
-    icon: IconDefinition;
-    isActive: boolean;
-    label: string;
-    onClick: () => void;
-  } | false)[];
+  items: (
+    | {
+        icon: IconDefinition;
+        isActive: boolean;
+        label: string;
+        onClick: () => void;
+      }
+    | false
+  )[];
 }) {
   const visibleItems = items.filter((item) => item !== false);
   if (visibleItems.length === 0) {
