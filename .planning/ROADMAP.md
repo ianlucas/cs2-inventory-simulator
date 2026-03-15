@@ -40,7 +40,10 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. User can open a server rules page from the app
   2. Page displays server rules for players (e.g. no cheating, be respectful)
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 02-01-PLAN.md — Public /rules page (static sections, header+footer links, translation key, route test)
 
 ### Phase 3: Homepage
 **Goal**: Users see a live server list with rich display and player detail.
