@@ -8,6 +8,7 @@ import {
   CS2Inventory,
   CS2ItemType,
   CS2Team,
+  CS2_MIN_KEYCHAIN_SEED,
   CS2_MIN_SEED,
   CS2_MIN_STICKER_WEAR,
   assert
@@ -27,6 +28,13 @@ interface EconItem {
     rotation?: number;
     slot: number;
     wear?: number;
+    x?: number;
+    y?: number;
+  }[];
+  keychains?: {
+    def: number;
+    seed: number;
+    slot: number;
     x?: number;
     y?: number;
   }[];
@@ -132,6 +140,13 @@ export async function generate(
               wear: sticker.wear ?? CS2_MIN_STICKER_WEAR,
               x: sticker.x,
               y: sticker.y
+            })),
+            keychains: item.someKeychains().map(([index, keychain]) => ({
+              def: CS2Economy.getById(keychain.id).index ?? 0,
+              seed: keychain.seed ?? CS2_MIN_KEYCHAIN_SEED,
+              slot: index,
+              x: keychain.x,
+              y: keychain.y
             })),
             uid: item.uid,
             wear: item.getWear()

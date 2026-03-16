@@ -29,6 +29,16 @@ import type { Route } from "./+types/api.action.import-inspect-link";
 const rateLimiter = new RateLimiter(1000);
 
 function postParseInventoryItem(item: CS2BaseInventoryItem) {
+  if (item.keychains !== undefined) {
+    for (const keychain of Object.values(item.keychains)) {
+      if (keychain.x !== undefined) {
+        keychain.x = truncate(keychain.x, stickerOffsetFactor);
+      }
+      if (keychain.y !== undefined) {
+        keychain.y = truncate(keychain.y, stickerOffsetFactor);
+      }
+    }
+  }
   if (item.stickers !== undefined) {
     for (const sticker of Object.values(item.stickers)) {
       if (sticker.x !== undefined) {

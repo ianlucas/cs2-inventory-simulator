@@ -21,6 +21,10 @@ export function CraftNew({
 }) {
   const translate = useTranslate();
   const {
+    craftAllowKeychainSeed,
+    craftAllowKeychains,
+    craftAllowKeychainX,
+    craftAllowKeychainY,
     craftAllowNametag,
     craftAllowPatches,
     craftAllowSeed,
@@ -57,12 +61,18 @@ export function CraftNew({
   const isHideStickerWear = !craftAllowStickerWear;
   const isHideStickerX = !craftAllowStickerX;
   const isHideStickerY = !craftAllowStickerY;
+  const isHideKeychainSeed = !craftAllowKeychainSeed;
+  const isHideKeychainX = !craftAllowKeychainX;
+  const isHideKeychainY = !craftAllowKeychainY;
 
   const isHidePatches =
     !craftAllowPatches || craftHideType.includes(CS2ItemType.Patch);
 
   const isHideStickers =
     !craftAllowStickers || craftHideType.includes(CS2ItemType.Sticker);
+
+  const isHideKeychains =
+    !craftAllowKeychains || craftHideType.includes(CS2ItemType.Keychain);
 
   function handleSubmit() {
     if (attributes !== undefined) {
@@ -87,6 +97,10 @@ export function CraftNew({
     <>
       <ItemEditor
         className="px-4"
+        isHideKeychainSeed={isHideKeychainSeed}
+        isHideKeychains={isHideKeychains}
+        isHideKeychainX={isHideKeychainX}
+        isHideKeychainY={isHideKeychainY}
         isHideNameTag={isHideNameTag}
         isHidePatches={isHidePatches}
         isHideSeed={isHideSeed}
@@ -99,6 +113,7 @@ export function CraftNew({
         isHideStickerY={isHideStickerY}
         isHideWear={isHideWear}
         item={item}
+        keychainFilter={filterStickerOrPatch}
         maxQuantity={maxQuantity}
         onChange={setAttributes}
         patchFilter={filterStickerOrPatch}

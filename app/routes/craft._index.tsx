@@ -122,7 +122,7 @@ export default function Craft() {
     } satisfies CS2BaseInventoryItem;
 
     if (isEditing) {
-      deleteEmptyProps(inventoryItem);
+      deleteEmptyProps(inventoryItem, ["keychains", "stickers"]);
       setInventory(
         inventory.edit(uid, {
           ...inventoryItem,

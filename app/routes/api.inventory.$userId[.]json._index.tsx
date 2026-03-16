@@ -18,7 +18,7 @@ export const loader = api(
       generate(inventory) {
         return inventory;
       },
-      throwBody: [],
+      throwBody: {},
       url: ApiInventoryUserIdUrl,
       userId
     });
