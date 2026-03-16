@@ -137,6 +137,7 @@ export default function Craft() {
       return navigate("/");
     }
 
+    console.log(inventoryItem);
     range(isItemCountable(item) ? quantity : 1).forEach(() => {
       setInventory(inventory.add(inventoryItem));
       sync({

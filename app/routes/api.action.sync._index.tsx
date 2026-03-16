@@ -16,6 +16,10 @@ import { requireUser } from "~/auth.server";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/http.server";
 import {
+  craftAllowKeychainSeed,
+  craftAllowKeychains,
+  craftAllowKeychainX,
+  craftAllowKeychainY,
   craftAllowNametag,
   craftAllowSeed,
   craftAllowStatTrak,
@@ -30,6 +34,10 @@ import {
   craftHideId,
   craftHideModel,
   craftHideType,
+  editAllowKeychainSeed,
+  editAllowKeychains,
+  editAllowKeychainX,
+  editAllowKeychainY,
   editAllowNametag,
   editAllowSeed,
   editAllowStatTrak,
@@ -203,10 +211,33 @@ async function enforceCraftRulesForStickerAttributes(
   }
 }
 
-async function enforceCraftRulesForInventoryItem(
-  { stickers, statTrak, wear, seed, nameTag }: Partial<CS2BaseInventoryItem>,
+async function enforceCraftRulesForKeychainAttributes(
+  { seed, x, y }: RecordValue<NonNullable<CS2BaseInventoryItem["keychains"]>>,
   userId: string
 ) {
+  if (seed !== undefined) {
+    await craftAllowKeychainSeed.for(userId).truthy();
+  }
+  if (x !== undefined) {
+    await craftAllowKeychainX.for(userId).truthy();
+  }
+  if (y !== undefined) {
+    await craftAllowKeychainY.for(userId).truthy();
+  }
+}
+
+async function enforceCraftRulesForInventoryItem(
+  { keychains, stickers, statTrak, wear, seed, nameTag }: Partial<CS2BaseInventoryItem>,
+  userId: string
+) {
+  if (keychains !== undefined) {
+    await craftAllowKeychains.for(userId).truthy();
+    await craftHideType.for(userId).notContains(CS2ItemType.Keychain);
+    for (const keychain of Object.values(keychains)) {
+      await enforceCraftRulesForItem(keychain.id, userId);
+      await enforceCraftRulesForKeychainAttributes(keychain, userId);
+    }
+  }
   if (stickers !== undefined) {
     await craftAllowStickers.for(userId).truthy();
     await craftHideType.for(userId).notContains(CS2ItemType.Sticker);
@@ -246,10 +277,33 @@ async function enforceEditRulesForItem(
   }
 }
 
-async function enforceEditRulesForInventoryItem(
-  { stickers, statTrak, wear, seed, nameTag }: Partial<CS2BaseInventoryItem>,
+async function enforceEditRulesForKeychainAttributes(
+  { seed, x, y }: RecordValue<NonNullable<CS2BaseInventoryItem["keychains"]>>,
   userId: string
 ) {
+  if (seed !== undefined) {
+    await editAllowKeychainSeed.for(userId).truthy();
+  }
+  if (x !== undefined) {
+    await editAllowKeychainX.for(userId).truthy();
+  }
+  if (y !== undefined) {
+    await editAllowKeychainY.for(userId).truthy();
+  }
+}
+
+async function enforceEditRulesForInventoryItem(
+  { keychains, stickers, statTrak, wear, seed, nameTag }: Partial<CS2BaseInventoryItem>,
+  userId: string
+) {
+  if (keychains !== undefined) {
+    await editAllowKeychains.for(userId).truthy();
+    await editHideType.for(userId).notContains(CS2ItemType.Keychain);
+    for (const keychain of Object.values(keychains)) {
+      await enforceEditRulesForItem(keychain.id, userId);
+      await enforceEditRulesForKeychainAttributes(keychain, userId);
+    }
+  }
   if (stickers !== undefined) {
     await editAllowStickers.for(userId).truthy();
     await editHideType.for(userId).notContains(CS2ItemType.Sticker);

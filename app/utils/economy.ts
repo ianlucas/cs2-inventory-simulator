@@ -4,21 +4,23 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  CS2_ITEMS,
+  CS2_MAX_KEYCHAIN_SEED,
+  CS2_MAX_SEED,
+  CS2_MAX_STICKER_ROTATION,
+  CS2_MAX_STICKER_WEAR,
+  CS2_MAX_STICKERS,
+  CS2_MIN_KEYCHAIN_SEED,
+  CS2_MIN_STICKER_ROTATION,
+  CS2_MIN_STICKER_WEAR,
+  CS2_STICKER_WEAR_FACTOR,
+  CS2_WEAR_FACTOR,
   CS2Economy,
   CS2EconomyItem,
   CS2ItemTranslationByLanguage,
   CS2ItemType,
   CS2ItemTypeValues,
   CS2RarityColor,
-  CS2_ITEMS,
-  CS2_MAX_SEED,
-  CS2_MAX_STICKER_ROTATION,
-  CS2_MAX_STICKER_WEAR,
-  CS2_MAX_STICKERS,
-  CS2_MIN_STICKER_ROTATION,
-  CS2_MIN_STICKER_WEAR,
-  CS2_STICKER_WEAR_FACTOR,
-  CS2_WEAR_FACTOR,
   fail
 } from "@ianlucas/cs2-lib";
 import {
@@ -62,8 +64,8 @@ export function isItemCountable(item: CS2EconomyItem) {
 
 export const newItemStartingId = 15367;
 export const newItemEndAt = 1774482426116;
-export const minStickerOffset = -2;
-export const maxStickerOffset = 2;
+export const minStickerOffset = -5;
+export const maxStickerOffset = 5;
 export const stickerOffsetFactor = 0.001;
 export const seedStringMaxLen = String(CS2_MAX_SEED).length;
 export const wearStringMaxLen = String(CS2_WEAR_FACTOR).length;
@@ -114,6 +116,16 @@ export const stickerSchemaStringMaxLen = String(CS2_MAX_STICKERS - 1).length;
 export function validateStickerSchema(schema: number) {
   return (
     Number.isInteger(schema) && schema >= 0 && schema <= CS2_MAX_STICKERS - 1
+  );
+}
+
+export const keychainSeedStringMaxLen = String(CS2_MAX_KEYCHAIN_SEED).length;
+
+export function validateKeychainSeed(seed: number) {
+  return (
+    Number.isInteger(seed) &&
+    seed >= CS2_MIN_KEYCHAIN_SEED &&
+    seed <= CS2_MAX_KEYCHAIN_SEED
   );
 }
 

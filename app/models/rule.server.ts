@@ -441,6 +441,30 @@ export const craftAllowStickerSchema = new Rule({
   defaultValue: true
 });
 
+export const craftAllowKeychains = new Rule({
+  name: "craftAllowKeychains",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowKeychainSeed = new Rule({
+  name: "craftAllowKeychainSeed",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowKeychainX = new Rule({
+  name: "craftAllowKeychainX",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowKeychainY = new Rule({
+  name: "craftAllowKeychainY",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const editAllowNametag = new Rule({
   name: "editAllowNametag",
   type: "boolean",
@@ -509,6 +533,30 @@ export const editAllowStickerY = new Rule({
 
 export const editAllowStickerSchema = new Rule({
   name: "editAllowStickerSchema",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowKeychains = new Rule({
+  name: "editAllowKeychains",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowKeychainSeed = new Rule({
+  name: "editAllowKeychainSeed",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowKeychainX = new Rule({
+  name: "editAllowKeychainX",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowKeychainY = new Rule({
+  name: "editAllowKeychainY",
   type: "boolean",
   defaultValue: true
 });
