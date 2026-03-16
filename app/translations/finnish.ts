@@ -71,6 +71,8 @@ export const finnish = {
   EditorQuantity: /* csgo_finnish.txt */"Määrä",
   EditorRandom: /* csgo_finnish.txt */"Satunnainen",
   EditorReset: /* csgo_finnish.txt */"Nollaa",
+  EditorResetConfirm: "Nollataanko kaikki mukautetut ominaisuudet oletusarvoihin?",
+  EditorResetConfirmTitle: "Vahvista nollaus",
   EditorSave: /* csgo_finnish.txt */"Tallenna",
   EditorSeed: /* csgo_finnish.txt */"Kuvio",
   EditorStatTrak: /* csgo_finnish.txt */"StatTrak™",

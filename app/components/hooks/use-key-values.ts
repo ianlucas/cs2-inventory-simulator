@@ -9,6 +9,7 @@ export function useKeyValues<T extends object>(initialState: T) {
   const [value, setValue] = useState(initialState);
   return {
     value,
+    setValue,
 
     update(key: keyof T) {
       return function handler(value: T[keyof T]) {
@@ -35,6 +36,10 @@ export function useKeyValues<T extends object>(initialState: T) {
           [key]: event.target.checked
         }));
       };
+    },
+
+    reset() {
+      setValue(initialState);
     }
   };
 }

@@ -72,6 +72,8 @@ export const turkish = {
   EditorQuantity: /* csgo_turkish.txt */"Miktar",
   EditorRandom: /* csgo_turkish.txt */"Rastgele",
   EditorReset: /* csgo_turkish.txt */"Sıfırla",
+  EditorResetConfirm: "Tüm özel öznitelikler varsayılanlara sıfırlansın mı?",
+  EditorResetConfirmTitle: "Sıfırlamayı Onayla",
   EditorSave: /* csgo_turkish.txt */"Kaydet",
   EditorSeed: /* csgo_turkish.txt */"Model",
   EditorStatTrak: /* csgo_turkish.txt */"StatTrak™",

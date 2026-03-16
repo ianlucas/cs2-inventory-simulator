@@ -71,6 +71,8 @@ export const spanish = {
   EditorQuantity: /* csgo_spanish.txt */"Cantidad",
   EditorRandom: /* csgo_spanish.txt */"Aleatorio",
   EditorReset: /* csgo_spanish.txt */"Restablecer",
+  EditorResetConfirm: "¿Restablecer todos los atributos personalizados a sus valores predeterminados?",
+  EditorResetConfirmTitle: "Confirmar restablecimiento",
   EditorSave: /* csgo_spanish.txt */"Guardar",
   EditorSeed: /* csgo_spanish.txt */"Patrón",
   EditorStatTrak: /* csgo_spanish.txt */"StatTrak™",

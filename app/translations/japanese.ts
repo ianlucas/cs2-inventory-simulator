@@ -71,6 +71,8 @@ export const japanese = {
   EditorQuantity: /* csgo_japanese.txt */"数量",
   EditorRandom: /* csgo_japanese.txt */"ランダム",
   EditorReset: /* csgo_japanese.txt */"リセット",
+  EditorResetConfirm: "すべてのカスタム属性をデフォルトにリセットしますか？",
+  EditorResetConfirmTitle: "リセットの確認",
   EditorSave: /* csgo_japanese.txt */"セーブ",
   EditorSeed: /* csgo_japanese.txt */"パターン",
   EditorStatTrak: /* csgo_japanese.txt */"StatTrak™",

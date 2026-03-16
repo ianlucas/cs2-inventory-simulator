@@ -71,6 +71,8 @@ export const ukrainian = {
   EditorQuantity: /* csgo_ukrainian.txt */"Кількість",
   EditorRandom: /* csgo_ukrainian.txt */"Випадкова",
   EditorReset: /* csgo_ukrainian.txt */"Скинути",
+  EditorResetConfirm: "Скинути всі власні атрибути до значень за замовчуванням?",
+  EditorResetConfirmTitle: "Підтвердити скидання",
   EditorSave: /* csgo_ukrainian.txt */"Зберегти",
   EditorSeed: /* csgo_ukrainian.txt */"Текстура",
   EditorStatTrak: /* csgo_ukrainian.txt */"СтатТрек™",

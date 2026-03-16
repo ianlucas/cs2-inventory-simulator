@@ -71,6 +71,8 @@ export const norwegian = {
   EditorQuantity: /* csgo_norwegian.txt */"Antall",
   EditorRandom: /* csgo_norwegian.txt */"Tilfeldig",
   EditorReset: /* csgo_norwegian.txt */"Tilbakestill",
+  EditorResetConfirm: "Tilbakestille alle tilpassede attributter til standardverdiene?",
+  EditorResetConfirmTitle: "Bekreft tilbakestilling",
   EditorSave: /* csgo_norwegian.txt */"Lagre",
   EditorSeed: /* csgo_norwegian.txt */"Mønster",
   EditorStatTrak: /* csgo_norwegian.txt */"StatTrak™",

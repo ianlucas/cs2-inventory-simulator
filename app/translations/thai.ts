@@ -72,6 +72,8 @@ export const thai = {
   EditorQuantity: /* csgo_thai.txt */"จำนวน",
   EditorRandom: /* csgo_thai.txt */"สุ่ม",
   EditorReset: /* csgo_thai.txt */"รีเซ็ต",
+  EditorResetConfirm: "รีเซ็ตแอตทริบิวต์ที่กำหนดเองทั้งหมดเป็นค่าเริ่มต้น?",
+  EditorResetConfirmTitle: "ยืนยันการรีเซ็ต",
   EditorSave: /* csgo_thai.txt */"บันทึก",
   EditorSeed: /* csgo_thai.txt */"รูปแบบ",
   EditorStatTrak: /* csgo_thai.txt */"StatTrak™",

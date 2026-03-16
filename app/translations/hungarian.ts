@@ -71,6 +71,8 @@ export const hungarian = {
   EditorQuantity: /* csgo_hungarian.txt */"Mennyiség",
   EditorRandom: /* csgo_hungarian.txt */"Véletlenszerű",
   EditorReset: /* csgo_hungarian.txt */"Visszaállítás",
+  EditorResetConfirm: "Visszaállítja az összes egyéni attribútumot az alapértelmezett értékekre?",
+  EditorResetConfirmTitle: "Visszaállítás megerősítése",
   EditorSave: /* csgo_hungarian.txt */"Mentés",
   EditorSeed: /* csgo_hungarian.txt */"Minta",
   EditorStatTrak: /* csgo_hungarian.txt */"StatTrak™",

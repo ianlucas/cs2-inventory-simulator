@@ -71,6 +71,8 @@ export const latam = {
   EditorQuantity: /* csgo_latam.txt */"Cantidad",
   EditorRandom: /* csgo_latam.txt */"Aleatorio",
   EditorReset: /* csgo_latam.txt */"Restablecer",
+  EditorResetConfirm: "¿Restablecer todos los atributos personalizados a sus valores predeterminados?",
+  EditorResetConfirmTitle: "Confirmar reinicio",
   EditorSave: /* csgo_latam.txt */"Guardar",
   EditorSeed: /* csgo_latam.txt */"Patrón",
   EditorStatTrak: /* csgo_latam.txt */"StatTrak™",

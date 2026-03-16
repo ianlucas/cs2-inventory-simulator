@@ -72,6 +72,8 @@ export const koreana = {
   EditorQuantity: /* csgo_koreana.txt */"수량",
   EditorRandom: /* csgo_koreana.txt */"무작위",
   EditorReset: /* csgo_koreana.txt */"초기화",
+  EditorResetConfirm: "모든 커스텀 속성을 기본값으로 초기화하시겠습니까?",
+  EditorResetConfirmTitle: "초기화 확인",
   EditorSave: /* csgo_koreana.txt */"저장",
   EditorSeed: /* csgo_koreana.txt */"패턴",
   EditorStatTrak: /* csgo_koreana.txt */"StatTrak™",

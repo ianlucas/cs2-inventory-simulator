@@ -71,6 +71,8 @@ export const dutch = {
   EditorQuantity: /* csgo_dutch.txt */"Aantal",
   EditorRandom: /* csgo_dutch.txt */"Willekeurig",
   EditorReset: /* csgo_dutch.txt */"Resetten",
+  EditorResetConfirm: "Alle aangepaste attributen terugzetten naar de standaardwaarden?",
+  EditorResetConfirmTitle: "Resetten bevestigen",
   EditorSave: /* csgo_dutch.txt */"Opslaan",
   EditorSeed: /* csgo_dutch.txt */"Patroon",
   EditorStatTrak: /* csgo_dutch.txt */"StatTrak™",

@@ -71,6 +71,8 @@ export const greek = {
   EditorQuantity: /* csgo_greek.txt */"Ποσότητα",
   EditorRandom: /* csgo_greek.txt */"Τυχαίος",
   EditorReset: /* csgo_greek.txt */"Επαναφορά",
+  EditorResetConfirm: "Επαναφορά όλων των προσαρμοσμένων χαρακτηριστικών στις προεπιλογές;",
+  EditorResetConfirmTitle: "Επιβεβαίωση επαναφοράς",
   EditorSave: /* csgo_greek.txt */"Αποθήκευση",
   EditorSeed: /* csgo_greek.txt */"Μοτίβο",
   EditorStatTrak: /* csgo_greek.txt */"StatTrak™",

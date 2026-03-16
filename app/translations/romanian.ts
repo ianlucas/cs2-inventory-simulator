@@ -71,6 +71,8 @@ export const romanian = {
   EditorQuantity: /* csgo_romanian.txt */"Cantitate",
   EditorRandom: /* csgo_romanian.txt */"Aleatorie",
   EditorReset: /* csgo_romanian.txt */"Resetează",
+  EditorResetConfirm: "Resetați toate atributele personalizate la valorile implicite?",
+  EditorResetConfirmTitle: "Confirmați resetarea",
   EditorSave: /* csgo_romanian.txt */"Salvează",
   EditorSeed: /* csgo_romanian.txt */"Tipar",
   EditorStatTrak: /* csgo_romanian.txt */"StatTrak™",

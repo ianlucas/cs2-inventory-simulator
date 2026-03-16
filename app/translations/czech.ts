@@ -71,6 +71,8 @@ export const czech = {
   EditorQuantity: /* csgo_czech.txt */"Množství",
   EditorRandom: /* csgo_czech.txt */"Náhodná",
   EditorReset: /* csgo_czech.txt */"Resetovat",
+  EditorResetConfirm: "Resetovat všechny vlastní atributy na výchozí hodnoty?",
+  EditorResetConfirmTitle: "Potvrdit resetování",
   EditorSave: /* csgo_czech.txt */"Uložit",
   EditorSeed: /* csgo_czech.txt */"Vzor",
   EditorStatTrak: /* csgo_czech.txt */"StatTrak™",
