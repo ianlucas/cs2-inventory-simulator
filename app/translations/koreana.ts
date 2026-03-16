@@ -95,6 +95,7 @@ export const koreana = {
   ErrorAlertFailedToValidateTitle: "Steam 인증 실패",
   GenericCancel: /* csgo_koreana.txt */"취소",
   GenericNo: /* csgo_koreana.txt */"사용 안 함",
+  GenericOK: /* csgo_koreana.txt */"확인",
   GenericYes: /* csgo_koreana.txt */"사용",
   GridItemNoItemsToDisplay: "표시할 아이템이 없습니다",
   HeaderCraftCannotCraft: "제작할 수 없습니다.",

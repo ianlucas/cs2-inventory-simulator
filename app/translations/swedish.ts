@@ -94,6 +94,7 @@ export const swedish = {
   ErrorAlertFailedToValidateTitle: "Validering misslyckades",
   GenericCancel: /* csgo_swedish.txt */"Avbryt",
   GenericNo: /* csgo_swedish.txt */"Nej",
+  GenericOK: /* csgo_swedish.txt */"OK",
   GenericYes: /* csgo_swedish.txt */"Ja",
   GridItemNoItemsToDisplay: "Inga föremål att visa.",
   HeaderCraftCannotCraft: "Du kan inte skapa föremål.",

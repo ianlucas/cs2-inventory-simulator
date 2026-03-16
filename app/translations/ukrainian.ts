@@ -94,6 +94,7 @@ export const ukrainian = {
   ErrorAlertFailedToValidateTitle: "Не вдалося перевірити",
   GenericCancel: /* csgo_ukrainian.txt */"Скасувати",
   GenericNo: /* csgo_ukrainian.txt */"Ні",
+  GenericOK: /* csgo_ukrainian.txt */"Гаразд",
   GenericYes: /* csgo_ukrainian.txt */"Так",
   GridItemNoItemsToDisplay: "Немає предметів для відображення.",
   HeaderCraftCannotCraft: "Ви не можете створювати предмети.",

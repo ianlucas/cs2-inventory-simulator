@@ -95,6 +95,7 @@ export const english = {
   ErrorAlertFailedToValidateTitle: "Authentication with Steam failed",
   GenericCancel: /* csgo_english.txt */"Cancel",
   GenericNo: /* csgo_english.txt */"No",
+  GenericOK: /* csgo_english.txt */"OK",
   GenericYes: /* csgo_english.txt */"Yes",
   GridItemNoItemsToDisplay: "No items to display",
   HeaderAPILabel: "API",

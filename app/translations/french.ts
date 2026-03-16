@@ -94,6 +94,7 @@ export const french = {
   ErrorAlertFailedToValidateTitle: "Échec de l'authentification avec Steam",
   GenericCancel: /* csgo_french.txt */"Annuler",
   GenericNo: /* csgo_french.txt */"Non",
+  GenericOK: /* csgo_french.txt */"OK",
   GenericYes: /* csgo_french.txt */"Oui",
   GridItemNoItemsToDisplay: "Aucun objet à afficher",
   HeaderCraftCannotCraft: "Vous ne pouvez pas créer.",

@@ -95,6 +95,7 @@ export const thai = {
   ErrorAlertFailedToValidateTitle: "การตรวจสอบล้มเหลว",
   GenericCancel: /* csgo_thai.txt */"ยกเลิก",
   GenericNo: /* csgo_thai.txt */"ไม่",
+  GenericOK: /* csgo_thai.txt */"ตกลง",
   GenericYes: /* csgo_thai.txt */"ใช่",
   GridItemNoItemsToDisplay: "ไม่มีไอเท็มที่จะแสดง",
   HeaderCraftCannotCraft: "คุณไม่สามารถสร้างไอเท็มได้",

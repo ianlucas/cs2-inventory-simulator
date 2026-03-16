@@ -94,6 +94,7 @@ export const german = {
   ErrorAlertFailedToValidateTitle: "Authentifizierung mit Steam fehlgeschlagen",
   GenericCancel: /* csgo_german.txt */"Abbrechen",
   GenericNo: /* csgo_german.txt */"Nein",
+  GenericOK: /* csgo_german.txt */"OK",
   GenericYes: /* csgo_german.txt */"Ja",
   GridItemNoItemsToDisplay: "Keine Gegenstände zum Anzeigen",
   HeaderCraftCannotCraft: "Sie können nicht herstellen.",

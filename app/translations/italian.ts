@@ -94,6 +94,7 @@ export const italian = {
   ErrorAlertFailedToValidateTitle: "Autenticazione con Steam non riuscita",
   GenericCancel: /* csgo_italian.txt */"Annulla",
   GenericNo: /* csgo_italian.txt */"No",
+  GenericOK: /* csgo_italian.txt */"OK",
   GenericYes: /* csgo_italian.txt */"Sì",
   GridItemNoItemsToDisplay: "Nessun oggetto da visualizzare",
   HeaderCraftCannotCraft: "Non puoi creare.",

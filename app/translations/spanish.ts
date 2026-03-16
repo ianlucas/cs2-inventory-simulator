@@ -94,6 +94,7 @@ export const spanish = {
   ErrorAlertFailedToValidateTitle: "Error de validación",
   GenericCancel: /* csgo_spanish.txt */"Cancelar",
   GenericNo: /* csgo_spanish.txt */"No",
+  GenericOK: /* csgo_spanish.txt */"Aceptar",
   GenericYes: /* csgo_spanish.txt */"Sí",
   GridItemNoItemsToDisplay: "No hay objetos para mostrar.",
   HeaderCraftCannotCraft: "No puedes crear objetos.",

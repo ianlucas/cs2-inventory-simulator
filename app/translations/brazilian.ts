@@ -92,6 +92,7 @@ export const brazilian = {
   ErrorAlertFailedToValidateTitle: "Falha na autenticação na Steam",
   GenericCancel: /* csgo_brazilian.txt */"Cancelar",
   GenericNo: /* csgo_brazilian.txt */"Não",
+  GenericOK: /* csgo_brazilian.txt */"OK",
   GenericYes: /* csgo_brazilian.txt */"Sim",
   GridItemNoItemsToDisplay: "Nenhum item para exibir",
   HeaderCraftCannotCraft: "Você não pode criar itens.",

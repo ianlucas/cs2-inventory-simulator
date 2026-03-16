@@ -94,6 +94,7 @@ export const romanian = {
   ErrorAlertFailedToValidateTitle: "Validarea nu a reușit",
   GenericCancel: /* csgo_romanian.txt */"Anulează",
   GenericNo: /* csgo_romanian.txt */"Nu",
+  GenericOK: /* csgo_romanian.txt */"OK",
   GenericYes: /* csgo_romanian.txt */"Da",
   GridItemNoItemsToDisplay: "Nu există obiecte de afișat.",
   HeaderCraftCannotCraft: "Nu poți crea.",

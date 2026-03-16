@@ -95,6 +95,7 @@ export const schinese = {
   ErrorAlertFailedToValidateTitle: "验证失败",
   GenericCancel: /* csgo_schinese.txt */"取消",
   GenericNo: /* csgo_schinese.txt */"否",
+  GenericOK: /* csgo_schinese.txt */"确定",
   GenericYes: /* csgo_schinese.txt */"是",
   GridItemNoItemsToDisplay: "没有可显示的物品。",
   HeaderCraftCannotCraft: "您无法制作物品。",

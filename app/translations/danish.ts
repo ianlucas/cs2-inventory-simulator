@@ -94,6 +94,7 @@ export const danish = {
   ErrorAlertFailedToValidateTitle: "Godkendelse med Steam mislykkedes",
   GenericCancel: /* csgo_danish.txt */"Annuller",
   GenericNo: /* csgo_danish.txt */"Nej",
+  GenericOK: /* csgo_danish.txt */"OK",
   GenericYes: /* csgo_danish.txt */"Ja",
   GridItemNoItemsToDisplay: "Ingen genstande at vise",
   HeaderCraftCannotCraft: "Du kan ikke fremstille.",

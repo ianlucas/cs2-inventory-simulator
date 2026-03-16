@@ -94,6 +94,7 @@ export const dutch = {
   ErrorAlertFailedToValidateTitle: "Authenticatie met Steam mislukt",
   GenericCancel: /* csgo_dutch.txt */"Annuleren",
   GenericNo: /* csgo_dutch.txt */"Nee",
+  GenericOK: /* csgo_dutch.txt */"OK",
   GenericYes: /* csgo_dutch.txt */"Ja",
   GridItemNoItemsToDisplay: "Geen voorwerpen om weer te geven",
   HeaderCraftCannotCraft: "Je kunt niet maken.",

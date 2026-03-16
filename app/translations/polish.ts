@@ -94,6 +94,7 @@ export const polish = {
   ErrorAlertFailedToValidateTitle: "Uwierzytelnienie Steam nie powiodło się",
   GenericCancel: /* csgo_polish.txt */"Anuluj",
   GenericNo: /* csgo_polish.txt */"Nie",
+  GenericOK: /* csgo_polish.txt */"OK",
   GenericYes: /* csgo_polish.txt */"Tak",
   GridItemNoItemsToDisplay: "Brak przedmiotów do wyświetlenia",
   HeaderCraftCannotCraft: "Nie możesz tworzyć.",

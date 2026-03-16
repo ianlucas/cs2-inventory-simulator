@@ -94,6 +94,7 @@ export const japanese = {
   ErrorAlertFailedToValidateTitle: "Steamでの認証に失敗しました",
   GenericCancel: /* csgo_japanese.txt */"キャンセル",
   GenericNo: /* csgo_japanese.txt */"いいえ",
+  GenericOK: /* csgo_japanese.txt */"OK",
   GenericYes: /* csgo_japanese.txt */"はい",
   GridItemNoItemsToDisplay: "表示するアイテムがありません",
   HeaderCraftCannotCraft: "クラフトできません。",

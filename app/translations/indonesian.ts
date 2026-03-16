@@ -92,6 +92,7 @@ export const indonesian = {
   ErrorAlertFailedToValidateTitle: "Autentikasi dengan Steam gagal",
   GenericCancel: /* csgo_indonesian.txt */"Batal",
   GenericNo: /* csgo_indonesian.txt */"Tidak",
+  GenericOK: /* csgo_indonesian.txt */"OK",
   GenericYes: /* csgo_indonesian.txt */"Ya",
   GridItemNoItemsToDisplay: "Tidak ada item untuk ditampilkan",
   HeaderCraftCannotCraft: "Kamu tidak bisa craft.",

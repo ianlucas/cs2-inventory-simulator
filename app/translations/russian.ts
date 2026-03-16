@@ -94,6 +94,7 @@ export const russian = {
   ErrorAlertFailedToValidateTitle: "Проверка не удалась",
   GenericCancel: /* csgo_russian.txt */"Отмена",
   GenericNo: /* csgo_russian.txt */"Нет",
+  GenericOK: /* csgo_russian.txt */"OK",
   GenericYes: /* csgo_russian.txt */"Да",
   GridItemNoItemsToDisplay: "Нет предметов для отображения.",
   HeaderCraftCannotCraft: "Вы не можете создавать предметы.",

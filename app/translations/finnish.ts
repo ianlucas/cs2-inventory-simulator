@@ -94,6 +94,7 @@ export const finnish = {
   ErrorAlertFailedToValidateTitle: "Todennus Steamin kanssa epäonnistui",
   GenericCancel: /* csgo_finnish.txt */"Peruuta",
   GenericNo: /* csgo_finnish.txt */"Ei",
+  GenericOK: /* csgo_finnish.txt */"OK",
   GenericYes: /* csgo_finnish.txt */"Kyllä",
   GridItemNoItemsToDisplay: "Ei näytettäviä esineitä",
   HeaderCraftCannotCraft: "Et voi valmistaa.",

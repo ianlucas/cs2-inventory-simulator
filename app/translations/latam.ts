@@ -94,6 +94,7 @@ export const latam = {
   ErrorAlertFailedToValidateTitle: "La autenticación con Steam falló",
   GenericCancel: /* csgo_latam.txt */"Cancelar",
   GenericNo: /* csgo_latam.txt */"No",
+  GenericOK: /* csgo_latam.txt */"Aceptar",
   GenericYes: /* csgo_latam.txt */"Sí",
   GridItemNoItemsToDisplay: "No hay objetos para mostrar",
   HeaderCraftCannotCraft: "No puedes crear.",

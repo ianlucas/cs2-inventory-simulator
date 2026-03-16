@@ -93,6 +93,7 @@ export const norwegian = {
   ErrorAlertFailedToValidateTitle: "Autentisering med Steam mislyktes",
   GenericCancel: /* csgo_norwegian.txt */"Avbryt",
   GenericNo: /* csgo_norwegian.txt */"Nei",
+  GenericOK: /* csgo_norwegian.txt */"OK",
   GenericYes: /* csgo_norwegian.txt */"Ja",
   GridItemNoItemsToDisplay: "Ingen gjenstander å vise",
   HeaderCraftCannotCraft: "Du kan ikke lage.",

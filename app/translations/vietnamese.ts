@@ -94,6 +94,7 @@ export const vietnamese = {
   ErrorAlertFailedToValidateTitle: "Xác thực thất bại",
   GenericCancel: /* csgo_vietnamese.txt */"Hủy",
   GenericNo: /* csgo_vietnamese.txt */"Không",
+  GenericOK: /* csgo_vietnamese.txt */"Đồng Ý",
   GenericYes: /* csgo_vietnamese.txt */"Có",
   GridItemNoItemsToDisplay: "Không có vật phẩm để hiển thị.",
   HeaderCraftCannotCraft: "Bạn không thể chế tạo vật phẩm.",

@@ -94,6 +94,7 @@ export const czech = {
   ErrorAlertFailedToValidateTitle: "Ověření přes Steam se nezdařilo",
   GenericCancel: /* csgo_czech.txt */"Zrušit",
   GenericNo: /* csgo_czech.txt */"Ne",
+  GenericOK: /* csgo_czech.txt */"OK",
   GenericYes: /* csgo_czech.txt */"Ano",
   GridItemNoItemsToDisplay: "Žádné předměty k zobrazení",
   HeaderCraftCannotCraft: "Nemůžeš vytvářet.",

@@ -94,6 +94,7 @@ export const hungarian = {
   ErrorAlertFailedToValidateTitle: "Steam hitelesítés sikertelen",
   GenericCancel: /* csgo_hungarian.txt */"Mégse",
   GenericNo: /* csgo_hungarian.txt */"Nem",
+  GenericOK: /* csgo_hungarian.txt */"OK",
   GenericYes: /* csgo_hungarian.txt */"Igen",
   GridItemNoItemsToDisplay: "Nincsenek megjeleníthető tárgyak",
   HeaderCraftCannotCraft: "Nem tudsz készíteni.",

@@ -94,6 +94,7 @@ export const bulgarian = {
   ErrorAlertFailedToValidateTitle: "Неуспешно удостоверяване със Steam",
   GenericCancel: /* csgo_bulgarian.txt */"Отказ",
   GenericNo: /* csgo_bulgarian.txt */"Не",
+  GenericOK: /* csgo_bulgarian.txt */"Добре",
   GenericYes: /* csgo_bulgarian.txt */"Да",
   GridItemNoItemsToDisplay: "Няма артикули за показване",
   HeaderCraftCannotCraft: "Не можете да изработвате.",

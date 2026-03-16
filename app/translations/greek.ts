@@ -94,6 +94,7 @@ export const greek = {
   ErrorAlertFailedToValidateTitle: "Αποτυχία ελέγχου ταυτότητας με το Steam",
   GenericCancel: /* csgo_greek.txt */"Άκυρο",
   GenericNo: /* csgo_greek.txt */"Όχι",
+  GenericOK: /* csgo_greek.txt */"Εντάξει",
   GenericYes: /* csgo_greek.txt */"Ναι",
   GridItemNoItemsToDisplay: "Δεν υπάρχουν αντικείμενα προς εμφάνιση",
   HeaderCraftCannotCraft: "Δεν μπορείτε να κατασκευάσετε.",

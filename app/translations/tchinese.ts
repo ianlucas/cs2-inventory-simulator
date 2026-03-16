@@ -95,6 +95,7 @@ export const tchinese = {
   ErrorAlertFailedToValidateTitle: "驗證失敗",
   GenericCancel: /* csgo_tchinese.txt */"取消",
   GenericNo: /* csgo_tchinese.txt */"否",
+  GenericOK: /* csgo_tchinese.txt */"確定",
   GenericYes: /* csgo_tchinese.txt */"是",
   GridItemNoItemsToDisplay: "沒有可顯示的物品。",
   HeaderCraftCannotCraft: "您無法製作物品。",

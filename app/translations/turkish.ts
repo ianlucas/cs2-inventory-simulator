@@ -95,6 +95,7 @@ export const turkish = {
   ErrorAlertFailedToValidateTitle: "Doğrulama başarısız",
   GenericCancel: /* csgo_turkish.txt */"İptal",
   GenericNo: /* csgo_turkish.txt */"Hayır",
+  GenericOK: /* csgo_turkish.txt */"Tamam",
   GenericYes: /* csgo_turkish.txt */"Evet",
   GridItemNoItemsToDisplay: "Gösterilecek eşya yok.",
   HeaderCraftCannotCraft: "Eşya oluşturamazsın.",
