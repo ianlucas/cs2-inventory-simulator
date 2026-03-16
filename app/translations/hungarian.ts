@@ -66,7 +66,7 @@ export const hungarian = {
   EditorKeychainEdit: /* csgo_hungarian.txt */"Szerkesztés",
   EditorKeychainX: /* csgo_hungarian.txt */"X eltolás",
   EditorKeychainY: /* csgo_hungarian.txt */"Y eltolás",
-  EditorKeychainZ: /* csgo_hungarian.txt */"Z eltolás",
+  EditorKeychainZ: "Z eltolás",
   EditorKeychains: /* csgo_hungarian.txt */"Talizmánok",
   EditorNametag: /* csgo_hungarian.txt */"Névcédula",
   EditorNametagPlaceholder: "Írj be egy egyedi nevet...",

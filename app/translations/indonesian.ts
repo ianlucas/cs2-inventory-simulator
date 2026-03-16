@@ -65,7 +65,6 @@ export const indonesian = {
   EditorKeychainEdit: /* csgo_indonesian.txt */"Edit",
   EditorKeychainX: /* csgo_indonesian.txt */"X Offset",
   EditorKeychainY: /* csgo_indonesian.txt */"Y Offset",
-  EditorKeychainZ: /* csgo_indonesian.txt */"Z Offset",
   EditorKeychains: /* csgo_indonesian.txt */"Gantungan",
   EditorNametag: /* csgo_indonesian.txt */"Tag Nama",
   EditorNametagPlaceholder: "Ketik nama khusus...",

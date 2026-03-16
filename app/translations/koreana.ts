@@ -67,7 +67,7 @@ export const koreana = {
   EditorKeychainEdit: /* csgo_koreana.txt */"편집",
   EditorKeychainX: /* csgo_koreana.txt */"가로 위치",
   EditorKeychainY: /* csgo_koreana.txt */"세로 위치",
-  EditorKeychainZ: /* csgo_koreana.txt */"Z 위치",
+  EditorKeychainZ: "Z 위치",
   EditorKeychains: /* csgo_koreana.txt */"참 장식",
   EditorNametag: /* csgo_koreana.txt */"이름표",
   EditorNametagPlaceholder: "사용자 지정 이름 입력...",

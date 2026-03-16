@@ -66,7 +66,7 @@ export const polish = {
   EditorKeychainEdit: /* csgo_polish.txt */"Edytuj",
   EditorKeychainX: /* csgo_polish.txt */"Współrzędna X",
   EditorKeychainY: /* csgo_polish.txt */"Współrzędna Y",
-  EditorKeychainZ: /* csgo_polish.txt */"Współrzędna Z",
+  EditorKeychainZ: "Współrzędna Z",
   EditorKeychains: /* csgo_polish.txt */"Przywieszki",
   EditorNametag: /* csgo_polish.txt */"Tabliczka z nazwą",
   EditorNametagPlaceholder: "Wpisz własną nazwę...",

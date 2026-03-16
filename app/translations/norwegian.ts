@@ -66,7 +66,6 @@ export const norwegian = {
   EditorKeychainEdit: /* csgo_norwegian.txt */"Rediger",
   EditorKeychainX: /* csgo_norwegian.txt */"X Offset",
   EditorKeychainY: /* csgo_norwegian.txt */"Y Offset",
-  EditorKeychainZ: /* csgo_norwegian.txt */"Z Offset",
   EditorKeychains: /* csgo_norwegian.txt */"Anheng",
   EditorNametag: /* csgo_norwegian.txt */"Navnelapp",
   EditorNametagPlaceholder: "Skriv inn et tilpasset navn...",

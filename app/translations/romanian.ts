@@ -66,7 +66,7 @@ export const romanian = {
   EditorKeychainEdit: /* csgo_romanian.txt */"Editează",
   EditorKeychainX: /* csgo_romanian.txt */"Coordonată X",
   EditorKeychainY: /* csgo_romanian.txt */"Coordonată Y",
-  EditorKeychainZ: /* csgo_romanian.txt */"Coordonată Z",
+  EditorKeychainZ: "Coordonată Z",
   EditorKeychains: /* csgo_romanian.txt */"Brelocuri",
   EditorNametag: /* csgo_romanian.txt */"Etichetă",
   EditorNametagPlaceholder: "Introdu etichetă...",

@@ -67,7 +67,7 @@ export const thai = {
   EditorKeychainEdit: /* csgo_thai.txt */"แก้ไข",
   EditorKeychainX: /* csgo_thai.txt */"ค่าชดเชยแกน X",
   EditorKeychainY: /* csgo_thai.txt */"ค่าชดเชยแกน Y",
-  EditorKeychainZ: /* csgo_thai.txt */"ค่าชดเชยแกน Z",
+  EditorKeychainZ: "ค่าชดเชยแกน Z",
   EditorKeychains: /* csgo_thai.txt */"พวงกุญแจ",
   EditorNametag: /* csgo_thai.txt */"ป้ายชื่อ",
   EditorNametagPlaceholder: "กรอกป้ายชื่อ...",

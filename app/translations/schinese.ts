@@ -67,7 +67,7 @@ export const schinese = {
   EditorKeychainEdit: /* csgo_schinese.txt */"编辑",
   EditorKeychainX: /* csgo_schinese.txt */"水平位移",
   EditorKeychainY: /* csgo_schinese.txt */"垂直位移",
-  EditorKeychainZ: /* csgo_schinese.txt */"Z 位移",
+  EditorKeychainZ: "Z 位移",
   EditorKeychains: /* csgo_schinese.txt */"挂件",
   EditorNametag: /* csgo_schinese.txt */"名称标签",
   EditorNametagPlaceholder: "输入名称标签...",

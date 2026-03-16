@@ -66,7 +66,7 @@ export const vietnamese = {
   EditorKeychainEdit: /* csgo_vietnamese.txt */"Sửa",
   EditorKeychainX: /* csgo_vietnamese.txt */"Độ lệch khỏi trục hoành",
   EditorKeychainY: /* csgo_vietnamese.txt */"Độ lệch khỏi trục tung",
-  EditorKeychainZ: /* csgo_vietnamese.txt */"Độ lệch khỏi trục Z",
+  EditorKeychainZ: "Độ lệch khỏi trục Z",
   EditorKeychains: /* csgo_vietnamese.txt */"Móc treo",
   EditorNametag: /* csgo_vietnamese.txt */"Thẻ tên",
   EditorNametagPlaceholder: "Nhập nhãn tên...",

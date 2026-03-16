@@ -67,7 +67,7 @@ export const turkish = {
   EditorKeychainEdit: /* csgo_turkish.txt */"Düzenle",
   EditorKeychainX: /* csgo_turkish.txt */"X Kolu",
   EditorKeychainY: /* csgo_turkish.txt */"Y Kolu",
-  EditorKeychainZ: /* csgo_turkish.txt */"Z Kolu",
+  EditorKeychainZ: "Z Kolu",
   EditorKeychains: /* csgo_turkish.txt */"Süsler",
   EditorNametag: /* csgo_turkish.txt */"İsim Etiketi",
   EditorNametagPlaceholder: "İsim etiketi gir...",

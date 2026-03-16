@@ -66,7 +66,7 @@ export const danish = {
   EditorKeychainEdit: /* csgo_danish.txt */"Rediger",
   EditorKeychainX: /* csgo_danish.txt */"X-offset",
   EditorKeychainY: /* csgo_danish.txt */"Y-offset",
-  EditorKeychainZ: /* csgo_danish.txt */"Z-offset",
+  EditorKeychainZ: "Z-offset",
   EditorKeychains: /* csgo_danish.txt */"Vedhæng",
   EditorNametag: /* csgo_danish.txt */"Navneskilt",
   EditorNametagPlaceholder: "Skriv et brugerdefineret navn...",

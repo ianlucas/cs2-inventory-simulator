@@ -64,7 +64,7 @@ export const brazilian = {
   EditorKeychainEdit: /* csgo_brazilian.txt */"Editar",
   EditorKeychainX: /* csgo_brazilian.txt */"Desloc. X",
   EditorKeychainY: /* csgo_brazilian.txt */"Desloc. Y",
-  EditorKeychainZ: /* csgo_brazilian.txt */"Desloc. Z",
+  EditorKeychainZ: "Desloc. Z",
   EditorKeychains: /* csgo_brazilian.txt */"Chaveiros",
   EditorNametag: /* csgo_brazilian.txt */"Etiqueta de Nome",
   EditorNametagPlaceholder: "Digite um nome...",

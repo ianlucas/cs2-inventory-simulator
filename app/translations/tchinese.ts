@@ -67,7 +67,7 @@ export const tchinese = {
   EditorKeychainEdit: /* csgo_tchinese.txt */"編輯",
   EditorKeychainX: /* csgo_tchinese.txt */"X 軸位移",
   EditorKeychainY: /* csgo_tchinese.txt */"Y 軸位移",
-  EditorKeychainZ: /* csgo_tchinese.txt */"Z 軸位移",
+  EditorKeychainZ: "Z 軸位移",
   EditorKeychains: /* csgo_tchinese.txt */"吊飾",
   EditorNametag: /* csgo_tchinese.txt */"名稱標籤",
   EditorNametagPlaceholder: "輸入名稱標籤...",

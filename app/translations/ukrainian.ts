@@ -66,7 +66,7 @@ export const ukrainian = {
   EditorKeychainEdit: /* csgo_ukrainian.txt */"Редагувати",
   EditorKeychainX: /* csgo_ukrainian.txt */"Зміщ. по X",
   EditorKeychainY: /* csgo_ukrainian.txt */"Зміщ. по Y",
-  EditorKeychainZ: /* csgo_ukrainian.txt */"Зміщ. по Z",
+  EditorKeychainZ: "Зміщ. по Z",
   EditorKeychains: /* csgo_ukrainian.txt */"Брелоки",
   EditorNametag: /* csgo_ukrainian.txt */"Бирка",
   EditorNametagPlaceholder: "Введіть бирку імені...",

@@ -66,7 +66,7 @@ export const french = {
   EditorKeychainEdit: /* csgo_french.txt */"Modifier",
   EditorKeychainX: /* csgo_french.txt */"Décalage X",
   EditorKeychainY: /* csgo_french.txt */"Décalage Y",
-  EditorKeychainZ: /* csgo_french.txt */"Décalage Z",
+  EditorKeychainZ: "Décalage Z",
   EditorKeychains: /* csgo_french.txt */"Porte-bonheurs",
   EditorNametag: /* csgo_french.txt */"Étiquette",
   EditorNametagPlaceholder: "Entrez un nom personnalisé...",

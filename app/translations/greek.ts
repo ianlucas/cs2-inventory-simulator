@@ -66,7 +66,7 @@ export const greek = {
   EditorKeychainEdit: /* csgo_greek.txt */"Επεξεργασία",
   EditorKeychainX: /* csgo_greek.txt */"Μετατόπιση X",
   EditorKeychainY: /* csgo_greek.txt */"Μετατόπιση Y",
-  EditorKeychainZ: /* csgo_greek.txt */"Μετατόπιση Z",
+  EditorKeychainZ: "Μετατόπιση Z",
   EditorKeychains: /* csgo_greek.txt */"Γούρια",
   EditorNametag: /* csgo_greek.txt */"Ετικέτα ονόματος",
   EditorNametagPlaceholder: "Πληκτρολογήστε προσαρμοσμένο όνομα...",
