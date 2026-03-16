@@ -25,6 +25,7 @@ export function CraftNew({
     craftAllowKeychains,
     craftAllowKeychainX,
     craftAllowKeychainY,
+    craftAllowKeychainZ,
     craftAllowNametag,
     craftAllowPatches,
     craftAllowSeed,
@@ -64,6 +65,7 @@ export function CraftNew({
   const isHideKeychainSeed = !craftAllowKeychainSeed;
   const isHideKeychainX = !craftAllowKeychainX;
   const isHideKeychainY = !craftAllowKeychainY;
+  const isHideKeychainZ = !craftAllowKeychainZ;
 
   const isHidePatches =
     !craftAllowPatches || craftHideType.includes(CS2ItemType.Patch);
@@ -101,6 +103,7 @@ export function CraftNew({
         isHideKeychains={isHideKeychains}
         isHideKeychainX={isHideKeychainX}
         isHideKeychainY={isHideKeychainY}
+        isHideKeychainZ={isHideKeychainZ}
         isHideNameTag={isHideNameTag}
         isHidePatches={isHidePatches}
         isHideSeed={isHideSeed}

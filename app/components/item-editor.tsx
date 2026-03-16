@@ -54,6 +54,7 @@ export function ItemEditor({
   isHideKeychains,
   isHideKeychainX,
   isHideKeychainY,
+  isHideKeychainZ,
   isHideNameTag,
   isHidePatches,
   isHideSeed,
@@ -81,6 +82,7 @@ export function ItemEditor({
   isHideKeychains?: boolean;
   isHideKeychainX?: boolean;
   isHideKeychainY?: boolean;
+  isHideKeychainZ?: boolean;
   isHideNameTag?: boolean;
   isHidePatches?: boolean;
   isHideSeed?: boolean;
@@ -212,6 +214,7 @@ export function ItemEditor({
               isHideKeychainSeed={isHideKeychainSeed}
               isHideKeychainX={isHideKeychainX}
               isHideKeychainY={isHideKeychainY}
+              isHideKeychainZ={isHideKeychainZ}
               keychainFilter={keychainFilter}
               onChange={attributes.update("keychains")}
               value={attributes.value.keychains}

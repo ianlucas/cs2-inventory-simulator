@@ -16,6 +16,7 @@ export function api<T, U>(action: (args: T) => Promise<U>) {
       let statusCode = 500;
       if (error instanceof Error) {
         if (error.name === "ZodError") {
+          console.log(error);
           errorMessage =
             "Please check this endpoint's documentation for the correct request parameters.";
           logError = false;

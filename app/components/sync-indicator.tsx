@@ -89,7 +89,7 @@ export function SyncIndicator() {
                           <FillSpinner />
                         </span>
                       ) : (
-                        translate("SyncErrorContinue")
+                        translate("GenericOK")
                       )
                     }
                   />

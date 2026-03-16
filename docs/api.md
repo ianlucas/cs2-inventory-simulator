@@ -29,6 +29,7 @@ type GetUserInventoryResponse = {
           seed?: number;
           x?: number;
           y?: number;
+          z?: number;
         }
       >;
       nameTag?: string;
@@ -125,6 +126,14 @@ interface WeaponEconItem {
     wear: number;
     x?: number;
     y?: number;
+  }[];
+  keychains: {
+    def: number;
+    seed: number;
+    slot: number;
+    x?: number;
+    y?: number;
+    z?: number;
   }[];
   uid: number;
   wear: number;

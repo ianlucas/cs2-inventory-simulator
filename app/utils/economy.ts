@@ -64,13 +64,15 @@ export function isItemCountable(item: CS2EconomyItem) {
 
 export const newItemStartingId = 15367;
 export const newItemEndAt = 1774482426116;
-export const minStickerOffset = -10;
-export const maxStickerOffset = 10;
+export const minStickerOffset = -100;
+export const maxStickerOffset = 100;
 export const stickerOffsetFactor = 0.001;
 export const seedStringMaxLen = String(CS2_MAX_SEED).length;
 export const wearStringMaxLen = String(CS2_WEAR_FACTOR).length;
 export const stickerWearStringMaxLen = String(CS2_STICKER_WEAR_FACTOR).length;
-export const stickerOffsetStringMaxLen = String(stickerOffsetFactor).length;
+const stickerOffsetDecimalPlaces = String(stickerOffsetFactor).length - 2;
+export const stickerOffsetStringMaxLen =
+  String(maxStickerOffset).length + 1 + stickerOffsetDecimalPlaces;
 export const stickerRotationStringMaxLen = String(
   CS2_MAX_STICKER_ROTATION
 ).length;
@@ -92,12 +94,12 @@ export function validateStickerWear(wear: number) {
 }
 
 export function stickerOffsetToString(offset: number) {
-  return offset.toFixed(stickerOffsetStringMaxLen - 2);
+  return offset.toFixed(stickerOffsetDecimalPlaces);
 }
 
 export function validateStickerOffset(offset: number) {
   return (
-    String(offset).length <= stickerOffsetStringMaxLen + (offset > 0 ? 0 : 1) &&
+    Number(offset.toFixed(stickerOffsetDecimalPlaces)) === offset &&
     offset >= minStickerOffset &&
     offset <= maxStickerOffset
   );
@@ -113,9 +115,11 @@ export function validateStickerRotation(rotation: number) {
 
 export const stickerSchemaStringMaxLen = String(CS2_MAX_STICKERS - 1).length;
 
-export function validateStickerSchema(schema: number) {
+export function validateStickerSchema(schema: number, item?: CS2EconomyItem) {
   return (
-    Number.isInteger(schema) && schema >= 0 && schema <= CS2_MAX_STICKERS - 1
+    Number.isInteger(schema) &&
+    schema >= 0 &&
+    schema <= (item?.getStickerSlotCount() ?? CS2_MAX_STICKERS) - 1
   );
 }
 

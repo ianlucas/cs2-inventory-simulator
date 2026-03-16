@@ -37,6 +37,7 @@ interface EconItem {
     slot: number;
     x?: number;
     y?: number;
+    z?: number;
   }[];
   tint?: number;
   uid?: number;
@@ -146,7 +147,8 @@ export async function generate(
               seed: keychain.seed ?? CS2_MIN_KEYCHAIN_SEED,
               slot: index,
               x: keychain.x,
-              y: keychain.y
+              y: keychain.y,
+              z: keychain.z
             })),
             uid: item.uid,
             wear: item.getWear()

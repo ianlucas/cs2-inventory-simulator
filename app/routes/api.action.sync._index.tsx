@@ -20,6 +20,7 @@ import {
   craftAllowKeychainSeed,
   craftAllowKeychainX,
   craftAllowKeychainY,
+  craftAllowKeychainZ,
   craftAllowNametag,
   craftAllowSeed,
   craftAllowStatTrak,
@@ -38,6 +39,7 @@ import {
   editAllowKeychainSeed,
   editAllowKeychainX,
   editAllowKeychainY,
+  editAllowKeychainZ,
   editAllowNametag,
   editAllowSeed,
   editAllowStatTrak,
@@ -213,7 +215,7 @@ async function enforceCraftRulesForStickerAttributes(
 }
 
 async function enforceCraftRulesForKeychainAttributes(
-  { seed, x, y }: RecordValue<NonNullable<CS2BaseInventoryItem["keychains"]>>,
+  { seed, x, y, z }: RecordValue<NonNullable<CS2BaseInventoryItem["keychains"]>>,
   userId: string
 ) {
   if (seed !== undefined) {
@@ -224,6 +226,9 @@ async function enforceCraftRulesForKeychainAttributes(
   }
   if (y !== undefined) {
     await craftAllowKeychainY.for(userId).truthy();
+  }
+  if (z !== undefined) {
+    await craftAllowKeychainZ.for(userId).truthy();
   }
 }
 
@@ -286,7 +291,7 @@ async function enforceEditRulesForItem(
 }
 
 async function enforceEditRulesForKeychainAttributes(
-  { seed, x, y }: RecordValue<NonNullable<CS2BaseInventoryItem["keychains"]>>,
+  { seed, x, y, z }: RecordValue<NonNullable<CS2BaseInventoryItem["keychains"]>>,
   userId: string
 ) {
   if (seed !== undefined) {
@@ -297,6 +302,9 @@ async function enforceEditRulesForKeychainAttributes(
   }
   if (y !== undefined) {
     await editAllowKeychainY.for(userId).truthy();
+  }
+  if (z !== undefined) {
+    await editAllowKeychainZ.for(userId).truthy();
   }
 }
 
