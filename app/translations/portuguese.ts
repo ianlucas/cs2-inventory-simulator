@@ -71,6 +71,8 @@ export const portuguese = {
   EditorQuantity: /* csgo_portuguese.txt */"Quantidade",
   EditorRandom: /* csgo_portuguese.txt */"Aleatório",
   EditorReset: /* csgo_portuguese.txt */"Repor",
+  EditorResetConfirm: "Repor todos os atributos personalizados para os predefinidos?",
+  EditorResetConfirmTitle: "Confirmar redefinição",
   EditorSave: /* csgo_portuguese.txt */"Guardar",
   EditorSeed: /* csgo_portuguese.txt */"Padrão",
   EditorStatTrak: /* csgo_portuguese.txt */"StatTrak™",

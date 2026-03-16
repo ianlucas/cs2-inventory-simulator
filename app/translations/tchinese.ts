@@ -72,6 +72,8 @@ export const tchinese = {
   EditorQuantity: /* csgo_tchinese.txt */"數量",
   EditorRandom: /* csgo_tchinese.txt */"隨機",
   EditorReset: /* csgo_tchinese.txt */"重設",
+  EditorResetConfirm: "將所有自訂屬性重置為預設值？",
+  EditorResetConfirmTitle: "確認重置",
   EditorSave: /* csgo_tchinese.txt */"儲存",
   EditorSeed: /* csgo_tchinese.txt */"圖案",
   EditorStatTrak: /* csgo_tchinese.txt */"StatTrak™",

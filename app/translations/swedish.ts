@@ -71,6 +71,8 @@ export const swedish = {
   EditorQuantity: /* csgo_swedish.txt */"Antal",
   EditorRandom: /* csgo_swedish.txt */"Slumpmässig",
   EditorReset: /* csgo_swedish.txt */"Återställ",
+  EditorResetConfirm: "Återställa alla anpassade attribut till standardvärdena?",
+  EditorResetConfirmTitle: "Bekräfta återställning",
   EditorSave: /* csgo_swedish.txt */"Spara",
   EditorSeed: /* csgo_swedish.txt */"Mönster",
   EditorStatTrak: /* csgo_swedish.txt */"StatTrak™",

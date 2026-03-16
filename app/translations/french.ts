@@ -71,6 +71,8 @@ export const french = {
   EditorQuantity: /* csgo_french.txt */"Quantité",
   EditorRandom: /* csgo_french.txt */"Aléatoire",
   EditorReset: /* csgo_french.txt */"Réinitialiser",
+  EditorResetConfirm: "Réinitialiser tous les attributs personnalisés par défaut ?",
+  EditorResetConfirmTitle: "Confirmer la réinitialisation",
   EditorSave: /* csgo_french.txt */"Enregistrer",
   EditorSeed: /* csgo_french.txt */"Motif",
   EditorStatTrak: /* csgo_french.txt */"StatTrak™",

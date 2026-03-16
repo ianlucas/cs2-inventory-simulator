@@ -69,6 +69,8 @@ export const brazilian = {
   EditorQuantity: /* csgo_brazilian.txt */"Quantidade",
   EditorRandom: /* csgo_brazilian.txt */"Aleatório",
   EditorReset: /* csgo_brazilian.txt */"Redefinir",
+  EditorResetConfirm: "Redefinir todos os atributos personalizados para os padrões?",
+  EditorResetConfirmTitle: "Confirmar redefinição",
   EditorSave: /* csgo_brazilian.txt */"Salvar",
   EditorSeed: /* csgo_brazilian.txt */"Padrão",
   EditorStatTrak: /* csgo_brazilian.txt */"StatTrak™",

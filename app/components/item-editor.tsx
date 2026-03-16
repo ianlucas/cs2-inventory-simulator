@@ -114,9 +114,9 @@ export function ItemEditor({
   async function handleReset() {
     if (
       await confirm({
-        titleText: translate("EditorReset"),
-        bodyText: "Do you want to reset the attributes?",
-        cancelText: translate("GenericCancel"),
+        titleText: translate("EditorResetConfirmTitle"),
+        bodyText: translate("EditorResetConfirm"),
+        cancelText: translate("GenericNo"),
         confirmText: translate("GenericYes")
       })
     ) {

@@ -70,6 +70,8 @@ export const indonesian = {
   EditorQuantity: /* csgo_indonesian.txt */"Jumlah",
   EditorRandom: /* csgo_indonesian.txt */"Acak",
   EditorReset: /* csgo_indonesian.txt */"Reset",
+  EditorResetConfirm: "Setel ulang semua atribut kustom ke default?",
+  EditorResetConfirmTitle: "Konfirmasi Reset",
   EditorSave: /* csgo_indonesian.txt */"Simpan",
   EditorSeed: /* csgo_indonesian.txt */"Pola",
   EditorStatTrak: /* csgo_indonesian.txt */"StatTrak™",

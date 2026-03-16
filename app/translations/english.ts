@@ -70,6 +70,8 @@ export const english = {
   EditorQuantity: /* csgo_english.txt */"Quantity",
   EditorRandom: /* csgo_english.txt */"Random",
   EditorReset: /* csgo_english.txt */"Reset",
+  EditorResetConfirm: "Reset all custom attributes to their defaults?",
+  EditorResetConfirmTitle: "Confirm Reset",
   EditorSave: /* csgo_english.txt */"Save",
   EditorSeed: /* csgo_english.txt */"Pattern",
   EditorStatTrak: /* csgo_english.txt */"StatTrak™",

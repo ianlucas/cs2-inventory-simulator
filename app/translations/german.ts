@@ -71,6 +71,8 @@ export const german = {
   EditorQuantity: /* csgo_german.txt */"Anzahl",
   EditorRandom: /* csgo_german.txt */"Zufällig",
   EditorReset: /* csgo_german.txt */"Zurücksetzen",
+  EditorResetConfirm: "Alle benutzerdefinierten Attribute auf die Standardwerte zurücksetzen?",
+  EditorResetConfirmTitle: "Zurücksetzen bestätigen",
   EditorSave: /* csgo_german.txt */"Speichern",
   EditorSeed: /* csgo_german.txt */"Muster",
   EditorStatTrak: /* csgo_german.txt */"StatTrak™",

@@ -72,6 +72,8 @@ export const schinese = {
   EditorQuantity: /* csgo_schinese.txt */"数量",
   EditorRandom: /* csgo_schinese.txt */"随机",
   EditorReset: /* csgo_schinese.txt */"重置",
+  EditorResetConfirm: "将所有自定义属性重置为默认值？",
+  EditorResetConfirmTitle: "确认重置",
   EditorSave: /* csgo_schinese.txt */"保存",
   EditorSeed: /* csgo_schinese.txt */"图案",
   EditorStatTrak: /* csgo_schinese.txt */"StatTrak™",

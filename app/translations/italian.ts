@@ -71,6 +71,8 @@ export const italian = {
   EditorQuantity: /* csgo_italian.txt */"Quantità",
   EditorRandom: /* csgo_italian.txt */"Casuale",
   EditorReset: /* csgo_italian.txt */"Ripristina",
+  EditorResetConfirm: "Ripristinare tutti gli attributi personalizzati ai valori predefiniti?",
+  EditorResetConfirmTitle: "Conferma ripristino",
   EditorSave: /* csgo_italian.txt */"Salva",
   EditorSeed: /* csgo_italian.txt */"Motivo",
   EditorStatTrak: /* csgo_italian.txt */"StatTrak™",

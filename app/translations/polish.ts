@@ -71,6 +71,8 @@ export const polish = {
   EditorQuantity: /* csgo_polish.txt */"Ilość",
   EditorRandom: /* csgo_polish.txt */"Losowa",
   EditorReset: /* csgo_polish.txt */"Zresetuj",
+  EditorResetConfirm: "Zresetować wszystkie niestandardowe atrybuty do wartości domyślnych?",
+  EditorResetConfirmTitle: "Potwierdź resetowanie",
   EditorSave: /* csgo_polish.txt */"Zapisz",
   EditorSeed: /* csgo_polish.txt */"Wzór",
   EditorStatTrak: /* csgo_polish.txt */"StatTrak™",

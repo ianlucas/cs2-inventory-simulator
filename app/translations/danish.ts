@@ -71,6 +71,8 @@ export const danish = {
   EditorQuantity: /* csgo_danish.txt */"Antal",
   EditorRandom: /* csgo_danish.txt */"Tilfældig",
   EditorReset: /* csgo_danish.txt */"Nulstil",
+  EditorResetConfirm: "Nulstil alle tilpassede attributter til standardværdierne?",
+  EditorResetConfirmTitle: "Bekræft nulstilling",
   EditorSave: /* csgo_danish.txt */"Gem",
   EditorSeed: /* csgo_danish.txt */"Mønster",
   EditorStatTrak: /* csgo_danish.txt */"StatTrak™",

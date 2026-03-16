@@ -71,6 +71,8 @@ export const russian = {
   EditorQuantity: /* csgo_russian.txt */"Кол-во",
   EditorRandom: /* csgo_russian.txt */"Случайно",
   EditorReset: /* csgo_russian.txt */"Сброс",
+  EditorResetConfirm: "Сбросить все пользовательские атрибуты до значений по умолчанию?",
+  EditorResetConfirmTitle: "Подтверждение сброса",
   EditorSave: /* csgo_russian.txt */"Сохранить",
   EditorSeed: /* csgo_russian.txt */"Шаблон",
   EditorStatTrak: /* csgo_russian.txt */"StatTrak™",

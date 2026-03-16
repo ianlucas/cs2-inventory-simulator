@@ -71,6 +71,8 @@ export const vietnamese = {
   EditorQuantity: /* csgo_vietnamese.txt */"Số lượng",
   EditorRandom: /* csgo_vietnamese.txt */"Ngẫu nhiên",
   EditorReset: /* csgo_vietnamese.txt */"Đặt lại",
+  EditorResetConfirm: "Đặt lại tất cả thuộc tính tùy chỉnh về mặc định?",
+  EditorResetConfirmTitle: "Xác nhận đặt lại",
   EditorSave: /* csgo_vietnamese.txt */"Lưu",
   EditorSeed: /* csgo_vietnamese.txt */"Họa tiết",
   EditorStatTrak: /* csgo_vietnamese.txt */"StatTrak™",

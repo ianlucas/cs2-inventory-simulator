@@ -71,6 +71,8 @@ export const bulgarian = {
   EditorQuantity: /* csgo_bulgarian.txt */"Количество",
   EditorRandom: /* csgo_bulgarian.txt */"Произволна",
   EditorReset: /* csgo_bulgarian.txt */"Нулиране",
+  EditorResetConfirm: "Нулиране на всички персонализирани атрибути до стойностите по подразбиране?",
+  EditorResetConfirmTitle: "Потвърди нулирането",
   EditorSave: /* csgo_bulgarian.txt */"Запазване",
   EditorSeed: /* csgo_bulgarian.txt */"Шарка",
   EditorStatTrak: /* csgo_bulgarian.txt */"StatTrak™",
