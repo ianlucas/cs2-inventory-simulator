@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { assert } from "@ianlucas/cs2-lib";
 import { CSFloatItemInfo } from "@ianlucas/cs2-lib-inspect";
 import { csFloatHeaders, csFloatUrl } from "./models/rule.server";
 import {
@@ -36,12 +37,10 @@ export async function fetchCSFloatItemInfo(inspectLink: string) {
   } else {
     parsedUrl.searchParams.set("url", inspectLink);
   }
-  // TODO 1min timeout
-  const response = await fetch(parsedUrl.toString(), { headers });
-  if (!response.ok) {
-    throw badGateway;
-  }
   try {
+    const signal = AbortSignal.timeout(60_000);
+    const response = await fetch(parsedUrl.toString(), { headers, signal });
+    assert(response.ok);
     return ((await response.json()) as { iteminfo: CSFloatItemInfo }).iteminfo;
   } catch {
     throw badGateway;
