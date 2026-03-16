@@ -12,26 +12,26 @@ export interface ServerRulesSection {
 export const serverRulesSections: ServerRulesSection[] = [
   {
     id: "behavior",
-    title: "Behavior",
+    title: "Davranış",
     body:
-      "Treat all players with respect. Harassment, hate speech, and personal attacks are not allowed. Communicate in a way that keeps the server welcoming for everyone."
+      "Tüm oyunculara saygılı davranın. Taciz, nefret söylemi ve kişisel saldırılar kesinlikle yasaktır. Sunucuyu herkes için güvenli ve dostça tutacak şekilde iletişim kurun."
   },
   {
     id: "no-cheating",
-    title: "No Cheating",
+    title: "Hile Yok",
     body:
-      "Cheating, exploiting, or using unauthorized software is strictly prohibited. This includes aim assistance, wallhacks, and any other form of unfair advantage. Violations result in a permanent ban."
+      "Hile yapmak, açıkları kullanmak veya yetkisiz yazılım kullanmak kesinlikle yasaktır. Buna aim desteği, wallhack ve diğer tüm haksız avantajlar dahildir. İhlaller kalıcı banla sonuçlanır."
   },
   {
     id: "respect",
-    title: "Respect",
+    title: "Saygı",
     body:
-      "Respect server staff and their decisions. Do not argue in chat; use appropriate channels to appeal. Disrespect toward admins or other players may lead to mutes or bans."
+      "Sunucu yetkililerine ve kararlarına saygı gösterin. Sohbette tartışmayın; itiraz için uygun kanalları kullanın. Yetkililere veya diğer oyunculara saygısızlık mute veya ban ile sonuçlanabilir."
   },
   {
     id: "consequences",
-    title: "Consequences",
+    title: "Yaptırımlar",
     body:
-      "Breaking the rules may result in a warning, mute, kick, or ban depending on severity and history. Repeated or serious violations can lead to permanent removal from the server."
+      "Kuralları ihlal etmek; ihlalin ciddiyetine ve geçmişe bağlı olarak uyarı, mute, kick veya ban ile sonuçlanabilir. Tekrarlayan veya ağır ihlaller kalıcı uzaklaştırmaya neden olabilir."
   }
 ];

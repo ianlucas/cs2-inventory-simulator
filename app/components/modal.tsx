@@ -16,13 +16,15 @@ export function Modal({
   children,
   className,
   fixed,
-  hidden
+  hidden,
+  onClose
 }: {
   blur?: boolean;
   children: ReactNode;
   className?: string;
   fixed?: boolean;
   hidden?: boolean;
+  onClose?: () => void;
 }) {
   const ref = useRef<ComponentRef<"div">>(null);
   const [animate, setAnimate] = useState(true);
@@ -45,6 +47,11 @@ export function Modal({
               "top-0 left-0 z-50 flex min-h-full w-full items-center justify-center bg-linear-to-b from-black/15 to-transparent transition-opacity select-none",
               blur && "bg-black/50 lg:bg-transparent lg:backdrop-blur-[2px]"
             )}
+            onClick={(event) => {
+              if (event.target === event.currentTarget) {
+                onClose?.();
+              }
+            }}
             ref={ref}
           >
             <div

@@ -29,7 +29,6 @@ import {
   useTranslate,
   useUser
 } from "./app-context";
-import { DonateHeaderLink } from "./donate-header-link";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
 import { useItemSelector } from "./item-selector-context";
@@ -124,7 +123,6 @@ export function Header({
                     />
                   )}
                   <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
-                    <DonateHeaderLink />
                     <HeaderLink
                       to="/rules"
                       icon={faScroll}
@@ -156,7 +154,6 @@ export function Header({
                     />
                   )}
                   <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
-                    <DonateHeaderLink />
                     <HeaderLink
                       to="/rules"
                       icon={faScroll}

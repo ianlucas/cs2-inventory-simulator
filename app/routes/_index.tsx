@@ -5,8 +5,8 @@
 
 import { useEffect, useState } from "react";
 import { useFetcher, useLoaderData } from "react-router";
-import { GameDig } from "gamedig";
 import { middleware } from "~/http.server";
+import { cachedGamedigQuery } from "~/utils/gamedig-cache.server";
 import { getServerListForDisplay } from "~/admin/servers.server";
 import { getMetaTitle } from "~/root-meta";
 import { Modal } from "~/components/modal";
@@ -41,15 +41,9 @@ export async function loader({ request }: Route.LoaderArgs) {
   await middleware(request);
 
   const serverEntries = await getServerListForDisplay();
-  const gamedig = new GameDig();
   const results = await Promise.allSettled(
     serverEntries.map((s) =>
-      gamedig.query({
-        type: "counterstrike2",
-        host: s.host,
-        port: s.port ?? DEFAULT_PORT,
-        requestRules: false
-      })
+      cachedGamedigQuery(s.host, s.port ?? DEFAULT_PORT, { requestRules: false })
     )
   );
 
@@ -246,7 +240,7 @@ export default function Index() {
         </div>
       )}
 
-      <Modal hidden={!selectedServer} blur>
+      <Modal hidden={!selectedServer} blur onClose={() => setSelectedServer(null)}>
         <ServerDetailModal
           server={
             selectedServerInfo

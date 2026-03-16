@@ -5,7 +5,8 @@
 
 import { useLocation } from "react-router";
 
-const ROUTES_WITHOUT_INVENTORY = ["/", "/rules"] as const;
+/** Only show the inventory UI (item grid) on the /inventory route. */
+const INVENTORY_PATH = "/inventory";
 
 export function useRootLayout(): {
   footer?: boolean;
@@ -14,7 +15,7 @@ export function useRootLayout(): {
 } {
   const { pathname } = useLocation();
   const inventory =
-    !ROUTES_WITHOUT_INVENTORY.some((path) => pathname === path || pathname.startsWith(path + "/"));
+    pathname === INVENTORY_PATH || pathname.startsWith(INVENTORY_PATH + "/");
 
   return {
     footer: true,
