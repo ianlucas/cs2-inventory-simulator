@@ -66,6 +66,7 @@ export const dutch = {
   EditorKeychainEdit: /* csgo_dutch.txt */"Bewerken",
   EditorKeychainX: /* csgo_dutch.txt */"Verschuiving x-as",
   EditorKeychainY: /* csgo_dutch.txt */"Verschuiving y-as",
+  EditorKeychainZ: /* csgo_dutch.txt */"Verschuiving z-as",
   EditorKeychains: /* csgo_dutch.txt */"Hangertjes",
   EditorNametag: /* csgo_dutch.txt */"Naamplaat",
   EditorNametagPlaceholder: "Typ een aangepaste naam...",

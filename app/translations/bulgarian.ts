@@ -66,6 +66,7 @@ export const bulgarian = {
   EditorKeychainEdit: /* csgo_bulgarian.txt */"Редактиране",
   EditorKeychainX: /* csgo_bulgarian.txt */"Изместване по X",
   EditorKeychainY: /* csgo_bulgarian.txt */"Изместване по Y",
+  EditorKeychainZ: /* csgo_bulgarian.txt */"Изместване по Z",
   EditorKeychains: /* csgo_bulgarian.txt */"Джунджурии",
   EditorNametag: /* csgo_bulgarian.txt */"Етикет за име",
   EditorNametagPlaceholder: "Въведете персонализирано име...",

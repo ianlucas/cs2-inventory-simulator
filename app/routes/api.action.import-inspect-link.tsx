@@ -37,6 +37,9 @@ function postParseInventoryItem(item: CS2BaseInventoryItem) {
       if (keychain.y !== undefined) {
         keychain.y = truncate(keychain.y, stickerOffsetFactor);
       }
+      if (keychain.z !== undefined) {
+        keychain.z = truncate(keychain.z, stickerOffsetFactor);
+      }
     }
   }
   if (item.stickers !== undefined) {

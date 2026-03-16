@@ -66,6 +66,7 @@ export const finnish = {
   EditorKeychainEdit: /* csgo_finnish.txt */"Muokkaa",
   EditorKeychainX: /* csgo_finnish.txt */"X-akselin kompensaatio",
   EditorKeychainY: /* csgo_finnish.txt */"Y-akselin kompensaatio",
+  EditorKeychainZ: /* csgo_finnish.txt */"Z-akselin kompensaatio",
   EditorKeychains: /* csgo_finnish.txt */"Riipukset",
   EditorNametag: /* csgo_finnish.txt */"Nimitunniste",
   EditorNametagPlaceholder: "Kirjoita mukautettu nimi...",

@@ -28,6 +28,7 @@ export function CraftEdit({
     editAllowKeychains,
     editAllowKeychainX,
     editAllowKeychainY,
+    editAllowKeychainZ,
     editAllowNametag,
     editAllowPatches,
     editAllowSeed,
@@ -58,6 +59,7 @@ export function CraftEdit({
   const isHideKeychainSeed = !editAllowKeychainSeed;
   const isHideKeychainX = !editAllowKeychainX;
   const isHideKeychainY = !editAllowKeychainY;
+  const isHideKeychainZ = !editAllowKeychainZ;
 
   const isHidePatches =
     !editAllowPatches || editHideType.includes(CS2ItemType.Patch);
@@ -95,6 +97,7 @@ export function CraftEdit({
         isHideKeychains={isHideKeychains}
         isHideKeychainX={isHideKeychainX}
         isHideKeychainY={isHideKeychainY}
+        isHideKeychainZ={isHideKeychainZ}
         isHideNameTag={isHideNameTag}
         isHidePatches={isHidePatches}
         isHideSeed={isHideSeed}

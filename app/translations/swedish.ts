@@ -66,6 +66,7 @@ export const swedish = {
   EditorKeychainEdit: /* csgo_swedish.txt */"Ändra",
   EditorKeychainX: /* csgo_swedish.txt */"X-förskjutning",
   EditorKeychainY: /* csgo_swedish.txt */"Y-förskjutning",
+  EditorKeychainZ: /* csgo_swedish.txt */"Z-förskjutning",
   EditorKeychains: /* csgo_swedish.txt */"Hängen",
   EditorNametag: /* csgo_swedish.txt */"Namnplåt",
   EditorNametagPlaceholder: "Ange namnplåt...",

@@ -65,6 +65,7 @@ export const english = {
   EditorKeychainEdit: /* csgo_english.txt */"Edit",
   EditorKeychainX: /* csgo_english.txt */"X Offset",
   EditorKeychainY: /* csgo_english.txt */"Y Offset",
+  EditorKeychainZ: /* csgo_english.txt */"Z Offset",
   EditorKeychains: /* csgo_english.txt */"Charms",
   EditorNametag: /* csgo_english.txt */"Name Tag",
   EditorNametagPlaceholder: "Type a custom name...",

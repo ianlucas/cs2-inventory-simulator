@@ -66,6 +66,7 @@ export const japanese = {
   EditorKeychainEdit: /* csgo_japanese.txt */"編集",
   EditorKeychainX: /* csgo_japanese.txt */"X 補正値",
   EditorKeychainY: /* csgo_japanese.txt */"Y 補正値",
+  EditorKeychainZ: /* csgo_japanese.txt */"Z 補正値",
   EditorKeychains: /* csgo_japanese.txt */"チャーム",
   EditorNametag: /* csgo_japanese.txt */"ネームタグ",
   EditorNametagPlaceholder: "カスタム名を入力...",

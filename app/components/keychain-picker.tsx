@@ -37,6 +37,7 @@ export function KeychainPicker({
   isHideKeychainSeed,
   isHideKeychainX,
   isHideKeychainY,
+  isHideKeychainZ,
   keychainFilter,
   onChange,
   value
@@ -45,6 +46,7 @@ export function KeychainPicker({
   isHideKeychainSeed?: boolean;
   isHideKeychainX?: boolean;
   isHideKeychainY?: boolean;
+  isHideKeychainZ?: boolean;
   keychainFilter?: (item: CS2EconomyItem) => boolean;
   onChange: (value: NonNullable<CS2BaseInventoryItem["keychains"]>) => void;
   value: NonNullable<CS2BaseInventoryItem["keychains"]>;
@@ -63,12 +65,13 @@ export function KeychainPicker({
   const [appliedKeychainData, setAppliedKeychainData] = useState({
     seed: CS2_MIN_KEYCHAIN_SEED,
     x: 0,
-    y: 0
+    y: 0,
+    z: 0
   });
   const [selected, setSelected] = useState<CS2EconomyItem>();
   const [isEditing, setIsEditing] = useState(false);
   const canEditKeychainAttributes =
-    !isHideKeychainSeed || !isHideKeychainX || !isHideKeychainY;
+    !isHideKeychainSeed || !isHideKeychainX || !isHideKeychainY || !isHideKeychainZ;
 
   function handleClickSlot(index: number) {
     return function handleClickSlot() {
@@ -78,11 +81,12 @@ export function KeychainPicker({
 
   function handleClickEditSlot(index: number) {
     return function handleClickSlot() {
-      const { id, seed, x, y } = value[index];
+      const { id, seed, x, y, z } = value[index];
       setAppliedKeychainData({
         seed: seed ?? CS2_MIN_KEYCHAIN_SEED,
         x: x ?? 0,
-        y: y ?? 0
+        y: y ?? 0,
+        z: z ?? 0
       });
       setActiveIndex(index);
       setSelected(CS2Economy.getById(id));
@@ -113,7 +117,8 @@ export function KeychainPicker({
             ? appliedKeychainData.seed
             : undefined,
         x: appliedKeychainData.x || undefined,
-        y: appliedKeychainData.y || undefined
+        y: appliedKeychainData.y || undefined,
+        z: appliedKeychainData.z || undefined
       }
     });
     setSelected(undefined);
@@ -232,6 +237,7 @@ export function KeychainPicker({
               isHideKeychainSeed={isHideKeychainSeed}
               isHideKeychainX={isHideKeychainX}
               isHideKeychainY={isHideKeychainY}
+              isHideKeychainZ={isHideKeychainZ}
               item={selected}
               onChange={setAppliedKeychainData}
               value={appliedKeychainData}

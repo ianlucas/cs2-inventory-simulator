@@ -35,6 +35,7 @@ export function AppliedKeychainEditor({
   isHideKeychainSeed,
   isHideKeychainX,
   isHideKeychainY,
+  isHideKeychainZ,
   item,
   onChange,
   value
@@ -43,9 +44,10 @@ export function AppliedKeychainEditor({
   isHideKeychainSeed?: boolean;
   isHideKeychainX?: boolean;
   isHideKeychainY?: boolean;
+  isHideKeychainZ?: boolean;
   item: CS2EconomyItem;
-  onChange?: (data: { seed: number; x: number; y: number }) => void;
-  value: { seed: number; x: number; y: number };
+  onChange?: (data: { seed: number; x: number; y: number; z: number }) => void;
+  value: { seed: number; x: number; y: number; z: number };
 }) {
   const translate = useTranslate();
   const attributes = useKeyValues(value);
@@ -62,7 +64,8 @@ export function AppliedKeychainEditor({
       attributes.setValue({
         seed: CS2_MIN_KEYCHAIN_SEED,
         x: 0,
-        y: 0
+        y: 0,
+        z: 0
       });
     }
   }
@@ -125,6 +128,24 @@ export function AppliedKeychainEditor({
               type="float"
               validate={validateStickerOffset}
               value={attributes.value.y}
+            />
+          </EditorLabel>
+        )}
+        {!isHideKeychainZ && (
+          <EditorLabel label={translate("EditorKeychainZ")}>
+            <EditorStepRangeWithInput
+              inputStyles="w-24 min-w-0"
+              max={maxStickerOffset}
+              maxLength={stickerOffsetStringMaxLen}
+              min={minStickerOffset}
+              onChange={attributes.update("z")}
+              randomizable
+              step={stickerOffsetFactor}
+              stepRangeStyles="flex-1"
+              transform={stickerOffsetToString}
+              type="float"
+              validate={validateStickerOffset}
+              value={attributes.value.z}
             />
           </EditorLabel>
         )}

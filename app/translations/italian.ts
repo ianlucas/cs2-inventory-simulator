@@ -66,6 +66,7 @@ export const italian = {
   EditorKeychainEdit: /* csgo_italian.txt */"Modifica",
   EditorKeychainX: /* csgo_italian.txt */"Scostamento su X",
   EditorKeychainY: /* csgo_italian.txt */"Scostamento su Y",
+  EditorKeychainZ: /* csgo_italian.txt */"Scostamento su Z",
   EditorKeychains: /* csgo_italian.txt */"Ciondoli",
   EditorNametag: /* csgo_italian.txt */"Targhetta nome",
   EditorNametagPlaceholder: "Digita un nome personalizzato...",

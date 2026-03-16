@@ -66,6 +66,7 @@ export const german = {
   EditorKeychainEdit: /* csgo_german.txt */"Bearbeiten",
   EditorKeychainX: /* csgo_german.txt */"X-Versatz",
   EditorKeychainY: /* csgo_german.txt */"Y-Versatz",
+  EditorKeychainZ: /* csgo_german.txt */"Z-Versatz",
   EditorKeychains: /* csgo_german.txt */"Anhänger",
   EditorNametag: /* csgo_german.txt */"Namensschild",
   EditorNametagPlaceholder: "Eigenen Namen eingeben...",

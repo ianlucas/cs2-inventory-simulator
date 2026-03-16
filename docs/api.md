@@ -29,6 +29,7 @@ type GetUserInventoryResponse = {
           seed?: number;
           x?: number;
           y?: number;
+          z?: number;
         }
       >;
       nameTag?: string;

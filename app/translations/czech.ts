@@ -66,6 +66,7 @@ export const czech = {
   EditorKeychainEdit: /* csgo_czech.txt */"Upravit",
   EditorKeychainX: /* csgo_czech.txt */"Ofset na ose X",
   EditorKeychainY: /* csgo_czech.txt */"Ofset na ose Y",
+  EditorKeychainZ: /* csgo_czech.txt */"Ofset na ose Z",
   EditorKeychains: /* csgo_czech.txt */"Přívěsky",
   EditorNametag: /* csgo_czech.txt */"Štítek",
   EditorNametagPlaceholder: "Zadej vlastní název...",

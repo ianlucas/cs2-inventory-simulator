@@ -66,6 +66,7 @@ export const russian = {
   EditorKeychainEdit: /* csgo_russian.txt */"Изменить",
   EditorKeychainX: /* csgo_russian.txt */"Смещение по X",
   EditorKeychainY: /* csgo_russian.txt */"Смещение по Y",
+  EditorKeychainZ: /* csgo_russian.txt */"Смещение по Z",
   EditorKeychains: /* csgo_russian.txt */"Брелки",
   EditorNametag: /* csgo_russian.txt */"Именной ярлык",
   EditorNametagPlaceholder: "Введите именной ярлык...",

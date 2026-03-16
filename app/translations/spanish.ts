@@ -66,6 +66,7 @@ export const spanish = {
   EditorKeychainEdit: /* csgo_spanish.txt */"Modificar",
   EditorKeychainX: /* csgo_spanish.txt */"Desplazamiento X",
   EditorKeychainY: /* csgo_spanish.txt */"Desplazamiento Y",
+  EditorKeychainZ: /* csgo_spanish.txt */"Desplazamiento Z",
   EditorKeychains: /* csgo_spanish.txt */"Colgantes",
   EditorNametag: /* csgo_spanish.txt */"Etiqueta de nombre",
   EditorNametagPlaceholder: "Introduce etiqueta de nombre...",

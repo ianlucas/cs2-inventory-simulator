@@ -66,6 +66,7 @@ export const latam = {
   EditorKeychainEdit: /* csgo_latam.txt */"Modificar",
   EditorKeychainX: /* csgo_latam.txt */"Movimiento X",
   EditorKeychainY: /* csgo_latam.txt */"Movimiento Y",
+  EditorKeychainZ: /* csgo_latam.txt */"Movimiento Z",
   EditorKeychains: /* csgo_latam.txt */"Colgantes",
   EditorNametag: /* csgo_latam.txt */"Etiqueta de nombre",
   EditorNametagPlaceholder: "Escribe un nombre personalizado...",
