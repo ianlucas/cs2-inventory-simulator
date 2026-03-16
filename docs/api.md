@@ -22,6 +22,15 @@ type GetUserInventoryResponse = {
       equippedCT?: boolean;
       equippedT?: boolean;
       id: number;
+      keychains?: Record<
+        number,
+        {
+          id: number;
+          seed?: number;
+          x?: number;
+          y?: number;
+        }
+      >;
       nameTag?: string;
       patches?: Record<number, number>;
       seed?: number;

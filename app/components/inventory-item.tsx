@@ -190,7 +190,7 @@ export function InventoryItem({
     <>
       <div
         className={clsx(
-          "relative w-[154px] transition-all",
+          "relative w-38.5 transition-all",
           onClick === undefined && "hover:drop-shadow-[0_0_5px_rgba(0,0,0,1)]"
         )}
         ref={ref}
@@ -208,7 +208,7 @@ export function InventoryItem({
         <FloatingFocusManager context={clickContext} modal={false}>
           <div
             role="menu"
-            className="font-display z-20 w-[192px] rounded-sm bg-neutral-800 py-2 text-sm text-white outline-hidden"
+            className="font-display z-20 w-48 rounded-sm bg-neutral-800 py-2 text-sm text-white outline-hidden"
             ref={clickRefs.setFloating}
             style={clickStyles}
             {...getClickFloatingProps()}
