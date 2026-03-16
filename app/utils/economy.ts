@@ -64,8 +64,8 @@ export function isItemCountable(item: CS2EconomyItem) {
 
 export const newItemStartingId = 15367;
 export const newItemEndAt = 1774482426116;
-export const minStickerOffset = -5;
-export const maxStickerOffset = 5;
+export const minStickerOffset = -10;
+export const maxStickerOffset = 10;
 export const stickerOffsetFactor = 0.001;
 export const seedStringMaxLen = String(CS2_MAX_SEED).length;
 export const wearStringMaxLen = String(CS2_WEAR_FACTOR).length;
