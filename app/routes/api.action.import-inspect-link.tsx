@@ -49,7 +49,6 @@ function postParseInventoryItem(item: CS2BaseInventoryItem) {
       }
     }
   }
-  console.log(item);
   return item;
 }
 
