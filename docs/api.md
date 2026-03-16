@@ -127,6 +127,14 @@ interface WeaponEconItem {
     x?: number;
     y?: number;
   }[];
+  keychains: {
+    def: number;
+    seed: number;
+    slot: number;
+    x?: number;
+    y?: number;
+    z?: number;
+  }[];
   uid: number;
   wear: number;
 }
