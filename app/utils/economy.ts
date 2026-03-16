@@ -99,7 +99,7 @@ export function stickerOffsetToString(offset: number) {
 
 export function validateStickerOffset(offset: number) {
   return (
-    String(offset).length <= stickerOffsetStringMaxLen + (offset > 0 ? 0 : 1) &&
+    Number(offset.toFixed(stickerOffsetDecimalPlaces)) === offset &&
     offset >= minStickerOffset &&
     offset <= maxStickerOffset
   );
@@ -115,9 +115,11 @@ export function validateStickerRotation(rotation: number) {
 
 export const stickerSchemaStringMaxLen = String(CS2_MAX_STICKERS - 1).length;
 
-export function validateStickerSchema(schema: number) {
+export function validateStickerSchema(schema: number, item?: CS2EconomyItem) {
   return (
-    Number.isInteger(schema) && schema >= 0 && schema <= CS2_MAX_STICKERS - 1
+    Number.isInteger(schema) &&
+    schema >= 0 &&
+    schema <= (item?.getStickerSlotCount() ?? CS2_MAX_STICKERS) - 1
   );
 }
 

@@ -53,9 +53,12 @@ export function EditorStepRangeWithInput({
   const translate = useTranslate();
 
   useEffect(() => {
-    setText(
-      emptyValue !== undefined && value === emptyValue ? "" : transform(value)
-    );
+    const isEmpty = emptyValue !== undefined && value === emptyValue;
+    if (isEmpty) {
+      if (text !== "") setText("");
+    } else if (Number(text) !== value) {
+      setText(transform(value));
+    }
   }, [value]);
 
   function handleTextChange({

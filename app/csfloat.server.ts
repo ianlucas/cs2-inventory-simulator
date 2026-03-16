@@ -36,6 +36,7 @@ export async function fetchCSFloatItemInfo(inspectLink: string) {
   } else {
     parsedUrl.searchParams.set("url", inspectLink);
   }
+  // TODO 1min timeout
   const response = await fetch(parsedUrl.toString(), { headers });
   if (!response.ok) {
     throw badGateway;
