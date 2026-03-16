@@ -3,6 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2_MIN_SEED,
   CS2_MIN_WEAR,
@@ -21,12 +23,14 @@ import {
 } from "~/utils/economy";
 import { hasKeys } from "~/utils/misc";
 import { useTranslate } from "./app-context";
+import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorInput } from "./editor-input";
 import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
 import { useKeyValues } from "./hooks/use-key-values";
+import { confirm } from "./modal-generic";
 import { PatchPicker } from "./patch-picker";
 import { StickerPicker } from "./sticker-picker";
 
@@ -49,6 +53,7 @@ export function ItemEditor({
   isHideSeed,
   isHideStatTrak,
   isHideStickerRotation,
+  isHideStickerSchema,
   isHideStickers,
   isHideStickerWear,
   isHideStickerX,
@@ -70,6 +75,7 @@ export function ItemEditor({
   isHideSeed?: boolean;
   isHideStatTrak?: boolean;
   isHideStickerRotation?: boolean;
+  isHideStickerSchema?: boolean;
   isHideStickers?: boolean;
   isHideStickerWear?: boolean;
   isHideStickerX?: boolean;
@@ -104,6 +110,19 @@ export function ItemEditor({
     stickers: defaults?.stickers ?? {},
     wear: defaults?.wear ?? minimumWear
   });
+
+  async function handleReset() {
+    if (
+      await confirm({
+        titleText: translate("EditorResetConfirmTitle"),
+        bodyText: translate("EditorResetConfirm"),
+        cancelText: translate("GenericNo"),
+        confirmText: translate("GenericYes")
+      })
+    ) {
+      attributes.reset();
+    }
+  }
 
   useEffect(() => {
     onChange?.({
@@ -148,6 +167,7 @@ export function ItemEditor({
               disabled={isDisabled}
               forItem={item}
               isHideStickerRotation={isHideStickerRotation}
+              isHideStickerSchema={isHideStickerSchema}
               isHideStickerWear={isHideStickerWear}
               isHideStickerX={isHideStickerX}
               isHideStickerY={isHideStickerY}
@@ -259,6 +279,15 @@ export function ItemEditor({
             />
           </EditorLabel>
         )}
+        <div className="flex justify-end">
+          <ButtonWithTooltip
+            tooltip={translate("EditorReset")}
+            className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
+            onClick={handleReset}
+          >
+            <FontAwesomeIcon icon={faArrowRotateLeft} className="h-4" />
+          </ButtonWithTooltip>
+        </div>
       </div>
     </div>
   );

@@ -14,12 +14,18 @@ import {
   CS2_MAX_SEED,
   CS2_MAX_STICKER_ROTATION,
   CS2_MAX_STICKER_WEAR,
+  CS2_MAX_STICKERS,
   CS2_MIN_STICKER_ROTATION,
   CS2_MIN_STICKER_WEAR,
   CS2_STICKER_WEAR_FACTOR,
   CS2_WEAR_FACTOR,
   fail
 } from "@ianlucas/cs2-lib";
+import {
+  CS2_PREVIEW_URL,
+  isCommandInspect,
+  isSteamInspectLink
+} from "@ianlucas/cs2-lib-inspect";
 
 export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
   CS2ItemType.Container,
@@ -103,6 +109,14 @@ export function validateStickerRotation(rotation: number) {
   );
 }
 
+export const stickerSchemaStringMaxLen = String(CS2_MAX_STICKERS - 1).length;
+
+export function validateStickerSchema(schema: number) {
+  return (
+    Number.isInteger(schema) && schema >= 0 && schema <= CS2_MAX_STICKERS - 1
+  );
+}
+
 export function createFakeItem(
   { economy, item, language }: CS2EconomyItem,
   attributes: Partial<CS2EconomyItem>
@@ -179,4 +193,20 @@ export function unlockNonSpecialItem(container: CS2EconomyItem) {
 
 export function isNewItem(item: CS2EconomyItem) {
   return item.id >= newItemStartingId && newItemEndAt > Date.now();
+}
+
+export function normalizeInspectLink(link: string) {
+  const parts = link.split("csgo_econ_action_preview");
+  if (parts.length !== 2) {
+    return link;
+  }
+  return (CS2_PREVIEW_URL.replace("%20", "") + parts[1]).replace(" ", "%20");
+}
+
+export function isValidInspectLink(link: string) {
+  return (
+    isCommandInspect(link) ||
+    isSteamInspectLink(link) ||
+    link.startsWith(CS2_PREVIEW_URL)
+  );
 }

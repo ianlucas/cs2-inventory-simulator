@@ -27,7 +27,21 @@ export const conflict = new Response(null, {
   status: 409
 });
 
-export const forbidden = new Response(null, { status: 403 });
+export const tooManyRequests = new Response(null, {
+  status: 429
+});
+
+export const internalServerError = new Response(null, {
+  status: 500
+});
+
+export const badGateway = new Response(null, {
+  status: 502
+});
+
+export const serviceUnavailable = new Response(null, {
+  status: 503
+});
 
 export function res(body: BodyInit | null | undefined, mimeType: string) {
   return new Response(body, {
