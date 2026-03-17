@@ -38,6 +38,7 @@ export const dutch = {
   CategoryKeychain: /* csgo_dutch.txt */"Hangertje",
   CategoryKnife: /* csgo_dutch.txt */"Mes",
   CategoryMusicKit: /* csgo_dutch.txt */"Muziekset",
+  CategoryNew: "Nieuwe items!",
   CategoryPatch: /* csgo_dutch.txt */"Embleem",
   CategoryPistol: /* csgo_dutch.txt */"Pistool",
   CategoryRifle: /* csgo_dutch.txt */"Geweer",

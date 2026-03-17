@@ -38,6 +38,7 @@ export const italian = {
   CategoryKeychain: /* csgo_italian.txt */"Ciondolo",
   CategoryKnife: /* csgo_italian.txt */"Coltello",
   CategoryMusicKit: /* csgo_italian.txt */"Tema musicale",
+  CategoryNew: "Nuovi oggetti!",
   CategoryPatch: /* csgo_italian.txt */"Toppa",
   CategoryPistol: /* csgo_italian.txt */"Pistola",
   CategoryRifle: /* csgo_italian.txt */"Fucile",

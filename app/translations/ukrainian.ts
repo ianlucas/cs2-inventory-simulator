@@ -38,6 +38,7 @@ export const ukrainian = {
   CategoryKeychain: /* csgo_ukrainian.txt */"Брелок",
   CategoryKnife: /* csgo_ukrainian.txt */"Ніж",
   CategoryMusicKit: /* csgo_ukrainian.txt */"Музичний альбом",
+  CategoryNew: "Нові предмети!",
   CategoryPatch: /* csgo_ukrainian.txt */"Нашивка",
   CategoryPistol: /* csgo_ukrainian.txt */"Пістолет",
   CategoryRifle: /* csgo_ukrainian.txt */"Гвинтівка",

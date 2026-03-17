@@ -38,6 +38,7 @@ export const danish = {
   CategoryKeychain: /* csgo_danish.txt */"Vedhæng",
   CategoryKnife: /* csgo_danish.txt */"Kniv",
   CategoryMusicKit: /* csgo_danish.txt */"Musiksæt",
+  CategoryNew: "Nye genstande!",
   CategoryPatch: /* csgo_danish.txt */"Lap",
   CategoryPistol: /* csgo_danish.txt */"Pistol",
   CategoryRifle: /* csgo_danish.txt */"Riffel",

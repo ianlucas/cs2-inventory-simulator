@@ -38,6 +38,7 @@ export const vietnamese = {
   CategoryKeychain: /* csgo_vietnamese.txt */"Móc treo",
   CategoryKnife: /* csgo_vietnamese.txt */"Dao",
   CategoryMusicKit: /* csgo_vietnamese.txt */"Gói âm thanh",
+  CategoryNew: "Vật phẩm mới!",
   CategoryPatch: /* csgo_vietnamese.txt */"Phù hiệu",
   CategoryPistol: /* csgo_vietnamese.txt */"Súng lục",
   CategoryRifle: /* csgo_vietnamese.txt */"Súng trường",

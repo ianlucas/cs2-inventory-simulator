@@ -38,6 +38,7 @@ export const koreana = {
   CategoryKeychain: /* csgo_koreana.txt */"참 장식",
   CategoryKnife: /* csgo_koreana.txt */"칼",
   CategoryMusicKit: /* csgo_koreana.txt */"음악 키트",
+  CategoryNew: "새 아이템!",
   CategoryPatch: /* csgo_koreana.txt */"패치",
   CategoryPistol: /* csgo_koreana.txt */"권총",
   CategoryRifle: /* csgo_koreana.txt */"소총",

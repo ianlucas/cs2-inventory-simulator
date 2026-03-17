@@ -3,6 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faRss } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ComponentProps } from "react";
 
 export function ItemPickerFilterIcon({
@@ -259,6 +261,9 @@ export function ItemPickerFilterIcon({
           <path d="m26.961 14.569 3.633-2.804-3.584-6.27-4.295 1.721-2.5-1.449-.643-4.543h-7.229l-.622 4.543-2.5 1.449-4.294-1.7-3.583 6.208 3.631 2.846.015 2.904-3.646 2.834 3.604 6.25 4.273-1.734 2.501 1.449.622 4.514 7.229.042.643-4.556 2.5-1.449 4.337 1.734 3.542-6.271-3.633-2.816v-2.902zm-10.992 7.989a6.531 6.531 0 1 1 0-13.062 6.531 6.531 0 0 1 0 13.062z" />
         </svg>
       );
+
+    case "new":
+      return <FontAwesomeIcon {...(props as object)} icon={faRss} />;
 
     default:
       return null;

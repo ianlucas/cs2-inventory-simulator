@@ -38,6 +38,7 @@ export const latam = {
   CategoryKeychain: /* csgo_latam.txt */"Colgante",
   CategoryKnife: /* csgo_latam.txt */"Cuchillo",
   CategoryMusicKit: /* csgo_latam.txt */"Kit de música",
+  CategoryNew: "¡Nuevos objetos!",
   CategoryPatch: /* csgo_latam.txt */"Parche",
   CategoryPistol: /* csgo_latam.txt */"Pistola",
   CategoryRifle: /* csgo_latam.txt */"Rifle",

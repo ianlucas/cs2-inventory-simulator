@@ -38,6 +38,7 @@ export const spanish = {
   CategoryKeychain: /* csgo_spanish.txt */"Colgante",
   CategoryKnife: /* csgo_spanish.txt */"Cuchillo",
   CategoryMusicKit: /* csgo_spanish.txt */"Kit de música",
+  CategoryNew: "¡Nuevos objetos!",
   CategoryPatch: /* csgo_spanish.txt */"Parche",
   CategoryPistol: /* csgo_spanish.txt */"Pistola",
   CategoryRifle: /* csgo_spanish.txt */"Rifle",

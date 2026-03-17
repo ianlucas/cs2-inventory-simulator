@@ -38,6 +38,7 @@ export const finnish = {
   CategoryKeychain: /* csgo_finnish.txt */"Riipus",
   CategoryKnife: /* csgo_finnish.txt */"veitsi",
   CategoryMusicKit: /* csgo_finnish.txt */"musiikkipakkaus",
+  CategoryNew: "Uudet kohteet!",
   CategoryPatch: /* csgo_finnish.txt */"Kangasmerkki",
   CategoryPistol: /* csgo_finnish.txt */"pistooli",
   CategoryRifle: /* csgo_finnish.txt */"kivääri",

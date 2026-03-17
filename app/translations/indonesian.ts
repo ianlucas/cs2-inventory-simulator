@@ -38,6 +38,7 @@ export const indonesian = {
   CategoryKeychain: /* csgo_indonesian.txt */"Gantungan",
   CategoryKnife: /* csgo_indonesian.txt */"Pisau",
   CategoryMusicKit: /* csgo_indonesian.txt */"Kit Musik",
+  CategoryNew: "Item baru!",
   CategoryPatch: /* csgo_indonesian.txt */"Patch",
   CategoryPistol: /* csgo_indonesian.txt */"Pistol",
   CategoryRifle: /* csgo_indonesian.txt */"Rifle",

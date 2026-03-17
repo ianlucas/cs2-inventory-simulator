@@ -38,6 +38,7 @@ export const russian = {
   CategoryKeychain: /* csgo_russian.txt */"Брелок",
   CategoryKnife: /* csgo_russian.txt */"Нож",
   CategoryMusicKit: /* csgo_russian.txt */"Набор музыки",
+  CategoryNew: "Новые предметы!",
   CategoryPatch: /* csgo_russian.txt */"Нашивка",
   CategoryPistol: /* csgo_russian.txt */"Пистолет",
   CategoryRifle: /* csgo_russian.txt */"Винтовка",

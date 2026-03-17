@@ -38,6 +38,7 @@ export const hungarian = {
   CategoryKeychain: /* csgo_hungarian.txt */"Talizmán",
   CategoryKnife: /* csgo_hungarian.txt */"Kés",
   CategoryMusicKit: /* csgo_hungarian.txt */"Zenekészlet",
+  CategoryNew: "Új tárgyak!",
   CategoryPatch: /* csgo_hungarian.txt */"Felvarró",
   CategoryPistol: /* csgo_hungarian.txt */"Pisztoly",
   CategoryRifle: /* csgo_hungarian.txt */"Puska",

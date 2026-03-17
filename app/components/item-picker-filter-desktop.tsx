@@ -3,9 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
+import { newItemStartingId } from "~/utils/economy";
 import { EconomyItemFilter } from "~/utils/economy-filters";
 import { useTranslate } from "./app-context";
+import { useStorageState } from "./hooks/use-storage-state";
 import { ItemPickerFilterIcon } from "./item-picker-filter-icon";
 import { TextSlider } from "./text-slider";
 
@@ -19,15 +23,23 @@ export function ItemPickerFilterDesktop({
   value: EconomyItemFilter;
 }) {
   const translate = useTranslate();
+  const [seenNewItemsId, setSeenNewItemsId] = useStorageState(
+    "newItemsSeenId",
+    0
+  );
+  const showNewBadge = seenNewItemsId !== newItemStartingId;
 
   function handleClick(filter: EconomyItemFilter) {
     return function handleClick() {
+      if (filter.isNewItems) {
+        setSeenNewItemsId(newItemStartingId);
+      }
       onChange(filter);
     };
   }
 
   return (
-    <div className="flex max-w-[220px] min-w-[168px]">
+    <div className="flex max-w-55 min-w-42">
       <div className="w-full rounded-tr rounded-br bg-black/10 pb-1.5">
         {categories.map((filter, index) => {
           const isActive =
@@ -54,6 +66,12 @@ export function ItemPickerFilterDesktop({
               <div className="font-display min-w-0 flex-1 font-bold whitespace-nowrap drop-shadow-sm">
                 <TextSlider text={translate(`Category${filter.label}`)} />
               </div>
+              {filter.isNewItems && showNewBadge && (
+                <FontAwesomeIcon
+                  icon={faCircle}
+                  className="h-2 animate-pulse text-blue-400"
+                />
+              )}
             </button>
           );
         })}
