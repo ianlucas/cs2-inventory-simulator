@@ -38,6 +38,7 @@ export const thai = {
   CategoryKeychain: /* csgo_thai.txt */"พวงกุญแจ",
   CategoryKnife: /* csgo_thai.txt */"มีด",
   CategoryMusicKit: /* csgo_thai.txt */"ชุดอุปกรณ์เพลง",
+  CategoryNew: "ไอเทมใหม่",
   CategoryPatch: /* csgo_thai.txt */"แพตช์ปัก",
   CategoryPistol: /* csgo_thai.txt */"ปืนพก",
   CategoryRifle: /* csgo_thai.txt */"ปืนไรเฟิล",

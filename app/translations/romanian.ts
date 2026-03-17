@@ -38,6 +38,7 @@ export const romanian = {
   CategoryKeychain: /* csgo_romanian.txt */"Breloc",
   CategoryKnife: /* csgo_romanian.txt */"Cuțit",
   CategoryMusicKit: /* csgo_romanian.txt */"Pachet muzical",
+  CategoryNew: "Obiecte noi",
   CategoryPatch: /* csgo_romanian.txt */"Ecuson brodat",
   CategoryPistol: /* csgo_romanian.txt */"Pistol",
   CategoryRifle: /* csgo_romanian.txt */"Pușcă ghintuită",

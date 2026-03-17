@@ -92,7 +92,7 @@ export function ItemButton({
         </div>
         {!hideNewItemLabel && isNewItem(item) && (
           <div
-            className="absolute bottom-1.5 left-1.5 rounded bg-sky-400/40 px-1 text-[0.5rem] font-extrabold text-white uppercase backdrop-blur"
+            className="absolute bottom-1.5 left-1.5 animate-pulse rounded bg-neutral-800/90 px-0.75 text-[0.5rem] font-extrabold text-white uppercase backdrop-blur"
             children={translate("InventoryItemNew")}
           />
         )}

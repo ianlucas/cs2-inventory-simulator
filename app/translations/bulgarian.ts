@@ -38,6 +38,7 @@ export const bulgarian = {
   CategoryKeychain: /* csgo_bulgarian.txt */"Джунджурия",
   CategoryKnife: /* csgo_bulgarian.txt */"Нож",
   CategoryMusicKit: /* csgo_bulgarian.txt */"Музикален комплект",
+  CategoryNew: "Нови предмети",
   CategoryPatch: /* csgo_bulgarian.txt */"Нашивка",
   CategoryPistol: /* csgo_bulgarian.txt */"Пистолет",
   CategoryRifle: /* csgo_bulgarian.txt */"Винтовка",

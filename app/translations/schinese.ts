@@ -38,6 +38,7 @@ export const schinese = {
   CategoryKeychain: /* csgo_schinese.txt */"挂件",
   CategoryKnife: /* csgo_schinese.txt */"匕首",
   CategoryMusicKit: /* csgo_schinese.txt */"音乐盒",
+  CategoryNew: "新物品",
   CategoryPatch: /* csgo_schinese.txt */"布章",
   CategoryPistol: /* csgo_schinese.txt */"手枪",
   CategoryRifle: /* csgo_schinese.txt */"步枪",

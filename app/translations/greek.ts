@@ -38,6 +38,7 @@ export const greek = {
   CategoryKeychain: /* csgo_greek.txt */"Γούρι",
   CategoryKnife: /* csgo_greek.txt */"Μαχαίρι",
   CategoryMusicKit: /* csgo_greek.txt */"Μουσικό κουτί",
+  CategoryNew: "Νέα αντικείμενα",
   CategoryPatch: /* csgo_greek.txt */"Διακριτικό",
   CategoryPistol: /* csgo_greek.txt */"Πιστόλι",
   CategoryRifle: /* csgo_greek.txt */"Τυφέκιο",

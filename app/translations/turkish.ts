@@ -38,6 +38,7 @@ export const turkish = {
   CategoryKeychain: /* csgo_turkish.txt */"Süs",
   CategoryKnife: /* csgo_turkish.txt */"Bıçak",
   CategoryMusicKit: /* csgo_turkish.txt */"Müzik Kiti",
+  CategoryNew: "Yeni Öğeler",
   CategoryPatch: /* csgo_turkish.txt */"Yama",
   CategoryPistol: /* csgo_turkish.txt */"Tabanca",
   CategoryRifle: /* csgo_turkish.txt */"Tüfek",
