@@ -38,7 +38,7 @@ export const swedish = {
   CategoryKeychain: /* csgo_swedish.txt */"Hänge",
   CategoryKnife: /* csgo_swedish.txt */"Kniv",
   CategoryMusicKit: /* csgo_swedish.txt */"Musikpaket",
-  CategoryNew: "Nya föremål!",
+  CategoryNew: "Nya föremål",
   CategoryPatch: /* csgo_swedish.txt */"Tygmärke",
   CategoryPistol: /* csgo_swedish.txt */"Pistol",
   CategoryRifle: /* csgo_swedish.txt */"Gevär",

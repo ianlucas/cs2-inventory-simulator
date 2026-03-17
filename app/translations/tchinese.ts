@@ -38,7 +38,7 @@ export const tchinese = {
   CategoryKeychain: /* csgo_tchinese.txt */"吊飾",
   CategoryKnife: /* csgo_tchinese.txt */"軍刀",
   CategoryMusicKit: /* csgo_tchinese.txt */"音樂包",
-  CategoryNew: "新物品！",
+  CategoryNew: "新物品",
   CategoryPatch: /* csgo_tchinese.txt */"布章",
   CategoryPistol: /* csgo_tchinese.txt */"手槍",
   CategoryRifle: /* csgo_tchinese.txt */"步槍",

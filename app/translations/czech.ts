@@ -38,7 +38,7 @@ export const czech = {
   CategoryKeychain: /* csgo_czech.txt */"Přívěsek",
   CategoryKnife: /* csgo_czech.txt */"Nůž",
   CategoryMusicKit: /* csgo_czech.txt */"Hudební balíček",
-  CategoryNew: "Nové předměty!",
+  CategoryNew: "Nové předměty",
   CategoryPatch: /* csgo_czech.txt */"Nášivka",
   CategoryPistol: /* csgo_czech.txt */"Pistole",
   CategoryRifle: /* csgo_czech.txt */"Puška",

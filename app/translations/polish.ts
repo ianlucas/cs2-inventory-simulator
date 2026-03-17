@@ -38,7 +38,7 @@ export const polish = {
   CategoryKeychain: /* csgo_polish.txt */"Przywieszka",
   CategoryKnife: /* csgo_polish.txt */"Nóż",
   CategoryMusicKit: /* csgo_polish.txt */"Zestaw utworów",
-  CategoryNew: "Nowe przedmioty!",
+  CategoryNew: "Nowe przedmioty",
   CategoryPatch: /* csgo_polish.txt */"Naszywka",
   CategoryPistol: /* csgo_polish.txt */"Pistolet",
   CategoryRifle: /* csgo_polish.txt */"Karabin",

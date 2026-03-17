@@ -38,7 +38,7 @@ export const norwegian = {
   CategoryKeychain: /* csgo_norwegian.txt */"Anheng",
   CategoryKnife: /* csgo_norwegian.txt */"Kniv",
   CategoryMusicKit: /* csgo_norwegian.txt */"Musikksett",
-  CategoryNew: "Nye gjenstander!",
+  CategoryNew: "Nye gjenstander",
   CategoryPatch: /* csgo_norwegian.txt */"Lapp",
   CategoryPistol: /* csgo_norwegian.txt */"Pistol",
   CategoryRifle: /* csgo_norwegian.txt */"Rifle",

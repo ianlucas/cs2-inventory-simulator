@@ -36,7 +36,7 @@ export const brazilian = {
   CategoryKeychain: /* csgo_brazilian.txt */"Chaveiro",
   CategoryKnife: /* csgo_brazilian.txt */"Faca",
   CategoryMusicKit: /* csgo_brazilian.txt */"Trilha Sonora",
-  CategoryNew: "Novos itens!",
+  CategoryNew: "Novos itens",
   CategoryPatch: /* csgo_brazilian.txt */"Emblema",
   CategoryPistol: /* csgo_brazilian.txt */"Pistola",
   CategoryRifle: /* csgo_brazilian.txt */"Rifle",

@@ -38,7 +38,7 @@ export const japanese = {
   CategoryKeychain: /* csgo_japanese.txt */"チャーム",
   CategoryKnife: /* csgo_japanese.txt */"ナイフ",
   CategoryMusicKit: /* csgo_japanese.txt */"ミュージックキット",
-  CategoryNew: "新しいアイテム！",
+  CategoryNew: "新しいアイテム",
   CategoryPatch: /* csgo_japanese.txt */"パッチ",
   CategoryPistol: /* csgo_japanese.txt */"ピストル",
   CategoryRifle: /* csgo_japanese.txt */"ライフル",

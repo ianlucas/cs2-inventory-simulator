@@ -38,7 +38,7 @@ export const french = {
   CategoryKeychain: /* csgo_french.txt */"Porte-bonheur",
   CategoryKnife: /* csgo_french.txt */"Couteau",
   CategoryMusicKit: /* csgo_french.txt */"Kit de musiques",
-  CategoryNew: "Nouveaux objets!",
+  CategoryNew: "Nouveaux objets",
   CategoryPatch: /* csgo_french.txt */"Écusson",
   CategoryPistol: /* csgo_french.txt */"Pistolet",
   CategoryRifle: /* csgo_french.txt */"Fusil",
