@@ -131,6 +131,7 @@ interface WeaponEconItem {
     def: number;
     seed: number;
     slot: number;
+    sticker?: number;
     x?: number;
     y?: number;
     z?: number;

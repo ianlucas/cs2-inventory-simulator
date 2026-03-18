@@ -35,6 +35,7 @@ interface EconItem {
     def: number;
     seed: number;
     slot: number;
+    sticker?: number;
     x?: number;
     y?: number;
     z?: number;
@@ -142,14 +143,18 @@ export async function generate(
               x: sticker.x,
               y: sticker.y
             })),
-            keychains: item.someKeychains().map(([index, keychain]) => ({
-              def: CS2Economy.getById(keychain.id).index ?? 0,
-              seed: keychain.seed ?? CS2_MIN_KEYCHAIN_SEED,
-              slot: index,
-              x: keychain.x,
-              y: keychain.y,
-              z: keychain.z
-            })),
+            keychains: item.someKeychains().map(([index, keychain]) => {
+              const keychainEcon = CS2Economy.getById(keychain.id);
+              return {
+                def: keychainEcon.index ?? 0,
+                seed: keychain.seed ?? CS2_MIN_KEYCHAIN_SEED,
+                slot: index,
+                sticker: keychainEcon.stickerIndex,
+                x: keychain.x,
+                y: keychain.y,
+                z: keychain.z
+              };
+            }),
             uid: item.uid,
             wear: item.getWear()
           });
