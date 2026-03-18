@@ -40,7 +40,7 @@ export function InventorySelectedItem({
   const item = inventory.get(uid);
 
   return (
-    <div className="m-auto w-full px-4 pb-4 text-xs drop-shadow-sm lg:flex lg:w-[1024px] lg:items-center lg:px-0 lg:pb-0 lg:text-base">
+    <div className="m-auto w-full px-4 pb-4 text-xs drop-shadow-sm lg:flex lg:w-5xl lg:items-center lg:px-0 lg:pb-0 lg:text-base">
       <button
         className="px-2 py-1 hover:bg-black/30 active:bg-black/70"
         onClick={onDismiss}

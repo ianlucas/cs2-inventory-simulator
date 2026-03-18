@@ -68,7 +68,7 @@ export function InspectItem({
     <ClientOnly
       children={() =>
         createPortal(
-          <Overlay className="m-auto lg:w-[1024px]">
+          <Overlay className="m-auto lg:w-5xl">
             <div className="flex items-center justify-center">
               <div
                 className="flex items-center justify-center gap-2 border-b-4 px-1 pb-2"
@@ -89,13 +89,13 @@ export function InspectItem({
             </div>
             <div className="text-center">
               <div className="relative mx-auto inline-block">
-                <ItemImage className="m-auto my-8 max-w-[512px]" item={item} />
+                <ItemImage className="m-auto my-8 max-w-lg" item={item} />
                 {item.stickers !== undefined && (
                   <div className="absolute bottom-0 left-0 flex items-center justify-center">
                     {item.someStickers().map(([index, { id, wear }]) => (
                       <span className="inline-block" key={index}>
                         <ItemImage
-                          className="w-[128px]"
+                          className="w-32"
                           item={CS2Economy.getById(id)}
                           style={{
                             filter: `grayscale(${wear ?? 0})`,

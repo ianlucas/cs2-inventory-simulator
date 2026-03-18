@@ -30,7 +30,7 @@ export function EditorLabel({
     >
       <label
         className={clsx(
-          !block && "flex w-[138px]",
+          !block && "flex w-34.5",
           block && "block pl-1.5",
           "font-display items-center font-bold whitespace-nowrap text-neutral-400 select-none"
         )}

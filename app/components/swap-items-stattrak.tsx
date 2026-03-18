@@ -68,7 +68,7 @@ export function SwapItemsStatTrak({
                   <ItemImage className="max-w-[256px]" item={item} />
                   <div className="relative m-auto">
                     <img
-                      className="h-[128px]"
+                      className="h-32"
                       src="/images/stattrak-module.png"
                       draggable={false}
                     />

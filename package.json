@@ -53,6 +53,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "eslint": "^10.0.3",
+    "eslint-plugin-better-tailwindcss": "^4.3.2",
     "happy-dom": "^20.8.4",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",

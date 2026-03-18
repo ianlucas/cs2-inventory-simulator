@@ -93,7 +93,7 @@ export function CraftImportInspectLink({
             <>
               <div
                 className={clsx(
-                  "absolute top-0 left-0 flex h-full w-full items-center justify-center transition-all",
+                  "absolute top-0 left-0 flex size-full items-center justify-center transition-all",
                   isImporting ? "opacity-100" : "opacity-0"
                 )}
               >

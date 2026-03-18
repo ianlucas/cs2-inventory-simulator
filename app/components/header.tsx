@@ -66,7 +66,7 @@ export function Header({
         isOnTop ? "before:opacity-0" : "before:opacity-1"
       )}
     >
-      <div className="m-auto px-4 py-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] lg:flex lg:w-5xl lg:items-center lg:gap-8 lg:px-0">
+      <div className="m-auto p-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] lg:flex lg:w-5xl lg:items-center lg:gap-8 lg:px-0">
         <div
           className={clsx(
             "flex items-center justify-between",
@@ -140,11 +140,11 @@ export function Header({
                       <span className="text-neutral-400">
                         {translate("HeaderSignedInAsLabel")}
                       </span>
-                      <span className="max-w-[256px] overflow-hidden text-ellipsis whitespace-nowrap">
+                      <span className="max-w-[256px] truncate">
                         {user.name}
                       </span>
                       <img
-                        className="h-6 w-6 rounded-full"
+                        className="size-6 rounded-full"
                         src={user.avatar}
                         draggable={false}
                         alt={user.name}
