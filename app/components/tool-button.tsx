@@ -21,7 +21,7 @@ export function ToolButton({
     <ButtonWithTooltip
       {...props}
       className={clsx(
-        "cursor-default px-1.5 py-1.5 hover:bg-white/20 disabled:opacity-50",
+        "cursor-default p-1.5 hover:bg-white/20 disabled:opacity-50",
         !isBorderless && "border border-white/50"
       )}
     >

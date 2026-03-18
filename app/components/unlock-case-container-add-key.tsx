@@ -75,8 +75,8 @@ export function UnlockCaseContainerAddKey({
           value: (n + 1).toString()
         }))}
         noMaxHeight
-        className="min-w-[64px]"
-        optionsStyles="max-h-[256px] overflow-y-scroll"
+        className="min-w-16"
+        optionsStyles="max-h-64 overflow-y-scroll"
       />
       <ModalButton
         children={translate("CaseAdd")}
@@ -84,7 +84,7 @@ export function UnlockCaseContainerAddKey({
         onClick={handleClose}
       />
       {isCrafting && (
-        <Modal className="w-[420px]" fixed>
+        <Modal className="w-105" fixed>
           <ModalHeader
             title={translate("CaseAddKeyConfirm")}
             onClose={handleClose}

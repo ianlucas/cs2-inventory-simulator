@@ -29,7 +29,7 @@ export function EditorSelect({
     <select
       {...rest}
       className={clsx(
-        !styleless && "h-[24px] rounded-sm bg-black/50 outline-hidden",
+        !styleless && "h-6 rounded-sm bg-black/50 outline-hidden",
         !styleless && value === "" && "text-neutral-600",
         className
       )}

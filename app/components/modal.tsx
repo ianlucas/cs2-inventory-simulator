@@ -112,7 +112,7 @@ export function ModalHeader({
   title: string;
 }) {
   return (
-    <div className="bg-linear-to-t from-black/30 to-transparent px-1 py-1 pr-2 select-none">
+    <div className="bg-linear-to-t from-black/30 to-transparent p-1 pr-2 select-none">
       <div className="flex items-center justify-between bg-linear-to-r from-blue-500/30 to-transparent py-1 pl-2">
         <span className="font-display text-[0.9rem] font-bold text-neutral-200">
           {title}
@@ -123,7 +123,7 @@ export function ModalHeader({
               className="flex h-4 px-2 opacity-50 transition hover:opacity-100"
               to={closeTo}
             >
-              <FontAwesomeIcon icon={faXmark} className="h-4 w-4" />
+              <FontAwesomeIcon icon={faXmark} className="size-4" />
             </Link>
           )}
           {onClose !== undefined && (
@@ -131,7 +131,7 @@ export function ModalHeader({
               className="flex h-4 cursor-default px-2 opacity-50 transition hover:opacity-100"
               onClick={onClose}
             >
-              <FontAwesomeIcon icon={faXmark} className="h-4 w-4" />
+              <FontAwesomeIcon icon={faXmark} className="size-4" />
             </button>
           )}
         </div>

@@ -6,5 +6,5 @@
 import { range } from "~/utils/number";
 
 export function InventoryGridPlaceholder() {
-  return range(6).map((index) => <div className="w-[154px]" key={index} />);
+  return range(6).map((index) => <div className="w-38.5" key={index} />);
 }

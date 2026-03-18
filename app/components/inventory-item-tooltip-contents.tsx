@@ -33,7 +33,7 @@ export function InventoryItemTooltipContents({
           style={{ color: item.rarity }}
         >
           {unlockedItem !== undefined && (
-            <div className="w-[16px] text-right">
+            <div className="w-4 text-right">
               {item.id === unlockedItem.id && (
                 <FontAwesomeIcon
                   icon={faCheck}

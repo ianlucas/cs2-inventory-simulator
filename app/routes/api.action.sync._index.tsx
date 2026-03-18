@@ -215,7 +215,12 @@ async function enforceCraftRulesForStickerAttributes(
 }
 
 async function enforceCraftRulesForKeychainAttributes(
-  { seed, x, y, z }: RecordValue<NonNullable<CS2BaseInventoryItem["keychains"]>>,
+  {
+    seed,
+    x,
+    y,
+    z
+  }: RecordValue<NonNullable<CS2BaseInventoryItem["keychains"]>>,
   userId: string
 ) {
   if (seed !== undefined) {
@@ -291,7 +296,12 @@ async function enforceEditRulesForItem(
 }
 
 async function enforceEditRulesForKeychainAttributes(
-  { seed, x, y, z }: RecordValue<NonNullable<CS2BaseInventoryItem["keychains"]>>,
+  {
+    seed,
+    x,
+    y,
+    z
+  }: RecordValue<NonNullable<CS2BaseInventoryItem["keychains"]>>,
   userId: string
 ) {
   if (seed !== undefined) {
