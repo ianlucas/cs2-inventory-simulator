@@ -48,7 +48,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@react-router/dev": "^7.13.1",
-    "@tailwindcss/postcss": "^4.2.1",
+    "@tailwindcss/postcss": "^4.2.2",
     "@types/node": "^22.19.15",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -57,7 +57,7 @@
     "happy-dom": "^20.8.4",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "tailwindcss": "^4.2.1",
+    "tailwindcss": "^4.2.2",
     "terser": "^5.46.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.57.1",
