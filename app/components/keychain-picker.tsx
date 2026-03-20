@@ -58,7 +58,7 @@ export function KeychainPicker({
   const keychains = useMemo(
     () =>
       Array.from(CS2Economy.items.values())
-        .filter((item) => item.isKeychain())
+        .filter((item) => !item.free && item.isKeychain())
         .sort(sortByName),
     []
   );

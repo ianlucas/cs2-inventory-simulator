@@ -5,6 +5,7 @@
 
 import { CS2BaseInventoryItem, CS2Economy } from "@ianlucas/cs2-lib";
 import { z, ZodObject } from "zod";
+import { baseStickerSlabId } from "./economy";
 import { baseInventoryItemProps, nonNegativeInt } from "./shapes";
 
 const clientInventoryItemProps = {
@@ -37,6 +38,13 @@ function allowed({
     keychains === undefined
   ) {
     return false;
+  }
+  if (keychains !== undefined) {
+    for (const { id } of Object.values(keychains)) {
+      if (id === baseStickerSlabId) {
+        return false;
+      }
+    }
   }
   return true;
 }
