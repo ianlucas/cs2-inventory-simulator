@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { api } from "~/api.server";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
 import type { Route } from "./+types/api.inventory.$userId[.]json._index";
 
@@ -12,7 +12,7 @@ export const ApiInventoryUserIdUrl = "/api/inventory/$userId.json";
 
 export const loader = api(
   async ({ params: { userId }, request }: Route.LoaderArgs) => {
-    await middleware(request);
+    await middleware(request, userId);
     return await handleUserCachedResponse({
       args: null,
       generate(inventory) {

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { redirect } from "react-router";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import { destroySession, getSession } from "~/session.server";
 import type { Route } from "./+types/sign-out._index";
 

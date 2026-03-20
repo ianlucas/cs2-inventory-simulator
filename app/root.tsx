@@ -37,7 +37,7 @@ import {
   CLOUDFLARE_ANALYTICS_TOKEN,
   SOURCE_COMMIT
 } from "./env.server";
-import { middleware } from "./http.server";
+import { middleware } from "./middleware.server";
 import { getClientRules } from "./models/rule";
 import { steamCallbackUrl } from "./models/rule.server";
 import { getBackground } from "./preferences/background.server";

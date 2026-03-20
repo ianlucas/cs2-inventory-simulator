@@ -11,10 +11,10 @@ import {
 } from "@ianlucas/cs2-lib-inspect";
 import z from "zod";
 import { api } from "~/api.server";
-import { getRequestUserId } from "~/auth.server";
+import { getUserIdFromRequest } from "~/auth.server";
 import { usePostFetcher } from "~/components/hooks/use-post-fetcher";
 import { fetchCSFloatItemInfo } from "~/csfloat.server";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import { craftAllowImportInspectLink } from "~/models/rule.server";
 import {
   badRequest,
@@ -60,7 +60,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (request.method !== "POST") {
     throw methodNotAllowed;
   }
-  const userId = await getRequestUserId(request);
+  const userId = await getUserIdFromRequest(request);
   if (!userId) {
     throw badRequest;
   }

@@ -21,6 +21,7 @@ model User {
   groups UserGroup[]
   id String @id
   inventory String?
+  inventoryVersion Int @default(0)
   name String
   overwrites UserRule[]
   preferences UserPreference?

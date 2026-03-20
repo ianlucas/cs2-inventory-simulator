@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { api } from "~/api.server";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import type { Route } from "./+types/api.$";
 
 export const loader = api(async ({ request }: Route.LoaderArgs) => {

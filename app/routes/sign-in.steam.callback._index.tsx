@@ -5,7 +5,7 @@
 
 import { redirect } from "react-router";
 import { authenticator } from "~/auth.server";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import { commitSession, getSession } from "~/session.server";
 import type { Route } from "./+types/sign-in.steam.callback._index";
 

@@ -6,8 +6,8 @@
 import { redirect } from "react-router";
 import { z } from "zod";
 import { api } from "~/api.server";
-import { getRequestUserId } from "~/auth.server";
-import { middleware } from "~/http.server";
+import { getUserIdFromRequest } from "~/auth.server";
+import { middleware } from "~/middleware.server";
 import {
   getUserPreferences,
   setUserPreferences
@@ -25,7 +25,7 @@ export const ApiActionPreferencesUrl = "/api/action/preferences";
 
 export const loader = api(async ({ request }: Route.LoaderArgs) => {
   await middleware(request);
-  const userId = await getRequestUserId(request);
+  const userId = await getUserIdFromRequest(request);
   if (!userId) {
     return redirect("/");
   }
@@ -52,7 +52,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (request.method !== "POST") {
     throw methodNotAllowed;
   }
-  const userId = await getRequestUserId(request);
+  const userId = await getUserIdFromRequest(request);
   const preferences = z
     .object({
       background: z

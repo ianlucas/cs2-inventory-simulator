@@ -23,7 +23,7 @@ import { ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
 import { Modal, ModalHeader, ModalNav } from "~/components/modal";
 import { SyncAction } from "~/data/sync";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import { getUserBasicData } from "~/models/user.server";
 import { getMetaTitle } from "~/root-meta";
 import { isItemCountable } from "~/utils/economy";

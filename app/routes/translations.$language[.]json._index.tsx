@@ -5,7 +5,7 @@
 
 import { z } from "zod";
 import { serverGlobals } from "~/globals";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import type { Route } from "./+types/translations.$language[.]json._index";
 
 export async function loader({ request, params }: Route.LoaderArgs) {
