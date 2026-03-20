@@ -12,7 +12,7 @@ import {
 import { baseStickerSlabId } from "~/utils/economy";
 import { hasKeys } from "~/utils/misc";
 
-const VERSION = 1;
+const VERSION = 2;
 const pending = new Map<string, Promise<unknown>>();
 
 async function applyMigration(userId: string, rawInventory: string) {
