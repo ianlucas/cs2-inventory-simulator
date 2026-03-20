@@ -5,6 +5,7 @@
 
 import { faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import {
   CS2_MAX_KEYCHAIN_SEED,
   CS2_MIN_KEYCHAIN_SEED
@@ -28,7 +29,6 @@ import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { useKeyValues } from "./hooks/use-key-values";
 import { confirm } from "./modal-generic";
-import type { CS2EconomyItem } from "@ianlucas/cs2-lib";
 
 export function AppliedKeychainEditor({
   className,
@@ -75,7 +75,7 @@ export function AppliedKeychainEditor({
   }, [attributes.value]);
 
   return (
-    <div className={clsx("m-auto select-none", className)}>
+    <div className={clsx("m-auto text-sm select-none", className)}>
       <EditorItemDisplay item={item} />
       <div className="space-y-1.5">
         {!isHideKeychainSeed && (

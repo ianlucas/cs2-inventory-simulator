@@ -150,7 +150,7 @@ export function AppliedStickerEditor({
   }, [attributes.value]);
 
   return (
-    <div className={clsx("m-auto select-none", className)}>
+    <div className={clsx("m-auto text-sm select-none", className)}>
       <EditorItemDisplay item={item} wear={attributes.value.wear} />
       <div className="space-y-1.5">
         {!isHideStickerWear && (

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faLink } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDownLong } from "@fortawesome/free-solid-svg-icons";
 import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import lzstring from "lz-string";
@@ -191,7 +191,7 @@ export default function Craft() {
           <ModalNav
             items={[
               craftAllowImportInspectLink && {
-                icon: faLink,
+                icon: faArrowDownLong,
                 isActive: isImportFromInspectLink,
                 label: translate("CraftImportNavLabel"),
                 onClick: handleImportFromInspectLinkOpen
