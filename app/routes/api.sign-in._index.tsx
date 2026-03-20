@@ -5,7 +5,7 @@
 
 import { z } from "zod";
 import { api } from "~/api.server";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import { generateAuthToken } from "~/models/api-auth-token.server";
 import { API_AUTH_SCOPE, isApiKeyValid } from "~/models/api-credential.server";
 import { existsUser } from "~/models/user.server";

@@ -7,7 +7,7 @@ import { CS2Inventory, CS2UnlockedItem } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import {
   inventoryItemAllowUnlockContainer,
   inventoryMaxItems,

@@ -5,7 +5,7 @@
 
 import { z } from "zod";
 import { api } from "~/api.server";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import {
   API_SCOPE,
   INVENTORY_SCOPE,

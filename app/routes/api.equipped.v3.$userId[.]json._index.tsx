@@ -5,7 +5,7 @@
 
 import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { api } from "~/api.server";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import { getRules } from "~/models/rule";
 import {
   inventoryItemEquipHideModel,
@@ -21,7 +21,7 @@ export const ApiEquippedV3UserIdJsonUrl = "/api/equipped/v3/$userId.json";
 
 export const loader = api(
   async ({ params: { userId }, request }: Route.LoaderArgs) => {
-    await middleware(request);
+    await middleware(request, userId);
     const rules = await getRules(
       {
         inventoryItemEquipHideModel,

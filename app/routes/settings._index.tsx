@@ -26,7 +26,7 @@ import { SettingsLabel } from "~/components/settings-label";
 import { backgrounds } from "~/data/backgrounds";
 import { languages } from "~/data/languages";
 import { SyncAction } from "~/data/sync";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import { getMetaTitle } from "~/root-meta";
 import type { Route } from "./+types/settings._index";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";

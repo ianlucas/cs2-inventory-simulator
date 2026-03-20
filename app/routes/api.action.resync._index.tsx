@@ -5,7 +5,7 @@
 
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
-import { middleware } from "~/http.server";
+import { middleware } from "~/middleware.server";
 import type { Route } from "./+types/api.action.resync._index";
 
 export const ApiActionResyncUrl = "/api/action/resync";

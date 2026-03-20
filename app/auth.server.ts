@@ -14,7 +14,7 @@ export const authenticator = new Authenticator<string>();
 
 authenticator.use(new SteamStrategy(), "steam").use(new ApiStrategy(), "api");
 
-export async function getRequestUserId(request: Request) {
+export async function getUserIdFromRequest(request: Request) {
   const session = await getSession(request.headers.get("cookie"));
   const userId = session.get("userId") as unknown;
   if (typeof userId !== "string") {
@@ -25,7 +25,7 @@ export async function getRequestUserId(request: Request) {
 
 export async function findRequestUser(request: Request) {
   try {
-    const userId = await getRequestUserId(request);
+    const userId = await getUserIdFromRequest(request);
     if (userId === undefined) {
       return undefined;
     }
