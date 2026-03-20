@@ -9,7 +9,7 @@ import {
   getUserInventoryVersion,
   updateUserInventory
 } from "~/models/user.server";
-import { baseStickerSlab } from "~/utils/economy";
+import { baseStickerSlabId } from "~/utils/economy";
 import { hasKeys } from "~/utils/misc";
 
 const VERSION = 1;
@@ -36,7 +36,7 @@ async function applyMigration(userId: string, rawInventory: string) {
       }
       if (inventoryItem.keychains !== undefined) {
         for (const [slot] of Object.entries(inventoryItem.keychains).filter(
-          ([, { id }]) => id === baseStickerSlab
+          ([, { id }]) => id === baseStickerSlabId
         )) {
           delete inventoryItem.keychains[slot];
         }
