@@ -80,7 +80,10 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
   return CS2Economy.filterItems({
     free: true
   })
-    .filter((item) => item.type !== CS2ItemType.Utility)
+    .filter(
+      (item) =>
+        item.type !== CS2ItemType.Utility && item.type !== CS2ItemType.Keychain
+    )
     .map((item, index) => ({
       equipped: [],
       item: createFakeInventoryItem(item, {
