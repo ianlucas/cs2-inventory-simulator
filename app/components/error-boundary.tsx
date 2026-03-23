@@ -5,11 +5,31 @@
 
 import { faFrown } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Links, useRouteError } from "react-router";
+import { Links, useNavigate, useRouteError } from "react-router";
+import { SyncAction } from "~/data/sync";
+import { pushToSync } from "~/sync";
+import { isOurHostname } from "~/utils/misc";
+import { confirm } from "./modal-generic";
 
 export function ErrorBoundary() {
   const routeError = useRouteError();
   const error = routeError instanceof Error ? routeError : undefined;
+  const navigate = useNavigate();
+
+  async function handleRemoveAllItems() {
+    if (
+      await confirm({
+        titleText: "Reset your inventory",
+        bodyText: "Are you sure you want to reset your inventory?",
+        cancelText: "Cancel",
+        confirmText: "OK"
+      })
+    ) {
+      pushToSync({ type: SyncAction.RemoveAllItems });
+      return navigate("/");
+    }
+  }
+
   return (
     <html>
       <head>
@@ -29,6 +49,28 @@ export function ErrorBoundary() {
               Click here to refresh.
             </a>
           </p>
+          <p className="mt-4">If this keeps happening:</p>
+          <ul className="mt-2 list-disc pl-6">
+            <li>
+              Try to{" "}
+              <a className="underline" href="#" onClick={handleRemoveAllItems}>
+                reset your inventory.
+              </a>
+            </li>
+            <li>
+              {isOurHostname() ? (
+                <a
+                  className="underline"
+                  href="https://github.com/ianlucas/cs2-inventory-simulator/issues"
+                  target="_blank"
+                >
+                  Report the issue.
+                </a>
+              ) : (
+                "Contact the application administrator."
+              )}
+            </li>
+          </ul>
           {error?.stack !== undefined && (
             <pre className="relative mt-4 max-h-32 overflow-hidden text-sm text-ellipsis after:pointer-events-none after:absolute after:top-0 after:left-0 after:block after:size-full after:bg-linear-to-b after:from-transparent after:to-blue-500 after:content-['']">
               {error.stack}
