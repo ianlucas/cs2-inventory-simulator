@@ -13,6 +13,7 @@ import {
 import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
+import { ItemEditorAttributes } from "~/components/item-editor";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/middleware.server";
 import {
@@ -62,10 +63,12 @@ import {
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
+import { editInventoryItem } from "~/utils/inventory";
 import { hasKeys } from "~/utils/misc";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
 import {
   clientInventoryItemShape,
+  itemEditorAttributesShape,
   syncInventoryShape
 } from "~/utils/shapes.server";
 import type { Route } from "./+types/api.action.sync._index";
@@ -151,7 +154,7 @@ const actionShape = z.discriminatedUnion("type", [
   z.object({
     type: z.literal(SyncAction.Edit),
     uid: nonNegativeInt,
-    attributes: clientInventoryItemShape
+    attributes: itemEditorAttributesShape
   }),
   z.object({
     type: z.literal(SyncAction.AddWithSticker),
@@ -326,7 +329,7 @@ async function enforceEditRulesForInventoryItem(
     wear,
     seed,
     nameTag
-  }: Partial<CS2BaseInventoryItem>,
+  }: Partial<ItemEditorAttributes>,
   userId: string
 ) {
   if (keychains !== undefined && hasKeys(keychains)) {
@@ -489,16 +492,8 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.Edit:
             await inventoryItemAllowEdit.for(userId).truthy();
-            await enforceEditRulesForItem(action.attributes.id, userId);
             await enforceEditRulesForInventoryItem(action.attributes, userId);
-            inventory.edit(action.uid, {
-              ...action.attributes,
-              statTrak:
-                action.attributes.statTrak !== undefined
-                  ? (inventory.get(action.uid).statTrak ?? 0)
-                  : undefined,
-              nameTag: action.attributes.nameTag
-            });
+            editInventoryItem(inventory, action.uid, action.attributes);
             break;
           case SyncAction.AddWithSticker:
             await enforceCraftRulesForItem(action.itemId, userId);

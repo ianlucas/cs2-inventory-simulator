@@ -27,8 +27,11 @@ import { middleware } from "~/middleware.server";
 import { getUserBasicData } from "~/models/user.server";
 import { getMetaTitle } from "~/root-meta";
 import { isItemCountable } from "~/utils/economy";
-import { createFakeInventoryItemFromBase } from "~/utils/inventory";
-import { deleteEmptyProps, tryOrDefault } from "~/utils/misc";
+import {
+  createFakeInventoryItemFromBase,
+  editInventoryItem
+} from "~/utils/inventory";
+import { tryOrDefault } from "~/utils/misc";
 import { range } from "~/utils/number";
 import { baseInventoryItemProps } from "~/utils/shapes";
 import { playSound } from "~/utils/sound";
@@ -104,38 +107,29 @@ export default function Craft() {
 
   useLockScroll();
 
-  function handleSubmit({
-    quantity,
-    statTrak,
-    ...attributes
-  }: ItemEditorAttributes) {
+  function handleSubmit({ quantity, ...attributes }: ItemEditorAttributes) {
     if (isSubmitting || item === undefined) {
       return;
     }
+
     playSound("inventory_new_item_accept");
     setIsSubmitting(true);
 
-    const inventoryItem = {
-      id: item.id,
-      statTrak: statTrak ? (0 as const) : undefined,
-      ...attributes
-    } satisfies CS2BaseInventoryItem;
-
     if (isEditing) {
-      deleteEmptyProps(inventoryItem, ["keychains", "stickers"]);
-      setInventory(
-        inventory.edit(uid, {
-          ...inventoryItem,
-          statTrak: statTrak ? (inventory.get(uid).statTrak ?? 0) : undefined
-        })
-      );
+      setInventory(editInventoryItem(inventory, uid, attributes));
       sync({
         type: SyncAction.Edit,
         uid,
-        attributes: inventoryItem
+        attributes
       });
       return navigate("/");
     }
+
+    const inventoryItem = {
+      ...attributes,
+      id: item.id,
+      statTrak: attributes.statTrak ? (0 as const) : undefined
+    } satisfies CS2BaseInventoryItem;
 
     range(isItemCountable(item) ? quantity : 1).forEach(() => {
       setInventory(inventory.add(inventoryItem));

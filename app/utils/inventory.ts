@@ -13,6 +13,7 @@ import {
   CS2ItemTypeValues
 } from "@ianlucas/cs2-lib";
 import lzstring from "lz-string";
+import type { ItemEditorAttributes } from "~/components/item-editor";
 import { serverInventoryShape } from "./shapes";
 
 export const UNLOCKABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
@@ -100,4 +101,20 @@ export function getInventoryItemShareUrl(
   return `${window.location.origin}/craft?share=${lzstring.compressToEncodedURIComponent(
     JSON.stringify({ u: userId, i: item.asBase() })
   )}`;
+}
+
+export function editInventoryItem(
+  inventory: CS2Inventory,
+  uid: number,
+  { statTrak, ...attributes }: Omit<ItemEditorAttributes, "quantity">
+) {
+  return inventory.edit(uid, {
+    statTrak: statTrak ? (inventory.get(uid).statTrak ?? 0) : undefined,
+    nameTag: attributes.nameTag,
+    stickers: attributes.stickers,
+    patches: attributes.patches,
+    keychains: attributes.keychains,
+    seed: attributes.seed,
+    wear: attributes.wear
+  });
 }
