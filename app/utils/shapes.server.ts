@@ -83,5 +83,19 @@ export const syncInventoryShape = z.object({
   version: nonNegativeInt
 });
 
+export const itemEditorAttributesShape = z
+  .object(clientInventoryItemProps)
+  .pick({
+    keychains: true,
+    nameTag: true,
+    patches: true,
+    seed: true,
+    stickers: true,
+    wear: true
+  })
+  .extend({
+    statTrak: z.boolean().optional()
+  });
+
 export type SyncInventoryItemShape = z.infer<typeof syncInventoryItemShape>;
 export type SyncInventoryShape = z.infer<typeof syncInventoryShape>;
