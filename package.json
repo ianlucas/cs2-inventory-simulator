@@ -20,7 +20,7 @@
     "@fortawesome/free-regular-svg-icons": "^7.2.0",
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@fortawesome/react-fontawesome": "^3.3.0",
-    "@ianlucas/cs2-lib": "^7.31.1",
+    "@ianlucas/cs2-lib": "^7.32.0",
     "@ianlucas/cs2-lib-inspect": "^5.5.0",
     "@ianlucas/remix-auth-steam": "^7.0.0",
     "@prisma/adapter-pg": "^7.5.0",
@@ -54,7 +54,7 @@
     "@types/react-dom": "^19.2.3",
     "eslint": "^10.1.0",
     "eslint-plugin-better-tailwindcss": "^4.3.2",
-    "happy-dom": "^20.8.8",
+    "happy-dom": "^20.8.9",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.2.2",
@@ -63,7 +63,7 @@
     "typescript-eslint": "^8.57.2",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.1"
+    "vitest": "^4.1.2"
   },
   "engines": {
     "node": ">=20.0.0"
