@@ -34,9 +34,9 @@ jobs:
         id: upgrade
         run: |
           if [ "${{ steps.update_type.outputs.target }}" == "major" ]; then
-            NCU_JSON=$(npx npm-check-updates@latest --target latest --reject @types/node -u --jsonUpgraded 2>/dev/null)
+            NCU_JSON=$(npx npm-check-updates@latest --target latest --reject @types/node --cooldown 7 -u --jsonUpgraded 2>/dev/null)
           else
-            NCU_JSON=$(npx npm-check-updates@latest --target minor -u --jsonUpgraded 2>/dev/null)
+            NCU_JSON=$(npx npm-check-updates@latest --target minor --cooldown 7 -u --jsonUpgraded 2>/dev/null)
           fi
 
           if [ -z "$(git status --porcelain)" ]; then
