@@ -31,7 +31,7 @@
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.6.15",
-    "dotenv": "^17.3.1",
+    "dotenv": "^17.4.0",
     "hash-object": "^5.1.0",
     "isbot": "^5.1.37",
     "lz-string": "^1.5.0",
