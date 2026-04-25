@@ -3,14 +3,19 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faArrowDownLong } from "@fortawesome/free-solid-svg-icons";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import lzstring from "lz-string";
 import { useState } from "react";
 import { data, useLoaderData, useNavigate } from "react-router";
 import { z } from "zod";
-import { useInventory, useRules, useTranslate } from "~/components/app-context";
+import {
+  useInventory,
+  useRules,
+  useTranslate,
+  useUser
+} from "~/components/app-context";
 import { CraftEdit } from "~/components/craft-edit";
 import { CraftImportInspectLink } from "~/components/craft-import-inspect-link";
 import { CraftNew } from "~/components/craft-new";
@@ -92,6 +97,7 @@ export default function Craft() {
   const sync = useSync();
   const navigate = useNavigate();
   const isDesktop = useIsDesktop();
+  const user = useUser();
 
   const { craftAllowImportInspectLink } = useRules();
   const [inventory, setInventory] = useInventory();
@@ -184,12 +190,13 @@ export default function Craft() {
           <ModalHeader title={translate("CraftSelectHeader")} closeTo="/" />
           <ModalNav
             items={[
-              craftAllowImportInspectLink && {
-                icon: faArrowDownLong,
-                isActive: isImportFromInspectLink,
-                label: translate("CraftImportNavLabel"),
-                onClick: handleImportFromInspectLinkOpen
-              }
+              user !== undefined &&
+                craftAllowImportInspectLink && {
+                  icon: faDownload,
+                  isActive: isImportFromInspectLink,
+                  label: translate("CraftImportNavLabel"),
+                  onClick: handleImportFromInspectLinkOpen
+                }
             ]}
           />
           <ItemPicker onPickItem={setItem} />
