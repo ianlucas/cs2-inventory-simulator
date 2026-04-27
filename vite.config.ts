@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
 import { createHash } from "crypto";
 import { readdirSync, readFileSync } from "fs";
 import { resolve } from "path";
@@ -18,7 +19,7 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true
   },
-  plugins: [!process.env.VITEST && reactRouter()],
+  plugins: [tailwindcss(), !process.env.VITEST && reactRouter()],
   define: {
     __SPLASH_SCRIPT__: JSON.stringify(
       minify_sync(
