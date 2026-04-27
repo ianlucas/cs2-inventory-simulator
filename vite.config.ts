@@ -10,13 +10,15 @@ import { resolve } from "path";
 import { minify_sync } from "terser";
 import ts from "typescript";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   server: {
     port: 3000
   },
-  plugins: [!process.env.VITEST && reactRouter(), tsconfigPaths()],
+  resolve: {
+    tsconfigPaths: true
+  },
+  plugins: [!process.env.VITEST && reactRouter()],
   define: {
     __SPLASH_SCRIPT__: JSON.stringify(
       minify_sync(
