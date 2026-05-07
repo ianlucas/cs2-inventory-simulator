@@ -43,7 +43,7 @@
     "remix-utils": "^9.3.1",
     "steamapi": "^3.1.5",
     "tsx": "^4.21.0",
-    "zod": "^4.3.6"
+    "zod": "^4.4.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
