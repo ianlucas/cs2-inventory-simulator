@@ -49,7 +49,7 @@
     "@eslint/js": "^10.0.1",
     "@react-router/dev": "^7.15.0",
     "@tailwindcss/vite": "^4.2.4",
-    "@types/node": "^22.19.17",
+    "@types/node": "^22.19.18",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "eslint": "^10.3.0",
@@ -58,10 +58,10 @@
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.2.4",
-    "terser": "^5.46.2",
+    "terser": "^5.47.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.2",
-    "vite": "^8.0.10",
+    "vite": "^8.0.11",
     "vitest": "^4.1.5"
   },
   "engines": {
