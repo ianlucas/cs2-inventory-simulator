@@ -63,8 +63,8 @@ export function isItemCountable(item: CS2EconomyItem) {
 }
 
 export const baseStickerSlabId = 15200;
-export const newItemStartingId = 25066;
-export const newItemEndAt = 1779407353132;
+export const newItemStartingId = 25072;
+export const newItemEndAt = 1780696511400;
 export const minStickerOffset = -100;
 export const maxStickerOffset = 100;
 export const stickerOffsetFactor = 0.001;
