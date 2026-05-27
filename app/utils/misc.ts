@@ -24,6 +24,9 @@ export function has(str?: string) {
 }
 
 export function isOurHostname() {
+  if (typeof window === "undefined") {
+    return false;
+  }
   return ["inventory.cstrike.app", "localhost"].includes(
     window.location.hostname
   );

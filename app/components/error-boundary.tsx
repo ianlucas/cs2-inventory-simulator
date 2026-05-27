@@ -5,18 +5,19 @@
 
 import { faFrown } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Links, useNavigate, useRouteError } from "react-router";
-import { SyncAction } from "~/data/sync";
-import { pushToSync } from "~/sync";
+import { MouseEvent } from "react";
+import { Links, Scripts, useRouteError } from "react-router";
+import { ClientOnly } from "remix-utils/client-only";
+import { ApiActionResetInventoryUrl } from "~/routes/api.action.reset-inventory._index";
 import { isOurHostname } from "~/utils/misc";
 import { confirm } from "./modal-generic";
 
 export function ErrorBoundary() {
   const routeError = useRouteError();
   const error = routeError instanceof Error ? routeError : undefined;
-  const navigate = useNavigate();
 
-  async function handleRemoveAllItems() {
+  async function handleRemoveAllItems(event: MouseEvent) {
+    event.preventDefault();
     if (
       await confirm({
         titleText: "Reset your inventory",
@@ -25,8 +26,7 @@ export function ErrorBoundary() {
         confirmText: "OK"
       })
     ) {
-      pushToSync({ type: SyncAction.RemoveAllItems });
-      return navigate("/");
+      return window.location.assign(ApiActionResetInventoryUrl);
     }
   }
 
@@ -57,19 +57,23 @@ export function ErrorBoundary() {
                 reset your inventory.
               </a>
             </li>
-            <li>
-              {isOurHostname() ? (
-                <a
-                  className="underline"
-                  href="https://github.com/ianlucas/cs2-inventory-simulator/issues"
-                  target="_blank"
-                >
-                  Report the issue.
-                </a>
-              ) : (
-                "Contact the application administrator."
+            <ClientOnly
+              children={() => (
+                <li>
+                  {isOurHostname() ? (
+                    <a
+                      className="underline"
+                      href="https://github.com/ianlucas/cs2-inventory-simulator/issues"
+                      target="_blank"
+                    >
+                      Report the issue here.
+                    </a>
+                  ) : (
+                    "Contact the application administrator."
+                  )}
+                </li>
               )}
-            </li>
+            />
           </ul>
           {error?.stack !== undefined && (
             <pre className="relative mt-4 max-h-32 overflow-hidden text-sm text-ellipsis after:pointer-events-none after:absolute after:top-0 after:left-0 after:block after:size-full after:bg-linear-to-b after:from-transparent after:to-blue-500 after:content-['']">
@@ -77,6 +81,7 @@ export function ErrorBoundary() {
             </pre>
           )}
         </div>
+        <Scripts />
       </body>
     </html>
   );
