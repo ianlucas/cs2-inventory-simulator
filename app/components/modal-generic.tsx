@@ -53,7 +53,9 @@ export async function confirm({
       createPortal(
         <Modal className="w-137.5" fixed blur>
           <ModalHeader title={titleText} />
-          <p className="px-4 pt-2 text-sm whitespace-pre">{bodyText}</p>
+          <p className="px-4 pt-2 font-sans text-sm whitespace-pre">
+            {bodyText}
+          </p>
           <div className="my-6 flex justify-center gap-2 px-4">
             <ModalButton
               onClick={() => {
