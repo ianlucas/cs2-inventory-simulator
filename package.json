@@ -58,10 +58,10 @@
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.3.0",
-    "terser": "^5.47.1",
+    "terser": "^5.48.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.4",
-    "vite": "^8.0.13",
+    "vite": "^8.0.14",
     "vitest": "^4.1.7"
   },
   "engines": {
