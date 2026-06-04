@@ -96,7 +96,7 @@ export function ModalNav({
           )}
           onClick={onClick}
         >
-          <FontAwesomeIcon className="h-3" icon={icon} />
+          <FontAwesomeIcon className="h-4" icon={icon} />
           {label}
         </button>
       ))}
