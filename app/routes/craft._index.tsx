@@ -26,7 +26,7 @@ import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
 import { ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
-import { Modal, ModalHeader, ModalNav } from "~/components/modal";
+import { Modal, ModalHeader } from "~/components/modal";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/middleware.server";
 import { getUserBasicData } from "~/models/user.server";
@@ -188,8 +188,8 @@ export default function Craft() {
       {isCrafting && (
         <Modal className={clsx(isDesktop ? "max-w-180 min-w-160" : "w-135")}>
           <ModalHeader title={translate("CraftSelectHeader")} closeTo="/" />
-          <ModalNav
-            items={[
+          <ItemPicker
+            navItems={[
               user !== undefined &&
                 craftAllowImportInspectLink && {
                   icon: faDownload,
@@ -198,8 +198,8 @@ export default function Craft() {
                   onClick: handleImportFromInspectLinkOpen
                 }
             ]}
+            onPickItem={setItem}
           />
-          <ItemPicker onPickItem={setItem} />
         </Modal>
       )}
       {hasItem && (

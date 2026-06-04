@@ -17,6 +17,8 @@ import { useCraftFilterRules } from "./use-craft-filter-rules";
 import { useInput } from "./use-input";
 import { useIsItemCraftable } from "./use-is-item-craftable";
 
+export type ItemPickerState = ReturnType<typeof useItemPickerState>;
+
 export function useItemPickerState({
   onPickItem
 }: {
