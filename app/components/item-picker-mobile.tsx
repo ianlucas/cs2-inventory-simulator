@@ -5,27 +5,21 @@
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS2EconomyItem } from "@ianlucas/cs2-lib";
-import { useItemPickerState } from "~/components/hooks/use-item-picker-state";
 import { ItemBrowser } from "~/components/item-browser";
 import { ItemPickerFilterMobile } from "~/components/item-picker-filter-mobile";
 import { useTranslate } from "./app-context";
+import { type ItemPickerState } from "./hooks/use-item-picker-state";
 
 export function ItemPickerMobile({
-  onPickItem
-}: {
-  onPickItem: (item: CS2EconomyItem) => void;
-}) {
-  const {
-    categories,
-    filter,
-    handleCategoryClick,
-    handleItemClick,
-    ignoreRarityColor,
-    items,
-    query,
-    setQuery
-  } = useItemPickerState({ onPickItem });
+  categories,
+  filter,
+  handleCategoryClick,
+  handleItemClick,
+  ignoreRarityColor,
+  items,
+  query,
+  setQuery
+}: ItemPickerState) {
   const translate = useTranslate();
 
   return (

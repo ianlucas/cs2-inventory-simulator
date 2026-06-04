@@ -65,7 +65,8 @@ export function Modal({
 }
 
 export function ModalNav({
-  items
+  items,
+  right
 }: {
   items: (
     | {
@@ -76,13 +77,14 @@ export function ModalNav({
       }
     | false
   )[];
+  right?: ReactNode;
 }) {
   const visibleItems = items.filter((item) => item !== false);
-  if (visibleItems.length === 0) {
+  if (visibleItems.length === 0 && right === undefined) {
     return null;
   }
   return (
-    <nav className="bg-black/30 px-1 pb-1 text-xs text-neutral-400">
+    <nav className="flex items-center bg-black/30 px-1 pb-1 text-xs text-neutral-400">
       {visibleItems.map(({ label, onClick, icon, isActive }) => (
         <button
           key={label}
@@ -94,10 +96,11 @@ export function ModalNav({
           )}
           onClick={onClick}
         >
-          <FontAwesomeIcon className="h-3" icon={icon} />
+          <FontAwesomeIcon className="h-4" icon={icon} />
           {label}
         </button>
       ))}
+      {right !== undefined && <div className="ml-auto">{right}</div>}
     </nav>
   );
 }

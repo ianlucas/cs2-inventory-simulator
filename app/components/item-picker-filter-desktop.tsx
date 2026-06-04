@@ -9,9 +9,15 @@ import clsx from "clsx";
 import { newItemStartingId } from "~/utils/economy";
 import { EconomyItemFilter } from "~/utils/economy-filters";
 import { useTranslate } from "./app-context";
+import { GridList } from "./grid-list";
 import { useStorageState } from "./hooks/use-storage-state";
 import { ItemPickerFilterIcon } from "./item-picker-filter-icon";
 import { TextSlider } from "./text-slider";
+
+// Match the item browser column height (8 rows * 64px) so the filter list
+// never makes the modal taller than the items beside it.
+const FILTER_HEIGHT = 32;
+const MAX_FILTERS_INTO_VIEW = 14;
 
 export function ItemPickerFilterDesktop({
   categories,
@@ -39,22 +45,28 @@ export function ItemPickerFilterDesktop({
   }
 
   return (
-    <div className="flex max-w-55 min-w-42">
-      <div className="w-full rounded-tr rounded-br bg-black/10 pb-1.5">
-        {categories.map((filter, index) => {
+    <div className="w-55 min-w-42">
+      <GridList
+        className="rounded-tr rounded-br bg-black/10"
+        itemHeight={FILTER_HEIGHT}
+        items={categories}
+        maxItemsIntoView={Math.min(categories.length, MAX_FILTERS_INTO_VIEW)}
+      >
+        {(filter, index) => {
           const isActive =
             filter.category === value.category && filter.type === value.type;
           const isIdle = !isActive;
           return (
             <button
               className={clsx(
-                "relative flex w-full cursor-default items-center justify-between gap-2 overflow-hidden px-4 py-1 pl-8 text-left transition-all",
+                "relative flex w-full cursor-default items-center justify-between gap-2 overflow-hidden px-4 pl-8 text-left transition-all",
                 isIdle &&
                   "group text-neutral-500 hover:bg-black/5 hover:text-neutral-300",
                 isActive && "bg-black/20 text-blue-500"
               )}
               key={index}
               onClick={handleClick(filter)}
+              style={{ height: FILTER_HEIGHT }}
             >
               <ItemPickerFilterIcon
                 icon={filter.icon}
@@ -74,8 +86,8 @@ export function ItemPickerFilterDesktop({
               )}
             </button>
           );
-        })}
-      </div>
+        }}
+      </GridList>
     </div>
   );
 }

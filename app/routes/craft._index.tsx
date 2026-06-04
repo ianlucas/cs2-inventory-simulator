@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import lzstring from "lz-string";
@@ -26,7 +26,7 @@ import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
 import { ItemEditorAttributes } from "~/components/item-editor";
 import { ItemPicker } from "~/components/item-picker";
-import { Modal, ModalHeader, ModalNav } from "~/components/modal";
+import { Modal, ModalHeader } from "~/components/modal";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/middleware.server";
 import { getUserBasicData } from "~/models/user.server";
@@ -188,18 +188,18 @@ export default function Craft() {
       {isCrafting && (
         <Modal className={clsx(isDesktop ? "max-w-180 min-w-160" : "w-135")}>
           <ModalHeader title={translate("CraftSelectHeader")} closeTo="/" />
-          <ModalNav
-            items={[
+          <ItemPicker
+            navItems={[
               user !== undefined &&
                 craftAllowImportInspectLink && {
-                  icon: faDownload,
+                  icon: faLink,
                   isActive: isImportFromInspectLink,
                   label: translate("CraftImportNavLabel"),
                   onClick: handleImportFromInspectLinkOpen
                 }
             ]}
+            onPickItem={setItem}
           />
-          <ItemPicker onPickItem={setItem} />
         </Modal>
       )}
       {hasItem && (

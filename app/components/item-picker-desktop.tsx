@@ -3,31 +3,18 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { CS2EconomyItem } from "@ianlucas/cs2-lib";
-import { useItemPickerState } from "~/components/hooks/use-item-picker-state";
 import { ItemBrowser } from "~/components/item-browser";
-import { useTranslate } from "./app-context";
-import { IconInput } from "./icon-input";
+import { type ItemPickerState } from "./hooks/use-item-picker-state";
 import { ItemPickerFilterDesktop } from "./item-picker-filter-desktop";
 
 export function ItemPickerDesktop({
-  onPickItem
-}: {
-  onPickItem: (item: CS2EconomyItem) => void;
-}) {
-  const {
-    categories,
-    filter,
-    handleCategoryClick,
-    handleItemClick,
-    ignoreRarityColor,
-    items,
-    query,
-    setQuery
-  } = useItemPickerState({ onPickItem });
-  const translate = useTranslate();
-
+  categories,
+  filter,
+  handleCategoryClick,
+  handleItemClick,
+  ignoreRarityColor,
+  items
+}: ItemPickerState) {
   return (
     <div className="pb-2">
       <div className="mt-2 flex gap-2">
@@ -37,17 +24,10 @@ export function ItemPickerDesktop({
           value={filter}
         />
         <div className="flex-1">
-          <IconInput
-            icon={faMagnifyingGlass}
-            labelStyles="mb-2"
-            onChange={setQuery}
-            placeholder={translate("CraftSearchPlaceholder")}
-            value={query}
-          />
           <ItemBrowser
             ignoreRarityColor={ignoreRarityColor}
             items={items}
-            maxItemsIntoView={8}
+            maxItemsIntoView={7}
             onClick={handleItemClick}
           />
         </div>
