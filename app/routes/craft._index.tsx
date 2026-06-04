@@ -203,7 +203,7 @@ export default function Craft() {
         </Modal>
       )}
       {hasItem && (
-        <Modal className="w-105">
+        <Modal className="w-fit">
           <ModalHeader
             title={translate(
               isSharing ? "CraftSharedHeader" : "CraftConfirmHeader"

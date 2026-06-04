@@ -14,6 +14,7 @@ import {
   CS2EconomyItem,
   CS2InventoryItem
 } from "@ianlucas/cs2-lib";
+import { useMeasure } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useEffect } from "react";
 import {
@@ -29,6 +30,7 @@ import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
+import { useIsDesktop } from "./hooks/use-is-desktop";
 import { useKeyValues } from "./hooks/use-key-values";
 import { KeychainPicker } from "./keychain-picker";
 import { confirm } from "./modal-generic";
@@ -115,6 +117,10 @@ export function ItemEditor({
   const minimumWear = item.getMinimumWear();
 
   const translate = useTranslate();
+  const isDesktop = useIsDesktop();
+
+  const [attributesRef, { height: attributesHeight }] = useMeasure();
+  const isTwoColumn = isDesktop && (attributesHeight ?? 0) > 250;
 
   const attributes = useKeyValues({
     keychains: defaults?.keychains ?? {},
@@ -177,152 +183,175 @@ export function ItemEditor({
     });
   }, [attributes.value]);
 
-  return (
-    <div className={clsx("m-auto text-sm select-none", className)}>
-      <EditorItemDisplay item={item} wear={attributes.value.wear} />
-      <div className="space-y-1.5">
-        {hasStickers && (
-          <EditorLabel block label={translate("EditorStickers")}>
-            <StickerPicker
-              disabled={isDisabled}
-              forItem={item}
-              isHideStickerRotation={isHideStickerRotation}
-              isHideStickerSchema={isHideStickerSchema}
-              isHideStickerWear={isHideStickerWear}
-              isHideStickerX={isHideStickerX}
-              isHideStickerY={isHideStickerY}
-              onChange={attributes.update("stickers")}
-              stickerFilter={stickerFilter}
-              value={attributes.value.stickers}
-            />
-          </EditorLabel>
-        )}
-        {hasPatches && (
-          <EditorLabel block label={translate("EditorPatches")}>
-            <PatchPicker
-              patchFilter={patchFilter}
-              disabled={isDisabled}
-              value={attributes.value.patches}
-              onChange={attributes.update("patches")}
-            />
-          </EditorLabel>
-        )}
-        {hasKeychains && (
-          <EditorLabel block label={translate("EditorKeychains")}>
-            <KeychainPicker
-              disabled={isDisabled}
-              isHideKeychainSeed={isHideKeychainSeed}
-              isHideKeychainX={isHideKeychainX}
-              isHideKeychainY={isHideKeychainY}
-              isHideKeychainZ={isHideKeychainZ}
-              keychainFilter={keychainFilter}
-              onChange={attributes.update("keychains")}
-              value={attributes.value.keychains}
-            />
-          </EditorLabel>
-        )}
-        {hasNameTag && (
-          <EditorLabel
-            isDisabled={isDisabled}
-            label={translate("EditorNametag")}
-          >
-            <EditorInput
-              className={clsx("w-full", isDisabled && "text-right")}
-              disabled={isDisabled}
-              maxLength={20}
-              onChange={attributes.input("nameTag")}
-              placeholder={
-                isDisabled ? "N/A" : translate("EditorNametagPlaceholder")
-              }
-              validate={(nameTag) =>
-                CS2Economy.safeValidateNametag(nameTag ?? "")
-              }
-              value={attributes.value.nameTag}
-            />
-          </EditorLabel>
-        )}
-        {hasSeed && (
-          <EditorLabel isDisabled={isDisabled} label={translate("EditorSeed")}>
-            <EditorStepRangeWithInput
-              disabled={isDisabled}
-              inputStyles="w-24 min-w-0"
-              disabledInputStyles="flex-1 text-right"
-              max={item.getMaximumSeed()}
-              maxLength={String(item.getMaximumSeed()).length}
-              min={minimumSeed}
-              onChange={attributes.update("seed")}
-              randomizable
-              step={CS2_MIN_SEED}
-              stepRangeStyles="flex-1"
-              type="int"
-              validate={(value) => CS2Economy.safeValidateSeed(value, item)}
-              value={attributes.value.seed}
-            />
-          </EditorLabel>
-        )}
-        {hasWear && (
-          <EditorLabel isDisabled={isDisabled} label={translate("EditorWear")}>
-            <EditorStepRangeWithInput
-              disabled={isDisabled}
-              inputStyles="w-24 min-w-0"
-              disabledInputStyles="flex-1 text-right"
-              max={item.getMaximumWear()}
-              maxLength={wearStringMaxLen}
-              min={minimumWear}
-              onChange={attributes.update("wear")}
-              randomizable
-              step={CS2_WEAR_FACTOR}
-              stepRangeStyles="flex-1"
-              transform={wearToString}
-              type="float"
-              validate={(value) => CS2Economy.safeValidateWear(value, item)}
-              value={attributes.value.wear}
-            />
-          </EditorLabel>
-        )}
-        {hasStatTrak && (
-          <EditorLabel
-            isDisabled={isDisabled}
-            label={translate("EditorStatTrak")}
-          >
-            <EditorToggle
-              checkedLabel={translate("GenericYes")}
-              uncheckedLabel={translate("GenericNo")}
-              disabled={isDisabled}
-              checked={attributes.value.statTrak}
-              onChange={attributes.checkbox("statTrak")}
-            />
-          </EditorLabel>
-        )}
-        {hasQuantity && (
-          <EditorLabel
-            isDisabled={isDisabled}
-            label={translate("EditorQuantity")}
-          >
-            <EditorStepRangeWithInput
-              inputStyles="w-24 min-w-0"
-              max={maxQuantity}
-              maxLength={String(maxQuantity).length}
-              min={1}
-              onChange={attributes.update("quantity")}
-              step={1}
-              stepRangeStyles="flex-1"
-              type="int"
-              validate={(value) => value >= 1 && value <= maxQuantity}
-              value={attributes.value.quantity}
-            />
-          </EditorLabel>
-        )}
-        <div className="flex justify-end">
-          <ButtonWithTooltip
-            tooltip={translate("EditorReset")}
-            className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
-            onClick={handleReset}
-          >
-            <FontAwesomeIcon icon={faArrowRotateLeft} className="h-4" />
-          </ButtonWithTooltip>
-        </div>
+  const display = (
+    <EditorItemDisplay item={item} wear={attributes.value.wear} />
+  );
+
+  const editor = (
+    <div ref={attributesRef} className="space-y-1.5">
+      {hasStickers && (
+        <EditorLabel block label={translate("EditorStickers")}>
+          <StickerPicker
+            disabled={isDisabled}
+            forItem={item}
+            isHideStickerRotation={isHideStickerRotation}
+            isHideStickerSchema={isHideStickerSchema}
+            isHideStickerWear={isHideStickerWear}
+            isHideStickerX={isHideStickerX}
+            isHideStickerY={isHideStickerY}
+            onChange={attributes.update("stickers")}
+            stickerFilter={stickerFilter}
+            value={attributes.value.stickers}
+          />
+        </EditorLabel>
+      )}
+      {hasPatches && (
+        <EditorLabel block label={translate("EditorPatches")}>
+          <PatchPicker
+            patchFilter={patchFilter}
+            disabled={isDisabled}
+            value={attributes.value.patches}
+            onChange={attributes.update("patches")}
+          />
+        </EditorLabel>
+      )}
+      {hasKeychains && (
+        <EditorLabel block label={translate("EditorKeychains")}>
+          <KeychainPicker
+            disabled={isDisabled}
+            isHideKeychainSeed={isHideKeychainSeed}
+            isHideKeychainX={isHideKeychainX}
+            isHideKeychainY={isHideKeychainY}
+            isHideKeychainZ={isHideKeychainZ}
+            keychainFilter={keychainFilter}
+            onChange={attributes.update("keychains")}
+            value={attributes.value.keychains}
+          />
+        </EditorLabel>
+      )}
+      {hasNameTag && (
+        <EditorLabel isDisabled={isDisabled} label={translate("EditorNametag")}>
+          <EditorInput
+            className={clsx("w-full", isDisabled && "text-right")}
+            disabled={isDisabled}
+            maxLength={20}
+            onChange={attributes.input("nameTag")}
+            placeholder={
+              isDisabled ? "N/A" : translate("EditorNametagPlaceholder")
+            }
+            validate={(nameTag) =>
+              CS2Economy.safeValidateNametag(nameTag ?? "")
+            }
+            value={attributes.value.nameTag}
+          />
+        </EditorLabel>
+      )}
+      {hasSeed && (
+        <EditorLabel isDisabled={isDisabled} label={translate("EditorSeed")}>
+          <EditorStepRangeWithInput
+            disabled={isDisabled}
+            inputStyles="w-24 min-w-0"
+            disabledInputStyles="flex-1 text-right"
+            max={item.getMaximumSeed()}
+            maxLength={String(item.getMaximumSeed()).length}
+            min={minimumSeed}
+            onChange={attributes.update("seed")}
+            randomizable
+            step={CS2_MIN_SEED}
+            stepRangeStyles="flex-1"
+            type="int"
+            validate={(value) => CS2Economy.safeValidateSeed(value, item)}
+            value={attributes.value.seed}
+          />
+        </EditorLabel>
+      )}
+      {hasWear && (
+        <EditorLabel isDisabled={isDisabled} label={translate("EditorWear")}>
+          <EditorStepRangeWithInput
+            disabled={isDisabled}
+            inputStyles="w-24 min-w-0"
+            disabledInputStyles="flex-1 text-right"
+            max={item.getMaximumWear()}
+            maxLength={wearStringMaxLen}
+            min={minimumWear}
+            onChange={attributes.update("wear")}
+            randomizable
+            step={CS2_WEAR_FACTOR}
+            stepRangeStyles="flex-1"
+            transform={wearToString}
+            type="float"
+            validate={(value) => CS2Economy.safeValidateWear(value, item)}
+            value={attributes.value.wear}
+          />
+        </EditorLabel>
+      )}
+      {hasStatTrak && (
+        <EditorLabel
+          isDisabled={isDisabled}
+          label={translate("EditorStatTrak")}
+        >
+          <EditorToggle
+            checkedLabel={translate("GenericYes")}
+            uncheckedLabel={translate("GenericNo")}
+            disabled={isDisabled}
+            checked={attributes.value.statTrak}
+            onChange={attributes.checkbox("statTrak")}
+          />
+        </EditorLabel>
+      )}
+      {hasQuantity && (
+        <EditorLabel
+          isDisabled={isDisabled}
+          label={translate("EditorQuantity")}
+        >
+          <EditorStepRangeWithInput
+            inputStyles="w-24 min-w-0"
+            max={maxQuantity}
+            maxLength={String(maxQuantity).length}
+            min={1}
+            onChange={attributes.update("quantity")}
+            step={1}
+            stepRangeStyles="flex-1"
+            type="int"
+            validate={(value) => value >= 1 && value <= maxQuantity}
+            value={attributes.value.quantity}
+          />
+        </EditorLabel>
+      )}
+      <div className="flex justify-end">
+        <ButtonWithTooltip
+          tooltip={translate("EditorReset")}
+          className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
+          onClick={handleReset}
+        >
+          <FontAwesomeIcon icon={faArrowRotateLeft} className="h-4" />
+        </ButtonWithTooltip>
       </div>
+    </div>
+  );
+
+  return (
+    <div
+      className={clsx(
+        "m-auto mt-4 text-sm select-none",
+        // Own the width so the surrounding modal (sized to content) grows when
+        // we switch to two columns. w-105 (420px) matches the previous
+        // single-column modal width.
+        isTwoColumn ? "w-160" : "w-105",
+        className
+      )}
+    >
+      {isTwoColumn ? (
+        <div className="flex items-center gap-4">
+          <div className="shrink-0">{display}</div>
+          <div className="min-w-0 flex-1">{editor}</div>
+        </div>
+      ) : (
+        <>
+          {display}
+          {editor}
+        </>
+      )}
     </div>
   );
 }
