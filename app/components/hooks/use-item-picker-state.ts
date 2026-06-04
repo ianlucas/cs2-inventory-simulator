@@ -53,7 +53,7 @@ export function useItemPickerState({
   }
 
   function handleItemClick(item: CS2EconomyItem) {
-    if (!filter.hasModel || model !== undefined) {
+    if (!filter.hasModel || model !== undefined || !item.base) {
       return onPickItem(item);
     }
     setQuery("");
