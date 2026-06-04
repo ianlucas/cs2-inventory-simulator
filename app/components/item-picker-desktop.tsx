@@ -27,7 +27,7 @@ export function ItemPickerDesktop({
           <ItemBrowser
             ignoreRarityColor={ignoreRarityColor}
             items={items}
-            maxItemsIntoView={6}
+            maxItemsIntoView={7}
             onClick={handleItemClick}
           />
         </div>

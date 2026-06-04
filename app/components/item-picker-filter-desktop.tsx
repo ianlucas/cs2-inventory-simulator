@@ -17,7 +17,7 @@ import { TextSlider } from "./text-slider";
 // Match the item browser column height (8 rows * 64px) so the filter list
 // never makes the modal taller than the items beside it.
 const FILTER_HEIGHT = 32;
-const MAX_FILTERS_INTO_VIEW = 12;
+const MAX_FILTERS_INTO_VIEW = 14;
 
 export function ItemPickerFilterDesktop({
   categories,
