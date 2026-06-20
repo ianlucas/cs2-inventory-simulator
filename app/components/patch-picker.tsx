@@ -7,6 +7,7 @@ import {
   faMagnifyingGlass,
   faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
   CS2Economy,
@@ -20,11 +21,12 @@ import { useInput } from "~/components/hooks/use-input";
 import { sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
-import { IconButton } from "./icon-button";
+import { ButtonWithTooltip } from "./button-with-tooltip";
 import { IconInput } from "./icon-input";
 import { ItemBrowser } from "./item-browser";
 import { ItemImage } from "./item-image";
-import { Modal, ModalHeader } from "./modal";
+import { Modal, ModalHeader, ModalNav } from "./modal";
+import { confirm } from "./modal-generic";
 
 export function PatchPicker({
   disabled,
@@ -60,11 +62,21 @@ export function PatchPicker({
     setActiveIndex(undefined);
   }
 
-  function handleRemovePatch() {
-    const newValue = { ...value };
-    delete newValue[ensure(activeIndex)];
-    onChange(newValue);
-    setActiveIndex(undefined);
+  function handleRemovePatch(index: number) {
+    return async function handleRemovePatch() {
+      if (
+        await confirm({
+          titleText: translate("PatchPickerRemove"),
+          bodyText: translate("PatchPickerRemoveConfirm"),
+          cancelText: translate("GenericNo"),
+          confirmText: translate("GenericYes")
+        })
+      ) {
+        const updated = { ...value };
+        delete updated[index];
+        onChange(updated);
+      }
+    };
   }
 
   function handleCloseModal() {
@@ -95,23 +107,33 @@ export function PatchPicker({
           const item =
             patchId !== undefined ? CS2Economy.getById(patchId) : undefined;
           return (
-            <button
-              disabled={disabled}
-              key={index}
-              className="relative aspect-256/192 cursor-default overflow-hidden bg-neutral-950/40"
-              onClick={handleClickSlot(index)}
-            >
-              {item !== undefined ? (
-                <ItemImage item={item} />
-              ) : (
-                <div className="flex items-center justify-center text-neutral-700">
-                  {translate("StickerPickerNA")}
-                </div>
+            <div className="relative aspect-256/192" key={index}>
+              <button
+                disabled={disabled}
+                className="absolute size-full cursor-default overflow-hidden bg-neutral-950/40"
+                onClick={handleClickSlot(index)}
+              >
+                {item !== undefined ? (
+                  <ItemImage item={item} />
+                ) : (
+                  <div className="flex items-center justify-center text-neutral-700">
+                    {translate("PatchPickerNA")}
+                  </div>
+                )}
+                {!disabled && (
+                  <div className="absolute top-0 left-0 size-full border-2 border-transparent hover:border-blue-500/50" />
+                )}
+              </button>
+              {item !== undefined && !disabled && (
+                <ButtonWithTooltip
+                  onClick={handleRemovePatch(index)}
+                  className="absolute bottom-1 left-1 hover:bg-red-500/50"
+                  tooltip={translate("PatchPickerRemove")}
+                >
+                  <FontAwesomeIcon icon={faTrashCan} className="h-3" />
+                </ButtonWithTooltip>
               )}
-              {!disabled && (
-                <div className="absolute top-0 left-0 size-full border-2 border-transparent hover:border-blue-500/50" />
-              )}
-            </button>
+            </div>
           );
         })}
       </div>
@@ -120,20 +142,19 @@ export function PatchPicker({
           title={translate("PatchPickerHeader")}
           onClose={handleCloseModal}
         />
-        <div className="my-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
-          <IconInput
-            icon={faMagnifyingGlass}
-            labelStyles="flex-1"
-            onChange={setSearch}
-            placeholder={translate("PatchPickerSearchPlaceholder")}
-            value={search}
-          />
-          <IconButton
-            icon={faTrashCan}
-            onClick={handleRemovePatch}
-            title={translate("StickerPickerRemove")}
-          />
-        </div>
+        <ModalNav
+          items={[]}
+          right={
+            <IconInput
+              autoFocus
+              icon={faMagnifyingGlass}
+              labelStyles="w-64"
+              onChange={setSearch}
+              placeholder={translate("PatchPickerSearchPlaceholder")}
+              value={search}
+            />
+          }
+        />
         <ItemBrowser items={filtered} onClick={handleAddPatch} />
       </Modal>
     </>

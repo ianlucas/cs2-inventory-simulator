@@ -31,6 +31,9 @@ export function Modal({
   useEffect(() => {
     if (ref.current !== null) {
       document.body.append(ref.current);
+      if (!hidden) {
+        ref.current.querySelector<HTMLElement>("[data-autofocus]")?.focus();
+      }
     }
     requestAnimationFrame(() => setAnimate(hidden ? true : false));
   }, [hidden]);

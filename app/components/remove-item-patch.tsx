@@ -62,7 +62,7 @@ export function RemoveItemPatch({
           <>
             <Overlay>
               <UseItemHeader
-                title={translate("ScrapeStickerUse")}
+                title={translate("RemovePatchUse")}
                 warning={translate("RemovePatchWarn")}
                 warningItem={nameItemString(item)}
               />
@@ -81,7 +81,7 @@ export function RemoveItemPatch({
               <UseItemFooter
                 right={
                   <ModalButton
-                    children={translate("ScrapeStickerClose")}
+                    children={translate("RemovePatchClose")}
                     onClick={onClose}
                     variant="secondary"
                   />
@@ -99,7 +99,7 @@ export function RemoveItemPatch({
                   <ModalButton
                     onClick={() => setConfirmRemoveSlot(undefined)}
                     variant="secondary"
-                    children={translate("ScrapeStickerCancel")}
+                    children={translate("RemovePatchCancel")}
                   />
                   <ModalButton
                     onClick={handleConfirmScrape}

@@ -87,7 +87,7 @@ export default function Settings() {
         titleText: translate("SettingsRemoveAllItems"),
         bodyText: translate("SettingsConfirmRemoveAllItems"),
         cancelText: translate("EditorCancel"),
-        confirmText: translate("InventoryItemStorageUnitEmptyClose")
+        confirmText: translate("GenericOK")
       })
     ) {
       inventory.removeAll();

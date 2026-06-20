@@ -247,7 +247,7 @@ export function ItemEditor({
         </EditorLabel>
       )}
       {hasSeed && (
-        <EditorLabel isDisabled={isDisabled} label={translate("EditorSeed")}>
+        <EditorLabel isDisabled={isDisabled} label={translate("EditorPattern")}>
           <EditorStepRangeWithInput
             disabled={isDisabled}
             inputStyles="w-24 min-w-0"

@@ -15,10 +15,10 @@ import {
   CS2Economy,
   CS2EconomyItem,
   CS2_MAX_STICKERS,
-  CS2_MIN_STICKER_WEAR,
   assert,
   ensure
 } from "@ianlucas/cs2-lib";
+import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
 import { sortByName } from "~/utils/economy";
@@ -26,13 +26,13 @@ import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import { AppliedStickerEditor } from "./applied-sticker-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";
-import { IconButton } from "./icon-button";
 import { IconInput } from "./icon-input";
 import { IconSelect } from "./icon-select";
 import { ItemBrowser } from "./item-browser";
 import { ItemImage } from "./item-image";
-import { Modal, ModalHeader } from "./modal";
+import { Modal, ModalHeader, ModalNav } from "./modal";
 import { ModalButton } from "./modal-button";
+import { confirm } from "./modal-generic";
 
 export function StickerPicker({
   disabled,
@@ -135,12 +135,21 @@ export function StickerPicker({
     setIsEditing(false);
   }
 
-  function handleRemoveSticker() {
-    const updated = { ...value };
-    delete updated[ensure(activeIndex)];
-    onChange(updated);
-    setActiveIndex(undefined);
-    setIsEditing(false);
+  function handleRemoveSticker(index: number) {
+    return async function handleRemoveSticker() {
+      if (
+        await confirm({
+          titleText: translate("StickerPickerRemove"),
+          bodyText: translate("StickerPickerRemoveConfirm"),
+          cancelText: translate("GenericNo"),
+          confirmText: translate("GenericYes")
+        })
+      ) {
+        const updated = { ...value };
+        delete updated[index];
+        onChange(updated);
+      }
+    };
   }
 
   function handleCloseModal() {
@@ -177,7 +186,6 @@ export function StickerPicker({
       >
         {range(CS2_MAX_STICKERS).map((index) => {
           const sticker = value[index];
-          const stickerWear = sticker?.wear ?? CS2_MIN_STICKER_WEAR;
           const item =
             sticker !== undefined ? CS2Economy.getById(sticker.id) : undefined;
           return (
@@ -194,23 +202,27 @@ export function StickerPicker({
                     {translate("StickerPickerNA")}
                   </div>
                 )}
-                {sticker !== undefined && (
-                  <div className="text-outline-1 absolute right-1 bottom-0 text-sm font-bold drop-shadow-lg">
-                    {(stickerWear * 100).toFixed(0)}%
-                  </div>
-                )}
                 {!disabled && (
                   <div className="absolute top-0 left-0 size-full border-2 border-transparent hover:border-blue-500/50" />
                 )}
               </button>
               {item !== undefined && !disabled && (
-                <ButtonWithTooltip
-                  onClick={handleClickEditSlot(index)}
-                  className="absolute bottom-1 left-1 hover:bg-blue-500/50"
-                  tooltip={translate("EditorStickerEdit")}
-                >
-                  <FontAwesomeIcon icon={faPen} className="h-3" />
-                </ButtonWithTooltip>
+                <>
+                  <ButtonWithTooltip
+                    onClick={handleRemoveSticker(index)}
+                    className="absolute bottom-1 left-1 hover:bg-red-500/50"
+                    tooltip={translate("StickerPickerRemove")}
+                  >
+                    <FontAwesomeIcon icon={faTrashCan} className="h-3" />
+                  </ButtonWithTooltip>
+                  <ButtonWithTooltip
+                    onClick={handleClickEditSlot(index)}
+                    className="absolute right-1 bottom-1 hover:bg-blue-500/50"
+                    tooltip={translate("EditorStickerEdit")}
+                  >
+                    <FontAwesomeIcon icon={faPen} className="h-3" />
+                  </ButtonWithTooltip>
+                </>
               )}
             </div>
           );
@@ -225,34 +237,39 @@ export function StickerPicker({
           title={translate("StickerPickerHeader")}
           onClose={handleCloseModal}
         />
-        <div className="my-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
-          <IconInput
-            icon={faMagnifyingGlass}
-            labelStyles="flex-1"
-            onChange={setSearch}
-            placeholder={translate("StickerPickerSearchPlaceholder")}
-            value={search}
-          />
-          <IconSelect
-            icon={faTag}
-            className="w-42"
-            onChange={setCategory}
-            options={categories}
-            placeholder={translate("StickerPickerFilterPlaceholder")}
-            value={category}
-          />
-          <IconButton
-            icon={faTrashCan}
-            onClick={handleRemoveSticker}
-            title={translate("StickerPickerRemove")}
-          />
-        </div>
+        <ModalNav
+          items={[]}
+          right={
+            <div className="flex items-center gap-2">
+              <IconSelect
+                icon={faTag}
+                className={clsx(
+                  "h-4 w-42 shrink-0 outline-hidden",
+                  category === "" && "text-neutral-600"
+                )}
+                onChange={setCategory}
+                options={categories}
+                placeholder={translate("StickerPickerFilterPlaceholder")}
+                styleless
+                value={category}
+              />
+              <IconInput
+                autoFocus
+                icon={faMagnifyingGlass}
+                labelStyles="w-44 shrink-0"
+                onChange={setSearch}
+                placeholder={translate("StickerPickerSearchPlaceholder")}
+                value={search}
+              />
+            </div>
+          }
+        />
         <ItemBrowser items={filtered} onClick={handleSelectSticker} />
       </Modal>
       {selected !== undefined && (
         <Modal className="w-105">
           <ModalHeader
-            title={translate("EditorConfirmPick")}
+            title={translate("ApplyStickerUse")}
             onClose={handleCloseSelectModal}
           />
           {canEditStickerAttributes && (
@@ -278,7 +295,7 @@ export function StickerPicker({
               variant="secondary"
             />
             <ModalButton
-              children={translate("EditorPick")}
+              children={translate("EditorApply")}
               onClick={handleAddSticker}
               variant="primary"
             />

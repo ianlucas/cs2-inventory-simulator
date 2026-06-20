@@ -25,12 +25,12 @@ import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import { AppliedKeychainEditor } from "./applied-keychain-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";
-import { IconButton } from "./icon-button";
 import { IconInput } from "./icon-input";
 import { ItemBrowser } from "./item-browser";
 import { ItemImage } from "./item-image";
-import { Modal, ModalHeader } from "./modal";
+import { Modal, ModalHeader, ModalNav } from "./modal";
 import { ModalButton } from "./modal-button";
+import { confirm } from "./modal-generic";
 
 export function KeychainPicker({
   disabled,
@@ -129,12 +129,21 @@ export function KeychainPicker({
     setIsEditing(false);
   }
 
-  function handleRemoveKeychain() {
-    const updated = { ...value };
-    delete updated[ensure(activeIndex)];
-    onChange(updated);
-    setActiveIndex(undefined);
-    setIsEditing(false);
+  function handleRemoveKeychain(index: number) {
+    return async function handleRemoveKeychain() {
+      if (
+        await confirm({
+          titleText: translate("KeychainPickerRemove"),
+          bodyText: translate("KeychainPickerRemoveConfirm"),
+          cancelText: translate("GenericNo"),
+          confirmText: translate("GenericYes")
+        })
+      ) {
+        const updated = { ...value };
+        delete updated[index];
+        onChange(updated);
+      }
+    };
   }
 
   function handleCloseModal() {
@@ -191,13 +200,22 @@ export function KeychainPicker({
                 )}
               </button>
               {item !== undefined && !disabled && (
-                <ButtonWithTooltip
-                  onClick={handleClickEditSlot(index)}
-                  className="absolute bottom-1 left-1 hover:bg-blue-500/50"
-                  tooltip={translate("EditorKeychainEdit")}
-                >
-                  <FontAwesomeIcon icon={faPen} className="h-3" />
-                </ButtonWithTooltip>
+                <>
+                  <ButtonWithTooltip
+                    onClick={handleRemoveKeychain(index)}
+                    className="absolute bottom-1 left-1 hover:bg-red-500/50"
+                    tooltip={translate("KeychainPickerRemove")}
+                  >
+                    <FontAwesomeIcon icon={faTrashCan} className="h-3" />
+                  </ButtonWithTooltip>
+                  <ButtonWithTooltip
+                    onClick={handleClickEditSlot(index)}
+                    className="absolute right-1 bottom-1 hover:bg-blue-500/50"
+                    tooltip={translate("EditorKeychainEdit")}
+                  >
+                    <FontAwesomeIcon icon={faPen} className="h-3" />
+                  </ButtonWithTooltip>
+                </>
               )}
             </div>
           );
@@ -212,26 +230,25 @@ export function KeychainPicker({
           title={translate("KeychainPickerHeader")}
           onClose={handleCloseModal}
         />
-        <div className="my-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
-          <IconInput
-            icon={faMagnifyingGlass}
-            labelStyles="flex-1"
-            onChange={setSearch}
-            placeholder={translate("KeychainPickerSearchPlaceholder")}
-            value={search}
-          />
-          <IconButton
-            icon={faTrashCan}
-            onClick={handleRemoveKeychain}
-            title={translate("KeychainPickerRemove")}
-          />
-        </div>
+        <ModalNav
+          items={[]}
+          right={
+            <IconInput
+              autoFocus
+              icon={faMagnifyingGlass}
+              labelStyles="w-64"
+              onChange={setSearch}
+              placeholder={translate("KeychainPickerSearchPlaceholder")}
+              value={search}
+            />
+          }
+        />
         <ItemBrowser items={filtered} onClick={handleSelectKeychain} />
       </Modal>
       {selected !== undefined && (
         <Modal className="w-105">
           <ModalHeader
-            title={translate("EditorConfirmPick")}
+            title={translate("ApplyKeychainUse")}
             onClose={handleCloseSelectModal}
           />
           {canEditKeychainAttributes && (
@@ -253,7 +270,7 @@ export function KeychainPicker({
               variant="secondary"
             />
             <ModalButton
-              children={translate("EditorPick")}
+              children={translate("EditorApply")}
               onClick={handleAddKeychain}
               variant="primary"
             />

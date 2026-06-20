@@ -9,12 +9,14 @@ import clsx from "clsx";
 import { ChangeEventHandler } from "react";
 
 export function IconInput({
+  autoFocus,
   icon,
   labelStyles,
   onChange,
   placeholder,
   value
 }: {
+  autoFocus?: boolean;
   icon: IconProp;
   labelStyles?: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
@@ -30,13 +32,15 @@ export function IconInput({
     >
       <FontAwesomeIcon
         icon={icon}
-        className="h-4 text-neutral-500 group-focus-within:text-blue-500/50"
+        className="h-4 shrink-0 text-neutral-500 group-focus-within:text-blue-500/50"
       />
       <input
-        value={value}
+        autoFocus={autoFocus}
+        data-autofocus={autoFocus ? "" : undefined}
+        className="w-0 min-w-0 flex-1 bg-transparent placeholder-neutral-600 outline-hidden"
         onChange={onChange}
-        className="flex-1 bg-transparent placeholder-neutral-600 outline-hidden"
         placeholder={placeholder}
+        value={value}
       />
     </label>
   );
