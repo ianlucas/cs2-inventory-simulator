@@ -247,7 +247,7 @@ export function KeychainPicker({
       {selected !== undefined && (
         <Modal className="w-105">
           <ModalHeader
-            title={translate("EditorConfirmPick")}
+            title={translate("ApplyKeychainUse")}
             onClose={handleCloseSelectModal}
           />
           {canEditKeychainAttributes && (
@@ -269,7 +269,7 @@ export function KeychainPicker({
               variant="secondary"
             />
             <ModalButton
-              children={translate("EditorPick")}
+              children={translate("EditorApply")}
               onClick={handleAddKeychain}
               variant="primary"
             />

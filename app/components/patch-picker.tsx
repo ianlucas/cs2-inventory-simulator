@@ -117,7 +117,7 @@ export function PatchPicker({
                   <ItemImage item={item} />
                 ) : (
                   <div className="flex items-center justify-center text-neutral-700">
-                    {translate("StickerPickerNA")}
+                    {translate("PatchPickerNA")}
                   </div>
                 )}
                 {!disabled && (

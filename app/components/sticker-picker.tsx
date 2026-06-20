@@ -268,7 +268,7 @@ export function StickerPicker({
       {selected !== undefined && (
         <Modal className="w-105">
           <ModalHeader
-            title={translate("EditorConfirmPick")}
+            title={translate("ApplyStickerUse")}
             onClose={handleCloseSelectModal}
           />
           {canEditStickerAttributes && (
@@ -294,7 +294,7 @@ export function StickerPicker({
               variant="secondary"
             />
             <ModalButton
-              children={translate("EditorPick")}
+              children={translate("EditorApply")}
               onClick={handleAddSticker}
               variant="primary"
             />

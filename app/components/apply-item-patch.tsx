@@ -59,7 +59,7 @@ export function ApplyItemPatch({
         createPortal(
           <Overlay>
             <UseItemHeader
-              actionDesc={translate("ApplyStickerUseOn")}
+              actionDesc={translate("ApplyPatchUseOn")}
               actionItem={nameItemString(targetItem)}
               title={translate("ApplyPatchUse")}
               warning={translate("ApplyPatchWarn")}
@@ -103,7 +103,7 @@ export function ApplyItemPatch({
                     variant="primary"
                   />
                   <ModalButton
-                    children={translate("ApplyStickerCancel")}
+                    children={translate("ApplyPatchCancel")}
                     onClick={onClose}
                     variant="secondary"
                   />

@@ -79,7 +79,7 @@ export function AppliedKeychainEditor({
       <EditorItemDisplay item={item} />
       <div className="space-y-1.5">
         {!isHideKeychainSeed && (
-          <EditorLabel label={translate("EditorSeed")}>
+          <EditorLabel label={translate("EditorPattern")}>
             <EditorStepRangeWithInput
               inputStyles="w-24 min-w-0"
               max={CS2_MAX_KEYCHAIN_SEED}
