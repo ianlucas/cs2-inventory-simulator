@@ -234,6 +234,7 @@ export function KeychainPicker({
           items={[]}
           right={
             <IconInput
+              autoFocus
               icon={faMagnifyingGlass}
               labelStyles="w-64"
               onChange={setSearch}

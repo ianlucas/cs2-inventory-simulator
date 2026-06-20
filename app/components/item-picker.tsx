@@ -32,6 +32,7 @@ export function ItemPicker({
         right={
           isDesktop ? (
             <IconInput
+              autoFocus
               icon={faMagnifyingGlass}
               labelStyles="w-64"
               onChange={state.setQuery}

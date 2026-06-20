@@ -254,6 +254,7 @@ export function StickerPicker({
                 value={category}
               />
               <IconInput
+                autoFocus
                 icon={faMagnifyingGlass}
                 labelStyles="w-44 shrink-0"
                 onChange={setSearch}

@@ -146,6 +146,7 @@ export function PatchPicker({
           items={[]}
           right={
             <IconInput
+              autoFocus
               icon={faMagnifyingGlass}
               labelStyles="w-64"
               onChange={setSearch}
