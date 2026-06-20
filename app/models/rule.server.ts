@@ -189,6 +189,12 @@ export const inventoryStorageUnitMaxItems = new Rule({
   defaultValue: 32
 });
 
+export const inventoryInactivityResetDays = new Rule({
+  name: "inventoryInactivityResetDays",
+  type: "number",
+  defaultValue: 0
+});
+
 export const appLogoUrl = new Rule({
   name: "appLogoUrl",
   type: "string",

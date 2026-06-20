@@ -110,6 +110,16 @@ export async function updateUserInventory(
   });
 }
 
+export async function touchLastSeen(userId: string, throttleMs = 3_600_000) {
+  await prisma.user.updateMany({
+    data: { lastSeen: new Date() },
+    where: {
+      id: userId,
+      lastSeen: { lt: new Date(Date.now() - throttleMs) }
+    }
+  });
+}
+
 export async function getUserSyncedAt(userId: string) {
   return (
     await prisma.user.findFirstOrThrow({

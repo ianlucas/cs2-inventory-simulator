@@ -22,6 +22,7 @@ model User {
   id String @id
   inventory String?
   inventoryVersion Int @default(0)
+  lastSeen DateTime @default(now())
   name String
   overwrites UserRule[]
   preferences UserPreference?
