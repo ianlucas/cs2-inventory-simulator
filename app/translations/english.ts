@@ -322,6 +322,7 @@ export const english = {
   StickerPickerHeader: "Pick a sticker...",
   StickerPickerNA: "N/A",
   StickerPickerRemove: /* csgo_english.txt */"Remove",
+  StickerPickerRemoveConfirm: "Are you sure you want to remove this sticker?",
   StickerPickerSearchPlaceholder: "Search sticker...",
   SyncErrorContinue: "Try again",
   SyncErrorDesc: "An error occurred while syncing your changes.",
