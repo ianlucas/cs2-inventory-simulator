@@ -30,12 +30,12 @@ export function IconInput({
     >
       <FontAwesomeIcon
         icon={icon}
-        className="h-4 text-neutral-500 group-focus-within:text-blue-500/50"
+        className="h-4 shrink-0 text-neutral-500 group-focus-within:text-blue-500/50"
       />
       <input
         value={value}
         onChange={onChange}
-        className="flex-1 bg-transparent placeholder-neutral-600 outline-hidden"
+        className="w-0 min-w-0 flex-1 bg-transparent placeholder-neutral-600 outline-hidden"
         placeholder={placeholder}
       />
     </label>

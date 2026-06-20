@@ -19,6 +19,7 @@ import {
   assert,
   ensure
 } from "@ianlucas/cs2-lib";
+import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
 import { sortByName } from "~/utils/economy";
@@ -26,12 +27,11 @@ import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import { AppliedStickerEditor } from "./applied-sticker-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";
-import { IconButton } from "./icon-button";
 import { IconInput } from "./icon-input";
 import { IconSelect } from "./icon-select";
 import { ItemBrowser } from "./item-browser";
 import { ItemImage } from "./item-image";
-import { Modal, ModalHeader } from "./modal";
+import { Modal, ModalHeader, ModalNav } from "./modal";
 import { ModalButton } from "./modal-button";
 
 export function StickerPicker({
@@ -225,28 +225,39 @@ export function StickerPicker({
           title={translate("StickerPickerHeader")}
           onClose={handleCloseModal}
         />
-        <div className="my-2 flex flex-col gap-2 px-2 lg:flex-row lg:items-center">
-          <IconInput
-            icon={faMagnifyingGlass}
-            labelStyles="flex-1"
-            onChange={setSearch}
-            placeholder={translate("StickerPickerSearchPlaceholder")}
-            value={search}
-          />
-          <IconSelect
-            icon={faTag}
-            className="w-42"
-            onChange={setCategory}
-            options={categories}
-            placeholder={translate("StickerPickerFilterPlaceholder")}
-            value={category}
-          />
-          <IconButton
-            icon={faTrashCan}
-            onClick={handleRemoveSticker}
-            title={translate("StickerPickerRemove")}
-          />
-        </div>
+        <ModalNav
+          items={[
+            {
+              icon: faTrashCan,
+              isActive: false,
+              label: translate("StickerPickerRemove"),
+              onClick: handleRemoveSticker
+            }
+          ]}
+          right={
+            <div className="flex items-center gap-2">
+              <IconInput
+                icon={faMagnifyingGlass}
+                labelStyles="w-44 shrink-0"
+                onChange={setSearch}
+                placeholder={translate("StickerPickerSearchPlaceholder")}
+                value={search}
+              />
+              <IconSelect
+                icon={faTag}
+                className={clsx(
+                  "h-4 w-42 shrink-0 outline-hidden",
+                  category === "" && "text-neutral-600"
+                )}
+                onChange={setCategory}
+                options={categories}
+                placeholder={translate("StickerPickerFilterPlaceholder")}
+                styleless
+                value={category}
+              />
+            </div>
+          }
+        />
         <ItemBrowser items={filtered} onClick={handleSelectSticker} />
       </Modal>
       {selected !== undefined && (
