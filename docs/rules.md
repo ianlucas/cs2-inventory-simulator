@@ -25,6 +25,7 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 | `steamCallbackUrl` | URL to validate Steam authentication. | `string` | Env var or `http://localhost/sign-in/steam/callback` |
 | `inventoryMaxItems` | Max number of items a user can add to inventory. | `number` | `256` |
 | `inventoryStorageUnitMaxItems` | Max items a storage unit can store. | `number` | `32` |
+| `inventoryInactivityResetDays` | Resets (deletes) a user's inventory after this many days without logging into the website or being fetched by the game server. `0` disables the rule. Set a per-user or per-group overwrite to `0` to make them immune. | `number` | `0` |
 | `inventoryItemAllowEdit` | Can the user edit an inventory item? | `boolean` | `true` |
 | `inventoryItemAllowApplySticker` | Can the user apply stickers to inventory items? | `boolean` | `true` |
 | `inventoryItemAllowScrapeSticker` | Can the user scrape stickers from inventory items? | `boolean` | `true` |

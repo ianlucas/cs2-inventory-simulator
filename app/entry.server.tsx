@@ -14,6 +14,7 @@ import type { EntryContext } from "react-router";
 import { ServerRouter } from "react-router";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule";
+import { scheduleInactivityReset } from "./routines/reset-inactive-inventory";
 import { setupPurge } from "./routines/setup-purge";
 import { setupTranslation } from "./translation.server";
 
@@ -22,6 +23,7 @@ const ABORT_DELAY = 5_000;
 CS2Economy.use({ items: CS2_ITEMS, language: english });
 setupTranslation();
 setupPurge();
+scheduleInactivityReset();
 setupRules().then(() => setupLogo());
 
 export default function handleRequest(

@@ -7,10 +7,14 @@ import { getUserIdFromRequest } from "./auth.server";
 import { migrateInventory } from "./middlewares/migrate-inventory.server";
 import { removeTrailingDots } from "./middlewares/remove-trailing-dots.server";
 import { removeTrailingSlashes } from "./middlewares/remove-trailing-slashes.server";
+import { touchLastSeen } from "./models/user.server";
 
 export async function middleware(request: Request, userId?: string) {
   userId ??= await getUserIdFromRequest(request);
   await removeTrailingDots(request);
   await removeTrailingSlashes(request);
   await migrateInventory(userId);
+  if (userId !== undefined) {
+    await touchLastSeen(userId);
+  }
 }
