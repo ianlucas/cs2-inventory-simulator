@@ -14,6 +14,7 @@ import { ComponentProps } from "react";
 import { has } from "~/utils/misc";
 import { usePreferences } from "./app-context";
 import { InventoryItemTooltipContents } from "./inventory-item-tooltip-contents";
+import { InventoryItemTooltipDescription } from "./inventory-item-tooltip-description";
 import { InventoryItemTooltipExterior } from "./inventory-item-tooltip-exterior";
 import { InventoryItemTooltipName } from "./inventory-item-tooltip-name";
 import { InventoryItemTooltipRarity } from "./inventory-item-tooltip-rarity";
@@ -50,9 +51,6 @@ export function InventoryItemTooltip({
     item.type === CS2ItemType.Graffiti ? CS2_TEAMS_BOTH : item.teams;
   const hasTeams = teams !== undefined;
 
-  const baseDescription = (item.parent ?? item).desc;
-  const itemDescription = item.parent !== undefined ? item.desc : undefined;
-
   return (
     <div
       role="tooltip"
@@ -78,21 +76,7 @@ export function InventoryItemTooltip({
           statTrak={item.statTrak}
         />
       )}
-      {has(baseDescription) && (
-        <p className="mt-4 whitespace-pre-wrap text-neutral-300">
-          {baseDescription}
-        </p>
-      )}
-      {has(itemDescription) && (
-        <p
-          className={clsx(
-            "mt-4 whitespace-pre-wrap text-neutral-300",
-            item.isPaintable() && "italic"
-          )}
-        >
-          {itemDescription}
-        </p>
-      )}
+      <InventoryItemTooltipDescription item={item} />
       {hasContents && (
         <InventoryItemTooltipContents
           containerItem={containerItem}
