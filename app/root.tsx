@@ -37,6 +37,7 @@ import {
   CLOUDFLARE_ANALYTICS_TOKEN,
   SOURCE_COMMIT
 } from "./env.server";
+import { resolveCan3dViewerOrigin } from "./data/cs2-viewer.server";
 import { middleware } from "./middleware.server";
 import { getClientRules } from "./models/rule";
 import { steamCallbackUrl } from "./models/rule.server";
@@ -82,12 +83,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { origin: appUrl, host: appSiteName } = new URL(
     await steamCallbackUrl.get()
   );
+  const clientRules = await getClientRules(user?.id);
   return data({
     rules: {
-      ...(await getClientRules(user?.id)),
+      ...clientRules,
       assetsBaseUrl: nonEmptyString(ASSETS_BASE_URL),
       cloudflareAnalyticsToken: CLOUDFLARE_ANALYTICS_TOKEN,
       sourceCommit: SOURCE_COMMIT,
+      can3dViewerOrigin: resolveCan3dViewerOrigin({
+        enabled: clientRules.appEnable3dViewer,
+        hostname: new URL(appUrl).hostname,
+        key: clientRules.app3dViewerKey
+      }),
       meta: { appUrl, appSiteName }
     },
     preferences: {

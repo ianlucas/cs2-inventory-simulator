@@ -14,6 +14,7 @@ import { Cs2ViewerApi } from "~/utils/cs2-viewer-api";
  * iframe (className, style, allow, ...); `src` is managed internally.
  */
 export function Cs2Viewer({
+  apiKey,
   baseUrl,
   item,
   onApi,
@@ -21,6 +22,7 @@ export function Cs2Viewer({
   title = "CS2 3D viewer",
   ...props
 }: Omit<ComponentPropsWithoutRef<"iframe">, "src"> & {
+  apiKey?: string;
   baseUrl?: string;
   item?: Cs2ViewerItemInput;
   onApi: (api: Cs2ViewerApi | undefined) => void;
@@ -30,7 +32,7 @@ export function Cs2Viewer({
   // `?item=` only seeds the INITIAL state; capture the src once so re-renders (or
   // a changed `item` prop) don't reload the iframe. Drive later changes through
   // the api, or remount with a `key`.
-  const [src] = useState(() => buildViewerSrc(item, { baseUrl }));
+  const [src] = useState(() => buildViewerSrc(item, { baseUrl, key: apiKey }));
   const onApiRef = useRef(onApi);
   const originRef = useRef(origin);
 

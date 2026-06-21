@@ -4,7 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  app3dViewerKey,
   appCacheInventory,
+  appEnable3dViewer,
   appFaviconMimeType,
   appFaviconUrl,
   appFooterName,
@@ -98,7 +100,9 @@ export async function getRules<T extends Record<string, Rule<string, unknown>>>(
 export async function getClientRules(userId?: string) {
   return await getRules(
     {
+      app3dViewerKey,
       appCacheInventory,
+      appEnable3dViewer,
       appFaviconMimeType,
       appFaviconUrl,
       appFooterName,

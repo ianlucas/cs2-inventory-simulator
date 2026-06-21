@@ -21,6 +21,8 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 | `appCacheInventory` | Cache user's inventory if offline or unauthenticated. | `boolean` | `true` |
 | `appHideLogo` | Hide the logo in the app. | `boolean` | `false` |
 | `appHideAuth` | Hide authentication controls in the app. | `boolean` | `false` |
+| `appEnable3dViewer` | Enable the 3D viewer (e.g. the craft sticker editor). Still gated by a reachable viewer and available rate-limit budget. | `boolean` | `false` |
+| `app3dViewerKey` | Partner key for the 3D viewer. Sent as the iframe `key` and used as a trusted-partner signal that skips the rate-limit check. | `string` | Env var or _Empty_ |
 | `steamApiKey` | Steam API Key is used to retrieve user information from Steam. | `string` | Env var or `YOUR_STEAM_API_KEY_GOES_HERE` |
 | `steamCallbackUrl` | URL to validate Steam authentication. | `string` | Env var or `http://localhost/sign-in/steam/callback` |
 | `inventoryMaxItems` | Max number of items a user can add to inventory. | `number` | `256` |

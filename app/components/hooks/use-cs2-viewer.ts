@@ -20,6 +20,7 @@ import { Cs2ViewerApi } from "~/utils/cs2-viewer-api";
  *     );
  */
 export function useCs2Viewer(options?: {
+  apiKey?: string;
   baseUrl?: string;
   item?: Cs2ViewerItemInput;
   origin?: string;

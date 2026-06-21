@@ -30,11 +30,13 @@ import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
+import { useCs2ViewerAvailability } from "./hooks/use-cs2-viewer-availability";
 import { useIsDesktop } from "./hooks/use-is-desktop";
 import { useKeyValues } from "./hooks/use-key-values";
 import { KeychainPicker } from "./keychain-picker";
 import { confirm } from "./modal-generic";
 import { PatchPicker } from "./patch-picker";
+import { Sticker3dPicker } from "./sticker-3d-picker";
 import { StickerPicker } from "./sticker-picker";
 
 export interface ItemEditorAttributes {
@@ -118,6 +120,18 @@ export function ItemEditor({
 
   const translate = useTranslate();
   const isDesktop = useIsDesktop();
+  const { canUse3d } = useCs2ViewerAvailability();
+
+  // The 3D viewer edits every sticker dimension, so only offer it when none are
+  // constrained (and not in the read-only/disabled view).
+  const use3dStickerPicker =
+    canUse3d &&
+    !isDisabled &&
+    !isHideStickerRotation &&
+    !isHideStickerSchema &&
+    !isHideStickerWear &&
+    !isHideStickerX &&
+    !isHideStickerY;
 
   const [attributesRef, { height: attributesHeight }] = useMeasure();
   const isTwoColumn = isDesktop && (attributesHeight ?? 0) > 250;
@@ -191,18 +205,27 @@ export function ItemEditor({
     <div ref={attributesRef} className="space-y-1.5">
       {hasStickers && (
         <EditorLabel block label={translate("EditorStickers")}>
-          <StickerPicker
-            disabled={isDisabled}
-            forItem={item}
-            isHideStickerRotation={isHideStickerRotation}
-            isHideStickerSchema={isHideStickerSchema}
-            isHideStickerWear={isHideStickerWear}
-            isHideStickerX={isHideStickerX}
-            isHideStickerY={isHideStickerY}
-            onChange={attributes.update("stickers")}
-            stickerFilter={stickerFilter}
-            value={attributes.value.stickers}
-          />
+          {use3dStickerPicker ? (
+            <Sticker3dPicker
+              disabled={isDisabled}
+              forItem={item}
+              seed={attributes.value.seed}
+              value={attributes.value.stickers}
+            />
+          ) : (
+            <StickerPicker
+              disabled={isDisabled}
+              forItem={item}
+              isHideStickerRotation={isHideStickerRotation}
+              isHideStickerSchema={isHideStickerSchema}
+              isHideStickerWear={isHideStickerWear}
+              isHideStickerX={isHideStickerX}
+              isHideStickerY={isHideStickerY}
+              onChange={attributes.update("stickers")}
+              stickerFilter={stickerFilter}
+              value={attributes.value.stickers}
+            />
+          )}
         </EditorLabel>
       )}
       {hasPatches && (
