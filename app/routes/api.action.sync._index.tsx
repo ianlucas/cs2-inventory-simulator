@@ -96,7 +96,7 @@ const actionShape = z.discriminatedUnion("type", [
   }),
   z.object({
     type: z.literal(SyncAction.ApplyItemSticker),
-    slot: nonNegativeInt,
+    schema: nonNegativeInt,
     stickerUid: nonNegativeInt,
     targetUid: nonNegativeInt
   }),
@@ -128,7 +128,7 @@ const actionShape = z.discriminatedUnion("type", [
   z.object({
     type: z.literal(SyncAction.ScrapeItemSticker),
     targetUid: nonNegativeInt,
-    slot: nonNegativeInt
+    index: nonNegativeInt
   }),
   z.object({
     type: z.literal(SyncAction.SwapItemsStatTrak),
@@ -159,7 +159,7 @@ const actionShape = z.discriminatedUnion("type", [
   z.object({
     type: z.literal(SyncAction.AddWithSticker),
     itemId: nonNegativeInt,
-    slot: nonNegativeInt,
+    schema: nonNegativeInt,
     stickerUid: nonNegativeInt
   }),
   z.object({
@@ -428,7 +428,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.AddWithNametag:
             await enforceCraftRulesForItem(action.itemId, userId);
-            inventory.addWithNametag(
+            inventory.addWithNameTag(
               action.toolUid,
               action.itemId,
               action.nameTag
@@ -447,7 +447,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             inventory.applyItemSticker(
               action.targetUid,
               action.stickerUid,
-              action.slot
+              action.schema
             );
             break;
           case SyncAction.Equip:
@@ -472,7 +472,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.ScrapeItemSticker:
             await inventoryItemAllowScrapeSticker.for(userId).truthy();
-            inventory.scrapeItemSticker(action.targetUid, action.slot);
+            inventory.scrapeItemSticker(action.targetUid, action.index);
             break;
           case SyncAction.SwapItemsStatTrak:
             inventory.swapItemsStatTrak(
@@ -500,7 +500,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             inventory.addWithSticker(
               action.stickerUid,
               action.itemId,
-              action.slot
+              action.schema
             );
             break;
           case SyncAction.RemoveAllItems:

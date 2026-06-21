@@ -229,7 +229,7 @@ export function AppliedStickerEditor({
             <EditorStepRangeWithInput
               emptyValue={-1}
               inputStyles="w-24 min-w-0"
-              max={(forItem?.getStickerSlotCount() ?? CS2_MAX_STICKERS) - 1}
+              max={(forItem?.getMaximumStickers() ?? CS2_MAX_STICKERS) - 1}
               maxLength={stickerSchemaStringMaxLen}
               min={-1}
               onChange={attributes.update("schema")}

@@ -42,27 +42,27 @@ export function ScrapeItemSticker({
 
   const item = inventory.get(uid);
 
-  function doScrapeSticker(slot: number) {
+  function doScrapeSticker(index: number) {
     const scratch = Math.ceil(
-      (item.getStickerWear(slot) + CS2_STICKER_WEAR_FACTOR) * 5
+      (item.getStickerWear(index) + CS2_STICKER_WEAR_FACTOR) * 5
     );
     sync({
       type: SyncAction.ScrapeItemSticker,
       targetUid: uid,
-      slot: slot
+      index
     });
-    setInventory(inventory.scrapeItemSticker(uid, slot));
+    setInventory(inventory.scrapeItemSticker(uid, index));
     playSound(`sticker_scratch${scratch as 1 | 2 | 3 | 4 | 5}`);
     if (item.getStickersCount() === 0) {
       onClose();
     }
   }
 
-  function handleScrapeSticker(slot: number) {
-    if (item.getStickerWear(slot) + CS2_WEAR_FACTOR > CS2_MAX_STICKER_WEAR) {
-      setConfirmScrapeIndex(slot);
+  function handleScrapeSticker(index: number) {
+    if (item.getStickerWear(index) + CS2_WEAR_FACTOR > CS2_MAX_STICKER_WEAR) {
+      setConfirmScrapeIndex(index);
     } else {
-      doScrapeSticker(slot);
+      doScrapeSticker(index);
     }
   }
 

@@ -19,7 +19,6 @@ import {
   CS2EconomyItem,
   CS2ItemTranslationByLanguage,
   CS2ItemType,
-  CS2ItemTypeValues,
   CS2RarityColor,
   fail
 } from "@ianlucas/cs2-lib";
@@ -29,7 +28,7 @@ import {
   isSteamInspectLink
 } from "@ianlucas/cs2-lib-inspect";
 
-export const COUNTABLE_ITEM_TYPES: CS2ItemTypeValues[] = [
+export const COUNTABLE_ITEM_TYPES: CS2ItemType[] = [
   CS2ItemType.Container,
   CS2ItemType.Graffiti,
   CS2ItemType.Key,
@@ -52,7 +51,7 @@ export const RarityLabel = {
 export function updateEconomyLanguage(
   language: CS2ItemTranslationByLanguage[string]
 ) {
-  CS2Economy.use({
+  CS2Economy.load({
     items: CS2_ITEMS,
     language
   });
@@ -74,8 +73,10 @@ export const stickerWearStringMaxLen = String(CS2_STICKER_WEAR_FACTOR).length;
 const stickerOffsetDecimalPlaces = String(stickerOffsetFactor).length - 2;
 export const stickerOffsetStringMaxLen =
   String(maxStickerOffset).length + 1 + stickerOffsetDecimalPlaces;
+// v8 uses a signed [-180, 180] range; the longest input is the negative bound
+// ("-180" = 4 chars), so size the max length off the minimum.
 export const stickerRotationStringMaxLen = String(
-  CS2_MAX_STICKER_ROTATION
+  CS2_MIN_STICKER_ROTATION
 ).length;
 
 export function wearToString(wear: number) {
@@ -120,7 +121,7 @@ export function validateStickerSchema(schema: number, item?: CS2EconomyItem) {
   return (
     Number.isInteger(schema) &&
     schema >= 0 &&
-    schema <= (item?.getStickerSlotCount() ?? CS2_MAX_STICKERS) - 1
+    schema <= (item?.getMaximumStickers() ?? CS2_MAX_STICKERS) - 1
   );
 }
 

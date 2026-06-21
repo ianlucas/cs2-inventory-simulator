@@ -111,7 +111,7 @@ export function ItemEditor({
   const hasKeychains = !isHideKeychains && item.hasKeychains();
   const hasStickers = !isHideStickers && item.hasStickers();
   const hasPatches = !isHidePatches && item.hasPatches();
-  const hasNameTag = !isHideNameTag && item.hasNametag();
+  const hasNameTag = !isHideNameTag && item.hasNameTag();
   const hasSeed = !isHideSeed && item.hasSeed();
   const hasWear = !isHideWear && item.hasWear();
   const hasStatTrak = !isHideStatTrak && item.hasStatTrak();
@@ -263,7 +263,7 @@ export function ItemEditor({
               isDisabled ? "N/A" : translate("EditorNametagPlaceholder")
             }
             validate={(nameTag) =>
-              CS2Economy.safeValidateNametag(nameTag ?? "")
+              CS2Economy.safeValidateNameTag(nameTag ?? "")
             }
             value={attributes.value.nameTag}
           />

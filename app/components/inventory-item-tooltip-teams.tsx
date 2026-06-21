@@ -3,15 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Team, CS2TeamValues } from "@ianlucas/cs2-lib";
+import { CS2Team } from "@ianlucas/cs2-lib";
 import { useTranslate } from "./app-context";
 import { InventoryItemTooltipInfo } from "./inventory-item-tooltip-info";
 
-export function InventoryItemTooltipTeams({
-  teams
-}: {
-  teams?: CS2TeamValues[];
-}) {
+export function InventoryItemTooltipTeams({ teams }: { teams?: CS2Team[] }) {
   const translate = useTranslate();
 
   const hasCT = teams?.includes(CS2Team.CT);

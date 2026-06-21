@@ -25,8 +25,8 @@ export const baseInventoryItemProps = {
     .string()
     .max(20)
     .optional()
-    .transform((nameTag) => CS2Economy.trimNametag(nameTag))
-    .refine((nameTag) => CS2Economy.safeValidateNametag(nameTag))
+    .transform((nameTag) => CS2Economy.trimNameTag(nameTag))
+    .refine((nameTag) => CS2Economy.safeValidateNameTag(nameTag))
     .optional(),
   keychains: z
     .record(

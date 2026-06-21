@@ -91,7 +91,7 @@ export function useCraftableItem({
   const itemHasStatTrak = item.hasStatTrak();
   const itemHasSeed = item.hasSeed();
   const itemHasWear = item.hasWear();
-  const itemHasNameTag = item.hasNametag();
+  const itemHasNameTag = item.hasNameTag();
 
   const showStickers = itemHasStickers && (isSharing || allowStickers);
   const showPatches = itemHasPatches && (isSharing || allowPatches);
@@ -113,7 +113,7 @@ export function useCraftableItem({
   const isNametagValid =
     !itemHasNameTag ||
     ((!showNameTag || canAddNameTag) &&
-      (CS2Economy.safeValidateNametag(nameTag) || nameTag.length === 0));
+      (CS2Economy.safeValidateNameTag(nameTag) || nameTag.length === 0));
   const isSeedValid =
     !itemHasSeed ||
     ((!showSeed || canAddSeed) && CS2Economy.safeValidateSeed(seed, item));

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2ItemType, CS2TeamValues } from "@ianlucas/cs2-lib";
+import { CS2ItemType, CS2Team } from "@ianlucas/cs2-lib";
 import { useNavigate } from "react-router";
 import { useApplyItemSticker } from "~/components/hooks/use-apply-item-sticker";
 import { useInspectItem } from "~/components/hooks/use-inspect-item";
@@ -129,7 +129,7 @@ export function Inventory() {
   const { closeInspectItem, handleInspectItem, inspectItem, isInspectingItem } =
     useInspectItem();
 
-  function handleEquip(uid: number, team?: CS2TeamValues) {
+  function handleEquip(uid: number, team?: CS2Team) {
     playSound(
       inventory.get(uid).type === CS2ItemType.MusicKit
         ? "music_equip"
@@ -139,7 +139,7 @@ export function Inventory() {
     sync({ type: SyncAction.Equip, uid: uid, team });
   }
 
-  function handleUnequip(uid: number, team?: CS2TeamValues) {
+  function handleUnequip(uid: number, team?: CS2Team) {
     playSound("inventory_item_close");
     setInventory(inventory.unequip(uid, team));
     sync({ type: SyncAction.Unequip, uid: uid, team });

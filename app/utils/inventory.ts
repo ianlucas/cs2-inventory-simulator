@@ -9,19 +9,18 @@ import {
   CS2EconomyItem,
   CS2Inventory,
   CS2InventoryItem,
-  CS2ItemType,
-  CS2ItemTypeValues
+  CS2ItemType
 } from "@ianlucas/cs2-lib";
 import lzstring from "lz-string";
 import type { ItemEditorAttributes } from "~/components/item-editor";
 import { serverInventoryShape } from "./shapes";
 
-export const UNLOCKABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
+export const UNLOCKABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Container,
   CS2ItemType.Key
 ];
 
-export const EDITABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
+export const EDITABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Agent,
   CS2ItemType.Gloves,
   CS2ItemType.Keychain,
@@ -30,7 +29,7 @@ export const EDITABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
   CS2ItemType.Weapon
 ];
 
-export const INSPECTABLE_ITEM_TYPE: CS2ItemTypeValues[] = [
+export const INSPECTABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Collectible,
   CS2ItemType.Gloves,
   CS2ItemType.Graffiti,

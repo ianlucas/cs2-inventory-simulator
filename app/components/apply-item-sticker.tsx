@@ -13,6 +13,7 @@ import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
+import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { useInventory, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -35,20 +36,30 @@ export function ApplyItemSticker({
   const sync = useSync();
   const nameItemString = useNameItemString();
 
-  const [slot, setSlot] = useState<number>();
+  const [schema, setSchema] = useState<number>();
   const stickerItem = useInventoryItem(stickerUid);
   const targetItem = useInventoryItem(targetUid);
 
+  // v8 stores stickers as a stack array; each sticker's `schema` is the markup
+  // anchor (the in-game slot it sits on). Build the grid from the weapon's
+  // markup positions and offer a "+" on each one no applied sticker occupies.
+  const maxStickers = targetItem.getMaximumStickers();
+  const stickerBySchema = new Map(
+    targetItem
+      .someStickers()
+      .map(([index, sticker]) => [sticker.schema ?? index, sticker])
+  );
+
   function handleApplySticker() {
-    if (slot !== undefined) {
+    if (schema !== undefined) {
       if (targetUid >= 0) {
         sync({
           type: SyncAction.ApplyItemSticker,
           targetUid,
-          slot,
+          schema,
           stickerUid
         });
-        setInventory(inventory.applyItemSticker(targetUid, stickerUid, slot));
+        setInventory(inventory.applyItemSticker(targetUid, stickerUid, schema));
         playSound("sticker_apply_confirm");
         onClose();
       } else {
@@ -56,9 +67,11 @@ export function ApplyItemSticker({
           type: SyncAction.AddWithSticker,
           stickerUid,
           itemId: targetItem.id,
-          slot
+          schema
         });
-        setInventory(inventory.addWithSticker(stickerUid, targetItem.id, slot));
+        setInventory(
+          inventory.addWithSticker(stickerUid, targetItem.id, schema)
+        );
         playSound("sticker_apply_confirm");
         onClose();
       }
@@ -78,24 +91,24 @@ export function ApplyItemSticker({
             />
             <ItemImage className="m-auto max-w-lg" item={targetItem} />
             <div className="flex items-center justify-center">
-              {targetItem.allStickers().map(([xslot, sticker]) =>
-                xslot === 4 ? undefined : sticker !== undefined ||
-                  xslot === slot ? (
+              {range(maxStickers).map((position) => {
+                const applied = stickerBySchema.get(position);
+                return applied !== undefined || position === schema ? (
                   <ItemImage
-                    key={xslot}
+                    key={position}
                     className="w-42"
                     item={
-                      sticker !== undefined
-                        ? CS2Economy.getById(sticker.id)
+                      applied !== undefined
+                        ? CS2Economy.getById(applied.id)
                         : stickerItem
                     }
                   />
                 ) : (
                   <button
-                    key={xslot}
+                    key={position}
                     className="group flex h-31.5 w-42 items-center justify-center"
                     onClick={() => {
-                      setSlot(xslot);
+                      setSchema(position);
                       playSound("sticker_apply");
                     }}
                   >
@@ -103,15 +116,15 @@ export function ApplyItemSticker({
                       <FontAwesomeIcon className="h-4" icon={faPlus} />
                     </div>
                   </button>
-                )
-              )}
+                );
+              })}
             </div>
             <UseItemFooter
               right={
                 <>
                   <ModalButton
                     children={translate("ApplyStickerUse")}
-                    disabled={slot === undefined}
+                    disabled={schema === undefined}
                     onClick={handleApplySticker}
                     variant="primary"
                   />

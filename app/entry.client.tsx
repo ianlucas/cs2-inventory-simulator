@@ -25,7 +25,7 @@ function hydrate() {
     );
   }
 
-  CS2Economy.use({
+  CS2Economy.load({
     items: CS2_ITEMS,
     language: itemTranslationMap
   });

@@ -6,20 +6,19 @@
 import {
   CS2EconomyItem,
   CS2InventoryItem,
-  CS2ItemType,
-  CS2ItemTypeValues
+  CS2ItemType
 } from "@ianlucas/cs2-lib";
 import { useTranslate } from "~/components/app-context";
 import { has } from "~/utils/misc";
 
-const ITEM_TYPES_WITHOUT_NAME: CS2ItemTypeValues[] = [
+const ITEM_TYPES_WITHOUT_NAME: CS2ItemType[] = [
   CS2ItemType.Collectible,
   CS2ItemType.Container,
   CS2ItemType.Key,
   CS2ItemType.Tool
 ];
 
-const ITEM_TYPE_WITH_MODEL: CS2ItemTypeValues[] = [
+const ITEM_TYPE_WITH_MODEL: CS2ItemType[] = [
   CS2ItemType.Weapon,
   CS2ItemType.Melee,
   CS2ItemType.Collectible

@@ -10,7 +10,7 @@ import { createFakeInventoryItem } from "~/utils/inventory";
 import { has } from "~/utils/misc";
 import { nameItemFactory } from "./use-name-item";
 
-CS2Economy.use({
+CS2Economy.load({
   items: CS2_ITEMS,
   language: english
 });
