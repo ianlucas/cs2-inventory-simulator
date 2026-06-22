@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2Inventory } from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2Inventory, clamp } from "@ianlucas/cs2-lib";
 import {
   getUserInventory,
   getUserInventoryVersion,
@@ -43,8 +43,9 @@ async function applyMigration(userId: string, rawInventory: string) {
       !CS2Economy.safeValidateWear(inventoryItem.wear, item)
     ) {
       inventoryItem.wear = item.hasWear()
-        ? Math.min(
-            Math.max(inventoryItem.wear, item.getMinimumWear()),
+        ? clamp(
+            inventoryItem.wear,
+            item.getMinimumWear(),
             item.getMaximumWear()
           )
         : undefined;

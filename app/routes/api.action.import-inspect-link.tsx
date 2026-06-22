@@ -3,7 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2BaseInventoryItem, CS2Economy } from "@ianlucas/cs2-lib";
+import {
+  CS2_STICKER_OFFSET_FACTOR,
+  CS2BaseInventoryItem,
+  CS2Economy,
+  truncateToFactor
+} from "@ianlucas/cs2-lib";
 import {
   isSteamInspectLink,
   parseCSFloatItemInfo,
@@ -21,8 +26,7 @@ import {
   methodNotAllowed,
   tooManyRequests
 } from "~/responses.server";
-import { isValidInspectLink, stickerOffsetFactor } from "~/utils/economy";
-import { truncate } from "~/utils/number";
+import { isValidInspectLink, keychainOffsetFactor } from "~/utils/economy";
 import { RateLimiter } from "~/utils/rate-limiter.server";
 import type { Route } from "./+types/api.action.import-inspect-link";
 
@@ -32,23 +36,23 @@ function postParseInventoryItem(item: CS2BaseInventoryItem) {
   if (item.keychains !== undefined) {
     for (const keychain of Object.values(item.keychains)) {
       if (keychain.x !== undefined) {
-        keychain.x = truncate(keychain.x, stickerOffsetFactor);
+        keychain.x = truncateToFactor(keychain.x, keychainOffsetFactor);
       }
       if (keychain.y !== undefined) {
-        keychain.y = truncate(keychain.y, stickerOffsetFactor);
+        keychain.y = truncateToFactor(keychain.y, keychainOffsetFactor);
       }
       if (keychain.z !== undefined) {
-        keychain.z = truncate(keychain.z, stickerOffsetFactor);
+        keychain.z = truncateToFactor(keychain.z, keychainOffsetFactor);
       }
     }
   }
   if (item.stickers !== undefined) {
     for (const sticker of Object.values(item.stickers)) {
       if (sticker.x !== undefined) {
-        sticker.x = truncate(sticker.x, stickerOffsetFactor);
+        sticker.x = truncateToFactor(sticker.x, CS2_STICKER_OFFSET_FACTOR);
       }
       if (sticker.y !== undefined) {
-        sticker.y = truncate(sticker.y, stickerOffsetFactor);
+        sticker.y = truncateToFactor(sticker.y, CS2_STICKER_OFFSET_FACTOR);
       }
     }
   }

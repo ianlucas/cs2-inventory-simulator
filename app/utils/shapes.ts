@@ -3,11 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy } from "@ianlucas/cs2-lib";
+import {
+  CS2_STICKER_OFFSET_FACTOR,
+  CS2Economy,
+  isFactorPrecise
+} from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import {
+  validateKeychainOffset,
   validateKeychainSeed,
-  validateStickerOffset,
   validateStickerRotation,
   validateStickerWear
 } from "./economy";
@@ -39,15 +43,15 @@ export const baseInventoryItemProps = {
         x: z
           .number()
           .optional()
-          .refine((x) => x === undefined || validateStickerOffset(x)),
+          .refine((x) => x === undefined || validateKeychainOffset(x)),
         y: z
           .number()
           .optional()
-          .refine((y) => y === undefined || validateStickerOffset(y)),
+          .refine((y) => y === undefined || validateKeychainOffset(y)),
         z: z
           .number()
           .optional()
-          .refine((z) => z === undefined || validateStickerOffset(z))
+          .refine((z) => z === undefined || validateKeychainOffset(z))
       })
     )
     .optional(),
@@ -72,11 +76,17 @@ export const baseInventoryItemProps = {
         x: z
           .number()
           .optional()
-          .refine((x) => x === undefined || validateStickerOffset(x)),
+          .refine(
+            (x) =>
+              x === undefined || isFactorPrecise(x, CS2_STICKER_OFFSET_FACTOR)
+          ),
         y: z
           .number()
           .optional()
-          .refine((y) => y === undefined || validateStickerOffset(y))
+          .refine(
+            (y) =>
+              y === undefined || isFactorPrecise(y, CS2_STICKER_OFFSET_FACTOR)
+          )
       })
     )
     .optional(),

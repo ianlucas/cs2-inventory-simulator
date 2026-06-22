@@ -11,6 +11,7 @@ import {
   CS2_MAX_STICKERS,
   CS2_MIN_STICKER_ROTATION,
   CS2_MIN_STICKER_WEAR,
+  CS2_STICKER_OFFSET_FACTOR,
   CS2_STICKER_WEAR_FACTOR,
   CS2EconomyItem
 } from "@ianlucas/cs2-lib";
@@ -22,9 +23,6 @@ import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useEffect } from "react";
 import {
-  maxStickerOffset,
-  minStickerOffset,
-  stickerOffsetFactor,
   stickerOffsetStringMaxLen,
   stickerOffsetToString,
   stickerRotationStringMaxLen,
@@ -101,6 +99,14 @@ export function AppliedStickerEditor({
   const attributes = useKeyValues(value);
   const canPreviewItem =
     slot !== undefined && forItem !== undefined && stickers !== undefined;
+  // Per-model sticker-offset envelope. When the model (or a missing target item)
+  // doesn't publish bounds for an axis, that control is hidden: the value stays
+  // at its 0 default, which sits inside every real envelope, and CS2Inventory is
+  // the authoritative gate for what actually persists.
+  const stickerOffsetXMin = forItem?.getMinimumStickerOffsetX();
+  const stickerOffsetXMax = forItem?.getMaximumStickerOffsetX();
+  const stickerOffsetYMin = forItem?.getMinimumStickerOffsetY();
+  const stickerOffsetYMax = forItem?.getMaximumStickerOffsetY();
 
   function handlePreview() {
     if (!canPreviewItem) {
@@ -171,42 +177,58 @@ export function AppliedStickerEditor({
             />
           </EditorLabel>
         )}
-        {!isHideStickerX && (
-          <EditorLabel label={translate("EditorStickerX")}>
-            <EditorStepRangeWithInput
-              inputStyles="w-24 min-w-0"
-              max={maxStickerOffset}
-              maxLength={stickerOffsetStringMaxLen}
-              min={minStickerOffset}
-              onChange={attributes.update("x")}
-              randomizable
-              step={stickerOffsetFactor}
-              stepRangeStyles="flex-1"
-              transform={stickerOffsetToString}
-              type="float"
-              validate={validateStickerOffset}
-              value={attributes.value.x}
-            />
-          </EditorLabel>
-        )}
-        {!isHideStickerY && (
-          <EditorLabel label={translate("EditorStickerY")}>
-            <EditorStepRangeWithInput
-              inputStyles="w-24 min-w-0"
-              max={maxStickerOffset}
-              maxLength={stickerOffsetStringMaxLen}
-              min={minStickerOffset}
-              onChange={attributes.update("y")}
-              randomizable
-              step={stickerOffsetFactor}
-              stepRangeStyles="flex-1"
-              transform={stickerOffsetToString}
-              type="float"
-              validate={validateStickerOffset}
-              value={attributes.value.y}
-            />
-          </EditorLabel>
-        )}
+        {!isHideStickerX &&
+          stickerOffsetXMin !== undefined &&
+          stickerOffsetXMax !== undefined && (
+            <EditorLabel label={translate("EditorStickerX")}>
+              <EditorStepRangeWithInput
+                inputStyles="w-24 min-w-0"
+                max={stickerOffsetXMax}
+                maxLength={stickerOffsetStringMaxLen}
+                min={stickerOffsetXMin}
+                onChange={attributes.update("x")}
+                randomizable
+                step={CS2_STICKER_OFFSET_FACTOR}
+                stepRangeStyles="flex-1"
+                transform={stickerOffsetToString}
+                type="float"
+                validate={(value) =>
+                  validateStickerOffset(
+                    value,
+                    stickerOffsetXMin,
+                    stickerOffsetXMax
+                  )
+                }
+                value={attributes.value.x}
+              />
+            </EditorLabel>
+          )}
+        {!isHideStickerY &&
+          stickerOffsetYMin !== undefined &&
+          stickerOffsetYMax !== undefined && (
+            <EditorLabel label={translate("EditorStickerY")}>
+              <EditorStepRangeWithInput
+                inputStyles="w-24 min-w-0"
+                max={stickerOffsetYMax}
+                maxLength={stickerOffsetStringMaxLen}
+                min={stickerOffsetYMin}
+                onChange={attributes.update("y")}
+                randomizable
+                step={CS2_STICKER_OFFSET_FACTOR}
+                stepRangeStyles="flex-1"
+                transform={stickerOffsetToString}
+                type="float"
+                validate={(value) =>
+                  validateStickerOffset(
+                    value,
+                    stickerOffsetYMin,
+                    stickerOffsetYMax
+                  )
+                }
+                value={attributes.value.y}
+              />
+            </EditorLabel>
+          )}
         {!isHideStickerRotation && (
           <EditorLabel label={translate("EditorStickerRotation")}>
             <EditorStepRangeWithInput

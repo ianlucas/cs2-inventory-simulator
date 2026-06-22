@@ -13,14 +13,14 @@ import {
 import clsx from "clsx";
 import { useEffect } from "react";
 import {
+  keychainOffsetFactor,
+  keychainOffsetStringMaxLen,
+  keychainOffsetToString,
   keychainSeedStringMaxLen,
-  maxStickerOffset,
-  minStickerOffset,
-  stickerOffsetFactor,
-  stickerOffsetStringMaxLen,
-  stickerOffsetToString,
-  validateKeychainSeed,
-  validateStickerOffset
+  maxKeychainOffset,
+  minKeychainOffset,
+  validateKeychainOffset,
+  validateKeychainSeed
 } from "~/utils/economy";
 import { useTranslate } from "./app-context";
 import { ButtonWithTooltip } from "./button-with-tooltip";
@@ -99,16 +99,16 @@ export function AppliedKeychainEditor({
           <EditorLabel label={translate("EditorKeychainX")}>
             <EditorStepRangeWithInput
               inputStyles="w-24 min-w-0"
-              max={maxStickerOffset}
-              maxLength={stickerOffsetStringMaxLen}
-              min={minStickerOffset}
+              max={maxKeychainOffset}
+              maxLength={keychainOffsetStringMaxLen}
+              min={minKeychainOffset}
               onChange={attributes.update("x")}
               randomizable
-              step={stickerOffsetFactor}
+              step={keychainOffsetFactor}
               stepRangeStyles="flex-1"
-              transform={stickerOffsetToString}
+              transform={keychainOffsetToString}
               type="float"
-              validate={validateStickerOffset}
+              validate={validateKeychainOffset}
               value={attributes.value.x}
             />
           </EditorLabel>
@@ -117,16 +117,16 @@ export function AppliedKeychainEditor({
           <EditorLabel label={translate("EditorKeychainY")}>
             <EditorStepRangeWithInput
               inputStyles="w-24 min-w-0"
-              max={maxStickerOffset}
-              maxLength={stickerOffsetStringMaxLen}
-              min={minStickerOffset}
+              max={maxKeychainOffset}
+              maxLength={keychainOffsetStringMaxLen}
+              min={minKeychainOffset}
               onChange={attributes.update("y")}
               randomizable
-              step={stickerOffsetFactor}
+              step={keychainOffsetFactor}
               stepRangeStyles="flex-1"
-              transform={stickerOffsetToString}
+              transform={keychainOffsetToString}
               type="float"
-              validate={validateStickerOffset}
+              validate={validateKeychainOffset}
               value={attributes.value.y}
             />
           </EditorLabel>
@@ -135,16 +135,16 @@ export function AppliedKeychainEditor({
           <EditorLabel label={translate("EditorKeychainZ")}>
             <EditorStepRangeWithInput
               inputStyles="w-24 min-w-0"
-              max={maxStickerOffset}
-              maxLength={stickerOffsetStringMaxLen}
-              min={minStickerOffset}
+              max={maxKeychainOffset}
+              maxLength={keychainOffsetStringMaxLen}
+              min={minKeychainOffset}
               onChange={attributes.update("z")}
               randomizable
-              step={stickerOffsetFactor}
+              step={keychainOffsetFactor}
               stepRangeStyles="flex-1"
-              transform={stickerOffsetToString}
+              transform={keychainOffsetToString}
               type="float"
-              validate={validateStickerOffset}
+              validate={validateKeychainOffset}
               value={attributes.value.z}
             />
           </EditorLabel>
