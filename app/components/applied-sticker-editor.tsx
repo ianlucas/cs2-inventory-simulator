@@ -47,6 +47,9 @@ import { confirm } from "./modal-generic";
 export function AppliedStickerEditor({
   className,
   forItem,
+  isHideItemDisplay,
+  isHidePreview,
+  isResetPlacementOnSchema,
   isHideStickerRotation,
   isHideStickerSchema,
   isHideStickerWear,
@@ -60,6 +63,9 @@ export function AppliedStickerEditor({
 }: {
   className?: string;
   forItem?: CS2EconomyItem;
+  isHideItemDisplay?: boolean;
+  isHidePreview?: boolean;
+  isResetPlacementOnSchema?: boolean;
   isHideStickerRotation?: boolean;
   isHideStickerSchema?: boolean;
   isHideStickerWear?: boolean;
@@ -157,7 +163,9 @@ export function AppliedStickerEditor({
 
   return (
     <div className={clsx("m-auto text-sm select-none", className)}>
-      <EditorItemDisplay item={item} wear={attributes.value.wear} />
+      {!isHideItemDisplay && (
+        <EditorItemDisplay item={item} wear={attributes.value.wear} />
+      )}
       <div className="space-y-1.5">
         {!isHideStickerWear && (
           <EditorLabel label={translate("EditorWear")}>
@@ -174,6 +182,35 @@ export function AppliedStickerEditor({
               type="float"
               validate={validateStickerWear}
               value={attributes.value.wear}
+            />
+          </EditorLabel>
+        )}
+        {!isHideStickerSchema && (
+          <EditorLabel label={translate("EditorStickerSchema")}>
+            <EditorStepRangeWithInput
+              emptyValue={-1}
+              inputStyles="w-24 min-w-0"
+              max={(forItem?.getMaximumStickers() ?? CS2_MAX_STICKERS) - 1}
+              maxLength={stickerSchemaStringMaxLen}
+              min={-1}
+              onChange={
+                isResetPlacementOnSchema
+                  ? (schema) =>
+                      attributes.setValue((current) => ({
+                        ...current,
+                        schema,
+                        x: 0,
+                        y: 0,
+                        rotation: 0
+                      }))
+                  : attributes.update("schema")
+              }
+              placeholder={translate("EditorStickerSchemaPlaceholder")}
+              step={1}
+              stepRangeStyles="flex-1"
+              type="int"
+              validate={(value) => validateStickerSchema(value, forItem)}
+              value={attributes.value.schema}
             />
           </EditorLabel>
         )}
@@ -246,24 +283,6 @@ export function AppliedStickerEditor({
             />
           </EditorLabel>
         )}
-        {!isHideStickerSchema && (
-          <EditorLabel label={translate("EditorStickerSchema")}>
-            <EditorStepRangeWithInput
-              emptyValue={-1}
-              inputStyles="w-24 min-w-0"
-              max={(forItem?.getMaximumStickers() ?? CS2_MAX_STICKERS) - 1}
-              maxLength={stickerSchemaStringMaxLen}
-              min={-1}
-              onChange={attributes.update("schema")}
-              placeholder={translate("EditorStickerSchemaPlaceholder")}
-              step={1}
-              stepRangeStyles="flex-1"
-              type="int"
-              validate={(value) => validateStickerSchema(value, forItem)}
-              value={attributes.value.schema}
-            />
-          </EditorLabel>
-        )}
         <div className="flex justify-end gap-1">
           <ButtonWithTooltip
             tooltip={translate("EditorReset")}
@@ -272,15 +291,17 @@ export function AppliedStickerEditor({
           >
             <FontAwesomeIcon icon={faArrowRotateLeft} className="h-4" />
           </ButtonWithTooltip>
-          <ButtonWithTooltip
-            tooltip={translate(
-              copied ? "EditorCopiedToClipboard" : "EditorPreview"
-            )}
-            className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
-            onClick={handlePreview}
-          >
-            <FontAwesomeIcon icon={faEye} className="h-4" />
-          </ButtonWithTooltip>
+          {!isHidePreview && (
+            <ButtonWithTooltip
+              tooltip={translate(
+                copied ? "EditorCopiedToClipboard" : "EditorPreview"
+              )}
+              className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
+              onClick={handlePreview}
+            >
+              <FontAwesomeIcon icon={faEye} className="h-4" />
+            </ButtonWithTooltip>
+          )}
         </div>
       </div>
     </div>

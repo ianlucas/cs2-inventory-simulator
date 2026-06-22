@@ -3,12 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  faMagnifyingGlass,
-  faPen,
-  faTag,
-  faTrashCan
-} from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
@@ -18,21 +13,16 @@ import {
   assert,
   ensure
 } from "@ianlucas/cs2-lib";
-import clsx from "clsx";
-import { useMemo, useState } from "react";
-import { useInput } from "~/components/hooks/use-input";
-import { sortByName } from "~/utils/economy";
+import { useState } from "react";
 import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import { AppliedStickerEditor } from "./applied-sticker-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";
-import { IconInput } from "./icon-input";
-import { IconSelect } from "./icon-select";
-import { ItemBrowser } from "./item-browser";
 import { ItemImage } from "./item-image";
-import { Modal, ModalHeader, ModalNav } from "./modal";
+import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
 import { confirm } from "./modal-generic";
+import { SelectStickerModal } from "./select-sticker-modal";
 
 export function StickerPicker({
   disabled,
@@ -59,11 +49,7 @@ export function StickerPicker({
 }) {
   const translate = useTranslate();
 
-  const [category, setCategory] = useState("");
-  const [search, setSearch] = useInput("");
   const [activeIndex, setActiveIndex] = useState<number>();
-  const stickers = useMemo(() => CS2Economy.getStickers().sort(sortByName), []);
-  const categories = useMemo(() => CS2Economy.getStickerCategories(), []);
   const [appliedStickerData, setAppliedStickerData] = useState({
     rotation: 0,
     schema: -1,
@@ -157,25 +143,6 @@ export function StickerPicker({
     setIsEditing(false);
   }
 
-  const filtered = useMemo(() => {
-    const words = search.split(" ").map((word) => word.toLowerCase());
-    return stickers.filter((item) => {
-      if (stickerFilter !== undefined && !stickerFilter(item)) {
-        return false;
-      }
-      if (category !== "" && item.category !== category) {
-        return false;
-      }
-      const name = item.name.toLowerCase();
-      for (const word of words) {
-        if (word.length > 0 && name.indexOf(word) === -1) {
-          return false;
-        }
-      }
-      return true;
-    });
-  }, [search, category]);
-
   return (
     <>
       <div
@@ -228,44 +195,12 @@ export function StickerPicker({
           );
         })}
       </div>
-      <Modal
-        className="w-135 pb-1"
+      <SelectStickerModal
         hidden={activeIndex === undefined || isEditing}
-        blur
-      >
-        <ModalHeader
-          title={translate("StickerPickerHeader")}
-          onClose={handleCloseModal}
-        />
-        <ModalNav
-          items={[]}
-          right={
-            <div className="flex items-center gap-2">
-              <IconSelect
-                icon={faTag}
-                className={clsx(
-                  "h-4 w-42 shrink-0 outline-hidden",
-                  category === "" && "text-neutral-600"
-                )}
-                onChange={setCategory}
-                options={categories}
-                placeholder={translate("StickerPickerFilterPlaceholder")}
-                styleless
-                value={category}
-              />
-              <IconInput
-                autoFocus
-                icon={faMagnifyingGlass}
-                labelStyles="w-44 shrink-0"
-                onChange={setSearch}
-                placeholder={translate("StickerPickerSearchPlaceholder")}
-                value={search}
-              />
-            </div>
-          }
-        />
-        <ItemBrowser items={filtered} onClick={handleSelectSticker} />
-      </Modal>
+        onClose={handleCloseModal}
+        onSelect={handleSelectSticker}
+        stickerFilter={stickerFilter}
+      />
       {selected !== undefined && (
         <Modal className="w-105">
           <ModalHeader
