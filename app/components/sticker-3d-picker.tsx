@@ -133,8 +133,9 @@ function DrawerTab({
  * Full-screen 3D editor: the weapon in the viewer iframe, a left rail of sticker
  * slots, and a right attributes panel for the selected slot. Slots can be added,
  * removed, reordered (drag = draw order) and edited; edits push to the live viewer
- * and persist up through `onChange`, and in-viewer offset/rotation edits flow back
- * into the panel. The rail/panel are the only pointer targets — the space around
+ * but only stage locally — they persist up through `onChange` when the user clicks
+ * Apply (close/cancel discards them). In-viewer offset/rotation edits flow back into
+ * the panel. The rail/panel are the only pointer targets — the space around
  * them passes through to the iframe so the model stays orbitable.
  */
 function Sticker3dEditorOverlay({
@@ -164,8 +165,8 @@ function Sticker3dEditorOverlay({
 
   // Working copy for this editing session, held as the stack array cs2-lib stores:
   // the array index is draw order and == the viewer's sticker index, so index-based
-  // api calls line up. Seeded from `value` once — the parent is updated through
-  // `onChange`, not vice versa.
+  // api calls line up. Seeded from `value` once; the parent is updated through
+  // `onChange` only on Apply (not vice versa), so edits never flow back mid-session.
   const [stickers, setStickers] = useState<Sticker[]>(() =>
     toArray(value, maxSchema)
   );
@@ -236,11 +237,14 @@ function Sticker3dEditorOverlay({
         return;
       }
       markCs2ViewerRateLimited(retryAfterMs);
+      // Preserve in-progress edits into the 2D fallback before closing.
+      onChangeRef.current(toRecord(stickersRef.current));
       onCloseRef.current();
     });
     // Mirror edits made inside the viewer (e.g. dragging a sticker's offset) back
-    // into our state + the form. We ignore echoes of our own edits via value-equality
-    // so the form isn't remounted from under an active slider.
+    // into our local working copy + the form (not the parent — that waits for Apply).
+    // We ignore echoes of our own edits via value-equality so the form isn't
+    // remounted from under an active slider.
     const offChange = api.on("change", ({ item }) => {
       // Our own form edits round-trip back as `change`; ignore them briefly so the
       // panel isn't remounted under an active slider. Genuine in-viewer edits (no
@@ -254,13 +258,14 @@ function Sticker3dEditorOverlay({
       }
       stickersRef.current = incoming;
       setStickers(incoming);
-      onChangeRef.current(toRecord(incoming));
       setFormVersion((version) => version + 1);
     });
     let settled = false;
     const timer = setTimeout(() => {
       settled = true;
       markCs2ViewerRateLimited(VIEWER_UNREACHABLE_COOLDOWN_MS);
+      // Preserve in-progress edits into the 2D fallback before closing.
+      onChangeRef.current(toRecord(stickersRef.current));
       onCloseRef.current();
     }, VIEWER_READY_TIMEOUT_MS);
     void api.whenReady().then(() => {
@@ -317,10 +322,20 @@ function Sticker3dEditorOverlay({
     return () => cancelAnimationFrame(raf);
   }, [hasSelectedSticker]);
 
-  function applyStickers(next: Sticker[]) {
+  // Stage edits into the local working copy (+ ref) only. The parent is committed
+  // through `onChange` on Apply (handleApply), not here; the viewer is updated
+  // separately by callers.
+  function stageStickers(next: Sticker[]) {
     stickersRef.current = next;
     setStickers(next);
-    onChangeRef.current(toRecord(next));
+  }
+
+  // Commit the staged working copy up to the parent, then close. Wired to the
+  // primary "Apply" button (and the involuntary-close paths) so edits only persist
+  // on an explicit apply — closing/cancelling discards them.
+  function handleApply() {
+    onChangeRef.current(toRecord(stickersRef.current));
+    onCloseRef.current();
   }
 
   function buildItem(next: Sticker[]): CS2BaseInventoryItem {
@@ -344,7 +359,7 @@ function Sticker3dEditorOverlay({
       const schema = getNextStickerSchema(stickers, maxSchema);
       const next = [...stickers, { id: item.id, schema }];
       api?.addSticker({ id: item.id, schema });
-      applyStickers(next);
+      stageStickers(next);
       setSelected(index);
       api?.setActiveSticker({ index });
     } else {
@@ -352,7 +367,7 @@ function Sticker3dEditorOverlay({
       const next = stickers.map((sticker, i) =>
         i === index ? { ...sticker, id: item.id } : sticker
       );
-      applyStickers(next);
+      stageStickers(next);
       // No setStickerId in the embed api: rebuild so the viewer picks up the swap.
       api?.setItem(buildItem(next));
     }
@@ -361,7 +376,7 @@ function Sticker3dEditorOverlay({
   function handleRemove(index: number) {
     const next = stickers.filter((_, i) => i !== index);
     api?.removeSticker({ index });
-    applyStickers(next);
+    stageStickers(next);
     // Removing compacts the stack: anything below `index` shifts up one, so keep the
     // current selection pointing at the same sticker (or drop it if it was removed).
     if (selected === index) {
@@ -443,7 +458,7 @@ function Sticker3dEditorOverlay({
         x: data.x || undefined,
         y: data.y || undefined
       };
-      applyStickers(
+      stageStickers(
         stickers.map((sticker, i) => (i === index ? updated : sticker))
       );
     };
@@ -503,7 +518,7 @@ function Sticker3dEditorOverlay({
       const next = stickers.slice();
       const [moved] = next.splice(from, 1);
       next.splice(to, 0, moved);
-      applyStickers(next);
+      stageStickers(next);
       api?.setItem(buildItem(next));
     }
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
@@ -736,7 +751,7 @@ function Sticker3dEditorOverlay({
             <>
               <ModalButton
                 variant="primary"
-                onClick={() => onCloseRef.current()}
+                onClick={handleApply}
                 children={translate("ApplyStickerUse")}
               />
               <ModalButton
