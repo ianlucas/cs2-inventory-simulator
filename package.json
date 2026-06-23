@@ -33,7 +33,7 @@
     "country-flag-icons": "^1.6.17",
     "dotenv": "^17.4.2",
     "hash-object": "^5.1.0",
-    "isbot": "^5.1.42",
+    "isbot": "^5.1.43",
     "lz-string": "^1.5.0",
     "prisma": "^7.8.0",
     "react": "^19.2.7",
@@ -54,15 +54,15 @@
     "@types/react-dom": "^19.2.3",
     "eslint": "^10.5.0",
     "eslint-plugin-better-tailwindcss": "^4.6.0",
-    "happy-dom": "^20.10.3",
+    "happy-dom": "^20.10.4",
     "prettier": "^3.8.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.3.1",
     "terser": "^5.48.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.61.0",
+    "typescript-eslint": "^8.61.1",
     "vite": "^8.0.16",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.9"
   },
   "engines": {
     "node": ">=20.0.0"
