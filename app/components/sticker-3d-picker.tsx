@@ -4,8 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  faChevronDown,
-  faChevronUp,
   faGripVertical,
   faTrashCan,
   faXmark
@@ -97,6 +95,40 @@ function stickersEqual(a: Sticker[], b: Sticker[]): boolean {
   });
 }
 
+// Vertical drawer handle shared by both panels: a compact bookmark tab on the
+// panel's inner edge that doubles as the collapse/expand toggle. `edge` is the
+// screen side the panel lives on; the corners facing away from the body (toward
+// the viewer) get rounded so it reads as a tab in both open and collapsed states.
+function DrawerTab({
+  className,
+  edge,
+  label,
+  onClick
+}: {
+  className?: string;
+  edge: "left" | "right";
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className={clsx(
+        // self-stretch so the tab spans the panel's content height; bg/shadow come
+        // from the caller so each tab can match its panel (rows vs. solid editor).
+        "font-display pointer-events-auto flex shrink-0 items-center justify-center self-stretch px-1.5 py-3 text-sm font-bold text-neutral-200 transition",
+        edge === "left" ? "rounded-r" : "rounded-l",
+        className
+      )}
+      onClick={onClick}
+      title={label}
+    >
+      <span className="max-h-full truncate [writing-mode:vertical-rl]">
+        {label}
+      </span>
+    </button>
+  );
+}
+
 /**
  * Full-screen 3D editor: the weapon in the viewer iframe, a left rail of sticker
  * slots, and a right attributes panel for the selected slot. Slots can be added,
@@ -149,7 +181,14 @@ function Sticker3dEditorOverlay({
   });
 
   const [selected, setSelected] = useState<number>();
-  const [collapsed, setCollapsed] = useState(false);
+  // Both panels are collapsible drawers. The left ("Stickers") is a plain toggle,
+  // open by default. The right (attributes) opens itself for the selected sticker,
+  // but once the user collapses it the choice sticks — selecting other stickers
+  // won't re-open it; only the tab does (`userCollapsedRight`). `rightEntered`
+  // drives the slide+fade the first time the panel appears for a selection.
+  const [leftOpen, setLeftOpen] = useState(true);
+  const [userCollapsedRight, setUserCollapsedRight] = useState(false);
+  const [rightEntered, setRightEntered] = useState(false);
   const [selecting, setSelecting] = useState<
     { mode: "add" } | { mode: "replace"; index: number }
   >();
@@ -263,6 +302,19 @@ function Sticker3dEditorOverlay({
     const raf = requestAnimationFrame(() => setNoTransition(false));
     return () => cancelAnimationFrame(raf);
   }, [noTransition]);
+
+  // Play the right panel's slide+fade-in the first time it mounts for a selection;
+  // reset once nothing is selected so it re-plays on the next one. Keyed on the
+  // has/has-not boundary so switching between selected stickers doesn't re-animate.
+  const hasSelectedSticker = selectedSticker !== undefined;
+  useEffect(() => {
+    if (!hasSelectedSticker) {
+      setRightEntered(false);
+      return;
+    }
+    const raf = requestAnimationFrame(() => setRightEntered(true));
+    return () => cancelAnimationFrame(raf);
+  }, [hasSelectedSticker]);
 
   function applyStickers(next: Sticker[]) {
     stickersRef.current = next;
@@ -486,7 +538,7 @@ function Sticker3dEditorOverlay({
   // Portal to document.body so the overlay fills the window, escaping the craft
   // modal's containing block. Only ever runs client-side (mounted on click).
   return createPortal(
-    <div className="fixed top-0 left-0 z-50 size-full backdrop-blur-xs select-none">
+    <div className="fixed top-0 left-0 z-50 size-full overflow-hidden backdrop-blur-xs select-none">
       <Cs2Viewer
         {...viewerProps}
         className={clsx(
@@ -500,117 +552,150 @@ function Sticker3dEditorOverlay({
         style={{ colorScheme: "normal" }}
       />
       {/* Wrappers are pointer-events-none so the space around the tiles passes
-          through to the iframe; only the tiles/controls opt back in. */}
+          through to the iframe; only the tiles/controls opt back in. The drawer
+          row slides out behind its tab on collapse; the overlay's overflow-hidden
+          clips the off-screen body so it can't extend the page. */}
       <div className="pointer-events-none absolute inset-y-0 left-0 flex h-full items-center p-4">
         <div
           className={clsx(
-            "pointer-events-none flex max-h-full w-80 flex-col gap-1",
-            // Drop the scroll clip while dragging so the cursor-following ghost
-            // isn't cut off; the list is short enough to fit.
-            isDragging ? "overflow-visible" : "overflow-y-auto"
+            "flex max-h-full items-center transition-transform duration-150 ease-out",
+            // Collapsed: shift left by the body width (w-80) + wrapper padding (p-4
+            // = 1rem), i.e. 21rem, so only the tab stays on screen.
+            !leftOpen && "-translate-x-84"
           )}
         >
-          {stickers.map((sticker, position) => {
-            const item = CS2Economy.getById(sticker.id);
-            const isDragged = dragIndex === position;
-            const isSelected = selected === position;
-            return (
-              <div
-                key={position}
-                ref={(element) => {
-                  rowRefs.current[position] = element;
-                }}
-                className={clsx(
-                  "pointer-events-auto overflow-hidden rounded",
-                  isDragged
-                    ? "z-10 bg-neutral-800 shadow-lg"
-                    : clsx(
-                        !noTransition && "transition duration-150",
-                        isSelected
-                          ? "bg-blue-600/40"
-                          : "bg-neutral-900/80 hover:bg-neutral-800/70"
-                      )
-                )}
-                style={{ transform: rowTransform(position) }}
-                onMouseEnter={() => {
-                  if (!isDragging) {
-                    api?.highlightSticker({ index: position });
-                  }
-                }}
-              >
+          <div
+            className={clsx(
+              "pointer-events-none flex max-h-full w-80 flex-col gap-1",
+              // Drop the scroll clip while dragging so the cursor-following ghost
+              // isn't cut off; the list is short enough to fit.
+              isDragging ? "overflow-visible" : "overflow-y-auto"
+            )}
+          >
+            {stickers.map((sticker, position) => {
+              const item = CS2Economy.getById(sticker.id);
+              const isDragged = dragIndex === position;
+              const isSelected = selected === position;
+              return (
                 <div
-                  className="flex cursor-pointer items-center gap-1 p-1"
-                  onClick={() => handleToggleSelect(position)}
+                  key={position}
+                  ref={(element) => {
+                    rowRefs.current[position] = element;
+                  }}
+                  className={clsx(
+                    // rounded-l only: the square right edge butts flush into the
+                    // full-height "Stickers" tab so the row merges into it. `group`
+                    // so the thumbnail's blue outline lights on hover of the whole
+                    // row, not just the small thumbnail (matches the empty slots).
+                    "group pointer-events-auto overflow-hidden rounded-l",
+                    isDragged
+                      ? "z-10 bg-neutral-800 shadow-lg"
+                      : clsx(
+                          !noTransition && "transition duration-150",
+                          isSelected
+                            ? "bg-blue-600/40"
+                            : "bg-neutral-900/80 hover:bg-neutral-800/70"
+                        )
+                  )}
+                  style={{ transform: rowTransform(position) }}
+                  onMouseEnter={() => {
+                    if (!isDragging) {
+                      api?.highlightSticker({ index: position });
+                    }
+                  }}
                 >
-                  <button
-                    className="flex h-12 w-5 shrink-0 cursor-grab touch-none items-center justify-center text-neutral-400 transition hover:text-neutral-200 active:cursor-grabbing"
-                    onClick={(event) => event.stopPropagation()}
-                    onPointerDown={handleDragStart(position)}
-                    onPointerMove={handleDragMove}
-                    onPointerUp={handleDragEnd}
-                    title={translate("StickerPickerReorder")}
+                  <div
+                    className="flex items-center gap-1 p-1 pr-2"
+                    onClick={() => handleToggleSelect(position)}
                   >
-                    <FontAwesomeIcon icon={faGripVertical} className="h-4" />
-                  </button>
-                  <button
-                    className="aspect-256/192 h-12 shrink-0 overflow-hidden rounded-sm bg-neutral-950/40"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      setSelecting({ mode: "replace", index: position });
-                    }}
-                    title={translate("EditorStickerEdit")}
-                  >
-                    <ItemImage item={item} />
-                  </button>
-                  <span className="flex-1 truncate px-1 text-sm text-neutral-200">
-                    {stickerName(item.name)}
-                  </span>
-                  <ButtonWithTooltip
-                    className="shrink-0 rounded-sm p-2 text-neutral-300 transition hover:bg-red-500/40"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleRemove(position);
-                    }}
-                    tooltip={translate("StickerPickerRemove")}
-                  >
-                    <FontAwesomeIcon icon={faTrashCan} className="h-3.5" />
-                  </ButtonWithTooltip>
+                    <button
+                      className="flex h-12 w-5 shrink-0 cursor-grab touch-none items-center justify-center text-neutral-400 transition hover:text-neutral-200 active:cursor-grabbing"
+                      onClick={(event) => event.stopPropagation()}
+                      onPointerDown={handleDragStart(position)}
+                      onPointerMove={handleDragMove}
+                      onPointerUp={handleDragEnd}
+                      title={translate("StickerPickerReorder")}
+                    >
+                      <FontAwesomeIcon icon={faGripVertical} className="h-4" />
+                    </button>
+                    <button
+                      className="relative aspect-256/192 h-12 shrink-0 overflow-hidden bg-neutral-950/40"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setSelecting({ mode: "replace", index: position });
+                      }}
+                      title={translate("EditorStickerEdit")}
+                    >
+                      <ItemImage item={item} />
+                      {/* Blue hover outline matching the inline grid tiles that open
+                          this overlay; an overlay so the image stays full-bleed.
+                          group-hover keys it to the row so it shows like the empty
+                          slots do. */}
+                      <div className="absolute top-0 left-0 size-full border-2 border-transparent group-hover:border-blue-500/50" />
+                    </button>
+                    <span className="flex-1 truncate px-1 text-sm text-neutral-200">
+                      {stickerName(item.name)}
+                    </span>
+                    <ButtonWithTooltip
+                      className="shrink-0 rounded-sm p-2 text-neutral-300 transition hover:bg-red-500/40"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleRemove(position);
+                      }}
+                      tooltip={translate("StickerPickerRemove")}
+                    >
+                      <FontAwesomeIcon icon={faTrashCan} className="h-3.5" />
+                    </ButtonWithTooltip>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-          {range(CS2_MAX_STICKERS - count).map((index) => (
-            <button
-              key={`empty-${index}`}
-              className="pointer-events-auto flex items-center gap-1 rounded bg-neutral-950/40 p-1 transition hover:bg-neutral-900/60"
-              onClick={() => setSelecting({ mode: "add" })}
-            >
-              <span className="w-5 shrink-0" />
-              <span className="flex aspect-256/192 h-12 shrink-0 items-center justify-center rounded-sm bg-neutral-900 text-xs text-neutral-600">
-                {translate("StickerPickerNA")}
-              </span>
-            </button>
-          ))}
+              );
+            })}
+            {range(CS2_MAX_STICKERS - count).map((index) => (
+              <button
+                key={`empty-${index}`}
+                className="group pointer-events-auto flex items-center gap-1 rounded-l bg-neutral-950/40 p-1 transition hover:bg-neutral-900/60"
+                onClick={() => setSelecting({ mode: "add" })}
+              >
+                <span className="w-5 shrink-0" />
+                <span className="flex aspect-256/192 h-12 shrink-0 items-center justify-center border-2 border-transparent bg-neutral-900 text-xs text-neutral-600 group-hover:border-blue-500/50">
+                  {translate("StickerPickerNA")}
+                </span>
+              </button>
+            ))}
+          </div>
+          <DrawerTab
+            className="bg-neutral-900/80 hover:bg-neutral-800/70"
+            edge="left"
+            label={translate("EditorStickers")}
+            onClick={() => setLeftOpen((value) => !value)}
+          />
         </div>
       </div>
-      {/* Right attributes panel — shown while a slot is selected; the title bar
-          collapses it. */}
+      {/* Right attributes drawer — mounts while a slot is selected and slides +
+          fades in; its tab collapses it back behind the right edge. */}
       <div className="pointer-events-none absolute inset-y-0 right-0 flex h-full items-center p-4">
         {selected !== undefined && selectedSticker !== undefined && (
-          <div className="pointer-events-auto flex max-h-full w-90 flex-col overflow-hidden rounded bg-neutral-900/90 shadow-lg">
-            <button
-              className="flex shrink-0 items-center justify-between gap-2 bg-black/30 px-3 py-2 text-left transition hover:bg-black/40"
-              onClick={() => setCollapsed((value) => !value)}
-            >
-              <span className="font-display truncate text-sm font-bold text-neutral-200">
-                {stickerName(CS2Economy.getById(selectedSticker.id).name)}
-              </span>
-              <FontAwesomeIcon
-                icon={collapsed ? faChevronDown : faChevronUp}
-                className="h-3 shrink-0 text-neutral-400"
-              />
-            </button>
-            {!collapsed && (
+          <div
+            className={clsx(
+              // Bare `transition` (not the arbitrary transform,opacity list, which
+              // didn't generate) so both the slide and the fade animate.
+              "flex max-h-full items-center transition duration-150 ease-out",
+              rightEntered ? "opacity-100" : "opacity-0",
+              // Collapsed (and the pre-enter start state) sits one body width (w-90)
+              // + wrapper padding (p-4 = 1rem), i.e. 23.5rem, off the right edge so
+              // only the tab shows.
+              userCollapsedRight || !rightEntered
+                ? "translate-x-94"
+                : "translate-x-0"
+            )}
+          >
+            <DrawerTab
+              className="bg-neutral-900/90 shadow-lg hover:bg-neutral-800/90"
+              edge="right"
+              label={stickerName(CS2Economy.getById(selectedSticker.id).name)}
+              onClick={() => setUserCollapsedRight((value) => !value)}
+            />
+            <div className="pointer-events-auto flex max-h-full w-90 flex-col overflow-hidden rounded-r bg-neutral-900/90 shadow-lg">
               <div className="overflow-y-auto p-2">
                 <AppliedStickerEditor
                   forItem={forItem}
@@ -631,7 +716,7 @@ function Sticker3dEditorOverlay({
                   }}
                 />
               </div>
-            )}
+            </div>
           </div>
         )}
       </div>
