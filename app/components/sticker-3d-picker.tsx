@@ -33,8 +33,10 @@ import { ButtonWithTooltip } from "./button-with-tooltip";
 import { Cs2Viewer } from "./cs2-viewer";
 import { useCs2Viewer } from "./hooks/use-cs2-viewer";
 import { markCs2ViewerRateLimited } from "./hooks/use-cs2-viewer-availability";
+import { useNameItemString } from "./hooks/use-name-item";
 import { ItemImage } from "./item-image";
 import { SelectStickerModal } from "./select-sticker-modal";
+import { UseItemHeader } from "./use-item-header";
 
 // How long to wait for the viewer's ready handshake before giving up and
 // falling back, so a down/blocked viewer doesn't strand the user on a blank
@@ -153,6 +155,7 @@ function Sticker3dEditorOverlay({
   value: Stickers;
 }) {
   const translate = useTranslate();
+  const nameItemString = useNameItemString();
   const { app3dViewerKey } = useRules();
 
   // The weapon's markup-anchor count (e.g. 4 for the AK-47 HD body). A sticker's
@@ -551,6 +554,14 @@ function Sticker3dEditorOverlay({
         // its document gets an opaque backdrop. Reset it so the viewer shows through.
         style={{ colorScheme: "normal" }}
       />
+      <div className="pointer-events-none absolute top-0 left-0 w-full pt-8 text-center">
+        <UseItemHeader
+          actionDesc={translate("ApplyStickerUseOn")}
+          actionItem={nameItemString(forItem)}
+          title={translate("ApplyStickerUse")}
+          stickerHint
+        />
+      </div>
       {/* Wrappers are pointer-events-none so the space around the tiles passes
           through to the iframe; only the tiles/controls opt back in. The drawer
           row slides out behind its tab on collapse; the overlay's overflow-hidden
