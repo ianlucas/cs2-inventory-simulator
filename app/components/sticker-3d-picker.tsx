@@ -3,11 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  faGripVertical,
-  faTrashCan,
-  faXmark
-} from "@fortawesome/free-solid-svg-icons";
+import { faGripVertical, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
@@ -35,7 +31,9 @@ import { useCs2Viewer } from "./hooks/use-cs2-viewer";
 import { markCs2ViewerRateLimited } from "./hooks/use-cs2-viewer-availability";
 import { useNameItemString } from "./hooks/use-name-item";
 import { ItemImage } from "./item-image";
+import { ModalButton } from "./modal-button";
 import { SelectStickerModal } from "./select-sticker-modal";
+import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
 // How long to wait for the viewer's ready handshake before giving up and
@@ -731,13 +729,25 @@ function Sticker3dEditorOverlay({
           </div>
         )}
       </div>
-      <button
-        className="absolute top-4 right-4 flex size-10 cursor-default items-center justify-center rounded-sm bg-black/40 text-white opacity-75 transition hover:opacity-100"
-        onClick={() => onCloseRef.current()}
-        title={translate("InspectClose")}
-      >
-        <FontAwesomeIcon icon={faXmark} className="size-5" />
-      </button>
+      <div className="pointer-events-none absolute bottom-8 left-0 w-full">
+        <UseItemFooter
+          className="w-200"
+          right={
+            <>
+              <ModalButton
+                variant="primary"
+                onClick={() => onCloseRef.current()}
+                children={translate("ApplyStickerUse")}
+              />
+              <ModalButton
+                variant="secondary"
+                onClick={() => onCloseRef.current()}
+                children={translate("InspectClose")}
+              />
+            </>
+          }
+        />
+      </div>
       <SelectStickerModal
         fixed
         hidden={selecting === undefined}
