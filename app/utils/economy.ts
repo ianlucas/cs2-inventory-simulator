@@ -150,7 +150,7 @@ export function validateStickerSchema(schema: number, item?: CS2EconomyItem) {
   return (
     Number.isInteger(schema) &&
     schema >= 0 &&
-    schema <= (item?.getMaximumStickers() ?? CS2_MAX_STICKERS) - 1
+    schema <= (item?.getStickerSchemaCount() ?? CS2_MAX_STICKERS) - 1
   );
 }
 

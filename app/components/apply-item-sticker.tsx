@@ -43,7 +43,7 @@ export function ApplyItemSticker({
   // v8 stores stickers as a stack array; each sticker's `schema` is the markup
   // anchor (the in-game slot it sits on). Build the grid from the weapon's
   // markup positions and offer a "+" on each one no applied sticker occupies.
-  const maxStickers = targetItem.getMaximumStickers();
+  const schemaCount = targetItem.getStickerSchemaCount();
   const stickerBySchema = new Map(
     targetItem
       .someStickers()
@@ -91,7 +91,7 @@ export function ApplyItemSticker({
             />
             <ItemImage className="m-auto max-w-lg" item={targetItem} />
             <div className="flex items-center justify-center">
-              {range(maxStickers).map((position) => {
+              {range(schemaCount).map((position) => {
                 const applied = stickerBySchema.get(position);
                 return applied !== undefined || position === schema ? (
                   <ItemImage

@@ -16,7 +16,8 @@ import {
   CS2Economy,
   CS2EconomyItem,
   CS2InventoryItem,
-  CS2_MAX_STICKERS
+  CS2_MAX_STICKERS,
+  getNextStickerSchema
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import {
@@ -53,12 +54,6 @@ const FORM_ECHO_WINDOW_MS = 400;
 type Stickers = NonNullable<CS2BaseInventoryItem["stickers"]>;
 type Sticker = Stickers[string];
 
-function sortedKeys(stickers: Stickers): number[] {
-  return Object.keys(stickers)
-    .map((key) => Number(key))
-    .sort((a, b) => a - b);
-}
-
 // Sticker names are "<localized category> | <name>"; the rail shows just the part
 // after the first "|" (locale-safe — only the separator is constant).
 function stickerName(name: string): string {
@@ -66,36 +61,30 @@ function stickerName(name: string): string {
   return separator === -1 ? name : name.slice(separator + 1).trim();
 }
 
-// Rebuild into contiguous keys (0..n-1) following `orderedKeys` (source keys in
-// their new top->bottom order), freezing each sticker's effective `schema` to its
-// current on-gun anchor. Re-keying therefore only changes draw order (z), never a
-// sticker's position — which is exactly what reordering should do.
-function reindex(orderedKeys: number[], stickers: Stickers): Stickers {
-  const next: Stickers = {};
-  orderedKeys.forEach((sourceKey, index) => {
-    const sticker = stickers[sourceKey];
-    next[index] = { ...sticker, schema: sticker.schema ?? sourceKey };
-  });
-  return next;
+// Seed the editor's working array from stored data. cs2-lib sorts by key, caps at
+// CS2_MAX_STICKERS, materializes each `schema` from its key when absent, and heals
+// any anchor outside [0, maxSchema) onto a free one — the same normalization the
+// viewer and the server validator run, so our stack index lines up 1:1 with the
+// viewer's sticker index. The stack index (draw order) and the `schema` (markup
+// anchor) are separate axes; they diverge on reduced-anchor models like the AK-47 HD.
+function toArray(stickers: Stickers, maxSchema: number): Sticker[] {
+  return CS2InventoryItem.stickersToArray(stickers, maxSchema);
 }
 
-// Normalize whatever was stored (possibly sparse, e.g. {0, 3}) into the contiguous
-// shape the editor and the viewer agree on: keys 0..n-1 in slot order. Keeps our
-// keys == the viewer's sticker indices so index-based api calls line up.
-function normalizeStickers(stickers: Stickers, max: number): Stickers {
-  return reindex(sortedKeys(stickers).slice(0, max), stickers);
+// Serialize the working array back into the stored record (contiguous 0-based keys,
+// `schema` always set, default wear/offsets dropped) for `onChange` and the viewer.
+function toRecord(stickers: Sticker[]): Stickers {
+  return CS2InventoryItem.stickersFromArray(stickers) ?? {};
 }
 
-// Value-equality on the normalized shape; used to ignore the viewer's echo of our
-// own edits (so only genuine in-viewer edits re-seed the form).
-function stickersEqual(a: Stickers, b: Stickers): boolean {
-  const keys = sortedKeys(a);
-  if (keys.length !== sortedKeys(b).length) {
+// Value-equality on the stack array; used to ignore the viewer's echo of our own
+// edits (so only genuine in-viewer edits re-seed the form).
+function stickersEqual(a: Sticker[], b: Sticker[]): boolean {
+  if (a.length !== b.length) {
     return false;
   }
-  return keys.every((key) => {
-    const left = a[key];
-    const right = b[key];
+  return a.every((left, index) => {
+    const right = b[index];
     return (
       right !== undefined &&
       left.id === right.id &&
@@ -103,7 +92,7 @@ function stickersEqual(a: Stickers, b: Stickers): boolean {
       (left.wear ?? 0) === (right.wear ?? 0) &&
       (left.x ?? 0) === (right.x ?? 0) &&
       (left.y ?? 0) === (right.y ?? 0) &&
-      (left.schema ?? key) === (right.schema ?? key)
+      (left.schema ?? index) === (right.schema ?? index)
     );
   });
 }
@@ -134,18 +123,25 @@ function Sticker3dEditorOverlay({
   const translate = useTranslate();
   const { app3dViewerKey } = useRules();
 
-  // Working copy for this editing session, normalized on open so our keys line up
-  // 1:1 with the viewer's sticker indices; every op keeps it contiguous. Seeded
-  // from `value` once — the parent is updated through `onChange`, not vice versa.
-  const [stickers, setStickers] = useState<Stickers>(() =>
-    normalizeStickers(value, CS2_MAX_STICKERS)
+  // The weapon's markup-anchor count (e.g. 4 for the AK-47 HD body). A sticker's
+  // `schema` must stay in [0, maxSchema); the stack index / draw order is a separate
+  // axis capped at CS2_MAX_STICKERS, so the two diverge on reduced-anchor models —
+  // conflating them is what put an invalid schema (4) on the AK-47 HD's 5th slot.
+  const maxSchema = forItem.getStickerSchemaCount();
+
+  // Working copy for this editing session, held as the stack array cs2-lib stores:
+  // the array index is draw order and == the viewer's sticker index, so index-based
+  // api calls line up. Seeded from `value` once — the parent is updated through
+  // `onChange`, not vice versa.
+  const [stickers, setStickers] = useState<Sticker[]>(() =>
+    toArray(value, maxSchema)
   );
   // The viewer reads its initial stickers from the iframe `src` (captured once), so
   // hand it the same normalized snapshot; later changes go through the api.
   const [initialItem] = useState<CS2BaseInventoryItem>(() => ({
     id: forItem.id,
     seed,
-    stickers: normalizeStickers(value, CS2_MAX_STICKERS)
+    stickers: toRecord(toArray(value, maxSchema))
   }));
   const { api, viewerProps } = useCs2Viewer({
     apiKey: app3dViewerKey || undefined,
@@ -160,21 +156,21 @@ function Sticker3dEditorOverlay({
   // Bumped when an in-viewer edit changes our data, to remount the attributes form
   // so its sliders re-seed to the new values.
   const [formVersion, setFormVersion] = useState(0);
-  // Drag-to-reorder. `dragKey` is the slot being dragged; `dragDelta` translates it
+  // Drag-to-reorder. `dragIndex` is the row being dragged; `dragDelta` translates it
   // to follow the cursor (the "ghost"); `dragTarget` is the display position it will
   // drop into (other rows slide to open that gap). Geometry is captured once at drag
   // start (refs) so hit-testing never re-measures mid-drag.
-  const [dragKey, setDragKey] = useState<number | null>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragDelta, setDragDelta] = useState(0);
   const [dragTarget, setDragTarget] = useState(0);
   // Suppresses row transitions for the single frame after a drop, so the transform
   // reset snaps instead of replaying the slide animation.
   const [noTransition, setNoTransition] = useState(false);
-  const isDragging = dragKey !== null;
+  const isDragging = dragIndex !== null;
 
   const stickersRef = useRef(stickers);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const dragKeyRef = useRef<number | null>(null);
+  const dragIndexRef = useRef<number | null>(null);
   const dragStartYRef = useRef(0);
   const dragStartPosRef = useRef(0);
   const dragTargetRef = useRef(0);
@@ -212,13 +208,13 @@ function Sticker3dEditorOverlay({
       if (Date.now() - lastEditAtRef.current < FORM_ECHO_WINDOW_MS) {
         return;
       }
-      const incoming = normalizeStickers(item.stickers ?? {}, CS2_MAX_STICKERS);
+      const incoming = toArray(item.stickers ?? {}, maxSchema);
       if (stickersEqual(stickersRef.current, incoming)) {
         return;
       }
       stickersRef.current = incoming;
       setStickers(incoming);
-      onChangeRef.current(incoming);
+      onChangeRef.current(toRecord(incoming));
       setFormVersion((version) => version + 1);
     });
     let settled = false;
@@ -238,18 +234,17 @@ function Sticker3dEditorOverlay({
       offRateLimited();
       offChange();
     };
-  }, [api]);
+  }, [api, maxSchema]);
 
-  const filledKeys = sortedKeys(stickers);
-  const count = filledKeys.length;
-  const dragFrom = dragKey === null ? -1 : filledKeys.indexOf(dragKey);
+  const count = stickers.length;
+  const dragFrom = dragIndex ?? -1;
   const selectedSticker =
     selected !== undefined ? stickers[selected] : undefined;
 
   // Capture the row pitch once the drag begins (rows are uniform, no transforms
   // applied yet), so move math is a stable delta -> slot conversion.
   useLayoutEffect(() => {
-    if (dragKey === null) {
+    if (dragIndex === null) {
       return;
     }
     const first = rowRefs.current[0]?.getBoundingClientRect().top;
@@ -257,7 +252,7 @@ function Sticker3dEditorOverlay({
     if (first !== undefined && second !== undefined) {
       rowStepRef.current = second - first;
     }
-  }, [dragKey]);
+  }, [dragIndex]);
 
   // Re-enable row transitions the frame after a drop, once the snapped layout has
   // painted (so future reorders animate again without re-animating this drop).
@@ -269,14 +264,14 @@ function Sticker3dEditorOverlay({
     return () => cancelAnimationFrame(raf);
   }, [noTransition]);
 
-  function applyStickers(next: Stickers) {
+  function applyStickers(next: Sticker[]) {
     stickersRef.current = next;
     setStickers(next);
-    onChangeRef.current(next);
+    onChangeRef.current(toRecord(next));
   }
 
-  function buildItem(next: Stickers): CS2BaseInventoryItem {
-    return { id: forItem.id, seed, stickers: next };
+  function buildItem(next: Sticker[]): CS2BaseInventoryItem {
+    return { id: forItem.id, seed, stickers: toRecord(next) };
   }
 
   function handleSelect(item: CS2EconomyItem) {
@@ -290,17 +285,20 @@ function Sticker3dEditorOverlay({
         return;
       }
       const index = count;
-      const next = { ...stickers, [index]: { id: item.id, schema: index } };
-      api?.addSticker({ id: item.id, schema: index });
+      // Draw-order index is `index`; the markup anchor is the first free schema (which
+      // may overlap an existing one once the body's anchors run out), never the stack
+      // index — that would overflow on reduced-anchor models like the AK-47 HD.
+      const schema = getNextStickerSchema(stickers, maxSchema);
+      const next = [...stickers, { id: item.id, schema }];
+      api?.addSticker({ id: item.id, schema });
       applyStickers(next);
       setSelected(index);
       api?.setActiveSticker({ index });
     } else {
       const { index } = target;
-      const next = {
-        ...stickers,
-        [index]: { ...stickers[index], id: item.id }
-      };
+      const next = stickers.map((sticker, i) =>
+        i === index ? { ...sticker, id: item.id } : sticker
+      );
       applyStickers(next);
       // No setStickerId in the embed api: rebuild so the viewer picks up the swap.
       api?.setItem(buildItem(next));
@@ -308,13 +306,10 @@ function Sticker3dEditorOverlay({
   }
 
   function handleRemove(index: number) {
-    const next = reindex(
-      filledKeys.filter((key) => key !== index),
-      stickers
-    );
+    const next = stickers.filter((_, i) => i !== index);
     api?.removeSticker({ index });
     applyStickers(next);
-    // Removing compacts keys: anything below `index` shifts up one, so keep the
+    // Removing compacts the stack: anything below `index` shifts up one, so keep the
     // current selection pointing at the same sticker (or drop it if it was removed).
     if (selected === index) {
       setSelected(undefined);
@@ -347,7 +342,15 @@ function Sticker3dEditorOverlay({
       if (current === undefined) {
         return;
       }
-      const schema = data.schema === -1 ? index : data.schema;
+      // -1 is the form's "auto": resolve to the first anchor not used by the other
+      // stickers (bounded by the body's anchor count), never the stack index.
+      const schema =
+        data.schema === -1
+          ? getNextStickerSchema(
+              stickers.filter((_, i) => i !== index),
+              maxSchema
+            )
+          : data.schema;
       // AppliedStickerEditor fires once on mount with the seeded values; skip
       // no-ops so we neither spam the viewer nor churn parent state.
       if (
@@ -379,7 +382,7 @@ function Sticker3dEditorOverlay({
       if ((current.schema ?? index) !== schema) {
         api?.setStickerSchema({ index, schema });
       }
-      const next: Sticker = {
+      const updated: Sticker = {
         id: current.id,
         rotation: data.rotation || undefined,
         schema,
@@ -387,11 +390,13 @@ function Sticker3dEditorOverlay({
         x: data.x || undefined,
         y: data.y || undefined
       };
-      applyStickers({ ...stickers, [index]: next });
+      applyStickers(
+        stickers.map((sticker, i) => (i === index ? updated : sticker))
+      );
     };
   }
 
-  function handleDragStart(key: number) {
+  function handleDragStart(index: number) {
     return function handleDragStart(event: PointerEvent<HTMLButtonElement>) {
       if (count < 2) {
         return;
@@ -401,19 +406,18 @@ function Sticker3dEditorOverlay({
       event.currentTarget.setPointerCapture(event.pointerId);
       setSelected(undefined);
       api?.setActiveSticker({ index: null });
-      const from = filledKeys.indexOf(key);
-      dragKeyRef.current = key;
+      dragIndexRef.current = index;
       dragStartYRef.current = event.clientY;
-      dragStartPosRef.current = from;
-      dragTargetRef.current = from;
-      setDragKey(key);
+      dragStartPosRef.current = index;
+      dragTargetRef.current = index;
+      setDragIndex(index);
       setDragDelta(0);
-      setDragTarget(from);
+      setDragTarget(index);
     };
   }
 
   function handleDragMove(event: PointerEvent<HTMLButtonElement>) {
-    if (dragKeyRef.current === null) {
+    if (dragIndexRef.current === null) {
       return;
     }
     const delta = event.clientY - dragStartYRef.current;
@@ -430,24 +434,22 @@ function Sticker3dEditorOverlay({
   }
 
   function handleDragEnd(event: PointerEvent<HTMLButtonElement>) {
-    if (dragKeyRef.current === null) {
+    if (dragIndexRef.current === null) {
       return;
     }
-    const key = dragKeyRef.current;
     const from = dragStartPosRef.current;
     const to = dragTargetRef.current;
-    dragKeyRef.current = null;
+    dragIndexRef.current = null;
     // Snap the dropped row + slid rows to their final layout without animating the
     // transform reset (otherwise the slide replays instead of the ghost settling).
     setNoTransition(true);
-    setDragKey(null);
+    setDragIndex(null);
     setDragDelta(0);
     // Commit before releasing capture so a release hiccup can't drop the reorder.
     if (to !== from) {
-      const order = filledKeys.slice();
-      order.splice(from, 1);
-      order.splice(to, 0, key);
-      const next = reindex(order, stickers);
+      const next = stickers.slice();
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved);
       applyStickers(next);
       api?.setItem(buildItem(next));
     }
@@ -456,11 +458,11 @@ function Sticker3dEditorOverlay({
     }
   }
 
-  function rowTransform(position: number, key: number): string {
-    if (dragKey === null) {
+  function rowTransform(position: number): string {
+    if (dragIndex === null) {
       return "none";
     }
-    if (key === dragKey) {
+    if (position === dragIndex) {
       return `translateY(${dragDelta}px)`;
     }
     const step = rowStepRef.current;
@@ -508,14 +510,13 @@ function Sticker3dEditorOverlay({
             isDragging ? "overflow-visible" : "overflow-y-auto"
           )}
         >
-          {filledKeys.map((key, position) => {
-            const sticker = stickers[key];
+          {stickers.map((sticker, position) => {
             const item = CS2Economy.getById(sticker.id);
-            const isDragged = dragKey === key;
-            const isSelected = selected === key;
+            const isDragged = dragIndex === position;
+            const isSelected = selected === position;
             return (
               <div
-                key={key}
+                key={position}
                 ref={(element) => {
                   rowRefs.current[position] = element;
                 }}
@@ -530,21 +531,21 @@ function Sticker3dEditorOverlay({
                           : "bg-neutral-900/80 hover:bg-neutral-800/70"
                       )
                 )}
-                style={{ transform: rowTransform(position, key) }}
+                style={{ transform: rowTransform(position) }}
                 onMouseEnter={() => {
                   if (!isDragging) {
-                    api?.highlightSticker({ index: key });
+                    api?.highlightSticker({ index: position });
                   }
                 }}
               >
                 <div
                   className="flex cursor-pointer items-center gap-1 p-1"
-                  onClick={() => handleToggleSelect(key)}
+                  onClick={() => handleToggleSelect(position)}
                 >
                   <button
                     className="flex h-12 w-5 shrink-0 cursor-grab touch-none items-center justify-center text-neutral-400 transition hover:text-neutral-200 active:cursor-grabbing"
                     onClick={(event) => event.stopPropagation()}
-                    onPointerDown={handleDragStart(key)}
+                    onPointerDown={handleDragStart(position)}
                     onPointerMove={handleDragMove}
                     onPointerUp={handleDragEnd}
                     title={translate("StickerPickerReorder")}
@@ -555,7 +556,7 @@ function Sticker3dEditorOverlay({
                     className="aspect-256/192 h-12 shrink-0 overflow-hidden rounded-sm bg-neutral-950/40"
                     onClick={(event) => {
                       event.stopPropagation();
-                      setSelecting({ mode: "replace", index: key });
+                      setSelecting({ mode: "replace", index: position });
                     }}
                     title={translate("EditorStickerEdit")}
                   >
@@ -568,7 +569,7 @@ function Sticker3dEditorOverlay({
                     className="shrink-0 rounded-sm p-2 text-neutral-300 transition hover:bg-red-500/40"
                     onClick={(event) => {
                       event.stopPropagation();
-                      handleRemove(key);
+                      handleRemove(position);
                     }}
                     tooltip={translate("StickerPickerRemove")}
                   >
@@ -620,7 +621,7 @@ function Sticker3dEditorOverlay({
                   key={`${selected}-${formVersion}`}
                   onChange={handleEdit(selected)}
                   slot={selected}
-                  stickers={stickers}
+                  stickers={toRecord(stickers)}
                   value={{
                     rotation: selectedSticker.rotation ?? 0,
                     schema: selectedSticker.schema ?? -1,
