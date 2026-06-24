@@ -3,23 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  autoUpdate,
-  flip,
-  FloatingPortal,
-  offset,
-  shift,
-  useDismiss,
-  useFloating,
-  useHover,
-  useInteractions,
-  useRole,
-  useTransitionStyles
-} from "@floating-ui/react";
 import clsx from "clsx";
 import { ComponentProps, PointerEvent, useRef, useState } from "react";
 import { getTypedFromLocalStorage } from "~/utils/localstorage";
 import { ModalButton } from "./modal-button";
+import { TooltipBubble, useTooltip } from "./tooltip";
 
 // How long the button must be held before it fires; the reddish fill sweeps to full
 // over this window with the loop cue underneath.
@@ -48,29 +36,14 @@ export function HoldButton({
   const fireRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const loopRef = useRef<HTMLAudioElement | undefined>(undefined);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const { refs, floatingStyles, context } = useFloating({
-    middleware: [
-      offset(20),
-      flip({ fallbackAxisSideDirection: "start" }),
-      shift()
-    ],
-    onOpenChange: setIsOpen,
-    open: isOpen,
-    placement: "top",
-    whileElementsMounted: autoUpdate
-  });
-  const hover = useHover(context, { move: false });
-  const dismiss = useDismiss(context);
-  const role = useRole(context, { role: "tooltip" });
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover,
-    dismiss,
-    role
-  ]);
-  const { isMounted, styles } = useTransitionStyles(context, {
-    duration: 200,
-    initial: { opacity: 0 }
+  const {
+    getReferenceProps,
+    setReference,
+    tooltip: bubble
+  } = useTooltip({
+    durationMs: 200,
+    offsetPx: 20,
+    placement: "top"
   });
 
   function startLoop() {
@@ -132,7 +105,7 @@ export function HoldButton({
           onPointerUp: cancel
         })}
         className={clsx("overflow-hidden", props.className)}
-        forwardRef={refs.setReference}
+        forwardRef={setReference}
         variant="danger"
       >
         <span
@@ -147,24 +120,9 @@ export function HoldButton({
         />
         <span className="relative">{children}</span>
       </ModalButton>
-      <FloatingPortal>
-        {tooltip !== undefined && isOpen && isMounted && (
-          <div
-            className="z-80"
-            ref={refs.setFloating}
-            role="tooltip"
-            style={floatingStyles}
-            {...getFloatingProps()}
-          >
-            <div
-              className="max-w-xs rounded-sm bg-neutral-900/90 px-4 py-3.5 text-xs whitespace-pre-line text-neutral-200 shadow-sm"
-              style={styles}
-            >
-              {tooltip}
-            </div>
-          </div>
-        )}
-      </FloatingPortal>
+      <TooltipBubble {...bubble} multiline>
+        {tooltip}
+      </TooltipBubble>
     </>
   );
 }

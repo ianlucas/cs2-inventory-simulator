@@ -11,7 +11,7 @@ import {
   CS2InventoryItem
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
@@ -25,13 +25,11 @@ import {
   useRules,
   useTranslate
 } from "./app-context";
-import { Cs2Viewer } from "./cs2-viewer";
+import { Cs2ViewerOverlay } from "./cs2-viewer-overlay";
 import { HoldButton } from "./hold-button";
 import { useCs2Viewer } from "./hooks/use-cs2-viewer";
-import {
-  markCs2ViewerRateLimited,
-  useCs2ViewerAvailability
-} from "./hooks/use-cs2-viewer-availability";
+import { useCs2ViewerAvailability } from "./hooks/use-cs2-viewer-availability";
+import { useCs2ViewerFallback } from "./hooks/use-cs2-viewer-fallback";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -39,13 +37,9 @@ import { ScrapeLevelSlider } from "./scrape-level-slider";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
-// How long to wait for the viewer's ready handshake before falling back to the 2D
-// flow, so a down/blocked viewer doesn't strand the user on a blank overlay.
-const VIEWER_READY_TIMEOUT_MS = 6000;
-
-// Client-side cooldown applied when the viewer fails to become ready (not a rate
-// limit, but the same "fall back to 2D for a bit" behavior).
-const VIEWER_UNREACHABLE_COOLDOWN_MS = 30_000;
+// How long the "remove sticker" button must be held to confirm; shorter than
+// HoldButton's default since removal is a single, low-stakes action.
+const REMOVE_STICKER_HOLD_MS = 1500;
 
 interface ScrapeItemStickerProps {
   onClose: () => void;
@@ -306,7 +300,7 @@ function ScrapeStickerControls({
           <>
             {canRemove && (
               <HoldButton
-                durationMs={1500}
+                durationMs={REMOVE_STICKER_HOLD_MS}
                 disabled={!hasSelection}
                 onHold={onRemove}
                 tooltip={translate("ScrapeStickerRemoveHint")}
@@ -372,54 +366,22 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
     }
   });
 
-  // Same fallback wiring as the apply flow: instance-wide rate limits and a missed
-  // ready handshake both flip availability so the parent swaps to the 2D flow.
-  useEffect(() => {
-    if (api === undefined) {
-      return;
-    }
-    const offRateLimited = api.on("rateLimited", ({ retryAfterMs, scope }) => {
-      if (scope === "ip") {
-        return;
-      }
-      markCs2ViewerRateLimited(retryAfterMs);
-    });
-    let settled = false;
-    const timer = setTimeout(() => {
-      settled = true;
-      markCs2ViewerRateLimited(VIEWER_UNREACHABLE_COOLDOWN_MS);
-    }, VIEWER_READY_TIMEOUT_MS);
-    void api.whenReady().then(() => {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      clearTimeout(timer);
-    });
-    return () => {
-      clearTimeout(timer);
-      offRateLimited();
-    };
-  }, [api]);
+  // Flip availability when the viewer is rate-limited or never becomes ready, so the
+  // parent swaps to the 2D flow; the scrape flow itself needs no readiness handling.
+  useCs2ViewerFallback(api);
 
-  // Portal to document.body so the overlay fills the window; wrappers are
-  // pointer-events-none so the space around the header/footer passes through to the
-  // iframe, keeping the model orbitable. The controls opt back in.
-  return createPortal(
-    <div className="fixed top-0 left-0 z-50 size-full overflow-hidden backdrop-blur-xs select-none">
-      <Cs2Viewer
-        {...viewerProps}
-        className="size-full border-0 bg-transparent"
-        style={{ colorScheme: "normal" }}
-      />
-      <div className="pointer-events-none absolute top-0 left-0 w-full pt-8 text-center">
+  return (
+    <Cs2ViewerOverlay
+      header={
         <UseItemHeader
           actionDesc={translate("ScrapeStickerUseOn")}
           actionItem={nameItemString(item)}
           title={translate("ScrapeStickerRemove")}
           warning={translate("ScrapeStickerSelectHint")}
         />
-      </div>
+      }
+      viewerProps={viewerProps}
+    >
       <div className="pointer-events-none absolute bottom-8 left-0 w-full">
         <ScrapeStickerControls
           canRemove={inventoryItemAllowRemoveSticker}
@@ -436,8 +398,7 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
           wear={scrape.wear}
         />
       </div>
-    </div>,
-    document.body
+    </Cs2ViewerOverlay>
   );
 }
 

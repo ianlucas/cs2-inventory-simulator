@@ -4,12 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS2_STICKER_OFFSET_FACTOR,
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
   CS2ItemType,
-  isFactorPrecise,
   RecordValue
 } from "@ianlucas/cs2-lib";
 import { z } from "zod";
@@ -66,10 +64,15 @@ import {
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
-import { validateStickerRotation, validateStickerWear } from "~/utils/economy";
 import { editInventoryItem } from "~/utils/inventory";
 import { hasKeys } from "~/utils/misc";
-import { nonNegativeInt, teamShape } from "~/utils/shapes";
+import {
+  nonNegativeInt,
+  optionalStickerOffset,
+  optionalStickerRotation,
+  optionalStickerWear,
+  teamShape
+} from "~/utils/shapes";
 import {
   clientInventoryItemShape,
   itemEditorAttributesShape,
@@ -78,33 +81,14 @@ import {
 import type { Route } from "./+types/api.action.sync._index";
 
 // Placement carried by the sticker-apply actions (applied weapon + free-item add).
-// `schema` is the markup anchor; `x`/`y` ride the offset grid; `rotation` is the
-// in-game signed -180..180 range (so NOT positiveInt). cs2-lib re-validates each
-// against the target model before mutating.
+// `schema` is the markup anchor; `x`/`y`/`rotation`/`wear` reuse the shared sticker
+// fields. cs2-lib re-validates each against the target model before mutating.
 const stickerPlacementShape = {
   schema: nonNegativeInt,
-  x: z
-    .number()
-    .optional()
-    .refine(
-      (x) => x === undefined || isFactorPrecise(x, CS2_STICKER_OFFSET_FACTOR)
-    ),
-  y: z
-    .number()
-    .optional()
-    .refine(
-      (y) => y === undefined || isFactorPrecise(y, CS2_STICKER_OFFSET_FACTOR)
-    ),
-  rotation: z
-    .number()
-    .optional()
-    .refine(
-      (rotation) => rotation === undefined || validateStickerRotation(rotation)
-    ),
-  wear: z
-    .number()
-    .optional()
-    .refine((wear) => wear === undefined || validateStickerWear(wear))
+  x: optionalStickerOffset,
+  y: optionalStickerOffset,
+  rotation: optionalStickerRotation,
+  wear: optionalStickerWear
 };
 
 const actionShape = z.discriminatedUnion("type", [
@@ -168,10 +152,7 @@ const actionShape = z.discriminatedUnion("type", [
     type: z.literal(SyncAction.ScrapeItemSticker),
     targetUid: nonNegativeInt,
     index: nonNegativeInt,
-    wear: z
-      .number()
-      .optional()
-      .refine((wear) => wear === undefined || validateStickerWear(wear))
+    wear: optionalStickerWear
   }),
   z.object({
     type: z.literal(SyncAction.SwapItemsStatTrak),

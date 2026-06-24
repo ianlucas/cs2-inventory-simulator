@@ -22,26 +22,16 @@ import { SyncAction } from "~/data/sync";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { useInventory, useRules, useTranslate } from "./app-context";
-import { Cs2Viewer } from "./cs2-viewer";
+import { Cs2ViewerOverlay } from "./cs2-viewer-overlay";
 import { useCs2Viewer } from "./hooks/use-cs2-viewer";
-import {
-  markCs2ViewerRateLimited,
-  useCs2ViewerAvailability
-} from "./hooks/use-cs2-viewer-availability";
+import { useCs2ViewerAvailability } from "./hooks/use-cs2-viewer-availability";
+import { useCs2ViewerFallback } from "./hooks/use-cs2-viewer-fallback";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
 import { ScrapeLevelSlider } from "./scrape-level-slider";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
-
-// How long to wait for the viewer's ready handshake before falling back to the 2D
-// picker, so a down/blocked viewer doesn't strand the user on a blank overlay.
-const VIEWER_READY_TIMEOUT_MS = 6000;
-
-// Client-side cooldown applied when the viewer fails to become ready (not a rate
-// limit, but the same "fall back to 2D for a bit" behavior).
-const VIEWER_UNREACHABLE_COOLDOWN_MS = 30_000;
 
 // "Confirm position" stays disabled this long after the weapon loads so the user
 // registers the sticker (pulsed via highlight) before they can lock in the apply.
@@ -199,22 +189,14 @@ function ApplyItemSticker3d({
     rotation?: number;
   }>({});
 
+  const viewerStatus = useCs2ViewerFallback(api);
+
+  // Mirror the active sticker's offset/rotation so Apply persists what's shown, and
+  // cancel a pending confirmation the moment the user nudges the sticker.
   useEffect(() => {
     if (api === undefined) {
       return;
     }
-    const offRateLimited = api.on("rateLimited", ({ retryAfterMs, scope }) => {
-      // Per-user limits (scope "ip") are transient and the viewer auto-retries, so
-      // let it recover in place. Instance-wide cases (or an unknown scope) persist,
-      // so record the backoff — availability flips and the parent swaps to the 2D
-      // picker (this overlay unmounts).
-      if (scope === "ip") {
-        return;
-      }
-      markCs2ViewerRateLimited(retryAfterMs);
-    });
-    // Mirror the active sticker's offset/rotation so Apply persists what's shown, and
-    // cancel a pending confirmation the moment the user nudges the sticker.
     const offChange = api.on("change", ({ item }) => {
       const sticker = item.stickers?.[newIndex];
       if (sticker === undefined) {
@@ -237,46 +219,31 @@ function ApplyItemSticker3d({
         }
       }
     });
-    let settled = false;
-    let pulse: ReturnType<typeof setInterval> | undefined;
-    let unlock: ReturnType<typeof setTimeout> | undefined;
-    const timer = setTimeout(() => {
-      settled = true;
-      markCs2ViewerRateLimited(VIEWER_UNREACHABLE_COOLDOWN_MS);
-    }, VIEWER_READY_TIMEOUT_MS);
-    void api.whenReady().then(() => {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      clearTimeout(timer);
-      api.setActiveSticker({ index: newIndex });
-      // Pulse a highlight over the sticker through the confirm-delay window so the
-      // user notices which one they're placing before Apply unlocks.
-      api.highlightSticker({ index: newIndex });
-      pulse = setInterval(
-        () => api.highlightSticker({ index: newIndex }),
-        HIGHLIGHT_PULSE_INTERVAL_MS
-      );
-      unlock = setTimeout(() => {
-        if (pulse !== undefined) {
-          clearInterval(pulse);
-        }
-        setConfirmEnabled(true);
-      }, CONFIRM_POSITION_DELAY_MS);
-    });
-    return () => {
-      clearTimeout(timer);
-      if (pulse !== undefined) {
-        clearInterval(pulse);
-      }
-      if (unlock !== undefined) {
-        clearTimeout(unlock);
-      }
-      offRateLimited();
-      offChange();
-    };
+    return () => offChange();
   }, [api, newIndex]);
+
+  // Once the viewer is ready, make the appended sticker active and pulse a highlight
+  // over it through the confirm-delay window so the user notices which one they're
+  // placing before Apply unlocks.
+  useEffect(() => {
+    if (api === undefined || viewerStatus !== "ready") {
+      return;
+    }
+    api.setActiveSticker({ index: newIndex });
+    api.highlightSticker({ index: newIndex });
+    const pulse = setInterval(
+      () => api.highlightSticker({ index: newIndex }),
+      HIGHLIGHT_PULSE_INTERVAL_MS
+    );
+    const unlock = setTimeout(() => {
+      clearInterval(pulse);
+      setConfirmEnabled(true);
+    }, CONFIRM_POSITION_DELAY_MS);
+    return () => {
+      clearInterval(pulse);
+      clearTimeout(unlock);
+    };
+  }, [api, viewerStatus, newIndex]);
 
   function handleWearChange(nextWear: number) {
     setWear(nextWear);
@@ -302,20 +269,9 @@ function ApplyItemSticker3d({
     setConfirmed(false);
   }
 
-  // Portal to document.body so the overlay fills the window. Only ever runs
-  // client-side (mounted on user action). The wrappers are pointer-events-none so
-  // the space around the header/footer passes through to the iframe, keeping the
-  // model orbitable; the buttons opt back in (ModalButton).
-  return createPortal(
-    <div className="fixed top-0 left-0 z-50 size-full overflow-hidden backdrop-blur-xs select-none">
-      <Cs2Viewer
-        {...viewerProps}
-        className="size-full border-0 bg-transparent"
-        // The app forces `color-scheme: dark`; an iframe whose scheme differs from
-        // its document gets an opaque backdrop. Reset it so the viewer shows through.
-        style={{ colorScheme: "normal" }}
-      />
-      <div className="pointer-events-none absolute top-0 left-0 w-full pt-8 text-center">
+  return (
+    <Cs2ViewerOverlay
+      header={
         <UseItemHeader
           actionDesc={translate("ApplyStickerUseOn")}
           actionItem={nameItemString(targetItem)}
@@ -323,7 +279,9 @@ function ApplyItemSticker3d({
           title={translate("ApplyStickerUse")}
           warning={translate("ApplyStickerWarn")}
         />
-      </div>
+      }
+      viewerProps={viewerProps}
+    >
       <div className="pointer-events-none absolute bottom-8 left-0 flex w-full flex-col items-center gap-4">
         <div className="flex flex-col items-center gap-2 text-white/95 drop-shadow-sm">
           <ItemImage className="h-25" item={stickerItem} />
@@ -412,8 +370,7 @@ function ApplyItemSticker3d({
           }
         />
       </div>
-    </div>,
-    document.body
+    </Cs2ViewerOverlay>
   );
 }
 

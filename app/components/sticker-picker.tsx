@@ -9,20 +9,18 @@ import {
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
-  CS2_MAX_STICKERS,
   assert,
   ensure
 } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import { AppliedStickerEditor } from "./applied-sticker-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";
-import { ItemImage } from "./item-image";
 import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
 import { confirm } from "./modal-generic";
 import { SelectStickerModal } from "./select-sticker-modal";
+import { StickerSlotGrid } from "./sticker-slot-grid";
 
 export function StickerPicker({
   disabled,
@@ -65,12 +63,6 @@ export function StickerPicker({
     !isHideStickerWear &&
     !isHideStickerX &&
     !isHideStickerY;
-
-  function handleClickSlot(index: number) {
-    return function handleClickSlot() {
-      setActiveIndex(index);
-    };
-  }
 
   function handleClickEditSlot(index: number) {
     return function handleClickSlot() {
@@ -145,56 +137,29 @@ export function StickerPicker({
 
   return (
     <>
-      <div
-        className="grid gap-1"
-        style={{
-          gridTemplateColumns: `repeat(${CS2_MAX_STICKERS}, minmax(0, 1fr))`
-        }}
-      >
-        {range(CS2_MAX_STICKERS).map((index) => {
-          const sticker = value[index];
-          const item =
-            sticker !== undefined ? CS2Economy.getById(sticker.id) : undefined;
-          return (
-            <div className="relative aspect-256/192" key={index}>
-              <button
-                disabled={disabled}
-                className="absolute size-full cursor-default overflow-hidden bg-neutral-950/40"
-                onClick={handleClickSlot(index)}
-              >
-                {item !== undefined ? (
-                  <ItemImage item={item} />
-                ) : (
-                  <div className="flex items-center justify-center text-neutral-700">
-                    {translate("StickerPickerNA")}
-                  </div>
-                )}
-                {!disabled && (
-                  <div className="absolute top-0 left-0 size-full border-2 border-transparent hover:border-blue-500/50" />
-                )}
-              </button>
-              {item !== undefined && !disabled && (
-                <>
-                  <ButtonWithTooltip
-                    onClick={handleRemoveSticker(index)}
-                    className="absolute bottom-1 left-1 hover:bg-red-500/50"
-                    tooltip={translate("StickerPickerRemove")}
-                  >
-                    <FontAwesomeIcon icon={faTrashCan} className="h-3" />
-                  </ButtonWithTooltip>
-                  <ButtonWithTooltip
-                    onClick={handleClickEditSlot(index)}
-                    className="absolute right-1 bottom-1 hover:bg-blue-500/50"
-                    tooltip={translate("EditorStickerEdit")}
-                  >
-                    <FontAwesomeIcon icon={faPen} className="h-3" />
-                  </ButtonWithTooltip>
-                </>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <StickerSlotGrid
+        disabled={disabled}
+        onSlotClick={(index) => setActiveIndex(index)}
+        renderSlotOverlay={(index) => (
+          <>
+            <ButtonWithTooltip
+              onClick={handleRemoveSticker(index)}
+              className="absolute bottom-1 left-1 hover:bg-red-500/50"
+              tooltip={translate("StickerPickerRemove")}
+            >
+              <FontAwesomeIcon icon={faTrashCan} className="h-3" />
+            </ButtonWithTooltip>
+            <ButtonWithTooltip
+              onClick={handleClickEditSlot(index)}
+              className="absolute right-1 bottom-1 hover:bg-blue-500/50"
+              tooltip={translate("EditorStickerEdit")}
+            >
+              <FontAwesomeIcon icon={faPen} className="h-3" />
+            </ButtonWithTooltip>
+          </>
+        )}
+        value={value}
+      />
       <SelectStickerModal
         hidden={activeIndex === undefined || isEditing}
         onClose={handleCloseModal}

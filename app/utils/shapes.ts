@@ -3,15 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS2_STICKER_OFFSET_FACTOR,
-  CS2Economy,
-  isFactorPrecise
-} from "@ianlucas/cs2-lib";
+import { CS2Economy } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import {
   validateKeychainOffset,
   validateKeychainSeed,
+  validateStickerOffset,
   validateStickerRotation,
   validateStickerWear
 } from "./economy";
@@ -19,6 +16,31 @@ import {
 export const nonNegativeInt = z.number().int().nonnegative().finite().safe();
 export const positiveInt = z.number().int().positive().finite().safe();
 export const nonNegativeFloat = z.number().nonnegative().finite();
+
+// A sticker placement's offset (x/y), rotation, and wear — each optional and
+// self-validating against the economy rules. Shared by the stored-inventory shape
+// below and the sync action shape (`~/routes/api.action.sync`) so the two never drift
+// on what a valid placement is. Offsets and rotation are signed (the sticker moves
+// either way and rotates to negative angles), so the base is a plain finite number —
+// NOT `positiveInt`, which would wrongly reject negatives, zero, and fractions.
+export const optionalStickerOffset = z
+  .number()
+  .finite()
+  .optional()
+  .refine(
+    (value) =>
+      value === undefined || validateStickerOffset(value, undefined, undefined)
+  );
+export const optionalStickerRotation = z
+  .number()
+  .finite()
+  .optional()
+  .refine((value) => value === undefined || validateStickerRotation(value));
+export const optionalStickerWear = z
+  .number()
+  .finite()
+  .optional()
+  .refine((value) => value === undefined || validateStickerWear(value));
 
 export const baseInventoryItemProps = {
   equipped: z.boolean().optional(),
@@ -63,30 +85,11 @@ export const baseInventoryItemProps = {
       z.string(),
       z.object({
         id: nonNegativeInt,
-        rotation: positiveInt
-          .optional()
-          .refine(
-            (rotation) =>
-              rotation === undefined || validateStickerRotation(rotation)
-          ),
-        wear: nonNegativeFloat
-          .optional()
-          .refine((wear) => wear === undefined || validateStickerWear(wear)),
+        rotation: optionalStickerRotation,
+        wear: optionalStickerWear,
         schema: z.number().int().min(0).optional(),
-        x: z
-          .number()
-          .optional()
-          .refine(
-            (x) =>
-              x === undefined || isFactorPrecise(x, CS2_STICKER_OFFSET_FACTOR)
-          ),
-        y: z
-          .number()
-          .optional()
-          .refine(
-            (y) =>
-              y === undefined || isFactorPrecise(y, CS2_STICKER_OFFSET_FACTOR)
-          )
+        x: optionalStickerOffset,
+        y: optionalStickerOffset
       })
     )
     .optional(),

@@ -21,29 +21,20 @@ import {
   useRef,
   useState
 } from "react";
-import { createPortal } from "react-dom";
 import { range } from "~/utils/number";
 import { useRules, useTranslate } from "./app-context";
 import { AppliedStickerEditor } from "./applied-sticker-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";
-import { Cs2Viewer } from "./cs2-viewer";
+import { Cs2ViewerOverlay } from "./cs2-viewer-overlay";
 import { useCs2Viewer } from "./hooks/use-cs2-viewer";
-import { markCs2ViewerRateLimited } from "./hooks/use-cs2-viewer-availability";
+import { useCs2ViewerFallback } from "./hooks/use-cs2-viewer-fallback";
 import { useNameItemString } from "./hooks/use-name-item";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { SelectStickerModal } from "./select-sticker-modal";
+import { StickerSlotGrid } from "./sticker-slot-grid";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
-
-// How long to wait for the viewer's ready handshake before giving up and
-// falling back, so a down/blocked viewer doesn't strand the user on a blank
-// overlay.
-const VIEWER_READY_TIMEOUT_MS = 6000;
-
-// Client-side cooldown applied when the viewer fails to become ready (not a
-// rate limit, but the same "fall back to 2D for a bit" behavior).
-const VIEWER_UNREACHABLE_COOLDOWN_MS = 30_000;
 
 // After a form edit, ignore the viewer's `change` echoes for this long so the
 // panel isn't remounted from under an active slider (which made dragging stick).
@@ -224,27 +215,26 @@ function Sticker3dEditorOverlay({
     onChangeRef.current = onChange;
   }, [onChange, onClose]);
 
+  const viewerStatus = useCs2ViewerFallback(api);
+
+  // The viewer became unavailable (never ready, or an instance-wide rate limit):
+  // preserve in-progress edits into the 2D fallback, then close so the parent swaps.
+  useEffect(() => {
+    if (viewerStatus !== "unavailable") {
+      return;
+    }
+    onChangeRef.current(toRecord(stickersRef.current));
+    onCloseRef.current();
+  }, [viewerStatus]);
+
+  // Mirror edits made inside the viewer (e.g. dragging a sticker's offset) back into
+  // our local working copy + the form (not the parent — that waits for Apply). We ignore
+  // echoes of our own edits via value-equality so the form isn't remounted from under an
+  // active slider.
   useEffect(() => {
     if (api === undefined) {
       return;
     }
-    const offRateLimited = api.on("rateLimited", ({ retryAfterMs, scope }) => {
-      // Per-user limits (scope "ip") are transient and the viewer auto-retries, so
-      // let it recover in place. Instance-wide cases (or an unknown scope) persist,
-      // so record the backoff and close — flipping availability off and falling
-      // back to the 2D picker.
-      if (scope === "ip") {
-        return;
-      }
-      markCs2ViewerRateLimited(retryAfterMs);
-      // Preserve in-progress edits into the 2D fallback before closing.
-      onChangeRef.current(toRecord(stickersRef.current));
-      onCloseRef.current();
-    });
-    // Mirror edits made inside the viewer (e.g. dragging a sticker's offset) back
-    // into our local working copy + the form (not the parent — that waits for Apply).
-    // We ignore echoes of our own edits via value-equality so the form isn't
-    // remounted from under an active slider.
     const offChange = api.on("change", ({ item }) => {
       // Our own form edits round-trip back as `change`; ignore them briefly so the
       // panel isn't remounted under an active slider. Genuine in-viewer edits (no
@@ -260,25 +250,7 @@ function Sticker3dEditorOverlay({
       setStickers(incoming);
       setFormVersion((version) => version + 1);
     });
-    let settled = false;
-    const timer = setTimeout(() => {
-      settled = true;
-      markCs2ViewerRateLimited(VIEWER_UNREACHABLE_COOLDOWN_MS);
-      // Preserve in-progress edits into the 2D fallback before closing.
-      onChangeRef.current(toRecord(stickersRef.current));
-      onCloseRef.current();
-    }, VIEWER_READY_TIMEOUT_MS);
-    void api.whenReady().then(() => {
-      if (!settled) {
-        settled = true;
-        clearTimeout(timer);
-      }
-    });
-    return () => {
-      clearTimeout(timer);
-      offRateLimited();
-      offChange();
-    };
+    return () => offChange();
   }, [api, maxSchema]);
 
   const count = stickers.length;
@@ -551,30 +523,23 @@ function Sticker3dEditorOverlay({
     return "none";
   }
 
-  // Portal to document.body so the overlay fills the window, escaping the craft
-  // modal's containing block. Only ever runs client-side (mounted on click).
-  return createPortal(
-    <div className="fixed top-0 left-0 z-50 size-full overflow-hidden backdrop-blur-xs select-none">
-      <Cs2Viewer
-        {...viewerProps}
-        className={clsx(
-          "size-full border-0 bg-transparent",
-          // While dragging, let pointer events skip the iframe so it can't swallow
-          // the move/up that the rail's pointer capture needs.
-          isDragging && "pointer-events-none"
-        )}
-        // The app forces `color-scheme: dark`; an iframe whose scheme differs from
-        // its document gets an opaque backdrop. Reset it so the viewer shows through.
-        style={{ colorScheme: "normal" }}
-      />
-      <div className="pointer-events-none absolute top-0 left-0 w-full pt-8 text-center">
+  return (
+    <Cs2ViewerOverlay
+      header={
         <UseItemHeader
           actionDesc={translate("ApplyStickerUseOn")}
           actionItem={nameItemString(forItem)}
           title={translate("ApplyStickerUse")}
           stickerHint
         />
-      </div>
+      }
+      viewerClassName={
+        // While dragging, let pointer events skip the iframe so it can't swallow the
+        // move/up that the rail's pointer capture needs.
+        isDragging ? "pointer-events-none" : undefined
+      }
+      viewerProps={viewerProps}
+    >
       {/* Wrappers are pointer-events-none so the space around the tiles passes
           through to the iframe; only the tiles/controls opt back in. The drawer
           row slides out behind its tab on collapse; the overlay's overflow-hidden
@@ -770,8 +735,7 @@ function Sticker3dEditorOverlay({
         onSelect={handleSelect}
         stickerFilter={stickerFilter}
       />
-    </div>,
-    document.body
+    </Cs2ViewerOverlay>
   );
 }
 
@@ -795,43 +759,15 @@ export function Sticker3dPicker({
   stickerFilter?: (item: CS2EconomyItem) => boolean;
   value: Stickers;
 }) {
-  const translate = useTranslate();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <div
-        className="grid gap-1"
-        style={{
-          gridTemplateColumns: `repeat(${CS2_MAX_STICKERS}, minmax(0, 1fr))`
-        }}
-      >
-        {range(CS2_MAX_STICKERS).map((index) => {
-          const sticker = value[index];
-          const item =
-            sticker !== undefined ? CS2Economy.getById(sticker.id) : undefined;
-          return (
-            <div className="relative aspect-256/192" key={index}>
-              <button
-                disabled={disabled}
-                className="absolute size-full cursor-default overflow-hidden bg-neutral-950/40"
-                onClick={() => setIsOpen(true)}
-              >
-                {item !== undefined ? (
-                  <ItemImage item={item} />
-                ) : (
-                  <div className="flex items-center justify-center text-neutral-700">
-                    {translate("StickerPickerNA")}
-                  </div>
-                )}
-                {!disabled && (
-                  <div className="absolute top-0 left-0 size-full border-2 border-transparent hover:border-blue-500/50" />
-                )}
-              </button>
-            </div>
-          );
-        })}
-      </div>
+      <StickerSlotGrid
+        disabled={disabled}
+        onSlotClick={() => setIsOpen(true)}
+        value={value}
+      />
       {isOpen && (
         <Sticker3dEditorOverlay
           forItem={forItem}
