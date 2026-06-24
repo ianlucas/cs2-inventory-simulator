@@ -349,6 +349,12 @@ export const inventoryItemAllowScrapeSticker = new Rule({
   defaultValue: true
 });
 
+export const inventoryItemAllowRemoveSticker = new Rule({
+  name: "inventoryItemAllowRemoveSticker",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const inventoryItemAllowShare = new Rule({
   name: "inventoryItemAllowShare",
   type: "boolean",

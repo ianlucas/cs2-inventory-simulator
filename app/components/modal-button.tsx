@@ -16,7 +16,7 @@ export function ModalButton({
 }: ComponentProps<"button"> & {
   forwardRef?: typeof props.ref;
   uppercaseless?: boolean;
-  variant: "primary" | "secondary" | "tertiary";
+  variant: "primary" | "secondary" | "tertiary" | "danger";
 }) {
   return (
     <button
@@ -29,7 +29,9 @@ export function ModalButton({
         variant === "secondary" &&
           "text-neutral-100 hover:bg-neutral-500/30 hover:text-white disabled:bg-transparent disabled:text-neutral-700",
         variant === "tertiary" &&
-          "border border-neutral-100/90 text-neutral-100 hover:bg-neutral-800/30 hover:text-white disabled:bg-transparent disabled:text-neutral-700"
+          "border border-neutral-100/90 text-neutral-100 hover:bg-neutral-800/30 hover:text-white disabled:bg-transparent disabled:text-neutral-700",
+        variant === "danger" &&
+          "bg-red-800/80 text-neutral-200 hover:bg-red-700 disabled:bg-red-950 disabled:text-red-700"
       ])}
       {...props}
       ref={forwardRef}

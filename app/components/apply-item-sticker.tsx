@@ -6,9 +6,6 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  CS2_MAX_STICKER_WEAR,
-  CS2_MIN_STICKER_WEAR,
-  CS2_STICKER_WEAR_FACTOR,
   CS2BaseInventoryItem,
   CS2Economy,
   CS2InventoryItem,
@@ -34,6 +31,7 @@ import {
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
+import { ScrapeLevelSlider } from "./scrape-level-slider";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
@@ -128,41 +126,6 @@ function useApplySticker(
     playSound("sticker_apply_confirm");
     onClose();
   };
-}
-
-/**
- * In-game "scrape sticker level" slider: a bare track with a filled progress portion
- * and a square thumb, driving the active sticker's wear. Deliberately not the craft
- * editor's `EditorStepRange` — that thin/round look doesn't match the game.
- */
-function ScrapeLevelSlider({
-  disabled,
-  onChange,
-  value
-}: {
-  disabled?: boolean;
-  onChange: (wear: number) => void;
-  value: number;
-}) {
-  return (
-    <div className="pointer-events-auto relative h-3 w-32">
-      <div className="absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 rounded-[3px] bg-black/40" />
-      <div
-        className="absolute top-1/2 left-0 h-1.5 -translate-y-1/2 rounded-[3px] bg-[#d0bfbf98]"
-        style={{ width: `${value * 100}%` }}
-      />
-      <input
-        className="absolute inset-0 w-full cursor-pointer appearance-none bg-transparent disabled:cursor-default [&::-moz-range-thumb]:size-3 [&::-moz-range-thumb]:rounded-xs [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:shadow-[1px_1px_4px_1px_#00000050] [&::-webkit-slider-thumb]:size-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-xs [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-[1px_1px_4px_1px_#00000050]"
-        disabled={disabled}
-        max={CS2_MAX_STICKER_WEAR}
-        min={CS2_MIN_STICKER_WEAR}
-        onChange={(event) => onChange(Number(event.target.value))}
-        step={CS2_STICKER_WEAR_FACTOR}
-        type="range"
-        value={value}
-      />
-    </div>
-  );
 }
 
 /**
@@ -371,7 +334,7 @@ function ApplyItemSticker3d({
             )}
           >
             <span className="font-display text-xs tracking-wider">
-              {translate("ApplyStickerScrapeLevel")}
+              {translate("StickerScrapeLevel")}
             </span>
             <ScrapeLevelSlider
               disabled={confirmed}

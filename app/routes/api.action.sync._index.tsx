@@ -61,6 +61,7 @@ import {
   inventoryItemAllowApplySticker,
   inventoryItemAllowEdit,
   inventoryItemAllowRemovePatch,
+  inventoryItemAllowRemoveSticker,
   inventoryItemAllowScrapeSticker
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
@@ -159,9 +160,18 @@ const actionShape = z.discriminatedUnion("type", [
     slot: nonNegativeInt
   }),
   z.object({
-    type: z.literal(SyncAction.ScrapeItemSticker),
+    type: z.literal(SyncAction.RemoveItemSticker),
     targetUid: nonNegativeInt,
     index: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.ScrapeItemSticker),
+    targetUid: nonNegativeInt,
+    index: nonNegativeInt,
+    wear: z
+      .number()
+      .optional()
+      .refine((wear) => wear === undefined || validateStickerWear(wear))
   }),
   z.object({
     type: z.literal(SyncAction.SwapItemsStatTrak),
@@ -505,9 +515,17 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             await inventoryItemAllowRemovePatch.for(userId).truthy();
             inventory.removeItemPatch(action.targetUid, action.slot);
             break;
+          case SyncAction.RemoveItemSticker:
+            await inventoryItemAllowRemoveSticker.for(userId).truthy();
+            inventory.removeItemSticker(action.targetUid, action.index);
+            break;
           case SyncAction.ScrapeItemSticker:
             await inventoryItemAllowScrapeSticker.for(userId).truthy();
-            inventory.scrapeItemSticker(action.targetUid, action.index);
+            inventory.scrapeItemSticker(
+              action.targetUid,
+              action.index,
+              action.wear
+            );
             break;
           case SyncAction.SwapItemsStatTrak:
             inventory.swapItemsStatTrak(

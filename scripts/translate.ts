@@ -42,7 +42,6 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   ApplyStickerHintRotateWeapon: "popup_control_tooltip_rotate_weapon",
   ApplyStickerHintZoomCamera: "laptop_zoom_tooltip",
   ApplyStickerNextPreset: "SFUI_InvUse_Next_Preset",
-  ApplyStickerScrapeLevel: "popup_scrape_sticker_level",
   ApplyStickerUse: "popup_can_stick_title_sticker",
   ApplyStickerUseOn: { token: "popup_can_stick_desc", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}<\/b>/, '') },
   ApplyStickerWarn: "SFUI_InvUse_Warning_use_can_stick_sticker",
@@ -245,10 +244,14 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   ScrapeStickerClose: "GameUI_Close",
   ScrapeStickerRemove: "SFUI_InvContextMenu_can_stick_Wear_full_sticker",
   ScrapeStickerRemoveDesc: "SFUI_Sticker_Remove_Desc",
+  ScrapeStickerRemoveHint: { token: "SFUI_Sticker_RemoveImmediate_Tooltip", transform: (value) => value.replace(/<\/?b>/g, '').replace(/<br\s*\/?>/g, '\n').trim() },
+  ScrapeStickerSelectHint: "popup_can_stick_scrape_hint",
   ScrapeStickerUse: "SFUI_InvContextMenu_can_stick_Wear_sticker",
+  ScrapeStickerUseOn: { token: "popup_can_stick_scrape_full_sticker", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}<\/b>/, '') },
   ScrapeStickerWarn: { token: "popup_can_stick_scrape_sticker", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}<\/b>/, '') },
   SettingsMasterVolume: "SFUI_Settings_Master_Volume",
   StickerPickerRemove: "Button_Remove",
+  StickerScrapeLevel: "popup_scrape_sticker_level",
 };
 
 assert(CS2_CSGO_PATH, "CS2_CSGO_PATH must be set.");
