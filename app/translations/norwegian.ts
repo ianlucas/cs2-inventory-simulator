@@ -301,6 +301,7 @@ export const norwegian = {
   SettingsHideNewLabel: "Skjul \"Ny\"-etikett når du lager en gjenstand",
   SettingsLanguage: "Språk",
   SettingsMasterVolume: /* csgo_norwegian.txt */"Hovedvolum",
+  SettingsPrefer2dStickerEditor: "Bruk 2D-klistremerkeeditor",
   SettingsRemoveAllItems: "Tilbakestill lageret mitt",
   SettingsSave: "Lagre",
   SettingsStatsForNerds: "Statistikk for nerdene",

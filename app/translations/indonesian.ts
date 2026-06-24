@@ -299,6 +299,7 @@ export const indonesian = {
   SettingsHideNewLabel: "Sembunyikan label \"Baru\" saat membuat item",
   SettingsLanguage: "Bahasa",
   SettingsMasterVolume: /* csgo_indonesian.txt */"Volume Utama",
+  SettingsPrefer2dStickerEditor: "Gunakan editor stiker 2D",
   SettingsRemoveAllItems: "Reset inventaris saya",
   SettingsSave: "Simpan",
   SettingsStatsForNerds: "Statistik untuk kutu buku",

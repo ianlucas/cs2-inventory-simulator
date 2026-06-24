@@ -303,6 +303,7 @@ export const bulgarian = {
   SettingsHideNewLabel: "Скрий етикета \"Ново!\" при изработка на артикул",
   SettingsLanguage: "Език",
   SettingsMasterVolume: /* csgo_bulgarian.txt */"Основна сила на звука",
+  SettingsPrefer2dStickerEditor: "Използвай 2D редактор на стикери",
   SettingsRemoveAllItems: "Нулирай инвентара ми",
   SettingsSave: "Запази",
   SettingsStatsForNerds: "Статистики за гикове",

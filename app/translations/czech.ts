@@ -302,6 +302,7 @@ export const czech = {
   SettingsHideNewLabel: "Skrýt štítek \"Nový!\" při vytváření předmětu",
   SettingsLanguage: "Jazyk",
   SettingsMasterVolume: /* csgo_czech.txt */"Celková hlasitost",
+  SettingsPrefer2dStickerEditor: "Použít 2D editor samolepek",
   SettingsRemoveAllItems: "Resetovat můj inventář",
   SettingsSave: "Uložit",
   SettingsStatsForNerds: "Statistiky pro nadšence",

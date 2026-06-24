@@ -302,6 +302,7 @@ export const japanese = {
   SettingsHideNewLabel: "アイテム作成時に「NEW」ラベルを非表示",
   SettingsLanguage: "言語",
   SettingsMasterVolume: /* csgo_japanese.txt */"マスターボリューム",
+  SettingsPrefer2dStickerEditor: "2Dステッカーエディターを使用",
   SettingsRemoveAllItems: "インベントリをリセット",
   SettingsSave: "保存",
   SettingsStatsForNerds: "オタク向け統計",

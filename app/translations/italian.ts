@@ -302,6 +302,7 @@ export const italian = {
   SettingsHideNewLabel: "Nascondi etichetta \"Novità\" durante la creazione di un oggetto",
   SettingsLanguage: "Lingua",
   SettingsMasterVolume: /* csgo_italian.txt */"Volume principale",
+  SettingsPrefer2dStickerEditor: "Usa l'editor di adesivi 2D",
   SettingsRemoveAllItems: "Ripristina il mio inventario",
   SettingsSave: "Salva",
   SettingsStatsForNerds: "Statistiche per nerd",

@@ -10,6 +10,7 @@ import { useNavigate, useSubmit } from "react-router";
 import {
   useInventory,
   usePreferences,
+  useRules,
   useTranslate
 } from "~/components/app-context";
 import { EditorRange } from "~/components/editor-range";
@@ -45,8 +46,10 @@ export default function Settings() {
     hideFreeItems: selectedHideFreeItems,
     hideNewItemLabel: selectedHideNewItemLabel,
     language: selectedLanguage,
+    prefer2dStickerEditor: selectedPrefer2dStickerEditor,
     statsForNerds: selectedStatsForNerds
   } = usePreferences();
+  const { appEnable3dViewer } = useRules();
   const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
   const sync = useSync();
@@ -58,6 +61,9 @@ export default function Settings() {
     selectedHideNewItemLabel
   );
   const [language, setLanguage] = useState(selectedLanguage);
+  const [prefer2dStickerEditor, setPrefer2dStickerEditor] = useCheckbox(
+    selectedPrefer2dStickerEditor
+  );
   const [statsForNerds, setStatsForNerds] = useCheckbox(selectedStatsForNerds);
   const [volume, setVolume] = useStorageState("appVolume", 1);
 
@@ -72,6 +78,7 @@ export default function Settings() {
         hideFreeItems,
         hideNewItemLabel,
         language,
+        prefer2dStickerEditor,
         statsForNerds
       },
       {
@@ -151,6 +158,14 @@ export default function Settings() {
             onChange={setHideNewItemLabel}
           />
         </SettingsLabel>
+        {appEnable3dViewer && (
+          <SettingsLabel label={translate("SettingsPrefer2dStickerEditor")}>
+            <EditorToggle
+              checked={prefer2dStickerEditor}
+              onChange={setPrefer2dStickerEditor}
+            />
+          </SettingsLabel>
+        )}
         {inventory.size() > 0 && (
           <button
             className="font-display flex h-12 w-full cursor-default items-center gap-3 rounded-sm border border-neutral-500/20 bg-neutral-800/50 px-3 py-1 text-red-500 transition-all hover:ring-2 hover:ring-red-500"

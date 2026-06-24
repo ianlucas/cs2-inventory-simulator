@@ -302,6 +302,7 @@ export const german = {
   SettingsHideNewLabel: "\"Neu\"-Label beim Herstellen eines Gegenstands ausblenden",
   SettingsLanguage: "Sprache",
   SettingsMasterVolume: /* csgo_german.txt */"Gesamtlautstärke",
+  SettingsPrefer2dStickerEditor: "2D-Aufkleber-Editor verwenden",
   SettingsRemoveAllItems: "Mein Inventar zurücksetzen",
   SettingsSave: "Speichern",
   SettingsStatsForNerds: "Statistiken für Nerds",

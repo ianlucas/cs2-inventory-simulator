@@ -302,6 +302,7 @@ export const swedish = {
   SettingsHideNewLabel: "Dölj \"Nytt\"-etikett",
   SettingsLanguage: "Språk",
   SettingsMasterVolume: /* csgo_swedish.txt */"Huvudvolym",
+  SettingsPrefer2dStickerEditor: "Använd 2D-redigerare för klistermärken",
   SettingsRemoveAllItems: "Ta bort alla föremål",
   SettingsSave: "Spara",
   SettingsStatsForNerds: "Statistik för nördar",

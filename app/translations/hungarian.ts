@@ -300,6 +300,7 @@ export const hungarian = {
   SettingsHideNewLabel: "\"Új\" címke elrejtése tárgy készítésekor",
   SettingsLanguage: "Nyelv",
   SettingsMasterVolume: /* csgo_hungarian.txt */"Fő hangerő",
+  SettingsPrefer2dStickerEditor: "2D matricaszerkesztő használata",
   SettingsRemoveAllItems: "Raktáram visszaállítása",
   SettingsSave: "Mentés",
   SettingsStatsForNerds: "Statisztikák nerdeknek",

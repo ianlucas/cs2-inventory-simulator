@@ -302,6 +302,7 @@ export const polish = {
   SettingsHideNewLabel: "Ukryj etykietę \"Nowe\" podczas tworzenia przedmiotu",
   SettingsLanguage: "Język",
   SettingsMasterVolume: /* csgo_polish.txt */"Głośność ogólna",
+  SettingsPrefer2dStickerEditor: "Użyj edytora naklejek 2D",
   SettingsRemoveAllItems: "Zresetuj mój ekwipunek",
   SettingsSave: "Zapisz",
   SettingsStatsForNerds: "Statystyki dla maniaków",

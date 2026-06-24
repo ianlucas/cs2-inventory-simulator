@@ -303,6 +303,7 @@ export const spanish = {
   SettingsHideNewLabel: "Ocultar etiqueta \"Nuevo\"",
   SettingsLanguage: "Idioma",
   SettingsMasterVolume: /* csgo_spanish.txt */"Volumen general",
+  SettingsPrefer2dStickerEditor: "Usar editor de pegatinas 2D",
   SettingsRemoveAllItems: "Eliminar todos los objetos",
   SettingsSave: "Guardar",
   SettingsStatsForNerds: "Estadísticas para expertos",

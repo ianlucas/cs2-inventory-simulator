@@ -303,6 +303,7 @@ export const ukrainian = {
   SettingsHideNewLabel: "Приховати мітку \"Нове\"",
   SettingsLanguage: "Мова",
   SettingsMasterVolume: /* csgo_ukrainian.txt */"Загальна гучність",
+  SettingsPrefer2dStickerEditor: "Використовувати 2D-редактор наліпок",
   SettingsRemoveAllItems: "Видалити всі предмети",
   SettingsSave: "Зберегти",
   SettingsStatsForNerds: "Статистика для ботанів",

@@ -302,6 +302,7 @@ export const romanian = {
   SettingsHideNewLabel: "Ascunde eticheta \"Nou\"",
   SettingsLanguage: "Limbă",
   SettingsMasterVolume: /* csgo_romanian.txt */"Volum general",
+  SettingsPrefer2dStickerEditor: "Folosește editorul 2D de abțibilduri",
   SettingsRemoveAllItems: "Șterge toate obiectele",
   SettingsSave: "Salvează",
   SettingsStatsForNerds: "Statistici pentru experți",

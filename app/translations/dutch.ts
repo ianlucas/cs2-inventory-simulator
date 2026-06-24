@@ -302,6 +302,7 @@ export const dutch = {
   SettingsHideNewLabel: "Verberg \"Nieuw!\"-label bij het maken van een voorwerp",
   SettingsLanguage: "Taal",
   SettingsMasterVolume: /* csgo_dutch.txt */"Hoofdvolume",
+  SettingsPrefer2dStickerEditor: "2D-stickereditor gebruiken",
   SettingsRemoveAllItems: "Reset mijn inventaris",
   SettingsSave: "Opslaan",
   SettingsStatsForNerds: "Statistieken voor nerds",

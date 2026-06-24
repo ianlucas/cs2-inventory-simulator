@@ -303,6 +303,7 @@ export const latam = {
   SettingsHideNewLabel: "Ocultar etiqueta \"Nuevo\" al crear un objeto",
   SettingsLanguage: "Idioma",
   SettingsMasterVolume: /* csgo_latam.txt */"Volumen general",
+  SettingsPrefer2dStickerEditor: "Usar editor de calcomanías 2D",
   SettingsRemoveAllItems: "Restablecer mi inventario",
   SettingsSave: "Guardar",
   SettingsStatsForNerds: "Estadísticas para nerds",

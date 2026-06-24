@@ -303,6 +303,7 @@ export const vietnamese = {
   SettingsHideNewLabel: "Ẩn nhãn \"Mới\"",
   SettingsLanguage: "Ngôn ngữ",
   SettingsMasterVolume: /* csgo_vietnamese.txt */"Âm lượng chính",
+  SettingsPrefer2dStickerEditor: "Dùng trình chỉnh sửa hình dán 2D",
   SettingsRemoveAllItems: "Xóa tất cả vật phẩm",
   SettingsSave: "Lưu",
   SettingsStatsForNerds: "Thống kê cho người mọt sách",

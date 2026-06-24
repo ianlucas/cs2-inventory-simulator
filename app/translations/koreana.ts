@@ -303,6 +303,7 @@ export const koreana = {
   SettingsHideNewLabel: "아이템 제작 시 \"신규\" 레이블 숨기기",
   SettingsLanguage: "언어",
   SettingsMasterVolume: /* csgo_koreana.txt */"마스터 음량",
+  SettingsPrefer2dStickerEditor: "2D 스티커 편집기 사용",
   SettingsRemoveAllItems: "보관함 초기화",
   SettingsSave: "저장",
   SettingsStatsForNerds: "너드를 위한 통계",

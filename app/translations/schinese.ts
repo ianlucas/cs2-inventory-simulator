@@ -303,6 +303,7 @@ export const schinese = {
   SettingsHideNewLabel: "隐藏新标签",
   SettingsLanguage: "语言",
   SettingsMasterVolume: /* csgo_schinese.txt */"主音量",
+  SettingsPrefer2dStickerEditor: "使用2D印花编辑器",
   SettingsRemoveAllItems: "删除所有物品",
   SettingsSave: "保存",
   SettingsStatsForNerds: "高级统计",

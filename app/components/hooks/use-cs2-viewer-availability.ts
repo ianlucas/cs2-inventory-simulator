@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useSyncExternalStore } from "react";
-import { useRules } from "~/components/app-context";
+import { usePreferences, useRules } from "~/components/app-context";
 
 // Module-level cooldown shared across the whole app: when the viewer reports a
 // rate limit — for this user via scope "ip", or for the whole instance via
@@ -56,16 +56,19 @@ export function markCs2ViewerRateLimited(retryAfterMs: number) {
 
 /**
  * Single source of truth for "can we show the 3D viewer right now?", combining
- * the master rule, the server-resolved origin budget verdict, and any live
- * rate-limit cooldown. The decision is a synchronous boolean read — callers
- * never await — so opening the editor is instant.
+ * the master rule, the server-resolved origin budget verdict, any live
+ * rate-limit cooldown, and the user's preference to stick with the 2D sticker
+ * editors. The decision is a synchronous boolean read — callers never await —
+ * so opening the editor is instant.
  */
 export function useCs2ViewerAvailability() {
   const { appEnable3dViewer, can3dViewerOrigin } = useRules();
+  const { prefer2dStickerEditor } = usePreferences();
   const until = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const canUse3d =
     appEnable3dViewer === true &&
     can3dViewerOrigin === true &&
+    !prefer2dStickerEditor &&
     Date.now() >= until;
   return { canUse3d, markRateLimited: markCs2ViewerRateLimited };
 }

@@ -303,6 +303,7 @@ export const brazilian = {
   SettingsHideNewLabel: "Ocultar indicador de \"Novo!\" ao criar um item",
   SettingsLanguage: "Idioma",
   SettingsMasterVolume: /* csgo_brazilian.txt */"Volume geral",
+  SettingsPrefer2dStickerEditor: "Usar editor de adesivos 2D",
   SettingsRemoveAllItems: "Redefinir meu inventário",
   SettingsSave: "Salvar",
   SettingsStatsForNerds: "Estatísticas para Nerds",

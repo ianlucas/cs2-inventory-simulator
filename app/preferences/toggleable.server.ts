@@ -10,6 +10,8 @@ export async function getToggleable(session: Session) {
     hideFilters: session.get("hideFilters") === "true" || false,
     hideFreeItems: session.get("hideFreeItems") === "true" || false,
     hideNewItemLabel: session.get("hideNewItemLabel") === "true" || false,
+    prefer2dStickerEditor:
+      session.get("prefer2dStickerEditor") === "true" || false,
     statsForNerds: session.get("statsForNerds") === "true" || false
   };
 }

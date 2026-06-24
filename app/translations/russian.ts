@@ -302,6 +302,7 @@ export const russian = {
   SettingsHideNewLabel: "Скрыть метку \"Новое\"",
   SettingsLanguage: "Язык",
   SettingsMasterVolume: /* csgo_russian.txt */"Общая громкость",
+  SettingsPrefer2dStickerEditor: "Использовать 2D-редактор наклеек",
   SettingsRemoveAllItems: "Удалить все предметы",
   SettingsSave: "Сохранить",
   SettingsStatsForNerds: "Статистика для фанатов",

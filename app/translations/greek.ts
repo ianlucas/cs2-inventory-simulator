@@ -303,6 +303,7 @@ export const greek = {
   SettingsHideNewLabel: "Απόκρυψη ετικέτας \"Νέο\" κατά την κατασκευή αντικειμένου",
   SettingsLanguage: "Γλώσσα",
   SettingsMasterVolume: /* csgo_greek.txt */"Κύρια ένταση",
+  SettingsPrefer2dStickerEditor: "Χρήση επεξεργαστή αυτοκόλλητων 2D",
   SettingsRemoveAllItems: "Επαναφορά της λίστας αντικειμένων μου",
   SettingsSave: "Αποθήκευση",
   SettingsStatsForNerds: "Στατιστικά για nerds",

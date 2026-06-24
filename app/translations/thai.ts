@@ -303,6 +303,7 @@ export const thai = {
   SettingsHideNewLabel: "ซ่อนป้าย \"ใหม่\"",
   SettingsLanguage: "ภาษา",
   SettingsMasterVolume: /* csgo_thai.txt */"เสียงหลัก",
+  SettingsPrefer2dStickerEditor: "ใช้ตัวแก้ไขสติกเกอร์ 2D",
   SettingsRemoveAllItems: "ลบไอเท็มทั้งหมด",
   SettingsSave: "บันทึก",
   SettingsStatsForNerds: "สถิติสำหรับคนเนิร์ด",

@@ -303,6 +303,7 @@ export const tchinese = {
   SettingsHideNewLabel: "隱藏新標籤",
   SettingsLanguage: "語言",
   SettingsMasterVolume: /* csgo_tchinese.txt */"主音量",
+  SettingsPrefer2dStickerEditor: "使用2D貼紙編輯器",
   SettingsRemoveAllItems: "刪除所有物品",
   SettingsSave: "儲存",
   SettingsStatsForNerds: "進階統計資料",

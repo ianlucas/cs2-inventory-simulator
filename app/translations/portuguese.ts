@@ -303,6 +303,7 @@ export const portuguese = {
   SettingsHideNewLabel: "Ocultar etiqueta \"Novo!\" ao criar um item",
   SettingsLanguage: "Idioma",
   SettingsMasterVolume: /* csgo_portuguese.txt */"Volume global",
+  SettingsPrefer2dStickerEditor: "Usar editor de autocolantes 2D",
   SettingsRemoveAllItems: "Repor o meu inventário",
   SettingsSave: "Guardar",
   SettingsStatsForNerds: "Estatísticas para nerds",

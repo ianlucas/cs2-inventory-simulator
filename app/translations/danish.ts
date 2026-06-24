@@ -302,6 +302,7 @@ export const danish = {
   SettingsHideNewLabel: "Skjul \"Ny!\"-mærkat ved fremstilling af genstand",
   SettingsLanguage: "Sprog",
   SettingsMasterVolume: /* csgo_danish.txt */"Primær lydstyrke",
+  SettingsPrefer2dStickerEditor: "Brug 2D-klistermærkeeditor",
   SettingsRemoveAllItems: "Nulstil mit inventar",
   SettingsSave: "Gem",
   SettingsStatsForNerds: "Statistik for nørder",

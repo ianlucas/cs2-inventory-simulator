@@ -303,6 +303,7 @@ export const turkish = {
   SettingsHideNewLabel: "\"Yeni\" etiketini gizle",
   SettingsLanguage: "Dil",
   SettingsMasterVolume: /* csgo_turkish.txt */"Ana Ses",
+  SettingsPrefer2dStickerEditor: "2D çıkartma düzenleyicisini kullan",
   SettingsRemoveAllItems: "Tüm eşyaları sil",
   SettingsSave: "Kaydet",
   SettingsStatsForNerds: "İstatistik meraklıları için",

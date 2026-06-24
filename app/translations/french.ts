@@ -302,6 +302,7 @@ export const french = {
   SettingsHideNewLabel: "Masquer l'étiquette \"Nouveau !\" lors de la création d'un objet",
   SettingsLanguage: "Langue",
   SettingsMasterVolume: /* csgo_french.txt */"Volume principal",
+  SettingsPrefer2dStickerEditor: "Utiliser l'éditeur de stickers 2D",
   SettingsRemoveAllItems: "Réinitialiser mon inventaire",
   SettingsSave: "Enregistrer",
   SettingsStatsForNerds: "Statistiques pour experts",

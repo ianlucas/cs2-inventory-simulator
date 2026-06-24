@@ -333,6 +333,7 @@ export const english = {
   SettingsHideNewLabel: "Hide \"New\" label when crafting an item",
   SettingsLanguage: "Language",
   SettingsMasterVolume: /* csgo_english.txt */"Master Volume",
+  SettingsPrefer2dStickerEditor: "Use 2D sticker editor",
   SettingsRemoveAllItems: "Reset my inventory",
   SettingsSave: "Save",
   SettingsStatsForNerds: "Stats for nerds",

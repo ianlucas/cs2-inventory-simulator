@@ -302,6 +302,7 @@ export const finnish = {
   SettingsHideNewLabel: "Piilota \"Uusi!\"-merkintä valmistettaessa esinettä",
   SettingsLanguage: "Kieli",
   SettingsMasterVolume: /* csgo_finnish.txt */"Yleinen äänenvoimakkuus",
+  SettingsPrefer2dStickerEditor: "Käytä 2D-tarraeditoria",
   SettingsRemoveAllItems: "Tyhjennä varusteluetteloni",
   SettingsSave: "Tallenna",
   SettingsStatsForNerds: "Tilastoja nörteille",
