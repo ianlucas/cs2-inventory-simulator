@@ -4,10 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  CS2_STICKER_OFFSET_FACTOR,
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
   CS2ItemType,
+  isFactorPrecise,
   RecordValue
 } from "@ianlucas/cs2-lib";
 import { z } from "zod";
@@ -63,6 +65,7 @@ import {
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
+import { validateStickerRotation, validateStickerWear } from "~/utils/economy";
 import { editInventoryItem } from "~/utils/inventory";
 import { hasKeys } from "~/utils/misc";
 import { nonNegativeInt, teamShape } from "~/utils/shapes";
@@ -72,6 +75,36 @@ import {
   syncInventoryShape
 } from "~/utils/shapes.server";
 import type { Route } from "./+types/api.action.sync._index";
+
+// Placement carried by the sticker-apply actions (applied weapon + free-item add).
+// `schema` is the markup anchor; `x`/`y` ride the offset grid; `rotation` is the
+// in-game signed -180..180 range (so NOT positiveInt). cs2-lib re-validates each
+// against the target model before mutating.
+const stickerPlacementShape = {
+  schema: nonNegativeInt,
+  x: z
+    .number()
+    .optional()
+    .refine(
+      (x) => x === undefined || isFactorPrecise(x, CS2_STICKER_OFFSET_FACTOR)
+    ),
+  y: z
+    .number()
+    .optional()
+    .refine(
+      (y) => y === undefined || isFactorPrecise(y, CS2_STICKER_OFFSET_FACTOR)
+    ),
+  rotation: z
+    .number()
+    .optional()
+    .refine(
+      (rotation) => rotation === undefined || validateStickerRotation(rotation)
+    ),
+  wear: z
+    .number()
+    .optional()
+    .refine((wear) => wear === undefined || validateStickerWear(wear))
+};
 
 const actionShape = z.discriminatedUnion("type", [
   z.object({
@@ -96,9 +129,9 @@ const actionShape = z.discriminatedUnion("type", [
   }),
   z.object({
     type: z.literal(SyncAction.ApplyItemSticker),
-    schema: nonNegativeInt,
     stickerUid: nonNegativeInt,
-    targetUid: nonNegativeInt
+    targetUid: nonNegativeInt,
+    ...stickerPlacementShape
   }),
   z.object({
     type: z.literal(SyncAction.Equip),
@@ -159,8 +192,8 @@ const actionShape = z.discriminatedUnion("type", [
   z.object({
     type: z.literal(SyncAction.AddWithSticker),
     itemId: nonNegativeInt,
-    schema: nonNegativeInt,
-    stickerUid: nonNegativeInt
+    stickerUid: nonNegativeInt,
+    ...stickerPlacementShape
   }),
   z.object({
     type: z.literal(SyncAction.RemoveAllItems)
@@ -444,11 +477,13 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.ApplyItemSticker:
             await inventoryItemAllowApplySticker.for(userId).truthy();
-            inventory.applyItemSticker(
-              action.targetUid,
-              action.stickerUid,
-              action.schema
-            );
+            inventory.applyItemSticker(action.targetUid, action.stickerUid, {
+              schema: action.schema,
+              x: action.x,
+              y: action.y,
+              rotation: action.rotation,
+              wear: action.wear
+            });
             break;
           case SyncAction.Equip:
             inventory.equip(action.uid, action.team);
@@ -497,11 +532,13 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.AddWithSticker:
             await enforceCraftRulesForItem(action.itemId, userId);
-            inventory.addWithSticker(
-              action.stickerUid,
-              action.itemId,
-              action.schema
-            );
+            inventory.addWithSticker(action.stickerUid, action.itemId, {
+              schema: action.schema,
+              x: action.x,
+              y: action.y,
+              rotation: action.rotation,
+              wear: action.wear
+            });
             break;
           case SyncAction.RemoveAllItems:
             inventory.removeAll();

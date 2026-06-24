@@ -7,6 +7,7 @@ import { FloatingFocusManager } from "@floating-ui/react";
 import {
   CS2_INVENTORY_EQUIPPABLE_ITEMS,
   CS2_MAX_PATCHES,
+  CS2_MAX_STICKERS,
   CS2Team
 } from "@ianlucas/cs2-lib";
 import {
@@ -152,7 +153,8 @@ export function InventoryItem({
   const canApplySticker =
     inventoryItemAllowApplySticker &&
     ownApplicableStickers &&
-    ((item.hasStickers() && item.getStickersCount() < 4) || item.isSticker());
+    ((item.hasStickers() && item.getStickersCount() < CS2_MAX_STICKERS) ||
+      item.isSticker());
   const canScrapeSticker =
     inventoryItemAllowScrapeSticker &&
     item.hasStickers() &&
