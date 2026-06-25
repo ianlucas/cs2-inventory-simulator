@@ -54,7 +54,7 @@
     "@types/react-dom": "^19.2.3",
     "eslint": "^10.5.0",
     "eslint-plugin-better-tailwindcss": "^4.6.0",
-    "happy-dom": "^20.10.5",
+    "happy-dom": "^20.10.6",
     "prettier": "^3.8.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.3.1",
