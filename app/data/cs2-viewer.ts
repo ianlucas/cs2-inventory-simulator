@@ -32,7 +32,8 @@ export function toViewerItem(item: Cs2ViewerItemInput): ViewerItem {
   }
   const viewerItem: ViewerItem = { id: item.id };
   if (item.seed !== undefined) viewerItem.seed = item.seed;
-  if (item.wear !== undefined) viewerItem.wear = item.wear;
+  /** @todo Wear is not supported for now. */
+  // if (item.wear !== undefined) viewerItem.wear = item.wear;
   if (item.stickers !== undefined) viewerItem.stickers = item.stickers;
   return viewerItem;
 }
