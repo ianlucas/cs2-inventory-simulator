@@ -31,6 +31,7 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 | `inventoryItemAllowEdit` | Can the user edit an inventory item? | `boolean` | `true` |
 | `inventoryItemAllowApplySticker` | Can the user apply stickers to inventory items? | `boolean` | `true` |
 | `inventoryItemAllowScrapeSticker` | Can the user scrape stickers from inventory items? | `boolean` | `true` |
+| `inventoryItemAllowRemoveSticker` | Can the user remove stickers from inventory items? | `boolean` | `true` |
 | `inventoryItemAllowApplyPatch` | Can the user apply patches to inventory items? | `boolean` | `true` |
 | `inventoryItemAllowRemovePatch` | Can the user remove patches from inventory items? | `boolean` | `true` |
 | `inventoryItemAllowUnlockContainer` | Can the user unlock container inventory items? | `boolean` | `true` |
