@@ -23,4 +23,8 @@ COPY ./prisma /app/prisma
 COPY --from=production-dependencies-env /app/node_modules /app/node_modules
 COPY --from=build-env /app/build /app/build
 WORKDIR /app
+ENV PORT=3000
+EXPOSE 3000
+HEALTHCHECK --start-period=40s --interval=10s --timeout=5s --retries=3 \
+  CMD wget -q -O /dev/null http://127.0.0.1:${PORT:-3000}/healthz || exit 1
 ENTRYPOINT ["./start.sh"]
