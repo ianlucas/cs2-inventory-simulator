@@ -55,7 +55,7 @@
     "eslint": "^10.6.0",
     "eslint-plugin-better-tailwindcss": "^4.6.0",
     "happy-dom": "^20.10.6",
-    "prettier": "^3.8.5",
+    "prettier": "^3.9.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.3.1",
     "terser": "^5.48.0",
