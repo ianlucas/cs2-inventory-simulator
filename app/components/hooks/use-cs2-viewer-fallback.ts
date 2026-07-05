@@ -64,6 +64,18 @@ export function useCs2ViewerFallback(
       clearTimeout(timer);
       setStatus("unavailable");
     });
+    // The viewer reported it can't render the requested item (unknown weapon/sticker id — a cs2-lib
+    // catalog mismatch that slipped past the manifest gate in a stale-manifest race — or a hard asset
+    // failure). Fall back to 2D exactly like an instance-wide rate limit, reusing the same module
+    // cooldown: it flips the parent off 3D, which both drives the swap and breaks the reopen loop.
+    // ~30s is long enough to clear the current interaction and short enough that an unrelated item
+    // returns to 3D promptly.
+    const offUnsupported = api.on("unsupported", () => {
+      markCs2ViewerRateLimited(VIEWER_UNREACHABLE_COOLDOWN_MS);
+      settled = true;
+      clearTimeout(timer);
+      setStatus("unavailable");
+    });
     void api.whenReady().then(() => {
       if (settled) {
         return;
@@ -75,6 +87,7 @@ export function useCs2ViewerFallback(
     return () => {
       clearTimeout(timer);
       offRateLimited();
+      offUnsupported();
     };
   }, [api]);
 

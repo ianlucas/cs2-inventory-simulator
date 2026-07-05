@@ -475,8 +475,12 @@ function ApplyItemSticker2d({
  * place); falls back to the 2D anchor picker when the viewer is unavailable.
  */
 export function ApplyItemSticker(props: ApplyItemStickerProps) {
-  const { canUse3d } = useCs2ViewerAvailability();
-  return canUse3d ? (
+  // The 3D scene renders the target weapon (with its existing stickers) AND the sticker being
+  // applied, so all of them must be viewer-supported; otherwise fall back to the 2D anchor picker.
+  const targetItem = useInventoryItem(props.targetUid);
+  const stickerItem = useInventoryItem(props.stickerUid);
+  const { canUse3d, isStickerSupported } = useCs2ViewerAvailability(targetItem);
+  return canUse3d && isStickerSupported(stickerItem.id) ? (
     <ApplyItemSticker3d {...props} />
   ) : (
     <ApplyItemSticker2d {...props} />

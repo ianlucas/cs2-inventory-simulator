@@ -26,6 +26,11 @@ export interface ViewerState {
 // Which rate limit bound; absent when the server didn't report a known bucket.
 export type RateLimitScope = "ip" | "origin" | "partner";
 
+// Why the viewer can't render the requested item: an unknown weapon or sticker id (a cs2-lib catalog
+// mismatch), or a hard asset failure (a requested surface won't load). Any of them flips the host
+// back to its 2D editor.
+export type ViewerUnsupportedReason = "weapon" | "sticker" | "asset";
+
 // Events the viewer emits back to us. The `state` reply to `getState` is consumed
 // by that promise, so it isn't surfaced as an event here.
 export interface Cs2ViewerEventMap {
@@ -33,6 +38,7 @@ export interface Cs2ViewerEventMap {
   change: ViewerState;
   loading: { busy: boolean };
   rateLimited: { retryAfterMs: number; scope?: RateLimitScope };
+  unsupported: { reason: ViewerUnsupportedReason };
 }
 
 export interface Cs2ViewerApiOptions {
@@ -332,6 +338,12 @@ export class Cs2ViewerApi extends EventTarget {
         break;
       case "rateLimited":
         this.dispatch("rateLimited", data as Cs2ViewerEventMap["rateLimited"]);
+        break;
+      case "unsupported":
+        this.dispatch(
+          "unsupported",
+          data as Cs2ViewerEventMap["unsupported"]
+        );
         break;
     }
   };

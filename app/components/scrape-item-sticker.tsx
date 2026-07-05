@@ -456,7 +456,10 @@ function ScrapeItemSticker2d({ onClose, uid }: ScrapeItemStickerProps) {
  * on the model); falls back to the 2D flow when the viewer is unavailable.
  */
 export function ScrapeItemSticker(props: ScrapeItemStickerProps) {
-  const { canUse3d } = useCs2ViewerAvailability();
+  // The 3D scene renders the weapon with its existing stickers, so the weapon and every sticker must
+  // be viewer-supported; otherwise fall back to the 2D flow.
+  const item = useInventoryItem(props.uid);
+  const { canUse3d } = useCs2ViewerAvailability(item);
   return canUse3d ? (
     <ScrapeItemSticker3d {...props} />
   ) : (

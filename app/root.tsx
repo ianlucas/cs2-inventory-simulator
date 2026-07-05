@@ -37,7 +37,10 @@ import {
   CLOUDFLARE_ANALYTICS_TOKEN,
   SOURCE_COMMIT
 } from "./env.server";
-import { resolveCan3dViewerOrigin } from "./data/cs2-viewer.server";
+import {
+  resolveCan3dViewerOrigin,
+  resolveViewerCatalog
+} from "./data/cs2-viewer.server";
 import { middleware } from "./middleware.server";
 import { getClientRules } from "./models/rule";
 import { steamCallbackUrl } from "./models/rule.server";
@@ -95,6 +98,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
         hostname: new URL(appUrl).hostname,
         key: clientRules.app3dViewerKey
       }),
+      // The viewer's support manifest, for the item-aware 3D gate. Resolved only when 3D is enabled
+      // (skip the fetch otherwise); undefined leaves the gate fail-closed on 2D.
+      viewerCatalog: clientRules.appEnable3dViewer
+        ? resolveViewerCatalog()
+        : undefined,
       meta: { appUrl, appSiteName }
     },
     preferences: {

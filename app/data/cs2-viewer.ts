@@ -21,6 +21,66 @@ export type Cs2ViewerItemInput =
   | CS2InventoryItem
   | CS2BaseInventoryItem;
 
+// The viewer's support manifest (its `/api/catalog`): the max economy id it can render plus the id
+// gaps below it. `supported(id) = id <= maxId && id not in holes`. Encodes the complement of the
+// viewer's ~12k renderable ids in ~60 bytes, which works because cs2-lib ids are stable + append-only
+// (id N is the same item in every version), so the host can compare its OWN ids against this envelope.
+// Resolved server-side (cs2-viewer.server.ts) and injected into rules; read synchronously by the gate.
+export interface ViewerCatalog {
+  maxId: number;
+  holes: [number, number][];
+}
+
+// The manifest as the gate READS it. Structural + loose on `holes` so it accepts both the server's
+// exact `[number, number][]` and the loader-serialized form (SerializeFrom may widen the inner tuples
+// to `number[]`). ViewerCatalog is assignable to this.
+export type ViewerCatalogLike = {
+  maxId: number;
+  holes: readonly (readonly number[])[];
+};
+
+// Whether the viewer can render economy id `id`, per its manifest. Fail-closed: an absent manifest
+// (endpoint down / not yet fetched) reads as unsupported, so the host never offers a 3D viewer it
+// can't back — the item-aware gate then keeps that item on the 2D editor.
+export function isViewerIdSupported(
+  catalog: ViewerCatalogLike | undefined,
+  id: number
+): boolean {
+  if (catalog === undefined || id > catalog.maxId) {
+    return false;
+  }
+  for (const [lo, hi] of catalog.holes) {
+    if (id >= lo && id <= hi) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// Every economy id the viewer must render for `item`: its weapon/base id plus each applied sticker's
+// id. The gate requires ALL of them to be supported before it offers 3D (a weapon with a
+// viewer-unknown sticker falls back to 2D).
+export function viewerItemIds(item: Cs2ViewerItemInput): number[] {
+  const viewerItem = toViewerItem(item);
+  const ids = [viewerItem.id];
+  if (viewerItem.stickers !== undefined) {
+    for (const sticker of Object.values(viewerItem.stickers)) {
+      if (sticker !== undefined) {
+        ids.push(sticker.id);
+      }
+    }
+  }
+  return ids;
+}
+
+// Whether the viewer can render `item` in full — its body and every applied sticker.
+export function isViewerItemSupported(
+  catalog: ViewerCatalogLike | undefined,
+  item: Cs2ViewerItemInput
+): boolean {
+  return viewerItemIds(item).every((id) => isViewerIdSupported(catalog, id));
+}
+
 // Narrow any accepted item into the subset the viewer reads (id/seed/wear/
 // stickers), dropping undefined fields so the viewer overlays its own defaults.
 export function toViewerItem(item: Cs2ViewerItemInput): ViewerItem {
