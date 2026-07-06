@@ -162,6 +162,9 @@ function ApplyItemSticker3d({
   const [initialItem] = useState<CS2BaseInventoryItem>(() => ({
     id: targetItem.id,
     seed: targetItem.seed,
+    wear: targetItem.wear,
+    statTrak: targetItem.statTrak,
+    nameTag: targetItem.nameTag,
     stickers: CS2InventoryItem.stickersFromArray([...existing, newSticker])
   }));
   const { api, viewerProps } = useCs2Viewer({

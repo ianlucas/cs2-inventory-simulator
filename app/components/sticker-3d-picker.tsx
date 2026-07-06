@@ -131,18 +131,24 @@ function DrawerTab({
  */
 function Sticker3dEditorOverlay({
   forItem,
+  nameTag,
   onChange,
   onClose,
   seed,
+  statTrak,
   stickerFilter,
-  value
+  value,
+  wear
 }: {
   forItem: CS2EconomyItem | CS2InventoryItem;
+  nameTag?: string;
   onChange: (value: Stickers) => void;
   onClose: () => void;
   seed?: number;
+  statTrak?: number;
   stickerFilter?: (item: CS2EconomyItem) => boolean;
   value: Stickers;
+  wear?: number;
 }) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
@@ -166,6 +172,9 @@ function Sticker3dEditorOverlay({
   const [initialItem] = useState<CS2BaseInventoryItem>(() => ({
     id: forItem.id,
     seed,
+    wear,
+    statTrak,
+    nameTag,
     stickers: toRecord(toArray(value, maxSchema))
   }));
   const { api, viewerProps } = useCs2Viewer({
@@ -311,7 +320,14 @@ function Sticker3dEditorOverlay({
   }
 
   function buildItem(next: Sticker[]): CS2BaseInventoryItem {
-    return { id: forItem.id, seed, stickers: toRecord(next) };
+    return {
+      id: forItem.id,
+      seed,
+      wear,
+      statTrak,
+      nameTag,
+      stickers: toRecord(next)
+    };
   }
 
   function handleSelect(item: CS2EconomyItem) {
@@ -747,17 +763,23 @@ function Sticker3dEditorOverlay({
 export function Sticker3dPicker({
   disabled,
   forItem,
+  nameTag,
   onChange,
   seed,
+  statTrak,
   stickerFilter,
-  value
+  value,
+  wear
 }: {
   disabled?: boolean;
   forItem: CS2EconomyItem | CS2InventoryItem;
+  nameTag?: string;
   onChange: (value: Stickers) => void;
   seed?: number;
+  statTrak?: number;
   stickerFilter?: (item: CS2EconomyItem) => boolean;
   value: Stickers;
+  wear?: number;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -771,11 +793,14 @@ export function Sticker3dPicker({
       {isOpen && (
         <Sticker3dEditorOverlay
           forItem={forItem}
+          nameTag={nameTag}
           onChange={onChange}
           onClose={() => setIsOpen(false)}
           seed={seed}
+          statTrak={statTrak}
           stickerFilter={stickerFilter}
           value={value}
+          wear={wear}
         />
       )}
     </>

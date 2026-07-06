@@ -345,6 +345,9 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
   const [initialItem] = useState<CS2BaseInventoryItem>(() => ({
     id: item.id,
     seed: item.seed,
+    wear: item.wear,
+    statTrak: item.statTrak,
+    nameTag: item.nameTag,
     stickers: CS2InventoryItem.stickersFromArray(
       CS2InventoryItem.stickersToArray(
         Object.fromEntries(item.someStickers()),

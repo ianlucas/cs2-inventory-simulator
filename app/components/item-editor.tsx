@@ -220,10 +220,17 @@ export function ItemEditor({
             <Sticker3dPicker
               disabled={isDisabled}
               forItem={item}
+              nameTag={attributes.value.nameTag || undefined}
               onChange={attributes.update("stickers")}
               seed={attributes.value.seed}
+              statTrak={
+                attributes.value.statTrak
+                  ? (defaults?.statTrak ?? 0)
+                  : undefined
+              }
               stickerFilter={sticker3dFilter}
               value={attributes.value.stickers}
+              wear={attributes.value.wear}
             />
           ) : (
             <StickerPicker
