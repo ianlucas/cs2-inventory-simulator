@@ -20,7 +20,7 @@ import { setupTranslation } from "./translation.server";
 
 const ABORT_DELAY = 5_000;
 
-CS2Economy.use({ items: CS2_ITEMS, language: english });
+CS2Economy.load({ items: CS2_ITEMS, language: english });
 setupTranslation();
 setupPurge();
 scheduleInactivityReset();

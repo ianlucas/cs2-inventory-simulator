@@ -41,7 +41,7 @@ export function RenameItem({
   const [isConfirmed, toggleIsConfirmed] = useToggle();
 
   const inventoryItem = useInventoryItem(targetUid);
-  const isInvalid = !CS2Economy.safeValidateNametag(nameTag);
+  const isInvalid = !CS2Economy.safeValidateNameTag(nameTag);
   const isConfirmDisabled = nameTag.length === 0;
 
   function handleRename() {
@@ -54,7 +54,7 @@ export function RenameItem({
         nameTag: nameTag
       });
       setInventory(
-        inventory.addWithNametag(toolUid, inventoryItem.id, nameTag)
+        inventory.addWithNameTag(toolUid, inventoryItem.id, nameTag)
       );
     } else {
       sync({
@@ -99,7 +99,7 @@ export function RenameItem({
                 onChange={setNameTag}
                 placeholder={translate("InventoryItemRenamePlaceholder")}
                 validate={(nameTag) =>
-                  CS2Economy.safeValidateNametag(nameTag ?? "")
+                  CS2Economy.safeValidateNameTag(nameTag ?? "")
                 }
                 value={nameTag}
               />

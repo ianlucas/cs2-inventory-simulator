@@ -7,8 +7,8 @@ import { FloatingFocusManager } from "@floating-ui/react";
 import {
   CS2_INVENTORY_EQUIPPABLE_ITEMS,
   CS2_MAX_PATCHES,
-  CS2Team,
-  CS2TeamValues
+  CS2_MAX_STICKERS,
+  CS2Team
 } from "@ianlucas/cs2-lib";
 import {
   CS2_PREVIEW_INSPECTABLE_ITEMS,
@@ -65,7 +65,7 @@ export function InventoryItem({
   onClick?: (uid: number) => void;
   onDepositToStorageUnit?: (uid: number) => void;
   onEdit?: (uid: number) => void;
-  onEquip?: (uid: number, team?: CS2TeamValues) => void;
+  onEquip?: (uid: number, team?: CS2Team) => void;
   onInspectItem?: (uid: number) => void;
   onInspectStorageUnit?: (uid: number) => void;
   onRemove?: (uid: number) => void;
@@ -75,7 +75,7 @@ export function InventoryItem({
   onRetrieveFromStorageUnit?: (uid: number) => void;
   onScrapeSticker?: (uid: number) => void;
   onSwapItemsStatTrak?: (uid: number) => void;
-  onUnequip?: (uid: number, team?: CS2TeamValues) => void;
+  onUnequip?: (uid: number, team?: CS2Team) => void;
   onUnlockContainer?: (uid: number) => void;
   ownApplicablePatches?: boolean;
   ownApplicableStickers?: boolean;
@@ -153,7 +153,8 @@ export function InventoryItem({
   const canApplySticker =
     inventoryItemAllowApplySticker &&
     ownApplicableStickers &&
-    ((item.hasStickers() && item.getStickersCount() < 4) || item.isSticker());
+    ((item.hasStickers() && item.getStickersCount() < CS2_MAX_STICKERS) ||
+      item.isSticker());
   const canScrapeSticker =
     inventoryItemAllowScrapeSticker &&
     item.hasStickers() &&

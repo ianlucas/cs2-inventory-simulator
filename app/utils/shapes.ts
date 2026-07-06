@@ -6,6 +6,7 @@
 import { CS2Economy } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import {
+  validateKeychainOffset,
   validateKeychainSeed,
   validateStickerOffset,
   validateStickerRotation,
@@ -16,6 +17,31 @@ export const nonNegativeInt = z.number().int().nonnegative().finite().safe();
 export const positiveInt = z.number().int().positive().finite().safe();
 export const nonNegativeFloat = z.number().nonnegative().finite();
 
+// A sticker placement's offset (x/y), rotation, and wear — each optional and
+// self-validating against the economy rules. Shared by the stored-inventory shape
+// below and the sync action shape (`~/routes/api.action.sync`) so the two never drift
+// on what a valid placement is. Offsets and rotation are signed (the sticker moves
+// either way and rotates to negative angles), so the base is a plain finite number —
+// NOT `positiveInt`, which would wrongly reject negatives, zero, and fractions.
+export const optionalStickerOffset = z
+  .number()
+  .finite()
+  .optional()
+  .refine(
+    (value) =>
+      value === undefined || validateStickerOffset(value, undefined, undefined)
+  );
+export const optionalStickerRotation = z
+  .number()
+  .finite()
+  .optional()
+  .refine((value) => value === undefined || validateStickerRotation(value));
+export const optionalStickerWear = z
+  .number()
+  .finite()
+  .optional()
+  .refine((value) => value === undefined || validateStickerWear(value));
+
 export const baseInventoryItemProps = {
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
@@ -25,8 +51,8 @@ export const baseInventoryItemProps = {
     .string()
     .max(20)
     .optional()
-    .transform((nameTag) => CS2Economy.trimNametag(nameTag))
-    .refine((nameTag) => CS2Economy.safeValidateNametag(nameTag))
+    .transform((nameTag) => CS2Economy.trimNameTag(nameTag))
+    .refine((nameTag) => CS2Economy.safeValidateNameTag(nameTag))
     .optional(),
   keychains: z
     .record(
@@ -39,15 +65,15 @@ export const baseInventoryItemProps = {
         x: z
           .number()
           .optional()
-          .refine((x) => x === undefined || validateStickerOffset(x)),
+          .refine((x) => x === undefined || validateKeychainOffset(x)),
         y: z
           .number()
           .optional()
-          .refine((y) => y === undefined || validateStickerOffset(y)),
+          .refine((y) => y === undefined || validateKeychainOffset(y)),
         z: z
           .number()
           .optional()
-          .refine((z) => z === undefined || validateStickerOffset(z))
+          .refine((z) => z === undefined || validateKeychainOffset(z))
       })
     )
     .optional(),
@@ -59,24 +85,11 @@ export const baseInventoryItemProps = {
       z.string(),
       z.object({
         id: nonNegativeInt,
-        rotation: positiveInt
-          .optional()
-          .refine(
-            (rotation) =>
-              rotation === undefined || validateStickerRotation(rotation)
-          ),
-        wear: nonNegativeFloat
-          .optional()
-          .refine((wear) => wear === undefined || validateStickerWear(wear)),
+        rotation: optionalStickerRotation,
+        wear: optionalStickerWear,
         schema: z.number().int().min(0).optional(),
-        x: z
-          .number()
-          .optional()
-          .refine((x) => x === undefined || validateStickerOffset(x)),
-        y: z
-          .number()
-          .optional()
-          .refine((y) => y === undefined || validateStickerOffset(y))
+        x: optionalStickerOffset,
+        y: optionalStickerOffset
       })
     )
     .optional(),

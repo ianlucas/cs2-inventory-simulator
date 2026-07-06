@@ -46,6 +46,7 @@ model UserPreference {
   hideFreeItems String?
   hideNewItemLabel String?
   language String?
+  prefer2dStickerEditor String?
   statsForNerds String?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @id

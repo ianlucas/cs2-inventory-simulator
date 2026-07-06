@@ -11,6 +11,7 @@ import {
   CS2_MAX_STICKERS,
   CS2_MIN_STICKER_ROTATION,
   CS2_MIN_STICKER_WEAR,
+  CS2_STICKER_OFFSET_FACTOR,
   CS2_STICKER_WEAR_FACTOR,
   CS2EconomyItem
 } from "@ianlucas/cs2-lib";
@@ -22,9 +23,6 @@ import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useEffect } from "react";
 import {
-  maxStickerOffset,
-  minStickerOffset,
-  stickerOffsetFactor,
   stickerOffsetStringMaxLen,
   stickerOffsetToString,
   stickerRotationStringMaxLen,
@@ -49,6 +47,9 @@ import { confirm } from "./modal-generic";
 export function AppliedStickerEditor({
   className,
   forItem,
+  isHideItemDisplay,
+  isHidePreview,
+  isResetPlacementOnSchema,
   isHideStickerRotation,
   isHideStickerSchema,
   isHideStickerWear,
@@ -62,6 +63,9 @@ export function AppliedStickerEditor({
 }: {
   className?: string;
   forItem?: CS2EconomyItem;
+  isHideItemDisplay?: boolean;
+  isHidePreview?: boolean;
+  isResetPlacementOnSchema?: boolean;
   isHideStickerRotation?: boolean;
   isHideStickerSchema?: boolean;
   isHideStickerWear?: boolean;
@@ -101,6 +105,14 @@ export function AppliedStickerEditor({
   const attributes = useKeyValues(value);
   const canPreviewItem =
     slot !== undefined && forItem !== undefined && stickers !== undefined;
+  // Per-model sticker-offset envelope. When the model (or a missing target item)
+  // doesn't publish bounds for an axis, that control is hidden: the value stays
+  // at its 0 default, which sits inside every real envelope, and CS2Inventory is
+  // the authoritative gate for what actually persists.
+  const stickerOffsetXMin = forItem?.getMinimumStickerOffsetX();
+  const stickerOffsetXMax = forItem?.getMaximumStickerOffsetX();
+  const stickerOffsetYMin = forItem?.getMinimumStickerOffsetY();
+  const stickerOffsetYMax = forItem?.getMaximumStickerOffsetY();
 
   function handlePreview() {
     if (!canPreviewItem) {
@@ -151,7 +163,9 @@ export function AppliedStickerEditor({
 
   return (
     <div className={clsx("m-auto text-sm select-none", className)}>
-      <EditorItemDisplay item={item} wear={attributes.value.wear} />
+      {!isHideItemDisplay && (
+        <EditorItemDisplay item={item} wear={attributes.value.wear} />
+      )}
       <div className="space-y-1.5">
         {!isHideStickerWear && (
           <EditorLabel label={translate("EditorWear")}>
@@ -171,42 +185,87 @@ export function AppliedStickerEditor({
             />
           </EditorLabel>
         )}
-        {!isHideStickerX && (
-          <EditorLabel label={translate("EditorStickerX")}>
+        {!isHideStickerSchema && (
+          <EditorLabel label={translate("EditorStickerSchema")}>
             <EditorStepRangeWithInput
+              emptyValue={-1}
               inputStyles="w-24 min-w-0"
-              max={maxStickerOffset}
-              maxLength={stickerOffsetStringMaxLen}
-              min={minStickerOffset}
-              onChange={attributes.update("x")}
-              randomizable
-              step={stickerOffsetFactor}
+              max={(forItem?.getStickerSchemaCount() ?? CS2_MAX_STICKERS) - 1}
+              maxLength={stickerSchemaStringMaxLen}
+              min={-1}
+              onChange={
+                isResetPlacementOnSchema
+                  ? (schema) =>
+                      attributes.setValue((current) => ({
+                        ...current,
+                        schema,
+                        x: 0,
+                        y: 0,
+                        rotation: 0
+                      }))
+                  : attributes.update("schema")
+              }
+              placeholder={translate("EditorStickerSchemaPlaceholder")}
+              step={1}
               stepRangeStyles="flex-1"
-              transform={stickerOffsetToString}
-              type="float"
-              validate={validateStickerOffset}
-              value={attributes.value.x}
+              type="int"
+              validate={(value) => validateStickerSchema(value, forItem)}
+              value={attributes.value.schema}
             />
           </EditorLabel>
         )}
-        {!isHideStickerY && (
-          <EditorLabel label={translate("EditorStickerY")}>
-            <EditorStepRangeWithInput
-              inputStyles="w-24 min-w-0"
-              max={maxStickerOffset}
-              maxLength={stickerOffsetStringMaxLen}
-              min={minStickerOffset}
-              onChange={attributes.update("y")}
-              randomizable
-              step={stickerOffsetFactor}
-              stepRangeStyles="flex-1"
-              transform={stickerOffsetToString}
-              type="float"
-              validate={validateStickerOffset}
-              value={attributes.value.y}
-            />
-          </EditorLabel>
-        )}
+        {!isHideStickerX &&
+          stickerOffsetXMin !== undefined &&
+          stickerOffsetXMax !== undefined && (
+            <EditorLabel label={translate("EditorStickerX")}>
+              <EditorStepRangeWithInput
+                inputStyles="w-24 min-w-0"
+                max={stickerOffsetXMax}
+                maxLength={stickerOffsetStringMaxLen}
+                min={stickerOffsetXMin}
+                onChange={attributes.update("x")}
+                randomizable
+                step={CS2_STICKER_OFFSET_FACTOR}
+                stepRangeStyles="flex-1"
+                transform={stickerOffsetToString}
+                type="float"
+                validate={(value) =>
+                  validateStickerOffset(
+                    value,
+                    stickerOffsetXMin,
+                    stickerOffsetXMax
+                  )
+                }
+                value={attributes.value.x}
+              />
+            </EditorLabel>
+          )}
+        {!isHideStickerY &&
+          stickerOffsetYMin !== undefined &&
+          stickerOffsetYMax !== undefined && (
+            <EditorLabel label={translate("EditorStickerY")}>
+              <EditorStepRangeWithInput
+                inputStyles="w-24 min-w-0"
+                max={stickerOffsetYMax}
+                maxLength={stickerOffsetStringMaxLen}
+                min={stickerOffsetYMin}
+                onChange={attributes.update("y")}
+                randomizable
+                step={CS2_STICKER_OFFSET_FACTOR}
+                stepRangeStyles="flex-1"
+                transform={stickerOffsetToString}
+                type="float"
+                validate={(value) =>
+                  validateStickerOffset(
+                    value,
+                    stickerOffsetYMin,
+                    stickerOffsetYMax
+                  )
+                }
+                value={attributes.value.y}
+              />
+            </EditorLabel>
+          )}
         {!isHideStickerRotation && (
           <EditorLabel label={translate("EditorStickerRotation")}>
             <EditorStepRangeWithInput
@@ -224,24 +283,6 @@ export function AppliedStickerEditor({
             />
           </EditorLabel>
         )}
-        {!isHideStickerSchema && (
-          <EditorLabel label={translate("EditorStickerSchema")}>
-            <EditorStepRangeWithInput
-              emptyValue={-1}
-              inputStyles="w-24 min-w-0"
-              max={(forItem?.getStickerSlotCount() ?? CS2_MAX_STICKERS) - 1}
-              maxLength={stickerSchemaStringMaxLen}
-              min={-1}
-              onChange={attributes.update("schema")}
-              placeholder={translate("EditorStickerSchemaPlaceholder")}
-              step={1}
-              stepRangeStyles="flex-1"
-              type="int"
-              validate={(value) => validateStickerSchema(value, forItem)}
-              value={attributes.value.schema}
-            />
-          </EditorLabel>
-        )}
         <div className="flex justify-end gap-1">
           <ButtonWithTooltip
             tooltip={translate("EditorReset")}
@@ -250,15 +291,17 @@ export function AppliedStickerEditor({
           >
             <FontAwesomeIcon icon={faArrowRotateLeft} className="h-4" />
           </ButtonWithTooltip>
-          <ButtonWithTooltip
-            tooltip={translate(
-              copied ? "EditorCopiedToClipboard" : "EditorPreview"
-            )}
-            className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
-            onClick={handlePreview}
-          >
-            <FontAwesomeIcon icon={faEye} className="h-4" />
-          </ButtonWithTooltip>
+          {!isHidePreview && (
+            <ButtonWithTooltip
+              tooltip={translate(
+                copied ? "EditorCopiedToClipboard" : "EditorPreview"
+              )}
+              className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
+              onClick={handlePreview}
+            >
+              <FontAwesomeIcon icon={faEye} className="h-4" />
+            </ButtonWithTooltip>
+          )}
         </div>
       </div>
     </div>

@@ -90,6 +90,21 @@
   }
 }
 
+@keyframes scrape-pop {
+  0% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  40% {
+    filter: brightness(2.4);
+    transform: scale(1.15);
+  }
+  100% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+}
+
 .text-outline-1 {
   text-shadow:
     #000 1px 0px 0px,

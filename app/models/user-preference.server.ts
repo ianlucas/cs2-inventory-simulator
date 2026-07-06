@@ -11,6 +11,7 @@ type UserPreferenceKeys =
   | "hideFreeItems"
   | "hideNewItemLabel"
   | "language"
+  | "prefer2dStickerEditor"
   | "statsForNerds";
 
 export async function getUserPreference(

@@ -59,19 +59,37 @@ import {
   inventoryItemAllowApplySticker,
   inventoryItemAllowEdit,
   inventoryItemAllowRemovePatch,
+  inventoryItemAllowRemoveSticker,
   inventoryItemAllowScrapeSticker
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
 import { editInventoryItem } from "~/utils/inventory";
 import { hasKeys } from "~/utils/misc";
-import { nonNegativeInt, teamShape } from "~/utils/shapes";
+import {
+  nonNegativeInt,
+  optionalStickerOffset,
+  optionalStickerRotation,
+  optionalStickerWear,
+  teamShape
+} from "~/utils/shapes";
 import {
   clientInventoryItemShape,
   itemEditorAttributesShape,
   syncInventoryShape
 } from "~/utils/shapes.server";
 import type { Route } from "./+types/api.action.sync._index";
+
+// Placement carried by the sticker-apply actions (applied weapon + free-item add).
+// `schema` is the markup anchor; `x`/`y`/`rotation`/`wear` reuse the shared sticker
+// fields. cs2-lib re-validates each against the target model before mutating.
+const stickerPlacementShape = {
+  schema: nonNegativeInt,
+  x: optionalStickerOffset,
+  y: optionalStickerOffset,
+  rotation: optionalStickerRotation,
+  wear: optionalStickerWear
+};
 
 const actionShape = z.discriminatedUnion("type", [
   z.object({
@@ -96,9 +114,9 @@ const actionShape = z.discriminatedUnion("type", [
   }),
   z.object({
     type: z.literal(SyncAction.ApplyItemSticker),
-    slot: nonNegativeInt,
     stickerUid: nonNegativeInt,
-    targetUid: nonNegativeInt
+    targetUid: nonNegativeInt,
+    ...stickerPlacementShape
   }),
   z.object({
     type: z.literal(SyncAction.Equip),
@@ -126,9 +144,15 @@ const actionShape = z.discriminatedUnion("type", [
     slot: nonNegativeInt
   }),
   z.object({
+    type: z.literal(SyncAction.RemoveItemSticker),
+    targetUid: nonNegativeInt,
+    index: nonNegativeInt
+  }),
+  z.object({
     type: z.literal(SyncAction.ScrapeItemSticker),
     targetUid: nonNegativeInt,
-    slot: nonNegativeInt
+    index: nonNegativeInt,
+    wear: optionalStickerWear
   }),
   z.object({
     type: z.literal(SyncAction.SwapItemsStatTrak),
@@ -159,8 +183,8 @@ const actionShape = z.discriminatedUnion("type", [
   z.object({
     type: z.literal(SyncAction.AddWithSticker),
     itemId: nonNegativeInt,
-    slot: nonNegativeInt,
-    stickerUid: nonNegativeInt
+    stickerUid: nonNegativeInt,
+    ...stickerPlacementShape
   }),
   z.object({
     type: z.literal(SyncAction.RemoveAllItems)
@@ -428,7 +452,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.AddWithNametag:
             await enforceCraftRulesForItem(action.itemId, userId);
-            inventory.addWithNametag(
+            inventory.addWithNameTag(
               action.toolUid,
               action.itemId,
               action.nameTag
@@ -444,11 +468,13 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.ApplyItemSticker:
             await inventoryItemAllowApplySticker.for(userId).truthy();
-            inventory.applyItemSticker(
-              action.targetUid,
-              action.stickerUid,
-              action.slot
-            );
+            inventory.applyItemSticker(action.targetUid, action.stickerUid, {
+              schema: action.schema,
+              x: action.x,
+              y: action.y,
+              rotation: action.rotation,
+              wear: action.wear
+            });
             break;
           case SyncAction.Equip:
             inventory.equip(action.uid, action.team);
@@ -470,9 +496,17 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             await inventoryItemAllowRemovePatch.for(userId).truthy();
             inventory.removeItemPatch(action.targetUid, action.slot);
             break;
+          case SyncAction.RemoveItemSticker:
+            await inventoryItemAllowRemoveSticker.for(userId).truthy();
+            inventory.removeItemSticker(action.targetUid, action.index);
+            break;
           case SyncAction.ScrapeItemSticker:
             await inventoryItemAllowScrapeSticker.for(userId).truthy();
-            inventory.scrapeItemSticker(action.targetUid, action.slot);
+            inventory.scrapeItemSticker(
+              action.targetUid,
+              action.index,
+              action.wear
+            );
             break;
           case SyncAction.SwapItemsStatTrak:
             inventory.swapItemsStatTrak(
@@ -497,11 +531,13 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.AddWithSticker:
             await enforceCraftRulesForItem(action.itemId, userId);
-            inventory.addWithSticker(
-              action.stickerUid,
-              action.itemId,
-              action.slot
-            );
+            inventory.addWithSticker(action.stickerUid, action.itemId, {
+              schema: action.schema,
+              x: action.x,
+              y: action.y,
+              rotation: action.rotation,
+              wear: action.wear
+            });
             break;
           case SyncAction.RemoveAllItems:
             inventory.removeAll();

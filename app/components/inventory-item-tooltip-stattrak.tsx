@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2ItemType, CS2ItemTypeValues } from "@ianlucas/cs2-lib";
+import { CS2ItemType } from "@ianlucas/cs2-lib";
 import { useTranslate } from "./app-context";
 
 export function InventoryItemTooltipStatTrak({
@@ -11,7 +11,7 @@ export function InventoryItemTooltipStatTrak({
   type
 }: {
   statTrak?: number;
-  type: CS2ItemTypeValues;
+  type: CS2ItemType;
 }) {
   const translate = useTranslate();
 

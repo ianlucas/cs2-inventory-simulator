@@ -18,6 +18,7 @@ export const SyncAction = {
   Remove: "remove",
   RemoveAllItems: "remove-all-items",
   RemoveItemPatch: "remove-item-patch",
+  RemoveItemSticker: "remove-item-sticker",
   RenameItem: "rename-item",
   RenameStorageUnit: "rename-storage-unit",
   RetrieveFromStorageUnit: "retrieve-from-storage-unit",

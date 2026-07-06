@@ -6,7 +6,11 @@
 import { assert, fail } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { prisma } from "~/db.server";
-import { STEAM_API_KEY, STEAM_CALLBACK_URL } from "~/env.server";
+import {
+  CS2_VIEWER_KEY,
+  STEAM_API_KEY,
+  STEAM_CALLBACK_URL
+} from "~/env.server";
 import { noop } from "~/utils/misc";
 
 class RuleFor<RuleValue> {
@@ -345,6 +349,12 @@ export const inventoryItemAllowScrapeSticker = new Rule({
   defaultValue: true
 });
 
+export const inventoryItemAllowRemoveSticker = new Rule({
+  name: "inventoryItemAllowRemoveSticker",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const inventoryItemAllowShare = new Rule({
   name: "inventoryItemAllowShare",
   type: "boolean",
@@ -589,6 +599,18 @@ export const appHideAuth = new Rule({
   name: "appHideAuth",
   type: "boolean",
   defaultValue: false
+});
+
+export const appEnable3dViewer = new Rule({
+  name: "appEnable3dViewer",
+  type: "boolean",
+  defaultValue: false
+});
+
+export const app3dViewerKey = new Rule({
+  name: "app3dViewerKey",
+  type: "string",
+  defaultValue: CS2_VIEWER_KEY ?? ""
 });
 
 export const csFloatUrl = new Rule({

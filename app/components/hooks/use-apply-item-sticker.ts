@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { assert } from "@ianlucas/cs2-lib";
+import { assert, CS2_MAX_STICKERS } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
@@ -23,8 +23,9 @@ export function useApplyItemSticker() {
       uid,
       items: items.filter(({ item }) =>
         selectedItem.isSticker()
-          ? item.hasStickers() && item.getStickersCount() < 4
-          : selectedItem.getStickersCount() < 4 && item.isSticker()
+          ? item.hasStickers() && item.getStickersCount() < CS2_MAX_STICKERS
+          : selectedItem.getStickersCount() < CS2_MAX_STICKERS &&
+            item.isSticker()
       ),
       type: "apply-item-sticker"
     });

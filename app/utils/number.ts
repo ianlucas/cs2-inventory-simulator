@@ -23,7 +23,3 @@ export function format(n: number) {
     return n.toString();
   }
 }
-
-export function truncate(value: number, factor: number) {
-  return parseFloat(String(value).substring(0, String(factor).length));
-}

@@ -36,7 +36,9 @@ export const loader = api(async ({ request }: Route.LoaderArgs) => {
       "background",
       "hideFilters",
       "hideFreeItems",
+      "hideNewItemLabel",
       "language",
+      "prefer2dStickerEditor",
       "statsForNerds"
     ])
   );
@@ -63,7 +65,8 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       statsForNerds: z.literal("true").or(z.literal("false")),
       hideFreeItems: z.literal("true").or(z.literal("false")),
       hideFilters: z.literal("true").or(z.literal("false")),
-      hideNewItemLabel: z.literal("true").or(z.literal("false"))
+      hideNewItemLabel: z.literal("true").or(z.literal("false")),
+      prefer2dStickerEditor: z.literal("true").or(z.literal("false"))
     })
     .parse(Object.fromEntries(await request.formData()));
   if (userId) {

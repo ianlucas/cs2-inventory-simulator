@@ -16,7 +16,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { useMeasure } from "@uidotdev/usehooks";
 import clsx from "clsx";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import {
   isItemCountable,
   wearStringMaxLen,
@@ -30,11 +30,13 @@ import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
+import { useCs2ViewerAvailability } from "./hooks/use-cs2-viewer-availability";
 import { useIsDesktop } from "./hooks/use-is-desktop";
 import { useKeyValues } from "./hooks/use-key-values";
 import { KeychainPicker } from "./keychain-picker";
 import { confirm } from "./modal-generic";
 import { PatchPicker } from "./patch-picker";
+import { Sticker3dPicker } from "./sticker-3d-picker";
 import { StickerPicker } from "./sticker-picker";
 
 export interface ItemEditorAttributes {
@@ -109,7 +111,7 @@ export function ItemEditor({
   const hasKeychains = !isHideKeychains && item.hasKeychains();
   const hasStickers = !isHideStickers && item.hasStickers();
   const hasPatches = !isHidePatches && item.hasPatches();
-  const hasNameTag = !isHideNameTag && item.hasNametag();
+  const hasNameTag = !isHideNameTag && item.hasNameTag();
   const hasSeed = !isHideSeed && item.hasSeed();
   const hasWear = !isHideWear && item.hasWear();
   const hasStatTrak = !isHideStatTrak && item.hasStatTrak();
@@ -118,6 +120,29 @@ export function ItemEditor({
 
   const translate = useTranslate();
   const isDesktop = useIsDesktop();
+  // Item-aware: `canUse3d` also folds in whether the viewer can render THIS item and its existing
+  // stickers, so a viewer-unknown weapon/sticker keeps the 2D editor.
+  const { canUse3d, isStickerSupported } = useCs2ViewerAvailability(item);
+
+  // The 3D viewer edits every sticker dimension, so only offer it when none are
+  // constrained (and not in the read-only/disabled view).
+  const use3dStickerPicker =
+    canUse3d &&
+    !isDisabled &&
+    !isHideStickerRotation &&
+    !isHideStickerSchema &&
+    !isHideStickerWear &&
+    !isHideStickerX &&
+    !isHideStickerY;
+
+  // In 3D, hide stickers the viewer can't render (newer than its cs2-lib) so the user only picks ones
+  // it can show; the 2D picker keeps the full list. Composes with any caller-provided stickerFilter.
+  const sticker3dFilter = useCallback(
+    (economyItem: CS2EconomyItem) =>
+      isStickerSupported(economyItem.id) &&
+      (stickerFilter === undefined || stickerFilter(economyItem)),
+    [isStickerSupported, stickerFilter]
+  );
 
   const [attributesRef, { height: attributesHeight }] = useMeasure();
   const isTwoColumn = isDesktop && (attributesHeight ?? 0) > 250;
@@ -191,18 +216,36 @@ export function ItemEditor({
     <div ref={attributesRef} className="space-y-1.5">
       {hasStickers && (
         <EditorLabel block label={translate("EditorStickers")}>
-          <StickerPicker
-            disabled={isDisabled}
-            forItem={item}
-            isHideStickerRotation={isHideStickerRotation}
-            isHideStickerSchema={isHideStickerSchema}
-            isHideStickerWear={isHideStickerWear}
-            isHideStickerX={isHideStickerX}
-            isHideStickerY={isHideStickerY}
-            onChange={attributes.update("stickers")}
-            stickerFilter={stickerFilter}
-            value={attributes.value.stickers}
-          />
+          {use3dStickerPicker ? (
+            <Sticker3dPicker
+              disabled={isDisabled}
+              forItem={item}
+              nameTag={attributes.value.nameTag || undefined}
+              onChange={attributes.update("stickers")}
+              seed={attributes.value.seed}
+              statTrak={
+                attributes.value.statTrak
+                  ? (defaults?.statTrak ?? 0)
+                  : undefined
+              }
+              stickerFilter={sticker3dFilter}
+              value={attributes.value.stickers}
+              wear={attributes.value.wear}
+            />
+          ) : (
+            <StickerPicker
+              disabled={isDisabled}
+              forItem={item}
+              isHideStickerRotation={isHideStickerRotation}
+              isHideStickerSchema={isHideStickerSchema}
+              isHideStickerWear={isHideStickerWear}
+              isHideStickerX={isHideStickerX}
+              isHideStickerY={isHideStickerY}
+              onChange={attributes.update("stickers")}
+              stickerFilter={stickerFilter}
+              value={attributes.value.stickers}
+            />
+          )}
         </EditorLabel>
       )}
       {hasPatches && (
@@ -240,7 +283,7 @@ export function ItemEditor({
               isDisabled ? "N/A" : translate("EditorNametagPlaceholder")
             }
             validate={(nameTag) =>
-              CS2Economy.safeValidateNametag(nameTag ?? "")
+              CS2Economy.safeValidateNameTag(nameTag ?? "")
             }
             value={attributes.value.nameTag}
           />

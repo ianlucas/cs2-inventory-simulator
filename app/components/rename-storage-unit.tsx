@@ -43,7 +43,7 @@ export function RenameStorageUnit({
   const [isConfirmed, toggleIsConfirmed] = useToggle();
 
   const isConfirmDisabled = nameTag.length === 0;
-  const isInvalid = !CS2Economy.safeValidateNametag(nameTag);
+  const isInvalid = !CS2Economy.safeValidateNameTag(nameTag);
 
   function handleRename() {
     sync({
@@ -89,7 +89,7 @@ export function RenameStorageUnit({
                 onChange={setNameTag}
                 placeholder={translate("InventoryItemRenamePlaceholder")}
                 validate={(nameTag) =>
-                  CS2Economy.safeValidateNametag(nameTag ?? "")
+                  CS2Economy.safeValidateNameTag(nameTag ?? "")
                 }
                 value={nameTag}
               />

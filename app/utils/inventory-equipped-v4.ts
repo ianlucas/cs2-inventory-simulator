@@ -149,7 +149,7 @@ export async function generate(
                 def: keychainEcon.index ?? 0,
                 seed: keychain.seed ?? CS2_MIN_KEYCHAIN_SEED,
                 slot: index,
-                sticker: keychainEcon.stickerIndex,
+                sticker: keychainEcon.wrappedSticker?.index,
                 x: keychain.x,
                 y: keychain.y,
                 z: keychain.z
