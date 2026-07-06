@@ -11,8 +11,7 @@ import {
 // Type-only (erased) so this module never depends on cs2-viewer-api at runtime.
 import type { ViewerItem } from "~/utils/cs2-viewer-api";
 
-// The 3D viewer isn't deployed yet; point at its local dev server for now.
-export const CS2_VIEWER_BASE_URL = "http://localhost:5173/view";
+export const CS2_VIEWER_BASE_URL = "https://3d.cstrike.app/view";
 
 // Anything we can turn into a viewer item: an economy entry, a live inventory
 // item, or the plain serialized shape.
