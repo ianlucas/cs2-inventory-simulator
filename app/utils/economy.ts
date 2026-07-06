@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  countDecimals,
   CS2_ITEMS,
   CS2_MAX_KEYCHAIN_SEED,
   CS2_MAX_SEED,
@@ -21,7 +22,6 @@ import {
   CS2ItemTranslationByLanguage,
   CS2ItemType,
   CS2RarityColor,
-  countDecimals,
   fail,
   isFactorPrecise
 } from "@ianlucas/cs2-lib";
@@ -65,8 +65,8 @@ export function isItemCountable(item: CS2EconomyItem) {
 }
 
 export const baseStickerSlabId = 15200;
-export const newItemStartingId = 25072;
-export const newItemEndAt = 1780696511400;
+export const newItemStartingId = 26698;
+export const newItemEndAt = 1784590681523;
 // Keychain offsets keep the app's own flat range: the lib publishes no keychain
 // offset bounds (its validator still only checks finiteness), so the app owns it.
 export const minKeychainOffset = -100;
