@@ -17,9 +17,7 @@ export const CS2_VIEWER_BASE_URL = "http://localhost:5173/view";
 // Anything we can turn into a viewer item: an economy entry, a live inventory
 // item, or the plain serialized shape.
 export type Cs2ViewerItemInput =
-  | CS2EconomyItem
-  | CS2InventoryItem
-  | CS2BaseInventoryItem;
+  CS2EconomyItem | CS2InventoryItem | CS2BaseInventoryItem;
 
 // The viewer's support manifest (its `/api/catalog`): the max economy id it can render plus the id
 // gaps below it. `supported(id) = id <= maxId && id not in holes`. Encodes the complement of the
@@ -82,7 +80,8 @@ export function isViewerItemSupported(
 }
 
 // Narrow any accepted item into the subset the viewer reads (id/seed/wear/
-// stickers), dropping undefined fields so the viewer overlays its own defaults.
+// stickers/statTrak/nameTag), dropping undefined fields so the viewer overlays
+// its own defaults.
 export function toViewerItem(item: Cs2ViewerItemInput): ViewerItem {
   if (item instanceof CS2InventoryItem) {
     return toViewerItem(item.asBase());
@@ -92,9 +91,10 @@ export function toViewerItem(item: Cs2ViewerItemInput): ViewerItem {
   }
   const viewerItem: ViewerItem = { id: item.id };
   if (item.seed !== undefined) viewerItem.seed = item.seed;
-  /** @todo Wear is not supported for now. */
-  // if (item.wear !== undefined) viewerItem.wear = item.wear;
+  if (item.wear !== undefined) viewerItem.wear = item.wear;
   if (item.stickers !== undefined) viewerItem.stickers = item.stickers;
+  if (item.statTrak !== undefined) viewerItem.statTrak = item.statTrak;
+  if (item.nameTag !== undefined) viewerItem.nameTag = item.nameTag;
   return viewerItem;
 }
 

@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import {
   isViewerIdSupported,
   isViewerItemSupported,
+  toViewerItem,
   viewerItemIds
 } from "./cs2-viewer";
 
@@ -55,6 +56,28 @@ describe("viewerItemIds", () => {
 
   it("returns just the weapon id when there are no stickers", () => {
     expect(viewerItemIds({ id: 7 })).toEqual([7]);
+  });
+});
+
+describe("toViewerItem", () => {
+  it("passes statTrak and nameTag through to the viewer payload", () => {
+    expect(
+      toViewerItem({ id: 7, statTrak: 42, nameTag: "My Gun" })
+    ).toEqual({ id: 7, statTrak: 42, nameTag: "My Gun" });
+  });
+
+  it("keeps statTrak: 0 (StatTrak enabled, zero kills)", () => {
+    expect(toViewerItem({ id: 7, statTrak: 0 })).toEqual({
+      id: 7,
+      statTrak: 0
+    });
+  });
+
+  it("drops statTrak and nameTag when undefined so the viewer keeps its defaults", () => {
+    const viewerItem = toViewerItem({ id: 7 });
+    expect(viewerItem).toEqual({ id: 7 });
+    expect("statTrak" in viewerItem).toBe(false);
+    expect("nameTag" in viewerItem).toBe(false);
   });
 });
 

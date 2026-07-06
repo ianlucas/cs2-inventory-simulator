@@ -13,7 +13,7 @@ const CS2_VIEWER_PROTOCOL_VERSION = 1;
 // The subset of a CS2BaseInventoryItem the viewer reads (same shape as `?item=`).
 export type ViewerItem = Pick<
   CS2BaseInventoryItem,
-  "id" | "seed" | "wear" | "stickers"
+  "id" | "seed" | "wear" | "stickers" | "statTrak" | "nameTag"
 >;
 
 // The observable viewer state, reported by `getState` and the `change` event.
