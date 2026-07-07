@@ -10,6 +10,7 @@ import {
   isViewerIdSupported,
   isViewerItemSupported
 } from "~/data/cs2-viewer";
+import type { ViewerUnsupportedReason } from "~/utils/cs2-viewer-api";
 
 // Module-level cooldown shared across the whole app: when the viewer reports a
 // rate limit — for this user via scope "ip", or for the whole instance via
@@ -19,6 +20,27 @@ import {
 let cooldownUntil = 0;
 let cooldownTimer: ReturnType<typeof setTimeout> | undefined;
 const listeners = new Set<() => void>();
+
+// Cooldown lengths per `unsupported` reason (see markCs2ViewerUnsupported).
+const NETWORK_BASE_MS = 30_000; // a transient load failure — try 3D again soon
+const NETWORK_CAP_MS = 8 * 60_000; // ...but cap the exponential backoff
+const WEBGL_COOLDOWN_MS = 5 * 60_000; // device can't do 3D — don't re-probe every 30s
+// How many times in a row the viewer has failed with a transient (network) reason. Drives the
+// exponential backoff so a persistently-blocked CDN (e.g. behind the Great Firewall) settles into 2D
+// instead of ping-ponging the user back to a blank 3D view every 30s. It resets on its OWN — not on
+// the viewer's `ready` handshake, which fires even when the render then fails (that would reset the
+// streak every cycle and defeat the backoff) — via a quiet-period timer: if the cooldown clears and
+// no new failure arrives, the blip passed and the streak returns to zero.
+let networkBackoffStep = 0;
+let backoffResetTimer: ReturnType<typeof setTimeout> | undefined;
+// Extra quiet time after a cooldown clears before we call the streak over: the returned-to-3D viewer
+// must get all the way THROUGH its own retry budget WITHOUT failing again before we count the block as
+// gone. That budget is the viewer's ATTEMPTS × per-attempt TIMEOUT (3 × 30s ≈ 90s in the viewer's
+// fetch-asset.ts) plus its ready handshake, so this must exceed ~90s. Otherwise a persistently STALLING
+// CDN — every attempt times out, so the viewer takes ~90s to fail again — would reset the streak every
+// cycle (its next failure lands after the timer fires) and defeat the backoff, ping-ponging the user
+// between 2D and a ~90s-loading 3D view forever. Keep in step if the viewer's retry budget changes.
+const BACKOFF_RESET_GRACE_MS = 120_000;
 
 function emit() {
   for (const listener of listeners) {
@@ -57,6 +79,38 @@ export function markCs2ViewerRateLimited(retryAfterMs: number) {
   }
   cooldownTimer = setTimeout(emit, until - Date.now());
   emit();
+}
+
+/**
+ * Records a viewer `unsupported` report, deriving the cooldown from its reason:
+ *  - "webgl": the device can't do 3D (WebGL/hardware accel, or a context that keeps dying) — a fixed,
+ *    longer suppression, since it won't clear on a 30s retry and the viewer re-probes cheaply anyway.
+ *  - "network"/"asset"/unknown: a transient load failure — a short cooldown that backs off
+ *    exponentially on repeats (30s → 1m → 2m …, capped) so a persistently-blocked CDN settles into 2D
+ *    instead of ping-ponging the user. resetCs2ViewerBackoff clears the streak once 3D renders again.
+ *  - "weapon"/"sticker": a catalog mismatch handled per-item by the viewerCatalog gate — a short cooldown
+ *    just covers the current interaction.
+ */
+export function markCs2ViewerUnsupported(reason: ViewerUnsupportedReason) {
+  if (reason === "webgl") {
+    markCs2ViewerRateLimited(WEBGL_COOLDOWN_MS);
+    return;
+  }
+  if (reason === "weapon" || reason === "sticker") {
+    markCs2ViewerRateLimited(NETWORK_BASE_MS);
+    return;
+  }
+  const wait = Math.min(NETWORK_BASE_MS * 2 ** networkBackoffStep, NETWORK_CAP_MS);
+  networkBackoffStep++;
+  markCs2ViewerRateLimited(wait);
+  // Arm the quiet-period reset: if nothing fails again before this fires, the streak is over. A new
+  // failure before then reschedules it, so a persistent block keeps climbing the backoff.
+  if (backoffResetTimer !== undefined) {
+    clearTimeout(backoffResetTimer);
+  }
+  backoffResetTimer = setTimeout(() => {
+    networkBackoffStep = 0;
+  }, wait + BACKOFF_RESET_GRACE_MS);
 }
 
 /**

@@ -5,15 +5,14 @@
 
 import { useEffect, useState } from "react";
 import { Cs2ViewerApi } from "~/utils/cs2-viewer-api";
-import { markCs2ViewerRateLimited } from "./use-cs2-viewer-availability";
+import {
+  markCs2ViewerRateLimited,
+  markCs2ViewerUnsupported
+} from "./use-cs2-viewer-availability";
 
 // How long to wait for the viewer's ready handshake before falling back to the 2D flow,
 // so a down/blocked viewer doesn't strand the user on a blank overlay.
 const VIEWER_READY_TIMEOUT_MS = 6000;
-
-// Client-side cooldown applied when the viewer fails to become ready (not a rate limit,
-// but the same "fall back to 2D for a bit" behavior).
-const VIEWER_UNREACHABLE_COOLDOWN_MS = 30_000;
 
 export type Cs2ViewerFallbackStatus = "pending" | "ready" | "unavailable";
 
@@ -49,7 +48,9 @@ export function useCs2ViewerFallback(
         return;
       }
       settled = true;
-      markCs2ViewerRateLimited(VIEWER_UNREACHABLE_COOLDOWN_MS);
+      // The viewer never handshook — down/blocked/unreachable. Treat it as a transient network failure
+      // so repeated unreachability climbs the same exponential backoff (no 30s ping-pong).
+      markCs2ViewerUnsupported("network");
       setStatus("unavailable");
     }, VIEWER_READY_TIMEOUT_MS);
     const offRateLimited = api.on("rateLimited", ({ retryAfterMs, scope }) => {
@@ -64,14 +65,14 @@ export function useCs2ViewerFallback(
       clearTimeout(timer);
       setStatus("unavailable");
     });
-    // The viewer reported it can't render the requested item (unknown weapon/sticker id — a cs2-lib
-    // catalog mismatch that slipped past the manifest gate in a stale-manifest race — or a hard asset
-    // failure). Fall back to 2D exactly like an instance-wide rate limit, reusing the same module
-    // cooldown: it flips the parent off 3D, which both drives the swap and breaks the reopen loop.
-    // ~30s is long enough to clear the current interaction and short enough that an unrelated item
-    // returns to 3D promptly.
-    const offUnsupported = api.on("unsupported", () => {
-      markCs2ViewerRateLimited(VIEWER_UNREACHABLE_COOLDOWN_MS);
+    // The viewer reported it can't render the requested item — a WebGL/device failure, an asset/API
+    // load that failed after its own retries (a GFW-blocked CDN), or a cs2-lib catalog mismatch. Fall
+    // back to 2D, with a cooldown whose length the reason decides (markCs2ViewerUnsupported): device
+    // failures suppress 3D longer, transient network failures back off on repeats so a blocked CDN
+    // stops ping-ponging the user. This flips the parent off 3D, driving the swap and breaking the
+    // reopen loop.
+    const offUnsupported = api.on("unsupported", ({ reason }) => {
+      markCs2ViewerUnsupported(reason);
       settled = true;
       clearTimeout(timer);
       setStatus("unavailable");
