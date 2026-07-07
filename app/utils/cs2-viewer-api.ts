@@ -26,10 +26,21 @@ export interface ViewerState {
 // Which rate limit bound; absent when the server didn't report a known bucket.
 export type RateLimitScope = "ip" | "origin" | "partner";
 
-// Why the viewer can't render the requested item: an unknown weapon or sticker id (a cs2-lib catalog
-// mismatch), or a hard asset failure (a requested surface won't load). Any of them flips the host
-// back to its 2D editor.
-export type ViewerUnsupportedReason = "weapon" | "sticker" | "asset";
+// Why the viewer can't render the requested item, which the host maps to a cooldown LENGTH (see
+// markCs2ViewerUnsupported):
+//  - "webgl"   — the device can't do 3D at all (WebGL / hardware acceleration unavailable, or a context
+//                that keeps dying). Device-level → suppress 3D for a good while.
+//  - "network" — an asset/API load failed AFTER the viewer's own retries (e.g. a Great-Firewall-
+//                throttled CDN edge). Transient → short cooldown, but back off if it keeps failing.
+//  - "weapon" / "sticker" — a cs2-lib catalog mismatch (the per-item viewerCatalog gate handles it).
+// Any of them flips the host back to its 2D editor. "asset" is the pre-reason-split name, still
+// accepted (and treated as network) from a stale/cached viewer build.
+export type ViewerUnsupportedReason =
+  | "weapon"
+  | "sticker"
+  | "network"
+  | "webgl"
+  | "asset";
 
 // Events the viewer emits back to us. The `state` reply to `getState` is consumed
 // by that promise, so it isn't surfaced as an event here.
