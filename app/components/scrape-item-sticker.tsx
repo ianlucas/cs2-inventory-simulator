@@ -25,11 +25,11 @@ import {
   useRules,
   useTranslate
 } from "./app-context";
-import { Cs2ViewerOverlay } from "./cs2-viewer-overlay";
+import { ViewerOverlay } from "./viewer-overlay";
 import { HoldButton } from "./hold-button";
-import { useCs2Viewer } from "./hooks/use-cs2-viewer";
-import { useCs2ViewerAvailability } from "./hooks/use-cs2-viewer-availability";
-import { useCs2ViewerFallback } from "./hooks/use-cs2-viewer-fallback";
+import { useViewer } from "./hooks/use-viewer";
+import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useViewerFallback } from "./hooks/use-viewer-fallback";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -335,7 +335,7 @@ function ScrapeStickerControls({
 function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
-  const { app3dViewerKey, inventoryItemAllowRemoveSticker } = useRules();
+  const { inventoryItemAllowRemoveSticker } = useRules();
 
   const item = useInventoryItem(uid);
   const maxSchema = item.getStickerSchemaCount();
@@ -355,10 +355,7 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
       )
     )
   }));
-  const { api, viewerProps } = useCs2Viewer({
-    apiKey: app3dViewerKey || undefined,
-    item: initialItem
-  });
+  const { api, viewerProps } = useViewer({ item: initialItem });
 
   const scrape = useScrapeSticker({
     onClose,
@@ -371,10 +368,10 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
 
   // Flip availability when the viewer is rate-limited or never becomes ready, so the
   // parent swaps to the 2D flow; the scrape flow itself needs no readiness handling.
-  useCs2ViewerFallback(api);
+  useViewerFallback(api);
 
   return (
-    <Cs2ViewerOverlay
+    <ViewerOverlay
       header={
         <UseItemHeader
           actionDesc={translate("ScrapeStickerUseOn")}
@@ -401,7 +398,7 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
           wear={scrape.wear}
         />
       </div>
-    </Cs2ViewerOverlay>
+    </ViewerOverlay>
   );
 }
 
@@ -462,7 +459,7 @@ export function ScrapeItemSticker(props: ScrapeItemStickerProps) {
   // The 3D scene renders the weapon with its existing stickers, so the weapon and every sticker must
   // be viewer-supported; otherwise fall back to the 2D flow.
   const item = useInventoryItem(props.uid);
-  const { canUse3d } = useCs2ViewerAvailability(item);
+  const { canUse3d } = useViewerAvailability(item);
   return canUse3d ? (
     <ScrapeItemSticker3d {...props} />
   ) : (

@@ -8,21 +8,25 @@ import {
   CS2EconomyItem,
   CS2InventoryItem
 } from "@ianlucas/cs2-lib";
-// Type-only (erased) so this module never depends on cs2-viewer-api at runtime.
-import type { ViewerItem } from "~/utils/cs2-viewer-api";
+// Type-only (erased) so this module never depends on viewer-api at runtime.
+import type { ViewerItem } from "~/utils/viewer-api";
 
-export const CS2_VIEWER_BASE_URL = "https://3d.cstrike.app/view";
+// The public embed URL of the hosted CS2 3D viewer (its `/view` page). Overridable
+// per-deployment via the VIEWER_EMBED_URL env var (root loader → `viewerEmbedUrl`
+// rule → the viewer component's `embedUrl` client-side, and getViewerOrigin
+// server-side) for self-hosting the viewer; this is the fallback when it is unset.
+export const DEFAULT_VIEWER_EMBED_URL = "https://3d.cstrike.app/view";
 
 // Anything we can turn into a viewer item: an economy entry, a live inventory
 // item, or the plain serialized shape.
-export type Cs2ViewerItemInput =
+export type ViewerItemInput =
   CS2EconomyItem | CS2InventoryItem | CS2BaseInventoryItem;
 
 // The viewer's support manifest (its `/api/catalog`): the max economy id it can render plus the id
 // gaps below it. `supported(id) = id <= maxId && id not in holes`. Encodes the complement of the
 // viewer's ~12k renderable ids in ~60 bytes, which works because cs2-lib ids are stable + append-only
 // (id N is the same item in every version), so the host can compare its OWN ids against this envelope.
-// Resolved server-side (cs2-viewer.server.ts) and injected into rules; read synchronously by the gate.
+// Resolved server-side (viewer.server.ts) and injected into rules; read synchronously by the gate.
 export interface ViewerCatalog {
   maxId: number;
   holes: [number, number][];
@@ -57,7 +61,7 @@ export function isViewerIdSupported(
 // Every economy id the viewer must render for `item`: its weapon/base id plus each applied sticker's
 // id. The gate requires ALL of them to be supported before it offers 3D (a weapon with a
 // viewer-unknown sticker falls back to 2D).
-export function viewerItemIds(item: Cs2ViewerItemInput): number[] {
+export function viewerItemIds(item: ViewerItemInput): number[] {
   const viewerItem = toViewerItem(item);
   const ids = [viewerItem.id];
   if (viewerItem.stickers !== undefined) {
@@ -73,7 +77,7 @@ export function viewerItemIds(item: Cs2ViewerItemInput): number[] {
 // Whether the viewer can render `item` in full — its body and every applied sticker.
 export function isViewerItemSupported(
   catalog: ViewerCatalogLike | undefined,
-  item: Cs2ViewerItemInput
+  item: ViewerItemInput
 ): boolean {
   return viewerItemIds(item).every((id) => isViewerIdSupported(catalog, id));
 }
@@ -81,7 +85,7 @@ export function isViewerItemSupported(
 // Narrow any accepted item into the subset the viewer reads (id/seed/wear/
 // stickers/statTrak/nameTag), dropping undefined fields so the viewer overlays
 // its own defaults.
-export function toViewerItem(item: Cs2ViewerItemInput): ViewerItem {
+export function toViewerItem(item: ViewerItemInput): ViewerItem {
   if (item instanceof CS2InventoryItem) {
     return toViewerItem(item.asBase());
   }
@@ -98,18 +102,22 @@ export function toViewerItem(item: Cs2ViewerItemInput): ViewerItem {
 }
 
 // Build the iframe `src`: the viewer URL with the initial state encoded as the
-// `?item=` JSON param (the embed API takes over after load). `key`/`icon` map to
-// the viewer's other query params.
+// `?item=` JSON param (the embed API takes over after load). `key`/`cdn`/`icon` map
+// to the viewer's other query params; `cdn` points the viewer at a self-hosted mirror
+// of its economy asset tree (weapon models, textures, sticker masks, model-data).
 export function buildViewerSrc(
-  item?: Cs2ViewerItemInput,
-  options?: { baseUrl?: string; key?: string; icon?: boolean }
+  item?: ViewerItemInput,
+  options?: { embedUrl?: string; cdn?: string; key?: string; icon?: boolean }
 ): string {
-  const url = new URL(options?.baseUrl ?? CS2_VIEWER_BASE_URL);
+  const url = new URL(options?.embedUrl ?? DEFAULT_VIEWER_EMBED_URL);
   if (item !== undefined) {
     url.searchParams.set("item", JSON.stringify(toViewerItem(item)));
   }
   if (options?.key !== undefined) {
     url.searchParams.set("key", options.key);
+  }
+  if (options?.cdn !== undefined) {
+    url.searchParams.set("cdn", options.cdn);
   }
   if (options?.icon === true) {
     url.searchParams.set("icon", "");

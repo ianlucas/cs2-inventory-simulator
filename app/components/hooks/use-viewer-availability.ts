@@ -6,11 +6,11 @@
 import { useCallback, useSyncExternalStore } from "react";
 import { usePreferences, useRules } from "~/components/app-context";
 import {
-  Cs2ViewerItemInput,
+  ViewerItemInput,
   isViewerIdSupported,
   isViewerItemSupported
-} from "~/data/cs2-viewer";
-import type { ViewerUnsupportedReason } from "~/utils/cs2-viewer-api";
+} from "~/data/viewer";
+import type { ViewerUnsupportedReason } from "~/utils/viewer-api";
 
 // Module-level cooldown shared across the whole app: when the viewer reports a
 // rate limit — for this user via scope "ip", or for the whole instance via
@@ -21,7 +21,7 @@ let cooldownUntil = 0;
 let cooldownTimer: ReturnType<typeof setTimeout> | undefined;
 const listeners = new Set<() => void>();
 
-// Cooldown lengths per `unsupported` reason (see markCs2ViewerUnsupported).
+// Cooldown lengths per `unsupported` reason (see markViewerUnsupported).
 const NETWORK_BASE_MS = 30_000; // a transient load failure — try 3D again soon
 const NETWORK_CAP_MS = 8 * 60_000; // ...but cap the exponential backoff
 const WEBGL_COOLDOWN_MS = 5 * 60_000; // device can't do 3D — don't re-probe every 30s
@@ -68,7 +68,7 @@ function getServerSnapshot() {
  * `rateLimited` handler. Extends (never shortens) the cooldown and schedules a
  * re-render for when it elapses so consumers flip back to the 3D viewer.
  */
-export function markCs2ViewerRateLimited(retryAfterMs: number) {
+export function markViewerRateLimited(retryAfterMs: number) {
   const until = Date.now() + Math.max(0, retryAfterMs);
   if (until <= cooldownUntil) {
     return;
@@ -87,22 +87,25 @@ export function markCs2ViewerRateLimited(retryAfterMs: number) {
  *    longer suppression, since it won't clear on a 30s retry and the viewer re-probes cheaply anyway.
  *  - "network"/"asset"/unknown: a transient load failure — a short cooldown that backs off
  *    exponentially on repeats (30s → 1m → 2m …, capped) so a persistently-blocked CDN settles into 2D
- *    instead of ping-ponging the user. resetCs2ViewerBackoff clears the streak once 3D renders again.
+ *    instead of ping-ponging the user (the streak self-clears via the quiet-period timer above).
  *  - "weapon"/"sticker": a catalog mismatch handled per-item by the viewerCatalog gate — a short cooldown
  *    just covers the current interaction.
  */
-export function markCs2ViewerUnsupported(reason: ViewerUnsupportedReason) {
+export function markViewerUnsupported(reason: ViewerUnsupportedReason) {
   if (reason === "webgl") {
-    markCs2ViewerRateLimited(WEBGL_COOLDOWN_MS);
+    markViewerRateLimited(WEBGL_COOLDOWN_MS);
     return;
   }
   if (reason === "weapon" || reason === "sticker") {
-    markCs2ViewerRateLimited(NETWORK_BASE_MS);
+    markViewerRateLimited(NETWORK_BASE_MS);
     return;
   }
-  const wait = Math.min(NETWORK_BASE_MS * 2 ** networkBackoffStep, NETWORK_CAP_MS);
+  const wait = Math.min(
+    NETWORK_BASE_MS * 2 ** networkBackoffStep,
+    NETWORK_CAP_MS
+  );
   networkBackoffStep++;
-  markCs2ViewerRateLimited(wait);
+  markViewerRateLimited(wait);
   // Arm the quiet-period reset: if nothing fails again before this fires, the streak is over. A new
   // failure before then reschedules it, so a persistent block keeps climbing the backoff.
   if (backoffResetTimer !== undefined) {
@@ -125,7 +128,7 @@ export function markCs2ViewerUnsupported(reason: ViewerUnsupportedReason) {
  * weapon or existing sticker falls back to 2D). Omit it for a global check, and
  * use `isStickerSupported(id)` to filter per-sticker (e.g. the sticker modal).
  */
-export function useCs2ViewerAvailability(item?: Cs2ViewerItemInput) {
+export function useViewerAvailability(item?: ViewerItemInput) {
   const { appEnable3dViewer, can3dViewerOrigin, viewerCatalog } = useRules();
   const { prefer2dStickerEditor } = usePreferences();
   const until = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
@@ -147,6 +150,6 @@ export function useCs2ViewerAvailability(item?: Cs2ViewerItemInput) {
   return {
     canUse3d,
     isStickerSupported,
-    markRateLimited: markCs2ViewerRateLimited
+    markRateLimited: markViewerRateLimited
   };
 }

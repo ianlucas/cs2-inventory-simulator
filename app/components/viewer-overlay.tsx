@@ -6,7 +6,7 @@
 import clsx from "clsx";
 import { ComponentProps, ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { Cs2Viewer } from "./cs2-viewer";
+import { Viewer } from "./viewer";
 
 /**
  * The full-screen shell shared by the 3D sticker flows (apply / scrape / picker): a portal
@@ -18,7 +18,7 @@ import { Cs2Viewer } from "./cs2-viewer";
  * to the iframe, keeping the model orbitable; the controls opt back in. Only ever rendered
  * client-side (mounted on user action), so the portal needs no ClientOnly guard.
  */
-export function Cs2ViewerOverlay({
+export function ViewerOverlay({
   children,
   header,
   viewerClassName,
@@ -29,11 +29,11 @@ export function Cs2ViewerOverlay({
   // Extra classes merged onto the viewer iframe (e.g. dropping pointer events while a
   // drag in the controls needs them).
   viewerClassName?: string;
-  viewerProps: Omit<ComponentProps<typeof Cs2Viewer>, "className" | "style">;
+  viewerProps: Omit<ComponentProps<typeof Viewer>, "className" | "style">;
 }) {
   return createPortal(
     <div className="fixed top-0 left-0 z-50 size-full overflow-hidden backdrop-blur-xs select-none">
-      <Cs2Viewer
+      <Viewer
         {...viewerProps}
         className={clsx("size-full border-0 bg-transparent", viewerClassName)}
         // The app forces `color-scheme: dark`; an iframe whose scheme differs from its

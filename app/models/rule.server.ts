@@ -6,11 +6,7 @@
 import { assert, fail } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { prisma } from "~/db.server";
-import {
-  CS2_VIEWER_KEY,
-  STEAM_API_KEY,
-  STEAM_CALLBACK_URL
-} from "~/env.server";
+import { STEAM_API_KEY, STEAM_CALLBACK_URL, VIEWER_KEY } from "~/env.server";
 import { noop } from "~/utils/misc";
 
 class RuleFor<RuleValue> {
@@ -610,7 +606,7 @@ export const appEnable3dViewer = new Rule({
 export const app3dViewerKey = new Rule({
   name: "app3dViewerKey",
   type: "string",
-  defaultValue: CS2_VIEWER_KEY ?? ""
+  defaultValue: VIEWER_KEY ?? ""
 });
 
 export const csFloatUrl = new Rule({

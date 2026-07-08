@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ComponentPropsWithoutRef, useEffect, useRef, useState } from "react";
-import { buildViewerSrc, Cs2ViewerItemInput } from "~/data/cs2-viewer";
-import { Cs2ViewerApi } from "~/utils/cs2-viewer-api";
+import { buildViewerSrc, ViewerItemInput } from "~/data/viewer";
+import { ViewerApi } from "~/utils/viewer-api";
 
 /**
  * Embeds the CS2 3D viewer iframe and hands its embed API to `onApi` (and
@@ -13,9 +13,10 @@ import { Cs2ViewerApi } from "~/utils/cs2-viewer-api";
  * owns any loading UI via the api's events. Extra props are spread onto the
  * iframe (className, style, allow, ...); `src` is managed internally.
  */
-export function Cs2Viewer({
+export function Viewer({
   apiKey,
-  baseUrl,
+  embedUrl,
+  cdn,
   item,
   onApi,
   origin,
@@ -23,16 +24,19 @@ export function Cs2Viewer({
   ...props
 }: Omit<ComponentPropsWithoutRef<"iframe">, "src"> & {
   apiKey?: string;
-  baseUrl?: string;
-  item?: Cs2ViewerItemInput;
-  onApi: (api: Cs2ViewerApi | undefined) => void;
+  embedUrl?: string;
+  cdn?: string;
+  item?: ViewerItemInput;
+  onApi: (api: ViewerApi | undefined) => void;
   origin?: string;
 }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   // `?item=` only seeds the INITIAL state; capture the src once so re-renders (or
   // a changed `item` prop) don't reload the iframe. Drive later changes through
   // the api, or remount with a `key`.
-  const [src] = useState(() => buildViewerSrc(item, { baseUrl, key: apiKey }));
+  const [src] = useState(() =>
+    buildViewerSrc(item, { embedUrl, cdn, key: apiKey })
+  );
   const onApiRef = useRef(onApi);
   const originRef = useRef(origin);
 
@@ -45,7 +49,7 @@ export function Cs2Viewer({
     if (iframe === null) {
       return;
     }
-    const api = new Cs2ViewerApi(iframe, { origin: originRef.current });
+    const api = new ViewerApi(iframe, { origin: originRef.current });
     onApiRef.current(api);
     return () => {
       api.destroy();

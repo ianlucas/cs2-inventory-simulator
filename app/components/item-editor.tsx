@@ -30,7 +30,7 @@ import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
-import { useCs2ViewerAvailability } from "./hooks/use-cs2-viewer-availability";
+import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { useIsDesktop } from "./hooks/use-is-desktop";
 import { useKeyValues } from "./hooks/use-key-values";
 import { KeychainPicker } from "./keychain-picker";
@@ -122,7 +122,7 @@ export function ItemEditor({
   const isDesktop = useIsDesktop();
   // Item-aware: `canUse3d` also folds in whether the viewer can render THIS item and its existing
   // stickers, so a viewer-unknown weapon/sticker keeps the 2D editor.
-  const { canUse3d, isStickerSupported } = useCs2ViewerAvailability(item);
+  const { canUse3d, isStickerSupported } = useViewerAvailability(item);
 
   // The 3D viewer edits every sticker dimension, so only offer it when none are
   // constrained (and not in the read-only/disabled view).

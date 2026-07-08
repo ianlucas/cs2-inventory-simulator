@@ -5,11 +5,13 @@
 
 import { describe, expect, it } from "vitest";
 import {
+  buildViewerSrc,
+  DEFAULT_VIEWER_EMBED_URL,
   isViewerIdSupported,
   isViewerItemSupported,
   toViewerItem,
   viewerItemIds
-} from "./cs2-viewer";
+} from "./viewer";
 
 // A small manifest: max renderable id 100, with two removed/never-assigned ranges below it.
 const catalog = {
@@ -61,9 +63,11 @@ describe("viewerItemIds", () => {
 
 describe("toViewerItem", () => {
   it("passes statTrak and nameTag through to the viewer payload", () => {
-    expect(
-      toViewerItem({ id: 7, statTrak: 42, nameTag: "My Gun" })
-    ).toEqual({ id: 7, statTrak: 42, nameTag: "My Gun" });
+    expect(toViewerItem({ id: 7, statTrak: 42, nameTag: "My Gun" })).toEqual({
+      id: 7,
+      statTrak: 42,
+      nameTag: "My Gun"
+    });
   });
 
   it("keeps statTrak: 0 (StatTrak enabled, zero kills)", () => {
@@ -96,5 +100,46 @@ describe("isViewerItemSupported", () => {
 
   it("fails closed without a manifest", () => {
     expect(isViewerItemSupported(undefined, { id: 5 })).toBe(false);
+  });
+});
+
+describe("buildViewerSrc", () => {
+  it("uses the default viewer base URL and encodes the item", () => {
+    const url = new URL(buildViewerSrc({ id: 7 }));
+    expect(url.origin + url.pathname).toBe(DEFAULT_VIEWER_EMBED_URL);
+    expect(url.searchParams.get("item")).toBe(JSON.stringify({ id: 7 }));
+    expect(url.searchParams.has("cdn")).toBe(false);
+    expect(url.searchParams.has("key")).toBe(false);
+  });
+
+  it("overrides the embed URL when given one (the embed API origin follows it)", () => {
+    const url = new URL(
+      buildViewerSrc({ id: 7 }, { embedUrl: "https://viewer.example/view" })
+    );
+    expect(url.origin).toBe("https://viewer.example");
+    expect(url.pathname).toBe("/view");
+  });
+
+  it("sets ?cdn= only when a cdn base is provided", () => {
+    expect(
+      new URL(
+        buildViewerSrc({ id: 7 }, { cdn: "https://mirror.example/cs2" })
+      ).searchParams.get("cdn")
+    ).toBe("https://mirror.example/cs2");
+    expect(new URL(buildViewerSrc({ id: 7 })).searchParams.has("cdn")).toBe(
+      false
+    );
+  });
+
+  it("sets ?key= when a partner key is provided", () => {
+    expect(
+      new URL(
+        buildViewerSrc({ id: 7 }, { key: "partner-key" })
+      ).searchParams.get("key")
+    ).toBe("partner-key");
+  });
+
+  it("omits the item param when no item is given", () => {
+    expect(new URL(buildViewerSrc()).searchParams.has("item")).toBe(false);
   });
 });

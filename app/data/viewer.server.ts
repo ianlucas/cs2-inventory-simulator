@@ -3,7 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_VIEWER_BASE_URL, ViewerCatalog } from "./cs2-viewer";
+import { VIEWER_EMBED_URL } from "~/env.server";
+import { DEFAULT_VIEWER_EMBED_URL, ViewerCatalog } from "./viewer";
 
 // Fraction of the origin's request budget we keep in reserve before offering
 // the 3D viewer to a non-trusted origin.
@@ -32,7 +33,7 @@ const peekCache = new Map<string, PeekCacheEntry>();
 const peekInFlight = new Set<string>();
 
 function getViewerOrigin() {
-  return new URL(CS2_VIEWER_BASE_URL).origin;
+  return new URL(VIEWER_EMBED_URL || DEFAULT_VIEWER_EMBED_URL).origin;
 }
 
 // Origins we treat as trusted and therefore exempt from the budget check:
