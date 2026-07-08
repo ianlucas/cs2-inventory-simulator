@@ -4,11 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2BaseInventoryItem } from "@ianlucas/cs2-lib";
-import { Cs2ViewerItemInput, toViewerItem } from "~/data/cs2-viewer";
+import { ViewerItemInput, toViewerItem } from "~/data/viewer";
 
 // The viewer's postMessage namespace + protocol version.
-const CS2_VIEWER_SOURCE = "3d.cstrike.app";
-const CS2_VIEWER_PROTOCOL_VERSION = 1;
+const VIEWER_SOURCE = "3d.cstrike.app";
+const VIEWER_PROTOCOL_VERSION = 1;
 
 // The subset of a CS2BaseInventoryItem the viewer reads (same shape as `?item=`).
 export type ViewerItem = Pick<
@@ -27,7 +27,7 @@ export interface ViewerState {
 export type RateLimitScope = "ip" | "origin" | "partner";
 
 // Why the viewer can't render the requested item, which the host maps to a cooldown LENGTH (see
-// markCs2ViewerUnsupported):
+// markViewerUnsupported):
 //  - "webgl"   — the device can't do 3D at all (WebGL / hardware acceleration unavailable, or a context
 //                that keeps dying). Device-level → suppress 3D for a good while.
 //  - "network" — an asset/API load failed AFTER the viewer's own retries (e.g. a Great-Firewall-
@@ -36,15 +36,11 @@ export type RateLimitScope = "ip" | "origin" | "partner";
 // Any of them flips the host back to its 2D editor. "asset" is the pre-reason-split name, still
 // accepted (and treated as network) from a stale/cached viewer build.
 export type ViewerUnsupportedReason =
-  | "weapon"
-  | "sticker"
-  | "network"
-  | "webgl"
-  | "asset";
+  "weapon" | "sticker" | "network" | "webgl" | "asset";
 
 // Events the viewer emits back to us. The `state` reply to `getState` is consumed
 // by that promise, so it isn't surfaced as an event here.
-export interface Cs2ViewerEventMap {
+export interface ViewerEventMap {
   ready: { v: number };
   change: ViewerState;
   loading: { busy: boolean };
@@ -52,14 +48,14 @@ export interface Cs2ViewerEventMap {
   unsupported: { reason: ViewerUnsupportedReason };
 }
 
-export interface Cs2ViewerApiOptions {
+export interface ViewerApiOptions {
   // The viewer's origin, for postMessage targeting and inbound filtering.
   // Defaults to the origin of the iframe's `src`.
   origin?: string;
 }
 
 interface Envelope {
-  source: typeof CS2_VIEWER_SOURCE;
+  source: typeof VIEWER_SOURCE;
   v: number;
   id?: string;
   type: string;
@@ -78,7 +74,7 @@ interface PendingReply {
  * before the viewer is ready, correlates `getState` replies, and re-emits viewer
  * events. Call `destroy()` when the iframe goes away.
  */
-export class Cs2ViewerApi extends EventTarget {
+export class ViewerApi extends EventTarget {
   readonly origin: string;
   isReady = false;
   lastState: ViewerState | undefined;
@@ -89,7 +85,7 @@ export class Cs2ViewerApi extends EventTarget {
   private readyWaiters: (() => void)[] = [];
   private readonly pending = new Map<string, PendingReply>();
 
-  constructor(iframe: HTMLIFrameElement, options?: Cs2ViewerApiOptions) {
+  constructor(iframe: HTMLIFrameElement, options?: ViewerApiOptions) {
     super();
     this.iframe = iframe;
     this.origin =
@@ -104,21 +100,21 @@ export class Cs2ViewerApi extends EventTarget {
   // --- events -------------------------------------------------------------
 
   // Subscribe to a viewer event. Returns an unsubscribe function.
-  on<K extends keyof Cs2ViewerEventMap>(
+  on<K extends keyof ViewerEventMap>(
     type: K,
-    listener: (data: Cs2ViewerEventMap[K]) => void
+    listener: (data: ViewerEventMap[K]) => void
   ): () => void {
     const handler = (event: Event) => {
-      listener((event as CustomEvent<Cs2ViewerEventMap[K]>).detail);
+      listener((event as CustomEvent<ViewerEventMap[K]>).detail);
     };
     this.addEventListener(type, handler);
     return () => this.removeEventListener(type, handler);
   }
 
   // Subscribe to the next occurrence of a viewer event, then auto-unsubscribe.
-  once<K extends keyof Cs2ViewerEventMap>(
+  once<K extends keyof ViewerEventMap>(
     type: K,
-    listener: (data: Cs2ViewerEventMap[K]) => void
+    listener: (data: ViewerEventMap[K]) => void
   ): () => void {
     const off = this.on(type, (data) => {
       off();
@@ -137,7 +133,7 @@ export class Cs2ViewerApi extends EventTarget {
 
   // --- commands -----------------------------------------------------------
 
-  setItem(item: Cs2ViewerItemInput): void {
+  setItem(item: ViewerItemInput): void {
     this.send("setItem", { item: toViewerItem(item) });
   }
 
@@ -192,7 +188,7 @@ export class Cs2ViewerApi extends EventTarget {
     const id = crypto.randomUUID();
     return new Promise<ViewerState>((resolve, reject) => {
       if (this.destroyed) {
-        reject(new Error("Cs2ViewerApi: destroyed."));
+        reject(new Error("ViewerApi: destroyed."));
         return;
       }
       // Register the pending reply now so destroy() can reject it even while it
@@ -205,7 +201,7 @@ export class Cs2ViewerApi extends EventTarget {
         }
         entry.timer = setTimeout(() => {
           this.pending.delete(id);
-          reject(new Error("Cs2ViewerApi: getState timed out."));
+          reject(new Error("ViewerApi: getState timed out."));
         }, timeoutMs);
         this.post(this.envelope("getState", undefined, id));
       });
@@ -235,7 +231,7 @@ export class Cs2ViewerApi extends EventTarget {
       if (timer !== undefined) {
         clearTimeout(timer);
       }
-      reject(new Error("Cs2ViewerApi: destroyed."));
+      reject(new Error("ViewerApi: destroyed."));
     }
     this.pending.clear();
   }
@@ -244,8 +240,8 @@ export class Cs2ViewerApi extends EventTarget {
 
   private envelope(type: string, data?: unknown, id?: string): Envelope {
     const envelope: Envelope = {
-      source: CS2_VIEWER_SOURCE,
-      v: CS2_VIEWER_PROTOCOL_VERSION,
+      source: VIEWER_SOURCE,
+      v: VIEWER_PROTOCOL_VERSION,
       type
     };
     if (id !== undefined) envelope.id = id;
@@ -287,9 +283,9 @@ export class Cs2ViewerApi extends EventTarget {
     }
   }
 
-  private dispatch<K extends keyof Cs2ViewerEventMap>(
+  private dispatch<K extends keyof ViewerEventMap>(
     type: K,
-    detail: Cs2ViewerEventMap[K]
+    detail: ViewerEventMap[K]
   ): void {
     this.dispatchEvent(new CustomEvent(type, { detail }));
   }
@@ -313,8 +309,8 @@ export class Cs2ViewerApi extends EventTarget {
     if (event.source !== this.iframe.contentWindow) return;
     const message = event.data as Partial<Envelope> | null;
     if (
-      message?.source !== CS2_VIEWER_SOURCE ||
-      message.v !== CS2_VIEWER_PROTOCOL_VERSION ||
+      message?.source !== VIEWER_SOURCE ||
+      message.v !== VIEWER_PROTOCOL_VERSION ||
       typeof message.type !== "string"
     ) {
       return;
@@ -336,7 +332,7 @@ export class Cs2ViewerApi extends EventTarget {
     switch (type) {
       case "ready":
         this.flush();
-        this.dispatch("ready", data as Cs2ViewerEventMap["ready"]);
+        this.dispatch("ready", data as ViewerEventMap["ready"]);
         break;
       case "change": {
         const state = data as ViewerState;
@@ -345,16 +341,13 @@ export class Cs2ViewerApi extends EventTarget {
         break;
       }
       case "loading":
-        this.dispatch("loading", data as Cs2ViewerEventMap["loading"]);
+        this.dispatch("loading", data as ViewerEventMap["loading"]);
         break;
       case "rateLimited":
-        this.dispatch("rateLimited", data as Cs2ViewerEventMap["rateLimited"]);
+        this.dispatch("rateLimited", data as ViewerEventMap["rateLimited"]);
         break;
       case "unsupported":
-        this.dispatch(
-          "unsupported",
-          data as Cs2ViewerEventMap["unsupported"]
-        );
+        this.dispatch("unsupported", data as ViewerEventMap["unsupported"]);
         break;
     }
   };

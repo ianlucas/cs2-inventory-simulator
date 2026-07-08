@@ -20,8 +20,7 @@ export function ErrorAlert() {
 
   useEffect(() => {
     const errorKey = searchParams.get("error") as
-      | "FailedToAuth"
-      | "FailedToValidate";
+      "FailedToAuth" | "FailedToValidate";
     if (errorKey !== null) {
       searchParams.delete("error");
       setError({

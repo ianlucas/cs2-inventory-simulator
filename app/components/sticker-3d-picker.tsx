@@ -22,12 +22,12 @@ import {
   useState
 } from "react";
 import { range } from "~/utils/number";
-import { useRules, useTranslate } from "./app-context";
+import { useTranslate } from "./app-context";
 import { AppliedStickerEditor } from "./applied-sticker-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";
-import { Cs2ViewerOverlay } from "./cs2-viewer-overlay";
-import { useCs2Viewer } from "./hooks/use-cs2-viewer";
-import { useCs2ViewerFallback } from "./hooks/use-cs2-viewer-fallback";
+import { ViewerOverlay } from "./viewer-overlay";
+import { useViewer } from "./hooks/use-viewer";
+import { useViewerFallback } from "./hooks/use-viewer-fallback";
 import { useNameItemString } from "./hooks/use-name-item";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -152,7 +152,6 @@ function Sticker3dEditorOverlay({
 }) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
-  const { app3dViewerKey } = useRules();
 
   // The weapon's markup-anchor count (e.g. 4 for the AK-47 HD body). A sticker's
   // `schema` must stay in [0, maxSchema); the stack index / draw order is a separate
@@ -177,10 +176,7 @@ function Sticker3dEditorOverlay({
     nameTag,
     stickers: toRecord(toArray(value, maxSchema))
   }));
-  const { api, viewerProps } = useCs2Viewer({
-    apiKey: app3dViewerKey || undefined,
-    item: initialItem
-  });
+  const { api, viewerProps } = useViewer({ item: initialItem });
 
   const [selected, setSelected] = useState<number>();
   // Both panels are collapsible drawers. The left ("Stickers") is a plain toggle,
@@ -224,7 +220,7 @@ function Sticker3dEditorOverlay({
     onChangeRef.current = onChange;
   }, [onChange, onClose]);
 
-  const viewerStatus = useCs2ViewerFallback(api);
+  const viewerStatus = useViewerFallback(api);
 
   // The viewer became unavailable (never ready, or an instance-wide rate limit):
   // preserve in-progress edits into the 2D fallback, then close so the parent swaps.
@@ -540,7 +536,7 @@ function Sticker3dEditorOverlay({
   }
 
   return (
-    <Cs2ViewerOverlay
+    <ViewerOverlay
       header={
         <UseItemHeader
           actionDesc={translate("ApplyStickerUseOn")}
@@ -751,7 +747,7 @@ function Sticker3dEditorOverlay({
         onSelect={handleSelect}
         stickerFilter={stickerFilter}
       />
-    </Cs2ViewerOverlay>
+    </ViewerOverlay>
   );
 }
 

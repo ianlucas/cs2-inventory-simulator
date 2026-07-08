@@ -35,12 +35,14 @@ import { SyncWarn } from "./components/sync-warn";
 import {
   ASSETS_BASE_URL,
   CLOUDFLARE_ANALYTICS_TOKEN,
-  SOURCE_COMMIT
+  SOURCE_COMMIT,
+  VIEWER_ASSETS_BASE_URL,
+  VIEWER_EMBED_URL
 } from "./env.server";
 import {
   resolveCan3dViewerOrigin,
   resolveViewerCatalog
-} from "./data/cs2-viewer.server";
+} from "./data/viewer.server";
 import { middleware } from "./middleware.server";
 import { getClientRules } from "./models/rule";
 import { steamCallbackUrl } from "./models/rule.server";
@@ -91,6 +93,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     rules: {
       ...clientRules,
       assetsBaseUrl: nonEmptyString(ASSETS_BASE_URL),
+      viewerEmbedUrl: nonEmptyString(VIEWER_EMBED_URL),
+      viewerAssetsBaseUrl: nonEmptyString(VIEWER_ASSETS_BASE_URL),
       cloudflareAnalyticsToken: CLOUDFLARE_ANALYTICS_TOKEN,
       sourceCommit: SOURCE_COMMIT,
       can3dViewerOrigin: resolveCan3dViewerOrigin({

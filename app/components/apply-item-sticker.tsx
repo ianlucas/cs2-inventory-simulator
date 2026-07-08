@@ -21,11 +21,11 @@ import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
-import { useInventory, useRules, useTranslate } from "./app-context";
-import { Cs2ViewerOverlay } from "./cs2-viewer-overlay";
-import { useCs2Viewer } from "./hooks/use-cs2-viewer";
-import { useCs2ViewerAvailability } from "./hooks/use-cs2-viewer-availability";
-import { useCs2ViewerFallback } from "./hooks/use-cs2-viewer-fallback";
+import { useInventory, useTranslate } from "./app-context";
+import { ViewerOverlay } from "./viewer-overlay";
+import { useViewer } from "./hooks/use-viewer";
+import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useViewerFallback } from "./hooks/use-viewer-fallback";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -133,7 +133,6 @@ function ApplyItemSticker3d({
 }: ApplyItemStickerProps) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
-  const { app3dViewerKey } = useRules();
   const applySticker = useApplySticker(targetUid, stickerUid, onClose);
 
   const targetItem = useInventoryItem(targetUid);
@@ -167,10 +166,7 @@ function ApplyItemSticker3d({
     nameTag: targetItem.nameTag,
     stickers: CS2InventoryItem.stickersFromArray([...existing, newSticker])
   }));
-  const { api, viewerProps } = useCs2Viewer({
-    apiKey: app3dViewerKey || undefined,
-    item: initialItem
-  });
+  const { api, viewerProps } = useViewer({ item: initialItem });
 
   // Anchor (schema) and wear are driven from here (Next preset / scrape slider); the
   // offset/rotation are driven inside the viewer and mirrored back via `change`.
@@ -192,7 +188,7 @@ function ApplyItemSticker3d({
     rotation?: number;
   }>({});
 
-  const viewerStatus = useCs2ViewerFallback(api);
+  const viewerStatus = useViewerFallback(api);
 
   // Mirror the active sticker's offset/rotation so Apply persists what's shown, and
   // cancel a pending confirmation the moment the user nudges the sticker.
@@ -273,7 +269,7 @@ function ApplyItemSticker3d({
   }
 
   return (
-    <Cs2ViewerOverlay
+    <ViewerOverlay
       header={
         <UseItemHeader
           actionDesc={translate("ApplyStickerUseOn")}
@@ -373,7 +369,7 @@ function ApplyItemSticker3d({
           }
         />
       </div>
-    </Cs2ViewerOverlay>
+    </ViewerOverlay>
   );
 }
 
@@ -482,7 +478,7 @@ export function ApplyItemSticker(props: ApplyItemStickerProps) {
   // applied, so all of them must be viewer-supported; otherwise fall back to the 2D anchor picker.
   const targetItem = useInventoryItem(props.targetUid);
   const stickerItem = useInventoryItem(props.stickerUid);
-  const { canUse3d, isStickerSupported } = useCs2ViewerAvailability(targetItem);
+  const { canUse3d, isStickerSupported } = useViewerAvailability(targetItem);
   return canUse3d && isStickerSupported(stickerItem.id) ? (
     <ApplyItemSticker3d {...props} />
   ) : (
