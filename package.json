@@ -30,7 +30,7 @@
     "@react-router/serve": "^7.18.1",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
-    "country-flag-icons": "^1.6.19",
+    "country-flag-icons": "^1.6.20",
     "dotenv": "^17.4.2",
     "hash-object": "^5.1.0",
     "isbot": "^5.1.44",
