@@ -65,8 +65,8 @@ export function isItemCountable(item: CS2EconomyItem) {
 }
 
 export const baseStickerSlabId = 15200;
-export const newItemStartingId = 26698;
-export const newItemEndAt = 1784590681523;
+export const newItemStartingId = 26817;
+export const newItemEndAt = 1784841228427;
 // Keychain offsets keep the app's own flat range: the lib publishes no keychain
 // offset bounds (its validator still only checks finiteness), so the app owns it.
 export const minKeychainOffset = -100;
