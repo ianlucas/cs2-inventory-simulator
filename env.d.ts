@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-/// <reference types="@remix-run/node" />
+/// <reference types="@react-router/node" />
 
 declare const __SPLASH_SCRIPT__: string;
 declare const __TRANSLATION_CHECKSUM__: string;
