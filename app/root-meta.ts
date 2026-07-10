@@ -13,10 +13,10 @@ export function getMetaTitle(
 ): MetaFunction<unknown, { root: typeof rootLoader }> {
   return function meta({ matches }) {
     const rootData = matches.find((match) => match.id === "root");
-    const appName = rootData?.data?.rules.appName || DEFAULT_APP_NAME;
+    const appName = rootData?.loaderData?.rules.appName || DEFAULT_APP_NAME;
     const pageTitle =
       key !== undefined
-        ? getSystemTranslation(key, rootData?.data?.preferences.language)
+        ? getSystemTranslation(key, rootData?.loaderData?.preferences.language)
         : undefined;
     return [
       { title: `${pageTitle !== undefined ? `${pageTitle} - ` : ""}${appName}` }
