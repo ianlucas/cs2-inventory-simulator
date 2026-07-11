@@ -12,8 +12,10 @@ import {
   CS2_MIN_STICKER_ROTATION,
   CS2_MIN_STICKER_WEAR,
   CS2_STICKER_OFFSET_FACTOR,
+  CS2_STICKER_ROTATION_STEP,
   CS2_STICKER_WEAR_FACTOR,
-  CS2EconomyItem
+  CS2EconomyItem,
+  snapStickerRotation
 } from "@ianlucas/cs2-lib";
 import {
   generateInspectLink,
@@ -275,9 +277,10 @@ export function AppliedStickerEditor({
               min={CS2_MIN_STICKER_ROTATION}
               onChange={attributes.update("rotation")}
               randomizable
-              step={1}
+              step={CS2_STICKER_ROTATION_STEP}
               stepRangeStyles="flex-1"
-              type="int"
+              transform={(rotation) => String(snapStickerRotation(rotation))}
+              type="float"
               validate={validateStickerRotation}
               value={attributes.value.rotation}
             />

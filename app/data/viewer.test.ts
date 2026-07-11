@@ -142,4 +142,13 @@ describe("buildViewerSrc", () => {
   it("omits the item param when no item is given", () => {
     expect(new URL(buildViewerSrc()).searchParams.has("item")).toBe(false);
   });
+
+  it("always opts in to half-degree rotation", () => {
+    expect(new URL(buildViewerSrc()).searchParams.get("halfRotation")).toBe(
+      "1"
+    );
+    expect(
+      new URL(buildViewerSrc({ id: 7 })).searchParams.get("halfRotation")
+    ).toBe("1");
+  });
 });

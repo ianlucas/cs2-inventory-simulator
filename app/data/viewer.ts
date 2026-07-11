@@ -110,6 +110,7 @@ export function buildViewerSrc(
   options?: { embedUrl?: string; cdn?: string; key?: string; icon?: boolean }
 ): string {
   const url = new URL(options?.embedUrl ?? DEFAULT_VIEWER_EMBED_URL);
+  url.searchParams.set("halfRotation", "1");
   if (item !== undefined) {
     url.searchParams.set("item", JSON.stringify(toViewerItem(item)));
   }
