@@ -281,18 +281,22 @@ export function Inventory() {
       {isRemovingItemPatch(removeItemPatch) && (
         <RemoveItemPatch {...removeItemPatch} onClose={closeRemoveItemPatch} />
       )}
-      {isApplyingItemSticker(applyItemSticker) && (
-        <ApplyItemSticker
-          {...applyItemSticker}
-          onClose={closeApplyItemSticker}
-        />
-      )}
-      {isScrapingItemSticker(scrapeItemSticker) && (
-        <ScrapeItemSticker
-          {...scrapeItemSticker}
-          onClose={closeScrapeItemSticker}
-        />
-      )}
+      <Presence present={isApplyingItemSticker(applyItemSticker)}>
+        {isApplyingItemSticker(applyItemSticker) ? (
+          <ApplyItemSticker
+            {...applyItemSticker}
+            onClose={closeApplyItemSticker}
+          />
+        ) : null}
+      </Presence>
+      <Presence present={isScrapingItemSticker(scrapeItemSticker)}>
+        {isScrapingItemSticker(scrapeItemSticker) ? (
+          <ScrapeItemSticker
+            {...scrapeItemSticker}
+            onClose={closeScrapeItemSticker}
+          />
+        ) : null}
+      </Presence>
       {isSwapingItemsStatTrak(swapItemsStatTrak) && (
         <SwapItemsStatTrak
           {...swapItemsStatTrak}
