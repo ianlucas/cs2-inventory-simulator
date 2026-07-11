@@ -4,10 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { FloatingFocusManager } from "@floating-ui/react";
-import { faCheck, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2Economy, CS2InventoryItem, CS2_MIN_SEED } from "@ianlucas/cs2-lib";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
+import clsx from "clsx";
 import { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -37,20 +38,34 @@ interface InspectItemProps {
 function InspectItemHeader({ item }: { item: CS2InventoryItem }) {
   const nameItemString = useNameItemString();
   return (
-    <div className="flex items-center justify-center">
-      <div
-        className="flex items-center justify-center gap-2 border-b-4 px-1 pb-2"
-        style={{ borderColor: item.rarity }}
-      >
-        {item.collection !== undefined && (
-          <ItemImage className="h-16" item={item} type="collection" />
-        )}
-        <div className="font-display">
-          <div className="text-3xl">{nameItemString(item)}</div>
-          {item.collectionName !== undefined && (
-            <div className="-mt-2 text-neutral-300">{item.collectionName}</div>
+    <div className="flex flex-col items-center">
+      <div className="flex w-fit flex-col">
+        <div className="flex items-center justify-center gap-1">
+          {item.collection !== undefined && (
+            <ItemImage className="w-29.5" item={item} type="collection" />
           )}
+          <div
+            className={clsx(
+              "max-w-200",
+              item.collection !== undefined ? "text-left" : "text-center"
+            )}
+          >
+            <div className="font-display text-[36px] leading-tight font-medium text-white/90">
+              {nameItemString(item)}
+            </div>
+            {item.collectionName !== undefined && (
+              <div className="mt-1 font-sans text-[20px] text-neutral-300 drop-shadow">
+                {item.collectionName}
+              </div>
+            )}
+          </div>
         </div>
+        <div
+          className="mt-1.5 h-1 w-full"
+          style={{
+            backgroundImage: `linear-gradient(to right, ${item.rarity}, color-mix(in srgb, ${item.rarity} 72%, #000))`
+          }}
+        />
       </div>
     </div>
   );
@@ -125,7 +140,7 @@ function InspectItemShareButton({ item }: { item: CS2InventoryItem }) {
   return (
     <ModalButton variant="secondary" onClick={handleClickShare}>
       <FontAwesomeIcon
-        icon={clickedShare ? faCheck : faShareNodes}
+        icon={clickedShare ? faCheck : faShare}
         className="h-6"
       />
     </ModalButton>
