@@ -4,11 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { FloatingFocusManager } from "@floating-ui/react";
-import { faCheck, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS2Economy, CS2_MIN_SEED } from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2InventoryItem, CS2_MIN_SEED } from "@ianlucas/cs2-lib";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
-import { useEffect } from "react";
+import clsx from "clsx";
+import { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/components/hooks/use-inspect-floating";
@@ -19,25 +20,62 @@ import { wearToString } from "~/utils/economy";
 import { getInventoryItemShareUrl } from "~/utils/inventory";
 import { usePreferences, useTranslate, useUser } from "./app-context";
 import { useTimedState } from "./hooks/use-timed-state";
+import { useViewer } from "./hooks/use-viewer";
+import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useViewerFallback } from "./hooks/use-viewer-fallback";
 import { InfoIcon } from "./info-icon";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
 import { UseItemFooter } from "./use-item-footer";
+import { ViewerOverlay } from "./viewer-overlay";
 
-export function InspectItem({
-  onClose,
-  uid
-}: {
+interface InspectItemProps {
   onClose: () => void;
   uid: number;
-}) {
-  const [, copyToClipboard] = useCopyToClipboard();
-  const translate = useTranslate();
+}
+
+function InspectItemHeader({ item }: { item: CS2InventoryItem }) {
   const nameItemString = useNameItemString();
-  const item = useInventoryItem(uid);
-  const { statsForNerds } = usePreferences();
-  const user = useUser();
+  return (
+    <div className="flex flex-col items-center">
+      <div className="flex w-fit flex-col">
+        <div className="flex items-center justify-center gap-1">
+          {item.collection !== undefined && (
+            <ItemImage className="w-29.5" item={item} type="collection" />
+          )}
+          <div
+            className={clsx(
+              "max-w-200",
+              item.collection !== undefined ? "text-left" : "text-center"
+            )}
+          >
+            <div className="font-display text-[36px] leading-tight font-medium text-white/90">
+              {nameItemString(item)}
+            </div>
+            {item.collectionName !== undefined && (
+              <div className="mt-1 font-sans text-[20px] text-neutral-300 drop-shadow">
+                {item.collectionName}
+              </div>
+            )}
+          </div>
+        </div>
+        <div
+          className="mt-1.5 h-1 w-full"
+          style={{
+            backgroundImage: `linear-gradient(to right, ${item.rarity}, color-mix(in srgb, ${item.rarity} 72%, #000))`
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function useInspectInfo(item: CS2InventoryItem): {
+  infoButton: ReactNode;
+  infoTooltip: ReactNode;
+} {
+  const translate = useTranslate();
   const {
     getHoverFloatingProps,
     getHoverReferenceProps,
@@ -47,46 +85,114 @@ export function InspectItem({
     isHoverOpen,
     ref
   } = useInspectFloating();
-  const [clickedShare, triggerClickedShare] = useTimedState();
-
-  useEffect(() => {
-    clientGlobals.inspectedItem = item;
-    return () => {
-      clientGlobals.inspectedItem = undefined;
-    };
-  }, []);
-
   const hasInfo = item.hasSeed() && item.hasWear();
-  const hasShare = item.isPaintable();
+  return {
+    infoButton: hasInfo ? (
+      <ModalButton
+        variant="secondary"
+        forwardRef={ref}
+        {...getHoverReferenceProps()}
+      >
+        <InfoIcon className="h-6" />
+      </ModalButton>
+    ) : null,
+    infoTooltip:
+      hasInfo && isHoverOpen ? (
+        <FloatingFocusManager context={hoverContext} modal={false}>
+          <div
+            role="tooltip"
+            className="z-20 max-w-[320px] space-y-3 rounded-sm bg-neutral-900/95 px-6 py-4 text-sm text-white outline-hidden"
+            ref={hoverRefs.setFloating}
+            style={hoverStyles}
+            {...getHoverFloatingProps()}
+          >
+            <div>
+              <strong>{translate("InventoryItemInspectFinishCatalog")}:</strong>{" "}
+              {item.index}
+            </div>
+            <div>
+              <strong>
+                {translate("InventoryItemInspectPatternTemplate")}:
+              </strong>{" "}
+              {item.seed ?? CS2_MIN_SEED}
+            </div>
+            <div>
+              <strong>{translate("InventoryItemInspectWearRating")}:</strong>{" "}
+              {wearToString(item.getWear())}
+            </div>
+          </div>
+        </FloatingFocusManager>
+      ) : null
+  };
+}
 
+function InspectItemShareButton({ item }: { item: CS2InventoryItem }) {
+  const [, copyToClipboard] = useCopyToClipboard();
+  const user = useUser();
+  const [clickedShare, triggerClickedShare] = useTimedState();
+  if (!item.isPaintable()) {
+    return null;
+  }
   function handleClickShare() {
     triggerClickedShare();
     copyToClipboard(getInventoryItemShareUrl(item, user?.id));
   }
+  return (
+    <ModalButton variant="secondary" onClick={handleClickShare}>
+      <FontAwesomeIcon
+        icon={clickedShare ? faCheck : faShare}
+        className="h-6"
+      />
+    </ModalButton>
+  );
+}
+
+function InspectItem3d({ onClose, uid }: InspectItemProps) {
+  const translate = useTranslate();
+  const item = useInventoryItem(uid);
+  const { api, viewerProps } = useViewer({ item });
+  useViewerFallback(api);
+  const { infoButton, infoTooltip } = useInspectInfo(item);
+
+  return (
+    <ViewerOverlay
+      header={<InspectItemHeader item={item} />}
+      viewerProps={viewerProps}
+    >
+      <div className="pointer-events-none absolute bottom-8 left-0 w-full">
+        <UseItemFooter
+          left={
+            <>
+              {infoButton}
+              <InspectItemShareButton item={item} />
+            </>
+          }
+          right={
+            <ModalButton
+              variant="secondary"
+              onClick={onClose}
+              children={translate("InspectClose")}
+            />
+          }
+        />
+      </div>
+      {infoTooltip}
+    </ViewerOverlay>
+  );
+}
+
+function InspectItem2d({ onClose, uid }: InspectItemProps) {
+  const translate = useTranslate();
+  const item = useInventoryItem(uid);
+  const { statsForNerds } = usePreferences();
+  const { infoButton, infoTooltip } = useInspectInfo(item);
 
   return (
     <ClientOnly
       children={() =>
         createPortal(
           <Overlay className="m-auto lg:w-5xl">
-            <div className="flex items-center justify-center">
-              <div
-                className="flex items-center justify-center gap-2 border-b-4 px-1 pb-2"
-                style={{ borderColor: item.rarity }}
-              >
-                {item.collection !== undefined && (
-                  <ItemImage className="h-16" item={item} type="collection" />
-                )}
-                <div className="font-display">
-                  <div className="text-3xl">{nameItemString(item)}</div>
-                  {item.collectionName !== undefined && (
-                    <div className="-mt-2 text-neutral-300">
-                      {item.collectionName}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            <InspectItemHeader item={item} />
             <div className="text-center">
               <div className="relative mx-auto inline-block">
                 <ItemImage className="m-auto my-8 max-w-lg" item={item} />
@@ -116,69 +222,43 @@ export function InspectItem({
             <UseItemFooter
               left={
                 <>
-                  {hasInfo && (
-                    <ModalButton
-                      variant="secondary"
-                      forwardRef={ref}
-                      {...getHoverReferenceProps()}
-                    >
-                      <InfoIcon className="h-6" />
-                    </ModalButton>
-                  )}
-                  {hasShare && (
-                    <ModalButton variant="secondary" onClick={handleClickShare}>
-                      <FontAwesomeIcon
-                        icon={clickedShare ? faCheck : faShareNodes}
-                        className="h-6"
-                      />
-                    </ModalButton>
-                  )}
+                  {infoButton}
+                  <InspectItemShareButton item={item} />
                 </>
               }
               right={
-                <>
-                  <ModalButton
-                    variant="secondary"
-                    onClick={onClose}
-                    children={translate("InspectClose")}
-                  />
-                </>
+                <ModalButton
+                  variant="secondary"
+                  onClick={onClose}
+                  children={translate("InspectClose")}
+                />
               }
             />
-            {hasInfo && isHoverOpen && (
-              <FloatingFocusManager context={hoverContext} modal={false}>
-                <div
-                  role="tooltip"
-                  className="z-20 max-w-[320px] space-y-3 rounded-sm bg-neutral-900/95 px-6 py-4 text-sm text-white outline-hidden"
-                  ref={hoverRefs.setFloating}
-                  style={hoverStyles}
-                  {...getHoverFloatingProps()}
-                >
-                  <div>
-                    <strong>
-                      {translate("InventoryItemInspectFinishCatalog")}:
-                    </strong>{" "}
-                    {item.index}
-                  </div>
-                  <div>
-                    <strong>
-                      {translate("InventoryItemInspectPatternTemplate")}:
-                    </strong>{" "}
-                    {item.seed ?? CS2_MIN_SEED}
-                  </div>
-                  <div>
-                    <strong>
-                      {translate("InventoryItemInspectWearRating")}:
-                    </strong>{" "}
-                    {wearToString(item.getWear())}
-                  </div>
-                </div>
-              </FloatingFocusManager>
-            )}
+            {infoTooltip}
           </Overlay>,
           document.body
         )
       }
     />
+  );
+}
+
+export function InspectItem({ onClose, uid }: InspectItemProps) {
+  const item = useInventoryItem(uid);
+  const { canUse3d } = useViewerAvailability(item, {
+    respectStickerEditorPreference: false
+  });
+
+  useEffect(() => {
+    clientGlobals.inspectedItem = item;
+    return () => {
+      clientGlobals.inspectedItem = undefined;
+    };
+  }, []);
+
+  return canUse3d ? (
+    <InspectItem3d onClose={onClose} uid={uid} />
+  ) : (
+    <InspectItem2d onClose={onClose} uid={uid} />
   );
 }

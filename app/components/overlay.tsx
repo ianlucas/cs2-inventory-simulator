@@ -3,7 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import clsx from "clsx";
 import { ReactNode } from "react";
+import { useOverlayTransition } from "./hooks/use-overlay-transition";
 
 export function Overlay({
   className,
@@ -14,8 +16,15 @@ export function Overlay({
   children: ReactNode;
   isWrapperless?: boolean;
 }) {
+  const transition = useOverlayTransition();
   return (
-    <div className="fixed top-0 left-0 z-50 flex size-full items-center justify-center bg-black/60 backdrop-blur-xs select-none">
+    <div
+      className={clsx(
+        "fixed top-0 left-0 z-50 flex size-full items-center justify-center bg-black/60 backdrop-blur-xs select-none",
+        transition.className
+      )}
+      {...transition.rootProps}
+    >
       {isWrapperless ? children : <div className={className}>{children}</div>}
     </div>
   );
