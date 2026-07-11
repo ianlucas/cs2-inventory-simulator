@@ -6,6 +6,7 @@
 import clsx from "clsx";
 import { ComponentProps, ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { useOverlayTransition } from "./hooks/use-overlay-transition";
 import { Viewer } from "./viewer";
 
 /**
@@ -21,18 +22,26 @@ import { Viewer } from "./viewer";
 export function ViewerOverlay({
   children,
   header,
+  overlayClassName,
   viewerClassName,
   viewerProps
 }: {
   children?: ReactNode;
   header: ReactNode;
-  // Extra classes merged onto the viewer iframe (e.g. dropping pointer events while a
-  // drag in the controls needs them).
+  overlayClassName?: string;
   viewerClassName?: string;
   viewerProps: Omit<ComponentProps<typeof Viewer>, "className" | "style">;
 }) {
+  const transition = useOverlayTransition();
   return createPortal(
-    <div className="fixed top-0 left-0 z-50 size-full overflow-hidden backdrop-blur-xs select-none">
+    <div
+      className={clsx(
+        "fixed top-0 left-0 z-50 size-full overflow-hidden backdrop-blur-xs select-none",
+        transition.className,
+        overlayClassName
+      )}
+      {...transition.rootProps}
+    >
       <Viewer
         {...viewerProps}
         className={clsx("size-full border-0 bg-transparent", viewerClassName)}
