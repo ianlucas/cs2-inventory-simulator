@@ -8,7 +8,6 @@ import {
   CS2_ITEMS,
   CS2_MAX_KEYCHAIN_SEED,
   CS2_MAX_SEED,
-  CS2_MAX_STICKER_ROTATION,
   CS2_MAX_STICKER_WEAR,
   CS2_MAX_STICKERS,
   CS2_MIN_KEYCHAIN_SEED,
@@ -84,11 +83,11 @@ export const stickerOffsetStringMaxLen =
 const keychainOffsetDecimalPlaces = countDecimals(keychainOffsetFactor);
 export const keychainOffsetStringMaxLen =
   String(maxKeychainOffset).length + 1 + keychainOffsetDecimalPlaces;
-// v8 uses a signed [-180, 180] range; the longest input is the negative bound
-// ("-180" = 4 chars), so size the max length off the minimum.
-export const stickerRotationStringMaxLen = String(
-  CS2_MIN_STICKER_ROTATION
-).length;
+// v8 uses a signed [-180, 180] range on cs2-lib's half-degree grid; the longest
+// input is the negative bound's half step ("-179.5" = 6 chars), so size the max
+// length off the minimum plus the ".5" suffix.
+export const stickerRotationStringMaxLen =
+  String(CS2_MIN_STICKER_ROTATION).length + ".5".length;
 
 export function wearToString(wear: number) {
   return wear.toFixed(wearStringMaxLen - 2);
@@ -136,13 +135,7 @@ export function validateKeychainOffset(offset: number) {
   );
 }
 
-export function validateStickerRotation(rotation: number) {
-  return (
-    String(rotation).length <= stickerRotationStringMaxLen &&
-    rotation >= CS2_MIN_STICKER_ROTATION &&
-    rotation <= CS2_MAX_STICKER_ROTATION
-  );
-}
+export { validateStickerRotation } from "@ianlucas/cs2-lib";
 
 export const stickerSchemaStringMaxLen = String(CS2_MAX_STICKERS - 1).length;
 
