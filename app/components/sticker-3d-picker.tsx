@@ -31,6 +31,7 @@ import { useViewerFallback } from "./hooks/use-viewer-fallback";
 import { useNameItemString } from "./hooks/use-name-item";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
+import { Presence } from "./presence";
 import { SelectStickerModal } from "./select-sticker-modal";
 import { StickerSlotGrid } from "./sticker-slot-grid";
 import { UseItemFooter } from "./use-item-footer";
@@ -786,19 +787,21 @@ export function Sticker3dPicker({
         onSlotClick={() => setIsOpen(true)}
         value={value}
       />
-      {isOpen && (
-        <Sticker3dEditorOverlay
-          forItem={forItem}
-          nameTag={nameTag}
-          onChange={onChange}
-          onClose={() => setIsOpen(false)}
-          seed={seed}
-          statTrak={statTrak}
-          stickerFilter={stickerFilter}
-          value={value}
-          wear={wear}
-        />
-      )}
+      <Presence present={isOpen}>
+        {isOpen ? (
+          <Sticker3dEditorOverlay
+            forItem={forItem}
+            nameTag={nameTag}
+            onChange={onChange}
+            onClose={() => setIsOpen(false)}
+            seed={seed}
+            statTrak={statTrak}
+            stickerFilter={stickerFilter}
+            value={value}
+            wear={wear}
+          />
+        ) : null}
+      </Presence>
     </>
   );
 }
