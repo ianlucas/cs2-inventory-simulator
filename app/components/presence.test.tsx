@@ -9,8 +9,9 @@ import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { useOverlayTransition } from "./hooks/use-overlay-transition";
 import { Presence } from "./presence";
 
-(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT =
-  true;
+(
+  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
+).IS_REACT_ACT_ENVIRONMENT = true;
 
 function TestOverlay() {
   const transition = useOverlayTransition();
