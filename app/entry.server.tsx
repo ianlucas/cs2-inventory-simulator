@@ -12,6 +12,7 @@ import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import type { EntryContext } from "react-router";
 import { ServerRouter } from "react-router";
+import { warmViewerCaches } from "./data/viewer.server";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule";
 import { scheduleInactivityReset } from "./routines/reset-inactive-inventory";
@@ -22,9 +23,12 @@ const ABORT_DELAY = 5_000;
 
 CS2Economy.load({ items: CS2_ITEMS, language: english });
 setupTranslation();
-setupPurge();
+void setupPurge();
 scheduleInactivityReset();
-setupRules().then(() => setupLogo());
+void setupRules().then(() => {
+  void setupLogo();
+  void warmViewerCaches();
+});
 
 export default function handleRequest(
   request: Request,

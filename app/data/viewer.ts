@@ -5,6 +5,7 @@
 
 import {
   CS2BaseInventoryItem,
+  CS2Economy,
   CS2EconomyItem,
   CS2InventoryItem
 } from "@ianlucas/cs2-lib";
@@ -26,6 +27,8 @@ export type ViewerItemInput =
 // gaps below it. `supported(id) = id <= maxId && id not in holes`. Encodes the complement of the
 // viewer's ~12k renderable ids in ~60 bytes, which works because cs2-lib ids are stable + append-only
 // (id N is the same item in every version), so the host can compare its OWN ids against this envelope.
+// The envelope carries no KIND information — non-renderable kinds are interleaved "present" ids — so
+// it only answers for ids the host already classified as renderable (isViewerRenderableKind).
 // Resolved server-side (viewer.server.ts) and injected into rules; read synchronously by the gate.
 export interface ViewerCatalog {
   maxId: number;
@@ -74,12 +77,29 @@ export function viewerItemIds(item: ViewerItemInput): number[] {
   return ids;
 }
 
-// Whether the viewer can render `item` in full — its body and every applied sticker.
+// The kinds the viewer renders — exactly the set its client/economy.ts offers. The manifest
+// deliberately encodes only the id ENVELOPE: non-renderable kinds (music kits, collectibles,
+// agents, ...) sit interleaved as "present" ids in it, so classifying kind is the host's half of
+// the catalog contract. Fail-closed: an id the loaded economy doesn't know reads as unsupported.
+function isViewerRenderableKind(item: ViewerItemInput): boolean {
+  const economyItem =
+    item instanceof CS2EconomyItem ? item : CS2Economy.items.get(item.id);
+  return (
+    economyItem !== undefined &&
+    (economyItem.isWeapon() || economyItem.isMelee() || economyItem.isSticker())
+  );
+}
+
+// Whether the viewer can render `item` in full — a renderable kind (weapon/melee/sticker) whose
+// body and every applied sticker sit inside the catalog envelope.
 export function isViewerItemSupported(
   catalog: ViewerCatalogLike | undefined,
   item: ViewerItemInput
 ): boolean {
-  return viewerItemIds(item).every((id) => isViewerIdSupported(catalog, id));
+  return (
+    isViewerRenderableKind(item) &&
+    viewerItemIds(item).every((id) => isViewerIdSupported(catalog, id))
+  );
 }
 
 // Narrow any accepted item into the subset the viewer reads (id/seed/wear/

@@ -105,7 +105,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       // The viewer's support manifest, for the item-aware 3D gate. Resolved only when 3D is enabled
       // (skip the fetch otherwise); undefined leaves the gate fail-closed on 2D.
       viewerCatalog: clientRules.appEnable3dViewer
-        ? resolveViewerCatalog()
+        ? await resolveViewerCatalog()
         : undefined,
       meta: { appUrl, appSiteName }
     },

@@ -4,6 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { VIEWER_EMBED_URL } from "~/env.server";
+import {
+  app3dViewerKey,
+  appEnable3dViewer,
+  steamCallbackUrl
+} from "~/models/rule.server";
 import { DEFAULT_VIEWER_EMBED_URL, ViewerCatalog } from "./viewer";
 
 // Fraction of the origin's request budget we keep in reserve before offering
@@ -129,6 +134,14 @@ const VIEWER_CATALOG_TTL_MS = 300_000;
 // endpoint is reachable again.
 const VIEWER_CATALOG_ERROR_TTL_MS = 30_000;
 
+// Bounds how long a COLD resolve (fresh process, no fetch has ever settled) waits for the in-flight
+// catalog fetch before failing closed for this request. Without it the first session after every
+// deploy/restart would be all-2D: the loader would ship `viewerCatalog: undefined` and never
+// revalidate mid-session. The boot warm (warmViewerCaches) makes hitting this rare — only a request
+// that beats it pays — and the fetch keeps running regardless, so a timed-out request reads as 2D
+// and the next one hits the cache.
+const VIEWER_CATALOG_COLD_WAIT_MS = 1500;
+
 interface CatalogCacheEntry {
   expiresAt: number;
   // undefined = the fetch failed/was malformed; the gate treats it as "nothing supported" (2D).
@@ -138,7 +151,7 @@ interface CatalogCacheEntry {
 // A single global entry (the manifest isn't per-embedder, unlike the origin peek). Module-level =
 // process-lifetime, refreshed in the background (stale-while-revalidate).
 let catalogCache: CatalogCacheEntry | undefined;
-let catalogInFlight = false;
+let catalogInFlight: Promise<void> | undefined;
 
 async function fetchViewerCatalog(): Promise<ViewerCatalog | undefined> {
   const response = await fetch(`${getViewerOrigin()}/api/catalog`);
@@ -164,14 +177,15 @@ async function fetchViewerCatalog(): Promise<ViewerCatalog | undefined> {
   return { maxId: data.maxId, holes };
 }
 
-function refreshViewerCatalog() {
-  if (catalogInFlight) {
-    return;
+// Kicks (or joins) the background catalog fetch and returns its promise, so a cold resolve can
+// bound-await the very first verdict.
+function refreshViewerCatalog(): Promise<void> {
+  if (catalogInFlight !== undefined) {
+    return catalogInFlight;
   }
-  catalogInFlight = true;
   // Fail closed: any error caches an undefined verdict (short TTL) so the gate stays on 2D rather
   // than optimistically offering a viewer we can't vouch for.
-  fetchViewerCatalog()
+  catalogInFlight = fetchViewerCatalog()
     .then((catalog) => {
       catalogCache = {
         expiresAt:
@@ -189,21 +203,56 @@ function refreshViewerCatalog() {
       };
     })
     .finally(() => {
-      catalogInFlight = false;
+      catalogInFlight = undefined;
     });
+  return catalogInFlight;
 }
 
 /**
- * Resolves, synchronously, the viewer's support manifest — the id envelope the item-aware 3D gate
- * checks against (see isViewerItemSupported). Stale-while-revalidate + fail-closed, mirroring
- * {@link resolveCan3dViewerOrigin}: the loader never blocks on the external request, and an
- * unreachable/never-fetched manifest reads as `undefined` (every item unsupported → 2D) until a
- * background refresh lands. A viewer deploy is picked up within the TTL, or on the next host reload.
+ * Resolves the viewer's support manifest — the id envelope the item-aware 3D gate checks against
+ * (see isViewerItemSupported). Warm reads are synchronous stale-while-revalidate + fail-closed,
+ * mirroring {@link resolveCan3dViewerOrigin}: an expired entry serves stale and refreshes in the
+ * background, so a viewer deploy is picked up within the TTL and an unreachable manifest reads as
+ * `undefined` (every item unsupported → 2D). Only a COLD cache — a fresh process where no fetch has
+ * ever settled, normally just a request that beats the boot warm ({@link warmViewerCaches}) —
+ * awaits the fetch, bounded by VIEWER_CATALOG_COLD_WAIT_MS so a hung viewer can't stall first paint.
  */
-export function resolveViewerCatalog(): ViewerCatalog | undefined {
+export async function resolveViewerCatalog(): Promise<
+  ViewerCatalog | undefined
+> {
   const cached = catalogCache;
-  if (cached === undefined || cached.expiresAt <= Date.now()) {
-    refreshViewerCatalog();
+  if (cached !== undefined) {
+    if (cached.expiresAt <= Date.now()) {
+      void refreshViewerCatalog();
+    }
+    return cached.catalog;
   }
-  return cached?.catalog;
+  await Promise.race([
+    refreshViewerCatalog(),
+    new Promise((resolve) => setTimeout(resolve, VIEWER_CATALOG_COLD_WAIT_MS))
+  ]);
+  return catalogCache?.catalog;
+}
+
+/**
+ * Fires the viewer fetches once at boot (entry.server, after rules are ready) so the first request
+ * after a deploy/restart doesn't fail closed to 2D on cold caches: the catalog manifest always, and
+ * the origin rate-limit peek when the origin actually needs one (trusted/keyed origins resolve with
+ * no network). Best-effort fire-and-forget — a failed warm must not take the boot down; both caches
+ * are stale-while-revalidate and fail-closed on their own, so the first request just pays the
+ * bounded cold wait instead.
+ */
+export async function warmViewerCaches() {
+  try {
+    const enabled = await appEnable3dViewer.get();
+    if (!enabled) {
+      return;
+    }
+    void refreshViewerCatalog();
+    resolveCan3dViewerOrigin({
+      enabled,
+      hostname: new URL(await steamCallbackUrl.get()).hostname,
+      key: await app3dViewerKey.get()
+    });
+  } catch {}
 }
