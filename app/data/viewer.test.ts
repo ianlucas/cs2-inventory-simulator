@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS2Economy, CS2ItemType, CS2RarityColor } from "@ianlucas/cs2-lib";
 import { describe, expect, it } from "vitest";
 import {
   buildViewerSrc,
@@ -21,6 +22,23 @@ const catalog = {
     [20, 20]
   ] as [number, number][]
 };
+
+// The fabricated economy backing the kind gate — ids line up with the catalog above. Loaded
+// without a language map, so names default to String(id). Id 70 is deliberately absent
+// (fail-closed path).
+CS2Economy.load({
+  items: [
+    { id: 5, type: CS2ItemType.Weapon, rarity: CS2RarityColor.Common },
+    { id: 11, type: CS2ItemType.Weapon, rarity: CS2RarityColor.Common },
+    { id: 50, type: CS2ItemType.Sticker, rarity: CS2RarityColor.Common },
+    { id: 60, type: CS2ItemType.MusicKit, rarity: CS2RarityColor.Common },
+    { id: 61, type: CS2ItemType.Collectible, rarity: CS2RarityColor.Common },
+    { id: 62, type: CS2ItemType.Gloves, rarity: CS2RarityColor.Common },
+    { id: 63, type: CS2ItemType.Melee, rarity: CS2RarityColor.Common },
+    { id: 64, type: CS2ItemType.Sticker, rarity: CS2RarityColor.Common },
+    { id: 200, type: CS2ItemType.Sticker, rarity: CS2RarityColor.Common }
+  ]
+});
 
 describe("isViewerIdSupported", () => {
   it("fails closed when the manifest is absent", () => {
@@ -100,6 +118,24 @@ describe("isViewerItemSupported", () => {
 
   it("fails closed without a manifest", () => {
     expect(isViewerItemSupported(undefined, { id: 5 })).toBe(false);
+  });
+
+  it("only offers kinds the viewer renders (weapon/melee/sticker)", () => {
+    expect(isViewerItemSupported(catalog, { id: 63 })).toBe(true);
+    expect(isViewerItemSupported(catalog, { id: 64 })).toBe(true);
+    // Inside the envelope, but a kind the viewer never renders -> 2D.
+    expect(isViewerItemSupported(catalog, { id: 60 })).toBe(false);
+    expect(isViewerItemSupported(catalog, { id: 61 })).toBe(false);
+    expect(isViewerItemSupported(catalog, { id: 62 })).toBe(false);
+  });
+
+  it("classifies CS2EconomyItem instances without an economy lookup", () => {
+    expect(isViewerItemSupported(catalog, CS2Economy.getById(5))).toBe(true);
+    expect(isViewerItemSupported(catalog, CS2Economy.getById(60))).toBe(false);
+  });
+
+  it("fails closed for an id the economy doesn't know", () => {
+    expect(isViewerItemSupported(catalog, { id: 70 })).toBe(false);
   });
 });
 

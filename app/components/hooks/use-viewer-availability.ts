@@ -124,7 +124,8 @@ export function markViewerUnsupported(reason: ViewerUnsupportedReason) {
  * render that specific item and every sticker it already carries. The decision
  * is a synchronous read — callers never await — so opening the editor is instant.
  *
- * Pass the item being crafted/edited/stickered to gate on it (a viewer-unknown
+ * Pass the item being inspected/crafted/edited/stickered to gate on it (a kind the
+ * viewer never renders — music kit, collectible, agent, ... — or a viewer-unknown
  * weapon or existing sticker falls back to 2D). Omit it for a global check, and
  * use `isStickerSupported(id)` to filter per-sticker (e.g. the sticker modal).
  *
