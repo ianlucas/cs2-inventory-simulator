@@ -22,11 +22,14 @@ import { postJson } from "~/utils/fetch";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { useInventory, useUser } from "./app-context";
+import { ConVar } from "./console";
 import { useKeyRelease } from "./hooks/use-key-release";
 import { useIsSyncing } from "./hooks/use-sync-state";
 import { Overlay } from "./overlay";
 import { UnlockCaseContainer } from "./unlock-case-container";
 import { UnlockCaseContainerUnlocked } from "./unlock-case-container-unlocked";
+
+const fakeOdds = new ConVar("fake_odds", "0");
 
 async function unlockCase(caseUid: number, keyUid?: number) {
   const { unlockedItem, syncedAt } =
@@ -56,7 +59,10 @@ export function UnlockCase({
   const [canUnlock, setCanUnlock] = useState(true);
   const [unlockedItem, setUnlockedItem] = useState<CS2UnlockedItem>();
   const [hideCaseContents, setHideCaseContents] = useState(false);
-  const unlockedItemRef = useRef<CS2UnlockedItem>(undefined);
+  const unlockedItemRef = useRef<{
+    actual: CS2UnlockedItem;
+    displayed: CS2UnlockedItem;
+  }>(undefined);
 
   const caseItem = useInventoryItem(caseUid);
   const neededKeyItem =
@@ -71,8 +77,10 @@ export function UnlockCase({
     if (unlockedItem === undefined) {
       return;
     }
-    setUnlockedItem(unlockedItem);
-    setInventory(inventory.unlockContainer(unlockedItem, caseUid, keyUid));
+    setUnlockedItem(unlockedItem.displayed);
+    setInventory(
+      inventory.unlockContainer(unlockedItem.actual, caseUid, keyUid)
+    );
     unlockedItemRef.current = undefined;
   }
 
@@ -85,11 +93,19 @@ export function UnlockCase({
     try {
       setIsDisplaying(false);
       setCanUnlock(false);
-      const unlockedItem =
+      const actualItem =
         user === undefined
           ? caseItem.unlockContainer()
           : await unlockCase(caseUid, keyUid);
-      unlockedItemRef.current = unlockedItem;
+      const displayedItem = fakeOdds.toBoolean()
+        ? caseItem.unlockContainer({
+            computeOdds: (rarities) => rarities.map(() => 1)
+          })
+        : actualItem;
+      unlockedItemRef.current = {
+        actual: actualItem,
+        displayed: displayedItem
+      };
       wait(() => {
         setHideCaseContents(true);
         if (caseItem.keys !== undefined) {
@@ -98,7 +114,7 @@ export function UnlockCase({
         wait(() => {
           setItems(
             range(32).map((_, index) =>
-              index === 28 ? unlockedItem : unlockNonSpecialItem(caseItem)
+              index === 28 ? displayedItem : unlockNonSpecialItem(caseItem)
             )
           );
           setIsDisplaying(true);
