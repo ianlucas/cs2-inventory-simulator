@@ -179,6 +179,17 @@ describe("buildViewerSrc", () => {
     expect(new URL(buildViewerSrc()).searchParams.has("item")).toBe(false);
   });
 
+  it("sets ?icon= only when icon mode is requested", () => {
+    expect(
+      new URL(buildViewerSrc({ id: 7 }, { icon: true })).searchParams.has(
+        "icon"
+      )
+    ).toBe(true);
+    expect(new URL(buildViewerSrc({ id: 7 })).searchParams.has("icon")).toBe(
+      false
+    );
+  });
+
   it("always opts in to half-degree rotation", () => {
     expect(new URL(buildViewerSrc()).searchParams.get("halfRotation")).toBe(
       "1"

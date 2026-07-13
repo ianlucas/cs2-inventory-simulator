@@ -209,7 +209,16 @@ export function ItemEditor({
   }, [attributes.value]);
 
   const display = (
-    <EditorItemDisplay item={item} wear={attributes.value.wear} />
+    <EditorItemDisplay
+      item={item}
+      nameTag={attributes.value.nameTag || undefined}
+      seed={attributes.value.seed}
+      statTrak={
+        attributes.value.statTrak ? (defaults?.statTrak ?? 0) : undefined
+      }
+      stickers={attributes.value.stickers}
+      wear={attributes.value.wear}
+    />
   );
 
   const editor = (

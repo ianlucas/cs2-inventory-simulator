@@ -17,6 +17,7 @@ export function Viewer({
   apiKey,
   embedUrl,
   cdn,
+  icon,
   item,
   onApi,
   origin,
@@ -26,6 +27,7 @@ export function Viewer({
   apiKey?: string;
   embedUrl?: string;
   cdn?: string;
+  icon?: boolean;
   item?: ViewerItemInput;
   onApi: (api: ViewerApi | undefined) => void;
   origin?: string;
@@ -35,7 +37,7 @@ export function Viewer({
   // a changed `item` prop) don't reload the iframe. Drive later changes through
   // the api, or remount with a `key`.
   const [src] = useState(() =>
-    buildViewerSrc(item, { embedUrl, cdn, key: apiKey })
+    buildViewerSrc(item, { embedUrl, cdn, key: apiKey, icon })
   );
   const onApiRef = useRef(onApi);
   const originRef = useRef(origin);

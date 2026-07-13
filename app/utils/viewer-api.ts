@@ -262,7 +262,26 @@ export class ViewerApi extends EventTarget {
     }
   }
 
+  private canReachViewer(): boolean {
+    const contentWindow = this.iframe.contentWindow;
+    if (contentWindow === null) {
+      return false;
+    }
+    if (this.origin === window.location.origin) {
+      return true;
+    }
+    try {
+      void contentWindow.location.href;
+      return false;
+    } catch {
+      return true;
+    }
+  }
+
   private post(envelope: Envelope): void {
+    if (!this.canReachViewer()) {
+      return;
+    }
     this.iframe.contentWindow?.postMessage(envelope, this.origin);
   }
 
