@@ -4,6 +4,8 @@ A Counter-Strike 2 **Inventory Simulator** for the web using TypeScript and Remi
 
 <img src="https://raw.githubusercontent.com/ianlucas/cs2-inventory-simulator/main/screenshot1.png" alt="Inventory Simulator homepage" title="CS2 Inventory Simulator" />
 
+<img src="https://raw.githubusercontent.com/ianlucas/cs2-inventory-simulator/main/screenshot3.png" alt="Inventory Simulator applying sticker" title="CS2 Inventory Simulator" />
+
 <img src="https://raw.githubusercontent.com/ianlucas/cs2-inventory-simulator/main/screenshot2.png" alt="Inventory Simulator case opening" title="CS2 Inventory Simulator" />
 
 ## Features
