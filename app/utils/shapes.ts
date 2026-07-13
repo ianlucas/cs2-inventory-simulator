@@ -17,12 +17,6 @@ export const nonNegativeInt = z.number().int().nonnegative().finite().safe();
 export const positiveInt = z.number().int().positive().finite().safe();
 export const nonNegativeFloat = z.number().nonnegative().finite();
 
-// A sticker placement's offset (x/y), rotation, and wear — each optional and
-// self-validating against the economy rules. Shared by the stored-inventory shape
-// below and the sync action shape (`~/routes/api.action.sync`) so the two never drift
-// on what a valid placement is. Offsets and rotation are signed (the sticker moves
-// either way and rotates to negative angles), so the base is a plain finite number —
-// NOT `positiveInt`, which would wrongly reject negatives, zero, and fractions.
 export const optionalStickerOffset = z
   .number()
   .finite()

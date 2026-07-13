@@ -11,20 +11,8 @@ import {
 import { useEffect, useRef } from "react";
 import { getTypedFromLocalStorage } from "~/utils/localstorage";
 
-// Minimum gap between scratch cues while dragging — throttles continuous movement into
-// a discrete scratch every 500ms instead of a glitchy buzz.
 const SCRATCH_THROTTLE_MS = 500;
 
-/**
- * In-game "sticker scrape level" slider: a bare track with a filled progress portion
- * and a square thumb, driving a sticker's wear. Deliberately not the craft editor's
- * `EditorStepRange` — that thin/round look doesn't match the game. Shared by the apply
- * and scrape flows.
- *
- * Two in-game behaviors live here so both flows get them: the scratch cue plays only
- * while the (controlled) value is actually moving — throttled, and silent when a drag
- * is pinned against a clamped floor — and the keyboard can't nudge it (pointer only).
- */
 export function ScrapeLevelSlider({
   disabled,
   max = CS2_MAX_STICKER_WEAR,
@@ -38,16 +26,11 @@ export function ScrapeLevelSlider({
   onChange: (wear: number) => void;
   value: number;
 }) {
-  // Reused <audio> (lazily created client-side), whether the handle is being dragged,
-  // the last value we scratched at, and the last scratch timestamp (for the throttle).
   const scratchRef = useRef<HTMLAudioElement | undefined>(undefined);
   const draggingRef = useRef(false);
   const prevValueRef = useRef(value);
   const lastScratchRef = useRef(0);
 
-  // Scratch only when the controlled value actually moves during a drag (so a drag
-  // pinned against the clamped floor, or a programmatic change like selecting another
-  // sticker, stays silent), throttled to a steady cadence.
   useEffect(() => {
     const previous = prevValueRef.current;
     prevValueRef.current = value;
@@ -80,15 +63,12 @@ export function ScrapeLevelSlider({
     }
   }
 
-  // Cut any in-flight scratch if the slider unmounts mid-drag (overlay closed on remove).
   useEffect(() => {
     return () => {
       scratchRef.current?.pause();
     };
   }, []);
 
-  // Fill tracks the thumb within [min, max]; guard the degenerate min === max case
-  // (a sticker already at the scrape cap) so the width never becomes NaN.
   const filled =
     max > min
       ? Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100))
@@ -108,7 +88,7 @@ export function ScrapeLevelSlider({
         min={min}
         onBlur={stopScratching}
         onChange={(event) => onChange(Number(event.target.value))}
-        // Pointer only, like the game — block arrow/home/end/page stepping but keep Tab.
+        // Pointer only, like the game; keep Tab.
         onKeyDown={(event) => {
           if (event.key !== "Tab") {
             event.preventDefault();

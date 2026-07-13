@@ -22,7 +22,7 @@ import { usePreferences, useTranslate, useUser } from "./app-context";
 import { useTimedState } from "./hooks/use-timed-state";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
-import { useViewerFallback } from "./hooks/use-viewer-fallback";
+import { useViewerStatus } from "./hooks/use-viewer-status";
 import { InfoIcon } from "./info-icon";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -151,7 +151,7 @@ function InspectItem3d({ onClose, uid }: InspectItemProps) {
   const translate = useTranslate();
   const item = useInventoryItem(uid);
   const { api, viewerProps } = useViewer({ item });
-  useViewerFallback(api);
+  useViewerStatus(api);
   const { infoButton, infoTooltip } = useInspectInfo(item);
 
   return (
@@ -245,9 +245,7 @@ function InspectItem2d({ onClose, uid }: InspectItemProps) {
 
 export function InspectItem({ onClose, uid }: InspectItemProps) {
   const item = useInventoryItem(uid);
-  const { canUse3d } = useViewerAvailability(item, {
-    respectStickerEditorPreference: false
-  });
+  const { canUse3d } = useViewerAvailability(item);
 
   useEffect(() => {
     clientGlobals.inspectedItem = item;

@@ -25,7 +25,7 @@ import { useInventory, useTranslate } from "./app-context";
 import { ViewerOverlay } from "./viewer-overlay";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
-import { useViewerFallback } from "./hooks/use-viewer-fallback";
+import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -33,11 +33,8 @@ import { ScrapeLevelSlider } from "./scrape-level-slider";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
-// "Confirm position" stays disabled this long after the weapon loads so the user
-// registers the sticker (pulsed via highlight) before they can lock in the apply.
 const CONFIRM_POSITION_DELAY_MS = 3500;
 
-// Cadence of the highlight sweep during the confirm-delay window (each sweep ~0.7s).
 const HIGHLIGHT_PULSE_INTERVAL_MS = 1000;
 
 interface ApplyItemStickerProps {
@@ -54,9 +51,6 @@ interface StickerPlacement {
   wear?: number;
 }
 
-// Shared commit path: apply the sticker onto an existing weapon, or add a free item
-// carrying it, syncing the same placement, playing the confirm cue, and closing.
-// Used by both the 3D and 2D bodies so they apply identically.
 function useApplySticker(
   targetUid: number,
   stickerUid: number,
@@ -118,14 +112,6 @@ function useApplySticker(
   };
 }
 
-/**
- * Game-like apply: the weapon in the 3D viewer with its already-applied stickers, the
- * one being applied appended on top and active so it (only) can be moved/rotated. A
- * scrape slider sets its wear and "Next preset" cycles its anchor. "Confirm position"
- * unlocks Apply after a short highlight window; nudging the sticker again cancels the
- * confirmation, mirroring the game. If the viewer can't be reached, availability flips
- * and the parent falls back to {@link ApplyItemSticker2d}.
- */
 function ApplyItemSticker3d({
   onClose,
   targetUid,
@@ -139,9 +125,6 @@ function ApplyItemSticker3d({
   const stickerItem = useInventoryItem(stickerUid);
   const maxSchema = targetItem.getStickerSchemaCount();
 
-  // The weapon's already-applied stickers stay fixed context; the sticker being
-  // applied is appended on top of the stack and made active. Seeded once: its stack
-  // index is `newIndex` and lines up 1:1 with the viewer's sticker index.
   const [existing] = useState(() =>
     CS2InventoryItem.stickersToArray(
       Object.fromEntries(targetItem.someStickers()),
@@ -150,14 +133,11 @@ function ApplyItemSticker3d({
   );
   const [newSticker] = useState(() => ({
     id: stickerItem.id,
-    // Anchor on the first free markup slot (bounded by the body's anchor count),
-    // never the stack index — that would overflow on reduced-anchor models.
+    // Anchor on the first free schema, never the stack index (overflows on
+    // reduced-anchor models).
     schema: getNextStickerSchema(existing, maxSchema)
   }));
   const newIndex = existing.length;
-  // The viewer reads its initial stickers from the iframe `src` (captured once), so
-  // hand it the existing stack plus the appended sticker; later changes go through
-  // the api.
   const [initialItem] = useState<CS2BaseInventoryItem>(() => ({
     id: targetItem.id,
     seed: targetItem.seed,
@@ -168,17 +148,12 @@ function ApplyItemSticker3d({
   }));
   const { api, viewerProps } = useViewer({ item: initialItem });
 
-  // Anchor (schema) and wear are driven from here (Next preset / scrape slider); the
-  // offset/rotation are driven inside the viewer and mirrored back via `change`.
   const [schema, setSchema] = useState(newSticker.schema);
   const [wear, setWear] = useState(0);
   const placementRef = useRef<{ x?: number; y?: number; rotation?: number }>(
     {}
   );
 
-  // "Confirm position" is disabled until the weapon has been shown for a moment, then
-  // unlocks Apply; moving/rotating the sticker afterwards cancels it. The refs hold
-  // the live values the once-registered `change` listener reads.
   const [confirmEnabled, setConfirmEnabled] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const confirmedRef = useRef(false);
@@ -188,10 +163,8 @@ function ApplyItemSticker3d({
     rotation?: number;
   }>({});
 
-  const viewerStatus = useViewerFallback(api);
+  const viewerStatus = useViewerStatus(api);
 
-  // Mirror the active sticker's offset/rotation so Apply persists what's shown, and
-  // cancel a pending confirmation the moment the user nudges the sticker.
   useEffect(() => {
     if (api === undefined) {
       return;
@@ -221,9 +194,6 @@ function ApplyItemSticker3d({
     return () => offChange();
   }, [api, newIndex]);
 
-  // Once the viewer is ready, make the appended sticker active and pulse a highlight
-  // over it through the confirm-delay window so the user notices which one they're
-  // placing before Apply unlocks.
   useEffect(() => {
     if (api === undefined || viewerStatus !== "ready") {
       return;
@@ -252,8 +222,6 @@ function ApplyItemSticker3d({
   function handleNextPreset() {
     const nextSchema = (schema + 1) % maxSchema;
     setSchema(nextSchema);
-    // setStickerSchema re-anchors and zeroes offset/rotation in the viewer; the
-    // `change` echo refreshes placementRef.
     api?.setStickerSchema({ index: newIndex, schema: nextSchema });
   }
 
@@ -373,11 +341,6 @@ function ApplyItemSticker3d({
   );
 }
 
-/**
- * 2D fallback used when the 3D viewer is unavailable (disabled or rate-limited):
- * the weapon image with a "+" on each free markup anchor to choose the new
- * sticker's slot. Persists the chosen `schema` only.
- */
 function ApplyItemSticker2d({
   onClose,
   targetUid,
@@ -391,9 +354,6 @@ function ApplyItemSticker2d({
   const stickerItem = useInventoryItem(stickerUid);
   const targetItem = useInventoryItem(targetUid);
 
-  // v8 stores stickers as a stack array; each sticker's `schema` is the markup
-  // anchor (the in-game slot it sits on). Build the grid from the weapon's markup
-  // positions and offer a "+" on each one no applied sticker occupies.
   const schemaCount = targetItem.getStickerSchemaCount();
   const stickerBySchema = new Map(
     targetItem
@@ -469,16 +429,12 @@ function ApplyItemSticker2d({
   );
 }
 
-/**
- * Apply a sticker onto a weapon. Prefers the 3D viewer (move/rotate the sticker in
- * place); falls back to the 2D anchor picker when the viewer is unavailable.
- */
 export function ApplyItemSticker(props: ApplyItemStickerProps) {
-  // The 3D scene renders the target weapon (with its existing stickers) AND the sticker being
-  // applied, so all of them must be viewer-supported; otherwise fall back to the 2D anchor picker.
   const targetItem = useInventoryItem(props.targetUid);
   const stickerItem = useInventoryItem(props.stickerUid);
-  const { canUse3d, isStickerSupported } = useViewerAvailability(targetItem);
+  const { canUse3d, isStickerSupported } = useViewerAvailability(targetItem, {
+    attachment: true
+  });
   return canUse3d && isStickerSupported(stickerItem.id) ? (
     <ApplyItemSticker3d {...props} />
   ) : (

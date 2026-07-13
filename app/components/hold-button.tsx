@@ -9,18 +9,9 @@ import { getTypedFromLocalStorage } from "~/utils/localstorage";
 import { ModalButton } from "./modal-button";
 import { TooltipBubble, useTooltip } from "./tooltip";
 
-// How long the button must be held before it fires; the reddish fill sweeps to full
-// over this window with the loop cue underneath.
 const DEFAULT_HOLD_MS = 2500;
-// Snap-back when released early — fast, so a cancelled hold reads as "let go".
 const REWIND_MS = 150;
 
-/**
- * Press-and-hold button mirroring the game's destructive confirm: holding sweeps a
- * fill across the button and plays a looping cue; completing the hold fires `onHold`,
- * releasing (or leaving) early cancels — the fill rewinds and the cue stops. A tooltip
- * explains the gesture (rendered with `pre-line` so the source `\n` breaks).
- */
 export function HoldButton({
   children,
   durationMs = DEFAULT_HOLD_MS,
@@ -77,7 +68,6 @@ export function HoldButton({
   }
 
   function start(event: PointerEvent<HTMLButtonElement>) {
-    // Ignore non-primary buttons and re-entrant presses so the fill tracks one hold.
     if (props.disabled === true || fireRef.current !== undefined) {
       return;
     }

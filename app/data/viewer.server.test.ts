@@ -13,12 +13,11 @@ const ruleState = vi.hoisted(() => ({
   key: ""
 }));
 vi.mock("~/models/rule.server", () => ({
-  appEnable3dViewer: { get: async () => ruleState.enabled },
+  viewerEnabled: { get: async () => ruleState.enabled },
   steamCallbackUrl: { get: async () => ruleState.callbackUrl },
-  app3dViewerKey: { get: async () => ruleState.key }
+  viewerKey: { get: async () => ruleState.key }
 }));
 
-// The caches are module-level (process-lifetime), so every test gets a fresh module = a cold cache.
 async function loadModule() {
   vi.resetModules();
   return await import("./viewer.server");
@@ -43,7 +42,6 @@ describe("resolveViewerCatalog", () => {
       maxId: 10,
       holes: [[2, 3]]
     });
-    // Warm now: served from cache, no second fetch.
     expect(await resolveViewerCatalog()).toEqual({
       maxId: 10,
       holes: [[2, 3]]
@@ -67,7 +65,6 @@ describe("resolveViewerCatalog", () => {
     const cold = resolveViewerCatalog();
     await vi.advanceTimersByTimeAsync(1500);
     expect(await cold).toBeUndefined();
-    // The fetch was never abandoned: once it lands, the next resolve reads the cache.
     settleFetch?.(okJson({ maxId: 5, holes: [] }));
     await vi.advanceTimersByTimeAsync(0);
     expect(await resolveViewerCatalog()).toEqual({ maxId: 5, holes: [] });

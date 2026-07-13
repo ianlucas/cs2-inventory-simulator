@@ -40,7 +40,7 @@ import {
   VIEWER_EMBED_URL
 } from "./env.server";
 import {
-  resolveCan3dViewerOrigin,
+  resolveViewerOriginAllowed,
   resolveViewerCatalog
 } from "./data/viewer.server";
 import { middleware } from "./middleware.server";
@@ -97,14 +97,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
       viewerAssetsBaseUrl: nonEmptyString(VIEWER_ASSETS_BASE_URL),
       cloudflareAnalyticsToken: CLOUDFLARE_ANALYTICS_TOKEN,
       sourceCommit: SOURCE_COMMIT,
-      can3dViewerOrigin: resolveCan3dViewerOrigin({
-        enabled: clientRules.appEnable3dViewer,
+      viewerOriginAllowed: resolveViewerOriginAllowed({
+        enabled: clientRules.viewerEnabled,
         hostname: new URL(appUrl).hostname,
-        key: clientRules.app3dViewerKey
+        key: clientRules.viewerKey
       }),
-      // The viewer's support manifest, for the item-aware 3D gate. Resolved only when 3D is enabled
-      // (skip the fetch otherwise); undefined leaves the gate fail-closed on 2D.
-      viewerCatalog: clientRules.appEnable3dViewer
+      viewerCatalog: clientRules.viewerEnabled
         ? await resolveViewerCatalog()
         : undefined,
       meta: { appUrl, appSiteName }

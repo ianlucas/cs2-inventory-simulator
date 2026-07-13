@@ -91,20 +91,6 @@ Hide the logo in the app.
 
 Hide authentication controls in the app.
 
-### `appEnable3dViewer`
-
-- **Type:** `boolean`
-- **Default:** `false`
-
-Enable the 3D viewer (e.g. the craft sticker editor). Still gated by a reachable viewer and available rate-limit budget.
-
-### `app3dViewerKey`
-
-- **Type:** `string`
-- **Default:** `VIEWER_KEY` env var or _empty_
-
-Partner key for the 3D viewer. Sent as the iframe `key` and used as a trusted-partner signal that skips the rate-limit check.
-
 ## Steam
 
 > [!CAUTION]  
@@ -546,6 +532,29 @@ CSFloat API URL for item inspection integration.
 - **Default:** _empty_
 
 CSFloat API request headers. Example: `Authorization;Bearer MyAPIToken`.
+
+## Viewer
+
+### `viewerEnabled`
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Enable the 3D viewer (e.g. the craft sticker editor). Still gated by a reachable viewer and available rate-limit budget.
+
+### `viewerAttachmentsOnly`
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Restrict the 3D viewer to attachment features (applying, scraping, and positioning stickers - and keychains in the future). Item inspection and the craft item preview fall back to 2D images. Has no effect when `viewerEnabled` is `false`.
+
+### `viewerKey`
+
+- **Type:** `string`
+- **Default:** `VIEWER_KEY` env var or _empty_
+
+Partner key for the 3D viewer. Sent as the iframe `key` and used as a trusted-partner signal that skips the rate-limit check.
 
 ## Rule overwriting
 

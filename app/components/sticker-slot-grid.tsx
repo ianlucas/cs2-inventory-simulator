@@ -14,12 +14,6 @@ import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 
-/**
- * The weapon's sticker slots as a fixed grid (one cell per markup slot): each filled slot
- * shows its sticker, empty slots show a placeholder, and clicking a slot calls
- * `onSlotClick`. Shared by the 2D {@link StickerPicker} and the 3D {@link Sticker3dPicker};
- * the 2D picker layers its per-slot remove/edit buttons on via `renderSlotOverlay`.
- */
 export function StickerSlotGrid({
   disabled,
   onSlotClick,
@@ -28,7 +22,6 @@ export function StickerSlotGrid({
 }: {
   disabled?: boolean;
   onSlotClick: (index: number) => void;
-  // Extra controls drawn over a filled, enabled slot (e.g. remove/edit).
   renderSlotOverlay?: (index: number, item: CS2EconomyItem) => ReactNode;
   value: NonNullable<CS2BaseInventoryItem["stickers"]>;
 }) {

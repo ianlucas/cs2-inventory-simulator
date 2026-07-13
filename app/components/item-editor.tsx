@@ -120,12 +120,10 @@ export function ItemEditor({
 
   const translate = useTranslate();
   const isDesktop = useIsDesktop();
-  // Item-aware: `canUse3d` also folds in whether the viewer can render THIS item and its existing
-  // stickers, so a viewer-unknown weapon/sticker keeps the 2D editor.
-  const { canUse3d, isStickerSupported } = useViewerAvailability(item);
+  const { canUse3d, isStickerSupported } = useViewerAvailability(item, {
+    attachment: true
+  });
 
-  // The 3D viewer edits every sticker dimension, so only offer it when none are
-  // constrained (and not in the read-only/disabled view).
   const use3dStickerPicker =
     canUse3d &&
     !isDisabled &&
@@ -135,8 +133,6 @@ export function ItemEditor({
     !isHideStickerX &&
     !isHideStickerY;
 
-  // In 3D, hide stickers the viewer can't render (newer than its cs2-lib) so the user only picks ones
-  // it can show; the 2D picker keeps the full list. Composes with any caller-provided stickerFilter.
   const sticker3dFilter = useCallback(
     (economyItem: CS2EconomyItem) =>
       isStickerSupported(economyItem.id) &&
@@ -209,7 +205,16 @@ export function ItemEditor({
   }, [attributes.value]);
 
   const display = (
-    <EditorItemDisplay item={item} wear={attributes.value.wear} />
+    <EditorItemDisplay
+      item={item}
+      nameTag={attributes.value.nameTag || undefined}
+      seed={attributes.value.seed}
+      statTrak={
+        attributes.value.statTrak ? (defaults?.statTrak ?? 0) : undefined
+      }
+      stickers={attributes.value.stickers}
+      wear={attributes.value.wear}
+    />
   );
 
   const editor = (
@@ -377,9 +382,6 @@ export function ItemEditor({
     <div
       className={clsx(
         "m-auto mt-4 text-sm select-none",
-        // Own the width so the surrounding modal (sized to content) grows when
-        // we switch to two columns. w-105 (420px) matches the previous
-        // single-column modal width.
         isTwoColumn ? "w-160" : "w-105",
         className
       )}

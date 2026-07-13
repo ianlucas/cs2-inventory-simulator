@@ -11,10 +11,9 @@ import {
   isViewerIdSupported,
   isViewerItemSupported,
   toViewerItem,
-  viewerItemIds
+  getViewerItemIds
 } from "./viewer";
 
-// A small manifest: max renderable id 100, with two removed/never-assigned ranges below it.
 const catalog = {
   maxId: 100,
   holes: [
@@ -23,9 +22,6 @@ const catalog = {
   ] as [number, number][]
 };
 
-// The fabricated economy backing the kind gate — ids line up with the catalog above. Loaded
-// without a language map, so names default to String(id). Id 70 is deliberately absent
-// (fail-closed path).
 CS2Economy.load({
   items: [
     { id: 5, type: CS2ItemType.Weapon, rarity: CS2RarityColor.Common },
@@ -42,7 +38,6 @@ CS2Economy.load({
 
 describe("isViewerIdSupported", () => {
   it("fails closed when the manifest is absent", () => {
-    // No manifest (endpoint down / not yet fetched) => nothing is offered in 3D.
     expect(isViewerIdSupported(undefined, 5)).toBe(false);
   });
 
@@ -61,21 +56,23 @@ describe("isViewerIdSupported", () => {
     expect(isViewerIdSupported(catalog, 11)).toBe(false);
     expect(isViewerIdSupported(catalog, 12)).toBe(false);
     expect(isViewerIdSupported(catalog, 20)).toBe(false);
-    // Just outside the holes.
     expect(isViewerIdSupported(catalog, 9)).toBe(true);
     expect(isViewerIdSupported(catalog, 21)).toBe(true);
   });
 });
 
-describe("viewerItemIds", () => {
+describe("getViewerItemIds", () => {
   it("returns the weapon id plus every applied sticker id", () => {
     expect(
-      viewerItemIds({ id: 7, stickers: { "0": { id: 30 }, "2": { id: 40 } } })
+      getViewerItemIds({
+        id: 7,
+        stickers: { "0": { id: 30 }, "2": { id: 40 } }
+      })
     ).toEqual([7, 30, 40]);
   });
 
   it("returns just the weapon id when there are no stickers", () => {
-    expect(viewerItemIds({ id: 7 })).toEqual([7]);
+    expect(getViewerItemIds({ id: 7 })).toEqual([7]);
   });
 });
 
@@ -108,11 +105,9 @@ describe("isViewerItemSupported", () => {
     expect(
       isViewerItemSupported(catalog, { id: 5, stickers: { "0": { id: 50 } } })
     ).toBe(true);
-    // A sticker beyond maxId blocks the whole item (edit falls back to 2D).
     expect(
       isViewerItemSupported(catalog, { id: 5, stickers: { "0": { id: 200 } } })
     ).toBe(false);
-    // The weapon itself sitting in a hole blocks it.
     expect(isViewerItemSupported(catalog, { id: 11 })).toBe(false);
   });
 
@@ -123,7 +118,6 @@ describe("isViewerItemSupported", () => {
   it("only offers kinds the viewer renders (weapon/melee/sticker)", () => {
     expect(isViewerItemSupported(catalog, { id: 63 })).toBe(true);
     expect(isViewerItemSupported(catalog, { id: 64 })).toBe(true);
-    // Inside the envelope, but a kind the viewer never renders -> 2D.
     expect(isViewerItemSupported(catalog, { id: 60 })).toBe(false);
     expect(isViewerItemSupported(catalog, { id: 61 })).toBe(false);
     expect(isViewerItemSupported(catalog, { id: 62 })).toBe(false);
@@ -177,6 +171,17 @@ describe("buildViewerSrc", () => {
 
   it("omits the item param when no item is given", () => {
     expect(new URL(buildViewerSrc()).searchParams.has("item")).toBe(false);
+  });
+
+  it("sets ?icon= only when icon mode is requested", () => {
+    expect(
+      new URL(buildViewerSrc({ id: 7 }, { icon: true })).searchParams.has(
+        "icon"
+      )
+    ).toBe(true);
+    expect(new URL(buildViewerSrc({ id: 7 })).searchParams.has("icon")).toBe(
+      false
+    );
   });
 
   it("always opts in to half-degree rotation", () => {

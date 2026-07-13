@@ -29,7 +29,7 @@ import { ViewerOverlay } from "./viewer-overlay";
 import { HoldButton } from "./hold-button";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
-import { useViewerFallback } from "./hooks/use-viewer-fallback";
+import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -37,8 +37,6 @@ import { ScrapeLevelSlider } from "./scrape-level-slider";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 
-// How long the "remove sticker" button must be held to confirm; shorter than
-// HoldButton's default since removal is a single, low-stakes action.
 const REMOVE_STICKER_HOLD_MS = 1500;
 
 interface ScrapeItemStickerProps {
@@ -46,20 +44,11 @@ interface ScrapeItemStickerProps {
   uid: number;
 }
 
-// The scrape flow's hook only nudges the 3D model (wear preview + highlight); in the
-// 2D fallback these are no-ops. Keeps the shared logic blind to whether a viewer is up.
 interface ScrapeViewer {
   highlight: (index: number) => void;
   setWear: (index: number, wear: number) => void;
 }
 
-/**
- * Shared scrape/remove logic for both the 3D and 2D flows. Selecting a sticker seeds
- * the slider from its committed wear and highlights it on the model; dragging previews
- * the new wear live (restoring the previously-selected sticker so an uncommitted
- * preview doesn't leak). SCRAPE commits the slider value; REMOVE destroys the sticker
- * and closes. `viewer` drives the 3D model, or no-ops in 2D.
- */
 function useScrapeSticker({
   onClose,
   uid,
@@ -75,14 +64,11 @@ function useScrapeSticker({
 
   const [selectedIndex, setSelectedIndex] = useState<number>();
   const [wear, setWear] = useState(0);
-  // The sticker last shown in the viewer, so we can restore its committed wear when
-  // the selection moves on without a scrape.
   const previewedIndexRef = useRef<number | undefined>(undefined);
 
   const committedWear =
     selectedIndex !== undefined ? item.getStickerWear(selectedIndex) : 0;
-  // Up to one factor below full so scraping never trips cs2-lib's wear-1 removal —
-  // removal is the REMOVE button's job alone.
+  // One factor below full so scraping never trips cs2-lib's wear-1 removal.
   const maxWear = CS2_MAX_STICKER_WEAR - CS2_STICKER_WEAR_FACTOR;
   const canScrape = selectedIndex !== undefined && wear > committedWear;
 
@@ -101,8 +87,6 @@ function useScrapeSticker({
     if (selectedIndex === undefined) {
       return;
     }
-    // The slider spans the full 0..max track (so the thumb sits at the absolute
-    // wear), but you can't scrape below the sticker's current wear — floor it.
     const clamped = Math.max(committedWear, nextWear);
     setWear(clamped);
     viewer.setWear(selectedIndex, clamped);
@@ -117,8 +101,6 @@ function useScrapeSticker({
     setInventory(inventory.scrapeItemSticker(uid, index, wear));
     playSound("sticker_scratch1");
     viewer.highlight(index);
-    // The new committed wear is now `wear`, so the slider locks at its min until the
-    // user drags up again — matching the game's "scrape further from here".
   }
 
   function handleRemove() {
@@ -147,11 +129,6 @@ function useScrapeSticker({
   };
 }
 
-/**
- * The applied-sticker thumbnails listed near the footer. The selected one is full-size
- * and opaque with a green check dropping in and a flash; the rest shrink and fade,
- * popping back to full size (but still transparent) on hover.
- */
 function ScrapeStickerRow({
   item,
   onSelect,
@@ -162,8 +139,6 @@ function ScrapeStickerRow({
   selectedIndex: number | undefined;
 }) {
   const { statsForNerds } = usePreferences();
-  // Bumped on every click so the green check + sticker flash replay each time a sticker
-  // is (re)selected, not only when the selected index changes.
   const [flashNonce, setFlashNonce] = useState(0);
   function handleSelect(index: number) {
     setFlashNonce((nonce) => nonce + 1);
@@ -179,10 +154,6 @@ function ScrapeStickerRow({
             className="group relative flex flex-col items-center"
             onClick={() => handleSelect(index)}
           >
-            {/* One scaling container holds both the check and the sticker, so they scale
-                (and, via their keyed inner wrappers, flash + pop) together. The check
-                sits behind the image (z-0 vs z-10) and additionally fades + slides down
-                to up on select, and back on deselect. */}
             <div
               className={clsx(
                 "relative drop-shadow-lg transition-all",
@@ -200,7 +171,6 @@ function ScrapeStickerRow({
                 )}
               >
                 <span
-                  // Remounts on (re)selection so the flash + scale overshoot replay.
                   key={selected ? `check-${flashNonce}` : "check"}
                   className={clsx(
                     "flex size-6.5 items-center justify-center rounded-full bg-green-600 shadow-md",
@@ -237,11 +207,6 @@ function ScrapeStickerRow({
   );
 }
 
-/**
- * The shared bottom region: the sticker row, the scrape-level slider (present but
- * invisible until a sticker is selected, so the layout doesn't jump), and the
- * REMOVE/SCRAPE/CLOSE footer. Used by both the 3D and 2D shells.
- */
 function ScrapeStickerControls({
   canRemove,
   canScrape,
@@ -326,12 +291,6 @@ function ScrapeStickerControls({
   );
 }
 
-/**
- * Game-like scrape/remove: the weapon in the 3D viewer with its applied stickers.
- * Selecting a sticker highlights it on the model; the slider previews its wear live.
- * If the viewer can't be reached, availability flips and the parent falls back to
- * {@link ScrapeItemSticker2d}.
- */
 function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
@@ -339,9 +298,6 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
 
   const item = useInventoryItem(uid);
   const maxSchema = item.getStickerSchemaCount();
-  // The viewer reads its initial stickers from the iframe `src` (captured once); seed
-  // it from the weapon's current stack, normalized so the viewer's sticker indices
-  // line up 1:1 with `someStickers()`.
   const [initialItem] = useState<CS2BaseInventoryItem>(() => ({
     id: item.id,
     seed: item.seed,
@@ -366,9 +322,9 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
     }
   });
 
-  // Flip availability when the viewer is rate-limited or never becomes ready, so the
-  // parent swaps to the 2D flow; the scrape flow itself needs no readiness handling.
-  useViewerFallback(api);
+  // Bare call: flips availability so the parent swaps to 2D when the viewer
+  // is rate-limited or never becomes ready.
+  useViewerStatus(api);
 
   return (
     <ViewerOverlay
@@ -402,11 +358,6 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
   );
 }
 
-/**
- * 2D fallback used when the 3D viewer is unavailable (disabled or rate-limited): the
- * weapon image with the same select/scrape/remove controls, minus the live wear
- * preview the model would show.
- */
 function ScrapeItemSticker2d({ onClose, uid }: ScrapeItemStickerProps) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
@@ -451,15 +402,9 @@ function ScrapeItemSticker2d({ onClose, uid }: ScrapeItemStickerProps) {
   );
 }
 
-/**
- * Scrape or remove a sticker from a weapon. Prefers the 3D viewer (live wear preview
- * on the model); falls back to the 2D flow when the viewer is unavailable.
- */
 export function ScrapeItemSticker(props: ScrapeItemStickerProps) {
-  // The 3D scene renders the weapon with its existing stickers, so the weapon and every sticker must
-  // be viewer-supported; otherwise fall back to the 2D flow.
   const item = useInventoryItem(props.uid);
-  const { canUse3d } = useViewerAvailability(item);
+  const { canUse3d } = useViewerAvailability(item, { attachment: true });
   return canUse3d ? (
     <ScrapeItemSticker3d {...props} />
   ) : (

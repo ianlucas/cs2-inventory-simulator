@@ -66,26 +66,18 @@ export function isItemCountable(item: CS2EconomyItem) {
 export const baseStickerSlabId = 15200;
 export const newItemStartingId = 26817;
 export const newItemEndAt = 1784841228427;
-// Keychain offsets keep the app's own flat range: the lib publishes no keychain
-// offset bounds (its validator still only checks finiteness), so the app owns it.
 export const minKeychainOffset = -100;
 export const maxKeychainOffset = 100;
 export const keychainOffsetFactor = 0.001;
 export const seedStringMaxLen = String(CS2_MAX_SEED).length;
 export const wearStringMaxLen = String(CS2_WEAR_FACTOR).length;
 export const stickerWearStringMaxLen = String(CS2_STICKER_WEAR_FACTOR).length;
-// Sticker offsets follow the lib's per-model envelope (bounds come from the
-// economy item); only the precision grid is fixed here. Every published bound is
-// sub-unit, so the input width is sign + "0." + the grid's decimals.
 const stickerOffsetDecimalPlaces = countDecimals(CS2_STICKER_OFFSET_FACTOR);
 export const stickerOffsetStringMaxLen =
   "-0.".length + stickerOffsetDecimalPlaces;
 const keychainOffsetDecimalPlaces = countDecimals(keychainOffsetFactor);
 export const keychainOffsetStringMaxLen =
   String(maxKeychainOffset).length + 1 + keychainOffsetDecimalPlaces;
-// v8 uses a signed [-180, 180] range on cs2-lib's half-degree grid; the longest
-// input is the negative bound's half step ("-179.5" = 6 chars), so size the max
-// length off the minimum plus the ".5" suffix.
 export const stickerRotationStringMaxLen =
   String(CS2_MIN_STICKER_ROTATION).length + ".5".length;
 
@@ -109,8 +101,6 @@ export function stickerOffsetToString(offset: number) {
   return offset.toFixed(stickerOffsetDecimalPlaces);
 }
 
-// Bounds are the model's published envelope (`getMinimum/MaximumStickerOffset*`),
-// passed in by the editor; `CS2Inventory` is the authoritative gate downstream.
 export function validateStickerOffset(
   offset: number,
   min: number | undefined,

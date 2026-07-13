@@ -44,6 +44,7 @@ export interface ViewerEventMap {
   ready: { v: number };
   change: ViewerState;
   loading: { busy: boolean };
+  rendered: { item: ViewerItem };
   rateLimited: { retryAfterMs: number; scope?: RateLimitScope };
   unsupported: { reason: ViewerUnsupportedReason };
 }
@@ -262,7 +263,26 @@ export class ViewerApi extends EventTarget {
     }
   }
 
+  private canReachViewer(): boolean {
+    const contentWindow = this.iframe.contentWindow;
+    if (contentWindow === null) {
+      return false;
+    }
+    if (this.origin === window.location.origin) {
+      return true;
+    }
+    try {
+      void contentWindow.location.href;
+      return false;
+    } catch {
+      return true;
+    }
+  }
+
   private post(envelope: Envelope): void {
+    if (!this.canReachViewer()) {
+      return;
+    }
     this.iframe.contentWindow?.postMessage(envelope, this.origin);
   }
 
@@ -342,6 +362,9 @@ export class ViewerApi extends EventTarget {
       }
       case "loading":
         this.dispatch("loading", data as ViewerEventMap["loading"]);
+        break;
+      case "rendered":
+        this.dispatch("rendered", data as ViewerEventMap["rendered"]);
         break;
       case "rateLimited":
         this.dispatch("rateLimited", data as ViewerEventMap["rateLimited"]);
