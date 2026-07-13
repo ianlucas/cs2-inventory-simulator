@@ -29,7 +29,7 @@ import { ViewerOverlay } from "./viewer-overlay";
 import { HoldButton } from "./hold-button";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
-import { useViewerFallback } from "./hooks/use-viewer-fallback";
+import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -368,7 +368,7 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
 
   // Flip availability when the viewer is rate-limited or never becomes ready, so the
   // parent swaps to the 2D flow; the scrape flow itself needs no readiness handling.
-  useViewerFallback(api);
+  useViewerStatus(api);
 
   return (
     <ViewerOverlay

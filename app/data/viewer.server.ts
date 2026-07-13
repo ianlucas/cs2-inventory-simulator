@@ -5,8 +5,8 @@
 
 import { VIEWER_EMBED_URL } from "~/env.server";
 import {
-  app3dViewerKey,
-  appEnable3dViewer,
+  viewerKey,
+  viewerEnabled,
   steamCallbackUrl
 } from "~/models/rule.server";
 import { DEFAULT_VIEWER_EMBED_URL, ViewerCatalog } from "./viewer";
@@ -43,7 +43,7 @@ function getViewerOrigin() {
 
 // Origins we treat as trusted and therefore exempt from the budget check:
 // local development and our own *.cstrike.app deployments.
-function isTrustedViewerHostname(hostname: string) {
+function isTrustedHostname(hostname: string) {
   return (
     hostname === "localhost" ||
     hostname === "127.0.0.1" ||
@@ -101,7 +101,7 @@ function refreshPeek(domain: string) {
  * remaining request budget (stale-while-revalidate, fail-closed), so the loader
  * never blocks on an external request.
  */
-export function resolveCan3dViewerOrigin({
+export function resolveViewerOriginAllowed({
   enabled,
   hostname,
   key
@@ -113,7 +113,7 @@ export function resolveCan3dViewerOrigin({
   if (!enabled) {
     return false;
   }
-  if (key.trim() !== "" || isTrustedViewerHostname(hostname)) {
+  if (key.trim() !== "" || isTrustedHostname(hostname)) {
     return true;
   }
   const cached = peekCache.get(hostname);
@@ -211,7 +211,7 @@ function refreshViewerCatalog(): Promise<void> {
 /**
  * Resolves the viewer's support manifest — the id envelope the item-aware 3D gate checks against
  * (see isViewerItemSupported). Warm reads are synchronous stale-while-revalidate + fail-closed,
- * mirroring {@link resolveCan3dViewerOrigin}: an expired entry serves stale and refreshes in the
+ * mirroring {@link resolveViewerOriginAllowed}: an expired entry serves stale and refreshes in the
  * background, so a viewer deploy is picked up within the TTL and an unreachable manifest reads as
  * `undefined` (every item unsupported → 2D). Only a COLD cache — a fresh process where no fetch has
  * ever settled, normally just a request that beats the boot warm ({@link warmViewerCaches}) —
@@ -244,15 +244,15 @@ export async function resolveViewerCatalog(): Promise<
  */
 export async function warmViewerCaches() {
   try {
-    const enabled = await appEnable3dViewer.get();
+    const enabled = await viewerEnabled.get();
     if (!enabled) {
       return;
     }
     void refreshViewerCatalog();
-    resolveCan3dViewerOrigin({
+    resolveViewerOriginAllowed({
       enabled,
       hostname: new URL(await steamCallbackUrl.get()).hostname,
-      key: await app3dViewerKey.get()
+      key: await viewerKey.get()
     });
   } catch {}
 }

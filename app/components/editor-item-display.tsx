@@ -12,7 +12,7 @@ import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
-import { useViewerFallback } from "./hooks/use-viewer-fallback";
+import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemEditorName } from "./item-editor-name";
 import { ItemImage } from "./item-image";
 import { Viewer } from "./viewer";
@@ -43,7 +43,7 @@ function EditorItem3dPreview({
     wear
   }));
   const { api, viewerProps } = useViewer({ item: initialItem });
-  useViewerFallback(api);
+  useViewerStatus(api);
   const lastItemRef = useRef(initialItem);
   const imageLoadedRef = useRef(false);
   const [reveal, setReveal] = useState<"pending" | "instant" | "fade">(

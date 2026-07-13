@@ -25,7 +25,7 @@ import { useInventory, useTranslate } from "./app-context";
 import { ViewerOverlay } from "./viewer-overlay";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
-import { useViewerFallback } from "./hooks/use-viewer-fallback";
+import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -188,7 +188,7 @@ function ApplyItemSticker3d({
     rotation?: number;
   }>({});
 
-  const viewerStatus = useViewerFallback(api);
+  const viewerStatus = useViewerStatus(api);
 
   // Mirror the active sticker's offset/rotation so Apply persists what's shown, and
   // cancel a pending confirmation the moment the user nudges the sticker.

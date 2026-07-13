@@ -11,7 +11,7 @@ import {
   isViewerIdSupported,
   isViewerItemSupported,
   toViewerItem,
-  viewerItemIds
+  getViewerItemIds
 } from "./viewer";
 
 // A small manifest: max renderable id 100, with two removed/never-assigned ranges below it.
@@ -67,15 +67,15 @@ describe("isViewerIdSupported", () => {
   });
 });
 
-describe("viewerItemIds", () => {
+describe("getViewerItemIds", () => {
   it("returns the weapon id plus every applied sticker id", () => {
     expect(
-      viewerItemIds({ id: 7, stickers: { "0": { id: 30 }, "2": { id: 40 } } })
+      getViewerItemIds({ id: 7, stickers: { "0": { id: 30 }, "2": { id: 40 } } })
     ).toEqual([7, 30, 40]);
   });
 
   it("returns just the weapon id when there are no stickers", () => {
-    expect(viewerItemIds({ id: 7 })).toEqual([7]);
+    expect(getViewerItemIds({ id: 7 })).toEqual([7]);
   });
 });
 

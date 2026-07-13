@@ -13,9 +13,9 @@ const ruleState = vi.hoisted(() => ({
   key: ""
 }));
 vi.mock("~/models/rule.server", () => ({
-  appEnable3dViewer: { get: async () => ruleState.enabled },
+  viewerEnabled: { get: async () => ruleState.enabled },
   steamCallbackUrl: { get: async () => ruleState.callbackUrl },
-  app3dViewerKey: { get: async () => ruleState.key }
+  viewerKey: { get: async () => ruleState.key }
 }));
 
 // The caches are module-level (process-lifetime), so every test gets a fresh module = a cold cache.

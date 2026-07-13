@@ -597,14 +597,14 @@ export const appHideAuth = new Rule({
   defaultValue: false
 });
 
-export const appEnable3dViewer = new Rule({
-  name: "appEnable3dViewer",
+export const viewerEnabled = new Rule({
+  name: "viewerEnabled",
   type: "boolean",
   defaultValue: false
 });
 
-export const app3dViewerKey = new Rule({
-  name: "app3dViewerKey",
+export const viewerKey = new Rule({
+  name: "viewerKey",
   type: "string",
   defaultValue: VIEWER_KEY ?? ""
 });

@@ -139,14 +139,14 @@ export function useViewerAvailability(
     respectStickerEditorPreference = true
   }: { respectStickerEditorPreference?: boolean } = {}
 ) {
-  const { appEnable3dViewer, can3dViewerOrigin, viewerCatalog } = useRules();
+  const { viewerEnabled, viewerOriginAllowed, viewerCatalog } = useRules();
   const { prefer2dStickerEditor } = usePreferences();
   const until = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   // The global gate: feature on, origin within budget, no active rate-limit cooldown, and — unless the
   // caller opts out — the user hasn't opted into the 2D editors.
   const globalAvailable =
-    appEnable3dViewer === true &&
-    can3dViewerOrigin === true &&
+    viewerEnabled === true &&
+    viewerOriginAllowed === true &&
     (!respectStickerEditorPreference || !prefer2dStickerEditor) &&
     Date.now() >= until;
   // Item-aware: 3D-eligible only if the viewer can render this item AND all its current stickers.

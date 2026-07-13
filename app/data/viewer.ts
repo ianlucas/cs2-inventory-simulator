@@ -64,7 +64,7 @@ export function isViewerIdSupported(
 // Every economy id the viewer must render for `item`: its weapon/base id plus each applied sticker's
 // id. The gate requires ALL of them to be supported before it offers 3D (a weapon with a
 // viewer-unknown sticker falls back to 2D).
-export function viewerItemIds(item: ViewerItemInput): number[] {
+export function getViewerItemIds(item: ViewerItemInput): number[] {
   const viewerItem = toViewerItem(item);
   const ids = [viewerItem.id];
   if (viewerItem.stickers !== undefined) {
@@ -98,7 +98,7 @@ export function isViewerItemSupported(
 ): boolean {
   return (
     isViewerRenderableKind(item) &&
-    viewerItemIds(item).every((id) => isViewerIdSupported(catalog, id))
+    getViewerItemIds(item).every((id) => isViewerIdSupported(catalog, id))
   );
 }
 

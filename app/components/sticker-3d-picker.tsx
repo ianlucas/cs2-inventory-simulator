@@ -27,7 +27,7 @@ import { AppliedStickerEditor } from "./applied-sticker-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { ViewerOverlay } from "./viewer-overlay";
 import { useViewer } from "./hooks/use-viewer";
-import { useViewerFallback } from "./hooks/use-viewer-fallback";
+import { useViewerStatus } from "./hooks/use-viewer-status";
 import { useNameItemString } from "./hooks/use-name-item";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -221,7 +221,7 @@ function Sticker3dEditorOverlay({
     onChangeRef.current = onChange;
   }, [onChange, onClose]);
 
-  const viewerStatus = useViewerFallback(api);
+  const viewerStatus = useViewerStatus(api);
 
   // The viewer became unavailable (never ready, or an instance-wide rate limit):
   // preserve in-progress edits into the 2D fallback, then close so the parent swaps.

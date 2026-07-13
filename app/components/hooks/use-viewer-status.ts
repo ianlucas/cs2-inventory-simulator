@@ -14,7 +14,7 @@ import {
 // so a down/blocked viewer doesn't strand the user on a blank overlay.
 const VIEWER_READY_TIMEOUT_MS = 6000;
 
-export type ViewerFallbackStatus = "pending" | "ready" | "unavailable";
+export type ViewerStatus = "pending" | "ready" | "unavailable";
 
 /**
  * Drives the shared "fall back to 2D" policy for a viewer overlay. It records a viewer
@@ -28,10 +28,10 @@ export type ViewerFallbackStatus = "pending" | "ready" | "unavailable";
  * preserve in-progress edits before the swap. `"ready"` and `"unavailable"` are mutually
  * exclusive; an instance-wide rate limit moves a once-`"ready"` viewer to `"unavailable"`.
  */
-export function useViewerFallback(
+export function useViewerStatus(
   api: ViewerApi | undefined
-): ViewerFallbackStatus {
-  const [status, setStatus] = useState<ViewerFallbackStatus>("pending");
+): ViewerStatus {
+  const [status, setStatus] = useState<ViewerStatus>("pending");
 
   useEffect(() => {
     if (api === undefined) {

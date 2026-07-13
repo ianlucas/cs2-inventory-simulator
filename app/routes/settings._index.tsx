@@ -49,7 +49,7 @@ export default function Settings() {
     prefer2dStickerEditor: selectedPrefer2dStickerEditor,
     statsForNerds: selectedStatsForNerds
   } = usePreferences();
-  const { appEnable3dViewer } = useRules();
+  const { viewerEnabled } = useRules();
   const [inventory, setInventory] = useInventory();
   const translate = useTranslate();
   const sync = useSync();
@@ -158,7 +158,7 @@ export default function Settings() {
             onChange={setHideNewItemLabel}
           />
         </SettingsLabel>
-        {appEnable3dViewer && (
+        {viewerEnabled && (
           <SettingsLabel label={translate("SettingsPrefer2dStickerEditor")}>
             <EditorToggle
               checked={prefer2dStickerEditor}
