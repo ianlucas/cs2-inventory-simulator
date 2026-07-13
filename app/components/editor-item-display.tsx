@@ -126,10 +126,7 @@ export function EditorItemDisplay({
   stickers,
   wear
 }: EditorItemDisplayProps) {
-  const { canUse3d } = useViewerAvailability(
-    { id: item.id, stickers },
-    { respectStickerEditorPreference: false }
-  );
+  const { canUse3d } = useViewerAvailability({ id: item.id, stickers });
   return (
     <>
       {canUse3d && !item.isSticker() ? (

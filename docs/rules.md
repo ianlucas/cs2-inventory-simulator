@@ -542,6 +542,13 @@ CSFloat API request headers. Example: `Authorization;Bearer MyAPIToken`.
 
 Enable the 3D viewer (e.g. the craft sticker editor). Still gated by a reachable viewer and available rate-limit budget.
 
+### `viewerAttachmentsOnly`
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Restrict the 3D viewer to attachment features (applying, scraping, and positioning stickers - and keychains in the future). Item inspection and the craft item preview fall back to 2D images. Has no effect when `viewerEnabled` is `false`.
+
 ### `viewerKey`
 
 - **Type:** `string`

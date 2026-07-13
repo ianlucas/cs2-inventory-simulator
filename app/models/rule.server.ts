@@ -603,6 +603,12 @@ export const viewerEnabled = new Rule({
   defaultValue: false
 });
 
+export const viewerAttachmentsOnly = new Rule({
+  name: "viewerAttachmentsOnly",
+  type: "boolean",
+  defaultValue: false
+});
+
 export const viewerKey = new Rule({
   name: "viewerKey",
   type: "string",

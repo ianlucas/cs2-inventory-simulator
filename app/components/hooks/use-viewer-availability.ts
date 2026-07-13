@@ -86,17 +86,20 @@ export function markViewerUnsupported(reason: ViewerUnsupportedReason) {
 
 export function useViewerAvailability(
   item?: ViewerItemInput,
-  {
-    respectStickerEditorPreference = true
-  }: { respectStickerEditorPreference?: boolean } = {}
+  { attachment = false }: { attachment?: boolean } = {}
 ) {
-  const { viewerEnabled, viewerOriginAllowed, viewerCatalog } = useRules();
+  const {
+    viewerAttachmentsOnly,
+    viewerEnabled,
+    viewerOriginAllowed,
+    viewerCatalog
+  } = useRules();
   const { prefer2dStickerEditor } = usePreferences();
   const until = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const globalAvailable =
     viewerEnabled === true &&
     viewerOriginAllowed === true &&
-    (!respectStickerEditorPreference || !prefer2dStickerEditor) &&
+    (attachment ? !prefer2dStickerEditor : viewerAttachmentsOnly !== true) &&
     Date.now() >= until;
   const canUse3d =
     globalAvailable &&

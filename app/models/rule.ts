@@ -71,6 +71,7 @@ import {
   inventoryItemEquipHideType,
   inventoryMaxItems,
   inventoryStorageUnitMaxItems,
+  viewerAttachmentsOnly,
   viewerEnabled,
   viewerKey,
   Rule
@@ -168,6 +169,7 @@ export async function getClientRules(userId?: string) {
       inventoryItemEquipHideType,
       inventoryMaxItems,
       inventoryStorageUnitMaxItems,
+      viewerAttachmentsOnly,
       viewerEnabled,
       viewerKey
     },

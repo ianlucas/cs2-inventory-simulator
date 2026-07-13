@@ -404,7 +404,7 @@ function ScrapeItemSticker2d({ onClose, uid }: ScrapeItemStickerProps) {
 
 export function ScrapeItemSticker(props: ScrapeItemStickerProps) {
   const item = useInventoryItem(props.uid);
-  const { canUse3d } = useViewerAvailability(item);
+  const { canUse3d } = useViewerAvailability(item, { attachment: true });
   return canUse3d ? (
     <ScrapeItemSticker3d {...props} />
   ) : (

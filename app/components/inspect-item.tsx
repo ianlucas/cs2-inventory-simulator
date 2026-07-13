@@ -245,9 +245,7 @@ function InspectItem2d({ onClose, uid }: InspectItemProps) {
 
 export function InspectItem({ onClose, uid }: InspectItemProps) {
   const item = useInventoryItem(uid);
-  const { canUse3d } = useViewerAvailability(item, {
-    respectStickerEditorPreference: false
-  });
+  const { canUse3d } = useViewerAvailability(item);
 
   useEffect(() => {
     clientGlobals.inspectedItem = item;

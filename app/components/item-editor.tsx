@@ -120,7 +120,9 @@ export function ItemEditor({
 
   const translate = useTranslate();
   const isDesktop = useIsDesktop();
-  const { canUse3d, isStickerSupported } = useViewerAvailability(item);
+  const { canUse3d, isStickerSupported } = useViewerAvailability(item, {
+    attachment: true
+  });
 
   const use3dStickerPicker =
     canUse3d &&
