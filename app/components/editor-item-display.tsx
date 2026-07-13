@@ -45,6 +45,19 @@ function EditorItem3dPreview({
   const { api, viewerProps } = useViewer({ item: initialItem });
   useViewerFallback(api);
   const lastItemRef = useRef(initialItem);
+  const imageLoadedRef = useRef(false);
+  const [reveal, setReveal] = useState<"pending" | "instant" | "fade">(
+    "pending"
+  );
+
+  useEffect(() => {
+    if (api === undefined) {
+      return;
+    }
+    return api.once("rendered", () => {
+      setReveal(imageLoadedRef.current ? "fade" : "instant");
+    });
+  }, [api]);
 
   useEffect(() => {
     if (api === undefined) {
@@ -77,12 +90,31 @@ function EditorItem3dPreview({
   }, [api, item.id, nameTag, seed, statTrak, stickers, wear]);
 
   return (
-    <Viewer
-      {...viewerProps}
-      className="m-auto aspect-256/192 w-[256px] border-0 bg-transparent"
-      icon
-      style={{ colorScheme: "normal" }}
-    />
+    <div className="relative m-auto aspect-256/192 w-[256px]">
+      <ItemImage
+        className={clsx(
+          "absolute inset-0 w-full",
+          reveal === "instant" && "opacity-0",
+          reveal === "fade" &&
+            "opacity-0 transition-opacity delay-1000 duration-1000"
+        )}
+        item={item}
+        onLoad={() => {
+          imageLoadedRef.current = true;
+        }}
+        wear={item.hasWear() ? wear : undefined}
+      />
+      <Viewer
+        {...viewerProps}
+        className={clsx(
+          "absolute inset-0 size-full border-0 bg-transparent",
+          reveal === "pending" && "opacity-0",
+          reveal === "fade" && "transition-opacity duration-1000"
+        )}
+        icon
+        style={{ colorScheme: "normal" }}
+      />
+    </div>
   );
 }
 

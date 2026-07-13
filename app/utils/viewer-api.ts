@@ -44,6 +44,7 @@ export interface ViewerEventMap {
   ready: { v: number };
   change: ViewerState;
   loading: { busy: boolean };
+  rendered: { item: ViewerItem };
   rateLimited: { retryAfterMs: number; scope?: RateLimitScope };
   unsupported: { reason: ViewerUnsupportedReason };
 }
@@ -361,6 +362,9 @@ export class ViewerApi extends EventTarget {
       }
       case "loading":
         this.dispatch("loading", data as ViewerEventMap["loading"]);
+        break;
+      case "rendered":
+        this.dispatch("rendered", data as ViewerEventMap["rendered"]);
         break;
       case "rateLimited":
         this.dispatch("rateLimited", data as ViewerEventMap["rateLimited"]);
