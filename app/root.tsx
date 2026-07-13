@@ -102,8 +102,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
         hostname: new URL(appUrl).hostname,
         key: clientRules.viewerKey
       }),
-      // The viewer's support manifest, for the item-aware 3D gate. Resolved only when 3D is enabled
-      // (skip the fetch otherwise); undefined leaves the gate fail-closed on 2D.
       viewerCatalog: clientRules.viewerEnabled
         ? await resolveViewerCatalog()
         : undefined,

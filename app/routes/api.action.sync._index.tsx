@@ -80,9 +80,6 @@ import {
 } from "~/utils/shapes.server";
 import type { Route } from "./+types/api.action.sync._index";
 
-// Placement carried by the sticker-apply actions (applied weapon + free-item add).
-// `schema` is the markup anchor; `x`/`y`/`rotation`/`wear` reuse the shared sticker
-// fields. cs2-lib re-validates each against the target model before mutating.
 const stickerPlacementShape = {
   schema: nonNegativeInt,
   x: optionalStickerOffset,

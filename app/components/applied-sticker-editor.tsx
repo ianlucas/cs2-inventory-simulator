@@ -107,10 +107,6 @@ export function AppliedStickerEditor({
   const attributes = useKeyValues(value);
   const canPreviewItem =
     slot !== undefined && forItem !== undefined && stickers !== undefined;
-  // Per-model sticker-offset envelope. When the model (or a missing target item)
-  // doesn't publish bounds for an axis, that control is hidden: the value stays
-  // at its 0 default, which sits inside every real envelope, and CS2Inventory is
-  // the authoritative gate for what actually persists.
   const stickerOffsetXMin = forItem?.getMinimumStickerOffsetX();
   const stickerOffsetXMax = forItem?.getMaximumStickerOffsetX();
   const stickerOffsetYMin = forItem?.getMinimumStickerOffsetY();

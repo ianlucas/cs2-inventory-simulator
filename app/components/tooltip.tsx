@@ -21,20 +21,6 @@ import {
 import clsx from "clsx";
 import { ReactNode, useState } from "react";
 
-/**
- * Shared hover-tooltip wiring (floating-ui): positioning, the hover/focus/dismiss
- * interactions, and the fade transition. Returns the ref + reference props to spread onto
- * the trigger (a button, image, ...) and a `tooltip` bag to spread onto
- * {@link TooltipBubble}, which renders the floating bubble.
- *
- *     const { getReferenceProps, setReference, tooltip } = useTooltip({ placement: "top" });
- *     return (
- *       <>
- *         <button ref={setReference} {...getReferenceProps()} />
- *         <TooltipBubble {...tooltip}>{label}</TooltipBubble>
- *       </>
- *     );
- */
 export function useTooltip({
   durationMs = 500,
   includeFocus = false,
@@ -42,7 +28,6 @@ export function useTooltip({
   placement = "top"
 }: {
   durationMs?: number;
-  // Also open on keyboard focus — for focusable triggers like buttons.
   includeFocus?: boolean;
   offsetPx?: number;
   placement?: Placement;
@@ -57,7 +42,6 @@ export function useTooltip({
     onOpenChange: setIsOpen,
     open: isOpen,
     placement,
-    // Keep the tooltip on screen as the trigger scrolls/moves.
     whileElementsMounted: autoUpdate
   });
   const hover = useHover(context, { move: false });
@@ -88,10 +72,6 @@ export function useTooltip({
   };
 }
 
-/**
- * The floating bubble for {@link useTooltip}. Spread the hook's `tooltip` bag onto it and
- * pass the label as children; pass `multiline` for pre-formatted multi-line text.
- */
 export function TooltipBubble({
   children,
   floatingStyles,

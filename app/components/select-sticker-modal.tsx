@@ -15,12 +15,6 @@ import { IconSelect } from "./icon-select";
 import { ItemBrowser } from "./item-browser";
 import { Modal, ModalHeader, ModalNav } from "./modal";
 
-/**
- * The "pick a sticker" modal: a searchable, category-filtered browser of every
- * sticker. Shared by the 2D {@link StickerPicker} and the 3D
- * {@link Sticker3dPicker} so both select stickers the same way. `onSelect` fires
- * with the chosen economy item; the caller owns what slot it lands in.
- */
 export function SelectStickerModal({
   fixed,
   hidden,
