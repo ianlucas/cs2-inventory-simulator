@@ -9,87 +9,101 @@ CS2 Inventory Simulator can be configured at runtime using rules. These rules ca
 
 ### `appName`
 
-Name of the app. If empty, uses Inventory Simulator's default value.
+- **Type:** `string`
+- **Default:** _empty_
 
-**Type:** `string` · **Default:** _empty_
+Name of the app. If empty, uses Inventory Simulator's default value.
 
 ### `appFooterName`
 
-Name in the footer of the app. If empty, uses Inventory Simulator's default value.
+- **Type:** `string`
+- **Default:** _empty_
 
-**Type:** `string` · **Default:** _empty_
+Name in the footer of the app. If empty, uses Inventory Simulator's default value.
 
 ### `appLogoUrl`
 
-URL of the app's logo. If empty, uses Inventory Simulator's logo. Restart required.
+- **Type:** `string`
+- **Default:** _empty_
 
-**Type:** `string` · **Default:** _empty_
+URL of the app's logo. If empty, uses Inventory Simulator's logo. Restart required.
 
 ### `appFaviconUrl`
 
-URL of the app's favicon. If empty, uses Inventory Simulator's favicon.
+- **Type:** `string`
+- **Default:** _empty_
 
-**Type:** `string` · **Default:** _empty_
+URL of the app's favicon. If empty, uses Inventory Simulator's favicon.
 
 ### `appFaviconMimeType`
 
-MIME type of the app's favicon. If empty, uses Inventory Simulator's favicon MIME type.
+- **Type:** `string`
+- **Default:** _empty_
 
-**Type:** `string` · **Default:** _empty_
+MIME type of the app's favicon. If empty, uses Inventory Simulator's favicon MIME type.
 
 ### `appSeoDescription`
 
-SEO description for the app. If empty, uses Inventory Simulator's default value.
+- **Type:** `string`
+- **Default:** _empty_
 
-**Type:** `string` · **Default:** _empty_
+SEO description for the app. If empty, uses Inventory Simulator's default value.
 
 ### `appSeoImageUrl`
 
-SEO image for the app. If empty, uses Inventory Simulator's default value.
+- **Type:** `string`
+- **Default:** _empty_
 
-**Type:** `string` · **Default:** _empty_
+SEO image for the app. If empty, uses Inventory Simulator's default value.
 
 ### `appSeoTitle`
 
-SEO title for the app. If empty, uses Inventory Simulator's default value.
+- **Type:** `string`
+- **Default:** _empty_
 
-**Type:** `string` · **Default:** _empty_
+SEO title for the app. If empty, uses Inventory Simulator's default value.
 
 ### `appCountry`
 
-Country of the application (ISO-3166-1 alpha-2 code). Changes language if available.
+- **Type:** `string`
+- **Default:** `us`
 
-**Type:** `string` · **Default:** `us`
+Country of the application (ISO-3166-1 alpha-2 code). Changes language if available.
 
 ### `appCacheInventory`
 
-Cache user's inventory if offline or unauthenticated.
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Cache user's inventory if offline or unauthenticated.
 
 ### `appHideLogo`
 
-Hide the logo in the app.
+- **Type:** `boolean`
+- **Default:** `false`
 
-**Type:** `boolean` · **Default:** `false`
+Hide the logo in the app.
 
 ### `appHideAuth`
 
-Hide authentication controls in the app.
+- **Type:** `boolean`
+- **Default:** `false`
 
-**Type:** `boolean` · **Default:** `false`
+Hide authentication controls in the app.
 
 ### `appEnable3dViewer`
 
-Enable the 3D viewer (e.g. the craft sticker editor). Still gated by a reachable viewer and available rate-limit budget.
+- **Type:** `boolean`
+- **Default:** `false`
 
-**Type:** `boolean` · **Default:** `false`
+Enable the 3D viewer (e.g. the craft sticker editor). Still gated by a reachable viewer and available rate-limit budget.
 
 ### `app3dViewerKey`
 
-Partner key for the 3D viewer. Sent as the iframe `key` and used as a trusted-partner signal that skips the rate-limit check.
+- **Type:** `string`
+- **Default:** `VIEWER_KEY` env var or _empty_
 
-**Type:** `string` · **Default:** `VIEWER_KEY` env var or _empty_
+Partner key for the 3D viewer. Sent as the iframe `key` and used as a trusted-partner signal that skips the rate-limit check.
 
 ## Steam
 
@@ -98,379 +112,440 @@ Partner key for the 3D viewer. Sent as the iframe `key` and used as a trusted-pa
 
 ### `steamApiKey`
 
-Steam API Key is used to retrieve user information from Steam.
+- **Type:** `string`
+- **Default:** `STEAM_API_KEY` env var or `YOUR_STEAM_API_KEY_GOES_HERE`
 
-**Type:** `string` · **Default:** `STEAM_API_KEY` env var or `YOUR_STEAM_API_KEY_GOES_HERE`
+Steam API Key is used to retrieve user information from Steam.
 
 ### `steamCallbackUrl`
 
-URL to validate Steam authentication.
+- **Type:** `string`
+- **Default:** `STEAM_CALLBACK_URL` env var or `http://localhost/sign-in/steam/callback`
 
-**Type:** `string` · **Default:** `STEAM_CALLBACK_URL` env var or `http://localhost/sign-in/steam/callback`
+URL to validate Steam authentication.
 
 ## Inventory
 
 ### `inventoryMaxItems`
 
-Max number of items a user can add to inventory.
+- **Type:** `number`
+- **Default:** `256`
 
-**Type:** `number` · **Default:** `256`
+Max number of items a user can add to inventory.
 
 ### `inventoryStorageUnitMaxItems`
 
-Max items a storage unit can store.
+- **Type:** `number`
+- **Default:** `32`
 
-**Type:** `number` · **Default:** `32`
+Max items a storage unit can store.
 
 ### `inventoryInactivityResetDays`
 
-Resets (deletes) a user's inventory after this many days without logging into the website or being fetched by the game server. `0` disables the rule. Set a per-user or per-group overwrite to `0` to make them immune.
+- **Type:** `number`
+- **Default:** `0`
 
-**Type:** `number` · **Default:** `0`
+Resets (deletes) a user's inventory after this many days without logging into the website or being fetched by the game server. `0` disables the rule. Set a per-user or per-group overwrite to `0` to make them immune.
 
 ## Inventory items
 
 ### `inventoryItemAllowEdit`
 
-Can the user edit an inventory item?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user edit an inventory item?
 
 ### `inventoryItemAllowApplySticker`
 
-Can the user apply stickers to inventory items?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user apply stickers to inventory items?
 
 ### `inventoryItemAllowScrapeSticker`
 
-Can the user scrape stickers from inventory items?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user scrape stickers from inventory items?
 
 ### `inventoryItemAllowRemoveSticker`
 
-Can the user remove stickers from inventory items?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user remove stickers from inventory items?
 
 ### `inventoryItemAllowApplyPatch`
 
-Can the user apply patches to inventory items?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user apply patches to inventory items?
 
 ### `inventoryItemAllowRemovePatch`
 
-Can the user remove patches from inventory items?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user remove patches from inventory items?
 
 ### `inventoryItemAllowUnlockContainer`
 
-Can the user unlock container inventory items?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user unlock container inventory items?
 
 ### `inventoryItemAllowInspectInGame`
 
-Can the user inspect an item in-game?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user inspect an item in-game?
 
 ### `inventoryItemAllowShare`
 
-Can the user share an inventory item?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user share an inventory item?
 
 ### `inventoryItemEquipHideModel`
 
-Prevents equipping certain models. Example: `knife_flip;bayonet`.
+- **Type:** `string-array`
+- **Default:** _empty_
 
-**Type:** `string-array` · **Default:** _empty_
+Prevents equipping certain models. Example: `knife_flip;bayonet`.
 
 ### `inventoryItemEquipHideType`
 
-Prevents equipping certain types. Example: `agent;weapon`.
+- **Type:** `string-array`
+- **Default:** _empty_
 
-**Type:** `string-array` · **Default:** _empty_
+Prevents equipping certain types. Example: `agent;weapon`.
 
 ## Craft
 
 ### `craftHideCategory`
 
-Hides a category from crafting. Example: `secondary;rifle`.
+- **Type:** `string-array`
+- **Default:** _empty_
 
-**Type:** `string-array` · **Default:** _empty_
+Hides a category from crafting. Example: `secondary;rifle`.
 
 ### `craftHideType`
 
-Hides a type from crafting. Example: `agent;case`.
+- **Type:** `string-array`
+- **Default:** _empty_
 
-**Type:** `string-array` · **Default:** _empty_
+Hides a type from crafting. Example: `agent;case`.
 
 ### `craftHideFilterType`
 
-Hides type from crafting prompt. Example: `sticker`.
+- **Type:** `string-array`
+- **Default:** _empty_
 
-**Type:** `string-array` · **Default:** _empty_
+Hides type from crafting prompt. Example: `sticker`.
 
 ### `craftHideModel`
 
-Hides a model from crafting. Example: `knife_flip;bayonet`.
+- **Type:** `string-array`
+- **Default:** _empty_
 
-**Type:** `string-array` · **Default:** _empty_
+Hides a model from crafting. Example: `knife_flip;bayonet`.
 
 ### `craftHideId`
 
-Hides a specific item from crafting. Example: `307`.
+- **Type:** `number-array`
+- **Default:** _empty_
 
-**Type:** `number-array` · **Default:** _empty_
+Hides a specific item from crafting. Example: `307`.
 
 ### `craftMaxQuantity`
 
-Max quantity of an item that can be crafted. `0` means no limit.
+- **Type:** `number`
+- **Default:** `0`
 
-**Type:** `number` · **Default:** `0`
+Max quantity of an item that can be crafted. `0` means no limit.
 
 ### `craftAllowNametag`
 
-Can the user define Name tag when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Name tag when crafting?
 
 ### `craftAllowSeed`
 
-Can the user define Seed when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Seed when crafting?
 
 ### `craftAllowStatTrak`
 
-Can the user define StatTrak when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define StatTrak when crafting?
 
 ### `craftAllowWear`
 
-Can the user define Wear when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Wear when crafting?
 
 ### `craftAllowStickers`
 
-Can the user define Stickers when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Stickers when crafting?
 
 ### `craftAllowStickerRotation`
 
-Can the user define Sticker Rotation when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Sticker Rotation when crafting?
 
 ### `craftAllowStickerWear`
 
-Can the user define Sticker Wear when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Sticker Wear when crafting?
 
 ### `craftAllowStickerX`
 
-Can the user define Sticker X offset when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Sticker X offset when crafting?
 
 ### `craftAllowStickerY`
 
-Can the user define Sticker Y offset when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Sticker Y offset when crafting?
 
 ### `craftAllowStickerSchema`
 
-Can the user define Sticker Schema when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Sticker Schema when crafting?
 
 ### `craftAllowPatches`
 
-Can the user define Patches when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Patches when crafting?
 
 ### `craftAllowKeychains`
 
-Can the user define Charms (keychains) when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Charms (keychains) when crafting?
 
 ### `craftAllowKeychainSeed`
 
-Can the user define Charm Seed when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Charm Seed when crafting?
 
 ### `craftAllowKeychainX`
 
-Can the user define Charm X offset when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Charm X offset when crafting?
 
 ### `craftAllowKeychainY`
 
-Can the user define Charm Y offset when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Charm Y offset when crafting?
 
 ### `craftAllowKeychainZ`
 
-Can the user define Charm Z offset when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Charm Z offset when crafting?
 
 ### `craftAllowImportInspectLink`
 
-Can the user import items from inspect links when crafting?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user import items from inspect links when crafting?
 
 ## Edit
 
 ### `editHideCategory`
 
-Hides a category from being edited. Example: `secondary;rifle`.
+- **Type:** `string-array`
+- **Default:** _empty_
 
-**Type:** `string-array` · **Default:** _empty_
+Hides a category from being edited. Example: `secondary;rifle`.
 
 ### `editHideType`
 
-Hides a type from being edited. Example: `sticker;weapon`.
+- **Type:** `string-array`
+- **Default:** _empty_
 
-**Type:** `string-array` · **Default:** _empty_
+Hides a type from being edited. Example: `sticker;weapon`.
 
 ### `editHideModel`
 
-Hides a model from being edited. Example: `knife_flip;bayonet`.
+- **Type:** `string-array`
+- **Default:** _empty_
 
-**Type:** `string-array` · **Default:** _empty_
+Hides a model from being edited. Example: `knife_flip;bayonet`.
 
 ### `editHideId`
 
-Hides a specific item from being edited. Example: `307`.
+- **Type:** `number-array`
+- **Default:** _empty_
 
-**Type:** `number-array` · **Default:** _empty_
+Hides a specific item from being edited. Example: `307`.
 
 ### `editAllowNametag`
 
-Can the user define Name tag when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Name tag when editing?
 
 ### `editAllowSeed`
 
-Can the user define Seed when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Seed when editing?
 
 ### `editAllowStatTrak`
 
-Can the user define StatTrak when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define StatTrak when editing?
 
 ### `editAllowWear`
 
-Can the user define Wear when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Wear when editing?
 
 ### `editAllowStickers`
 
-Can the user define Stickers when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Stickers when editing?
 
 ### `editAllowStickerRotation`
 
-Can the user define Sticker Rotation when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Sticker Rotation when editing?
 
 ### `editAllowStickerWear`
 
-Can the user define Sticker Wear when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Sticker Wear when editing?
 
 ### `editAllowStickerX`
 
-Can the user define Sticker X offset when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Sticker X offset when editing?
 
 ### `editAllowStickerY`
 
-Can the user define Sticker Y offset when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Sticker Y offset when editing?
 
 ### `editAllowStickerSchema`
 
-Can the user define Sticker Schema when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Sticker Schema when editing?
 
 ### `editAllowPatches`
 
-Can the user define Patches when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Patches when editing?
 
 ### `editAllowKeychains`
 
-Can the user define Charms (keychains) when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Charms (keychains) when editing?
 
 ### `editAllowKeychainSeed`
 
-Can the user define Charm Seed when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Charm Seed when editing?
 
 ### `editAllowKeychainX`
 
-Can the user define Charm X offset when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Charm X offset when editing?
 
 ### `editAllowKeychainY`
 
-Can the user define Charm Y offset when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Charm Y offset when editing?
 
 ### `editAllowKeychainZ`
 
-Can the user define Charm Z offset when editing?
+- **Type:** `boolean`
+- **Default:** `true`
 
-**Type:** `boolean` · **Default:** `true`
+Can the user define Charm Z offset when editing?
 
 ## CSFloat
 
 ### `csFloatUrl`
 
-CSFloat API URL for item inspection integration.
+- **Type:** `string`
+- **Default:** _empty_
 
-**Type:** `string` · **Default:** _empty_
+CSFloat API URL for item inspection integration.
 
 ### `csFloatHeaders`
 
-CSFloat API request headers. Example: `Authorization;Bearer MyAPIToken`.
+- **Type:** `string-array`
+- **Default:** _empty_
 
-**Type:** `string-array` · **Default:** _empty_
+CSFloat API request headers. Example: `Authorization;Bearer MyAPIToken`.
 
 ## Rule overwriting
 
