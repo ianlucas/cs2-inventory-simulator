@@ -4,11 +4,7 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - "docs/**"
   pull_request:
-    paths-ignore:
-      - "docs/**"
   workflow_dispatch:
     inputs:
       version:
@@ -28,8 +24,37 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  ci:
+  changes:
     runs-on: ubuntu-latest
+    outputs:
+      docs-only: ${{ steps.check.outputs.docs-only }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Check for docs-only changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            BASE="${{ github.event.before }}"
+          fi
+          DOCS_ONLY=false
+          if [ -n "$BASE" ] && CHANGED=$(git diff --name-only "$BASE" HEAD); then
+            if [ -n "$CHANGED" ] && ! echo "$CHANGED" | grep -qv "^docs/"; then
+              DOCS_ONLY=true
+            fi
+          fi
+          echo "docs-only=$DOCS_ONLY" >> "$GITHUB_OUTPUT"
+
+  build:
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.docs-only != 'true'
     permissions:
       contents: write
       packages: write
@@ -122,10 +147,21 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  ci:
+    if: always()
+    runs-on: ubuntu-latest
+    needs: [changes, build]
+
+    steps:
+      - name: Check results
+        run: |
+          [ "${{ needs.changes.result }}" = "success" ] || exit 1
+          [ "${{ needs.build.result }}" = "success" ] || [ "${{ needs.build.result }}" = "skipped" ]
+
   cleanup-old-images:
     if: inputs.version
     runs-on: ubuntu-latest
-    needs: ci
+    needs: build
     permissions:
       packages: write
 
