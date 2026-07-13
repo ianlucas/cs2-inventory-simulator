@@ -14,7 +14,7 @@ import {
   useRef,
   useState
 } from "react";
-import { colorText } from "~/utils/misc";
+import { colorText, safeParseJson } from "~/utils/misc";
 import { useStorageState } from "./hooks/use-storage-state";
 
 type Command = (params: {
@@ -24,6 +24,41 @@ type Command = (params: {
 }) => Promise<void>;
 
 const commands: Record<string, Command> = {};
+
+const convars = new Map<string, ConVar>();
+const CONVARS_STORAGE_KEY = "convars";
+
+function readConVarValues(): Record<string, string> {
+  if (typeof window === "undefined") {
+    return {};
+  }
+  const item = window.localStorage.getItem(CONVARS_STORAGE_KEY);
+  return item !== null ? (safeParseJson(item) ?? {}) : {};
+}
+
+export class ConVar {
+  constructor(
+    readonly name: string,
+    readonly defaultValue: string
+  ) {
+    convars.set(this.name, this);
+  }
+
+  get value() {
+    return readConVarValues()[this.name] ?? this.defaultValue;
+  }
+
+  set value(value: string) {
+    window.localStorage.setItem(
+      CONVARS_STORAGE_KEY,
+      JSON.stringify({ ...readConVarValues(), [this.name]: value })
+    );
+  }
+
+  toBoolean() {
+    return (Number(this.value) || 0) !== 0;
+  }
+}
 
 export function addCommand(name: string, handler: Command) {
   commands[name] = handler;
@@ -83,12 +118,21 @@ export function Console() {
     if (command !== undefined) {
       println(`{gray}] ${input}`);
       const handler = commands[command];
+      const convar = convars.get(command);
       if (handler !== undefined) {
         await handler({
           args,
           println,
           clear: () => setBuffer([])
         });
+      } else if (convar !== undefined) {
+        if (args.length > 1) {
+          convar.value = args.slice(1).join(" ");
+        } else {
+          println(
+            `"${convar.name}" = "${convar.value}" (default: "${convar.defaultValue}")`
+          );
+        }
       } else if (command !== "") {
         println(`{red}Command "${command}" not found.`);
       }
