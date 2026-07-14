@@ -16,6 +16,20 @@ export default defineConfig({
   server: {
     port: 3000
   },
+  build: {
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            {
+              name: "cs2-lib",
+              test: /node_modules[\\/]@ianlucas[\\/]cs2-lib[\\/]/
+            }
+          ]
+        }
+      }
+    }
+  },
   resolve: {
     tsconfigPaths: true
   },
