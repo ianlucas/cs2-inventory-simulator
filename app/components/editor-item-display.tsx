@@ -44,7 +44,6 @@ function EditorItem3dPreview({
   }));
   const { api, viewerProps } = useViewer({ item: initialItem });
   useViewerStatus(api);
-  const lastItemRef = useRef(initialItem);
   const imageLoadedRef = useRef(false);
   const [reveal, setReveal] = useState<"pending" | "instant" | "fade">(
     "pending"
@@ -60,33 +59,7 @@ function EditorItem3dPreview({
   }, [api]);
 
   useEffect(() => {
-    if (api === undefined) {
-      return;
-    }
-    const last = lastItemRef.current;
-    const next: CS2BaseInventoryItem = {
-      id: item.id,
-      nameTag,
-      seed,
-      statTrak,
-      stickers,
-      wear
-    };
-    lastItemRef.current = next;
-    if (
-      next.nameTag !== last.nameTag ||
-      next.statTrak !== last.statTrak ||
-      next.stickers !== last.stickers
-    ) {
-      api.setItem(next);
-      return;
-    }
-    if (next.wear !== last.wear && next.wear !== undefined) {
-      api.setWear({ wear: next.wear });
-    }
-    if (next.seed !== last.seed && next.seed !== undefined) {
-      api.setSeed({ seed: next.seed });
-    }
+    api?.setItem({ id: item.id, nameTag, seed, statTrak, stickers, wear });
   }, [api, item.id, nameTag, seed, statTrak, stickers, wear]);
 
   return (

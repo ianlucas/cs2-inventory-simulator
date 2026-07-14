@@ -270,9 +270,9 @@ function Sticker3dEditorOverlay({
       // reduced-anchor models like the AK-47 HD).
       const schema = getNextStickerSchema(stickers, maxSchema);
       const next = [...stickers, { id: item.id, schema }];
-      api?.addSticker({ id: item.id, schema });
       stageStickers(next);
       setSelected(index);
+      api?.setItem(buildItem(next));
       api?.setActiveSticker({ index });
     } else {
       const { index } = target;
@@ -280,15 +280,14 @@ function Sticker3dEditorOverlay({
         i === index ? { ...sticker, id: item.id } : sticker
       );
       stageStickers(next);
-      // No setStickerId in the embed api: rebuild so the viewer picks up the swap.
       api?.setItem(buildItem(next));
     }
   }
 
   function handleRemove(index: number) {
     const next = stickers.filter((_, i) => i !== index);
-    api?.removeSticker({ index });
     stageStickers(next);
+    api?.setItem(buildItem(next));
     if (selected === index) {
       setSelected(undefined);
       api?.setActiveSticker({ index: null });
@@ -338,21 +337,6 @@ function Sticker3dEditorOverlay({
         return;
       }
       lastEditAtRef.current = Date.now();
-      if ((current.wear ?? 0) !== (data.wear || 0)) {
-        api?.setStickerWear({ index, wear: data.wear });
-      }
-      if (
-        (current.x ?? 0) !== (data.x || 0) ||
-        (current.y ?? 0) !== (data.y || 0)
-      ) {
-        api?.setStickerOffset({ index, x: data.x, y: data.y });
-      }
-      if ((current.rotation ?? 0) !== (data.rotation || 0)) {
-        api?.setStickerRotation({ index, rotation: data.rotation });
-      }
-      if ((current.schema ?? index) !== schema) {
-        api?.setStickerSchema({ index, schema });
-      }
       const updated: Sticker = {
         id: current.id,
         rotation: data.rotation || undefined,
@@ -361,9 +345,11 @@ function Sticker3dEditorOverlay({
         x: data.x || undefined,
         y: data.y || undefined
       };
-      stageStickers(
-        stickers.map((sticker, i) => (i === index ? updated : sticker))
+      const next = stickers.map((sticker, i) =>
+        i === index ? updated : sticker
       );
+      stageStickers(next);
+      api?.setItem(buildItem(next));
     };
   }
 
