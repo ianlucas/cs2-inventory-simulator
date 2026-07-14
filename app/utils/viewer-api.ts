@@ -138,32 +138,8 @@ export class ViewerApi extends EventTarget {
     this.send("setItem", { item: toViewerItem(item) });
   }
 
-  setSeed(data: { seed: number }): void {
-    this.send("setSeed", data);
-  }
-
-  setWear(data: { wear: number }): void {
-    this.send("setWear", data);
-  }
-
-  addSticker(data: { id: number; schema?: number }): void {
-    this.send("addSticker", data);
-  }
-
-  removeSticker(data: { index: number }): void {
-    this.send("removeSticker", data);
-  }
-
   setStickerWear(data: { index: number; wear: number }): void {
     this.send("setStickerWear", data);
-  }
-
-  setStickerOffset(data: { index: number; x: number; y: number }): void {
-    this.send("setStickerOffset", data);
-  }
-
-  setStickerRotation(data: { index: number; rotation: number }): void {
-    this.send("setStickerRotation", data);
   }
 
   setStickerSchema(data: { index: number; schema: number }): void {
