@@ -14,7 +14,7 @@
     "upgrade": "npx npm-check-updates@latest --target minor -u"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.27.19",
+    "@floating-ui/react": "^0.27.20",
     "@fortawesome/fontawesome-svg-core": "^7.3.0",
     "@fortawesome/free-brands-svg-icons": "^7.3.0",
     "@fortawesome/free-regular-svg-icons": "^7.3.0",
