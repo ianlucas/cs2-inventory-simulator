@@ -15,6 +15,10 @@ export const unauthorized = new Response(null, {
   status: 401
 });
 
+export const forbidden = new Response(null, {
+  status: 403
+});
+
 export const notFound = new Response(null, {
   status: 404
 });

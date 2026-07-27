@@ -3,13 +3,18 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_MAX_PATCHES, assert } from "@ianlucas/cs2-lib";
+import { assert } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { useInventory, useInventoryItems } from "~/components/app-context";
+import {
+  useInventory,
+  useInventoryItems,
+  useRules
+} from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
 
 export function useApplyItemPatch() {
   const items = useInventoryItems();
+  const { inventoryItemMaxPatches } = useRules();
   const [inventory] = useInventory();
   const [itemSelector, setItemSelector] = useItemSelector();
   const [applyItemPatch, setApplyItemPatch] = useState<{
@@ -23,8 +28,10 @@ export function useApplyItemPatch() {
       uid,
       items: items.filter(({ item }) =>
         selectedItem.isPatch()
-          ? item.hasPatches() && item.getPatchesCount() < CS2_MAX_PATCHES
-          : selectedItem.getPatchesCount() < CS2_MAX_PATCHES && item.isPatch()
+          ? item.hasPatches() &&
+            item.getPatchesCount() < inventoryItemMaxPatches
+          : selectedItem.getPatchesCount() < inventoryItemMaxPatches &&
+            item.isPatch()
       ),
       type: "apply-item-patch"
     });

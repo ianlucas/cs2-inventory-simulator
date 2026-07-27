@@ -41,6 +41,8 @@ export function CraftNew({
     craftHideId,
     craftHideType,
     craftMaxQuantity,
+    inventoryItemMaxPatches,
+    inventoryItemMaxStickers,
     inventoryMaxItems
   } = useRules();
 
@@ -68,10 +70,14 @@ export function CraftNew({
   const isHideKeychainZ = !craftAllowKeychainZ;
 
   const isHidePatches =
-    !craftAllowPatches || craftHideType.includes(CS2ItemType.Patch);
+    !craftAllowPatches ||
+    craftHideType.includes(CS2ItemType.Patch) ||
+    inventoryItemMaxPatches === 0;
 
   const isHideStickers =
-    !craftAllowStickers || craftHideType.includes(CS2ItemType.Sticker);
+    !craftAllowStickers ||
+    craftHideType.includes(CS2ItemType.Sticker) ||
+    inventoryItemMaxStickers === 0;
 
   const isHideKeychains =
     !craftAllowKeychains || craftHideType.includes(CS2ItemType.Keychain);

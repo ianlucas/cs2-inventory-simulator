@@ -42,7 +42,9 @@ export function CraftEdit({
     editAllowWear,
     editHideCategory,
     editHideId,
-    editHideType
+    editHideType,
+    inventoryItemMaxPatches,
+    inventoryItemMaxStickers
   } = useRules();
 
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
@@ -62,10 +64,14 @@ export function CraftEdit({
   const isHideKeychainZ = !editAllowKeychainZ;
 
   const isHidePatches =
-    !editAllowPatches || editHideType.includes(CS2ItemType.Patch);
+    !editAllowPatches ||
+    editHideType.includes(CS2ItemType.Patch) ||
+    inventoryItemMaxPatches === 0;
 
   const isHideStickers =
-    !editAllowStickers || editHideType.includes(CS2ItemType.Sticker);
+    !editAllowStickers ||
+    editHideType.includes(CS2ItemType.Sticker) ||
+    inventoryItemMaxStickers === 0;
 
   const isHideKeychains =
     !editAllowKeychains || editHideType.includes(CS2ItemType.Keychain);
