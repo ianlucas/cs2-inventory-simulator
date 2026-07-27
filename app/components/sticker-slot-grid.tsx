@@ -3,6 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { faBan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
   CS2Economy,
@@ -11,7 +13,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { ReactNode } from "react";
 import { range } from "~/utils/number";
-import { useTranslate } from "./app-context";
+import { useRules, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 
 export function StickerSlotGrid({
@@ -26,6 +28,8 @@ export function StickerSlotGrid({
   value: NonNullable<CS2BaseInventoryItem["stickers"]>;
 }) {
   const translate = useTranslate();
+  const { inventoryItemMaxStickers } = useRules();
+  const isCapped = Object.keys(value).length >= inventoryItemMaxStickers;
   return (
     <div
       className="grid gap-1"
@@ -37,10 +41,11 @@ export function StickerSlotGrid({
         const sticker = value[index];
         const item =
           sticker !== undefined ? CS2Economy.getById(sticker.id) : undefined;
+        const isSlotDisabled = disabled || (item === undefined && isCapped);
         return (
           <div className="relative aspect-256/192" key={index}>
             <button
-              disabled={disabled}
+              disabled={isSlotDisabled}
               className="absolute size-full cursor-default overflow-hidden bg-neutral-950/40"
               onClick={() => onSlotClick(index)}
             >
@@ -48,10 +53,14 @@ export function StickerSlotGrid({
                 <ItemImage item={item} />
               ) : (
                 <div className="flex items-center justify-center text-neutral-700">
-                  {translate("StickerPickerNA")}
+                  {isSlotDisabled && isCapped ? (
+                    <FontAwesomeIcon icon={faBan} className="h-3" />
+                  ) : (
+                    translate("StickerPickerNA")
+                  )}
                 </div>
               )}
-              {!disabled && (
+              {!isSlotDisabled && (
                 <div className="absolute top-0 left-0 size-full border-2 border-transparent hover:border-blue-500/50" />
               )}
             </button>

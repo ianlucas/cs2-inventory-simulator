@@ -57,6 +57,7 @@ export const english = {
   CraftConfirmHeader: "Confirm craft",
   CraftImportButton: "Import",
   CraftImportError400: "The inspect link is invalid.",
+  CraftImportError403: "This item has more stickers or patches than you are allowed to have.",
   CraftImportError429: "Please wait a bit before importing another inspect link.",
   CraftImportError500: "We can't import this type of inspect link right now.",
   CraftImportError502: "Failed to fetch inspect link data, please try again.",

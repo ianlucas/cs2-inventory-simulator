@@ -3,10 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { assert, fail } from "@ianlucas/cs2-lib";
+import {
+  assert,
+  CS2_MAX_PATCHES,
+  CS2_MAX_STICKERS,
+  fail
+} from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL, VIEWER_KEY } from "~/env.server";
+import { resolveMaxAttachments } from "~/utils/attachments";
 import { noop } from "~/utils/misc";
 
 class RuleFor<RuleValue> {
@@ -42,18 +48,24 @@ export class Rule<RuleName extends string, RuleValue> {
             ? "number-array"
             : never;
   public name: RuleName;
+  // Type-erased so RuleValue stays covariant, otherwise a Rule<Name, Value> no
+  // longer satisfies the Rule<string, unknown> constraint getRules relies on.
+  private transform?: (value: unknown) => unknown;
 
   constructor({
     defaultValue,
     name,
+    transform,
     type
   }: {
     defaultValue: RuleValue;
     name: RuleName;
+    transform?: (value: RuleValue) => RuleValue;
     type: Rule<RuleName, RuleValue>["type"];
   }) {
     this.defaultValue = defaultValue;
     this.name = name;
+    this.transform = transform as ((value: unknown) => unknown) | undefined;
     this.type = type;
     Rule.instances.push(this);
   }
@@ -124,7 +136,7 @@ export class Rule<RuleName extends string, RuleValue> {
     let strValue = String(value);
     switch (this.type) {
       case "number":
-        assert(strValue.match(/^\d+$/) !== null);
+        assert(strValue.match(/^-?\d+$/) !== null);
         break;
 
       case "boolean":
@@ -162,17 +174,27 @@ export class Rule<RuleName extends string, RuleValue> {
       .then(noop);
   }
 
+  private toRuleValue(value: RuleValue): RuleValue {
+    return this.transform !== undefined
+      ? (this.transform(value) as RuleValue)
+      : value;
+  }
+
   async get() {
     const value = (await prisma.rule.findUnique({ where: { name: this.name } }))
       ?.value;
-    return value !== undefined ? this.toValue(value) : this.defaultValue;
+    return this.toRuleValue(
+      value !== undefined ? this.toValue(value) : this.defaultValue
+    );
   }
 
   for(userId: string): RuleFor<RuleValue> {
     return new RuleFor(
       this.getUserRuleOverwrite(userId)
         .then((v) => v ?? this.getUserGroupRuleOverwrite(userId))
-        .then((v) => (v !== undefined ? this.toValue(v) : this.get()))
+        .then((v) =>
+          v !== undefined ? this.toRuleValue(this.toValue(v)) : this.get()
+        )
     );
   }
 }
@@ -349,6 +371,20 @@ export const inventoryItemAllowRemoveSticker = new Rule({
   name: "inventoryItemAllowRemoveSticker",
   type: "boolean",
   defaultValue: true
+});
+
+export const inventoryItemMaxPatches = new Rule({
+  name: "inventoryItemMaxPatches",
+  type: "number",
+  defaultValue: -1,
+  transform: (value) => resolveMaxAttachments(value, CS2_MAX_PATCHES)
+});
+
+export const inventoryItemMaxStickers = new Rule({
+  name: "inventoryItemMaxStickers",
+  type: "number",
+  defaultValue: -1,
+  transform: (value) => resolveMaxAttachments(value, CS2_MAX_STICKERS)
 });
 
 export const inventoryItemAllowShare = new Rule({
