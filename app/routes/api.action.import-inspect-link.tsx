@@ -20,9 +20,14 @@ import { getUserIdFromRequest } from "~/auth.server";
 import { usePostFetcher } from "~/components/hooks/use-post-fetcher";
 import { fetchCSFloatItemInfo } from "~/csfloat.server";
 import { middleware } from "~/middleware.server";
-import { craftAllowImportInspectLink } from "~/models/rule.server";
+import {
+  craftAllowImportInspectLink,
+  inventoryItemMaxPatches,
+  inventoryItemMaxStickers
+} from "~/models/rule.server";
 import {
   badRequest,
+  forbidden,
   methodNotAllowed,
   tooManyRequests
 } from "~/responses.server";
@@ -59,6 +64,20 @@ function postParseInventoryItem(item: CS2BaseInventoryItem) {
   return item;
 }
 
+async function enforceMaxAttachments(
+  item: CS2BaseInventoryItem,
+  userId: string
+) {
+  if (
+    Object.keys(item.patches ?? {}).length >
+      (await inventoryItemMaxPatches.for(userId).get()) ||
+    Object.keys(item.stickers ?? {}).length >
+      (await inventoryItemMaxStickers.for(userId).get())
+  ) {
+    throw forbidden;
+  }
+}
+
 export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
   if (request.method !== "POST") {
@@ -80,16 +99,20 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       inspectLink: z.string().refine((value) => isValidInspectLink(value))
     })
     .parse(await request.json());
+  let item: CS2BaseInventoryItem;
   if (isSteamInspectLink(inspectLink)) {
-    return postParseInventoryItem(
+    item = postParseInventoryItem(
       parseCSFloatItemInfo(CS2Economy, await fetchCSFloatItemInfo(inspectLink))
     );
+  } else {
+    try {
+      item = postParseInventoryItem(parseInspectLink(CS2Economy, inspectLink));
+    } catch {
+      throw badRequest;
+    }
   }
-  try {
-    return postParseInventoryItem(parseInspectLink(CS2Economy, inspectLink));
-  } catch {
-    throw badRequest;
-  }
+  await enforceMaxAttachments(item, userId);
+  return item;
 });
 
 export { loader } from "./api.$";

@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  faBan,
   faMagnifyingGlass,
   faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
@@ -20,7 +21,7 @@ import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
 import { sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
-import { useTranslate } from "./app-context";
+import { useRules, useTranslate } from "./app-context";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { IconInput } from "./icon-input";
 import { ItemBrowser } from "./item-browser";
@@ -40,6 +41,8 @@ export function PatchPicker({
   value: NonNullable<CS2BaseInventoryItem["patches"]>;
 }) {
   const translate = useTranslate();
+  const { inventoryItemMaxPatches } = useRules();
+  const isCapped = Object.keys(value).length >= inventoryItemMaxPatches;
 
   const [search, setSearch] = useInput("");
   const [activeIndex, setActiveIndex] = useState<number>();
@@ -106,10 +109,11 @@ export function PatchPicker({
           const patchId = value[index];
           const item =
             patchId !== undefined ? CS2Economy.getById(patchId) : undefined;
+          const isSlotDisabled = disabled || (item === undefined && isCapped);
           return (
             <div className="relative aspect-256/192" key={index}>
               <button
-                disabled={disabled}
+                disabled={isSlotDisabled}
                 className="absolute size-full cursor-default overflow-hidden bg-neutral-950/40"
                 onClick={handleClickSlot(index)}
               >
@@ -117,10 +121,14 @@ export function PatchPicker({
                   <ItemImage item={item} />
                 ) : (
                   <div className="flex items-center justify-center text-neutral-700">
-                    {translate("PatchPickerNA")}
+                    {isSlotDisabled && isCapped ? (
+                      <FontAwesomeIcon icon={faBan} className="h-3" />
+                    ) : (
+                      translate("PatchPickerNA")
+                    )}
                   </div>
                 )}
-                {!disabled && (
+                {!isSlotDisabled && (
                   <div className="absolute top-0 left-0 size-full border-2 border-transparent hover:border-blue-500/50" />
                 )}
               </button>

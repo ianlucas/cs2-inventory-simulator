@@ -177,6 +177,22 @@ Can the user apply patches to inventory items?
 
 Can the user remove patches from inventory items?
 
+### `inventoryItemMaxStickers`
+
+- **Type:** `number`
+- **Default:** `-1`
+
+Max number of stickers an item can have. `-1` uses the game's limit (5), and higher values are clamped to it. `0` prevents stickers entirely, hiding the sticker editor. Enforced everywhere an item is crafted, edited, or has a sticker applied.
+
+Items that already exceed the limit (because it was lowered, or the user left a group that raised it) keep their stickers and stay editable - they just can't gain more.
+
+### `inventoryItemMaxPatches`
+
+- **Type:** `number`
+- **Default:** `-1`
+
+Max number of patches an item can have, following the same rules as `inventoryItemMaxStickers`. The limit is on the number of patches, not on which slots are used.
+
 ### `inventoryItemAllowUnlockContainer`
 
 - **Type:** `boolean`

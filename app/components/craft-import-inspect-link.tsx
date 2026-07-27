@@ -17,6 +17,7 @@ import { alert } from "./modal-generic";
 
 const importErrorMapping = {
   400: "CraftImportError400",
+  403: "CraftImportError403",
   429: "CraftImportError429",
   500: "CraftImportError500",
   502: "CraftImportError502",

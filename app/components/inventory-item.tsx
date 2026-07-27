@@ -4,12 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { FloatingFocusManager } from "@floating-ui/react";
-import {
-  CS2_INVENTORY_EQUIPPABLE_ITEMS,
-  CS2_MAX_PATCHES,
-  CS2_MAX_STICKERS,
-  CS2Team
-} from "@ianlucas/cs2-lib";
+import { CS2_INVENTORY_EQUIPPABLE_ITEMS, CS2Team } from "@ianlucas/cs2-lib";
 import {
   CS2_PREVIEW_INSPECTABLE_ITEMS,
   generateInspectLink,
@@ -97,6 +92,8 @@ export function InventoryItem({
     inventoryItemAllowUnlockContainer,
     inventoryItemEquipHideModel,
     inventoryItemEquipHideType,
+    inventoryItemMaxPatches,
+    inventoryItemMaxStickers,
     inventoryStorageUnitMaxItems
   } = useRules();
   const [inventory] = useInventory();
@@ -144,7 +141,8 @@ export function InventoryItem({
   const canApplyPatch =
     inventoryItemAllowApplyPatch &&
     ownApplicablePatches &&
-    ((item.hasPatches() && item.getPatchesCount() < CS2_MAX_PATCHES) ||
+    inventoryItemMaxPatches > 0 &&
+    ((item.hasPatches() && item.getPatchesCount() < inventoryItemMaxPatches) ||
       item.isPatch());
   const canRemovePatch =
     inventoryItemAllowRemovePatch &&
@@ -153,7 +151,9 @@ export function InventoryItem({
   const canApplySticker =
     inventoryItemAllowApplySticker &&
     ownApplicableStickers &&
-    ((item.hasStickers() && item.getStickersCount() < CS2_MAX_STICKERS) ||
+    inventoryItemMaxStickers > 0 &&
+    ((item.hasStickers() &&
+      item.getStickersCount() < inventoryItemMaxStickers) ||
       item.isSticker());
   const canScrapeSticker =
     inventoryItemAllowScrapeSticker &&

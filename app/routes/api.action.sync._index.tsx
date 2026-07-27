@@ -4,9 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  assert,
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
+  CS2InventoryItem,
   CS2ItemType,
   RecordValue
 } from "@ianlucas/cs2-lib";
@@ -60,10 +62,13 @@ import {
   inventoryItemAllowEdit,
   inventoryItemAllowRemovePatch,
   inventoryItemAllowRemoveSticker,
-  inventoryItemAllowScrapeSticker
+  inventoryItemAllowScrapeSticker,
+  inventoryItemMaxPatches,
+  inventoryItemMaxStickers
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
+import { isAttachmentCountAllowed } from "~/utils/attachments";
 import { editInventoryItem } from "~/utils/inventory";
 import { hasKeys } from "~/utils/misc";
 import {
@@ -194,6 +199,30 @@ export type ApiActionSyncData = {
   syncedAt: number;
 };
 
+async function enforceMaxAttachments(
+  {
+    patches,
+    stickers
+  }: Pick<Partial<CS2BaseInventoryItem>, "patches" | "stickers">,
+  userId: string,
+  target?: CS2InventoryItem
+) {
+  assert(
+    isAttachmentCountAllowed({
+      current: target?.getPatchesCount() ?? 0,
+      max: await inventoryItemMaxPatches.for(userId).get(),
+      next: patches !== undefined ? Object.keys(patches).length : 0
+    })
+  );
+  assert(
+    isAttachmentCountAllowed({
+      current: target?.getStickersCount() ?? 0,
+      max: await inventoryItemMaxStickers.for(userId).get(),
+      next: stickers !== undefined ? Object.keys(stickers).length : 0
+    })
+  );
+}
+
 async function enforceCraftRulesForItem(
   idOrItem: number | CS2EconomyItem,
   userId: string
@@ -262,16 +291,11 @@ async function enforceCraftRulesForKeychainAttributes(
 }
 
 async function enforceCraftRulesForInventoryItem(
-  {
-    keychains,
-    stickers,
-    statTrak,
-    wear,
-    seed,
-    nameTag
-  }: Partial<CS2BaseInventoryItem>,
+  item: Partial<CS2BaseInventoryItem>,
   userId: string
 ) {
+  const { keychains, stickers, statTrak, wear, seed, nameTag } = item;
+  await enforceMaxAttachments(item, userId);
   if (keychains !== undefined && hasKeys(keychains)) {
     await craftAllowKeychains.for(userId).truthy();
     await craftHideType.for(userId).notContains(CS2ItemType.Keychain);
@@ -343,16 +367,12 @@ async function enforceEditRulesForKeychainAttributes(
 }
 
 async function enforceEditRulesForInventoryItem(
-  {
-    keychains,
-    stickers,
-    statTrak,
-    wear,
-    seed,
-    nameTag
-  }: Partial<ItemEditorAttributes>,
-  userId: string
+  attributes: Partial<ItemEditorAttributes>,
+  userId: string,
+  target: CS2InventoryItem
 ) {
+  const { keychains, stickers, statTrak, wear, seed, nameTag } = attributes;
+  await enforceMaxAttachments(attributes, userId, target);
   if (keychains !== undefined && hasKeys(keychains)) {
     await editAllowKeychains.for(userId).truthy();
     await editHideType.for(userId).notContains(CS2ItemType.Keychain);
@@ -455,16 +475,33 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
               action.nameTag
             );
             break;
-          case SyncAction.ApplyItemPatch:
+          case SyncAction.ApplyItemPatch: {
             await inventoryItemAllowApplyPatch.for(userId).truthy();
+            const count = inventory.get(action.targetUid).getPatchesCount();
+            assert(
+              isAttachmentCountAllowed({
+                current: count,
+                max: await inventoryItemMaxPatches.for(userId).get(),
+                next: count + 1
+              })
+            );
             inventory.applyItemPatch(
               action.targetUid,
               action.patchUid,
               action.slot
             );
             break;
-          case SyncAction.ApplyItemSticker:
+          }
+          case SyncAction.ApplyItemSticker: {
             await inventoryItemAllowApplySticker.for(userId).truthy();
+            const count = inventory.get(action.targetUid).getStickersCount();
+            assert(
+              isAttachmentCountAllowed({
+                current: count,
+                max: await inventoryItemMaxStickers.for(userId).get(),
+                next: count + 1
+              })
+            );
             inventory.applyItemSticker(action.targetUid, action.stickerUid, {
               schema: action.schema,
               x: action.x,
@@ -473,6 +510,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
               wear: action.wear
             });
             break;
+          }
           case SyncAction.Equip:
             inventory.equip(action.uid, action.team);
             break;
@@ -523,11 +561,22 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.Edit:
             await inventoryItemAllowEdit.for(userId).truthy();
-            await enforceEditRulesForInventoryItem(action.attributes, userId);
+            await enforceEditRulesForInventoryItem(
+              action.attributes,
+              userId,
+              inventory.get(action.uid)
+            );
             editInventoryItem(inventory, action.uid, action.attributes);
             break;
           case SyncAction.AddWithSticker:
             await enforceCraftRulesForItem(action.itemId, userId);
+            assert(
+              isAttachmentCountAllowed({
+                current: 0,
+                max: await inventoryItemMaxStickers.for(userId).get(),
+                next: 1
+              })
+            );
             inventory.addWithSticker(action.stickerUid, action.itemId, {
               schema: action.schema,
               x: action.x,
