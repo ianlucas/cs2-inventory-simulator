@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  CS2_KEYCHAIN_OFFSET_FACTOR,
   CS2_STICKER_OFFSET_FACTOR,
   CS2BaseInventoryItem,
   CS2Economy,
@@ -31,7 +32,7 @@ import {
   methodNotAllowed,
   tooManyRequests
 } from "~/responses.server";
-import { isValidInspectLink, keychainOffsetFactor } from "~/utils/economy";
+import { isValidInspectLink } from "~/utils/economy";
 import { RateLimiter } from "~/utils/rate-limiter.server";
 import type { Route } from "./+types/api.action.import-inspect-link";
 
@@ -41,13 +42,13 @@ function postParseInventoryItem(item: CS2BaseInventoryItem) {
   if (item.keychains !== undefined) {
     for (const keychain of Object.values(item.keychains)) {
       if (keychain.x !== undefined) {
-        keychain.x = truncateToFactor(keychain.x, keychainOffsetFactor);
+        keychain.x = truncateToFactor(keychain.x, CS2_KEYCHAIN_OFFSET_FACTOR);
       }
       if (keychain.y !== undefined) {
-        keychain.y = truncateToFactor(keychain.y, keychainOffsetFactor);
+        keychain.y = truncateToFactor(keychain.y, CS2_KEYCHAIN_OFFSET_FACTOR);
       }
       if (keychain.z !== undefined) {
-        keychain.z = truncateToFactor(keychain.z, keychainOffsetFactor);
+        keychain.z = truncateToFactor(keychain.z, CS2_KEYCHAIN_OFFSET_FACTOR);
       }
     }
   }

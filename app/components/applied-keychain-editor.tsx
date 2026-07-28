@@ -7,18 +7,17 @@ import { faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import {
+  CS2_KEYCHAIN_OFFSET_FACTOR,
   CS2_MAX_KEYCHAIN_SEED,
   CS2_MIN_KEYCHAIN_SEED
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useEffect } from "react";
 import {
-  keychainOffsetFactor,
+  getDefaultKeychainOffset,
   keychainOffsetStringMaxLen,
   keychainOffsetToString,
   keychainSeedStringMaxLen,
-  maxKeychainOffset,
-  minKeychainOffset,
   validateKeychainOffset,
   validateKeychainSeed
 } from "~/utils/economy";
@@ -32,6 +31,7 @@ import { confirm } from "./modal-generic";
 
 export function AppliedKeychainEditor({
   className,
+  forItem,
   isHideKeychainSeed,
   isHideKeychainX,
   isHideKeychainY,
@@ -41,6 +41,7 @@ export function AppliedKeychainEditor({
   value
 }: {
   className?: string;
+  forItem?: CS2EconomyItem;
   isHideKeychainSeed?: boolean;
   isHideKeychainX?: boolean;
   isHideKeychainY?: boolean;
@@ -51,6 +52,12 @@ export function AppliedKeychainEditor({
 }) {
   const translate = useTranslate();
   const attributes = useKeyValues(value);
+  const keychainOffsetXMin = forItem?.getMinimumKeychainOffsetX();
+  const keychainOffsetXMax = forItem?.getMaximumKeychainOffsetX();
+  const keychainOffsetYMin = forItem?.getMinimumKeychainOffsetY();
+  const keychainOffsetYMax = forItem?.getMaximumKeychainOffsetY();
+  const keychainOffsetZMin = forItem?.getMinimumKeychainOffsetZ();
+  const keychainOffsetZMax = forItem?.getMaximumKeychainOffsetZ();
 
   async function handleReset() {
     if (
@@ -63,9 +70,9 @@ export function AppliedKeychainEditor({
     ) {
       attributes.setValue({
         seed: CS2_MIN_KEYCHAIN_SEED,
-        x: 0,
-        y: 0,
-        z: 0
+        x: getDefaultKeychainOffset(keychainOffsetXMin, keychainOffsetXMax),
+        y: getDefaultKeychainOffset(keychainOffsetYMin, keychainOffsetYMax),
+        z: getDefaultKeychainOffset(keychainOffsetZMin, keychainOffsetZMax)
       });
     }
   }
@@ -95,60 +102,93 @@ export function AppliedKeychainEditor({
             />
           </EditorLabel>
         )}
-        {!isHideKeychainX && (
-          <EditorLabel label={translate("EditorKeychainX")}>
-            <EditorStepRangeWithInput
-              inputStyles="w-24 min-w-0"
-              max={maxKeychainOffset}
-              maxLength={keychainOffsetStringMaxLen}
-              min={minKeychainOffset}
-              onChange={attributes.update("x")}
-              randomizable
-              step={keychainOffsetFactor}
-              stepRangeStyles="flex-1"
-              transform={keychainOffsetToString}
-              type="float"
-              validate={validateKeychainOffset}
-              value={attributes.value.x}
-            />
-          </EditorLabel>
-        )}
-        {!isHideKeychainY && (
-          <EditorLabel label={translate("EditorKeychainY")}>
-            <EditorStepRangeWithInput
-              inputStyles="w-24 min-w-0"
-              max={maxKeychainOffset}
-              maxLength={keychainOffsetStringMaxLen}
-              min={minKeychainOffset}
-              onChange={attributes.update("y")}
-              randomizable
-              step={keychainOffsetFactor}
-              stepRangeStyles="flex-1"
-              transform={keychainOffsetToString}
-              type="float"
-              validate={validateKeychainOffset}
-              value={attributes.value.y}
-            />
-          </EditorLabel>
-        )}
-        {!isHideKeychainZ && (
-          <EditorLabel label={translate("EditorKeychainZ")}>
-            <EditorStepRangeWithInput
-              inputStyles="w-24 min-w-0"
-              max={maxKeychainOffset}
-              maxLength={keychainOffsetStringMaxLen}
-              min={minKeychainOffset}
-              onChange={attributes.update("z")}
-              randomizable
-              step={keychainOffsetFactor}
-              stepRangeStyles="flex-1"
-              transform={keychainOffsetToString}
-              type="float"
-              validate={validateKeychainOffset}
-              value={attributes.value.z}
-            />
-          </EditorLabel>
-        )}
+        {!isHideKeychainX &&
+          keychainOffsetXMin !== undefined &&
+          keychainOffsetXMax !== undefined && (
+            <EditorLabel label={translate("EditorKeychainX")}>
+              <EditorStepRangeWithInput
+                inputStyles="w-24 min-w-0"
+                max={keychainOffsetXMax}
+                maxLength={keychainOffsetStringMaxLen(
+                  keychainOffsetXMin,
+                  keychainOffsetXMax
+                )}
+                min={keychainOffsetXMin}
+                onChange={attributes.update("x")}
+                randomizable
+                step={CS2_KEYCHAIN_OFFSET_FACTOR}
+                stepRangeStyles="flex-1"
+                transform={keychainOffsetToString}
+                type="float"
+                validate={(value) =>
+                  validateKeychainOffset(
+                    value,
+                    keychainOffsetXMin,
+                    keychainOffsetXMax
+                  )
+                }
+                value={attributes.value.x}
+              />
+            </EditorLabel>
+          )}
+        {!isHideKeychainY &&
+          keychainOffsetYMin !== undefined &&
+          keychainOffsetYMax !== undefined && (
+            <EditorLabel label={translate("EditorKeychainY")}>
+              <EditorStepRangeWithInput
+                inputStyles="w-24 min-w-0"
+                max={keychainOffsetYMax}
+                maxLength={keychainOffsetStringMaxLen(
+                  keychainOffsetYMin,
+                  keychainOffsetYMax
+                )}
+                min={keychainOffsetYMin}
+                onChange={attributes.update("y")}
+                randomizable
+                step={CS2_KEYCHAIN_OFFSET_FACTOR}
+                stepRangeStyles="flex-1"
+                transform={keychainOffsetToString}
+                type="float"
+                validate={(value) =>
+                  validateKeychainOffset(
+                    value,
+                    keychainOffsetYMin,
+                    keychainOffsetYMax
+                  )
+                }
+                value={attributes.value.y}
+              />
+            </EditorLabel>
+          )}
+        {!isHideKeychainZ &&
+          keychainOffsetZMin !== undefined &&
+          keychainOffsetZMax !== undefined && (
+            <EditorLabel label={translate("EditorKeychainZ")}>
+              <EditorStepRangeWithInput
+                inputStyles="w-24 min-w-0"
+                max={keychainOffsetZMax}
+                maxLength={keychainOffsetStringMaxLen(
+                  keychainOffsetZMin,
+                  keychainOffsetZMax
+                )}
+                min={keychainOffsetZMin}
+                onChange={attributes.update("z")}
+                randomizable
+                step={CS2_KEYCHAIN_OFFSET_FACTOR}
+                stepRangeStyles="flex-1"
+                transform={keychainOffsetToString}
+                type="float"
+                validate={(value) =>
+                  validateKeychainOffset(
+                    value,
+                    keychainOffsetZMin,
+                    keychainOffsetZMax
+                  )
+                }
+                value={attributes.value.z}
+              />
+            </EditorLabel>
+          )}
         <div className="flex justify-end gap-1">
           <ButtonWithTooltip
             tooltip={translate("EditorReset")}

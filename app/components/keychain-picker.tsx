@@ -20,7 +20,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
-import { sortByName } from "~/utils/economy";
+import { getDefaultKeychainOffset, sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import { AppliedKeychainEditor } from "./applied-keychain-editor";
@@ -34,6 +34,7 @@ import { confirm } from "./modal-generic";
 
 export function KeychainPicker({
   disabled,
+  forItem,
   isHideKeychainSeed,
   isHideKeychainX,
   isHideKeychainY,
@@ -43,6 +44,7 @@ export function KeychainPicker({
   value
 }: {
   disabled?: boolean;
+  forItem?: CS2EconomyItem;
   isHideKeychainSeed?: boolean;
   isHideKeychainX?: boolean;
   isHideKeychainY?: boolean;
@@ -62,12 +64,26 @@ export function KeychainPicker({
         .sort(sortByName),
     []
   );
-  const [appliedKeychainData, setAppliedKeychainData] = useState({
-    seed: CS2_MIN_KEYCHAIN_SEED,
-    x: 0,
-    y: 0,
-    z: 0
-  });
+  const defaultKeychainData = useMemo(
+    () => ({
+      seed: CS2_MIN_KEYCHAIN_SEED,
+      x: getDefaultKeychainOffset(
+        forItem?.getMinimumKeychainOffsetX(),
+        forItem?.getMaximumKeychainOffsetX()
+      ),
+      y: getDefaultKeychainOffset(
+        forItem?.getMinimumKeychainOffsetY(),
+        forItem?.getMaximumKeychainOffsetY()
+      ),
+      z: getDefaultKeychainOffset(
+        forItem?.getMinimumKeychainOffsetZ(),
+        forItem?.getMaximumKeychainOffsetZ()
+      )
+    }),
+    [forItem]
+  );
+  const [appliedKeychainData, setAppliedKeychainData] =
+    useState(defaultKeychainData);
   const [selected, setSelected] = useState<CS2EconomyItem>();
   const [isEditing, setIsEditing] = useState(false);
   const canEditKeychainAttributes =
@@ -86,10 +102,10 @@ export function KeychainPicker({
     return function handleClickSlot() {
       const { id, seed, x, y, z } = value[index];
       setAppliedKeychainData({
-        seed: seed ?? CS2_MIN_KEYCHAIN_SEED,
-        x: x ?? 0,
-        y: y ?? 0,
-        z: z ?? 0
+        seed: seed ?? defaultKeychainData.seed,
+        x: x ?? defaultKeychainData.x,
+        y: y ?? defaultKeychainData.y,
+        z: z ?? defaultKeychainData.z
       });
       setActiveIndex(index);
       setSelected(CS2Economy.getById(id));
@@ -116,12 +132,21 @@ export function KeychainPicker({
       [ensure(activeIndex)]: {
         id: selected.id,
         seed:
-          appliedKeychainData.seed !== CS2_MIN_KEYCHAIN_SEED
+          appliedKeychainData.seed !== defaultKeychainData.seed
             ? appliedKeychainData.seed
             : undefined,
-        x: appliedKeychainData.x || undefined,
-        y: appliedKeychainData.y || undefined,
-        z: appliedKeychainData.z || undefined
+        x:
+          appliedKeychainData.x !== defaultKeychainData.x
+            ? appliedKeychainData.x
+            : undefined,
+        y:
+          appliedKeychainData.y !== defaultKeychainData.y
+            ? appliedKeychainData.y
+            : undefined,
+        z:
+          appliedKeychainData.z !== defaultKeychainData.z
+            ? appliedKeychainData.z
+            : undefined
       }
     });
     setSelected(undefined);
@@ -254,6 +279,7 @@ export function KeychainPicker({
           {canEditKeychainAttributes && (
             <AppliedKeychainEditor
               className="px-4"
+              forItem={forItem}
               isHideKeychainSeed={isHideKeychainSeed}
               isHideKeychainX={isHideKeychainX}
               isHideKeychainY={isHideKeychainY}

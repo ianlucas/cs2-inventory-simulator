@@ -267,6 +267,7 @@ export function ItemEditor({
         <EditorLabel block label={translate("EditorKeychains")}>
           <KeychainPicker
             disabled={isDisabled}
+            forItem={item}
             isHideKeychainSeed={isHideKeychainSeed}
             isHideKeychainX={isHideKeychainX}
             isHideKeychainY={isHideKeychainY}
