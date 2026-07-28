@@ -33,7 +33,7 @@ export function useTranslation({ language }: { language: string }) {
     return (
       systemMap[token]?.replace(
         /\{(\d+)\}/g,
-        (_, index) => values[Number(index) - 1]
+        (_, index) => values[Number(index) - 1] ?? ""
       ) ?? ""
     );
   }
