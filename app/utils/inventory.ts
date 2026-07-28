@@ -13,6 +13,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import lzstring from "lz-string";
 import type { ItemEditorAttributes } from "~/components/item-editor";
+import { safeParseJson } from "./misc";
 import { serverInventoryShape } from "./shapes";
 
 export const UNLOCKABLE_ITEM_TYPE: CS2ItemType[] = [
@@ -47,6 +48,23 @@ export function parseInventory(inventory?: string | null) {
   } catch {
     return undefined;
   }
+}
+
+export function hasInventoryContent(
+  rawInventory: string | null
+): rawInventory is string {
+  if (rawInventory === null || rawInventory.trim().length === 0) {
+    return false;
+  }
+  const data = safeParseJson(rawInventory);
+  if (typeof data !== "object" || data === null || Array.isArray(data)) {
+    return true;
+  }
+  const { items } = data as { items?: unknown };
+  if (typeof items !== "object" || items === null) {
+    return false;
+  }
+  return Object.keys(items).length > 0;
 }
 
 const fakeInventory = new CS2Inventory();

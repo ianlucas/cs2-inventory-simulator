@@ -26,7 +26,11 @@ export function ErrorBoundary() {
         confirmText: "OK"
       })
     ) {
-      return window.location.assign(ApiActionResetInventoryUrl);
+      try {
+        await fetch(ApiActionResetInventoryUrl, { method: "POST" });
+      } finally {
+        window.location.assign("/");
+      }
     }
   }
 
