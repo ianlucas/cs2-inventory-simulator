@@ -17,9 +17,15 @@ export const nonNegativeInt = z.number().int().nonnegative().finite().safe();
 export const positiveInt = z.number().int().positive().finite().safe();
 export const nonNegativeFloat = z.number().nonnegative().finite();
 
+export const optionalKeychainOffset = z
+  .number()
+  .optional()
+  .refine(
+    (value) =>
+      value === undefined || validateKeychainOffset(value, undefined, undefined)
+  );
 export const optionalStickerOffset = z
   .number()
-  .finite()
   .optional()
   .refine(
     (value) =>
@@ -27,12 +33,10 @@ export const optionalStickerOffset = z
   );
 export const optionalStickerRotation = z
   .number()
-  .finite()
   .optional()
   .refine((value) => value === undefined || validateStickerRotation(value));
 export const optionalStickerWear = z
   .number()
-  .finite()
   .optional()
   .refine((value) => value === undefined || validateStickerWear(value));
 
@@ -56,18 +60,9 @@ export const baseInventoryItemProps = {
         seed: positiveInt
           .optional()
           .refine((seed) => seed === undefined || validateKeychainSeed(seed)),
-        x: z
-          .number()
-          .optional()
-          .refine((x) => x === undefined || validateKeychainOffset(x)),
-        y: z
-          .number()
-          .optional()
-          .refine((y) => y === undefined || validateKeychainOffset(y)),
-        z: z
-          .number()
-          .optional()
-          .refine((z) => z === undefined || validateKeychainOffset(z))
+        x: optionalKeychainOffset,
+        y: optionalKeychainOffset,
+        z: optionalKeychainOffset
       })
     )
     .optional(),
