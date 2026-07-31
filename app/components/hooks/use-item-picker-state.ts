@@ -5,7 +5,7 @@
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useMemo, useState } from "react";
-import { baseStickerSlabId, isNewItem } from "~/utils/economy";
+import { isNewItem } from "~/utils/economy";
 import {
   ECONOMY_ITEM_FILTERS,
   EconomyItemFilter,
@@ -62,8 +62,9 @@ export function useItemPickerState({
     setModel(item.modelKey);
   }
 
-  function filterItem({ alternateName, id, name }: CS2EconomyItem) {
-    if (id === baseStickerSlabId) {
+  function filterItem(item: CS2EconomyItem) {
+    const { alternateName, name } = item;
+    if (item.isDefault && item.isKeychain()) {
       return false;
     }
     if (query.length < 2) {

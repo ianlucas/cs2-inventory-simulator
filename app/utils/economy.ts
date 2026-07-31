@@ -68,7 +68,6 @@ export function getItemCategory(item: CS2EconomyItem) {
   return item.categoryName ?? item.loadoutCategory;
 }
 
-export const baseStickerSlabId = 15200;
 export const newItemStartingId = 26817;
 export const newItemEndAt = 1784841228427;
 export const seedStringMaxLen = String(CS2_MAX_SEED).length;

@@ -21,7 +21,6 @@ model User {
   groups UserGroup[]
   id String @id
   inventory String?
-  inventoryVersion Int @default(0)
   inventoryWipes InventoryWipeAudit[]
   lastSeen DateTime @default(now())
   name String

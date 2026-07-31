@@ -27,7 +27,7 @@ test("getCachedInventoryData reads the cached inventory", () => {
   window.localStorage.setItem(
     "inventoryItems",
     JSON.stringify({
-      items: { 0: { id: AK47_ID } },
+      items: { 0: { id: AK47_ID, nameTag: "keeper" } },
       version: CS2_INVENTORY_VERSION
     })
   );

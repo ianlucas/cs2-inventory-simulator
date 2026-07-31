@@ -50,7 +50,10 @@ export function safeLoadInventory(
     return undefined;
   }
   try {
-    return CS2Inventory.load(rawInventory, options);
+    return CS2Inventory.load(rawInventory, {
+      dropEmptyDefaultItems: true,
+      ...options
+    });
   } catch {
     return undefined;
   }

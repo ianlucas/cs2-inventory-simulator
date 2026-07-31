@@ -21,17 +21,6 @@ export async function getUserInventory(userId: string) {
   );
 }
 
-export async function getUserInventoryVersion(userId: string) {
-  return (
-    (
-      await prisma.user.findFirst({
-        select: { inventoryVersion: true },
-        where: { id: userId }
-      })
-    )?.inventoryVersion ?? null
-  );
-}
-
 export async function upsertUser(user: {
   avatar: { medium: string };
   nickname: string;
@@ -90,11 +79,7 @@ export async function existsUser(userId: string) {
   );
 }
 
-export async function updateUserInventory(
-  userId: string,
-  inventory: string,
-  inventoryVersion?: number
-) {
+export async function updateUserInventory(userId: string, inventory: string) {
   const syncedAt = new Date();
   return await prisma.user.update({
     select: {
@@ -102,7 +87,6 @@ export async function updateUserInventory(
     },
     data: {
       inventory,
-      inventoryVersion,
       syncedAt
     },
     where: {

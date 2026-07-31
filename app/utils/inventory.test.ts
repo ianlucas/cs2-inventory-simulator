@@ -52,7 +52,7 @@ test("safeLoadInventory drops a bad item and keeps the rest", () => {
   const inventory = safeLoadInventory(
     JSON.stringify({
       items: {
-        0: { id: AK47_ID },
+        0: { id: AK47_ID, nameTag: "keeper" },
         1: { id: UNKNOWN_ID }
       },
       version: CS2_INVENTORY_VERSION
@@ -62,6 +62,23 @@ test("safeLoadInventory drops a bad item and keeps the rest", () => {
   expect(inventory?.get(0).id).toBe(AK47_ID);
   expect(inventory?.loadChanges?.dropped).toEqual([
     { uid: 1, id: UNKNOWN_ID, reason: "unknown-item" }
+  ]);
+});
+
+test("safeLoadInventory drops a default item holding nothing paid", () => {
+  const inventory = safeLoadInventory(
+    JSON.stringify({
+      items: {
+        0: { id: AK47_ID },
+        1: { id: AK47_ID, nameTag: "my rifle" }
+      },
+      version: CS2_INVENTORY_VERSION
+    })
+  );
+  expect(inventory?.size()).toBe(1);
+  expect(inventory?.get(1).nameTag).toBe("my rifle");
+  expect(inventory?.loadChanges?.dropped).toEqual([
+    { uid: 0, id: AK47_ID, reason: "policy" }
   ]);
 });
 
