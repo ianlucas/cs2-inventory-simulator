@@ -9,6 +9,8 @@ import { english } from "./english";
 export const vietnamese = {
   ...english,
   APIPageHeader: "API cho lập trình viên",
+  ApplyKeychainHintMoveKeychain: /* csgo_vietnamese.txt */"Kéo và thả móc treo để đặt tùy ý trên vũ khí",
+  ApplyKeychainNextPosition: /* csgo_vietnamese.txt */"Vị trí tiếp",
   ApplyKeychainUse: /* csgo_vietnamese.txt */"Gắn móc treo",
   ApplyPatchCancel: /* csgo_vietnamese.txt */"Hủy",
   ApplyPatchUse: /* csgo_vietnamese.txt */"Dùng phù hiệu",

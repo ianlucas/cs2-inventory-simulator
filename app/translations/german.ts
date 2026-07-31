@@ -9,6 +9,8 @@ import { english } from "./english";
 export const german = {
   ...english,
   APIPageHeader: "API für Programmierer",
+  ApplyKeychainHintMoveKeychain: /* csgo_german.txt */"Klicken und ziehen Sie den Anhänger mit der Maus, um ihn auf der Waffe zu verschieben.",
+  ApplyKeychainNextPosition: /* csgo_german.txt */"Nächste Position",
   ApplyKeychainUse: /* csgo_german.txt */"Anhänger anbringen",
   ApplyPatchCancel: /* csgo_german.txt */"Abbrechen",
   ApplyPatchUse: /* csgo_german.txt */"Aufnäher anbringen",

@@ -6,19 +6,31 @@
 import { useTranslate } from "./app-context";
 import { IconWithTooltip } from "./icon-with-tooltip";
 
-export function StickerControlHints() {
+export function StickerControlHints({
+  variant = "sticker"
+}: {
+  // "keychain" swaps the move hint for the charm and drops the wheel-rotate
+  // hint (a charm has no rotation).
+  variant?: "sticker" | "keychain";
+}) {
   const translate = useTranslate();
   return (
     <div className="mt-4 flex justify-center">
       <div className="inline-flex items-center gap-5 rounded-md bg-black/25 p-2 px-6">
         <IconWithTooltip
           src="/images/vectors/move_sticker.svg"
-          tooltip={translate("ApplyStickerHintMoveSticker")}
+          tooltip={translate(
+            variant === "keychain"
+              ? "ApplyKeychainHintMoveKeychain"
+              : "ApplyStickerHintMoveSticker"
+          )}
         />
-        <IconWithTooltip
-          src="/images/vectors/rotate_sticker.svg"
-          tooltip={translate("ApplyStickerHintRotateSticker")}
-        />
+        {variant === "sticker" && (
+          <IconWithTooltip
+            src="/images/vectors/rotate_sticker.svg"
+            tooltip={translate("ApplyStickerHintRotateSticker")}
+          />
+        )}
         <IconWithTooltip
           src="/images/vectors/rotate_weapon.svg"
           tooltip={translate("ApplyStickerHintRotateWeapon")}

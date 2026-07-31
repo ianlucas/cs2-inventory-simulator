@@ -104,6 +104,7 @@ function DrawerTab({
 
 function Sticker3dEditorOverlay({
   forItem,
+  keychains,
   nameTag,
   onChange,
   onClose,
@@ -114,6 +115,7 @@ function Sticker3dEditorOverlay({
   wear
 }: {
   forItem: CS2EconomyItem | CS2InventoryItem;
+  keychains?: CS2BaseInventoryItem["keychains"];
   nameTag?: string;
   onChange: (value: Stickers) => void;
   onClose: () => void;
@@ -138,7 +140,8 @@ function Sticker3dEditorOverlay({
     wear,
     statTrak,
     nameTag,
-    stickers: toRecord(toArray(value, maxSchema))
+    stickers: toRecord(toArray(value, maxSchema)),
+    keychains
   }));
   const { api, viewerProps } = useViewer({ item: initialItem });
 
@@ -251,7 +254,8 @@ function Sticker3dEditorOverlay({
       wear,
       statTrak,
       nameTag,
-      stickers: toRecord(next)
+      stickers: toRecord(next),
+      keychains
     };
   }
 
@@ -457,7 +461,7 @@ function Sticker3dEditorOverlay({
         >
           <div
             className={clsx(
-              "pointer-events-none flex max-h-full w-80 flex-col gap-1",
+              "pointer-events-none flex max-h-full w-80 flex-col gap-1 rounded-l bg-neutral-900/80",
               isDragging ? "overflow-visible" : "overflow-y-auto"
             )}
           >
@@ -479,7 +483,7 @@ function Sticker3dEditorOverlay({
                           !noTransition && "transition duration-150",
                           isSelected
                             ? "bg-blue-600/40"
-                            : "bg-neutral-900/80 hover:bg-neutral-800/70"
+                            : "hover:bg-neutral-700/80"
                         )
                   )}
                   style={{ transform: rowTransform(position) }}
@@ -534,7 +538,7 @@ function Sticker3dEditorOverlay({
             {range(inventoryItemMaxStickers - count).map((index) => (
               <button
                 key={`empty-${index}`}
-                className="group pointer-events-auto flex items-center gap-1 rounded-l bg-neutral-950/40 p-1 transition hover:bg-neutral-900/60"
+                className="group pointer-events-auto flex items-center gap-1 rounded-l p-1 transition hover:bg-neutral-700/80"
                 onClick={() => setSelecting({ mode: "add" })}
               >
                 <span className="w-5 shrink-0" />
@@ -545,7 +549,7 @@ function Sticker3dEditorOverlay({
             ))}
           </div>
           <DrawerTab
-            className="bg-neutral-900/80 hover:bg-neutral-800/70"
+            className="bg-neutral-900/80 hover:bg-neutral-700/80"
             edge="left"
             label={translate("EditorStickers")}
             onClick={() => setLeftOpen((value) => !value)}
@@ -627,6 +631,7 @@ function Sticker3dEditorOverlay({
 export function Sticker3dPicker({
   disabled,
   forItem,
+  keychains,
   nameTag,
   onChange,
   seed,
@@ -637,6 +642,7 @@ export function Sticker3dPicker({
 }: {
   disabled?: boolean;
   forItem: CS2EconomyItem | CS2InventoryItem;
+  keychains?: CS2BaseInventoryItem["keychains"];
   nameTag?: string;
   onChange: (value: Stickers) => void;
   seed?: number;
@@ -658,6 +664,7 @@ export function Sticker3dPicker({
         {isOpen ? (
           <Sticker3dEditorOverlay
             forItem={forItem}
+            keychains={keychains}
             nameTag={nameTag}
             onChange={onChange}
             onClose={() => setIsOpen(false)}

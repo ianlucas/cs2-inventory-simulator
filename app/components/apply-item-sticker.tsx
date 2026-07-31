@@ -432,10 +432,10 @@ function ApplyItemSticker2d({
 export function ApplyItemSticker(props: ApplyItemStickerProps) {
   const targetItem = useInventoryItem(props.targetUid);
   const stickerItem = useInventoryItem(props.stickerUid);
-  const { canUse3d, isStickerSupported } = useViewerAvailability(targetItem, {
+  const { canUse3d, isIdSupported } = useViewerAvailability(targetItem, {
     attachment: true
   });
-  return canUse3d && isStickerSupported(stickerItem.id) ? (
+  return canUse3d && isIdSupported(stickerItem.id) ? (
     <ApplyItemSticker3d {...props} />
   ) : (
     <ApplyItemSticker2d {...props} />

@@ -9,6 +9,8 @@ import { english } from "./english";
 export const french = {
   ...english,
   APIPageHeader: "API pour programmeurs",
+  ApplyKeychainHintMoveKeychain: /* csgo_french.txt */"Cliquez sur un porte-bonheur et faites le glisser sur l'arme",
+  ApplyKeychainNextPosition: /* csgo_french.txt */"Emplacement suivant",
   ApplyKeychainUse: /* csgo_french.txt */"Attacher un porte-bonheur",
   ApplyPatchCancel: /* csgo_french.txt */"Annuler",
   ApplyPatchUse: /* csgo_french.txt */"Appliquer l'écusson",

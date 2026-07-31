@@ -19,6 +19,7 @@ import { Viewer } from "./viewer";
 
 interface EditorItemDisplayProps {
   item: CS2EconomyItem;
+  keychains?: CS2BaseInventoryItem["keychains"];
   nameTag?: string;
   seed?: number;
   statTrak?: number;
@@ -28,6 +29,7 @@ interface EditorItemDisplayProps {
 
 function EditorItem3dPreview({
   item,
+  keychains,
   nameTag,
   seed,
   statTrak,
@@ -36,6 +38,7 @@ function EditorItem3dPreview({
 }: EditorItemDisplayProps) {
   const [initialItem] = useState<CS2BaseInventoryItem>(() => ({
     id: item.id,
+    keychains,
     nameTag,
     seed,
     statTrak,
@@ -59,8 +62,16 @@ function EditorItem3dPreview({
   }, [api]);
 
   useEffect(() => {
-    api?.setItem({ id: item.id, nameTag, seed, statTrak, stickers, wear });
-  }, [api, item.id, nameTag, seed, statTrak, stickers, wear]);
+    api?.setItem({
+      id: item.id,
+      keychains,
+      nameTag,
+      seed,
+      statTrak,
+      stickers,
+      wear
+    });
+  }, [api, item.id, keychains, nameTag, seed, statTrak, stickers, wear]);
 
   return (
     <div className="relative m-auto aspect-256/192 w-[256px]">
@@ -93,19 +104,25 @@ function EditorItem3dPreview({
 
 export function EditorItemDisplay({
   item,
+  keychains,
   nameTag,
   seed,
   statTrak,
   stickers,
   wear
 }: EditorItemDisplayProps) {
-  const { canUse3d } = useViewerAvailability({ id: item.id, stickers });
+  const { canUse3d } = useViewerAvailability({
+    id: item.id,
+    stickers,
+    keychains
+  });
   return (
     <>
       {canUse3d && !item.isSticker() ? (
         <EditorItem3dPreview
           key={item.id}
           item={item}
+          keychains={keychains}
           nameTag={nameTag}
           seed={seed}
           statTrak={statTrak}

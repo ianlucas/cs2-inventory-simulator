@@ -33,6 +33,7 @@ import { EditorToggle } from "./editor-toggle";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { useIsDesktop } from "./hooks/use-is-desktop";
 import { useKeyValues } from "./hooks/use-key-values";
+import { Keychain3dPicker } from "./keychain-3d-picker";
 import { KeychainPicker } from "./keychain-picker";
 import { confirm } from "./modal-generic";
 import { PatchPicker } from "./patch-picker";
@@ -120,7 +121,7 @@ export function ItemEditor({
 
   const translate = useTranslate();
   const isDesktop = useIsDesktop();
-  const { canUse3d, isStickerSupported } = useViewerAvailability(item, {
+  const { canUse3d, isIdSupported } = useViewerAvailability(item, {
     attachment: true
   });
 
@@ -133,11 +134,26 @@ export function ItemEditor({
     !isHideStickerX &&
     !isHideStickerY;
 
+  const use3dKeychainPicker =
+    canUse3d &&
+    !isDisabled &&
+    !isHideKeychainSeed &&
+    !isHideKeychainX &&
+    !isHideKeychainY &&
+    !isHideKeychainZ;
+
   const sticker3dFilter = useCallback(
     (economyItem: CS2EconomyItem) =>
-      isStickerSupported(economyItem.id) &&
+      isIdSupported(economyItem.id) &&
       (stickerFilter === undefined || stickerFilter(economyItem)),
-    [isStickerSupported, stickerFilter]
+    [isIdSupported, stickerFilter]
+  );
+
+  const keychain3dFilter = useCallback(
+    (economyItem: CS2EconomyItem) =>
+      isIdSupported(economyItem.id) &&
+      (keychainFilter === undefined || keychainFilter(economyItem)),
+    [isIdSupported, keychainFilter]
   );
 
   const [attributesRef, { height: attributesHeight }] = useMeasure();
@@ -207,6 +223,7 @@ export function ItemEditor({
   const display = (
     <EditorItemDisplay
       item={item}
+      keychains={attributes.value.keychains}
       nameTag={attributes.value.nameTag || undefined}
       seed={attributes.value.seed}
       statTrak={
@@ -225,6 +242,11 @@ export function ItemEditor({
             <Sticker3dPicker
               disabled={isDisabled}
               forItem={item}
+              keychains={
+                hasKeys(attributes.value.keychains)
+                  ? attributes.value.keychains
+                  : undefined
+              }
               nameTag={attributes.value.nameTag || undefined}
               onChange={attributes.update("stickers")}
               seed={attributes.value.seed}
@@ -265,17 +287,40 @@ export function ItemEditor({
       )}
       {hasKeychains && (
         <EditorLabel block label={translate("EditorKeychains")}>
-          <KeychainPicker
-            disabled={isDisabled}
-            forItem={item}
-            isHideKeychainSeed={isHideKeychainSeed}
-            isHideKeychainX={isHideKeychainX}
-            isHideKeychainY={isHideKeychainY}
-            isHideKeychainZ={isHideKeychainZ}
-            keychainFilter={keychainFilter}
-            onChange={attributes.update("keychains")}
-            value={attributes.value.keychains}
-          />
+          {use3dKeychainPicker ? (
+            <Keychain3dPicker
+              disabled={isDisabled}
+              forItem={item}
+              keychainFilter={keychain3dFilter}
+              nameTag={attributes.value.nameTag || undefined}
+              onChange={attributes.update("keychains")}
+              seed={attributes.value.seed}
+              statTrak={
+                attributes.value.statTrak
+                  ? (defaults?.statTrak ?? 0)
+                  : undefined
+              }
+              stickers={
+                hasKeys(attributes.value.stickers)
+                  ? attributes.value.stickers
+                  : undefined
+              }
+              value={attributes.value.keychains}
+              wear={attributes.value.wear}
+            />
+          ) : (
+            <KeychainPicker
+              disabled={isDisabled}
+              forItem={item}
+              isHideKeychainSeed={isHideKeychainSeed}
+              isHideKeychainX={isHideKeychainX}
+              isHideKeychainY={isHideKeychainY}
+              isHideKeychainZ={isHideKeychainZ}
+              keychainFilter={keychainFilter}
+              onChange={attributes.update("keychains")}
+              value={attributes.value.keychains}
+            />
+          )}
         </EditorLabel>
       )}
       {hasNameTag && (

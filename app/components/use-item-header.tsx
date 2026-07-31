@@ -9,6 +9,7 @@ import { StickerControlHints } from "./sticker-control-hints";
 export function UseItemHeader({
   actionDesc,
   actionItem,
+  keychainHint,
   stickerHint,
   title,
   warning,
@@ -16,6 +17,7 @@ export function UseItemHeader({
 }: {
   actionDesc?: string;
   actionItem?: string;
+  keychainHint?: boolean;
   stickerHint?: boolean;
   title: string;
   warning?: string;
@@ -42,6 +44,7 @@ export function UseItemHeader({
         )}
       </div>
       {stickerHint && <StickerControlHints />}
+      {keychainHint && <StickerControlHints variant="keychain" />}
     </>
   );
 }

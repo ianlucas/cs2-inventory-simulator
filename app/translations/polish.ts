@@ -9,6 +9,8 @@ import { english } from "./english";
 export const polish = {
   ...english,
   APIPageHeader: "API dla programistów",
+  ApplyKeychainHintMoveKeychain: /* csgo_polish.txt */"Kliknij i przeciągnij przywieszkę, by przenieść ją na broń.",
+  ApplyKeychainNextPosition: /* csgo_polish.txt */"Następna pozycja",
   ApplyKeychainUse: /* csgo_polish.txt */"Przyczep przywieszkę",
   ApplyPatchCancel: /* csgo_polish.txt */"Anuluj",
   ApplyPatchUse: /* csgo_polish.txt */"Użyj naszywki",

@@ -9,6 +9,8 @@ import { english } from "./english";
 export const italian = {
   ...english,
   APIPageHeader: "API per programmatori",
+  ApplyKeychainHintMoveKeychain: /* csgo_italian.txt */"Clicca e trascina il portachiavi per spostarlo sull'arma",
+  ApplyKeychainNextPosition: /* csgo_italian.txt */"Prossima posizione",
   ApplyKeychainUse: /* csgo_italian.txt */"Applica ciondolo",
   ApplyPatchCancel: /* csgo_italian.txt */"Annulla",
   ApplyPatchUse: /* csgo_italian.txt */"Applica toppa",

@@ -9,6 +9,8 @@ import { english } from "./english";
 export const finnish = {
   ...english,
   APIPageHeader: "API ohjelmoijille",
+  ApplyKeychainHintMoveKeychain: /* csgo_finnish.txt */"Klikkaa ja vedä riipusta siirtääksesi sen aseeseen.",
+  ApplyKeychainNextPosition: /* csgo_finnish.txt */"Seuraava paikka",
   ApplyKeychainUse: /* csgo_finnish.txt */"Kiinnitä riipus",
   ApplyPatchCancel: /* csgo_finnish.txt */"Peruuta",
   ApplyPatchUse: /* csgo_finnish.txt */"Käytä kangasmerkki",
@@ -209,7 +211,7 @@ export const finnish = {
   InventorySelectInspectContents: /* csgo_finnish.txt */"Tarkastellaan sisältöä kohteelle:",
   InventorySelectItemToDeposit: /* csgo_finnish.txt */"Valitse siirrettävät esineet",
   InventorySelectItemToRetrieve: /* csgo_finnish.txt */"Valitse siirrettävät esineet",
-  ItemRarityAncient: /* csgo_finnish.txt */"Merkillinen",
+  ItemRarityAncient: /* csgo_finnish.txt */"Merkittävä",
   ItemRarityCommon: /* csgo_finnish.txt */"Perustason",
   ItemRarityDefault: /* csgo_finnish.txt */"Oletus",
   ItemRarityImmortal: /* csgo_finnish.txt */"Salakuljetettu",

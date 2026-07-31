@@ -9,6 +9,8 @@ import { english } from "./english";
 export const brazilian = {
   ...english,
   APIPageHeader: "API para programadores",
+  ApplyKeychainHintMoveKeychain: /* csgo_brazilian.txt */"Clique em um chaveiro e arraste para reposicioná-lo na arma.",
+  ApplyKeychainNextPosition: /* csgo_brazilian.txt */"Próxima posição",
   ApplyKeychainUse: /* csgo_brazilian.txt */"Prender chaveiro",
   ApplyPatchCancel: /* csgo_brazilian.txt */"Cancelar",
   ApplyPatchUse: /* csgo_brazilian.txt */"Aplicar emblema",

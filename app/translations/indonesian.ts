@@ -9,6 +9,8 @@ import { english } from "./english";
 export const indonesian = {
   ...english,
   APIPageHeader: "API untuk programmer",
+  ApplyKeychainHintMoveKeychain: /* csgo_indonesian.txt */"Klik dan seret gantungan untuk memindahkannya ke senjata",
+  ApplyKeychainNextPosition: /* csgo_indonesian.txt */"Posisi Berikutnya",
   ApplyKeychainUse: /* csgo_indonesian.txt */"Pasang Gantungan",
   ApplyPatchCancel: /* csgo_indonesian.txt */"Batal",
   ApplyPatchUse: /* csgo_indonesian.txt */"Tempel Patch",
@@ -184,7 +186,7 @@ export const indonesian = {
   InventoryItemStatTrak: /* csgo_indonesian.txt */"StatTrak™",
   InventoryItemStatTrakCount: /* csgo_indonesian.txt */"Kill Terkonfirmasi StatTrak™:",
   InventoryItemStatTrakDesc: /* csgo_indonesian.txt */"Item ini memiliki fitur teknologi StatTrak™ yang bisa melacak statistik tertentu ketika digunakan.",
-  InventoryItemStorageUnitDeposit: /* csgo_indonesian.txt */"Setor Item",
+  InventoryItemStorageUnitDeposit: /* csgo_indonesian.txt */"Simpan Item",
   InventoryItemStorageUnitEmptyBody: /* csgo_indonesian.txt */"Unit Penyimpanan memungkinkanmu untuk menyimpan hingga {1} item yang tidak muat lagi disimpan di dalam Inventaris. Saat ini, Unit Penyimpanan yang dipilih kosong. Kamu bisa memindahkan item dari inventaris ke Unit Penyimpanan dan sebaliknya kapan saja, atau kamu bisa menggunakannya untuk sekadar mengatur item koleksimu.",
   InventoryItemStorageUnitEmptyClose: /* csgo_indonesian.txt */"OK",
   InventoryItemStorageUnitEmptyTitle: /* csgo_indonesian.txt */"Unit Penyimpanan Kosong",

@@ -9,6 +9,8 @@ import { english } from "./english";
 export const danish = {
   ...english,
   APIPageHeader: "API til programmører",
+  ApplyKeychainHintMoveKeychain: /* csgo_danish.txt */"Klik på og træk vedhænget for at flytte det på våbnet",
+  ApplyKeychainNextPosition: /* csgo_danish.txt */"Næste position",
   ApplyKeychainUse: /* csgo_danish.txt */"Sæt vedhæng fast",
   ApplyPatchCancel: /* csgo_danish.txt */"Annuller",
   ApplyPatchUse: /* csgo_danish.txt */"Påfør lap",
