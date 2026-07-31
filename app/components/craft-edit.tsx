@@ -9,7 +9,6 @@ import {
   CS2ItemType
 } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { getItemCategory } from "~/utils/economy";
 import { useRules, useTranslate } from "./app-context";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ModalButton } from "./modal-button";
@@ -83,12 +82,14 @@ export function CraftEdit({
     }
   }
 
-  function filterStickerOrPatch(item: CS2EconomyItem) {
-    if (editHideId.includes(item.id)) {
+  function filterStickerOrPatch({ id, loadoutCategory }: CS2EconomyItem) {
+    if (editHideId.includes(id)) {
       return false;
     }
-    const category = getItemCategory(item);
-    if (category !== undefined && editHideCategory.includes(category)) {
+    if (
+      loadoutCategory !== undefined &&
+      editHideCategory.includes(loadoutCategory)
+    ) {
       return false;
     }
     return true;

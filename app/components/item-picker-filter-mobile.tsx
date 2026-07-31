@@ -32,9 +32,10 @@ export function ItemPickerFilterMobile({
           className={clsx(
             "font-display rounded-sm px-2 font-bold transition-all hover:text-neutral-200",
             !(
-              filter.category === value.category && filter.type === value.type
+              filter.loadoutCategory === value.loadoutCategory &&
+              filter.type === value.type
             ) && "text-neutral-400",
-            filter.category === value.category &&
+            filter.loadoutCategory === value.loadoutCategory &&
               filter.type === value.type &&
               "bg-black/50 text-neutral-200"
           )}

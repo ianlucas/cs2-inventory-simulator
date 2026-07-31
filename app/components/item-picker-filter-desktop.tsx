@@ -54,7 +54,8 @@ export function ItemPickerFilterDesktop({
       >
         {(filter, index) => {
           const isActive =
-            filter.category === value.category && filter.type === value.type;
+            filter.loadoutCategory === value.loadoutCategory &&
+            filter.type === value.type;
           const isIdle = !isActive;
           return (
             <button

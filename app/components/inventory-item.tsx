@@ -19,7 +19,6 @@ import {
   INSPECTABLE_ITEM_TYPE,
   UNLOCKABLE_ITEM_TYPE
 } from "~/utils/inventory";
-import { getItemCategory } from "~/utils/economy";
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
 import { useInventory, useRules, useTranslate, useUser } from "./app-context";
@@ -170,11 +169,11 @@ export function InventoryItem({
   const canInspectInGame =
     inventoryItemAllowInspectInGame &&
     (CS2_PREVIEW_INSPECTABLE_ITEMS.includes(item.type) || item.isNameTag());
-  const itemCategory = getItemCategory(item);
   const canEdit =
     inventoryItemAllowEdit &&
     isEditable &&
-    (itemCategory === undefined || !editHideCategory.includes(itemCategory)) &&
+    (item.loadoutCategory === undefined ||
+      !editHideCategory.includes(item.loadoutCategory)) &&
     (item.type === undefined || !editHideType.includes(item.type)) &&
     (item.modelKey === undefined || !editHideModel.includes(item.modelKey)) &&
     !editHideId.includes(item.id);

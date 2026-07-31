@@ -5,16 +5,17 @@
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useRules } from "~/components/app-context";
-import { getItemCategory } from "~/utils/economy";
 
 export function useIsItemCraftable() {
   const { craftHideCategory, craftHideType, craftHideModel, craftHideId } =
     useRules();
 
   return function filter(item: CS2EconomyItem) {
-    const { id, type, modelKey } = item;
-    const category = getItemCategory(item);
-    if (category !== undefined && craftHideCategory.includes(category)) {
+    const { id, type, modelKey, loadoutCategory } = item;
+    if (
+      loadoutCategory !== undefined &&
+      craftHideCategory.includes(loadoutCategory)
+    ) {
       return false;
     }
     if (craftHideType.includes(type)) {

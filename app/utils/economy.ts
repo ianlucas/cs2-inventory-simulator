@@ -61,10 +61,6 @@ export function isItemCountable(item: CS2EconomyItem) {
   return COUNTABLE_ITEM_TYPES.includes(item.type);
 }
 
-export function getItemCategory(item: CS2EconomyItem) {
-  return item.categoryName ?? item.loadoutCategory;
-}
-
 export const newItemStartingId = 26817;
 export const newItemEndAt = 1784841228427;
 export const seedStringMaxLen = String(CS2_MAX_SEED).length;
