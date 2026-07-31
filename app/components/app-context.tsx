@@ -24,7 +24,7 @@ import { SyncAction } from "~/data/sync";
 import type { loader } from "~/root";
 import { pushToSync, sync } from "~/sync";
 import { updateEconomyLanguage } from "~/utils/economy";
-import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
+import { getFreeItemsToDisplay, safeLoadInventory } from "~/utils/inventory";
 import {
   cacheInventoryData,
   getCachedInventoryData,
@@ -98,7 +98,7 @@ export function AppProvider({
 }) {
   const inventorySpec = {
     data: user?.inventory
-      ? parseInventory(user?.inventory)
+      ? safeLoadInventory(user.inventory)?.getData()
       : rules.appCacheInventory
         ? getCachedInventoryData()
         : undefined,

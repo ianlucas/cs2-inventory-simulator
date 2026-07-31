@@ -13,7 +13,7 @@ import {
 } from "~/routes/api.action.resync._index";
 import { sync } from "~/sync";
 import { getJson } from "~/utils/fetch";
-import { parseInventory } from "~/utils/inventory";
+import { safeLoadInventory } from "~/utils/inventory";
 import { useInventory, useRules, useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { Modal, ModalHeader } from "./modal";
@@ -43,12 +43,12 @@ export function SyncIndicator() {
       setShowSyncErrorModal(true);
       const { syncedAt, inventory } =
         await getJson<ApiActionResyncData>(ApiActionResyncUrl);
+      const options = {
+        maxItems: inventoryMaxItems,
+        storageUnitMaxItems: inventoryStorageUnitMaxItems
+      };
       setInventory(
-        new CS2Inventory({
-          data: parseInventory(inventory),
-          maxItems: inventoryMaxItems,
-          storageUnitMaxItems: inventoryStorageUnitMaxItems
-        })
+        safeLoadInventory(inventory, options) ?? new CS2Inventory(options)
       );
       sync.syncedAt = syncedAt;
       setDisableContinueButton(false);

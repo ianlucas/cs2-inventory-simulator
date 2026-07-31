@@ -9,13 +9,12 @@ import {
   CS2EconomyItem,
   CS2Inventory,
   CS2InventoryItem,
-  CS2ItemType,
-  decodeInventoryData
+  CS2InventorySpec,
+  CS2ItemType
 } from "@ianlucas/cs2-lib";
 import lzstring from "lz-string";
 import type { ItemEditorAttributes } from "~/components/item-editor";
 import { safeParseJson } from "./misc";
-import { serverInventoryShape } from "./shapes";
 
 export const UNLOCKABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Container,
@@ -43,12 +42,15 @@ export const INSPECTABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Weapon
 ];
 
-export function parseInventory(inventory?: string | null) {
+export function safeLoadInventory(
+  rawInventory: string | null,
+  options?: Partial<CS2InventorySpec>
+) {
+  if (rawInventory === null) {
+    return undefined;
+  }
   try {
-    if (inventory == null) {
-      return undefined;
-    }
-    return serverInventoryShape.parse(decodeInventoryData(inventory).data);
+    return CS2Inventory.load(rawInventory, options);
   } catch {
     return undefined;
   }

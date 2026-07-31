@@ -16,7 +16,7 @@ export const loader = api(
     return await handleUserCachedResponse({
       args: null,
       generate(inventory) {
-        return inventory;
+        return inventory.getData();
       },
       throwBody: {},
       url: ApiInventoryUserIdUrl,

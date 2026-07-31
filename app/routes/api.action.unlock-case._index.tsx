@@ -15,7 +15,7 @@ import {
 } from "~/models/rule.server";
 import { updateUserInventory } from "~/models/user.server";
 import { conflict, methodNotAllowed } from "~/responses.server";
-import { parseInventory } from "~/utils/inventory";
+import { safeLoadInventory } from "~/utils/inventory";
 import { nonNegativeInt, positiveInt } from "~/utils/shapes";
 import type { Route } from "./+types/api.action.unlock-case._index";
 
@@ -47,11 +47,12 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (syncedAt !== currentSyncedAt.getTime()) {
     throw conflict;
   }
-  const inventory = new CS2Inventory({
-    data: parseInventory(rawInventory),
+  const options = {
     maxItems: await inventoryMaxItems.for(userId).get(),
     storageUnitMaxItems: await inventoryStorageUnitMaxItems.for(userId).get()
-  });
+  };
+  const inventory =
+    safeLoadInventory(rawInventory, options) ?? new CS2Inventory(options);
   const unlockedItem = inventory.get(caseUid).unlockContainer();
   inventory.unlockContainer(unlockedItem, caseUid, keyUid);
   const { syncedAt: responseSyncedAt } = await updateUserInventory(

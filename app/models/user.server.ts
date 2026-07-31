@@ -6,7 +6,7 @@
 import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { badRequest, conflict } from "~/responses.server";
-import { hasInventoryContent, parseInventory } from "~/utils/inventory";
+import { hasInventoryContent, safeLoadInventory } from "~/utils/inventory";
 import { recordInventoryWipe } from "./inventory-wipe-audit.server";
 import { inventoryMaxItems, inventoryStorageUnitMaxItems } from "./rule.server";
 
@@ -143,16 +143,16 @@ export async function manipulateUserInventory({
   syncedAt?: number;
   userId: string;
 }) {
-  const data = parseInventory(rawInventory);
-  const wipedInventory =
-    data === undefined && hasInventoryContent(rawInventory)
-      ? rawInventory
-      : undefined;
-  const inventory = new CS2Inventory({
-    data,
+  const options = {
     maxItems: await inventoryMaxItems.for(userId).get(),
     storageUnitMaxItems: await inventoryStorageUnitMaxItems.for(userId).get()
-  });
+  };
+  const loadedInventory = safeLoadInventory(rawInventory, options);
+  const wipedInventory =
+    loadedInventory === undefined && hasInventoryContent(rawInventory)
+      ? rawInventory
+      : undefined;
+  const inventory = loadedInventory ?? new CS2Inventory(options);
   try {
     await manipulate(inventory);
   } catch {
