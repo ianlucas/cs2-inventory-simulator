@@ -36,13 +36,6 @@ import type { Route } from "./+types/api.action.import-inspect-link";
 
 const rateLimiter = new RateLimiter(1000);
 
-function postParseInventoryItem(item: CS2BaseInventoryItem) {
-  if (!repairInventoryItem(CS2Economy, item)) {
-    throw badRequest;
-  }
-  return item;
-}
-
 async function enforceMaxAttachments(
   item: CS2BaseInventoryItem,
   userId: string
@@ -80,15 +73,19 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     .parse(await request.json());
   let item: CS2BaseInventoryItem;
   if (isSteamInspectLink(inspectLink)) {
-    item = postParseInventoryItem(
-      parseCSFloatItemInfo(CS2Economy, await fetchCSFloatItemInfo(inspectLink))
+    item = parseCSFloatItemInfo(
+      CS2Economy,
+      await fetchCSFloatItemInfo(inspectLink)
     );
   } else {
     try {
-      item = postParseInventoryItem(parseInspectLink(CS2Economy, inspectLink));
+      item = parseInspectLink(CS2Economy, inspectLink);
     } catch {
       throw badRequest;
     }
+  }
+  if (!repairInventoryItem(CS2Economy, item)) {
+    throw badRequest;
   }
   await enforceMaxAttachments(item, userId);
   return item;
