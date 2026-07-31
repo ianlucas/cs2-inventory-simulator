@@ -13,6 +13,7 @@ import {
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
+import { useEditItemFilter } from "~/components/hooks/use-item-hide-filters";
 import {
   EDITABLE_ITEM_TYPE,
   getInventoryItemShareUrl,
@@ -78,10 +79,6 @@ export function InventoryItem({
   const [, copyToClipboard] = useCopyToClipboard();
   const translate = useTranslate();
   const {
-    editHideCategory,
-    editHideId,
-    editHideModel,
-    editHideType,
     inventoryItemAllowApplyPatch,
     inventoryItemAllowApplySticker,
     inventoryItemAllowEdit,
@@ -98,6 +95,7 @@ export function InventoryItem({
   } = useRules();
   const [inventory] = useInventory();
   const user = useUser();
+  const isItemEditable = useEditItemFilter();
 
   const {
     clickContext,
@@ -120,8 +118,8 @@ export function InventoryItem({
   const isFreeInventoryItem = uid < 0;
 
   const isEquippable =
-    (item.model === undefined ||
-      !inventoryItemEquipHideModel.includes(item.model)) &&
+    (item.modelKey === undefined ||
+      !inventoryItemEquipHideModel.includes(item.modelKey)) &&
     !inventoryItemEquipHideType.includes(item.type);
   const canEquip =
     isEquippable &&
@@ -169,14 +167,7 @@ export function InventoryItem({
   const canInspectInGame =
     inventoryItemAllowInspectInGame &&
     (CS2_PREVIEW_INSPECTABLE_ITEMS.includes(item.type) || item.isNameTag());
-  const canEdit =
-    inventoryItemAllowEdit &&
-    isEditable &&
-    (item.category === undefined ||
-      !editHideCategory.includes(item.category)) &&
-    (item.type === undefined || !editHideType.includes(item.type)) &&
-    (item.model === undefined || !editHideModel.includes(item.model)) &&
-    !editHideId.includes(item.id);
+  const canEdit = inventoryItemAllowEdit && isEditable && isItemEditable(item);
   const canShare = inventoryItemAllowShare && item.isPaintable();
 
   function close(callBeforeClosing: () => void) {

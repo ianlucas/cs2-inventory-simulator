@@ -30,9 +30,9 @@ export function ItemButton({
   const [model, name] = nameItem(item, "editor-name");
   const clickable = onClick !== undefined;
   const showAltname =
-    item.altName !== undefined &&
-    (item.altName.includes("Collectible") ||
-      item.altName.includes("Commodity") ||
+    item.alternateName !== undefined &&
+    (item.alternateName.includes("Collectible") ||
+      item.alternateName.includes("Commodity") ||
       item.isPaintable());
 
   function handleClick() {
@@ -67,7 +67,7 @@ export function ItemButton({
           )}
           item={item}
           lazy
-          key={item.image}
+          key={item.imagePath}
         />
         <div
           className={clsx(
@@ -80,13 +80,15 @@ export function ItemButton({
               <TextSlider text={model} />
             </div>
           )}
-          <div style={{ color: ignoreRarityColor ? undefined : item.rarity }}>
+          <div
+            style={{ color: ignoreRarityColor ? undefined : item.rarityColor }}
+          >
             <TextSlider text={name} />
           </div>
-          {showAltname && item.altName !== undefined && (
+          {showAltname && item.alternateName !== undefined && (
             <TextSlider
               className="text-sm/3 text-neutral-200"
-              text={item.altName}
+              text={item.alternateName}
             />
           )}
         </div>

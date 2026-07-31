@@ -13,8 +13,9 @@ export function InventoryItemTooltipDescription({
   item: CS2InventoryItem;
 }) {
   const isAgent = item.type === CS2ItemType.Agent;
-  const baseDescription = (item.parent ?? item).desc;
-  const itemDescription = item.parent !== undefined ? item.desc : undefined;
+  const baseDescription = (item.parent ?? item).description;
+  const itemDescription =
+    item.parent !== undefined ? item.description : undefined;
 
   let leadDescription: string;
   let flavorDescription: string;

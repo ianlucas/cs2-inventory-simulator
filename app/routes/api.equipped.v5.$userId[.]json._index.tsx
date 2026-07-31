@@ -3,15 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { api } from "~/api.server";
 import { middleware } from "~/middleware.server";
 import { getRules } from "~/models/rule";
 import {
   inventoryItemEquipHideModel,
-  inventoryItemEquipHideType,
-  inventoryMaxItems,
-  inventoryStorageUnitMaxItems
+  inventoryItemEquipHideType
 } from "~/models/rule.server";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
 import { generate } from "~/utils/inventory-equipped-v5";
@@ -25,9 +22,7 @@ export const loader = api(
     const rules = await getRules(
       {
         inventoryItemEquipHideModel,
-        inventoryItemEquipHideType,
-        inventoryMaxItems,
-        inventoryStorageUnitMaxItems
+        inventoryItemEquipHideType
       },
       userId
     );
@@ -37,18 +32,11 @@ export const loader = api(
     ].join(";");
     return await handleUserCachedResponse({
       args,
-      generate(data) {
-        return generate(
-          new CS2Inventory({
-            data,
-            maxItems: rules.inventoryMaxItems,
-            storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
-          }),
-          {
-            models: rules.inventoryItemEquipHideModel,
-            types: rules.inventoryItemEquipHideType
-          }
-        );
+      generate(inventory) {
+        return generate(inventory, {
+          models: rules.inventoryItemEquipHideModel,
+          types: rules.inventoryItemEquipHideType
+        });
       },
       throwBody: {},
       url: ApiEquippedV5UserIdJsonUrl,

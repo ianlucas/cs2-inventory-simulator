@@ -24,15 +24,19 @@ const catalog = {
 
 CS2Economy.load({
   items: [
-    { id: 5, type: CS2ItemType.Weapon, rarity: CS2RarityColor.Common },
-    { id: 11, type: CS2ItemType.Weapon, rarity: CS2RarityColor.Common },
-    { id: 50, type: CS2ItemType.Sticker, rarity: CS2RarityColor.Common },
-    { id: 60, type: CS2ItemType.MusicKit, rarity: CS2RarityColor.Common },
-    { id: 61, type: CS2ItemType.Collectible, rarity: CS2RarityColor.Common },
-    { id: 62, type: CS2ItemType.Gloves, rarity: CS2RarityColor.Common },
-    { id: 63, type: CS2ItemType.Melee, rarity: CS2RarityColor.Common },
-    { id: 64, type: CS2ItemType.Sticker, rarity: CS2RarityColor.Common },
-    { id: 200, type: CS2ItemType.Sticker, rarity: CS2RarityColor.Common }
+    { id: 5, type: CS2ItemType.Weapon, rarityColor: CS2RarityColor.Common },
+    { id: 11, type: CS2ItemType.Weapon, rarityColor: CS2RarityColor.Common },
+    { id: 50, type: CS2ItemType.Sticker, rarityColor: CS2RarityColor.Common },
+    { id: 60, type: CS2ItemType.MusicKit, rarityColor: CS2RarityColor.Common },
+    {
+      id: 61,
+      type: CS2ItemType.Collectible,
+      rarityColor: CS2RarityColor.Common
+    },
+    { id: 62, type: CS2ItemType.Gloves, rarityColor: CS2RarityColor.Common },
+    { id: 63, type: CS2ItemType.Melee, rarityColor: CS2RarityColor.Common },
+    { id: 64, type: CS2ItemType.Sticker, rarityColor: CS2RarityColor.Common },
+    { id: 200, type: CS2ItemType.Sticker, rarityColor: CS2RarityColor.Common }
   ]
 });
 

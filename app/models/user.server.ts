@@ -3,12 +3,38 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Inventory } from "@ianlucas/cs2-lib";
+import { CS2Inventory, CS2InventorySpec } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { badRequest, conflict } from "~/responses.server";
-import { hasInventoryContent, parseInventory } from "~/utils/inventory";
-import { recordInventoryWipe } from "./inventory-wipe-audit.server";
+import {
+  hasInventoryContent,
+  loadOrCreateInventory,
+  safeLoadInventory
+} from "~/utils/inventory";
+import {
+  hasInventoryLoadChanges,
+  recordInventoryLoadChanges,
+  recordInventoryWipe
+} from "./inventory-recovery.server";
 import { inventoryMaxItems, inventoryStorageUnitMaxItems } from "./rule.server";
+
+export async function getUserInventoryOptions(userId: string) {
+  return {
+    maxItems: await inventoryMaxItems.for(userId).get(),
+    storageUnitMaxItems: await inventoryStorageUnitMaxItems.for(userId).get()
+  };
+}
+
+export async function loadOrCreateUserInventory(
+  userId: string,
+  rawInventory: string | null,
+  options?: Partial<CS2InventorySpec>
+) {
+  return loadOrCreateInventory(
+    rawInventory,
+    options ?? (await getUserInventoryOptions(userId))
+  );
+}
 
 export async function getUserInventory(userId: string) {
   return (
@@ -18,17 +44,6 @@ export async function getUserInventory(userId: string) {
         where: { id: userId }
       })
     )?.inventory ?? null
-  );
-}
-
-export async function getUserInventoryVersion(userId: string) {
-  return (
-    (
-      await prisma.user.findFirst({
-        select: { inventoryVersion: true },
-        where: { id: userId }
-      })
-    )?.inventoryVersion ?? null
   );
 }
 
@@ -90,11 +105,7 @@ export async function existsUser(userId: string) {
   );
 }
 
-export async function updateUserInventory(
-  userId: string,
-  inventory: string,
-  inventoryVersion?: number
-) {
+export async function updateUserInventory(userId: string, inventory: string) {
   const syncedAt = new Date();
   return await prisma.user.update({
     select: {
@@ -102,7 +113,6 @@ export async function updateUserInventory(
     },
     data: {
       inventory,
-      inventoryVersion,
       syncedAt
     },
     where: {
@@ -143,16 +153,13 @@ export async function manipulateUserInventory({
   syncedAt?: number;
   userId: string;
 }) {
-  const data = parseInventory(rawInventory);
+  const options = await getUserInventoryOptions(userId);
+  const loadedInventory = safeLoadInventory(rawInventory, options);
   const wipedInventory =
-    data === undefined && hasInventoryContent(rawInventory)
+    loadedInventory === undefined && hasInventoryContent(rawInventory)
       ? rawInventory
       : undefined;
-  const inventory = new CS2Inventory({
-    data,
-    maxItems: await inventoryMaxItems.for(userId).get(),
-    storageUnitMaxItems: await inventoryStorageUnitMaxItems.for(userId).get()
-  });
+  const inventory = loadedInventory ?? new CS2Inventory(options);
   try {
     await manipulate(inventory);
   } catch {
@@ -166,6 +173,15 @@ export async function manipulateUserInventory({
   }
   if (wipedInventory !== undefined) {
     await recordInventoryWipe(userId, wipedInventory);
+  } else if (
+    rawInventory !== null &&
+    hasInventoryLoadChanges(inventory.loadChanges)
+  ) {
+    await recordInventoryLoadChanges(
+      userId,
+      rawInventory,
+      inventory.loadChanges
+    );
   }
   return await updateUserInventory(userId, inventory.stringify());
 }

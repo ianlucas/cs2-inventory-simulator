@@ -20,11 +20,11 @@ export function useUnlockCase() {
 
   function handleUnlockCase(uid: number) {
     const selectedItem = inventory.get(uid);
-    if (selectedItem.keys !== undefined || selectedItem.isKey()) {
+    if (selectedItem.keyIds !== undefined || selectedItem.isKey()) {
       const keyItems = items.filter(
         ({ item }) =>
-          (selectedItem.isKey() && item.keys?.includes(selectedItem.id)) ||
-          (selectedItem.isContainer() && selectedItem.keys?.includes(item.id))
+          (selectedItem.isKey() && item.keyIds?.includes(selectedItem.id)) ||
+          (selectedItem.isContainer() && selectedItem.keyIds?.includes(item.id))
       );
       if (selectedItem.isContainer() && keyItems.length === 0) {
         playSound("case_drop");

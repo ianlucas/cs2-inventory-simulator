@@ -30,10 +30,10 @@ export function ItemImage({
   type ??= "default";
   const url =
     type === "default"
-      ? item.getImage(wear)
+      ? item.getImageUrl(wear)
       : type === "collection"
-        ? item.getCollectionImage()
-        : item.getSpecialsImage();
+        ? item.getCollectionImageUrl()
+        : item.getSpecialsImageUrl();
 
   const [loaded, setLoaded] = useState(
     cached.includes(url) || url.includes("steamcommunity")

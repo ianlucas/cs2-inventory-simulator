@@ -5,7 +5,7 @@
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useMemo, useState } from "react";
-import { baseStickerSlabId, isNewItem } from "~/utils/economy";
+import { isNewItem } from "~/utils/economy";
 import {
   ECONOMY_ITEM_FILTERS,
   EconomyItemFilter,
@@ -15,7 +15,7 @@ import {
 } from "~/utils/economy-filters";
 import { useCraftFilterRules } from "./use-craft-filter-rules";
 import { useInput } from "./use-input";
-import { useIsItemCraftable } from "./use-is-item-craftable";
+import { useCraftItemFilter } from "./use-item-hide-filters";
 
 export type ItemPickerState = ReturnType<typeof useItemPickerState>;
 
@@ -24,7 +24,7 @@ export function useItemPickerState({
 }: {
   onPickItem: (item: CS2EconomyItem) => void;
 }) {
-  const isItemCraftable = useIsItemCraftable();
+  const isItemCraftable = useCraftItemFilter();
   const categoryFilter = useCraftFilterRules();
   const newItems = useMemo(
     () => getAllPaidItems().filter(isNewItem).filter(isItemCraftable),
@@ -55,15 +55,16 @@ export function useItemPickerState({
   }
 
   function handleItemClick(item: CS2EconomyItem) {
-    if (!filter.hasModel || model !== undefined || !item.base) {
+    if (!filter.hasModel || model !== undefined || !item.isBase) {
       return onPickItem(item);
     }
     setQuery("");
-    setModel(item.model);
+    setModel(item.modelKey);
   }
 
-  function filterItem({ altName, id, name }: CS2EconomyItem) {
-    if (id === baseStickerSlabId) {
+  function filterItem(item: CS2EconomyItem) {
+    const { alternateName, name } = item;
+    if (item.isDefault && item.isKeychain()) {
       return false;
     }
     if (query.length < 2) {
@@ -75,7 +76,7 @@ export function useItemPickerState({
       .every(
         (word) =>
           name.toLocaleLowerCase().includes(word) ||
-          altName?.toLocaleLowerCase().includes(word) ||
+          alternateName?.toLocaleLowerCase().includes(word) ||
           false
       );
   }

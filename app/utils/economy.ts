@@ -6,14 +6,12 @@
 import {
   countDecimals,
   CS2_ITEMS,
-  CS2_KEYCHAIN_OFFSET_FACTOR,
+  CS2_KEYCHAIN_POSITION_FACTOR,
   CS2_MAX_KEYCHAIN_SEED,
   CS2_MAX_SEED,
-  CS2_MAX_STICKER_WEAR,
   CS2_MAX_STICKERS,
   CS2_MIN_KEYCHAIN_SEED,
   CS2_MIN_STICKER_ROTATION,
-  CS2_MIN_STICKER_WEAR,
   CS2_STICKER_OFFSET_FACTOR,
   CS2_STICKER_WEAR_FACTOR,
   CS2_WEAR_FACTOR,
@@ -22,8 +20,7 @@ import {
   CS2ItemTranslationByLanguage,
   CS2ItemType,
   CS2RarityColor,
-  fail,
-  isFactorPrecise
+  fail
 } from "@ianlucas/cs2-lib";
 import {
   CS2_PREVIEW_URL,
@@ -51,6 +48,42 @@ export const RarityLabel = {
   [CS2RarityColor.Immortal]: "Immortal"
 } as const;
 
+export function createItemHideFilter({
+  hideCategory,
+  hideType,
+  hideModel,
+  hideId
+}: {
+  hideCategory: string[];
+  hideType: string[];
+  hideModel: string[];
+  hideId: number[];
+}) {
+  return function filter({
+    id,
+    type,
+    modelKey,
+    loadoutCategory
+  }: CS2EconomyItem) {
+    if (
+      loadoutCategory !== undefined &&
+      hideCategory.includes(loadoutCategory)
+    ) {
+      return false;
+    }
+    if (hideType.includes(type)) {
+      return false;
+    }
+    if (modelKey !== undefined && hideModel.includes(modelKey)) {
+      return false;
+    }
+    if (hideId.includes(id)) {
+      return false;
+    }
+    return true;
+  };
+}
+
 export function updateEconomyLanguage(
   language: CS2ItemTranslationByLanguage[string]
 ) {
@@ -64,7 +97,6 @@ export function isItemCountable(item: CS2EconomyItem) {
   return COUNTABLE_ITEM_TYPES.includes(item.type);
 }
 
-export const baseStickerSlabId = 15200;
 export const newItemStartingId = 26817;
 export const newItemEndAt = 1784841228427;
 export const seedStringMaxLen = String(CS2_MAX_SEED).length;
@@ -73,7 +105,7 @@ export const stickerWearStringMaxLen = String(CS2_STICKER_WEAR_FACTOR).length;
 const stickerOffsetDecimalPlaces = countDecimals(CS2_STICKER_OFFSET_FACTOR);
 export const stickerOffsetStringMaxLen =
   "-0.".length + stickerOffsetDecimalPlaces;
-const keychainOffsetDecimalPlaces = countDecimals(CS2_KEYCHAIN_OFFSET_FACTOR);
+const keychainPositionDecimalPlaces = countDecimals(CS2_KEYCHAIN_POSITION_FACTOR);
 export const stickerRotationStringMaxLen =
   String(CS2_MIN_STICKER_ROTATION).length + ".5".length;
 
@@ -85,42 +117,22 @@ export function stickerWearToString(wear: number) {
   return wear.toFixed(stickerWearStringMaxLen - 2);
 }
 
-export function validateStickerWear(wear: number) {
-  return (
-    isFactorPrecise(wear, CS2_STICKER_WEAR_FACTOR) &&
-    wear >= CS2_MIN_STICKER_WEAR &&
-    wear <= CS2_MAX_STICKER_WEAR
-  );
-}
-
 export function stickerOffsetToString(offset: number) {
   return offset.toFixed(stickerOffsetDecimalPlaces);
 }
 
-export function validateStickerOffset(
-  offset: number,
-  min: number | undefined,
-  max: number | undefined
-) {
-  return (
-    isFactorPrecise(offset, CS2_STICKER_OFFSET_FACTOR) &&
-    (min === undefined || offset >= min) &&
-    (max === undefined || offset <= max)
-  );
+export function keychainPositionToString(offset: number) {
+  return offset.toFixed(keychainPositionDecimalPlaces);
 }
 
-export function keychainOffsetToString(offset: number) {
-  return offset.toFixed(keychainOffsetDecimalPlaces);
-}
-
-export function keychainOffsetStringMaxLen(min: number, max: number) {
+export function keychainPositionStringMaxLen(min: number, max: number) {
   return Math.max(
-    keychainOffsetToString(min).length,
-    keychainOffsetToString(max).length
+    keychainPositionToString(min).length,
+    keychainPositionToString(max).length
   );
 }
 
-export function getDefaultKeychainOffset(
+export function getDefaultKeychainPosition(
   min: number | undefined,
   max: number | undefined
 ) {
@@ -132,20 +144,6 @@ export function getDefaultKeychainOffset(
   }
   return 0;
 }
-
-export function validateKeychainOffset(
-  offset: number,
-  min: number | undefined,
-  max: number | undefined
-) {
-  return (
-    isFactorPrecise(offset, CS2_KEYCHAIN_OFFSET_FACTOR) &&
-    (min === undefined || offset >= min) &&
-    (max === undefined || offset <= max)
-  );
-}
-
-export { validateStickerRotation } from "@ianlucas/cs2-lib";
 
 export const stickerSchemaStringMaxLen = String(CS2_MAX_STICKERS - 1).length;
 

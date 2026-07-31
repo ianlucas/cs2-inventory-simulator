@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
@@ -13,7 +12,7 @@ import {
 } from "~/routes/api.action.resync._index";
 import { sync } from "~/sync";
 import { getJson } from "~/utils/fetch";
-import { parseInventory } from "~/utils/inventory";
+import { loadOrCreateInventory } from "~/utils/inventory";
 import { useInventory, useRules, useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { Modal, ModalHeader } from "./modal";
@@ -44,8 +43,7 @@ export function SyncIndicator() {
       const { syncedAt, inventory } =
         await getJson<ApiActionResyncData>(ApiActionResyncUrl);
       setInventory(
-        new CS2Inventory({
-          data: parseInventory(inventory),
+        loadOrCreateInventory(inventory, {
           maxItems: inventoryMaxItems,
           storageUnitMaxItems: inventoryStorageUnitMaxItems
         })

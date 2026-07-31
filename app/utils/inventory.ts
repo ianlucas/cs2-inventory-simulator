@@ -9,12 +9,12 @@ import {
   CS2EconomyItem,
   CS2Inventory,
   CS2InventoryItem,
+  CS2InventorySpec,
   CS2ItemType
 } from "@ianlucas/cs2-lib";
 import lzstring from "lz-string";
 import type { ItemEditorAttributes } from "~/components/item-editor";
 import { safeParseJson } from "./misc";
-import { serverInventoryShape } from "./shapes";
 
 export const UNLOCKABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Container,
@@ -42,16 +42,28 @@ export const INSPECTABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Weapon
 ];
 
-export function parseInventory(inventory?: string | null) {
+export function safeLoadInventory(
+  rawInventory: string | null,
+  options?: Partial<CS2InventorySpec>
+) {
+  if (rawInventory === null) {
+    return undefined;
+  }
   try {
-    const data = CS2Inventory.parse(inventory);
-    if (data === undefined) {
-      return undefined;
-    }
-    return serverInventoryShape.parse(new CS2Inventory({ data }).getData());
+    return CS2Inventory.load(rawInventory, {
+      dropEmptyDefaultItems: true,
+      ...options
+    });
   } catch {
     return undefined;
   }
+}
+
+export function loadOrCreateInventory(
+  rawInventory: string | null,
+  options?: Partial<CS2InventorySpec>
+) {
+  return safeLoadInventory(rawInventory, options) ?? new CS2Inventory(options);
 }
 
 export function hasInventoryContent(
@@ -100,7 +112,7 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
     return [];
   }
   return CS2Economy.filterItems({
-    free: true
+    isDefault: true
   })
     .filter(
       (item) =>

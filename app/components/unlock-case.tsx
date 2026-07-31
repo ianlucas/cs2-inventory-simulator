@@ -66,8 +66,8 @@ export function UnlockCase({
 
   const caseItem = useInventoryItem(caseUid);
   const neededKeyItem =
-    caseItem.keys !== undefined
-      ? CS2Economy.getById(caseItem.keys[0])
+    caseItem.keyIds !== undefined
+      ? CS2Economy.getById(caseItem.keyIds[0])
       : undefined;
   const keyItem = useTryInventoryItem(keyUid);
   const wait = useTimer();
@@ -108,7 +108,7 @@ export function UnlockCase({
       };
       wait(() => {
         setHideCaseContents(true);
-        if (caseItem.keys !== undefined) {
+        if (caseItem.keyIds !== undefined) {
           playSound("case_unlock");
         }
         wait(() => {

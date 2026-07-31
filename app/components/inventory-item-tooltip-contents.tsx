@@ -30,7 +30,7 @@ export function InventoryItemTooltipContents({
         <div
           className="flex items-center gap-1"
           key={item.id}
-          style={{ color: item.rarity }}
+          style={{ color: item.rarityColor }}
         >
           {unlockedItem !== undefined && (
             <div className="w-4 text-right">

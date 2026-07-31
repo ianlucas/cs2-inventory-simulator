@@ -3,15 +3,28 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { parseInventory } from "./inventory";
-import { getFromLocalStorage, setToLocalStorage } from "./localstorage";
+import { safeLoadInventory } from "./inventory";
+import {
+  getFromLocalStorage,
+  removeFromLocalStorage,
+  setToLocalStorage
+} from "./localstorage";
 
 export function cacheInventoryData(value: string) {
   return setToLocalStorage("inventoryItems", value);
 }
 
 export function getCachedInventoryData() {
-  return parseInventory(getFromLocalStorage("inventoryItems"));
+  const raw = getFromLocalStorage("inventoryItems");
+  if (raw == null) {
+    return undefined;
+  }
+  const inventory = safeLoadInventory(raw);
+  if (inventory === undefined) {
+    removeFromLocalStorage("inventoryItems");
+    return undefined;
+  }
+  return inventory.getData();
 }
 
 export function getSanitizedCachedInventoryData() {

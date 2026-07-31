@@ -20,7 +20,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
-import { getDefaultKeychainOffset, sortByName } from "~/utils/economy";
+import { getDefaultKeychainPosition, sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import { AppliedKeychainEditor } from "./applied-keychain-editor";
@@ -60,28 +60,19 @@ export function KeychainPicker({
   const keychains = useMemo(
     () =>
       Array.from(CS2Economy.items.values())
-        .filter((item) => !item.free && item.isKeychain())
+        .filter((item) => !item.isDefault && item.isKeychain())
         .sort(sortByName),
     []
   );
-  const defaultKeychainData = useMemo(
-    () => ({
+  const defaultKeychainData = useMemo(() => {
+    const bounds = forItem?.getKeychainPositionBounds();
+    return {
       seed: CS2_MIN_KEYCHAIN_SEED,
-      x: getDefaultKeychainOffset(
-        forItem?.getMinimumKeychainOffsetX(),
-        forItem?.getMaximumKeychainOffsetX()
-      ),
-      y: getDefaultKeychainOffset(
-        forItem?.getMinimumKeychainOffsetY(),
-        forItem?.getMaximumKeychainOffsetY()
-      ),
-      z: getDefaultKeychainOffset(
-        forItem?.getMinimumKeychainOffsetZ(),
-        forItem?.getMaximumKeychainOffsetZ()
-      )
-    }),
-    [forItem]
-  );
+      x: getDefaultKeychainPosition(bounds?.x.min, bounds?.x.max),
+      y: getDefaultKeychainPosition(bounds?.y.min, bounds?.y.max),
+      z: getDefaultKeychainPosition(bounds?.z.min, bounds?.z.max)
+    };
+  }, [forItem]);
   const [appliedKeychainData, setAppliedKeychainData] =
     useState(defaultKeychainData);
   const [selected, setSelected] = useState<CS2EconomyItem>();

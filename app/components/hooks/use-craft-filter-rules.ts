@@ -11,8 +11,11 @@ export function useCraftFilterRules() {
   const { craftHideCategory, craftHideType, craftHideFilterType } = useRules();
   return useMemo(
     () =>
-      function filter({ category, type }: EconomyItemFilter) {
-        if (category !== undefined && craftHideCategory.includes(category)) {
+      function filter({ loadoutCategory, type }: EconomyItemFilter) {
+        if (
+          loadoutCategory !== undefined &&
+          craftHideCategory.includes(loadoutCategory)
+        ) {
           return false;
         }
         if (
@@ -23,6 +26,6 @@ export function useCraftFilterRules() {
         }
         return true;
       },
-    [craftHideCategory, craftHideType]
+    [craftHideCategory, craftHideType, craftHideFilterType]
   );
 }

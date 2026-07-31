@@ -9,7 +9,6 @@ import { useNameItem } from "~/components/hooks/use-name-item";
 import { has } from "~/utils/misc";
 
 export function ItemEditorName({ item }: { item: CS2EconomyItem }) {
-  const { rarity } = item;
   const nameItem = useNameItem();
   const [model, name] = nameItem(item, "editor-name");
 
@@ -18,7 +17,7 @@ export function ItemEditorName({ item }: { item: CS2EconomyItem }) {
       {has(model) && <div className="text-sm text-neutral-400">{model}</div>}
       <div
         className={clsx(has(model) && "-mt-2", "font-bold")}
-        style={{ color: rarity }}
+        style={{ color: item.rarityColor }}
       >
         {name}
       </div>

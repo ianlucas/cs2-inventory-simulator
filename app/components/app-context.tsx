@@ -24,7 +24,7 @@ import { SyncAction } from "~/data/sync";
 import type { loader } from "~/root";
 import { pushToSync, sync } from "~/sync";
 import { updateEconomyLanguage } from "~/utils/economy";
-import { getFreeItemsToDisplay, parseInventory } from "~/utils/inventory";
+import { getFreeItemsToDisplay } from "~/utils/inventory";
 import {
   cacheInventoryData,
   getCachedInventoryData,
@@ -97,11 +97,9 @@ export function AppProvider({
   children: ReactNode;
 }) {
   const inventorySpec = {
-    data: user?.inventory
-      ? parseInventory(user?.inventory)
-      : rules.appCacheInventory
-        ? getCachedInventoryData()
-        : undefined,
+    data:
+      user?.inventory ??
+      (rules.appCacheInventory ? getCachedInventoryData() : undefined),
     maxItems: rules.inventoryMaxItems,
     storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
   } satisfies Partial<CS2InventorySpec>;

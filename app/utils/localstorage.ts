@@ -18,6 +18,12 @@ export function setToLocalStorage(key: string, value: string) {
   }
 }
 
+export function removeFromLocalStorage(key: string) {
+  if (typeof document !== "undefined") {
+    return window.localStorage.removeItem(key);
+  }
+}
+
 export function getTypedFromLocalStorage<T>(key: string, defaultValue: T): T {
   const value = getFromLocalStorage(key);
   if (typeof value === "string") {

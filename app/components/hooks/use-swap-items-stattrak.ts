@@ -45,7 +45,8 @@ export function useSwapItemsStatTrak() {
             item.statTrak !== undefined &&
             xuid !== uid &&
             selectedItem.type === item.type &&
-            (selectedItem.isMusicKit() || selectedItem.def === item.def)
+            (selectedItem.isMusicKit() ||
+              selectedItem.definitionIndex === item.definitionIndex)
         ),
         type: "swap-items-stattrak"
       });

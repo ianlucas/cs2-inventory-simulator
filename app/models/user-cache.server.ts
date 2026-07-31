@@ -3,12 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2InventoryData } from "@ianlucas/cs2-lib";
+import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { res } from "~/responses.server";
-import { parseInventory } from "~/utils/inventory";
-import { getUserInventory, getUserSyncedAt } from "./user.server";
+import { safeLoadInventory } from "~/utils/inventory";
+import {
+  getUserInventory,
+  getUserInventoryOptions,
+  getUserSyncedAt
+} from "./user.server";
 
 export async function handleUserCachedResponse({
   args,
@@ -19,8 +23,8 @@ export async function handleUserCachedResponse({
 }: {
   args: string | null;
   generate:
-    | ((inventory: CS2InventoryData, userId: string) => unknown)
-    | ((inventory: CS2InventoryData, userId: string) => Promise<unknown>);
+    | ((inventory: CS2Inventory, userId: string) => unknown)
+    | ((inventory: CS2Inventory, userId: string) => Promise<unknown>);
   throwBody: object | string;
   url: string;
   userId: string;
@@ -49,8 +53,11 @@ export async function handleUserCachedResponse({
   if (cache !== null) {
     return res(cache.body, mimeType);
   }
-  const inventory = parseInventory(await getUserInventory(userId));
-  if (!inventory) {
+  const inventory = safeLoadInventory(
+    await getUserInventory(userId),
+    await getUserInventoryOptions(userId)
+  );
+  if (inventory === undefined) {
     throw typeof throwBody === "string"
       ? res(throwBody, mimeType)
       : Response.json(throwBody);

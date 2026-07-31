@@ -105,7 +105,7 @@ export function InventoryItemTile({
       </div>
       <div
         className="h-1 shadow-sm shadow-black/50"
-        style={{ backgroundColor: item.rarity }}
+        style={{ backgroundColor: item.rarityColor }}
       />
       <div className="font-display mt-1 text-[12px]/3 wrap-break-word text-white drop-shadow-[0_0_1px_rgba(0,0,0,1)]">
         {has(model) && <div className="font-bold">{model}</div>}

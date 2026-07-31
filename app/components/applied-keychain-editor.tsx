@@ -7,18 +7,18 @@ import { faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import {
-  CS2_KEYCHAIN_OFFSET_FACTOR,
+  CS2_INVENTORY_RULES,
+  CS2_KEYCHAIN_POSITION_FACTOR,
   CS2_MAX_KEYCHAIN_SEED,
   CS2_MIN_KEYCHAIN_SEED
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useEffect } from "react";
 import {
-  getDefaultKeychainOffset,
-  keychainOffsetStringMaxLen,
-  keychainOffsetToString,
+  getDefaultKeychainPosition,
+  keychainPositionStringMaxLen,
+  keychainPositionToString,
   keychainSeedStringMaxLen,
-  validateKeychainOffset,
   validateKeychainSeed
 } from "~/utils/economy";
 import { useTranslate } from "./app-context";
@@ -52,12 +52,13 @@ export function AppliedKeychainEditor({
 }) {
   const translate = useTranslate();
   const attributes = useKeyValues(value);
-  const keychainOffsetXMin = forItem?.getMinimumKeychainOffsetX();
-  const keychainOffsetXMax = forItem?.getMaximumKeychainOffsetX();
-  const keychainOffsetYMin = forItem?.getMinimumKeychainOffsetY();
-  const keychainOffsetYMax = forItem?.getMaximumKeychainOffsetY();
-  const keychainOffsetZMin = forItem?.getMinimumKeychainOffsetZ();
-  const keychainOffsetZMax = forItem?.getMaximumKeychainOffsetZ();
+  const keychainPositionBounds = forItem?.getKeychainPositionBounds();
+  const keychainPositionXMin = keychainPositionBounds?.x.min;
+  const keychainPositionXMax = keychainPositionBounds?.x.max;
+  const keychainPositionYMin = keychainPositionBounds?.y.min;
+  const keychainPositionYMax = keychainPositionBounds?.y.max;
+  const keychainPositionZMin = keychainPositionBounds?.z.min;
+  const keychainPositionZMax = keychainPositionBounds?.z.max;
 
   async function handleReset() {
     if (
@@ -70,9 +71,9 @@ export function AppliedKeychainEditor({
     ) {
       attributes.setValue({
         seed: CS2_MIN_KEYCHAIN_SEED,
-        x: getDefaultKeychainOffset(keychainOffsetXMin, keychainOffsetXMax),
-        y: getDefaultKeychainOffset(keychainOffsetYMin, keychainOffsetYMax),
-        z: getDefaultKeychainOffset(keychainOffsetZMin, keychainOffsetZMax)
+        x: getDefaultKeychainPosition(keychainPositionXMin, keychainPositionXMax),
+        y: getDefaultKeychainPosition(keychainPositionYMin, keychainPositionYMax),
+        z: getDefaultKeychainPosition(keychainPositionZMin, keychainPositionZMax)
       });
     }
   }
@@ -103,87 +104,78 @@ export function AppliedKeychainEditor({
           </EditorLabel>
         )}
         {!isHideKeychainX &&
-          keychainOffsetXMin !== undefined &&
-          keychainOffsetXMax !== undefined && (
+          keychainPositionXMin !== undefined &&
+          keychainPositionXMax !== undefined && (
             <EditorLabel label={translate("EditorKeychainX")}>
               <EditorStepRangeWithInput
                 inputStyles="w-24 min-w-0"
-                max={keychainOffsetXMax}
-                maxLength={keychainOffsetStringMaxLen(
-                  keychainOffsetXMin,
-                  keychainOffsetXMax
+                max={keychainPositionXMax}
+                maxLength={keychainPositionStringMaxLen(
+                  keychainPositionXMin,
+                  keychainPositionXMax
                 )}
-                min={keychainOffsetXMin}
+                min={keychainPositionXMin}
                 onChange={attributes.update("x")}
                 randomizable
-                step={CS2_KEYCHAIN_OFFSET_FACTOR}
+                step={CS2_KEYCHAIN_POSITION_FACTOR}
                 stepRangeStyles="flex-1"
-                transform={keychainOffsetToString}
+                transform={keychainPositionToString}
                 type="float"
                 validate={(value) =>
-                  validateKeychainOffset(
-                    value,
-                    keychainOffsetXMin,
-                    keychainOffsetXMax
-                  )
+                  forItem !== undefined &&
+                  CS2_INVENTORY_RULES.keychainPositionX.check(value, forItem)
                 }
                 value={attributes.value.x}
               />
             </EditorLabel>
           )}
         {!isHideKeychainY &&
-          keychainOffsetYMin !== undefined &&
-          keychainOffsetYMax !== undefined && (
+          keychainPositionYMin !== undefined &&
+          keychainPositionYMax !== undefined && (
             <EditorLabel label={translate("EditorKeychainY")}>
               <EditorStepRangeWithInput
                 inputStyles="w-24 min-w-0"
-                max={keychainOffsetYMax}
-                maxLength={keychainOffsetStringMaxLen(
-                  keychainOffsetYMin,
-                  keychainOffsetYMax
+                max={keychainPositionYMax}
+                maxLength={keychainPositionStringMaxLen(
+                  keychainPositionYMin,
+                  keychainPositionYMax
                 )}
-                min={keychainOffsetYMin}
+                min={keychainPositionYMin}
                 onChange={attributes.update("y")}
                 randomizable
-                step={CS2_KEYCHAIN_OFFSET_FACTOR}
+                step={CS2_KEYCHAIN_POSITION_FACTOR}
                 stepRangeStyles="flex-1"
-                transform={keychainOffsetToString}
+                transform={keychainPositionToString}
                 type="float"
                 validate={(value) =>
-                  validateKeychainOffset(
-                    value,
-                    keychainOffsetYMin,
-                    keychainOffsetYMax
-                  )
+                  forItem !== undefined &&
+                  CS2_INVENTORY_RULES.keychainPositionY.check(value, forItem)
                 }
                 value={attributes.value.y}
               />
             </EditorLabel>
           )}
         {!isHideKeychainZ &&
-          keychainOffsetZMin !== undefined &&
-          keychainOffsetZMax !== undefined && (
+          keychainPositionZMin !== undefined &&
+          keychainPositionZMax !== undefined && (
             <EditorLabel label={translate("EditorKeychainZ")}>
               <EditorStepRangeWithInput
                 inputStyles="w-24 min-w-0"
-                max={keychainOffsetZMax}
-                maxLength={keychainOffsetStringMaxLen(
-                  keychainOffsetZMin,
-                  keychainOffsetZMax
+                max={keychainPositionZMax}
+                maxLength={keychainPositionStringMaxLen(
+                  keychainPositionZMin,
+                  keychainPositionZMax
                 )}
-                min={keychainOffsetZMin}
+                min={keychainPositionZMin}
                 onChange={attributes.update("z")}
                 randomizable
-                step={CS2_KEYCHAIN_OFFSET_FACTOR}
+                step={CS2_KEYCHAIN_POSITION_FACTOR}
                 stepRangeStyles="flex-1"
-                transform={keychainOffsetToString}
+                transform={keychainPositionToString}
                 type="float"
                 validate={(value) =>
-                  validateKeychainOffset(
-                    value,
-                    keychainOffsetZMin,
-                    keychainOffsetZMax
-                  )
+                  forItem !== undefined &&
+                  CS2_INVENTORY_RULES.keychainPositionZ.check(value, forItem)
                 }
                 value={attributes.value.z}
               />

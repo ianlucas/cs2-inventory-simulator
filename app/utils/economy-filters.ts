@@ -7,7 +7,7 @@ import { CS2Economy, CS2ItemType } from "@ianlucas/cs2-lib";
 
 export const ECONOMY_ITEM_FILTERS = [
   {
-    category: "",
+    loadoutCategory: "",
     hasModel: false,
     icon: "new",
     isFree: false,
@@ -16,7 +16,7 @@ export const ECONOMY_ITEM_FILTERS = [
     type: CS2ItemType.Stub
   },
   {
-    category: "secondary",
+    loadoutCategory: "secondary",
     hasModel: true,
     icon: "pistol",
     isFree: true,
@@ -24,7 +24,7 @@ export const ECONOMY_ITEM_FILTERS = [
     type: CS2ItemType.Weapon
   },
   {
-    category: "smg",
+    loadoutCategory: "smg",
     hasModel: true,
     icon: "smg",
     isFree: true,
@@ -32,7 +32,7 @@ export const ECONOMY_ITEM_FILTERS = [
     type: CS2ItemType.Weapon
   },
   {
-    category: "heavy",
+    loadoutCategory: "heavy",
     hasModel: true,
     isFree: true,
     icon: "heavy",
@@ -40,7 +40,7 @@ export const ECONOMY_ITEM_FILTERS = [
     type: CS2ItemType.Weapon
   },
   {
-    category: "rifle",
+    loadoutCategory: "rifle",
     hasModel: true,
     isFree: true,
     icon: "rifle",
@@ -48,7 +48,7 @@ export const ECONOMY_ITEM_FILTERS = [
     type: CS2ItemType.Weapon
   },
   {
-    category: "equipment",
+    loadoutCategory: "equipment",
     hasModel: true,
     icon: "equipment",
     isFree: true,
@@ -133,29 +133,30 @@ export const ECONOMY_ITEM_FILTERS = [
 export type EconomyItemFilter = (typeof ECONOMY_ITEM_FILTERS)[number];
 
 export function getBaseItems({
-  category,
+  loadoutCategory,
   hasModel,
   type,
   isFree
 }: EconomyItemFilter) {
   return CS2Economy.filterItems({
-    category,
+    loadoutCategory,
     type,
-    base: hasModel ? true : undefined
+    isBase: hasModel ? true : undefined
   }).filter(
-    ({ free }) => (hasModel && isFree ? free : !free) || (!hasModel && !free)
+    ({ isDefault }) =>
+      (hasModel && isFree ? isDefault : !isDefault) || (!hasModel && !isDefault)
   );
 }
 
 export function getPaidItems({ type }: EconomyItemFilter, model: string) {
   return CS2Economy.filterItems({
-    model
-  }).filter(({ base }) => type === CS2ItemType.Melee || !base);
+    modelKey: model
+  }).filter(({ isBase }) => type === CS2ItemType.Melee || !isBase);
 }
 
 export function getAllPaidItems() {
   return CS2Economy.itemsAsArray.filter(
-    ({ base, type }) =>
-      type !== CS2ItemType.Stub && (type === CS2ItemType.Melee || !base)
+    ({ isBase, type }) =>
+      type !== CS2ItemType.Stub && (type === CS2ItemType.Melee || !isBase)
   );
 }

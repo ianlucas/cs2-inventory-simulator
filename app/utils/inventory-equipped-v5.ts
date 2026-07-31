@@ -71,8 +71,8 @@ export async function generate(
     const data = item;
 
     const isEquippable =
-      (data.model === undefined ||
-        !nonEquippable.models.includes(data.model)) &&
+      (data.modelKey === undefined ||
+        !nonEquippable.models.includes(data.modelKey)) &&
       !nonEquippable.types.includes(data.type);
 
     if (!isEquippable) {
@@ -91,23 +91,23 @@ export async function generate(
       }
       switch (data.type) {
         case CS2ItemType.MusicKit:
-          assert(data.index);
+          assert(data.variantIndex);
           musicKit = {
-            musicId: data.index,
+            musicId: data.variantIndex,
             stattrak: item.statTrak ?? -1,
             uid: item.uid
           };
           break;
         case CS2ItemType.Collectible:
-          collectible = { def: data.def };
+          collectible = { def: data.definitionIndex };
           break;
         case CS2ItemType.Melee:
           assert(team);
-          assert(data.def);
+          assert(data.definitionIndex);
           knives[team] = hash({
-            def: data.def,
+            def: data.definitionIndex,
             nametag: item.nameTag ?? "",
-            paint: data.index ?? 0,
+            paint: data.variantIndex ?? 0,
             seed: item.seed ?? CS2_MIN_SEED,
             stattrak: item.statTrak ?? -1,
             stickers: [],
@@ -117,25 +117,25 @@ export async function generate(
           break;
         case CS2ItemType.Gloves:
           assert(team);
-          assert(data.def);
+          assert(data.definitionIndex);
           gloves[team] = hash({
-            def: data.def,
-            paint: data.index ?? 0,
+            def: data.definitionIndex,
+            paint: data.variantIndex ?? 0,
             seed: item.seed ?? CS2_MIN_SEED,
             wear: item.getWear()
           });
           break;
         case CS2ItemType.Weapon: {
-          assert(data.def);
+          assert(data.definitionIndex);
           const weapon = team === CS2Team.CT ? ctWeapons : tWeapons;
-          weapon[data.def] = hash({
-            def: data.def,
+          weapon[data.definitionIndex] = hash({
+            def: data.definitionIndex,
             nametag: item.nameTag ?? "",
-            paint: data.index ?? 0,
+            paint: data.variantIndex ?? 0,
             seed: item.seed ?? CS2_MIN_SEED,
             stattrak: item.statTrak ?? -1,
             stickers: item.someStickers().map(([index, sticker]) => ({
-              def: CS2Economy.getById(sticker.id).index ?? 0,
+              def: CS2Economy.getById(sticker.id).variantIndex ?? 0,
               rotation: sticker.rotation,
               schema: sticker.schema,
               slot: index,
@@ -146,10 +146,10 @@ export async function generate(
             keychains: item.someKeychains().map(([index, keychain]) => {
               const keychainEcon = CS2Economy.getById(keychain.id);
               return {
-                def: keychainEcon.index ?? 0,
+                def: keychainEcon.variantIndex ?? 0,
                 seed: keychain.seed ?? CS2_MIN_KEYCHAIN_SEED,
                 slot: index,
-                sticker: keychainEcon.wrappedSticker?.index,
+                sticker: keychainEcon.displayedSticker?.variantIndex,
                 x: keychain.x,
                 y: keychain.y,
                 z: keychain.z
@@ -163,18 +163,18 @@ export async function generate(
         case CS2ItemType.Agent:
           assert(team);
           agents[team] = hash({
-            def: data.def,
+            def: data.definitionIndex,
             stickers: data.somePatches().map(([index, patch]) => ({
-              def: CS2Economy.getById(patch).index ?? 0,
+              def: CS2Economy.getById(patch).variantIndex ?? 0,
               slot: index
             }))
           });
           break;
         case CS2ItemType.Graffiti:
-          assert(data.index);
+          assert(data.variantIndex);
           graffiti = {
-            def: data.index,
-            tint: data.tint ?? 0
+            def: data.variantIndex,
+            tint: data.tintIndex ?? 0
           };
           break;
       }

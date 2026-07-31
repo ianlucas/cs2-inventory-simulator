@@ -12,10 +12,12 @@ import {
   CS2_MIN_STICKER_ROTATION,
   CS2_MIN_STICKER_WEAR,
   CS2_STICKER_OFFSET_FACTOR,
+  CS2_INVENTORY_RULES,
   CS2_STICKER_ROTATION_STEP,
   CS2_STICKER_WEAR_FACTOR,
   CS2EconomyItem,
-  snapStickerRotation
+  snapStickerRotation,
+  validateStickerRotation
 } from "@ianlucas/cs2-lib";
 import {
   generateInspectLink,
@@ -31,10 +33,7 @@ import {
   stickerSchemaStringMaxLen,
   stickerWearStringMaxLen,
   stickerWearToString,
-  validateStickerOffset,
-  validateStickerRotation,
-  validateStickerSchema,
-  validateStickerWear
+  validateStickerSchema
 } from "~/utils/economy";
 import { createFakeInventoryItemFromBase } from "~/utils/inventory";
 import { useTranslate } from "./app-context";
@@ -107,10 +106,11 @@ export function AppliedStickerEditor({
   const attributes = useKeyValues(value);
   const canPreviewItem =
     slot !== undefined && forItem !== undefined && stickers !== undefined;
-  const stickerOffsetXMin = forItem?.getMinimumStickerOffsetX();
-  const stickerOffsetXMax = forItem?.getMaximumStickerOffsetX();
-  const stickerOffsetYMin = forItem?.getMinimumStickerOffsetY();
-  const stickerOffsetYMax = forItem?.getMaximumStickerOffsetY();
+  const stickerOffsetBounds = forItem?.getStickerOffsetBounds();
+  const stickerOffsetXMin = stickerOffsetBounds?.x.min;
+  const stickerOffsetXMax = stickerOffsetBounds?.x.max;
+  const stickerOffsetYMin = stickerOffsetBounds?.y.min;
+  const stickerOffsetYMax = stickerOffsetBounds?.y.max;
 
   function handlePreview() {
     if (!canPreviewItem) {
@@ -178,7 +178,9 @@ export function AppliedStickerEditor({
               stepRangeStyles="flex-1"
               transform={stickerWearToString}
               type="float"
-              validate={validateStickerWear}
+              validate={(wear) =>
+                CS2_INVENTORY_RULES.stickerWear.check(wear, item)
+              }
               value={attributes.value.wear}
             />
           </EditorLabel>
@@ -228,11 +230,8 @@ export function AppliedStickerEditor({
                 transform={stickerOffsetToString}
                 type="float"
                 validate={(value) =>
-                  validateStickerOffset(
-                    value,
-                    stickerOffsetXMin,
-                    stickerOffsetXMax
-                  )
+                  forItem !== undefined &&
+                  CS2_INVENTORY_RULES.stickerX.check(value, forItem)
                 }
                 value={attributes.value.x}
               />
@@ -254,11 +253,8 @@ export function AppliedStickerEditor({
                 transform={stickerOffsetToString}
                 type="float"
                 validate={(value) =>
-                  validateStickerOffset(
-                    value,
-                    stickerOffsetYMin,
-                    stickerOffsetYMax
-                  )
+                  forItem !== undefined &&
+                  CS2_INVENTORY_RULES.stickerY.check(value, forItem)
                 }
                 value={attributes.value.y}
               />

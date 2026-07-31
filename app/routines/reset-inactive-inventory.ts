@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Inventory } from "@ianlucas/cs2-lib";
+import { safeLoadInventory } from "~/utils/inventory";
 import { prisma } from "~/db.server";
 import { inventoryInactivityResetDays } from "~/models/rule.server";
 import { getUserInventory, updateUserInventory } from "~/models/user.server";
@@ -14,8 +15,8 @@ function isInventoryEmpty(rawInventory: string | null) {
   if (rawInventory === null) {
     return true;
   }
-  const inventory = CS2Inventory.parse(rawInventory);
-  return inventory === undefined || Object.keys(inventory.items).length === 0;
+  const inventory = safeLoadInventory(rawInventory);
+  return inventory === undefined || inventory.size() === 0;
 }
 
 export async function resetInactiveInventories() {

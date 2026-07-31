@@ -3,9 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2BaseInventoryItem, CS2Economy } from "@ianlucas/cs2-lib";
-import { z, ZodObject } from "zod";
-import { baseStickerSlabId } from "./economy";
+import { z } from "zod";
 import { baseInventoryItemProps, nonNegativeInt } from "./shapes";
 
 const clientInventoryItemProps = {
@@ -24,54 +22,9 @@ const syncInventoryItemProps = {
     .optional()
 };
 
-function allowed({
-  id,
-  nameTag,
-  stickers,
-  keychains
-}: Pick<CS2BaseInventoryItem, "id" | "nameTag" | "stickers" | "keychains">) {
-  // Free items can be stored if they have a nametag or stickers or keychains
-  if (
-    CS2Economy.getById(id).free &&
-    nameTag === undefined &&
-    stickers === undefined &&
-    keychains === undefined
-  ) {
-    return false;
-  }
-  if (keychains !== undefined) {
-    for (const { id } of Object.values(keychains)) {
-      if (id === baseStickerSlabId) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
+export const clientInventoryItemShape = z.object(clientInventoryItemProps);
 
-function refine(
-  inventoryItem: z.infer<ZodObject<typeof syncInventoryItemProps>>
-) {
-  if (!allowed(inventoryItem)) {
-    return false;
-  }
-  if (inventoryItem.storage !== undefined) {
-    for (const item of Object.values(inventoryItem.storage)) {
-      if (!allowed(item)) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
-export const clientInventoryItemShape = z
-  .object(clientInventoryItemProps)
-  .refine(refine);
-
-export const syncInventoryItemShape = z
-  .object(syncInventoryItemProps)
-  .refine(refine);
+export const syncInventoryItemShape = z.object(syncInventoryItemProps);
 
 export const clientInventoryShape = z.object({
   items: z.record(z.string(), clientInventoryItemShape),

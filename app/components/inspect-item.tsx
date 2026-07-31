@@ -41,13 +41,13 @@ function InspectItemHeader({ item }: { item: CS2InventoryItem }) {
     <div className="flex flex-col items-center">
       <div className="flex w-fit flex-col">
         <div className="flex items-center justify-center gap-1">
-          {item.collection !== undefined && (
+          {item.collectionKey !== undefined && (
             <ItemImage className="w-29.5" item={item} type="collection" />
           )}
           <div
             className={clsx(
               "max-w-200",
-              item.collection !== undefined ? "text-left" : "text-center"
+              item.collectionKey !== undefined ? "text-left" : "text-center"
             )}
           >
             <div className="font-display text-[36px] leading-tight font-medium text-white/90">
@@ -63,7 +63,7 @@ function InspectItemHeader({ item }: { item: CS2InventoryItem }) {
         <div
           className="mt-1.5 h-1 w-full"
           style={{
-            backgroundImage: `linear-gradient(to right, ${item.rarity}, color-mix(in srgb, ${item.rarity} 72%, #000))`
+            backgroundImage: `linear-gradient(to right, ${item.rarityColor}, color-mix(in srgb, ${item.rarityColor} 72%, #000))`
           }}
         />
       </div>
@@ -108,7 +108,7 @@ function useInspectInfo(item: CS2InventoryItem): {
           >
             <div>
               <strong>{translate("InventoryItemInspectFinishCatalog")}:</strong>{" "}
-              {item.index}
+              {item.variantIndex}
             </div>
             <div>
               <strong>
