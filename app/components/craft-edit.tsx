@@ -9,6 +9,7 @@ import {
   CS2ItemType
 } from "@ianlucas/cs2-lib";
 import { useState } from "react";
+import { getItemCategory } from "~/utils/economy";
 import { useRules, useTranslate } from "./app-context";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ModalButton } from "./modal-button";
@@ -86,10 +87,8 @@ export function CraftEdit({
     if (editHideId.includes(item.id)) {
       return false;
     }
-    if (
-      item.categoryName !== undefined &&
-      editHideCategory.includes(item.categoryName)
-    ) {
+    const category = getItemCategory(item);
+    if (category !== undefined && editHideCategory.includes(category)) {
       return false;
     }
     return true;

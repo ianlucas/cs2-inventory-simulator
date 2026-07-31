@@ -5,6 +5,7 @@
 
 import { CS2EconomyItem, CS2ItemType } from "@ianlucas/cs2-lib";
 import { useState } from "react";
+import { getItemCategory } from "~/utils/economy";
 import { toArrayIf } from "~/utils/misc";
 import { useInventory, useRules, useTranslate } from "./app-context";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
@@ -92,10 +93,8 @@ export function CraftNew({
     if (craftHideId.includes(item.id)) {
       return false;
     }
-    if (
-      item.categoryName !== undefined &&
-      craftHideCategory.includes(item.categoryName)
-    ) {
+    const category = getItemCategory(item);
+    if (category !== undefined && craftHideCategory.includes(category)) {
       return false;
     }
     return true;

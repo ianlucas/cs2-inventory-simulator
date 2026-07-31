@@ -69,6 +69,7 @@ import {
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
 import { isAttachmentCountAllowed } from "~/utils/attachments";
+import { getItemCategory } from "~/utils/economy";
 import { editInventoryItem } from "~/utils/inventory";
 import { hasKeys } from "~/utils/misc";
 import {
@@ -227,9 +228,9 @@ async function enforceCraftRulesForItem(
   idOrItem: number | CS2EconomyItem,
   userId: string
 ) {
-  const { categoryName, loadoutCategory, type, modelKey, id } =
-    CS2Economy.get(idOrItem);
-  const category = categoryName ?? loadoutCategory;
+  const item = CS2Economy.get(idOrItem);
+  const { type, modelKey, id } = item;
+  const category = getItemCategory(item);
   await craftHideId.for(userId).notContains(id);
   if (category !== undefined) {
     await craftHideCategory.for(userId).notContains(category);
@@ -332,9 +333,9 @@ async function enforceEditRulesForItem(
   idOrItem: number | CS2EconomyItem,
   userId: string
 ) {
-  const { categoryName, loadoutCategory, type, modelKey, id } =
-    CS2Economy.get(idOrItem);
-  const category = categoryName ?? loadoutCategory;
+  const item = CS2Economy.get(idOrItem);
+  const { type, modelKey, id } = item;
+  const category = getItemCategory(item);
   await editHideId.for(userId).notContains(id);
   if (category !== undefined) {
     await editHideCategory.for(userId).notContains(category);
