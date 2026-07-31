@@ -41,7 +41,7 @@ export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
       inventoryItem?.statTrak !== undefined
         ? `${translate("InventoryItemStatTrak")} `
         : "";
-    const quality = item.isMelee() && !item.free ? "★ " : "";
+    const quality = item.isMelee() && !item.isDefault ? "★ " : "";
     let [model, ...names] = item.name.split("|").map((s) => s.trim());
     let name = names.join(" | ");
     model = `${quality}${statTrak}${model}`;

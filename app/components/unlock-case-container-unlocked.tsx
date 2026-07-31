@@ -49,7 +49,7 @@ export function UnlockCaseContainerUnlocked({
         <div className="px-4 text-2xl">
           <span
             className="font-display border-b-4 pb-2 leading-10 font-medium tracking-wider drop-shadow-sm"
-            style={{ borderColor: item.rarity }}
+            style={{ borderColor: item.rarityColor }}
           >
             {nameItemString(createFakeInventoryItem(item, attributes))}
           </span>

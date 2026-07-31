@@ -25,12 +25,12 @@ export function UnlockCaseWheelItem({
       data-id={index}
       className="relative ml-4 inline-block h-48 w-[256px] first-of-type:ml-0"
       style={{
-        backgroundImage: `linear-gradient(180deg, #8a8a8a 0%, #8a8a8a 60%, ${item.rarity} 92%, #000 100%)`
+        backgroundImage: `linear-gradient(180deg, #8a8a8a 0%, #8a8a8a 60%, ${item.rarityColor} 92%, #000 100%)`
       }}
     >
       <div
         className="absolute bottom-0 left-0 h-2 w-full"
-        style={{ backgroundColor: item.rarity }}
+        style={{ backgroundColor: item.rarityColor }}
       />
       <ItemImage className="absolute top-0 left-0 size-full" {...display} />
     </div>

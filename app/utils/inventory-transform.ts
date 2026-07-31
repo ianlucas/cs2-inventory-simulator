@@ -36,7 +36,8 @@ export function transform(
   }
 ) {
   const isEquippable =
-    (item.model === undefined || !nonEquippable.models.includes(item.model)) &&
+    (item.modelKey === undefined ||
+      !nonEquippable.models.includes(item.modelKey)) &&
     !nonEquippable.types.includes(item.type);
 
   if (!isEquippable) {
@@ -103,8 +104,8 @@ export function sortByQuality(
   b: TransformedInventoryItem
 ) {
   return (
-    CS2_RARITY_ORDER.indexOf(CS2RarityColorName[b.item.rarity]) -
-    CS2_RARITY_ORDER.indexOf(CS2RarityColorName[a.item.rarity])
+    CS2_RARITY_ORDER.indexOf(CS2RarityColorName[b.item.rarityColor]) -
+    CS2_RARITY_ORDER.indexOf(CS2RarityColorName[a.item.rarityColor])
   );
 }
 

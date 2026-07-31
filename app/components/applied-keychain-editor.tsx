@@ -7,7 +7,7 @@ import { faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import {
-  CS2_KEYCHAIN_OFFSET_FACTOR,
+  CS2_KEYCHAIN_POSITION_FACTOR,
   CS2_MAX_KEYCHAIN_SEED,
   CS2_MIN_KEYCHAIN_SEED
 } from "@ianlucas/cs2-lib";
@@ -52,12 +52,13 @@ export function AppliedKeychainEditor({
 }) {
   const translate = useTranslate();
   const attributes = useKeyValues(value);
-  const keychainOffsetXMin = forItem?.getMinimumKeychainOffsetX();
-  const keychainOffsetXMax = forItem?.getMaximumKeychainOffsetX();
-  const keychainOffsetYMin = forItem?.getMinimumKeychainOffsetY();
-  const keychainOffsetYMax = forItem?.getMaximumKeychainOffsetY();
-  const keychainOffsetZMin = forItem?.getMinimumKeychainOffsetZ();
-  const keychainOffsetZMax = forItem?.getMaximumKeychainOffsetZ();
+  const keychainPositionBounds = forItem?.getKeychainPositionBounds();
+  const keychainOffsetXMin = keychainPositionBounds?.x.min;
+  const keychainOffsetXMax = keychainPositionBounds?.x.max;
+  const keychainOffsetYMin = keychainPositionBounds?.y.min;
+  const keychainOffsetYMax = keychainPositionBounds?.y.max;
+  const keychainOffsetZMin = keychainPositionBounds?.z.min;
+  const keychainOffsetZMax = keychainPositionBounds?.z.max;
 
   async function handleReset() {
     if (
@@ -116,7 +117,7 @@ export function AppliedKeychainEditor({
                 min={keychainOffsetXMin}
                 onChange={attributes.update("x")}
                 randomizable
-                step={CS2_KEYCHAIN_OFFSET_FACTOR}
+                step={CS2_KEYCHAIN_POSITION_FACTOR}
                 stepRangeStyles="flex-1"
                 transform={keychainOffsetToString}
                 type="float"
@@ -145,7 +146,7 @@ export function AppliedKeychainEditor({
                 min={keychainOffsetYMin}
                 onChange={attributes.update("y")}
                 randomizable
-                step={CS2_KEYCHAIN_OFFSET_FACTOR}
+                step={CS2_KEYCHAIN_POSITION_FACTOR}
                 stepRangeStyles="flex-1"
                 transform={keychainOffsetToString}
                 type="float"
@@ -174,7 +175,7 @@ export function AppliedKeychainEditor({
                 min={keychainOffsetZMin}
                 onChange={attributes.update("z")}
                 randomizable
-                step={CS2_KEYCHAIN_OFFSET_FACTOR}
+                step={CS2_KEYCHAIN_POSITION_FACTOR}
                 stepRangeStyles="flex-1"
                 transform={keychainOffsetToString}
                 type="float"

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Inventory } from "@ianlucas/cs2-lib";
+import { CS2Inventory, decodeInventoryData } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { inventoryInactivityResetDays } from "~/models/rule.server";
 import { getUserInventory, updateUserInventory } from "~/models/user.server";
@@ -14,8 +14,12 @@ function isInventoryEmpty(rawInventory: string | null) {
   if (rawInventory === null) {
     return true;
   }
-  const inventory = CS2Inventory.parse(rawInventory);
-  return inventory === undefined || Object.keys(inventory.items).length === 0;
+  try {
+    const { data } = decodeInventoryData(rawInventory);
+    return Object.keys(data.items).length === 0;
+  } catch {
+    return true;
+  }
 }
 
 export async function resetInactiveInventories() {

@@ -6,7 +6,7 @@
 import {
   countDecimals,
   CS2_ITEMS,
-  CS2_KEYCHAIN_OFFSET_FACTOR,
+  CS2_KEYCHAIN_POSITION_FACTOR,
   CS2_MAX_KEYCHAIN_SEED,
   CS2_MAX_SEED,
   CS2_MAX_STICKER_WEAR,
@@ -73,7 +73,7 @@ export const stickerWearStringMaxLen = String(CS2_STICKER_WEAR_FACTOR).length;
 const stickerOffsetDecimalPlaces = countDecimals(CS2_STICKER_OFFSET_FACTOR);
 export const stickerOffsetStringMaxLen =
   "-0.".length + stickerOffsetDecimalPlaces;
-const keychainOffsetDecimalPlaces = countDecimals(CS2_KEYCHAIN_OFFSET_FACTOR);
+const keychainOffsetDecimalPlaces = countDecimals(CS2_KEYCHAIN_POSITION_FACTOR);
 export const stickerRotationStringMaxLen =
   String(CS2_MIN_STICKER_ROTATION).length + ".5".length;
 
@@ -139,7 +139,7 @@ export function validateKeychainOffset(
   max: number | undefined
 ) {
   return (
-    isFactorPrecise(offset, CS2_KEYCHAIN_OFFSET_FACTOR) &&
+    isFactorPrecise(offset, CS2_KEYCHAIN_POSITION_FACTOR) &&
     (min === undefined || offset >= min) &&
     (max === undefined || offset <= max)
   );

@@ -107,10 +107,11 @@ export function AppliedStickerEditor({
   const attributes = useKeyValues(value);
   const canPreviewItem =
     slot !== undefined && forItem !== undefined && stickers !== undefined;
-  const stickerOffsetXMin = forItem?.getMinimumStickerOffsetX();
-  const stickerOffsetXMax = forItem?.getMaximumStickerOffsetX();
-  const stickerOffsetYMin = forItem?.getMinimumStickerOffsetY();
-  const stickerOffsetYMax = forItem?.getMaximumStickerOffsetY();
+  const stickerOffsetBounds = forItem?.getStickerOffsetBounds();
+  const stickerOffsetXMin = stickerOffsetBounds?.x.min;
+  const stickerOffsetXMax = stickerOffsetBounds?.x.max;
+  const stickerOffsetYMin = stickerOffsetBounds?.y.min;
+  const stickerOffsetYMax = stickerOffsetBounds?.y.max;
 
   function handlePreview() {
     if (!canPreviewItem) {

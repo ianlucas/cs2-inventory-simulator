@@ -32,7 +32,7 @@ function allowed({
 }: Pick<CS2BaseInventoryItem, "id" | "nameTag" | "stickers" | "keychains">) {
   // Free items can be stored if they have a nametag or stickers or keychains
   if (
-    CS2Economy.getById(id).free &&
+    CS2Economy.getById(id).isDefault &&
     nameTag === undefined &&
     stickers === undefined &&
     keychains === undefined

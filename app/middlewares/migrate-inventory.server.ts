@@ -3,7 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2Inventory, clamp } from "@ianlucas/cs2-lib";
+import {
+  CS2Economy,
+  CS2InventoryData,
+  clamp,
+  decodeInventoryData
+} from "@ianlucas/cs2-lib";
 import {
   getUserInventory,
   getUserInventoryVersion,
@@ -16,8 +21,10 @@ const VERSION = 3;
 const pending = new Map<string, Promise<unknown>>();
 
 async function applyMigration(userId: string, rawInventory: string) {
-  const inventory = CS2Inventory.parse(rawInventory);
-  if (inventory === undefined) {
+  let inventory: CS2InventoryData;
+  try {
+    inventory = decodeInventoryData(rawInventory).data;
+  } catch {
     return;
   }
   for (const [uid, inventoryItem] of Object.entries(inventory.items)) {
@@ -69,7 +76,7 @@ async function applyMigration(userId: string, rawInventory: string) {
     // Free items need to have some paid econ attached to them. Run this last so
     // an item left empty by the healing above is dropped.
     if (
-      item.free &&
+      item.isDefault &&
       (inventoryItem.stickers === undefined ||
         !hasKeys(inventoryItem.stickers)) &&
       (inventoryItem.keychains === undefined ||

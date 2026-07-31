@@ -10,14 +10,21 @@ export function useIsItemCraftable() {
   const { craftHideCategory, craftHideType, craftHideModel, craftHideId } =
     useRules();
 
-  return function filter({ category, id, type, model }: CS2EconomyItem) {
+  return function filter({
+    categoryName,
+    loadoutCategory,
+    id,
+    type,
+    modelKey
+  }: CS2EconomyItem) {
+    const category = categoryName ?? loadoutCategory;
     if (category !== undefined && craftHideCategory.includes(category)) {
       return false;
     }
     if (craftHideType.includes(type)) {
       return false;
     }
-    if (model !== undefined && craftHideModel.includes(model)) {
+    if (modelKey !== undefined && craftHideModel.includes(modelKey)) {
       return false;
     }
     if (craftHideId.includes(id)) {

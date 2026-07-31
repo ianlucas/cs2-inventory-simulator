@@ -19,8 +19,8 @@ export function InventoryItemTileSpecial({
     <InventoryItemTile
       item={createFakeItem(containerItem, {
         name: `Container | ${translate("CaseRareItem")}`,
-        image: containerItem.specialsImage,
-        rarity: "#e4ae39"
+        imagePath: containerItem.specialsImagePath,
+        rarityColor: "#e4ae39"
       })}
     />
   );

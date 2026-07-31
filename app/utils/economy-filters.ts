@@ -139,23 +139,24 @@ export function getBaseItems({
   isFree
 }: EconomyItemFilter) {
   return CS2Economy.filterItems({
-    category,
+    loadoutCategory: category,
     type,
-    base: hasModel ? true : undefined
+    isBase: hasModel ? true : undefined
   }).filter(
-    ({ free }) => (hasModel && isFree ? free : !free) || (!hasModel && !free)
+    ({ isDefault }) =>
+      (hasModel && isFree ? isDefault : !isDefault) || (!hasModel && !isDefault)
   );
 }
 
 export function getPaidItems({ type }: EconomyItemFilter, model: string) {
   return CS2Economy.filterItems({
-    model
-  }).filter(({ base }) => type === CS2ItemType.Melee || !base);
+    modelKey: model
+  }).filter(({ isBase }) => type === CS2ItemType.Melee || !isBase);
 }
 
 export function getAllPaidItems() {
   return CS2Economy.itemsAsArray.filter(
-    ({ base, type }) =>
-      type !== CS2ItemType.Stub && (type === CS2ItemType.Melee || !base)
+    ({ isBase, type }) =>
+      type !== CS2ItemType.Stub && (type === CS2ItemType.Melee || !isBase)
   );
 }

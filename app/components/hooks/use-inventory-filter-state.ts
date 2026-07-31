@@ -75,7 +75,7 @@ export function useInventoryFilterState() {
       const searchLower = search.toLowerCase();
       const name = item.name.toLowerCase();
       const nameTag = item.nameTag?.toLowerCase() ?? "";
-      const altname = item.altName?.toLowerCase() ?? "";
+      const altname = item.alternateName?.toLowerCase() ?? "";
       if (name.includes(searchLower)) {
         return true;
       }

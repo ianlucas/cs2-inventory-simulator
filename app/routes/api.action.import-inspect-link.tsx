@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS2_KEYCHAIN_OFFSET_FACTOR,
+  CS2_KEYCHAIN_POSITION_FACTOR,
   CS2_STICKER_OFFSET_FACTOR,
   CS2BaseInventoryItem,
   CS2Economy,
@@ -42,13 +42,13 @@ function postParseInventoryItem(item: CS2BaseInventoryItem) {
   if (item.keychains !== undefined) {
     for (const keychain of Object.values(item.keychains)) {
       if (keychain.x !== undefined) {
-        keychain.x = truncateToFactor(keychain.x, CS2_KEYCHAIN_OFFSET_FACTOR);
+        keychain.x = truncateToFactor(keychain.x, CS2_KEYCHAIN_POSITION_FACTOR);
       }
       if (keychain.y !== undefined) {
-        keychain.y = truncateToFactor(keychain.y, CS2_KEYCHAIN_OFFSET_FACTOR);
+        keychain.y = truncateToFactor(keychain.y, CS2_KEYCHAIN_POSITION_FACTOR);
       }
       if (keychain.z !== undefined) {
-        keychain.z = truncateToFactor(keychain.z, CS2_KEYCHAIN_OFFSET_FACTOR);
+        keychain.z = truncateToFactor(keychain.z, CS2_KEYCHAIN_POSITION_FACTOR);
       }
     }
   }

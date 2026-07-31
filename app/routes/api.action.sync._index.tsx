@@ -227,7 +227,9 @@ async function enforceCraftRulesForItem(
   idOrItem: number | CS2EconomyItem,
   userId: string
 ) {
-  const { category, type, model, id } = CS2Economy.get(idOrItem);
+  const { categoryName, loadoutCategory, type, modelKey, id } =
+    CS2Economy.get(idOrItem);
+  const category = categoryName ?? loadoutCategory;
   await craftHideId.for(userId).notContains(id);
   if (category !== undefined) {
     await craftHideCategory.for(userId).notContains(category);
@@ -235,8 +237,8 @@ async function enforceCraftRulesForItem(
   if (type !== undefined) {
     await craftHideType.for(userId).notContains(type);
   }
-  if (model !== undefined) {
-    await craftHideModel.for(userId).notContains(model);
+  if (modelKey !== undefined) {
+    await craftHideModel.for(userId).notContains(modelKey);
   }
 }
 
@@ -330,7 +332,9 @@ async function enforceEditRulesForItem(
   idOrItem: number | CS2EconomyItem,
   userId: string
 ) {
-  const { category, type, model, id } = CS2Economy.get(idOrItem);
+  const { categoryName, loadoutCategory, type, modelKey, id } =
+    CS2Economy.get(idOrItem);
+  const category = categoryName ?? loadoutCategory;
   await editHideId.for(userId).notContains(id);
   if (category !== undefined) {
     await editHideCategory.for(userId).notContains(category);
@@ -338,8 +342,8 @@ async function enforceEditRulesForItem(
   if (type !== undefined) {
     await editHideType.for(userId).notContains(type);
   }
-  if (model !== undefined) {
-    await editHideModel.for(userId).notContains(model);
+  if (modelKey !== undefined) {
+    await editHideModel.for(userId).notContains(modelKey);
   }
 }
 

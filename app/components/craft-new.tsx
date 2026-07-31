@@ -93,8 +93,8 @@ export function CraftNew({
       return false;
     }
     if (
-      item.category !== undefined &&
-      craftHideCategory.includes(item.category)
+      item.categoryName !== undefined &&
+      craftHideCategory.includes(item.categoryName)
     ) {
       return false;
     }

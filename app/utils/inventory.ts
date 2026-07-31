@@ -9,7 +9,8 @@ import {
   CS2EconomyItem,
   CS2Inventory,
   CS2InventoryItem,
-  CS2ItemType
+  CS2ItemType,
+  decodeInventoryData
 } from "@ianlucas/cs2-lib";
 import lzstring from "lz-string";
 import type { ItemEditorAttributes } from "~/components/item-editor";
@@ -44,7 +45,10 @@ export const INSPECTABLE_ITEM_TYPE: CS2ItemType[] = [
 
 export function parseInventory(inventory?: string | null) {
   try {
-    return serverInventoryShape.parse(CS2Inventory.parse(inventory));
+    if (inventory == null) {
+      return undefined;
+    }
+    return serverInventoryShape.parse(decodeInventoryData(inventory).data);
   } catch {
     return undefined;
   }
@@ -96,7 +100,7 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
     return [];
   }
   return CS2Economy.filterItems({
-    free: true
+    isDefault: true
   })
     .filter(
       (item) =>

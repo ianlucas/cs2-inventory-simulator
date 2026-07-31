@@ -87,8 +87,8 @@ export function CraftEdit({
       return false;
     }
     if (
-      item.category !== undefined &&
-      editHideCategory.includes(item.category)
+      item.categoryName !== undefined &&
+      editHideCategory.includes(item.categoryName)
     ) {
       return false;
     }

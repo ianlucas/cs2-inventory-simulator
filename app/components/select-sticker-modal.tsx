@@ -40,7 +40,7 @@ export function SelectStickerModal({
       if (stickerFilter !== undefined && !stickerFilter(item)) {
         return false;
       }
-      if (category !== "" && item.category !== category) {
+      if (category !== "" && item.categoryName !== category) {
         return false;
       }
       const name = item.name.toLowerCase();

@@ -55,14 +55,14 @@ export function useItemPickerState({
   }
 
   function handleItemClick(item: CS2EconomyItem) {
-    if (!filter.hasModel || model !== undefined || !item.base) {
+    if (!filter.hasModel || model !== undefined || !item.isBase) {
       return onPickItem(item);
     }
     setQuery("");
-    setModel(item.model);
+    setModel(item.modelKey);
   }
 
-  function filterItem({ altName, id, name }: CS2EconomyItem) {
+  function filterItem({ alternateName, id, name }: CS2EconomyItem) {
     if (id === baseStickerSlabId) {
       return false;
     }
@@ -75,7 +75,7 @@ export function useItemPickerState({
       .every(
         (word) =>
           name.toLocaleLowerCase().includes(word) ||
-          altName?.toLocaleLowerCase().includes(word) ||
+          alternateName?.toLocaleLowerCase().includes(word) ||
           false
       );
   }

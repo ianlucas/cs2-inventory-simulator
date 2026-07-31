@@ -45,7 +45,7 @@ export function RenameItem({
   const isConfirmDisabled = nameTag.length === 0;
 
   function handleRename() {
-    if (targetUid < 0 && inventoryItem.free) {
+    if (targetUid < 0 && inventoryItem.isDefault) {
       playSound("inventory_new_item_accept");
       sync({
         type: SyncAction.AddWithNametag,
@@ -123,7 +123,7 @@ export function RenameItem({
                   <ModalButton
                     disabled={
                       (nameTag !== "" && isInvalid) ||
-                      (nameTag === "" && inventoryItem.free) ||
+                      (nameTag === "" && inventoryItem.isDefault) ||
                       !isConfirmed
                     }
                     variant="primary"

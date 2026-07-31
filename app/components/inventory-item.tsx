@@ -120,8 +120,8 @@ export function InventoryItem({
   const isFreeInventoryItem = uid < 0;
 
   const isEquippable =
-    (item.model === undefined ||
-      !inventoryItemEquipHideModel.includes(item.model)) &&
+    (item.modelKey === undefined ||
+      !inventoryItemEquipHideModel.includes(item.modelKey)) &&
     !inventoryItemEquipHideType.includes(item.type);
   const canEquip =
     isEquippable &&
@@ -169,13 +169,13 @@ export function InventoryItem({
   const canInspectInGame =
     inventoryItemAllowInspectInGame &&
     (CS2_PREVIEW_INSPECTABLE_ITEMS.includes(item.type) || item.isNameTag());
+  const itemCategory = item.categoryName ?? item.loadoutCategory;
   const canEdit =
     inventoryItemAllowEdit &&
     isEditable &&
-    (item.category === undefined ||
-      !editHideCategory.includes(item.category)) &&
+    (itemCategory === undefined || !editHideCategory.includes(itemCategory)) &&
     (item.type === undefined || !editHideType.includes(item.type)) &&
-    (item.model === undefined || !editHideModel.includes(item.model)) &&
+    (item.modelKey === undefined || !editHideModel.includes(item.modelKey)) &&
     !editHideId.includes(item.id);
   const canShare = inventoryItemAllowShare && item.isPaintable();
 

@@ -12,13 +12,13 @@ export function InventoryItemTooltipRarity({ item }: { item: CS2EconomyItem }) {
   const translate = useTranslate();
 
   const rarityType = item.isPaintable() || item.isC4() ? "Weapon" : "";
-  const rarityLabel = RarityLabel[item.rarity];
+  const rarityLabel = RarityLabel[item.rarityColor];
   const rarityKey = `Item${rarityType}Rarity${rarityLabel}` as const;
   const nameKey = `ItemRarityName${getRarityItemName(item)}` as const;
 
   return (
     <InventoryItemTooltipInfo
-      style={{ color: item.rarity }}
+      style={{ color: item.rarityColor }}
       label={translate("InventoryItemRarity")}
     >
       {translate("ItemRarityFormat", translate(rarityKey), translate(nameKey))}

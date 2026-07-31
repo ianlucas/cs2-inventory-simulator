@@ -9,7 +9,7 @@ import { useNameItem } from "~/components/hooks/use-name-item";
 import { has } from "~/utils/misc";
 
 export function ItemEditorName({ item }: { item: CS2EconomyItem }) {
-  const { rarity } = item;
+  const { rarityColor: rarity } = item;
   const nameItem = useNameItem();
   const [model, name] = nameItem(item, "editor-name");
 
