@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Inventory } from "@ianlucas/cs2-lib";
+import { CS2Inventory, CS2InventorySpec } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { badRequest, conflict } from "~/responses.server";
 import {
@@ -23,11 +23,12 @@ export async function getUserInventoryOptions(userId: string) {
 
 export async function loadOrCreateUserInventory(
   userId: string,
-  rawInventory: string | null
+  rawInventory: string | null,
+  options?: Partial<CS2InventorySpec>
 ) {
   return loadOrCreateInventory(
     rawInventory,
-    await getUserInventoryOptions(userId)
+    options ?? (await getUserInventoryOptions(userId))
   );
 }
 

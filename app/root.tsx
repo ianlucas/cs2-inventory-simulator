@@ -45,6 +45,7 @@ import {
 } from "./data/viewer.server";
 import { middleware } from "./middleware.server";
 import { getClientRules } from "./models/rule";
+import { loadOrCreateUserInventory } from "./models/user.server";
 import { steamCallbackUrl } from "./models/rule.server";
 import { getBackground } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
@@ -112,7 +113,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ...(await getLanguage(session, ipCountry)),
       ...(await getToggleable(session))
     },
-    user
+    user:
+      user === undefined
+        ? undefined
+        : {
+            ...user,
+            inventory:
+              user.inventory !== null
+                ? (
+                    await loadOrCreateUserInventory(user.id, user.inventory, {
+                      maxItems: clientRules.inventoryMaxItems,
+                      storageUnitMaxItems:
+                        clientRules.inventoryStorageUnitMaxItems
+                    })
+                  ).getData()
+                : null
+          }
   });
 }
 
