@@ -9,11 +9,9 @@ import {
   CS2_KEYCHAIN_POSITION_FACTOR,
   CS2_MAX_KEYCHAIN_SEED,
   CS2_MAX_SEED,
-  CS2_MAX_STICKER_WEAR,
   CS2_MAX_STICKERS,
   CS2_MIN_KEYCHAIN_SEED,
   CS2_MIN_STICKER_ROTATION,
-  CS2_MIN_STICKER_WEAR,
   CS2_STICKER_OFFSET_FACTOR,
   CS2_STICKER_WEAR_FACTOR,
   CS2_WEAR_FACTOR,
@@ -22,8 +20,7 @@ import {
   CS2ItemTranslationByLanguage,
   CS2ItemType,
   CS2RarityColor,
-  fail,
-  isFactorPrecise
+  fail
 } from "@ianlucas/cs2-lib";
 import {
   CS2_PREVIEW_URL,
@@ -88,28 +85,8 @@ export function stickerWearToString(wear: number) {
   return wear.toFixed(stickerWearStringMaxLen - 2);
 }
 
-export function validateStickerWear(wear: number) {
-  return (
-    isFactorPrecise(wear, CS2_STICKER_WEAR_FACTOR) &&
-    wear >= CS2_MIN_STICKER_WEAR &&
-    wear <= CS2_MAX_STICKER_WEAR
-  );
-}
-
 export function stickerOffsetToString(offset: number) {
   return offset.toFixed(stickerOffsetDecimalPlaces);
-}
-
-export function validateStickerOffset(
-  offset: number,
-  min: number | undefined,
-  max: number | undefined
-) {
-  return (
-    isFactorPrecise(offset, CS2_STICKER_OFFSET_FACTOR) &&
-    (min === undefined || offset >= min) &&
-    (max === undefined || offset <= max)
-  );
 }
 
 export function keychainOffsetToString(offset: number) {
@@ -135,20 +112,6 @@ export function getDefaultKeychainOffset(
   }
   return 0;
 }
-
-export function validateKeychainOffset(
-  offset: number,
-  min: number | undefined,
-  max: number | undefined
-) {
-  return (
-    isFactorPrecise(offset, CS2_KEYCHAIN_POSITION_FACTOR) &&
-    (min === undefined || offset >= min) &&
-    (max === undefined || offset <= max)
-  );
-}
-
-export { validateStickerRotation } from "@ianlucas/cs2-lib";
 
 export const stickerSchemaStringMaxLen = String(CS2_MAX_STICKERS - 1).length;
 

@@ -74,9 +74,7 @@ import { editInventoryItem } from "~/utils/inventory";
 import { hasKeys } from "~/utils/misc";
 import {
   nonNegativeInt,
-  optionalStickerOffset,
-  optionalStickerRotation,
-  optionalStickerWear,
+  optionalFiniteNumber,
   teamShape
 } from "~/utils/shapes";
 import {
@@ -88,10 +86,10 @@ import type { Route } from "./+types/api.action.sync._index";
 
 const stickerPlacementShape = {
   schema: nonNegativeInt,
-  x: optionalStickerOffset,
-  y: optionalStickerOffset,
-  rotation: optionalStickerRotation,
-  wear: optionalStickerWear
+  x: optionalFiniteNumber,
+  y: optionalFiniteNumber,
+  rotation: optionalFiniteNumber,
+  wear: optionalFiniteNumber
 };
 
 const actionShape = z.discriminatedUnion("type", [
@@ -155,7 +153,7 @@ const actionShape = z.discriminatedUnion("type", [
     type: z.literal(SyncAction.ScrapeItemSticker),
     targetUid: nonNegativeInt,
     index: nonNegativeInt,
-    wear: optionalStickerWear
+    wear: optionalFiniteNumber
   }),
   z.object({
     type: z.literal(SyncAction.SwapItemsStatTrak),

@@ -7,6 +7,7 @@ import { faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import {
+  CS2_INVENTORY_RULES,
   CS2_KEYCHAIN_POSITION_FACTOR,
   CS2_MAX_KEYCHAIN_SEED,
   CS2_MIN_KEYCHAIN_SEED
@@ -18,7 +19,6 @@ import {
   keychainOffsetStringMaxLen,
   keychainOffsetToString,
   keychainSeedStringMaxLen,
-  validateKeychainOffset,
   validateKeychainSeed
 } from "~/utils/economy";
 import { useTranslate } from "./app-context";
@@ -122,11 +122,8 @@ export function AppliedKeychainEditor({
                 transform={keychainOffsetToString}
                 type="float"
                 validate={(value) =>
-                  validateKeychainOffset(
-                    value,
-                    keychainOffsetXMin,
-                    keychainOffsetXMax
-                  )
+                  forItem !== undefined &&
+                  CS2_INVENTORY_RULES.keychainPositionX.check(value, forItem)
                 }
                 value={attributes.value.x}
               />
@@ -151,11 +148,8 @@ export function AppliedKeychainEditor({
                 transform={keychainOffsetToString}
                 type="float"
                 validate={(value) =>
-                  validateKeychainOffset(
-                    value,
-                    keychainOffsetYMin,
-                    keychainOffsetYMax
-                  )
+                  forItem !== undefined &&
+                  CS2_INVENTORY_RULES.keychainPositionY.check(value, forItem)
                 }
                 value={attributes.value.y}
               />
@@ -180,11 +174,8 @@ export function AppliedKeychainEditor({
                 transform={keychainOffsetToString}
                 type="float"
                 validate={(value) =>
-                  validateKeychainOffset(
-                    value,
-                    keychainOffsetZMin,
-                    keychainOffsetZMax
-                  )
+                  forItem !== undefined &&
+                  CS2_INVENTORY_RULES.keychainPositionZ.check(value, forItem)
                 }
                 value={attributes.value.z}
               />

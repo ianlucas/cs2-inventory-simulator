@@ -4,11 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS2_KEYCHAIN_POSITION_FACTOR,
-  CS2_STICKER_OFFSET_FACTOR,
   CS2BaseInventoryItem,
   CS2Economy,
-  truncateToFactor
+  repairInventoryItem
 } from "@ianlucas/cs2-lib";
 import {
   isSteamInspectLink,
@@ -39,28 +37,8 @@ import type { Route } from "./+types/api.action.import-inspect-link";
 const rateLimiter = new RateLimiter(1000);
 
 function postParseInventoryItem(item: CS2BaseInventoryItem) {
-  if (item.keychains !== undefined) {
-    for (const keychain of Object.values(item.keychains)) {
-      if (keychain.x !== undefined) {
-        keychain.x = truncateToFactor(keychain.x, CS2_KEYCHAIN_POSITION_FACTOR);
-      }
-      if (keychain.y !== undefined) {
-        keychain.y = truncateToFactor(keychain.y, CS2_KEYCHAIN_POSITION_FACTOR);
-      }
-      if (keychain.z !== undefined) {
-        keychain.z = truncateToFactor(keychain.z, CS2_KEYCHAIN_POSITION_FACTOR);
-      }
-    }
-  }
-  if (item.stickers !== undefined) {
-    for (const sticker of Object.values(item.stickers)) {
-      if (sticker.x !== undefined) {
-        sticker.x = truncateToFactor(sticker.x, CS2_STICKER_OFFSET_FACTOR);
-      }
-      if (sticker.y !== undefined) {
-        sticker.y = truncateToFactor(sticker.y, CS2_STICKER_OFFSET_FACTOR);
-      }
-    }
+  if (!repairInventoryItem(CS2Economy, item)) {
+    throw badRequest;
   }
   return item;
 }
