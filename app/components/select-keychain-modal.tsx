@@ -14,13 +14,11 @@ import { ItemBrowser } from "./item-browser";
 import { Modal, ModalHeader, ModalNav } from "./modal";
 
 export function SelectKeychainModal({
-  fixed,
   hidden,
   keychainFilter,
   onClose,
   onSelect
 }: {
-  fixed?: boolean;
   hidden?: boolean;
   keychainFilter?: (item: CS2EconomyItem) => boolean;
   onClose: () => void;
@@ -53,7 +51,7 @@ export function SelectKeychainModal({
   }, [search, keychains, keychainFilter]);
 
   return (
-    <Modal className="w-135 pb-1" fixed={fixed} hidden={hidden} blur>
+    <Modal className="w-135 pb-1" hidden={hidden} blur>
       <ModalHeader
         title={translate("KeychainPickerHeader")}
         onClose={onClose}

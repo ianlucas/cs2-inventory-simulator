@@ -539,7 +539,6 @@ function Sticker3dEditorOverlay({
         />
       </div>
       <SelectStickerModal
-        fixed
         hidden={selecting === undefined}
         onClose={() => setSelecting(undefined)}
         onSelect={handleSelect}

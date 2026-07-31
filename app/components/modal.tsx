@@ -16,13 +16,11 @@ export function Modal({
   blur,
   children,
   className,
-  fixed,
   hidden
 }: {
   blur?: boolean;
   children: ReactNode;
   className?: string;
-  fixed?: boolean;
   hidden?: boolean;
 }) {
   const ref = useRef<ComponentRef<"div">>(null);
@@ -32,7 +30,9 @@ export function Modal({
     if (ref.current !== null) {
       document.body.append(ref.current);
       if (!hidden) {
-        ref.current.querySelector<HTMLElement>("[data-autofocus]")?.focus();
+        ref.current
+          .querySelector<HTMLElement>("[data-autofocus]")
+          ?.focus({ preventScroll: true });
       }
     }
     requestAnimationFrame(() => setAnimate(hidden ? true : false));
@@ -44,16 +44,18 @@ export function Modal({
         createPortal(
           <div
             className={clsx(
-              hidden ? "hidden" : fixed ? "fixed" : "absolute",
+              hidden ? "hidden" : "fixed",
               animate && "opacity-0",
-              "top-0 left-0 z-50 flex min-h-full w-full items-center justify-center bg-linear-to-b from-black/15 to-transparent transition-opacity select-none",
+              // The inner `m-auto` (rather than flex centering) keeps a modal
+              // taller than the viewport scrollable from its top edge.
+              "top-0 left-0 z-50 flex size-full overflow-y-auto bg-linear-to-b from-black/15 to-transparent transition-opacity select-none",
               blur && "bg-black/50 lg:bg-transparent lg:backdrop-blur-[2px]"
             )}
             ref={ref}
           >
             <div
               className={clsx(
-                "min-h-[inherit] rounded-sm border border-white/30 bg-neutral-900/98 text-white shadow-lg drop-shadow-lg lg:backdrop-blur-xs",
+                "m-auto rounded-sm border border-white/30 bg-neutral-900/98 text-white shadow-lg drop-shadow-lg lg:backdrop-blur-xs",
                 className
               )}
             >
@@ -127,6 +129,7 @@ export function ModalHeader({
           {closeTo !== undefined && (
             <Link
               className="flex h-4 px-2 opacity-50 transition hover:opacity-100"
+              preventScrollReset
               to={closeTo}
             >
               <FontAwesomeIcon icon={faXmark} className="size-4" />

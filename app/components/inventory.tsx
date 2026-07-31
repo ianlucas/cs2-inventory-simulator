@@ -153,7 +153,7 @@ export function Inventory() {
   }
 
   function handleEdit(uid: number) {
-    return navigate(`/craft?uid=${uid}`);
+    return navigate(`/craft?uid=${uid}`, { preventScrollReset: true });
   }
 
   function dismissSelectItem() {

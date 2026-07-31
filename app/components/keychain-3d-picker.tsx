@@ -456,7 +456,6 @@ function Keychain3dEditorOverlay({
         />
       </div>
       <SelectKeychainModal
-        fixed
         hidden={!selecting}
         keychainFilter={keychainFilter}
         onClose={() => setSelecting(false)}

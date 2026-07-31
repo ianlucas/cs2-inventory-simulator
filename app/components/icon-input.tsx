@@ -6,7 +6,7 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
-import { ChangeEventHandler } from "react";
+import { ChangeEventHandler, useEffect, useRef } from "react";
 
 export function IconInput({
   autoFocus,
@@ -23,6 +23,17 @@ export function IconInput({
   placeholder?: string;
   value: string;
 }) {
+  const ref = useRef<HTMLInputElement>(null);
+
+  // Focus manually instead of via the autoFocus attribute so the browser
+  // doesn't scroll an absolutely-positioned modal's input into view (which
+  // would yank the page back to the top).
+  useEffect(() => {
+    if (autoFocus) {
+      ref.current?.focus({ preventScroll: true });
+    }
+  }, []);
+
   return (
     <label
       className={clsx(
@@ -35,7 +46,7 @@ export function IconInput({
         className="h-4 shrink-0 text-neutral-500 group-focus-within:text-blue-500/50"
       />
       <input
-        autoFocus={autoFocus}
+        ref={ref}
         data-autofocus={autoFocus ? "" : undefined}
         className="w-0 min-w-0 flex-1 bg-transparent placeholder-neutral-600 outline-hidden"
         onChange={onChange}
