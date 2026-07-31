@@ -9,9 +9,9 @@ import { english } from "./english";
 export const spanish = {
   ...english,
   APIPageHeader: "API para programadores",
-  ApplyKeychainHintMoveKeychain: /* csgo_spanish.txt */"Haz clic y arrastra el colgante para desplazarlo sobre el arma",
   ApplyKeychainNextPosition: /* csgo_spanish.txt */"Siguiente posición",
   ApplyKeychainUse: /* csgo_spanish.txt */"Acoplar colgante",
+  ApplyKeychainWarn: /* csgo_spanish.txt */"Los colgantes se pueden quitar con un desacoplador de colgantes",
   ApplyPatchCancel: /* csgo_spanish.txt */"Cancelar",
   ApplyPatchUse: /* csgo_spanish.txt */"Aplicar parche",
   ApplyPatchUseOn: /* csgo_spanish.txt */"Usar en",

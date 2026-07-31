@@ -9,9 +9,9 @@ import { english } from "./english";
 export const turkish = {
   ...english,
   APIPageHeader: "Geliştiriciler için API",
-  ApplyKeychainHintMoveKeychain: /* csgo_turkish.txt */"Süsleri silaha uygulamak için üzerine tıklayıp sürükle.",
   ApplyKeychainNextPosition: /* csgo_turkish.txt */"Sonraki Pozisyon",
   ApplyKeychainUse: /* csgo_turkish.txt */"Süsü Tak",
+  ApplyKeychainWarn: /* csgo_turkish.txt */"Süsleri, süs çıkarıcı kullanarak çıkarabilirsin.",
   ApplyPatchCancel: /* csgo_turkish.txt */"İptal",
   ApplyPatchUse: /* csgo_turkish.txt */"Yamayı İliştir",
   ApplyPatchUseOn: /* csgo_turkish.txt */"üzerinde kullan",

@@ -9,9 +9,9 @@ import { english } from "./english";
 export const norwegian = {
   ...english,
   APIPageHeader: "API for programmerere",
-  ApplyKeychainHintMoveKeychain: /* csgo_norwegian.txt */"Trykk og dra anhenget for å flytte det på våpenet",
   ApplyKeychainNextPosition: /* csgo_norwegian.txt */"Neste posisjon",
   ApplyKeychainUse: /* csgo_norwegian.txt */"Fest anheng",
+  ApplyKeychainWarn: /* csgo_norwegian.txt */"Anheng kan løsnes med en anhengsavbiter",
   ApplyPatchCancel: /* csgo_norwegian.txt */"Avbryt",
   ApplyPatchUse: /* csgo_norwegian.txt */"Påfør lapp",
   ApplyPatchUseOn: /* csgo_norwegian.txt */"Bruk på",

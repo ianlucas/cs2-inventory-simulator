@@ -302,7 +302,7 @@ function Keychain3dEditorOverlay({
           actionDesc={translate("ApplyStickerUseOn")}
           actionItem={nameItemString(forItem)}
           title={translate("ApplyKeychainUse")}
-          keychainHint
+          warning={translate("ApplyKeychainWarn")}
         />
       }
       viewerProps={viewerProps}

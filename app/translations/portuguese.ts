@@ -9,9 +9,9 @@ import { english } from "./english";
 export const portuguese = {
   ...english,
   APIPageHeader: "API para programadores",
-  ApplyKeychainHintMoveKeychain: /* csgo_portuguese.txt */"Clica num amuleto e arrasta-o para o deslocares na arma",
   ApplyKeychainNextPosition: /* csgo_portuguese.txt */"Posição seguinte",
   ApplyKeychainUse: /* csgo_portuguese.txt */"Colocar amuleto",
+  ApplyKeychainWarn: /* csgo_portuguese.txt */"Amuletos podem ser removidos com um Removedor de Amuletos",
   ApplyPatchCancel: /* csgo_portuguese.txt */"Cancelar",
   ApplyPatchUse: /* csgo_portuguese.txt */"Aplicar emblema",
   ApplyPatchUseOn: /* csgo_portuguese.txt */"Usar em:",

@@ -9,9 +9,9 @@ import { english } from "./english";
 export const greek = {
   ...english,
   APIPageHeader: "API για προγραμματιστές",
-  ApplyKeychainHintMoveKeychain: /* csgo_greek.txt */"Κάντε κλικ και σύρετε ένα γούρι για να το μετακινήσετε πάνω στο όπλο",
   ApplyKeychainNextPosition: /* csgo_greek.txt */"Επόμενη θέση",
   ApplyKeychainUse: /* csgo_greek.txt */"Τοποθέτηση γουριού",
+  ApplyKeychainWarn: /* csgo_greek.txt */"Τα γούρια μπορούν να αφαιρεθούν με μία Αφαίρεση Γουριού",
   ApplyPatchCancel: /* csgo_greek.txt */"Άκυρο",
   ApplyPatchUse: /* csgo_greek.txt */"Εφαρμογή διακριτικού",
   ApplyPatchUseOn: /* csgo_greek.txt */"Χρήση σε",

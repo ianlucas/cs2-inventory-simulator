@@ -29,9 +29,9 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   token: string;
   transform: (value: string, lang: string) => string;
 }> = {
-  ApplyKeychainHintMoveKeychain: "popup_control_tooltip_move_keychain",
   ApplyKeychainNextPosition: "SFUI_InvUse_Pick_Sticker_slot",
   ApplyKeychainUse: "popup_can_stick_title_keychain",
+  ApplyKeychainWarn: "SFUI_InvUse_Warning_use_can_stick_keychain",
   ApplyPatchCancel: "Cancel_Button",
   ApplyPatchUse: "popup_can_patch_button",
   ApplyPatchUseOn: { token: "popup_can_stick_desc", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}<\/b>/, '') },

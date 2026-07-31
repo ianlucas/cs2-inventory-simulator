@@ -9,9 +9,9 @@ import { english } from "./english";
 export const ukrainian = {
   ...english,
   APIPageHeader: "API для розробників",
-  ApplyKeychainHintMoveKeychain: /* csgo_ukrainian.txt */"Натисніть на брелок та перетягніть його на зброю.",
   ApplyKeychainNextPosition: /* csgo_ukrainian.txt */"Змінити місце",
   ApplyKeychainUse: /* csgo_ukrainian.txt */"Причепити брелок",
+  ApplyKeychainWarn: /* csgo_ukrainian.txt */"Брелоки можна знімати відчіплювачем брелоків",
   ApplyPatchCancel: /* csgo_ukrainian.txt */"Скасувати",
   ApplyPatchUse: /* csgo_ukrainian.txt */"Застосувати нашивку",
   ApplyPatchUseOn: /* csgo_ukrainian.txt */"Застосувати на",

@@ -9,9 +9,9 @@ import { english } from "./english";
 export const finnish = {
   ...english,
   APIPageHeader: "API ohjelmoijille",
-  ApplyKeychainHintMoveKeychain: /* csgo_finnish.txt */"Klikkaa ja vedä riipusta siirtääksesi sen aseeseen.",
   ApplyKeychainNextPosition: /* csgo_finnish.txt */"Seuraava paikka",
   ApplyKeychainUse: /* csgo_finnish.txt */"Kiinnitä riipus",
+  ApplyKeychainWarn: /* csgo_finnish.txt */"Riipukset voidaan irrottaa riipuksen poistajalla.",
   ApplyPatchCancel: /* csgo_finnish.txt */"Peruuta",
   ApplyPatchUse: /* csgo_finnish.txt */"Käytä kangasmerkki",
   ApplyPatchUseOn: /* csgo_finnish.txt */"Käytä:",

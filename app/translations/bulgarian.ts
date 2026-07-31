@@ -9,9 +9,9 @@ import { english } from "./english";
 export const bulgarian = {
   ...english,
   APIPageHeader: "API за програмисти",
-  ApplyKeychainHintMoveKeychain: /* csgo_bulgarian.txt */"Кликнете и провлечете ключодържателя, за да го преместите върху оръжието",
   ApplyKeychainNextPosition: /* csgo_bulgarian.txt */"Следваща позиция",
   ApplyKeychainUse: /* csgo_bulgarian.txt */"Прикачване на джунджурия",
+  ApplyKeychainWarn: /* csgo_bulgarian.txt */"Джунджуриите могат да бъдат откачени със съответния инструмент",
   ApplyPatchCancel: /* csgo_bulgarian.txt */"Отказ",
   ApplyPatchUse: /* csgo_bulgarian.txt */"Прилагане на нашивка",
   ApplyPatchUseOn: /* csgo_bulgarian.txt */"Използване върху",

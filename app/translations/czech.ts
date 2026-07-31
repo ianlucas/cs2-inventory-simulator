@@ -9,9 +9,9 @@ import { english } from "./english";
 export const czech = {
   ...english,
   APIPageHeader: "API pro programátory",
-  ApplyKeychainHintMoveKeychain: /* csgo_czech.txt */"Pro přesunutí přívěsku na zbrani na něj klikni myší a pohybuj s ním.",
   ApplyKeychainNextPosition: /* csgo_czech.txt */"Další pozice",
   ApplyKeychainUse: /* csgo_czech.txt */"Připevnit přívěsek",
+  ApplyKeychainWarn: /* csgo_czech.txt */"Přívěsky lze sundat pomocí oddělovačů přívěsků",
   ApplyPatchCancel: /* csgo_czech.txt */"Zrušit",
   ApplyPatchUse: /* csgo_czech.txt */"Použít nášivku",
   ApplyPatchUseOn: /* csgo_czech.txt */"Použít na:",

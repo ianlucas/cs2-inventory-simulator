@@ -7,10 +7,10 @@
 export const english = {
 
   APIPageHeader: "API for programmers",
-  ApplyKeychainHintMoveKeychain: /* csgo_english.txt */"Click and drag the keychain to move it on the weapon",
   ApplyKeychainNextPosition: /* csgo_english.txt */"Next Position",
   ApplyKeychainResetPosition: "Reset Position",
   ApplyKeychainUse: /* csgo_english.txt */"Attach Charm",
+  ApplyKeychainWarn: /* csgo_english.txt */"Charms can be detached with a Charm Detachment",
   ApplyPatchCancel: /* csgo_english.txt */"Cancel",
   ApplyPatchUse: /* csgo_english.txt */"Apply Patch",
   ApplyPatchUseOn: /* csgo_english.txt */"Use on",

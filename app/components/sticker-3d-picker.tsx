@@ -402,6 +402,7 @@ function Sticker3dEditorOverlay({
           actionDesc={translate("ApplyStickerUseOn")}
           actionItem={nameItemString(forItem)}
           title={translate("ApplyStickerUse")}
+          warning={translate("ApplyStickerWarn")}
           stickerHint
         />
       }

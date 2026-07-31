@@ -9,9 +9,9 @@ import { english } from "./english";
 export const japanese = {
   ...english,
   APIPageHeader: "プログラマー向けAPI",
-  ApplyKeychainHintMoveKeychain: /* csgo_japanese.txt */"キーチェーンをクリック＆ドラッグすると武器上で動かせます",
   ApplyKeychainNextPosition: /* csgo_japanese.txt */"次の位置",
   ApplyKeychainUse: /* csgo_japanese.txt */"チャームの取り付け",
+  ApplyKeychainWarn: /* csgo_japanese.txt */"チャームは、チャームデタッチで取り外すことができます",
   ApplyPatchCancel: /* csgo_japanese.txt */"キャンセル",
   ApplyPatchUse: /* csgo_japanese.txt */"ステッカーを適用",
   ApplyPatchUseOn: /* csgo_japanese.txt */"に使用",

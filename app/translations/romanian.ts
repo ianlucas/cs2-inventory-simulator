@@ -9,9 +9,9 @@ import { english } from "./english";
 export const romanian = {
   ...english,
   APIPageHeader: "API pentru dezvoltatori",
-  ApplyKeychainHintMoveKeychain: /* csgo_romanian.txt */"Fă clic pe breloc și trage-l pentru a-l muta pe armă.",
   ApplyKeychainNextPosition: /* csgo_romanian.txt */"Următoarea zonă",
   ApplyKeychainUse: /* csgo_romanian.txt */"Atașează brelocul",
+  ApplyKeychainWarn: /* csgo_romanian.txt */"Brelocurile pot fi detașate cu un instrument de detașat brelocuri",
   ApplyPatchCancel: /* csgo_romanian.txt */"Anulează",
   ApplyPatchUse: /* csgo_romanian.txt */"Aplică ecusonul brodat",
   ApplyPatchUseOn: /* csgo_romanian.txt */"Folosește pe",

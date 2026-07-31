@@ -9,9 +9,9 @@ import { english } from "./english";
 export const indonesian = {
   ...english,
   APIPageHeader: "API untuk programmer",
-  ApplyKeychainHintMoveKeychain: /* csgo_indonesian.txt */"Klik dan seret gantungan untuk memindahkannya ke senjata",
   ApplyKeychainNextPosition: /* csgo_indonesian.txt */"Posisi Berikutnya",
   ApplyKeychainUse: /* csgo_indonesian.txt */"Pasang Gantungan",
+  ApplyKeychainWarn: /* csgo_indonesian.txt */"Gantungan dapat dicabut dengan Pencabut Gantungan",
   ApplyPatchCancel: /* csgo_indonesian.txt */"Batal",
   ApplyPatchUse: /* csgo_indonesian.txt */"Tempel Patch",
   ApplyPatchUseOn: /* csgo_indonesian.txt */"Gunakan pada",

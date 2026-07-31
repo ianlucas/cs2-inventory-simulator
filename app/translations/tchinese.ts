@@ -9,9 +9,9 @@ import { english } from "./english";
 export const tchinese = {
   ...english,
   APIPageHeader: "開發者 API",
-  ApplyKeychainHintMoveKeychain: /* csgo_tchinese.txt */"點擊並拖曳鑰匙圈以將其移動到武器上",
   ApplyKeychainNextPosition: /* csgo_tchinese.txt */"下個位置",
   ApplyKeychainUse: /* csgo_tchinese.txt */"裝上吊飾",
+  ApplyKeychainWarn: /* csgo_tchinese.txt */"可使用吊飾卸除器移除吊飾",
   ApplyPatchCancel: /* csgo_tchinese.txt */"取消",
   ApplyPatchUse: /* csgo_tchinese.txt */"套用布章",
   ApplyPatchUseOn: /* csgo_tchinese.txt */"使用於",
