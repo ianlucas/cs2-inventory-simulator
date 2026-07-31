@@ -71,11 +71,7 @@ import { methodNotAllowed } from "~/responses.server";
 import { isAttachmentCountAllowed } from "~/utils/attachments";
 import { editInventoryItem } from "~/utils/inventory";
 import { hasKeys } from "~/utils/misc";
-import {
-  nonNegativeInt,
-  optionalNumber,
-  teamShape
-} from "~/utils/shapes";
+import { nonNegativeInt, optionalNumber, teamShape } from "~/utils/shapes";
 import {
   clientInventoryItemShape,
   itemEditorAttributesShape,
@@ -221,21 +217,41 @@ async function enforceMaxAttachments(
   );
 }
 
-async function enforceCraftRulesForItem(
+const craftHideRules = {
+  hideId: craftHideId,
+  hideCategory: craftHideCategory,
+  hideType: craftHideType,
+  hideModel: craftHideModel
+};
+
+const editHideRules = {
+  hideId: editHideId,
+  hideCategory: editHideCategory,
+  hideType: editHideType,
+  hideModel: editHideModel
+};
+
+async function enforceItemHideRules(
   idOrItem: number | CS2EconomyItem,
-  userId: string
+  userId: string,
+  {
+    hideId,
+    hideCategory,
+    hideType,
+    hideModel
+  }: typeof craftHideRules | typeof editHideRules
 ) {
   const item = CS2Economy.get(idOrItem);
   const { type, modelKey, id, loadoutCategory } = item;
-  await craftHideId.for(userId).notContains(id);
+  await hideId.for(userId).notContains(id);
   if (loadoutCategory !== undefined) {
-    await craftHideCategory.for(userId).notContains(loadoutCategory);
+    await hideCategory.for(userId).notContains(loadoutCategory);
   }
   if (type !== undefined) {
-    await craftHideType.for(userId).notContains(type);
+    await hideType.for(userId).notContains(type);
   }
   if (modelKey !== undefined) {
-    await craftHideModel.for(userId).notContains(modelKey);
+    await hideModel.for(userId).notContains(modelKey);
   }
 }
 
@@ -299,7 +315,7 @@ async function enforceCraftRulesForInventoryItem(
     await craftAllowKeychains.for(userId).truthy();
     await craftHideType.for(userId).notContains(CS2ItemType.Keychain);
     for (const keychain of Object.values(keychains)) {
-      await enforceCraftRulesForItem(keychain.id, userId);
+      await enforceItemHideRules(keychain.id, userId, craftHideRules);
       await enforceCraftRulesForKeychainAttributes(keychain, userId);
     }
   }
@@ -307,7 +323,7 @@ async function enforceCraftRulesForInventoryItem(
     await craftAllowStickers.for(userId).truthy();
     await craftHideType.for(userId).notContains(CS2ItemType.Sticker);
     for (const sticker of Object.values(stickers)) {
-      await enforceCraftRulesForItem(sticker.id, userId);
+      await enforceItemHideRules(sticker.id, userId, craftHideRules);
       await enforceCraftRulesForStickerAttributes(sticker, userId);
     }
   }
@@ -322,24 +338,6 @@ async function enforceCraftRulesForInventoryItem(
   }
   if (nameTag !== undefined) {
     await craftAllowNametag.for(userId).truthy();
-  }
-}
-
-async function enforceEditRulesForItem(
-  idOrItem: number | CS2EconomyItem,
-  userId: string
-) {
-  const item = CS2Economy.get(idOrItem);
-  const { type, modelKey, id, loadoutCategory } = item;
-  await editHideId.for(userId).notContains(id);
-  if (loadoutCategory !== undefined) {
-    await editHideCategory.for(userId).notContains(loadoutCategory);
-  }
-  if (type !== undefined) {
-    await editHideType.for(userId).notContains(type);
-  }
-  if (modelKey !== undefined) {
-    await editHideModel.for(userId).notContains(modelKey);
   }
 }
 
@@ -377,7 +375,7 @@ async function enforceEditRulesForInventoryItem(
     await editAllowKeychains.for(userId).truthy();
     await editHideType.for(userId).notContains(CS2ItemType.Keychain);
     for (const keychain of Object.values(keychains)) {
-      await enforceEditRulesForItem(keychain.id, userId);
+      await enforceItemHideRules(keychain.id, userId, editHideRules);
       await enforceEditRulesForKeychainAttributes(keychain, userId);
     }
   }
@@ -385,7 +383,7 @@ async function enforceEditRulesForInventoryItem(
     await editAllowStickers.for(userId).truthy();
     await editHideType.for(userId).notContains(CS2ItemType.Sticker);
     for (const sticker of Object.values(stickers)) {
-      await enforceEditRulesForItem(sticker.id, userId);
+      await enforceItemHideRules(sticker.id, userId, editHideRules);
       await enforceEditRulesForStickerAttributes(sticker, userId);
     }
   }
@@ -451,7 +449,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       for (const action of actions) {
         switch (action.type) {
           case SyncAction.Add:
-            await enforceCraftRulesForItem(action.item.id, userId);
+            await enforceItemHideRules(action.item.id, userId, craftHideRules);
             await enforceCraftRulesForInventoryItem(action.item, userId);
             inventory.add(action.item);
             break;
@@ -459,7 +457,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             if (rawInventory === null && !addedFromCache) {
               for (const item of Object.values(action.data.items)) {
                 try {
-                  await enforceCraftRulesForItem(item.id, userId);
+                  await enforceItemHideRules(item.id, userId, craftHideRules);
                   await enforceCraftRulesForInventoryItem(item, userId);
                   inventory.add(item);
                 } catch {}
@@ -468,7 +466,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             }
             break;
           case SyncAction.AddWithNametag:
-            await enforceCraftRulesForItem(action.itemId, userId);
+            await enforceItemHideRules(action.itemId, userId, craftHideRules);
             inventory.addWithNameTag(
               action.toolUid,
               action.itemId,
@@ -569,7 +567,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             editInventoryItem(inventory, action.uid, action.attributes);
             break;
           case SyncAction.AddWithSticker:
-            await enforceCraftRulesForItem(action.itemId, userId);
+            await enforceItemHideRules(action.itemId, userId, craftHideRules);
             assert(
               isAttachmentCountAllowed({
                 current: 0,

@@ -26,6 +26,6 @@ export function useCraftFilterRules() {
         }
         return true;
       },
-    [craftHideCategory, craftHideType]
+    [craftHideCategory, craftHideType, craftHideFilterType]
   );
 }

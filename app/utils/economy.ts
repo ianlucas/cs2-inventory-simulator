@@ -48,6 +48,42 @@ export const RarityLabel = {
   [CS2RarityColor.Immortal]: "Immortal"
 } as const;
 
+export function createItemHideFilter({
+  hideCategory,
+  hideType,
+  hideModel,
+  hideId
+}: {
+  hideCategory: string[];
+  hideType: string[];
+  hideModel: string[];
+  hideId: number[];
+}) {
+  return function filter({
+    id,
+    type,
+    modelKey,
+    loadoutCategory
+  }: CS2EconomyItem) {
+    if (
+      loadoutCategory !== undefined &&
+      hideCategory.includes(loadoutCategory)
+    ) {
+      return false;
+    }
+    if (hideType.includes(type)) {
+      return false;
+    }
+    if (modelKey !== undefined && hideModel.includes(modelKey)) {
+      return false;
+    }
+    if (hideId.includes(id)) {
+      return false;
+    }
+    return true;
+  };
+}
+
 export function updateEconomyLanguage(
   language: CS2ItemTranslationByLanguage[string]
 ) {

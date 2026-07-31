@@ -10,6 +10,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useRules, useTranslate } from "./app-context";
+import { useEditItemFilter } from "./hooks/use-item-hide-filters";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ModalButton } from "./modal-button";
 
@@ -40,14 +41,13 @@ export function CraftEdit({
     editAllowStickerX,
     editAllowStickerY,
     editAllowWear,
-    editHideCategory,
-    editHideId,
     editHideType,
     inventoryItemMaxPatches,
     inventoryItemMaxStickers
   } = useRules();
 
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
+  const filterStickerOrPatch = useEditItemFilter();
 
   const isHideNameTag = !editAllowNametag;
   const isHideSeed = !editAllowSeed;
@@ -80,19 +80,6 @@ export function CraftEdit({
     if (attributes !== undefined) {
       onSubmit(attributes);
     }
-  }
-
-  function filterStickerOrPatch({ id, loadoutCategory }: CS2EconomyItem) {
-    if (editHideId.includes(id)) {
-      return false;
-    }
-    if (
-      loadoutCategory !== undefined &&
-      editHideCategory.includes(loadoutCategory)
-    ) {
-      return false;
-    }
-    return true;
   }
 
   return (

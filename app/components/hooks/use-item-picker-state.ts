@@ -15,7 +15,7 @@ import {
 } from "~/utils/economy-filters";
 import { useCraftFilterRules } from "./use-craft-filter-rules";
 import { useInput } from "./use-input";
-import { useIsItemCraftable } from "./use-is-item-craftable";
+import { useCraftItemFilter } from "./use-item-hide-filters";
 
 export type ItemPickerState = ReturnType<typeof useItemPickerState>;
 
@@ -24,7 +24,7 @@ export function useItemPickerState({
 }: {
   onPickItem: (item: CS2EconomyItem) => void;
 }) {
-  const isItemCraftable = useIsItemCraftable();
+  const isItemCraftable = useCraftItemFilter();
   const categoryFilter = useCraftFilterRules();
   const newItems = useMemo(
     () => getAllPaidItems().filter(isNewItem).filter(isItemCraftable),
