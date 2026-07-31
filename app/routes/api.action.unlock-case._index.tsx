@@ -9,11 +9,8 @@ import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/middleware.server";
 import { inventoryItemAllowUnlockContainer } from "~/models/rule.server";
-import {
-  loadOrCreateUserInventory,
-  updateUserInventory
-} from "~/models/user.server";
-import { conflict, methodNotAllowed } from "~/responses.server";
+import { manipulateUserInventory } from "~/models/user.server";
+import { badRequest, methodNotAllowed } from "~/responses.server";
 import { nonNegativeInt, positiveInt } from "~/utils/shapes";
 import type { Route } from "./+types/api.action.unlock-case._index";
 
@@ -29,11 +26,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (request.method !== "POST") {
     throw methodNotAllowed;
   }
-  const {
-    id: userId,
-    inventory: rawInventory,
-    syncedAt: currentSyncedAt
-  } = await requireUser(request);
+  const { id: userId, inventory: rawInventory } = await requireUser(request);
   await inventoryItemAllowUnlockContainer.for(userId).truthy();
   const { caseUid, keyUid, syncedAt } = z
     .object({
@@ -42,16 +35,19 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       keyUid: nonNegativeInt.optional()
     })
     .parse(await request.json());
-  if (syncedAt !== currentSyncedAt.getTime()) {
-    throw conflict;
-  }
-  const inventory = await loadOrCreateUserInventory(userId, rawInventory);
-  const unlockedItem = inventory.get(caseUid).unlockContainer();
-  inventory.unlockContainer(unlockedItem, caseUid, keyUid);
-  const { syncedAt: responseSyncedAt } = await updateUserInventory(
+  let unlockedItem: CS2UnlockedItem | undefined;
+  const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
+    rawInventory,
+    syncedAt,
     userId,
-    inventory.stringify()
-  );
+    manipulate(inventory) {
+      unlockedItem = inventory.get(caseUid).unlockContainer();
+      inventory.unlockContainer(unlockedItem, caseUid, keyUid);
+    }
+  });
+  if (unlockedItem === undefined) {
+    throw badRequest;
+  }
 
   return Response.json({
     unlockedItem,

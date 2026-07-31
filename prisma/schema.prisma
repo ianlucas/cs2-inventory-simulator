@@ -21,7 +21,7 @@ model User {
   groups UserGroup[]
   id String @id
   inventory String?
-  inventoryWipes InventoryWipeAudit[]
+  inventoryRecoveries InventoryRecovery[]
   lastSeen DateTime @default(now())
   name String
   overwrites UserRule[]
@@ -30,11 +30,13 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-model InventoryWipeAudit {
+model InventoryRecovery {
   @@index([userId])
+  changes String?
   createdAt DateTime @default(now())
   id String @id @default(uuid())
   inventory String
+  reason String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 }

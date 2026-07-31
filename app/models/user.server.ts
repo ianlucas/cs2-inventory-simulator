@@ -11,7 +11,11 @@ import {
   loadOrCreateInventory,
   safeLoadInventory
 } from "~/utils/inventory";
-import { recordInventoryWipe } from "./inventory-wipe-audit.server";
+import {
+  hasInventoryLoadChanges,
+  recordInventoryLoadChanges,
+  recordInventoryWipe
+} from "./inventory-recovery.server";
 import { inventoryMaxItems, inventoryStorageUnitMaxItems } from "./rule.server";
 
 export async function getUserInventoryOptions(userId: string) {
@@ -169,6 +173,15 @@ export async function manipulateUserInventory({
   }
   if (wipedInventory !== undefined) {
     await recordInventoryWipe(userId, wipedInventory);
+  } else if (
+    rawInventory !== null &&
+    hasInventoryLoadChanges(inventory.loadChanges)
+  ) {
+    await recordInventoryLoadChanges(
+      userId,
+      rawInventory,
+      inventory.loadChanges
+    );
   }
   return await updateUserInventory(userId, inventory.stringify());
 }
