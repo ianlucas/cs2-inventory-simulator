@@ -40,7 +40,12 @@ function getWheelArgs() {
   };
 }
 
+let lockCount = 0;
+let previousOverflow = "";
+
 function disableScroll() {
+  previousOverflow = document.body.style.overflow;
+  document.body.style.overflow = "hidden";
   const { wheelEvent, wheelOpt } = getWheelArgs();
   window.addEventListener("DOMMouseScroll", preventDefault, false);
   window.addEventListener(wheelEvent, preventDefault, wheelOpt);
@@ -48,6 +53,7 @@ function disableScroll() {
 }
 
 function enableScroll() {
+  document.body.style.overflow = previousOverflow;
   const { wheelEvent, wheelOpt } = getWheelArgs();
   window.removeEventListener("DOMMouseScroll", preventDefault, false);
   // @ts-expect-error Function signature.
@@ -58,7 +64,15 @@ function enableScroll() {
 
 export function useLockScroll() {
   useEffect(() => {
-    disableScroll();
-    return () => enableScroll();
+    lockCount++;
+    if (lockCount === 1) {
+      disableScroll();
+    }
+    return () => {
+      lockCount--;
+      if (lockCount === 0) {
+        enableScroll();
+      }
+    };
   }, []);
 }
