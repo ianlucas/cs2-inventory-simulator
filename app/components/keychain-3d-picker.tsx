@@ -30,6 +30,12 @@ import {
 } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
+import {
+  AttachmentEditorDrawer,
+  AttachmentSlotsDrawer,
+  FORM_ECHO_WINDOW_MS,
+  attachmentName
+} from "./attachment-3d-drawer";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
@@ -44,17 +50,8 @@ import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 import { ViewerOverlay } from "./viewer-overlay";
 
-// Window to ignore the viewer's `change` echo of our own form edits, so the
-// panel isn't remounted under an active slider.
-const FORM_ECHO_WINDOW_MS = 400;
-
 type Keychains = NonNullable<CS2BaseInventoryItem["keychains"]>;
 type Keychain = Keychains[string];
-
-function keychainName(name: string): string {
-  const separator = name.indexOf("|");
-  return separator === -1 ? name : name.slice(separator + 1).trim();
-}
 
 // A weapon carries one charm, so only the lowest-keyed entry applies (the same
 // rule the viewer follows for the `keychains` Record).
@@ -82,34 +79,6 @@ function keychainsEqual(
     a.x === b.x &&
     a.y === b.y &&
     a.z === b.z
-  );
-}
-
-function DrawerTab({
-  className,
-  edge,
-  label,
-  onClick
-}: {
-  className?: string;
-  edge: "left" | "right";
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      className={clsx(
-        "font-display pointer-events-auto flex shrink-0 items-center justify-center self-stretch px-1.5 py-3 text-sm font-bold text-neutral-200 transition",
-        edge === "left" ? "rounded-r" : "rounded-l",
-        className
-      )}
-      onClick={onClick}
-      title={label}
-    >
-      <span className="max-h-full truncate [writing-mode:vertical-rl]">
-        {label}
-      </span>
-    </button>
   );
 }
 
@@ -157,9 +126,6 @@ function Keychain3dEditorOverlay({
   const { api, viewerProps } = useViewer({ item: initialItem });
 
   const [selected, setSelected] = useState(false);
-  const [leftOpen, setLeftOpen] = useState(true);
-  const [userCollapsedRight, setUserCollapsedRight] = useState(false);
-  const [rightEntered, setRightEntered] = useState(false);
   const [selecting, setSelecting] = useState(false);
 
   const keychainRef = useRef(keychain);
@@ -198,16 +164,6 @@ function Keychain3dEditorOverlay({
     });
     return () => offChange();
   }, [api]);
-
-  const hasKeychain = keychain !== undefined;
-  useEffect(() => {
-    if (!hasKeychain || !selected) {
-      setRightEntered(false);
-      return;
-    }
-    const raf = requestAnimationFrame(() => setRightEntered(true));
-    return () => cancelAnimationFrame(raf);
-  }, [hasKeychain, selected]);
 
   const keychainPositionBounds = forItem.getKeychainPositionBounds();
 
@@ -351,165 +307,135 @@ function Keychain3dEditorOverlay({
       }
       viewerProps={viewerProps}
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 flex h-full items-center p-4">
-        <div
-          className={clsx(
-            "flex max-h-full items-center transition-transform duration-150 ease-out",
-            !leftOpen && "-translate-x-84"
-          )}
-        >
-          <div className="pointer-events-none flex max-h-full min-h-28 w-80 flex-col justify-center gap-1 overflow-y-auto rounded-l bg-neutral-900/80">
-            {keychain !== undefined && item !== undefined ? (
-              <div
-                className={clsx(
-                  "group pointer-events-auto overflow-hidden rounded-l transition duration-150",
-                  selected ? "bg-blue-600/40" : "hover:bg-neutral-700/80"
-                )}
-              >
-                <div
-                  className="flex items-center gap-1 p-1 pr-2"
-                  onClick={handleToggleSelect}
-                >
-                  <span className="w-5 shrink-0" />
-                  <button
-                    className="relative aspect-256/192 h-12 shrink-0 overflow-hidden bg-neutral-950/40"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      setSelecting(true);
-                    }}
-                    title={translate("EditorKeychainEdit")}
-                  >
-                    <ItemImage item={item} />
-                    <div className="absolute top-0 left-0 size-full border-2 border-transparent group-hover:border-blue-500/50" />
-                  </button>
-                  <span className="flex-1 truncate px-1 text-sm text-neutral-200">
-                    {keychainName(item.name)}
-                  </span>
-                  <ButtonWithTooltip
-                    className="shrink-0 rounded-sm p-2 text-neutral-300 transition hover:bg-red-500/40"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleRemove();
-                    }}
-                    tooltip={translate("KeychainPickerRemove")}
-                  >
-                    <FontAwesomeIcon icon={faTrashCan} className="h-3.5" />
-                  </ButtonWithTooltip>
-                </div>
-              </div>
-            ) : (
-              range(CS2_MAX_KEYCHAINS).map((index) => (
-                <button
-                  key={`empty-${index}`}
-                  className="group pointer-events-auto flex items-center gap-1 rounded-l p-1 transition hover:bg-neutral-700/80"
-                  onClick={() => setSelecting(true)}
-                >
-                  <span className="w-5 shrink-0" />
-                  <span className="flex aspect-256/192 h-12 shrink-0 items-center justify-center border-2 border-transparent bg-neutral-900 text-xs text-neutral-600 group-hover:border-blue-500/50">
-                    {translate("KeychainPickerNA")}
-                  </span>
-                </button>
-              ))
-            )}
-          </div>
-          <DrawerTab
-            className="bg-neutral-900/80 hover:bg-neutral-700/80"
-            edge="left"
-            label={translate("EditorKeychains")}
-            onClick={() => setLeftOpen((value) => !value)}
-          />
-        </div>
-      </div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 flex h-full items-center p-4">
-        {selected && keychain !== undefined && item !== undefined && (
+      <AttachmentSlotsDrawer
+        label={translate("EditorKeychains")}
+        listClassName="min-h-28 justify-center overflow-y-auto"
+      >
+        {keychain !== undefined && item !== undefined ? (
           <div
             className={clsx(
-              "flex max-h-full items-center transition duration-150 ease-out",
-              rightEntered ? "opacity-100" : "opacity-0",
-              userCollapsedRight || !rightEntered
-                ? "translate-x-94"
-                : "translate-x-0"
+              "group pointer-events-auto overflow-hidden rounded-l transition duration-150",
+              selected ? "bg-blue-600/40" : "hover:bg-neutral-700/80"
             )}
           >
-            <DrawerTab
-              className="bg-neutral-900/90 shadow-lg hover:bg-neutral-800/90"
-              edge="right"
-              label={keychainName(item.name)}
-              onClick={() => setUserCollapsedRight((value) => !value)}
-            />
-            <div className="pointer-events-auto flex max-h-full min-h-48 w-90 flex-col justify-center overflow-hidden rounded-r bg-neutral-900/90 shadow-lg">
-              <div className="space-y-1.5 overflow-y-auto p-2">
-                <EditorLabel label={translate("EditorPattern")}>
-                  <EditorStepRangeWithInput
-                    inputStyles="w-24 min-w-0"
-                    max={CS2_MAX_KEYCHAIN_SEED}
-                    maxLength={keychainSeedStringMaxLen}
-                    min={CS2_MIN_KEYCHAIN_SEED}
-                    onChange={(seed) => handleEdit({ seed })}
-                    randomizable
-                    step={1}
-                    stepRangeStyles="flex-1"
-                    type="int"
-                    validate={validateKeychainSeed}
-                    value={keychain.seed ?? CS2_MIN_KEYCHAIN_SEED}
-                  />
-                </EditorLabel>
-                {positionAxes.map(({ axis, label, bounds, rule }) => {
-                  const axisValue = keychain[axis];
-                  if (
-                    axisValue === undefined ||
-                    bounds?.min === undefined ||
-                    bounds.max === undefined
-                  ) {
-                    return null;
-                  }
-                  return (
-                    <EditorLabel key={axis} label={label}>
-                      <EditorStepRangeWithInput
-                        inputStyles="w-24 min-w-0"
-                        max={bounds.max}
-                        maxLength={keychainPositionStringMaxLen(
-                          bounds.min,
-                          bounds.max
-                        )}
-                        min={bounds.min}
-                        onChange={(value) => handleEdit({ [axis]: value })}
-                        step={CS2_KEYCHAIN_POSITION_FACTOR}
-                        stepRangeStyles="flex-1"
-                        transform={keychainPositionToString}
-                        type="float"
-                        validate={(value) => rule.check(value, forItem)}
-                        value={axisValue}
-                      />
-                    </EditorLabel>
-                  );
-                })}
-                <div className="flex justify-end gap-1">
-                  <ButtonWithTooltip
-                    tooltip={translate("ApplyKeychainNextPosition")}
-                    className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
-                    onClick={handleRerollPosition}
-                  >
-                    <FontAwesomeIcon icon={faShuffle} className="h-4" />
-                  </ButtonWithTooltip>
-                  {hasPosition && (
-                    <ButtonWithTooltip
-                      tooltip={translate("ApplyKeychainResetPosition")}
-                      className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
-                      onClick={handleResetPosition}
-                    >
-                      <FontAwesomeIcon
-                        icon={faArrowRotateLeft}
-                        className="h-4"
-                      />
-                    </ButtonWithTooltip>
-                  )}
-                </div>
-              </div>
+            <div
+              className="flex items-center gap-1 p-1 pr-2"
+              onClick={handleToggleSelect}
+            >
+              <span className="w-5 shrink-0" />
+              <button
+                className="relative aspect-256/192 h-12 shrink-0 overflow-hidden bg-neutral-950/40"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setSelecting(true);
+                }}
+                title={translate("EditorKeychainEdit")}
+              >
+                <ItemImage item={item} />
+                <div className="absolute top-0 left-0 size-full border-2 border-transparent group-hover:border-blue-500/50" />
+              </button>
+              <span className="flex-1 truncate px-1 text-sm text-neutral-200">
+                {attachmentName(item.name)}
+              </span>
+              <ButtonWithTooltip
+                className="shrink-0 rounded-sm p-2 text-neutral-300 transition hover:bg-red-500/40"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleRemove();
+                }}
+                tooltip={translate("KeychainPickerRemove")}
+              >
+                <FontAwesomeIcon icon={faTrashCan} className="h-3.5" />
+              </ButtonWithTooltip>
             </div>
           </div>
+        ) : (
+          range(CS2_MAX_KEYCHAINS).map((index) => (
+            <button
+              key={`empty-${index}`}
+              className="group pointer-events-auto flex items-center gap-1 rounded-l p-1 transition hover:bg-neutral-700/80"
+              onClick={() => setSelecting(true)}
+            >
+              <span className="w-5 shrink-0" />
+              <span className="flex aspect-256/192 h-12 shrink-0 items-center justify-center border-2 border-transparent bg-neutral-900 text-xs text-neutral-600 group-hover:border-blue-500/50">
+                {translate("KeychainPickerNA")}
+              </span>
+            </button>
+          ))
         )}
-      </div>
+      </AttachmentSlotsDrawer>
+      {selected && keychain !== undefined && item !== undefined && (
+        <AttachmentEditorDrawer
+          label={attachmentName(item.name)}
+          panelClassName="min-h-48 justify-center"
+        >
+          <div className="space-y-1.5 overflow-y-auto p-2">
+            <EditorLabel label={translate("EditorPattern")}>
+              <EditorStepRangeWithInput
+                inputStyles="w-24 min-w-0"
+                max={CS2_MAX_KEYCHAIN_SEED}
+                maxLength={keychainSeedStringMaxLen}
+                min={CS2_MIN_KEYCHAIN_SEED}
+                onChange={(seed) => handleEdit({ seed })}
+                randomizable
+                step={1}
+                stepRangeStyles="flex-1"
+                type="int"
+                validate={validateKeychainSeed}
+                value={keychain.seed ?? CS2_MIN_KEYCHAIN_SEED}
+              />
+            </EditorLabel>
+            {positionAxes.map(({ axis, label, bounds, rule }) => {
+              const axisValue = keychain[axis];
+              if (
+                axisValue === undefined ||
+                bounds?.min === undefined ||
+                bounds.max === undefined
+              ) {
+                return null;
+              }
+              return (
+                <EditorLabel key={axis} label={label}>
+                  <EditorStepRangeWithInput
+                    inputStyles="w-24 min-w-0"
+                    max={bounds.max}
+                    maxLength={keychainPositionStringMaxLen(
+                      bounds.min,
+                      bounds.max
+                    )}
+                    min={bounds.min}
+                    onChange={(value) => handleEdit({ [axis]: value })}
+                    step={CS2_KEYCHAIN_POSITION_FACTOR}
+                    stepRangeStyles="flex-1"
+                    transform={keychainPositionToString}
+                    type="float"
+                    validate={(value) => rule.check(value, forItem)}
+                    value={axisValue}
+                  />
+                </EditorLabel>
+              );
+            })}
+            <div className="flex justify-end gap-1">
+              <ButtonWithTooltip
+                tooltip={translate("ApplyKeychainNextPosition")}
+                className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
+                onClick={handleRerollPosition}
+              >
+                <FontAwesomeIcon icon={faShuffle} className="h-4" />
+              </ButtonWithTooltip>
+              {hasPosition && (
+                <ButtonWithTooltip
+                  tooltip={translate("ApplyKeychainResetPosition")}
+                  className="bg-black/10 p-2 text-neutral-300 transition hover:bg-black/30"
+                  onClick={handleResetPosition}
+                >
+                  <FontAwesomeIcon icon={faArrowRotateLeft} className="h-4" />
+                </ButtonWithTooltip>
+              )}
+            </div>
+          </div>
+        </AttachmentEditorDrawer>
+      )}
       <div className="pointer-events-none absolute bottom-8 left-0 w-full">
         <UseItemFooter
           className="w-200"
