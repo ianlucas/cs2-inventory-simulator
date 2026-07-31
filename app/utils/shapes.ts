@@ -9,7 +9,7 @@ import { z } from "zod";
 export const nonNegativeInt = z.number().int().nonnegative();
 export const positiveInt = z.number().int().positive();
 export const nonNegativeFloat = z.number().nonnegative();
-export const optionalFiniteNumber = z.number().optional();
+export const optionalNumber = z.number().optional();
 
 export const baseInventoryItemProps = {
   equipped: z.boolean().optional(),
@@ -28,9 +28,9 @@ export const baseInventoryItemProps = {
       z.object({
         id: nonNegativeInt,
         seed: positiveInt.optional(),
-        x: optionalFiniteNumber,
-        y: optionalFiniteNumber,
-        z: optionalFiniteNumber
+        x: optionalNumber,
+        y: optionalNumber,
+        z: optionalNumber
       })
     )
     .optional(),
@@ -42,11 +42,11 @@ export const baseInventoryItemProps = {
       z.string(),
       z.object({
         id: nonNegativeInt,
-        rotation: optionalFiniteNumber,
-        wear: optionalFiniteNumber,
+        rotation: optionalNumber,
+        wear: optionalNumber,
         schema: z.number().int().min(0).optional(),
-        x: optionalFiniteNumber,
-        y: optionalFiniteNumber
+        x: optionalNumber,
+        y: optionalNumber
       })
     )
     .optional(),
