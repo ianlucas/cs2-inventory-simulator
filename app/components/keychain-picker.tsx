@@ -20,7 +20,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
-import { getDefaultKeychainOffset, sortByName } from "~/utils/economy";
+import { getDefaultKeychainPosition, sortByName } from "~/utils/economy";
 import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import { AppliedKeychainEditor } from "./applied-keychain-editor";
@@ -68,9 +68,9 @@ export function KeychainPicker({
     const bounds = forItem?.getKeychainPositionBounds();
     return {
       seed: CS2_MIN_KEYCHAIN_SEED,
-      x: getDefaultKeychainOffset(bounds?.x.min, bounds?.x.max),
-      y: getDefaultKeychainOffset(bounds?.y.min, bounds?.y.max),
-      z: getDefaultKeychainOffset(bounds?.z.min, bounds?.z.max)
+      x: getDefaultKeychainPosition(bounds?.x.min, bounds?.x.max),
+      y: getDefaultKeychainPosition(bounds?.y.min, bounds?.y.max),
+      z: getDefaultKeychainPosition(bounds?.z.min, bounds?.z.max)
     };
   }, [forItem]);
   const [appliedKeychainData, setAppliedKeychainData] =

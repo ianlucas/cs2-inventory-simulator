@@ -105,7 +105,7 @@ export const stickerWearStringMaxLen = String(CS2_STICKER_WEAR_FACTOR).length;
 const stickerOffsetDecimalPlaces = countDecimals(CS2_STICKER_OFFSET_FACTOR);
 export const stickerOffsetStringMaxLen =
   "-0.".length + stickerOffsetDecimalPlaces;
-const keychainOffsetDecimalPlaces = countDecimals(CS2_KEYCHAIN_POSITION_FACTOR);
+const keychainPositionDecimalPlaces = countDecimals(CS2_KEYCHAIN_POSITION_FACTOR);
 export const stickerRotationStringMaxLen =
   String(CS2_MIN_STICKER_ROTATION).length + ".5".length;
 
@@ -121,18 +121,18 @@ export function stickerOffsetToString(offset: number) {
   return offset.toFixed(stickerOffsetDecimalPlaces);
 }
 
-export function keychainOffsetToString(offset: number) {
-  return offset.toFixed(keychainOffsetDecimalPlaces);
+export function keychainPositionToString(offset: number) {
+  return offset.toFixed(keychainPositionDecimalPlaces);
 }
 
-export function keychainOffsetStringMaxLen(min: number, max: number) {
+export function keychainPositionStringMaxLen(min: number, max: number) {
   return Math.max(
-    keychainOffsetToString(min).length,
-    keychainOffsetToString(max).length
+    keychainPositionToString(min).length,
+    keychainPositionToString(max).length
   );
 }
 
-export function getDefaultKeychainOffset(
+export function getDefaultKeychainPosition(
   min: number | undefined,
   max: number | undefined
 ) {
