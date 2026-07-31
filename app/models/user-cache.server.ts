@@ -8,7 +8,11 @@ import { z } from "zod";
 import { prisma } from "~/db.server";
 import { res } from "~/responses.server";
 import { safeLoadInventory } from "~/utils/inventory";
-import { getUserInventory, getUserSyncedAt } from "./user.server";
+import {
+  getUserInventory,
+  getUserInventoryOptions,
+  getUserSyncedAt
+} from "./user.server";
 
 export async function handleUserCachedResponse({
   args,
@@ -49,7 +53,10 @@ export async function handleUserCachedResponse({
   if (cache !== null) {
     return res(cache.body, mimeType);
   }
-  const inventory = safeLoadInventory(await getUserInventory(userId));
+  const inventory = safeLoadInventory(
+    await getUserInventory(userId),
+    await getUserInventoryOptions(userId)
+  );
   if (inventory === undefined) {
     throw typeof throwBody === "string"
       ? res(throwBody, mimeType)

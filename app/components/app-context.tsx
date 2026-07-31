@@ -98,7 +98,10 @@ export function AppProvider({
 }) {
   const inventorySpec = {
     data: user?.inventory
-      ? safeLoadInventory(user.inventory)?.getData()
+      ? safeLoadInventory(user.inventory, {
+          maxItems: rules.inventoryMaxItems,
+          storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
+        })?.getData()
       : rules.appCacheInventory
         ? getCachedInventoryData()
         : undefined,

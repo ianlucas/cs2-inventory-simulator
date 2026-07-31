@@ -59,6 +59,13 @@ export function safeLoadInventory(
   }
 }
 
+export function loadOrCreateInventory(
+  rawInventory: string | null,
+  options?: Partial<CS2InventorySpec>
+) {
+  return safeLoadInventory(rawInventory, options) ?? new CS2Inventory(options);
+}
+
 export function hasInventoryContent(
   rawInventory: string | null
 ): rawInventory is string {

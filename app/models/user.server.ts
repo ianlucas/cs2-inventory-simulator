@@ -6,9 +6,30 @@
 import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { badRequest, conflict } from "~/responses.server";
-import { hasInventoryContent, safeLoadInventory } from "~/utils/inventory";
+import {
+  hasInventoryContent,
+  loadOrCreateInventory,
+  safeLoadInventory
+} from "~/utils/inventory";
 import { recordInventoryWipe } from "./inventory-wipe-audit.server";
 import { inventoryMaxItems, inventoryStorageUnitMaxItems } from "./rule.server";
+
+export async function getUserInventoryOptions(userId: string) {
+  return {
+    maxItems: await inventoryMaxItems.for(userId).get(),
+    storageUnitMaxItems: await inventoryStorageUnitMaxItems.for(userId).get()
+  };
+}
+
+export async function loadOrCreateUserInventory(
+  userId: string,
+  rawInventory: string | null
+) {
+  return loadOrCreateInventory(
+    rawInventory,
+    await getUserInventoryOptions(userId)
+  );
+}
 
 export async function getUserInventory(userId: string) {
   return (
@@ -127,10 +148,7 @@ export async function manipulateUserInventory({
   syncedAt?: number;
   userId: string;
 }) {
-  const options = {
-    maxItems: await inventoryMaxItems.for(userId).get(),
-    storageUnitMaxItems: await inventoryStorageUnitMaxItems.for(userId).get()
-  };
+  const options = await getUserInventoryOptions(userId);
   const loadedInventory = safeLoadInventory(rawInventory, options);
   const wipedInventory =
     loadedInventory === undefined && hasInventoryContent(rawInventory)

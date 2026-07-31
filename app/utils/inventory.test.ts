@@ -10,7 +10,11 @@ import {
 } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations";
 import { expect, test } from "vitest";
-import { hasInventoryContent, safeLoadInventory } from "./inventory";
+import {
+  hasInventoryContent,
+  loadOrCreateInventory,
+  safeLoadInventory
+} from "./inventory";
 
 CS2Economy.load({
   items: CS2_ITEMS,
@@ -91,6 +95,50 @@ test("safeLoadInventory is undefined for unreadable documents", () => {
       JSON.stringify({ items: {}, version: CS2_INVENTORY_VERSION + 1 })
     )
   ).toBeUndefined();
+});
+
+function makeRifles(count: number) {
+  return Object.fromEntries(
+    Array.from({ length: count }, (_, uid) => [
+      uid,
+      { id: AK47_ID, nameTag: `rifle ${uid}` }
+    ])
+  );
+}
+
+test("safeLoadInventory truncates items above the default cap", () => {
+  const inventory = safeLoadInventory(
+    JSON.stringify({ items: makeRifles(257), version: CS2_INVENTORY_VERSION })
+  );
+  expect(inventory?.size()).toBe(256);
+  expect(inventory?.loadChanges?.dropped).toEqual([
+    { uid: 256, id: AK47_ID, reason: "policy" }
+  ]);
+});
+
+test("safeLoadInventory keeps every item when maxItems is raised", () => {
+  const inventory = safeLoadInventory(
+    JSON.stringify({ items: makeRifles(257), version: CS2_INVENTORY_VERSION }),
+    { maxItems: 512 }
+  );
+  expect(inventory?.size()).toBe(257);
+  expect(inventory?.loadChanges?.dropped ?? []).toEqual([]);
+});
+
+test("loadOrCreateInventory returns the loaded inventory when readable", () => {
+  const inventory = loadOrCreateInventory(
+    JSON.stringify({
+      items: { 0: { id: AK47_ID, nameTag: "my rifle" } },
+      version: CS2_INVENTORY_VERSION
+    })
+  );
+  expect(inventory.size()).toBe(1);
+  expect(inventory.get(0).nameTag).toBe("my rifle");
+});
+
+test("loadOrCreateInventory falls back to an empty inventory", () => {
+  expect(loadOrCreateInventory(null).size()).toBe(0);
+  expect(loadOrCreateInventory("not json").size()).toBe(0);
 });
 
 test("hasInventoryContent is false when there is nothing to lose", () => {

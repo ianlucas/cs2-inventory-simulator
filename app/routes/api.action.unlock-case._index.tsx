@@ -3,19 +3,17 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Inventory, CS2UnlockedItem } from "@ianlucas/cs2-lib";
+import { CS2UnlockedItem } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/middleware.server";
+import { inventoryItemAllowUnlockContainer } from "~/models/rule.server";
 import {
-  inventoryItemAllowUnlockContainer,
-  inventoryMaxItems,
-  inventoryStorageUnitMaxItems
-} from "~/models/rule.server";
-import { updateUserInventory } from "~/models/user.server";
+  loadOrCreateUserInventory,
+  updateUserInventory
+} from "~/models/user.server";
 import { conflict, methodNotAllowed } from "~/responses.server";
-import { safeLoadInventory } from "~/utils/inventory";
 import { nonNegativeInt, positiveInt } from "~/utils/shapes";
 import type { Route } from "./+types/api.action.unlock-case._index";
 
@@ -47,12 +45,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (syncedAt !== currentSyncedAt.getTime()) {
     throw conflict;
   }
-  const options = {
-    maxItems: await inventoryMaxItems.for(userId).get(),
-    storageUnitMaxItems: await inventoryStorageUnitMaxItems.for(userId).get()
-  };
-  const inventory =
-    safeLoadInventory(rawInventory, options) ?? new CS2Inventory(options);
+  const inventory = await loadOrCreateUserInventory(userId, rawInventory);
   const unlockedItem = inventory.get(caseUid).unlockContainer();
   inventory.unlockContainer(unlockedItem, caseUid, keyUid);
   const { syncedAt: responseSyncedAt } = await updateUserInventory(
