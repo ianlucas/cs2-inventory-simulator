@@ -44,7 +44,11 @@ export const INSPECTABLE_ITEM_TYPE: CS2ItemType[] = [
 
 export function parseInventory(inventory?: string | null) {
   try {
-    return serverInventoryShape.parse(CS2Inventory.parse(inventory));
+    const data = CS2Inventory.parse(inventory);
+    if (data === undefined) {
+      return undefined;
+    }
+    return serverInventoryShape.parse(new CS2Inventory({ data }).getData());
   } catch {
     return undefined;
   }
