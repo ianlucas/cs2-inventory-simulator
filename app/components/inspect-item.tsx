@@ -175,6 +175,7 @@ function InspectItemDescription({ item }: { item: CS2InventoryItem }) {
   ) {
     return null;
   }
+  console.log(item);
   return (
     <div className="m-auto max-w-5xl px-24 pb-4 lg:w-5xl">
       {isSealedGraffiti ? (

@@ -9,7 +9,8 @@ import { has } from "~/utils/misc";
 
 export function ItemDescription({ item }: { item: CS2InventoryItem }) {
   const isAgent = item.type === CS2ItemType.Agent;
-  const baseDescription = (item.parent ?? item).description;
+  const baseDescription = (item.isStickerSlab() ? item : (item.parent ?? item))
+    .description;
   const itemDescription =
     item.parent !== undefined ? item.description : undefined;
 
