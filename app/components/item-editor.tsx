@@ -16,7 +16,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { useMeasure } from "@uidotdev/usehooks";
 import clsx from "clsx";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   isItemCountable,
   wearStringMaxLen,
@@ -30,9 +30,9 @@ import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
-import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { useIsDesktop } from "./hooks/use-is-desktop";
 import { useKeyValues } from "./hooks/use-key-values";
+import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { Keychain3dPicker } from "./keychain-3d-picker";
 import { KeychainPicker } from "./keychain-picker";
 import { confirm } from "./modal-generic";
@@ -157,7 +157,13 @@ export function ItemEditor({
   );
 
   const [attributesRef, { height: attributesHeight }] = useMeasure();
-  const isTwoColumn = isDesktop && (attributesHeight ?? 0) > 250;
+  const [isTallEditor, setIsTallEditor] = useState(false);
+  useEffect(() => {
+    if ((attributesHeight ?? 0) > 250) {
+      setIsTallEditor(true);
+    }
+  }, [attributesHeight]);
+  const isTwoColumn = isDesktop && isTallEditor;
 
   const attributes = useKeyValues({
     keychains: defaults?.keychains ?? {},
