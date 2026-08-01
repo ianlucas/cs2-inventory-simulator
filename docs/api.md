@@ -156,8 +156,10 @@ interface CollectibleEconItem {
   def: number;
 }
 interface GraffitiEconItem {
+  charges: number;
   def: number;
   tint: number;
+  uid: number;
 }
 type GetUserEquippedItemsResponse = {
   agents?: Record<number, AgentEconItem>;
