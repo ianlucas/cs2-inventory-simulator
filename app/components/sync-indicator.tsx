@@ -73,7 +73,7 @@ export function SyncIndicator() {
               <FillSpinner />
             </div>
             {showSyncErrorModal && (
-              <Modal fixed>
+              <Modal>
                 <ModalHeader title={translate("SyncErrorTitle")} />
                 <p className="mt-2 px-4">{translate("SyncErrorDesc")}</p>
                 <div className="my-6 mt-4 flex justify-center px-4">

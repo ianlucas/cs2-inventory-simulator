@@ -59,6 +59,13 @@ export function getViewerItemIds(item: ViewerItemInput): number[] {
       }
     }
   }
+  if (viewerItem.keychains !== undefined) {
+    for (const keychain of Object.values(viewerItem.keychains)) {
+      if (keychain !== undefined) {
+        ids.push(keychain.id);
+      }
+    }
+  }
   return ids;
 }
 
@@ -67,7 +74,11 @@ function isViewerRenderableKind(item: ViewerItemInput): boolean {
     item instanceof CS2EconomyItem ? item : CS2Economy.items.get(item.id);
   return (
     economyItem !== undefined &&
-    (economyItem.isWeapon() || economyItem.isMelee() || economyItem.isSticker())
+    (economyItem.isWeapon() ||
+      economyItem.isMelee() ||
+      economyItem.isSticker() ||
+      economyItem.isKeychain() ||
+      economyItem.isStickerSlab())
   );
 }
 
@@ -92,6 +103,7 @@ export function toViewerItem(item: ViewerItemInput): ViewerItem {
   if (item.seed !== undefined) viewerItem.seed = item.seed;
   if (item.wear !== undefined) viewerItem.wear = item.wear;
   if (item.stickers !== undefined) viewerItem.stickers = item.stickers;
+  if (item.keychains !== undefined) viewerItem.keychains = item.keychains;
   if (item.statTrak !== undefined) viewerItem.statTrak = item.statTrak;
   if (item.nameTag !== undefined) viewerItem.nameTag = item.nameTag;
   return viewerItem;

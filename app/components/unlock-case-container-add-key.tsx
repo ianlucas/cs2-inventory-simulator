@@ -84,7 +84,7 @@ export function UnlockCaseContainerAddKey({
         onClick={handleClose}
       />
       {isCrafting && (
-        <Modal className="w-fit" fixed>
+        <Modal className="w-fit">
           <ModalHeader
             title={translate("CaseAddKeyConfirm")}
             onClose={handleClose}

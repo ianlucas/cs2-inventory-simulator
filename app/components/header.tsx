@@ -104,6 +104,7 @@ export function Header({
                 icon={faHammer}
                 label={translate("HeaderCraftLabel")}
                 onClick={closeMenu}
+                preventScrollReset
               />
               {user === undefined ? (
                 <>

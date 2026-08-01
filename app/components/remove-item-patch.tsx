@@ -89,7 +89,7 @@ export function RemoveItemPatch({
               />
             </Overlay>
             {confirmRemoveSlot !== undefined && (
-              <Modal className="w-120" fixed>
+              <Modal className="w-120">
                 <ModalHeader title={translate("RemovePatchRemove")} />
                 <p className="mt-2 px-4">
                   {translate("RemovePatchRemoveDesc")}

@@ -9,6 +9,17 @@ import { useEffect } from "react";
  * @see https://stackoverflow.com/questions/4770025/how-to-disable-scrolling-temporarily
  */
 function preventDefault(event: Event) {
+  let element = event.target instanceof Element ? event.target : null;
+  while (element !== null && element !== document.body) {
+    const { overflowY } = getComputedStyle(element);
+    if (
+      (overflowY === "auto" || overflowY === "scroll") &&
+      element.scrollHeight > element.clientHeight
+    ) {
+      return;
+    }
+    element = element.parentElement;
+  }
   event.preventDefault();
 }
 
@@ -40,7 +51,12 @@ function getWheelArgs() {
   };
 }
 
+let lockCount = 0;
+let previousOverflow = "";
+
 function disableScroll() {
+  previousOverflow = document.body.style.overflow;
+  document.body.style.overflow = "hidden";
   const { wheelEvent, wheelOpt } = getWheelArgs();
   window.addEventListener("DOMMouseScroll", preventDefault, false);
   window.addEventListener(wheelEvent, preventDefault, wheelOpt);
@@ -48,6 +64,7 @@ function disableScroll() {
 }
 
 function enableScroll() {
+  document.body.style.overflow = previousOverflow;
   const { wheelEvent, wheelOpt } = getWheelArgs();
   window.removeEventListener("DOMMouseScroll", preventDefault, false);
   // @ts-expect-error Function signature.
@@ -58,7 +75,15 @@ function enableScroll() {
 
 export function useLockScroll() {
   useEffect(() => {
-    disableScroll();
-    return () => enableScroll();
+    lockCount++;
+    if (lockCount === 1) {
+      disableScroll();
+    }
+    return () => {
+      lockCount--;
+      if (lockCount === 0) {
+        enableScroll();
+      }
+    };
   }, []);
 }

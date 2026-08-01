@@ -128,7 +128,7 @@ export default function Craft() {
         uid,
         attributes
       });
-      return navigate("/");
+      return navigate("/", { preventScrollReset: true });
     }
 
     const inventoryItem = {
@@ -144,12 +144,12 @@ export default function Craft() {
         item: inventoryItem
       });
     });
-    return navigate("/");
+    return navigate("/", { preventScrollReset: true });
   }
 
   function handleClose() {
     if (isEditing || isSharing) {
-      return navigate("/");
+      return navigate("/", { preventScrollReset: true });
     }
     return setItem(undefined);
   }

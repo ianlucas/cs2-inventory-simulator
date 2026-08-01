@@ -79,6 +79,12 @@ import {
 } from "~/utils/shapes.server";
 import type { Route } from "./+types/api.action.sync._index";
 
+const keychainPlacementShape = {
+  x: optionalNumber,
+  y: optionalNumber,
+  z: optionalNumber
+};
+
 const stickerPlacementShape = {
   schema: nonNegativeInt,
   x: optionalNumber,
@@ -101,6 +107,12 @@ const actionShape = z.discriminatedUnion("type", [
     toolUid: nonNegativeInt,
     itemId: nonNegativeInt,
     nameTag: z.string()
+  }),
+  z.object({
+    type: z.literal(SyncAction.ApplyItemKeychain),
+    keychainUid: nonNegativeInt,
+    targetUid: nonNegativeInt,
+    ...keychainPlacementShape
   }),
   z.object({
     type: z.literal(SyncAction.ApplyItemPatch),
@@ -151,6 +163,15 @@ const actionShape = z.discriminatedUnion("type", [
     wear: optionalNumber
   }),
   z.object({
+    type: z.literal(SyncAction.ExtractItemSticker),
+    uid: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.SealItemSticker),
+    toolUid: nonNegativeInt,
+    stickerUid: nonNegativeInt
+  }),
+  z.object({
     type: z.literal(SyncAction.SwapItemsStatTrak),
     fromUid: nonNegativeInt,
     toUid: nonNegativeInt,
@@ -177,6 +198,12 @@ const actionShape = z.discriminatedUnion("type", [
     attributes: itemEditorAttributesShape
   }),
   z.object({
+    type: z.literal(SyncAction.AddWithKeychain),
+    itemId: nonNegativeInt,
+    keychainUid: nonNegativeInt,
+    ...keychainPlacementShape
+  }),
+  z.object({
     type: z.literal(SyncAction.AddWithSticker),
     itemId: nonNegativeInt,
     stickerUid: nonNegativeInt,
@@ -184,6 +211,15 @@ const actionShape = z.discriminatedUnion("type", [
   }),
   z.object({
     type: z.literal(SyncAction.RemoveAllItems)
+  }),
+  z.object({
+    type: z.literal(SyncAction.UnpackItem),
+    uid: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.RemoveItemKeychain),
+    targetUid: nonNegativeInt,
+    slot: nonNegativeInt
   })
 ]);
 
@@ -490,6 +526,13 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             );
             break;
           }
+          case SyncAction.ApplyItemKeychain:
+            inventory.applyItemKeychain(action.targetUid, action.keychainUid, {
+              x: action.x,
+              y: action.y,
+              z: action.z
+            });
+            break;
           case SyncAction.ApplyItemSticker: {
             await inventoryItemAllowApplySticker.for(userId).truthy();
             const count = inventory.get(action.targetUid).getStickersCount();
@@ -533,6 +576,12 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             await inventoryItemAllowRemoveSticker.for(userId).truthy();
             inventory.removeItemSticker(action.targetUid, action.index);
             break;
+          case SyncAction.ExtractItemSticker:
+            inventory.unsealStickerSlab(action.uid);
+            break;
+          case SyncAction.SealItemSticker:
+            inventory.sealStickerSlab(action.toolUid, action.stickerUid);
+            break;
           case SyncAction.ScrapeItemSticker:
             await inventoryItemAllowScrapeSticker.for(userId).truthy();
             inventory.scrapeItemSticker(
@@ -566,6 +615,14 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             );
             editInventoryItem(inventory, action.uid, action.attributes);
             break;
+          case SyncAction.AddWithKeychain:
+            await enforceItemHideRules(action.itemId, userId, craftHideRules);
+            inventory.addWithKeychain(action.keychainUid, action.itemId, {
+              x: action.x,
+              y: action.y,
+              z: action.z
+            });
+            break;
           case SyncAction.AddWithSticker:
             await enforceItemHideRules(action.itemId, userId, craftHideRules);
             assert(
@@ -585,6 +642,12 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.RemoveAllItems:
             inventory.removeAll();
+            break;
+          case SyncAction.UnpackItem:
+            inventory.unpackItem(action.uid);
+            break;
+          case SyncAction.RemoveItemKeychain:
+            inventory.removeItemKeychain(action.targetUid, action.slot);
             break;
         }
       }

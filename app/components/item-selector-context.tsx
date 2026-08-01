@@ -20,13 +20,16 @@ export interface ItemSelectorContextProps {
   items: TransformedInventoryItems;
   readOnly?: boolean;
   type:
+    | "apply-item-keychain"
     | "apply-item-patch"
     | "apply-item-sticker"
     | "deposit-to-storage-unit"
+    | "detach-charm"
     | "inspect-storage-unit"
     | "rename-item"
     | "retrieve-from-storage-unit"
     | "scrape-sticker"
+    | "seal-item-sticker"
     | "swap-items-stattrak"
     | "unlock-case";
   uid: number;
