@@ -17,7 +17,6 @@ import { useUnpackItem } from "~/components/hooks/use-unpack-item";
 import { InventoryItem } from "~/components/inventory-item";
 import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
-import { isStickerSlabTool } from "~/utils/sticker-slab";
 import {
   useInventory,
   useInventoryFilter,
@@ -77,7 +76,7 @@ export function Inventory() {
     items.filter(({ item }) => item.hasPatches()).length > 0;
 
   const ownStickerSlabs = items.some(
-    ({ uid, item }) => uid >= 0 && isStickerSlabTool(item)
+    ({ uid, item }) => uid >= 0 && item.isStickerSlab()
   );
 
   const {

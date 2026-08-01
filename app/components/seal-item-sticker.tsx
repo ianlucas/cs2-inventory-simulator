@@ -9,7 +9,6 @@ import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
-import { getStickerSlabKeychain, sealItemSticker } from "~/utils/sticker-slab";
 import { useInventory, useTranslate } from "./app-context";
 import { HoldButton } from "./hold-button";
 import { useViewer } from "./hooks/use-viewer";
@@ -41,7 +40,7 @@ function useSealSticker({
 
   function handleSeal() {
     sync({ type: SyncAction.SealItemSticker, toolUid, stickerUid });
-    setInventory(sealItemSticker(inventory, toolUid, stickerUid));
+    setInventory(inventory.sealStickerSlab(toolUid, stickerUid));
     playSound("inventory_new_item_accept");
     onClose();
   }
@@ -97,7 +96,7 @@ function SealItemSticker3d(props: SealItemStickerProps) {
   const stickerItem = useInventoryItem(props.stickerUid);
   const { handleSeal } = useSealSticker(props);
   const { api, viewerProps } = useViewer({
-    item: { id: getStickerSlabKeychain(stickerItem.id).id }
+    item: { id: stickerItem.getDisplayCase().id }
   });
 
   useViewerStatus(api);
@@ -114,7 +113,7 @@ function SealItemSticker3d(props: SealItemStickerProps) {
 function SealItemSticker2d(props: SealItemStickerProps) {
   const stickerItem = useInventoryItem(props.stickerUid);
   const { handleSeal } = useSealSticker(props);
-  const slabKeychain = getStickerSlabKeychain(stickerItem.id);
+  const slabKeychain = stickerItem.getDisplayCase();
 
   return (
     <ClientOnly
@@ -141,9 +140,7 @@ function SealItemSticker2d(props: SealItemStickerProps) {
 
 export function SealItemSticker(props: SealItemStickerProps) {
   const stickerItem = useInventoryItem(props.stickerUid);
-  const { canUse3d } = useViewerAvailability(
-    getStickerSlabKeychain(stickerItem.id)
-  );
+  const { canUse3d } = useViewerAvailability(stickerItem.getDisplayCase());
   return canUse3d ? (
     <SealItemSticker3d {...props} />
   ) : (

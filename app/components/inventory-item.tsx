@@ -24,7 +24,6 @@ import {
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
 import { useInventory, useRules, useTranslate, useUser } from "./app-context";
-import { isSealedStickerSlab, isStickerSlabTool } from "~/utils/sticker-slab";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemTile } from "./inventory-item-tile";
 import { InventoryItemTooltip } from "./inventory-item-tooltip";
@@ -201,9 +200,10 @@ export function InventoryItem({
   const canShare = inventoryItemAllowShare && item.isPaintable();
   const isUseItemOnly = item.isCharmDetachmentPack();
   const isCharmDetachments = item.isCharmDetachment();
-  const isStickerSlab = isStickerSlabTool(item);
-  const canSealSticker = ownStickerSlabs && item.isSticker();
-  const canExtractSticker = isSealedStickerSlab(item);
+  const isStickerSlab = item.isStickerSlab();
+  const canSealSticker =
+    ownStickerSlabs && item.isSticker() && item.hasDisplayCase();
+  const canExtractSticker = item.isStickerDisplayCase();
 
   function close(callBeforeClosing: () => void) {
     return function close() {

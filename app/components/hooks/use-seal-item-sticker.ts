@@ -7,7 +7,6 @@ import { assert } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
-import { isStickerSlabTool } from "~/utils/sticker-slab";
 
 export function useSealItemSticker() {
   const items = useInventoryItems();
@@ -26,8 +25,8 @@ export function useSealItemSticker() {
         ({ uid: itemUid, item }) =>
           itemUid >= 0 &&
           (selectedItem.isSticker()
-            ? isStickerSlabTool(item)
-            : item.isSticker())
+            ? item.isStickerSlab()
+            : item.isSticker() && item.hasDisplayCase())
       ),
       type: "seal-item-sticker"
     });

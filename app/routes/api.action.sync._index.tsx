@@ -72,7 +72,6 @@ import { isAttachmentCountAllowed } from "~/utils/attachments";
 import { editInventoryItem } from "~/utils/inventory";
 import { hasKeys } from "~/utils/misc";
 import { nonNegativeInt, optionalNumber, teamShape } from "~/utils/shapes";
-import { extractItemSticker, sealItemSticker } from "~/utils/sticker-slab";
 import {
   clientInventoryItemShape,
   itemEditorAttributesShape,
@@ -578,10 +577,10 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             inventory.removeItemSticker(action.targetUid, action.index);
             break;
           case SyncAction.ExtractItemSticker:
-            extractItemSticker(inventory, action.uid);
+            inventory.unsealStickerSlab(action.uid);
             break;
           case SyncAction.SealItemSticker:
-            sealItemSticker(inventory, action.toolUid, action.stickerUid);
+            inventory.sealStickerSlab(action.toolUid, action.stickerUid);
             break;
           case SyncAction.ScrapeItemSticker:
             await inventoryItemAllowScrapeSticker.for(userId).truthy();

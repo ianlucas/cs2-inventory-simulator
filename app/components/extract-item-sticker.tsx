@@ -9,7 +9,6 @@ import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
-import { extractItemSticker } from "~/utils/sticker-slab";
 import { useInventory, useTranslate } from "./app-context";
 import { HoldButton } from "./hold-button";
 import { useViewer } from "./hooks/use-viewer";
@@ -35,7 +34,7 @@ function useExtractSticker({ onClose, uid }: ExtractItemStickerProps) {
 
   function handleExtract() {
     sync({ type: SyncAction.ExtractItemSticker, uid });
-    setInventory(extractItemSticker(inventory, uid));
+    setInventory(inventory.unsealStickerSlab(uid));
     playSound("inventory_new_item_accept");
     onClose();
   }
