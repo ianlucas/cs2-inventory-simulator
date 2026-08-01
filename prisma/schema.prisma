@@ -121,3 +121,9 @@ model GroupRule {
   rule Rule @relation(fields: [name], references: [name], onDelete: Cascade)
   value String
 }
+
+model RateLimitBucket {
+  key String @id
+  tokens Float
+  updatedAt DateTime
+}

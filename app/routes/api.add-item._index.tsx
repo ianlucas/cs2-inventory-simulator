@@ -11,7 +11,7 @@ import {
   INVENTORY_SCOPE,
   isApiKeyValid
 } from "~/models/api-credential.server";
-import { findUniqueUser, manipulateUserInventory } from "~/models/user.server";
+import { existsUser, manipulateUserInventory } from "~/models/user.server";
 import {
   badRequest,
   methodNotAllowed,
@@ -38,10 +38,12 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     throw unauthorized;
   }
 
+  if (!(await existsUser(userId))) {
+    throw badRequest;
+  }
+
   try {
-    const { inventory: rawInventory } = await findUniqueUser(userId);
     await manipulateUserInventory({
-      rawInventory,
       userId,
       manipulate(inventory) {
         inventory.add(inventoryItem);

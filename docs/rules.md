@@ -572,6 +572,22 @@ Restrict the 3D viewer to attachment features (applying, scraping, and positioni
 
 Partner key for the 3D viewer. Sent as the iframe `key` and used as a trusted-partner signal that skips the rate-limit check.
 
+## API
+
+### `apiPublicStatTrakIncrement`
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Can anyone increment the StatTrak count of the user's equipped items using `POST /api/increment-item-stattrak` without an API key? Anonymous requests are rate-limited per item (burst of 50, then 1 increment every 3.6 seconds). Requests with a valid API key are not affected by this rule.
+
+### `apiPublicSprayConsume`
+
+- **Type:** `boolean`
+- **Default:** `false`
+
+Can anyone consume a charge of the user's equipped graffiti using `POST /api/consume-item-spray` without an API key? Anonymous requests are rate-limited per item (1 charge every 30 seconds). Requests with a valid API key are not affected by this rule.
+
 ## Rule overwriting
 
 There are two ways to overwrite rules: by adding records to `GroupRule` and `UserRule` tables. Users can be grouped by creating a record on `Group` table, and then associating each user to a group on `UserGroup`.

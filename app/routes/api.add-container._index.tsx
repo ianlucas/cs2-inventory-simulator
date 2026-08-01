@@ -13,7 +13,7 @@ import {
   INVENTORY_SCOPE,
   isApiKeyValid
 } from "~/models/api-credential.server";
-import { findUniqueUser, manipulateUserInventory } from "~/models/user.server";
+import { manipulateUserInventory } from "~/models/user.server";
 import { badRequest, methodNotAllowed, unauthorized } from "~/responses.server";
 import { random } from "~/utils/misc";
 import type { Route } from "./+types/api.add-container._index";
@@ -64,9 +64,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
         )
       )
     );
-    const { inventory: rawInventory } = await findUniqueUser(userId);
     await manipulateUserInventory({
-      rawInventory,
       userId,
       manipulate(inventory) {
         inventory.add({
