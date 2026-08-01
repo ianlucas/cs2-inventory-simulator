@@ -34,7 +34,8 @@ export function InventoryItemTile({
   const currDate = getTimestamp();
   const isNew =
     inventoryItem?.updatedAt !== undefined &&
-    currDate - inventoryItem.updatedAt < 120;
+    currDate - inventoryItem.updatedAt < 120 &&
+    !item.isCharmDetachment();
 
   return (
     <div className="w-38.5">

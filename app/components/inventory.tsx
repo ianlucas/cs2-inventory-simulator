@@ -27,13 +27,15 @@ import {
 import { ApplyItemPatch } from "./apply-item-patch";
 import { ApplyItemSticker } from "./apply-item-sticker";
 import { attachmentName } from "./attachment-3d-drawer";
+import { DetachCharm } from "./detach-charm";
 import { useApplyItemPatch } from "./hooks/use-apply-item-patch";
+import { useDetachCharm } from "./hooks/use-detach-charm";
 import { useListenAppEvent } from "./hooks/use-listen-app-event";
 import { useRemoveItemPatch } from "./hooks/use-remove-item-patch";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
-import { alert, confirm } from "./modal-generic";
+import { alert } from "./modal-generic";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelector } from "./item-selector-context";
 import { Presence } from "./presence";
@@ -137,6 +139,13 @@ export function Inventory() {
   const { closeUnpackItem, handleUnpackItem, isUnpackingItem, unpackItem } =
     useUnpackItem();
 
+  const {
+    closeDetachCharm,
+    detachCharm,
+    handleDetachCharm: openDetachCharm,
+    isDetachingCharm
+  } = useDetachCharm();
+
   function handleEquip(uid: number, team?: CS2Team) {
     playSound(
       inventory.get(uid).type === CS2ItemType.MusicKit
@@ -180,26 +189,11 @@ export function Inventory() {
     });
   }
 
-  async function handleDetachCharm(uid: number) {
+  function handleDetachCharm(uid: number) {
     if (inventory.getCharmDetachmentCharges() === 0) {
       return handleNeedCharmDetachment();
     }
-    const [slot] = inventory.get(uid).someKeychains()[0] ?? [];
-    if (slot === undefined) {
-      return;
-    }
-    if (
-      await confirm({
-        titleText: translate("InventoryItemDetachCharm"),
-        bodyText: translate("DetachCharmConfirmDesc"),
-        cancelText: translate("GenericCancel"),
-        confirmText: translate("DetachCharmConfirm")
-      })
-    ) {
-      playSound("inventory_item_pickup");
-      setInventory(inventory.removeItemKeychain(uid, slot));
-      sync({ type: SyncAction.RemoveItemKeychain, targetUid: uid, slot });
-    }
+    return openDetachCharm(uid);
   }
 
   function handleDetachCharmWithTool(uid: number) {
@@ -218,6 +212,7 @@ export function Inventory() {
   function dismissSelectItem() {
     setItemSelector(undefined);
     closeApplyItemPatch();
+    closeDetachCharm();
     closeApplyItemSticker();
     closeInspectItem();
     closeRemoveItemPatch();
@@ -372,6 +367,11 @@ export function Inventory() {
       <Presence present={isInspectingItem(inspectItem)}>
         {isInspectingItem(inspectItem) ? (
           <InspectItem {...inspectItem} onClose={closeInspectItem} />
+        ) : null}
+      </Presence>
+      <Presence present={isDetachingCharm(detachCharm)}>
+        {isDetachingCharm(detachCharm) ? (
+          <DetachCharm {...detachCharm} onClose={closeDetachCharm} />
         ) : null}
       </Presence>
       <Presence present={isUnpackingItem(unpackItem)}>
