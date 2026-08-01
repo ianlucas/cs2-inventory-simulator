@@ -68,8 +68,8 @@ export function sortByName(
 }
 
 function getTypeOrder(item: CS2InventoryItem) {
-  if (item.isStickerSlab()) {
-    return INVENTORY_ITEM_TYPE_ORDER[CS2ItemType.Sticker] - 0.5;
+  if (item.isStickerDisplayCase()) {
+    return INVENTORY_ITEM_TYPE_ORDER[CS2ItemType.Sticker] + 0.5;
   }
   return INVENTORY_ITEM_TYPE_ORDER[item.type];
 }
