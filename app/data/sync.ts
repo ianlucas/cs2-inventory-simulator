@@ -26,6 +26,7 @@ export const SyncAction = {
   RenameStorageUnit: "rename-storage-unit",
   RetrieveFromStorageUnit: "retrieve-from-storage-unit",
   ScrapeItemSticker: "scrape-item-sticker",
+  SealItemSticker: "seal-item-sticker",
   SwapItemsStatTrak: "swap-items-stattrak",
   Unequip: "unequip",
   UnpackItem: "unpack-item"

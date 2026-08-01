@@ -35,7 +35,7 @@ export function UseItemHeader({
           </div>
         )}
         {warning !== undefined && (
-          <div className="mt-2 flex items-center justify-center gap-2 text-sm">
+          <div className="mx-auto mt-2 flex max-w-160 items-center justify-center gap-2 text-sm">
             <InfoIcon className="h-6" />
             <span className="text-left whitespace-pre-line">{warning}</span>
             {warningItem !== undefined && <strong>{warningItem}</strong>}

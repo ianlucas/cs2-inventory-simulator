@@ -17,6 +17,7 @@ import { useUnpackItem } from "~/components/hooks/use-unpack-item";
 import { InventoryItem } from "~/components/inventory-item";
 import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
+import { isStickerSlabTool } from "~/utils/sticker-slab";
 import {
   useInventory,
   useInventoryFilter,
@@ -45,6 +46,8 @@ import { RemoveItemPatch } from "./remove-item-patch";
 import { RenameItem } from "./rename-item";
 import { RenameStorageUnit } from "./rename-storage-unit";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
+import { SealItemSticker } from "./seal-item-sticker";
+import { useSealItemSticker } from "./hooks/use-seal-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
 import { UnpackItem } from "./unpack-item";
@@ -70,6 +73,10 @@ export function Inventory() {
   const ownApplicablePatches =
     items.filter(({ item }) => item.isPatch()).length > 0 &&
     items.filter(({ item }) => item.hasPatches()).length > 0;
+
+  const ownStickerSlabs = items.some(
+    ({ uid, item }) => uid >= 0 && isStickerSlabTool(item)
+  );
 
   const {
     closeUnlockCase,
@@ -131,6 +138,14 @@ export function Inventory() {
     handleApplyItemStickerSelect,
     isApplyingItemSticker
   } = useApplyItemSticker();
+
+  const {
+    closeSealItemSticker,
+    handleSealItemSticker,
+    handleSealItemStickerSelect,
+    isSealingItemSticker,
+    sealItemSticker
+  } = useSealItemSticker();
 
   const {
     closeScrapeItemSticker,
@@ -234,6 +249,7 @@ export function Inventory() {
     closeRenameItem();
     closeRenameStorageUnit();
     closeScrapeItemSticker();
+    closeSealItemSticker();
     closeSwapItemsStatTrak();
     closeUnlockCase();
     closeUnpackItem();
@@ -265,6 +281,9 @@ export function Inventory() {
         case "detach-charm":
           setItemSelector(undefined);
           return handleDetachCharm(uid);
+        case "seal-item-sticker":
+          setItemSelector(undefined);
+          return handleSealItemStickerSelect(uid);
         case "deposit-to-storage-unit":
           return handleDepositToStorageUnitSelect(uid);
         case "retrieve-from-storage-unit":
@@ -319,13 +338,15 @@ export function Inventory() {
                     onRenameStorageUnit: handleRenameStorageUnit,
                     onRetrieveFromStorageUnit: handleRetrieveFromStorageUnit,
                     onScrapeSticker: handleScrapeItemSticker,
+                    onSealSticker: handleSealItemSticker,
                     onSwapItemsStatTrak: handleSwapItemsStatTrak,
                     onUnequip: handleUnequip,
                     onUnlockContainer: handleUnlockCase,
                     onUseItem: handleUnpackItem,
                     ownApplicableKeychains,
                     ownApplicablePatches,
-                    ownApplicableStickers
+                    ownApplicableStickers,
+                    ownStickerSlabs
                   })}
             />
           </div>
@@ -375,6 +396,14 @@ export function Inventory() {
           <ApplyItemSticker
             {...applyItemSticker}
             onClose={closeApplyItemSticker}
+          />
+        ) : null}
+      </Presence>
+      <Presence present={isSealingItemSticker(sealItemSticker)}>
+        {isSealingItemSticker(sealItemSticker) ? (
+          <SealItemSticker
+            {...sealItemSticker}
+            onClose={closeSealItemSticker}
           />
         ) : null}
       </Presence>

@@ -11,6 +11,7 @@ import {
 } from "@ianlucas/cs2-lib";
 // Type-only so this module never depends on viewer-api at runtime (it is also
 // imported server-side).
+import { isStickerSlabTool } from "~/utils/sticker-slab";
 import type { ViewerItem } from "~/utils/viewer-api";
 
 export const DEFAULT_VIEWER_EMBED_URL = "https://3d.cstrike.app/view";
@@ -77,7 +78,10 @@ function isViewerRenderableKind(item: ViewerItemInput): boolean {
     (economyItem.isWeapon() ||
       economyItem.isMelee() ||
       economyItem.isSticker() ||
-      economyItem.isKeychain())
+      economyItem.isKeychain() ||
+      // The Sticker Slab tool carries the display-case model that all sealed
+      // slab keychains inherit, so the viewer can render it empty.
+      isStickerSlabTool(economyItem))
   );
 }
 

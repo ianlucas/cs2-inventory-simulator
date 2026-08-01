@@ -25,6 +25,7 @@ import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
 import { InfoIcon } from "./info-icon";
 import { InspectCharmDetachments } from "./inspect-charm-detachments";
+import { ItemDescription } from "./item-description";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -161,6 +162,20 @@ function InspectItemShareButton({ item }: { item: CS2InventoryItem }) {
   );
 }
 
+function InspectItemDescription({ item }: { item: CS2InventoryItem }) {
+  if (
+    (item.parent ?? item).description === undefined &&
+    item.description === undefined
+  ) {
+    return null;
+  }
+  return (
+    <div className="m-auto max-w-5xl px-24 pb-4 lg:w-5xl">
+      <ItemDescription item={item} />
+    </div>
+  );
+}
+
 function InspectItem3d({ onClose, uid }: InspectItemProps) {
   const translate = useTranslate();
   const item = useInventoryItem(uid);
@@ -174,6 +189,7 @@ function InspectItem3d({ onClose, uid }: InspectItemProps) {
       viewerProps={viewerProps}
     >
       <div className="pointer-events-none absolute bottom-8 left-0 w-full">
+        <InspectItemDescription item={item} />
         <UseItemFooter
           left={
             <>
@@ -233,6 +249,7 @@ function InspectItem2d({ onClose, uid }: InspectItemProps) {
                 )}
               </div>
             </div>
+            <InspectItemDescription item={item} />
             <UseItemFooter
               left={
                 <>

@@ -72,6 +72,7 @@ import { isAttachmentCountAllowed } from "~/utils/attachments";
 import { editInventoryItem } from "~/utils/inventory";
 import { hasKeys } from "~/utils/misc";
 import { nonNegativeInt, optionalNumber, teamShape } from "~/utils/shapes";
+import { sealItemSticker } from "~/utils/sticker-slab";
 import {
   clientInventoryItemShape,
   itemEditorAttributesShape,
@@ -161,6 +162,11 @@ const actionShape = z.discriminatedUnion("type", [
     targetUid: nonNegativeInt,
     index: nonNegativeInt,
     wear: optionalNumber
+  }),
+  z.object({
+    type: z.literal(SyncAction.SealItemSticker),
+    toolUid: nonNegativeInt,
+    stickerUid: nonNegativeInt
   }),
   z.object({
     type: z.literal(SyncAction.SwapItemsStatTrak),
@@ -566,6 +572,9 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
           case SyncAction.RemoveItemSticker:
             await inventoryItemAllowRemoveSticker.for(userId).truthy();
             inventory.removeItemSticker(action.targetUid, action.index);
+            break;
+          case SyncAction.SealItemSticker:
+            sealItemSticker(inventory, action.toolUid, action.stickerUid);
             break;
           case SyncAction.ScrapeItemSticker:
             await inventoryItemAllowScrapeSticker.for(userId).truthy();

@@ -17,11 +17,13 @@ export function HoldButton({
   durationMs = DEFAULT_HOLD_MS,
   onHold,
   tooltip,
+  variant = "danger",
   ...props
 }: Omit<ComponentProps<typeof ModalButton>, "variant"> & {
   durationMs?: number;
   onHold: () => void;
   tooltip?: string;
+  variant?: "danger" | "primary";
 }) {
   const [holding, setHolding] = useState(false);
   const fireRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -96,11 +98,14 @@ export function HoldButton({
         })}
         className={clsx("overflow-hidden", props.className)}
         forwardRef={setReference}
-        variant="danger"
+        variant={variant}
       >
         <span
           aria-hidden
-          className="absolute inset-y-0 left-0 bg-red-400"
+          className={clsx(
+            "absolute inset-y-0 left-0",
+            variant === "danger" ? "bg-red-400" : "bg-green-400"
+          )}
           style={{
             transitionDuration: `${holding ? durationMs : REWIND_MS}ms`,
             transitionProperty: "width",

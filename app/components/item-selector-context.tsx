@@ -29,6 +29,7 @@ export interface ItemSelectorContextProps {
     | "rename-item"
     | "retrieve-from-storage-unit"
     | "scrape-sticker"
+    | "seal-item-sticker"
     | "swap-items-stattrak"
     | "unlock-case";
   uid: number;
