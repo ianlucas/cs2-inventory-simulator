@@ -220,6 +220,7 @@ export const turkish = {
   InventoryItemUnequipCT: "CT'den çıkar",
   InventoryItemUnequipT: "T'den çıkar",
   InventoryItemUnlockContainer: /* csgo_turkish.txt */"Kasayı Aç",
+  InventoryItemUnsealGraffiti: /* csgo_turkish.txt */"Aç ve Kuşan",
   InventoryItemUseItem: /* csgo_turkish.txt */"Eşyayı Kullan",
   InventoryItemUseStorageUnit: /* csgo_turkish.txt */"Bu Depoyu Kullanmaya Başla",
   InventoryItemWear: "Yıpranma:",
@@ -347,5 +348,10 @@ export const turkish = {
   UnpackClose: /* csgo_turkish.txt */"Kapat",
   UnpackDesc: /* csgo_turkish.txt */"Bu eşyayı açmak istediğine emin misin?",
   UnpackNumberOfItems: /* csgo_turkish.txt */"Eşya Sayısı: {1}",
-  UnpackTitle: /* csgo_turkish.txt */"{1} Aç"
+  UnpackTitle: /* csgo_turkish.txt */"{1} Aç",
+  UnsealGraffitiClose: /* csgo_turkish.txt */"Kapat",
+  UnsealGraffitiDesc: /* csgo_turkish.txt */"Öğesini Aç",
+  UnsealGraffitiTitle: /* csgo_turkish.txt */"Grafitiyi Aç",
+  UnsealGraffitiUse: /* csgo_turkish.txt */"Grafitinin Mührünü Kır",
+  UnsealGraffitiWarn: /* csgo_turkish.txt */"Bu grafitinin mührü sadece bir defa kırılabilir"
 };

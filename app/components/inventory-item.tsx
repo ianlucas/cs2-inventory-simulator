@@ -56,6 +56,7 @@ export function InventoryItem({
   onSwapItemsStatTrak,
   onUnequip,
   onUnlockContainer,
+  onUnsealGraffiti,
   onUseItem,
   ownApplicableKeychains,
   ownApplicablePatches,
@@ -86,6 +87,7 @@ export function InventoryItem({
   onSwapItemsStatTrak?: (uid: number) => void;
   onUnequip?: (uid: number, team?: CS2Team) => void;
   onUnlockContainer?: (uid: number) => void;
+  onUnsealGraffiti?: (uid: number) => void;
   onUseItem?: (uid: number) => void;
   ownApplicableKeychains?: boolean;
   ownApplicablePatches?: boolean;
@@ -138,7 +140,8 @@ export function InventoryItem({
   const isEquippable =
     (item.modelKey === undefined ||
       !inventoryItemEquipHideModel.includes(item.modelKey)) &&
-    !inventoryItemEquipHideType.includes(item.type);
+    !inventoryItemEquipHideType.includes(item.type) &&
+    !item.isSealed();
   const canEquip =
     isEquippable &&
     item.teams === undefined &&
@@ -201,6 +204,7 @@ export function InventoryItem({
   const isStickerSlab = item.isStickerSlab();
   const canSealSticker = item.isSticker() && item.hasDisplayCase();
   const canExtractSticker = item.isStickerDisplayCase();
+  const canUnsealGraffiti = item.isGraffiti() && item.isSealed();
 
   function close(callBeforeClosing: () => void) {
     return function close() {
@@ -384,6 +388,11 @@ export function InventoryItem({
                                   "InventoryItemUnlockContainer"
                                 ),
                                 onClick: close(() => onUnlockContainer?.(uid))
+                              },
+                              {
+                                condition: canUnsealGraffiti,
+                                label: translate("InventoryItemUnsealGraffiti"),
+                                onClick: close(() => onUnsealGraffiti?.(uid))
                               }
                             ],
                             [

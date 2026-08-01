@@ -220,6 +220,7 @@ export const bulgarian = {
   InventoryItemUnequipCT: "Премахни КТ",
   InventoryItemUnequipT: "Премахни Т",
   InventoryItemUnlockContainer: /* csgo_bulgarian.txt */"Отключване на контейнера",
+  InventoryItemUnsealGraffiti: /* csgo_bulgarian.txt */"Отваряне и екипиране",
   InventoryItemUseItem: /* csgo_bulgarian.txt */"Използване на артикула",
   InventoryItemUseStorageUnit: /* csgo_bulgarian.txt */"Стартиране на ползването на този елемент",
   InventoryItemWear: "Износване:",
@@ -347,5 +348,10 @@ export const bulgarian = {
   UnpackClose: /* csgo_bulgarian.txt */"Затваряне",
   UnpackDesc: /* csgo_bulgarian.txt */"Сигурни ли сте, че искате да разопаковате този артикул?",
   UnpackNumberOfItems: /* csgo_bulgarian.txt */"Брой артикули: {1}",
-  UnpackTitle: /* csgo_bulgarian.txt */"Разопаковане на {1}"
+  UnpackTitle: /* csgo_bulgarian.txt */"Разопаковане на {1}",
+  UnsealGraffitiClose: /* csgo_bulgarian.txt */"Затваряне",
+  UnsealGraffitiDesc: /* csgo_bulgarian.txt */"Отваряне на",
+  UnsealGraffitiTitle: /* csgo_bulgarian.txt */"Отваряне на графити",
+  UnsealGraffitiUse: /* csgo_bulgarian.txt */"Разпечатване на графити",
+  UnsealGraffitiWarn: /* csgo_bulgarian.txt */"Тези графити могат да бъдат разпечатани само веднъж"
 };

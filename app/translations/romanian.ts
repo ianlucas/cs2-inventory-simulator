@@ -219,6 +219,7 @@ export const romanian = {
   InventoryItemUnequipCT: "Dezechipează CT",
   InventoryItemUnequipT: "Dezechipează T",
   InventoryItemUnlockContainer: /* csgo_romanian.txt */"Deschide containerul",
+  InventoryItemUnsealGraffiti: /* csgo_romanian.txt */"Deschide și echipează",
   InventoryItemUseItem: /* csgo_romanian.txt */"Folosește obiectul",
   InventoryItemUseStorageUnit: /* csgo_romanian.txt */"Începe să folosești această unitate de depozitare",
   InventoryItemWear: "Uzură:",
@@ -346,5 +347,10 @@ export const romanian = {
   UnpackClose: /* csgo_romanian.txt */"Închide",
   UnpackDesc: /* csgo_romanian.txt */"Sigur vrei să despachetezi acest obiect?",
   UnpackNumberOfItems: /* csgo_romanian.txt */"Numărul de obiecte: {1}",
-  UnpackTitle: /* csgo_romanian.txt */"Despachetează: {1}"
+  UnpackTitle: /* csgo_romanian.txt */"Despachetează: {1}",
+  UnsealGraffitiClose: /* csgo_romanian.txt */"Închide",
+  UnsealGraffitiDesc: /* csgo_romanian.txt */"Deschide:",
+  UnsealGraffitiTitle: /* csgo_romanian.txt */"Deschide graffitiul",
+  UnsealGraffitiUse: /* csgo_romanian.txt */"Desigilează graffitiul",
+  UnsealGraffitiWarn: /* csgo_romanian.txt */"Acest graffiti poate fi desigilat doar o singură dată."
 };

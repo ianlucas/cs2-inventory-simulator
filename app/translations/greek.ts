@@ -220,6 +220,7 @@ export const greek = {
   InventoryItemUnequipCT: "Παρόπλιση CT",
   InventoryItemUnequipT: "Παρόπλιση T",
   InventoryItemUnlockContainer: /* csgo_greek.txt */"Ξεκλείδωμα κιβωτίου",
+  InventoryItemUnsealGraffiti: /* csgo_greek.txt */"Άνοιγμα & εξόπλιση",
   InventoryItemUseItem: /* csgo_greek.txt */"Χρήση αντικειμένου",
   InventoryItemUseStorageUnit: /* csgo_greek.txt */"Έναρξη χρήσης κιβωτίου",
   InventoryItemWear: "Φθορά:",
@@ -347,5 +348,10 @@ export const greek = {
   UnpackClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
   UnpackDesc: /* csgo_greek.txt */"Θέλετε σίγουρα να ανοίξετε αυτό το αντικείμενο;",
   UnpackNumberOfItems: /* csgo_greek.txt */"Αριθμός αντικειμένων: {1}",
-  UnpackTitle: /* csgo_greek.txt */"Άνοιγμα {1}"
+  UnpackTitle: /* csgo_greek.txt */"Άνοιγμα {1}",
+  UnsealGraffitiClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
+  UnsealGraffitiDesc: /* csgo_greek.txt */"Άνοιγμα",
+  UnsealGraffitiTitle: /* csgo_greek.txt */"Άνοιγμα γκράφιτι",
+  UnsealGraffitiUse: /* csgo_greek.txt */"Ξεσφράγισμα γκράφιτι",
+  UnsealGraffitiWarn: /* csgo_greek.txt */"Αυτό το γκράφιτι μπορεί να ξεσφραγιστεί μόνο μία φορά"
 };

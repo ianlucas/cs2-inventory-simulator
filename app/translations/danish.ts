@@ -219,6 +219,7 @@ export const danish = {
   InventoryItemUnequipCT: "Tag af CT",
   InventoryItemUnequipT: "Tag af T",
   InventoryItemUnlockContainer: /* csgo_danish.txt */"Oplås beholder",
+  InventoryItemUnsealGraffiti: /* csgo_danish.txt */"Åbn og tag i brug",
   InventoryItemUseItem: /* csgo_danish.txt */"Anvend genstand",
   InventoryItemUseStorageUnit: /* csgo_danish.txt */"Anvend denne enhed",
   InventoryItemWear: "Slid:",
@@ -346,5 +347,10 @@ export const danish = {
   UnpackClose: /* csgo_danish.txt */"Luk",
   UnpackDesc: /* csgo_danish.txt */"Er du sikker på, at du vil pakke denne genstand ud?",
   UnpackNumberOfItems: /* csgo_danish.txt */"Antal genstande: {1}",
-  UnpackTitle: /* csgo_danish.txt */"Udpak {1}"
+  UnpackTitle: /* csgo_danish.txt */"Udpak {1}",
+  UnsealGraffitiClose: /* csgo_danish.txt */"Luk",
+  UnsealGraffitiDesc: /* csgo_danish.txt */"Åbn",
+  UnsealGraffitiTitle: /* csgo_danish.txt */"Åbn graffiti",
+  UnsealGraffitiUse: /* csgo_danish.txt */"Bryd forseglingen på graffitien",
+  UnsealGraffitiWarn: /* csgo_danish.txt */"Forseglingen på denne graffiti kan kun brydes én gang"
 };

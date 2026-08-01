@@ -219,6 +219,7 @@ export const czech = {
   InventoryItemUnequipCT: "Sundat CT",
   InventoryItemUnequipT: "Sundat T",
   InventoryItemUnlockContainer: /* csgo_czech.txt */"Odemknout bednu",
+  InventoryItemUnsealGraffiti: /* csgo_czech.txt */"Rozbalit a vybavit",
   InventoryItemUseItem: /* csgo_czech.txt */"Použít předmět",
   InventoryItemUseStorageUnit: /* csgo_czech.txt */"Začít používat kontejner",
   InventoryItemWear: "Povrch:",
@@ -346,5 +347,10 @@ export const czech = {
   UnpackClose: /* csgo_czech.txt */"Zavřít",
   UnpackDesc: /* csgo_czech.txt */"Opravdu chceš rozbalit tento předmět?",
   UnpackNumberOfItems: /* csgo_czech.txt */"Počet předmětů: {1}",
-  UnpackTitle: /* csgo_czech.txt */"Rozbalit {1}"
+  UnpackTitle: /* csgo_czech.txt */"Rozbalit {1}",
+  UnsealGraffitiClose: /* csgo_czech.txt */"Zavřít",
+  UnsealGraffitiDesc: /* csgo_czech.txt */"Otevřít",
+  UnsealGraffitiTitle: /* csgo_czech.txt */"Rozbalit graffiti",
+  UnsealGraffitiUse: /* csgo_czech.txt */"Rozbalit graffiti",
+  UnsealGraffitiWarn: /* csgo_czech.txt */"Toto graffiti lze rozbalit pouze jednou"
 };

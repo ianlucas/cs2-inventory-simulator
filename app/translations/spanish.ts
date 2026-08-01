@@ -220,6 +220,7 @@ export const spanish = {
   InventoryItemUnequipCT: "Desequipar antiterroristas",
   InventoryItemUnequipT: "Desequipar terroristas",
   InventoryItemUnlockContainer: /* csgo_spanish.txt */"Abrir paquete",
+  InventoryItemUnsealGraffiti: /* csgo_spanish.txt */"Abrir y equipar",
   InventoryItemUseItem: /* csgo_spanish.txt */"Usar artículo",
   InventoryItemUseStorageUnit: /* csgo_spanish.txt */"Comenzar a usar esta unidad",
   InventoryItemWear: "Desgaste:",
@@ -347,5 +348,10 @@ export const spanish = {
   UnpackClose: /* csgo_spanish.txt */"Cerrar",
   UnpackDesc: /* csgo_spanish.txt */"¿Seguro que quieres abrir este artículo?",
   UnpackNumberOfItems: /* csgo_spanish.txt */"Número de objetos: {1}",
-  UnpackTitle: /* csgo_spanish.txt */"Abrir {1}"
+  UnpackTitle: /* csgo_spanish.txt */"Abrir {1}",
+  UnsealGraffitiClose: /* csgo_spanish.txt */"Cerrar",
+  UnsealGraffitiDesc: /* csgo_spanish.txt */"Abrir",
+  UnsealGraffitiTitle: /* csgo_spanish.txt */"Abrir grafiti",
+  UnsealGraffitiUse: /* csgo_spanish.txt */"Abrir grafiti",
+  UnsealGraffitiWarn: /* csgo_spanish.txt */"Este grafiti solo se puede abrir una vez"
 };

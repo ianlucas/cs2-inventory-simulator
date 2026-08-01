@@ -220,6 +220,7 @@ export const thai = {
   InventoryItemUnequipCT: "ถอด CT",
   InventoryItemUnequipT: "ถอด T",
   InventoryItemUnlockContainer: /* csgo_thai.txt */"ปลดล็อคบรรจุภัณฑ์",
+  InventoryItemUnsealGraffiti: /* csgo_thai.txt */"เปิดและสวมใส่",
   InventoryItemUseItem: /* csgo_thai.txt */"ใช้ไอเท็ม",
   InventoryItemUseStorageUnit: /* csgo_thai.txt */"เริ่มใช้กล่องเก็บของนี้",
   InventoryItemWear: "ความเสื่อมสภาพ:",
@@ -347,5 +348,10 @@ export const thai = {
   UnpackClose: /* csgo_thai.txt */"ปิด",
   UnpackDesc: /* csgo_thai.txt */"คุณแน่ใจหรือไม่ว่าคุณต้องการแกะไอเท็มนี้?",
   UnpackNumberOfItems: /* csgo_thai.txt */"จำนวนของไอเท็ม: {1}",
-  UnpackTitle: /* csgo_thai.txt */"แกะ {1}"
+  UnpackTitle: /* csgo_thai.txt */"แกะ {1}",
+  UnsealGraffitiClose: /* csgo_thai.txt */"ปิด",
+  UnsealGraffitiDesc: /* csgo_thai.txt */"เปิด",
+  UnsealGraffitiTitle: /* csgo_thai.txt */"เปิดกราฟฟิตี้",
+  UnsealGraffitiUse: /* csgo_thai.txt */"เปิดผนึกกราฟฟิตี้",
+  UnsealGraffitiWarn: /* csgo_thai.txt */"กราฟฟิตี้นี้สามารถเปิดผนึกได้แค่ครั้งเดียวเท่านั้น"
 };

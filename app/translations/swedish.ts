@@ -219,6 +219,7 @@ export const swedish = {
   InventoryItemUnequipCT: "Avutrusta CT",
   InventoryItemUnequipT: "Avutrusta T",
   InventoryItemUnlockContainer: /* csgo_swedish.txt */"Lås upp behållare",
+  InventoryItemUnsealGraffiti: /* csgo_swedish.txt */"Öppna och utrusta",
   InventoryItemUseItem: /* csgo_swedish.txt */"Använd föremål",
   InventoryItemUseStorageUnit: /* csgo_swedish.txt */"Börja använda denna enhet",
   InventoryItemWear: "Slitage:",
@@ -346,5 +347,10 @@ export const swedish = {
   UnpackClose: /* csgo_swedish.txt */"Stäng",
   UnpackDesc: /* csgo_swedish.txt */"Är du säker på att du vill packa upp detta föremål?",
   UnpackNumberOfItems: /* csgo_swedish.txt */"Antal föremål: {1}",
-  UnpackTitle: /* csgo_swedish.txt */"Packa upp {1}"
+  UnpackTitle: /* csgo_swedish.txt */"Packa upp {1}",
+  UnsealGraffitiClose: /* csgo_swedish.txt */"Stäng",
+  UnsealGraffitiDesc: /* csgo_swedish.txt */"Öppna",
+  UnsealGraffitiTitle: /* csgo_swedish.txt */"Öppna graffiti",
+  UnsealGraffitiUse: /* csgo_swedish.txt */"Öppna graffiti",
+  UnsealGraffitiWarn: /* csgo_swedish.txt */"Denna graffiti kan endast öppnas en gång"
 };

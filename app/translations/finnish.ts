@@ -219,6 +219,7 @@ export const finnish = {
   InventoryItemUnequipCT: "Poista CT",
   InventoryItemUnequipT: "Poista T",
   InventoryItemUnlockContainer: /* csgo_finnish.txt */"Avaa säiliö",
+  InventoryItemUnsealGraffiti: /* csgo_finnish.txt */"Avaa ja varusta",
   InventoryItemUseItem: /* csgo_finnish.txt */"Käytä esinettä",
   InventoryItemUseStorageUnit: /* csgo_finnish.txt */"Aloita varastolaatikon käyttö",
   InventoryItemWear: "Kuluminen:",
@@ -346,5 +347,10 @@ export const finnish = {
   UnpackClose: /* csgo_finnish.txt */"Sulje",
   UnpackDesc: /* csgo_finnish.txt */"Haluatko varmasti purkaa esineen pakkauksesta?",
   UnpackNumberOfItems: /* csgo_finnish.txt */"Esineiden määrä: {1}",
-  UnpackTitle: /* csgo_finnish.txt */"Avaa {1}"
+  UnpackTitle: /* csgo_finnish.txt */"Avaa {1}",
+  UnsealGraffitiClose: /* csgo_finnish.txt */"Sulje",
+  UnsealGraffitiDesc: /* csgo_finnish.txt */"Avaa",
+  UnsealGraffitiTitle: /* csgo_finnish.txt */"Avaa graffiti",
+  UnsealGraffitiUse: /* csgo_finnish.txt */"Avaa graffiti",
+  UnsealGraffitiWarn: /* csgo_finnish.txt */"Graffitin voi avata vain kerran"
 };

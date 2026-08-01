@@ -219,6 +219,7 @@ export const french = {
   InventoryItemUnequipCT: "Retirer CT",
   InventoryItemUnequipT: "Retirer T",
   InventoryItemUnlockContainer: /* csgo_french.txt */"Ouvrir le conteneur",
+  InventoryItemUnsealGraffiti: /* csgo_french.txt */"Ouvrir et équiper",
   InventoryItemUseItem: /* csgo_french.txt */"Utiliser cet item",
   InventoryItemUseStorageUnit: /* csgo_french.txt */"Commencer à utiliser cette unité",
   InventoryItemWear: "Usure :",
@@ -346,5 +347,10 @@ export const french = {
   UnpackClose: /* csgo_french.txt */"Fermer",
   UnpackDesc: /* csgo_french.txt */"Voulez-vous vraiment déballer cet item ?",
   UnpackNumberOfItems: /* csgo_french.txt */"Nombre d'objets : {1}",
-  UnpackTitle: /* csgo_french.txt */"Déballer {1}"
+  UnpackTitle: /* csgo_french.txt */"Déballer {1}",
+  UnsealGraffitiClose: /* csgo_french.txt */"Fermer",
+  UnsealGraffitiDesc: /* csgo_french.txt */"Ouvrir",
+  UnsealGraffitiTitle: /* csgo_french.txt */"Ouvrir le graffiti",
+  UnsealGraffitiUse: /* csgo_french.txt */"Desceller le graffiti",
+  UnsealGraffitiWarn: /* csgo_french.txt */"Ce graffiti ne peut être descellé qu'une seule fois"
 };

@@ -222,6 +222,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   InventoryItemTeamT: "CSGO_Inventory_Team_T",
   InventoryItemUnequip: "SFUI_InvContextMenu_Unequip",
   InventoryItemUnlockContainer: "inv_context_open_package",
+  InventoryItemUnsealGraffiti: "SFUI_InvContextMenu_usespray",
   InventoryItemUseItem: "inv_context_useitem",
   InventoryItemUseStorageUnit: "inv_context_newcasket",
   InventorySelectAnItem: "inv_select_item_use",
@@ -316,6 +317,11 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   UnpackDesc: "popup_useitem_desc_getkeychaincharges",
   UnpackNumberOfItems: { token: "Attrib_ItemsCount", transform: (value) => replace(value, '%s1', '{1}') },
   UnpackTitle: { token: "popup_useitem_title_getkeychaincharges", transform: (value) => replace(value, '{s:itemname}', '{1}') },
+  UnsealGraffitiClose: "GameUI_Close",
+  UnsealGraffitiDesc: { token: "popup_decodeable_desc_graffiti", transform: (value) => replace(value, '<b>{s:itemname}</b>', '') },
+  UnsealGraffitiTitle: "popup_totool_decodeable_header_graffiti",
+  UnsealGraffitiUse: "popup_decodeable_button_graffiti",
+  UnsealGraffitiWarn: "popup_decodeable_warning_graffiti",
 };
 
 assert(CS2_CSGO_PATH, "CS2_CSGO_PATH must be set.");

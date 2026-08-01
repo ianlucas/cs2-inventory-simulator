@@ -220,6 +220,7 @@ export const koreana = {
   InventoryItemUnequipCT: "CT 장착 해제",
   InventoryItemUnequipT: "T 장착 해제",
   InventoryItemUnlockContainer: /* csgo_koreana.txt */"상자 열기",
+  InventoryItemUnsealGraffiti: /* csgo_koreana.txt */"개봉 후 장착",
   InventoryItemUseItem: /* csgo_koreana.txt */"아이템 사용",
   InventoryItemUseStorageUnit: /* csgo_koreana.txt */"저장 컨테이너 사용",
   InventoryItemWear: "형태:",
@@ -347,5 +348,10 @@ export const koreana = {
   UnpackClose: /* csgo_koreana.txt */"닫기",
   UnpackDesc: /* csgo_koreana.txt */"이 아이템을 개봉할까요?",
   UnpackNumberOfItems: /* csgo_koreana.txt */"아이템 개수: {1}",
-  UnpackTitle: /* csgo_koreana.txt */"{1} 아이템 개봉"
+  UnpackTitle: /* csgo_koreana.txt */"{1} 아이템 개봉",
+  UnsealGraffitiClose: /* csgo_koreana.txt */"닫기",
+  UnsealGraffitiDesc: /* csgo_koreana.txt */"열기",
+  UnsealGraffitiTitle: /* csgo_koreana.txt */"그래피티 열기",
+  UnsealGraffitiUse: /* csgo_koreana.txt */"미개봉 그래피티",
+  UnsealGraffitiWarn: /* csgo_koreana.txt */"이 그래피티는 한 번만 개봉할 수 있습니다."
 };

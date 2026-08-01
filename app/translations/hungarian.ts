@@ -219,6 +219,7 @@ export const hungarian = {
   InventoryItemUnequipCT: "CT letevése",
   InventoryItemUnequipT: "T letevése",
   InventoryItemUnlockContainer: /* csgo_hungarian.txt */"Tároló kinyitása",
+  InventoryItemUnsealGraffiti: /* csgo_hungarian.txt */"Kinyit és felszerel",
   InventoryItemUseItem: /* csgo_hungarian.txt */"Használ",
   InventoryItemUseStorageUnit: /* csgo_hungarian.txt */"Egység használatának megkezdése",
   InventoryItemWear: "Kopottság:",
@@ -343,5 +344,10 @@ export const hungarian = {
   UnpackClose: /* csgo_hungarian.txt */"Bezár",
   UnpackDesc: /* csgo_hungarian.txt */"Biztosan ki akarod csomagolni ezt a tárgyat?",
   UnpackNumberOfItems: /* csgo_hungarian.txt */"Tárgyak száma: {1}",
-  UnpackTitle: /* csgo_hungarian.txt */"{1} kicsomagolása"
+  UnpackTitle: /* csgo_hungarian.txt */"{1} kicsomagolása",
+  UnsealGraffitiClose: /* csgo_hungarian.txt */"Bezár",
+  UnsealGraffitiDesc: /* csgo_hungarian.txt */"kinyitása",
+  UnsealGraffitiTitle: /* csgo_hungarian.txt */"Falfirka kinyitása",
+  UnsealGraffitiUse: /* csgo_hungarian.txt */"Graffiti felbontása",
+  UnsealGraffitiWarn: /* csgo_hungarian.txt */"Ezt a falfirkát csak egyszer lehet felbontani"
 };

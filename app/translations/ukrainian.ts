@@ -220,6 +220,7 @@ export const ukrainian = {
   InventoryItemUnequipCT: "Зняти екіпіровку CT",
   InventoryItemUnequipT: "Зняти екіпіровку T",
   InventoryItemUnlockContainer: /* csgo_ukrainian.txt */"Розкрити",
+  InventoryItemUnsealGraffiti: /* csgo_ukrainian.txt */"Відкрити і спорядити",
   InventoryItemUseItem: /* csgo_ukrainian.txt */"Використати предмет",
   InventoryItemUseStorageUnit: /* csgo_ukrainian.txt */"Почати використовувати це сховище",
   InventoryItemWear: "Зношеність:",
@@ -347,5 +348,10 @@ export const ukrainian = {
   UnpackClose: /* csgo_ukrainian.txt */"Закрити",
   UnpackDesc: /* csgo_ukrainian.txt */"Ви дійсно бажаєте розпакувати цей предмет?",
   UnpackNumberOfItems: /* csgo_ukrainian.txt */"Кількість предметів: {1}",
-  UnpackTitle: /* csgo_ukrainian.txt */"Розпакувати: {1}"
+  UnpackTitle: /* csgo_ukrainian.txt */"Розпакувати: {1}",
+  UnsealGraffitiClose: /* csgo_ukrainian.txt */"Закрити",
+  UnsealGraffitiDesc: /* csgo_ukrainian.txt */"Відкрити",
+  UnsealGraffitiTitle: /* csgo_ukrainian.txt */"Відкрити графіті",
+  UnsealGraffitiUse: /* csgo_ukrainian.txt */"Відкрити графіті",
+  UnsealGraffitiWarn: /* csgo_ukrainian.txt */"Це графіти можна відкрити лише раз"
 };

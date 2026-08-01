@@ -216,6 +216,7 @@ export const indonesian = {
   InventoryItemUnequipCT: "Lepas CT",
   InventoryItemUnequipT: "Lepas T",
   InventoryItemUnlockContainer: /* csgo_indonesian.txt */"Buka Kontainer",
+  InventoryItemUnsealGraffiti: /* csgo_indonesian.txt */"Buka dan Pasang",
   InventoryItemUseItem: /* csgo_indonesian.txt */"Gunakan Item",
   InventoryItemUseStorageUnit: /* csgo_indonesian.txt */"Mulai Gunakan Unit Ini",
   InventoryItemWear: "Kondisi:",
@@ -343,5 +344,10 @@ export const indonesian = {
   UnpackClose: /* csgo_indonesian.txt */"Tutup",
   UnpackDesc: /* csgo_indonesian.txt */"Apa kamu yakin ingin membuka item ini?",
   UnpackNumberOfItems: /* csgo_indonesian.txt */"Jumlah Item: {1}",
-  UnpackTitle: /* csgo_indonesian.txt */"Buka {1}"
+  UnpackTitle: /* csgo_indonesian.txt */"Buka {1}",
+  UnsealGraffitiClose: /* csgo_indonesian.txt */"Tutup",
+  UnsealGraffitiDesc: /* csgo_indonesian.txt */"Buka",
+  UnsealGraffitiTitle: /* csgo_indonesian.txt */"Buka Grafiti",
+  UnsealGraffitiUse: /* csgo_indonesian.txt */"Buka Segel Grafiti",
+  UnsealGraffitiWarn: /* csgo_indonesian.txt */"Segel grafiti ini hanya bisa dibuka satu kali"
 };

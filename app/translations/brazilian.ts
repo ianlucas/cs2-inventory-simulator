@@ -219,6 +219,7 @@ export const brazilian = {
   InventoryItemUnequipCT: "Desequipar CT",
   InventoryItemUnequipT: "Desequipar T",
   InventoryItemUnlockContainer: /* csgo_brazilian.txt */"Destrancar recipiente",
+  InventoryItemUnsealGraffiti: /* csgo_brazilian.txt */"Abrir e equipar",
   InventoryItemUseItem: /* csgo_brazilian.txt */"Usar item",
   InventoryItemUseStorageUnit: /* csgo_brazilian.txt */"Começar a usar unidade",
   InventoryItemWear: "Desgaste:",
@@ -347,5 +348,10 @@ export const brazilian = {
   UnpackClose: /* csgo_brazilian.txt */"Fechar",
   UnpackDesc: /* csgo_brazilian.txt */"Tem certeza de que deseja abrir este item?",
   UnpackNumberOfItems: /* csgo_brazilian.txt */"Número de itens: {1}",
-  UnpackTitle: /* csgo_brazilian.txt */"Abrir {1}"
+  UnpackTitle: /* csgo_brazilian.txt */"Abrir {1}",
+  UnsealGraffitiClose: /* csgo_brazilian.txt */"Fechar",
+  UnsealGraffitiDesc: /* csgo_brazilian.txt */"Abrir",
+  UnsealGraffitiTitle: /* csgo_brazilian.txt */"Abrir grafite",
+  UnsealGraffitiUse: /* csgo_brazilian.txt */"Abrir grafite",
+  UnsealGraffitiWarn: /* csgo_brazilian.txt */"Este grafite só pode ser aberto uma vez"
 };

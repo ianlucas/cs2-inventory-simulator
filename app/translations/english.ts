@@ -222,6 +222,7 @@ export const english = {
   InventoryItemUnequipCT: "Unequip CT",
   InventoryItemUnequipT: "Unequip T",
   InventoryItemUnlockContainer: /* csgo_english.txt */"Unlock Container",
+  InventoryItemUnsealGraffiti: /* csgo_english.txt */"Open and Equip",
   InventoryItemUseItem: /* csgo_english.txt */"Use Item",
   InventoryItemUseStorageUnit: /* csgo_english.txt */"Start Using This Unit",
   InventoryItemWear: "Wear:",
@@ -380,5 +381,10 @@ export const english = {
   UnpackClose: /* csgo_english.txt */"Close",
   UnpackDesc: /* csgo_english.txt */"Are you sure you want to unpack this item?",
   UnpackNumberOfItems: /* csgo_english.txt */"Number of Items: {1}",
-  UnpackTitle: /* csgo_english.txt */"Unpack {1}"
+  UnpackTitle: /* csgo_english.txt */"Unpack {1}",
+  UnsealGraffitiClose: /* csgo_english.txt */"Close",
+  UnsealGraffitiDesc: /* csgo_english.txt */"Open",
+  UnsealGraffitiTitle: /* csgo_english.txt */"Open Graffiti",
+  UnsealGraffitiUse: /* csgo_english.txt */"Unseal Graffiti",
+  UnsealGraffitiWarn: /* csgo_english.txt */"This graffiti can only be unsealed once"
 };

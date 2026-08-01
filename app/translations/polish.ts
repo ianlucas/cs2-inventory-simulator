@@ -219,6 +219,7 @@ export const polish = {
   InventoryItemUnequipCT: "Przestań używać w CT",
   InventoryItemUnequipT: "Przestań używać w T",
   InventoryItemUnlockContainer: /* csgo_polish.txt */"Otwórz pojemnik",
+  InventoryItemUnsealGraffiti: /* csgo_polish.txt */"Otwórz i użyj",
   InventoryItemUseItem: /* csgo_polish.txt */"Użyj przedmiotu",
   InventoryItemUseStorageUnit: /* csgo_polish.txt */"Zacznij korzystać z tego magazynu",
   InventoryItemWear: "Zużycie:",
@@ -346,5 +347,10 @@ export const polish = {
   UnpackClose: /* csgo_polish.txt */"Zamknij",
   UnpackDesc: /* csgo_polish.txt */"Czy na pewno chcesz odpakować ten przedmiot?",
   UnpackNumberOfItems: /* csgo_polish.txt */"Liczba przedmiotów: {1}",
-  UnpackTitle: /* csgo_polish.txt */"Odpakuj: {1}"
+  UnpackTitle: /* csgo_polish.txt */"Odpakuj: {1}",
+  UnsealGraffitiClose: /* csgo_polish.txt */"Zamknij",
+  UnsealGraffitiDesc: /* csgo_polish.txt */"Otwórz:",
+  UnsealGraffitiTitle: /* csgo_polish.txt */"Otwórz graffiti",
+  UnsealGraffitiUse: /* csgo_polish.txt */"Odlakuj graffiti",
+  UnsealGraffitiWarn: /* csgo_polish.txt */"To graffiti może zostać odlakowane tylko raz"
 };

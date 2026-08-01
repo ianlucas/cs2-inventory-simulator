@@ -219,6 +219,7 @@ export const japanese = {
   InventoryItemUnequipCT: "CTの装備解除",
   InventoryItemUnequipT: "Tの装備解除",
   InventoryItemUnlockContainer: /* csgo_japanese.txt */"コンテナを開ける",
+  InventoryItemUnsealGraffiti: /* csgo_japanese.txt */"開封して装備する",
   InventoryItemUseItem: /* csgo_japanese.txt */"アイテムを使用",
   InventoryItemUseStorageUnit: /* csgo_japanese.txt */"このユニットを使い始める",
   InventoryItemWear: "損耗:",
@@ -346,5 +347,10 @@ export const japanese = {
   UnpackClose: /* csgo_japanese.txt */"閉じる",
   UnpackDesc: /* csgo_japanese.txt */"本当にこのアイテムを開封しますか？",
   UnpackNumberOfItems: /* csgo_japanese.txt */"アイテム数: {1}",
-  UnpackTitle: /* csgo_japanese.txt */"{1}を開封"
+  UnpackTitle: /* csgo_japanese.txt */"{1}を開封",
+  UnsealGraffitiClose: /* csgo_japanese.txt */"閉じる",
+  UnsealGraffitiDesc: /* csgo_japanese.txt */"を開ける",
+  UnsealGraffitiTitle: /* csgo_japanese.txt */"グラフィティを開封する",
+  UnsealGraffitiUse: /* csgo_japanese.txt */"グラフィティを開封する",
+  UnsealGraffitiWarn: /* csgo_japanese.txt */"このグラフィティは一度しか開封できません"
 };

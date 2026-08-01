@@ -220,6 +220,7 @@ export const tchinese = {
   InventoryItemUnequipCT: "卸下反恐部隊",
   InventoryItemUnequipT: "卸下恐怖份子",
   InventoryItemUnlockContainer: /* csgo_tchinese.txt */"開啟箱子",
+  InventoryItemUnsealGraffiti: /* csgo_tchinese.txt */"開啟並裝備",
   InventoryItemUseItem: /* csgo_tchinese.txt */"使用物品",
   InventoryItemUseStorageUnit: /* csgo_tchinese.txt */"開始使用此儲存單元",
   InventoryItemWear: "磨損:",
@@ -347,5 +348,10 @@ export const tchinese = {
   UnpackClose: /* csgo_tchinese.txt */"關閉",
   UnpackDesc: /* csgo_tchinese.txt */"您確定要開封這項物品嗎？",
   UnpackNumberOfItems: /* csgo_tchinese.txt */"物品數量：{1}",
-  UnpackTitle: /* csgo_tchinese.txt */"開封「{1}」"
+  UnpackTitle: /* csgo_tchinese.txt */"開封「{1}」",
+  UnsealGraffitiClose: /* csgo_tchinese.txt */"關閉",
+  UnsealGraffitiDesc: /* csgo_tchinese.txt */"開啟",
+  UnsealGraffitiTitle: /* csgo_tchinese.txt */"開啟塗鴉",
+  UnsealGraffitiUse: /* csgo_tchinese.txt */"開封塗鴉",
+  UnsealGraffitiWarn: /* csgo_tchinese.txt */"此塗鴉僅可開封一次"
 };

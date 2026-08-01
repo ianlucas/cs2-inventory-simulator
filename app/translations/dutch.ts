@@ -219,6 +219,7 @@ export const dutch = {
   InventoryItemUnequipCT: "Uitdoen CT",
   InventoryItemUnequipT: "Uitdoen T",
   InventoryItemUnlockContainer: /* csgo_dutch.txt */"Kist openen",
+  InventoryItemUnsealGraffiti: /* csgo_dutch.txt */"Openen en uitrusten",
   InventoryItemUseItem: /* csgo_dutch.txt */"Voorwerp gebruiken",
   InventoryItemUseStorageUnit: /* csgo_dutch.txt */"Deze eenheid gebruiken",
   InventoryItemWear: "Slijtage:",
@@ -346,5 +347,10 @@ export const dutch = {
   UnpackClose: /* csgo_dutch.txt */"Sluiten",
   UnpackDesc: /* csgo_dutch.txt */"Weet je zeker dat je dit voorwerp wilt uitpakken?",
   UnpackNumberOfItems: /* csgo_dutch.txt */"Aantal voorwerpen: {1}",
-  UnpackTitle: /* csgo_dutch.txt */"{1} uitpakken"
+  UnpackTitle: /* csgo_dutch.txt */"{1} uitpakken",
+  UnsealGraffitiClose: /* csgo_dutch.txt */"Sluiten",
+  UnsealGraffitiDesc: /* csgo_dutch.txt */"openen",
+  UnsealGraffitiTitle: /* csgo_dutch.txt */"Graffiti openen",
+  UnsealGraffitiUse: /* csgo_dutch.txt */"Graffiti ontzegelen",
+  UnsealGraffitiWarn: /* csgo_dutch.txt */"Deze graffiti kan maar één keer uitgepakt worden"
 };

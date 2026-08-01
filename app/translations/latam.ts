@@ -220,6 +220,7 @@ export const latam = {
   InventoryItemUnequipCT: "Desequipar CT",
   InventoryItemUnequipT: "Desequipar T",
   InventoryItemUnlockContainer: /* csgo_latam.txt */"Abrir paquete",
+  InventoryItemUnsealGraffiti: /* csgo_latam.txt */"Abrir y equipar",
   InventoryItemUseItem: /* csgo_latam.txt */"Usar objeto",
   InventoryItemUseStorageUnit: /* csgo_latam.txt */"Comenzar a usar esta unidad",
   InventoryItemWear: "Desgaste:",
@@ -347,5 +348,10 @@ export const latam = {
   UnpackClose: /* csgo_latam.txt */"Cerrar",
   UnpackDesc: /* csgo_latam.txt */"¿Seguro que quieres abrir este artículo?",
   UnpackNumberOfItems: /* csgo_latam.txt */"Cantidad de artículos: {1}",
-  UnpackTitle: /* csgo_latam.txt */"Abrir {1}"
+  UnpackTitle: /* csgo_latam.txt */"Abrir {1}",
+  UnsealGraffitiClose: /* csgo_latam.txt */"Cerrar",
+  UnsealGraffitiDesc: /* csgo_latam.txt */"Abrir",
+  UnsealGraffitiTitle: /* csgo_latam.txt */"Abrir grafiti",
+  UnsealGraffitiUse: /* csgo_latam.txt */"Abrir grafiti",
+  UnsealGraffitiWarn: /* csgo_latam.txt */"Este grafiti solo se puede abrir una vez"
 };

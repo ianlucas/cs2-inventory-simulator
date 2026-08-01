@@ -218,6 +218,7 @@ export const norwegian = {
   InventoryItemUnequipCT: "Fjern utstyr CT",
   InventoryItemUnequipT: "Fjern utstyr T",
   InventoryItemUnlockContainer: /* csgo_norwegian.txt */"Lås opp beholder",
+  InventoryItemUnsealGraffiti: /* csgo_norwegian.txt */"Åpne og utstyr",
   InventoryItemUseItem: /* csgo_norwegian.txt */"Bruk gjenstand",
   InventoryItemUseStorageUnit: /* csgo_norwegian.txt */"Begynn å bruke denne enheten",
   InventoryItemWear: "Slitasje:",
@@ -345,5 +346,10 @@ export const norwegian = {
   UnpackClose: /* csgo_norwegian.txt */"Lukk",
   UnpackDesc: /* csgo_norwegian.txt */"Er du sikker på at du vil pakke opp denne gjenstanden?",
   UnpackNumberOfItems: /* csgo_norwegian.txt */"Antall gjenstander: {1}",
-  UnpackTitle: /* csgo_norwegian.txt */"Pakk opp {1}"
+  UnpackTitle: /* csgo_norwegian.txt */"Pakk opp {1}",
+  UnsealGraffitiClose: /* csgo_norwegian.txt */"Lukk",
+  UnsealGraffitiDesc: /* csgo_norwegian.txt */"Åpne",
+  UnsealGraffitiTitle: /* csgo_norwegian.txt */"Åpne graffiti",
+  UnsealGraffitiUse: /* csgo_norwegian.txt */"Åpne graffiti",
+  UnsealGraffitiWarn: /* csgo_norwegian.txt */"Denne graffitien kan kun åpnes én gang"
 };

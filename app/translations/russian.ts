@@ -219,6 +219,7 @@ export const russian = {
   InventoryItemUnequipCT: "Снять за спецназ",
   InventoryItemUnequipT: "Снять за террористов",
   InventoryItemUnlockContainer: /* csgo_russian.txt */"Открыть контейнер",
+  InventoryItemUnsealGraffiti: /* csgo_russian.txt */"Использовать",
   InventoryItemUseItem: /* csgo_russian.txt */"Использовать предмет",
   InventoryItemUseStorageUnit: /* csgo_russian.txt */"Активировать хранилище",
   InventoryItemWear: "Износ:",
@@ -346,5 +347,10 @@ export const russian = {
   UnpackClose: /* csgo_russian.txt */"Закрыть",
   UnpackDesc: /* csgo_russian.txt */"Вы уверены, что хотите распаковать этот предмет?",
   UnpackNumberOfItems: /* csgo_russian.txt */"Число предметов: {1}",
-  UnpackTitle: /* csgo_russian.txt */"Распаковка: {1}"
+  UnpackTitle: /* csgo_russian.txt */"Распаковка: {1}",
+  UnsealGraffitiClose: /* csgo_russian.txt */"Закрыть",
+  UnsealGraffitiDesc: /* csgo_russian.txt */"Открыть",
+  UnsealGraffitiTitle: /* csgo_russian.txt */"Открыть граффити",
+  UnsealGraffitiUse: /* csgo_russian.txt */"Распечатать граффити",
+  UnsealGraffitiWarn: /* csgo_russian.txt */"Этот граффити можно распечатать только один раз"
 };

@@ -219,6 +219,7 @@ export const portuguese = {
   InventoryItemUnequipCT: "Desequipar CT",
   InventoryItemUnequipT: "Desequipar T",
   InventoryItemUnlockContainer: /* csgo_portuguese.txt */"Abrir",
+  InventoryItemUnsealGraffiti: /* csgo_portuguese.txt */"Abrir e equipar",
   InventoryItemUseItem: /* csgo_portuguese.txt */"Usar item",
   InventoryItemUseStorageUnit: /* csgo_portuguese.txt */"Usar esta unidade",
   InventoryItemWear: "Desgaste:",
@@ -347,5 +348,10 @@ export const portuguese = {
   UnpackClose: /* csgo_portuguese.txt */"Fechar",
   UnpackDesc: /* csgo_portuguese.txt */"Tens a certeza de que queres abrir este item?",
   UnpackNumberOfItems: /* csgo_portuguese.txt */"Número de itens: {1}",
-  UnpackTitle: /* csgo_portuguese.txt */"Abrir {1}"
+  UnpackTitle: /* csgo_portuguese.txt */"Abrir {1}",
+  UnsealGraffitiClose: /* csgo_portuguese.txt */"Fechar",
+  UnsealGraffitiDesc: /* csgo_portuguese.txt */"Abrir",
+  UnsealGraffitiTitle: /* csgo_portuguese.txt */"Abrir grafíti",
+  UnsealGraffitiUse: /* csgo_portuguese.txt */"Abrir grafíti",
+  UnsealGraffitiWarn: /* csgo_portuguese.txt */"Este grafíti só pode ser aberto uma vez"
 };

@@ -220,6 +220,7 @@ export const vietnamese = {
   InventoryItemUnequipCT: "Gỡ trang bị CT",
   InventoryItemUnequipT: "Gỡ trang bị T",
   InventoryItemUnlockContainer: /* csgo_vietnamese.txt */"Mở khóa",
+  InventoryItemUnsealGraffiti: /* csgo_vietnamese.txt */"Mở và dán vào",
   InventoryItemUseItem: /* csgo_vietnamese.txt */"Sử dụng vật phẩm",
   InventoryItemUseStorageUnit: /* csgo_vietnamese.txt */"Bắt đầu dùng thùng này",
   InventoryItemWear: "Độ mòn:",
@@ -347,5 +348,10 @@ export const vietnamese = {
   UnpackClose: /* csgo_vietnamese.txt */"Đóng",
   UnpackDesc: /* csgo_vietnamese.txt */"Bạn có chắc mình muốn mở gói vật phẩm này?",
   UnpackNumberOfItems: /* csgo_vietnamese.txt */"Số món: {1}",
-  UnpackTitle: /* csgo_vietnamese.txt */"Mở gói {1}"
+  UnpackTitle: /* csgo_vietnamese.txt */"Mở gói {1}",
+  UnsealGraffitiClose: /* csgo_vietnamese.txt */"Đóng",
+  UnsealGraffitiDesc: /* csgo_vietnamese.txt */"Mở bọc",
+  UnsealGraffitiTitle: /* csgo_vietnamese.txt */"Mở graffiti",
+  UnsealGraffitiUse: /* csgo_vietnamese.txt */"Mở bọc graffiti",
+  UnsealGraffitiWarn: /* csgo_vietnamese.txt */"Graffiti này chỉ có thể mở bọc một lần"
 };

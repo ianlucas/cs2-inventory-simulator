@@ -219,6 +219,7 @@ export const german = {
   InventoryItemUnequipCT: "AT ablegen",
   InventoryItemUnequipT: "T ablegen",
   InventoryItemUnlockContainer: /* csgo_german.txt */"Behälter öffnen",
+  InventoryItemUnsealGraffiti: /* csgo_german.txt */"Öffnen & Ausrüsten",
   InventoryItemUseItem: /* csgo_german.txt */"Gegenstand benutzen",
   InventoryItemUseStorageUnit: /* csgo_german.txt */"Diese Einheit verwenden",
   InventoryItemWear: "Abnutzung:",
@@ -346,5 +347,10 @@ export const german = {
   UnpackClose: /* csgo_german.txt */"Schließen",
   UnpackDesc: /* csgo_german.txt */"Möchten Sie diesen Gegenstand wirklich auspacken?",
   UnpackNumberOfItems: /* csgo_german.txt */"Anzahl der Gegenstände: {1}",
-  UnpackTitle: /* csgo_german.txt */"{1} auspacken"
+  UnpackTitle: /* csgo_german.txt */"{1} auspacken",
+  UnsealGraffitiClose: /* csgo_german.txt */"Schließen",
+  UnsealGraffitiDesc: /* csgo_german.txt */"öffnen",
+  UnsealGraffitiTitle: /* csgo_german.txt */"Graffito öffnen",
+  UnsealGraffitiUse: /* csgo_german.txt */"Graffito entsiegeln",
+  UnsealGraffitiWarn: /* csgo_german.txt */"Dieses Graffito kann nur einmal entsiegelt werden"
 };
