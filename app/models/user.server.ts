@@ -142,48 +142,58 @@ export async function getUserSyncedAt(userId: string) {
 
 export async function manipulateUserInventory({
   manipulate,
-  rawInventory,
   syncedAt,
   userId
 }: {
   manipulate:
     | ((inventory: CS2Inventory) => void)
     | ((inventory: CS2Inventory) => Promise<void>);
-  rawInventory: string | null;
   syncedAt?: number;
   userId: string;
 }) {
   const options = await getUserInventoryOptions(userId);
-  const loadedInventory = safeLoadInventory(rawInventory, options);
-  const wipedInventory =
-    loadedInventory === undefined && hasInventoryContent(rawInventory)
-      ? rawInventory
-      : undefined;
-  const inventory = loadedInventory ?? new CS2Inventory(options);
-  try {
-    await manipulate(inventory);
-  } catch {
-    throw badRequest;
-  }
-  if (syncedAt !== undefined) {
-    const currentSyncedAt = await getUserSyncedAt(userId);
-    if (syncedAt !== currentSyncedAt.getTime()) {
-      throw conflict;
-    }
-  }
-  if (wipedInventory !== undefined) {
-    await recordInventoryWipe(userId, wipedInventory);
-  } else if (
-    rawInventory !== null &&
-    hasInventoryLoadChanges(inventory.loadChanges)
-  ) {
-    await recordInventoryLoadChanges(
-      userId,
-      rawInventory,
-      inventory.loadChanges
-    );
-  }
-  return await updateUserInventory(userId, inventory.stringify());
+  return await prisma.$transaction(
+    async (tx) => {
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${userId}))`;
+      const { inventory: rawInventory, syncedAt: currentSyncedAt } =
+        await tx.user.findUniqueOrThrow({
+          select: { inventory: true, syncedAt: true },
+          where: { id: userId }
+        });
+      const loadedInventory = safeLoadInventory(rawInventory, options);
+      const wipedInventory =
+        loadedInventory === undefined && hasInventoryContent(rawInventory)
+          ? rawInventory
+          : undefined;
+      const inventory = loadedInventory ?? new CS2Inventory(options);
+      try {
+        await manipulate(inventory);
+      } catch {
+        throw badRequest;
+      }
+      if (syncedAt !== undefined && syncedAt !== currentSyncedAt.getTime()) {
+        throw conflict;
+      }
+      if (wipedInventory !== undefined) {
+        await recordInventoryWipe(userId, wipedInventory);
+      } else if (
+        rawInventory !== null &&
+        hasInventoryLoadChanges(inventory.loadChanges)
+      ) {
+        await recordInventoryLoadChanges(
+          userId,
+          rawInventory,
+          inventory.loadChanges
+        );
+      }
+      return await tx.user.update({
+        select: { syncedAt: true },
+        data: { inventory: inventory.stringify(), syncedAt: new Date() },
+        where: { id: userId }
+      });
+    },
+    { timeout: 10_000 }
+  );
 }
 
 export async function getUserBasicData(userId: string) {

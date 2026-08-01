@@ -13,14 +13,16 @@ import {
   isApiKeyValid
 } from "~/models/api-credential.server";
 import {
-  existsUser,
-  findUniqueUser,
-  manipulateUserInventory
-} from "~/models/user.server";
+  STATTRAK_INCREMENT_RATE_LIMIT,
+  consumeRateLimitToken
+} from "~/models/rate-limit.server";
+import { apiPublicStatTrakIncrement } from "~/models/rule.server";
+import { existsUser, manipulateUserInventory } from "~/models/user.server";
 import {
   badRequest,
   methodNotAllowed,
   noContent,
+  tooManyRequests,
   unauthorized
 } from "~/responses.server";
 import { nonNegativeInt } from "~/utils/shapes";
@@ -33,14 +35,28 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   }
   const { apiKey, userId, targetUid } = z
     .object({
-      apiKey: z.string(),
+      apiKey: z.string().optional(),
       userId: z.string(),
       targetUid: nonNegativeInt
     })
     .parse(await request.json());
 
-  if (!(await isApiKeyValid(apiKey, [API_SCOPE, STATTRAK_INCREMENT_SCOPE]))) {
-    throw unauthorized;
+  if (apiKey !== undefined) {
+    if (!(await isApiKeyValid(apiKey, [API_SCOPE, STATTRAK_INCREMENT_SCOPE]))) {
+      throw unauthorized;
+    }
+  } else {
+    if (!(await apiPublicStatTrakIncrement.for(userId).get())) {
+      throw unauthorized;
+    }
+    if (
+      !(await consumeRateLimitToken(
+        `stattrak:${userId}:${targetUid}`,
+        STATTRAK_INCREMENT_RATE_LIMIT
+      ))
+    ) {
+      throw tooManyRequests;
+    }
   }
 
   if (!(await existsUser(userId))) {
@@ -48,9 +64,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   }
 
   try {
-    const { inventory: rawInventory } = await findUniqueUser(userId);
     await manipulateUserInventory({
-      rawInventory,
       userId,
       manipulate(inventory) {
         const item = inventory.get(targetUid);

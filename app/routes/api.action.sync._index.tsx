@@ -482,7 +482,6 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     .parse(await request.json());
   let addedFromCache = false;
   const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
-    rawInventory,
     syncedAt,
     userId,
     async manipulate(inventory) {

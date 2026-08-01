@@ -26,7 +26,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (request.method !== "POST") {
     throw methodNotAllowed;
   }
-  const { id: userId, inventory: rawInventory } = await requireUser(request);
+  const { id: userId } = await requireUser(request);
   await inventoryItemAllowUnlockContainer.for(userId).truthy();
   const { caseUid, keyUid, syncedAt } = z
     .object({
@@ -37,7 +37,6 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     .parse(await request.json());
   let unlockedItem: CS2UnlockedItem | undefined;
   const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
-    rawInventory,
     syncedAt,
     userId,
     manipulate(inventory) {

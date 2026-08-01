@@ -180,11 +180,11 @@ POST https://inventory.cstrike.app/api/increment-item-stattrak
 ### Request
 
 > [!IMPORTANT]  
-> API key must have `api` or `stattrak_increment` scope.
+> When `apiKey` is sent, it must have `api` or `stattrak_increment` scope. When omitted, the request is only accepted if the `apiPublicStatTrakIncrement` rule is enabled for the user, and it's rate-limited per item (burst of 50, then 1 increment every 3.6 seconds).
 
 ```typescript
 type PostIncrementItemStatTrakRequest = {
-  apiKey: string;
+  apiKey?: string;
   targetUid: number;
   userId: string;
 };
@@ -192,7 +192,8 @@ type PostIncrementItemStatTrakRequest = {
 
 ### Response
 
-- Returns `401` when using an invalid API key.
+- Returns `401` when using an invalid API key, or when `apiKey` is omitted and the `apiPublicStatTrakIncrement` rule is disabled for the user.
+- Returns `429` when `apiKey` is omitted and the rate limit for the item has been exceeded.
 - Returns `400` when the user does not exist, target uid is invalid, or the item is not equipped.
 - Returns `204` when the increment was successful.
 
@@ -207,11 +208,11 @@ Consumes a charge of an unsealed graffiti. The item is removed from the inventor
 ### Request
 
 > [!IMPORTANT]  
-> API key must have `api` or `spray_consume` scope.
+> When `apiKey` is sent, it must have `api` or `spray_consume` scope. When omitted, the request is only accepted if the `apiPublicSprayConsume` rule is enabled for the user, and it's rate-limited per item (1 charge every 30 seconds).
 
 ```typescript
 type PostConsumeItemSprayRequest = {
-  apiKey: string;
+  apiKey?: string;
   targetUid: number;
   userId: string;
 };
@@ -219,7 +220,8 @@ type PostConsumeItemSprayRequest = {
 
 ### Response
 
-- Returns `401` when using an invalid API key.
+- Returns `401` when using an invalid API key, or when `apiKey` is omitted and the `apiPublicSprayConsume` rule is disabled for the user.
+- Returns `429` when `apiKey` is omitted and the rate limit for the item has been exceeded.
 - Returns `400` when the user does not exist or target uid is not an equipped, unsealed graffiti with charges.
 - Returns `204` when the charge was consumed.
 

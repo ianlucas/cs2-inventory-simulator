@@ -668,3 +668,15 @@ export const craftAllowImportInspectLink = new Rule({
   type: "boolean",
   defaultValue: true
 });
+
+export const apiPublicStatTrakIncrement = new Rule({
+  name: "apiPublicStatTrakIncrement",
+  type: "boolean",
+  defaultValue: false
+});
+
+export const apiPublicSprayConsume = new Rule({
+  name: "apiPublicSprayConsume",
+  type: "boolean",
+  defaultValue: false
+});
