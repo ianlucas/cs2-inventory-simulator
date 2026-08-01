@@ -257,6 +257,7 @@ export const finnish = {
   ItemRarityRare: /* csgo_finnish.txt */"Korkean tason",
   ItemRarityUncommon: /* csgo_finnish.txt */"Keskitason",
   ItemSealedGraffiti: /* csgo_finnish.txt */"Sinetöity graffiti",
+  ItemSealedGraffitiDesc: /* csgo_finnish.txt */"Tämä on sinetöity graffitikuviosäiliö. Säiliön avaaminen antaa 50 latausta kyseisen graffitin käyttöön.",
   ItemSwapStatTrakAccept: /* csgo_finnish.txt */"HYVÄKSY",
   ItemSwapStatTrakClose: /* csgo_finnish.txt */"Sulje",
   ItemSwapStatTrakDesc: /* csgo_finnish.txt */"Tämä esine vaihtaa kahden samanlaisen aseen StatTrak™-arvot keskenään.",

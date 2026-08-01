@@ -258,6 +258,7 @@ export const bulgarian = {
   ItemRarityRare: /* csgo_bulgarian.txt */"Висок клас",
   ItemRarityUncommon: /* csgo_bulgarian.txt */"Средна поредица",
   ItemSealedGraffiti: /* csgo_bulgarian.txt */"Запечатани графити",
+  ItemSealedGraffitiDesc: /* csgo_bulgarian.txt */"Това е запечатан контейнер с шаблон за графити. След като бъде разпечатан, ще Ви предостави с достатъчно заряди, така че да приложите шаблона с графити 50 пъти в игралния свят.",
   ItemSwapStatTrakAccept: /* csgo_bulgarian.txt */"ПРИЕМАНЕ",
   ItemSwapStatTrakClose: /* csgo_bulgarian.txt */"Затваряне",
   ItemSwapStatTrakDesc: /* csgo_bulgarian.txt */"Този артикул разменя StatTrak™ стойностите между две оръжия от еднакъв тип.",

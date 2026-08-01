@@ -257,6 +257,7 @@ export const swedish = {
   ItemRarityRare: /* csgo_swedish.txt */"Högkvalitet",
   ItemRarityUncommon: /* csgo_swedish.txt */"Medelvärdig",
   ItemSealedGraffiti: /* csgo_swedish.txt */"Förseglad graffiti",
+  ItemSealedGraffitiDesc: /* csgo_swedish.txt */"Det här är en förseglad behållare för ett graffitimönster. När behållaren har öppnats så kommer den ge dig tillräckligt med laddningar för att använda graffitimönstret 50 gånger i spelvärlden.",
   ItemSwapStatTrakAccept: /* csgo_swedish.txt */"ACCEPTERA",
   ItemSwapStatTrakClose: /* csgo_swedish.txt */"Stäng",
   ItemSwapStatTrakDesc: /* csgo_swedish.txt */"Detta föremål byter StatTrak™-värden mellan två likadana föremålstyper.",

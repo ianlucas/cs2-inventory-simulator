@@ -258,6 +258,7 @@ export const vietnamese = {
   ItemRarityRare: /* csgo_vietnamese.txt */"Hạng cao cấp",
   ItemRarityUncommon: /* csgo_vietnamese.txt */"Hạng trung bình",
   ItemSealedGraffiti: /* csgo_vietnamese.txt */"Graffiti nguyên bọc",
+  ItemSealedGraffitiDesc: /* csgo_vietnamese.txt */"Đây là một gói niêm phong chứa hình vẽ graffiti. Một khi mở niêm phong, nó sẽ cho bạn 50 lần vẽ graffiti đó lên thế giới trong trò chơi.",
   ItemSwapStatTrakAccept: /* csgo_vietnamese.txt */"CHẤP NHẬN",
   ItemSwapStatTrakClose: /* csgo_vietnamese.txt */"Đóng",
   ItemSwapStatTrakDesc: /* csgo_vietnamese.txt */"Vật phẩm sẽ đổi giá trị StatTrak™ giữa hai vật phẩm trong cùng thể loại.",

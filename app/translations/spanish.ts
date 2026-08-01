@@ -258,6 +258,7 @@ export const spanish = {
   ItemRarityRare: /* csgo_spanish.txt */"de grado alto",
   ItemRarityUncommon: /* csgo_spanish.txt */"de grado medio",
   ItemSealedGraffiti: /* csgo_spanish.txt */"Grafiti precintado",
+  ItemSealedGraffitiDesc: /* csgo_spanish.txt */"Esto es un contenedor precintado de un patrón de grafiti. Al abrirlo obtendrás cargas suficientes para hacer el grafiti 50 veces en el mundo del juego.",
   ItemSwapStatTrakAccept: /* csgo_spanish.txt */"ACEPTAR",
   ItemSwapStatTrakClose: /* csgo_spanish.txt */"Cerrar",
   ItemSwapStatTrakDesc: /* csgo_spanish.txt */"Este artículo intercambia los valores StatTrak™ entre dos artículos del mismo tipo.",

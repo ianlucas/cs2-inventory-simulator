@@ -257,6 +257,7 @@ export const french = {
   ItemRarityRare: /* csgo_french.txt */"Qualité supérieure",
   ItemRarityUncommon: /* csgo_french.txt */"Qualité moyenne",
   ItemSealedGraffiti: /* csgo_french.txt */"Graffiti scellé",
+  ItemSealedGraffitiDesc: /* csgo_french.txt */"Ceci est un conteneur scellé d'un motif graffiti. Une fois ce motif graffiti descellé, vous pourrez l'appliquer en jeu 50 fois.",
   ItemSwapStatTrakAccept: /* csgo_french.txt */"ACCEPTER",
   ItemSwapStatTrakClose: /* csgo_french.txt */"Fermer",
   ItemSwapStatTrakDesc: /* csgo_french.txt */"Cet item permet de permuter les valeurs StatTrak™ entre deux types d'items identiques.",

@@ -256,6 +256,7 @@ export const norwegian = {
   ItemRarityRare: /* csgo_norwegian.txt */"Høy klasse",
   ItemRarityUncommon: /* csgo_norwegian.txt */"Mellomklasse",
   ItemSealedGraffiti: /* csgo_norwegian.txt */"Forseglet graffiti",
+  ItemSealedGraffitiDesc: /* csgo_norwegian.txt */"Dette er en forseglet beholder med et graffitimønster. Når forseglingen brytes, har den nok innhold til å påføre graffitimønsteret 50 ganger i spillverdenen.",
   ItemSwapStatTrakAccept: /* csgo_norwegian.txt */"GODTA",
   ItemSwapStatTrakClose: /* csgo_norwegian.txt */"Lukk",
   ItemSwapStatTrakDesc: /* csgo_norwegian.txt */"Denne gjenstanden bytter StatTrak™-verdier mellom to gjenstander av samme type.",

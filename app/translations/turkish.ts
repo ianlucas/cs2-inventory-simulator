@@ -258,6 +258,7 @@ export const turkish = {
   ItemRarityRare: /* csgo_turkish.txt */"Yüksek Sınıf",
   ItemRarityUncommon: /* csgo_turkish.txt */"Orta Sınıf",
   ItemSealedGraffiti: /* csgo_turkish.txt */"Mühürlü Grafiti",
+  ItemSealedGraffitiDesc: /* csgo_turkish.txt */"Bu bir grafiti kalıbının mühürlü kasasıdır. Bu kasanın mührü bozulduğunda, içinden çıkan kalıp 50 defa kullanılabilir.",
   ItemSwapStatTrakAccept: /* csgo_turkish.txt */"KABUL ET",
   ItemSwapStatTrakClose: /* csgo_turkish.txt */"Kapat",
   ItemSwapStatTrakDesc: /* csgo_turkish.txt */"Bu eşya aynı iki eşya arasındaki StatTrak™ değerlerini değiştirir.",

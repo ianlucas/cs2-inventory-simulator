@@ -257,6 +257,7 @@ export const dutch = {
   ItemRarityRare: /* csgo_dutch.txt */"Hoogwaardig",
   ItemRarityUncommon: /* csgo_dutch.txt */"Gemiddeld",
   ItemSealedGraffiti: /* csgo_dutch.txt */"Verzegelde graffiti",
+  ItemSealedGraffitiDesc: /* csgo_dutch.txt */"Dit is een verzegelde doos met een graffitipatroon. Zodra het graffitipatroon wordt ontzegeld, geeft het je genoeg ladingen om het graffitipatroon 50 keer op de wereld in het spel toe te passen.",
   ItemSwapStatTrakAccept: /* csgo_dutch.txt */"ACCEPTEREN",
   ItemSwapStatTrakClose: /* csgo_dutch.txt */"Sluiten",
   ItemSwapStatTrakDesc: /* csgo_dutch.txt */"Hiermee verwissel je de StatTrak™-waarden van twee voorwerpen van hetzelfde type.",

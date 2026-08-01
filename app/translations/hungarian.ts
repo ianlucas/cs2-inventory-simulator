@@ -257,6 +257,7 @@ export const hungarian = {
   ItemRarityRare: /* csgo_hungarian.txt */"Magas fokozatú",
   ItemRarityUncommon: /* csgo_hungarian.txt */"Közép fokozatú",
   ItemSealedGraffiti: /* csgo_hungarian.txt */"Lezárt falfirka",
+  ItemSealedGraffitiDesc: /* csgo_hungarian.txt */"Ez egy falfirka-mintát tartalmazó lezárt tároló. Miután a falfirka-minta felbontásra kerül, elegendő töltetet fog biztosítani, hogy 50 alkalommal használhasd a falfirka-mintát a játékvilágban.",
   ItemSwapStatTrakAccept: /* csgo_hungarian.txt */"ELFOGAD",
   ItemSwapStatTrakClose: /* csgo_hungarian.txt */"Bezár",
   ItemSwapStatTrakDesc: /* csgo_hungarian.txt */"Ez a tárgy StatTrak™ értékeket cserél két ugyanolyan típusú tárgy között.",

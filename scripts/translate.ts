@@ -258,6 +258,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   ItemRarityRare: "Rarity_Rare",
   ItemRarityUncommon: "Rarity_Uncommon",
   ItemSealedGraffiti: "CSGO_Tool_Spray",
+  ItemSealedGraffitiDesc: { token: "CSGO_Tool_Spray_Desc", transform: (value) => value.replace(/<\/?b>/g, '') },
   ItemSwapStatTrakAccept: "SFUI_Accept",
   ItemSwapStatTrakClose: "GameUI_Close",
   ItemSwapStatTrakDesc: "CSGO_tool_stattrak_swap_desc",

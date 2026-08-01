@@ -258,6 +258,7 @@ export const portuguese = {
   ItemRarityRare: /* csgo_portuguese.txt */"Alta Qualidade",
   ItemRarityUncommon: /* csgo_portuguese.txt */"Qualidade Média",
   ItemSealedGraffiti: /* csgo_portuguese.txt */"Grafíti selado",
+  ItemSealedGraffitiDesc: /* csgo_portuguese.txt */"Uma caixa selada que contém um padrão de grafíti. Assim que esta caixa for aberta, poderás aplicar o grafíti 50 vezes em superfícies planas durante partidas em qualquer mapa.",
   ItemSwapStatTrakAccept: /* csgo_portuguese.txt */"ACEITAR",
   ItemSwapStatTrakClose: /* csgo_portuguese.txt */"Fechar",
   ItemSwapStatTrakDesc: /* csgo_portuguese.txt */"Este item troca as estatísticas StatTrak™ entre dois itens do mesmo tipo.",

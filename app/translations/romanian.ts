@@ -257,6 +257,7 @@ export const romanian = {
   ItemRarityRare: /* csgo_romanian.txt */"Calitate ridicată",
   ItemRarityUncommon: /* csgo_romanian.txt */"Calitate medie",
   ItemSealedGraffiti: /* csgo_romanian.txt */"Graffiti sigilat",
+  ItemSealedGraffitiDesc: /* csgo_romanian.txt */"Acesta este un container sigilat cu un model graffiti. Odată ce acest model graffiti este desigilat, îți va oferi suficiente folosiri pentru a aplica modelul graffiti de 50 de ori în lumea jocului.",
   ItemSwapStatTrakAccept: /* csgo_romanian.txt */"ACCEPTĂ",
   ItemSwapStatTrakClose: /* csgo_romanian.txt */"Închide",
   ItemSwapStatTrakDesc: /* csgo_romanian.txt */"Acest obiect schimbă între ele valorile StatTrak™ pentru două obiecte de același tip.",

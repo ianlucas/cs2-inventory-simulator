@@ -257,6 +257,7 @@ export const italian = {
   ItemRarityRare: /* csgo_italian.txt */"Qualità elevata",
   ItemRarityUncommon: /* csgo_italian.txt */"Qualità media",
   ItemSealedGraffiti: /* csgo_italian.txt */"Graffito sigillato",
+  ItemSealedGraffitiDesc: /* csgo_italian.txt */"Un contenitore sigillato con un motivo per graffiti. Una volta sbloccato questo motivo, otterrai abbastanza utilizzi da applicare il graffito per 50 volte nell'ambiente di gioco.",
   ItemSwapStatTrakAccept: /* csgo_italian.txt */"ACCETTA",
   ItemSwapStatTrakClose: /* csgo_italian.txt */"Chiudi",
   ItemSwapStatTrakDesc: /* csgo_italian.txt */"Questo oggetto scambia i valori dei contatori StatTrak™ di due oggetti dello stesso tipo.",

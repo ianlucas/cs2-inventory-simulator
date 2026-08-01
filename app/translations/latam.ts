@@ -258,6 +258,7 @@ export const latam = {
   ItemRarityRare: /* csgo_latam.txt */"de grado alto",
   ItemRarityUncommon: /* csgo_latam.txt */"de grado medio",
   ItemSealedGraffiti: /* csgo_latam.txt */"Grafiti precintado",
+  ItemSealedGraffitiDesc: /* csgo_latam.txt */"Esto es un contenedor precintado de un patrón de grafiti. Al abrirlo obtendrás cargas suficientes para hacer el grafiti 50 veces en el mundo del juego.",
   ItemSwapStatTrakAccept: /* csgo_latam.txt */"ACEPTAR",
   ItemSwapStatTrakClose: /* csgo_latam.txt */"Cerrar",
   ItemSwapStatTrakDesc: /* csgo_latam.txt */"Este objeto intercambia los valores StatTrak™ entre dos artículos del mismo tipo.",

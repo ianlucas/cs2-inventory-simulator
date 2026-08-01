@@ -257,6 +257,7 @@ export const danish = {
   ItemRarityRare: /* csgo_danish.txt */"Højkvalitet",
   ItemRarityUncommon: /* csgo_danish.txt */"Middelkvalitet",
   ItemSealedGraffiti: /* csgo_danish.txt */"Forseglet graffiti",
+  ItemSealedGraffitiDesc: /* csgo_danish.txt */"Dette er en forseglet beholder med et graffitimønster. Når dette graffitimønsters forsegling brydes, giver den dig nok ladninger til at anvende graffitimønsteret 50 gange i spillets verden.",
   ItemSwapStatTrakAccept: /* csgo_danish.txt */"ACCEPTER",
   ItemSwapStatTrakClose: /* csgo_danish.txt */"Luk",
   ItemSwapStatTrakDesc: /* csgo_danish.txt */"Denne genstand bytter StatTrak™-værdier mellem to af den samme genstandstype.",

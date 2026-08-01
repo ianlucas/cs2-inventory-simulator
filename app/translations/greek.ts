@@ -258,6 +258,7 @@ export const greek = {
   ItemRarityRare: /* csgo_greek.txt */"High Grade",
   ItemRarityUncommon: /* csgo_greek.txt */"Medium Grade",
   ItemSealedGraffiti: /* csgo_greek.txt */"Σφραγισμένο γκράφιτι",
+  ItemSealedGraffitiDesc: /* csgo_greek.txt */"Πρόκειται για ένα σφραγισμένο κιβώτιο ενός σχεδίου γκράφιτι. Μόλις αυτό το σχέδιο γκράφιτι αποσφραγιστεί, θα σας παρέχει αρκετές χρήσεις για να εφαρμόσετε το σχέδιο 50 φορές στον εντός παιχνιδιού κόσμο.",
   ItemSwapStatTrakAccept: /* csgo_greek.txt */"ΑΠΟΔΟΧΗ",
   ItemSwapStatTrakClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
   ItemSwapStatTrakDesc: /* csgo_greek.txt */"Αυτό το αντικείμενο εναλλάσσει τις τιμές StatTrak™ μεταξύ δύο αντικειμένων ίδιου τύπου.",

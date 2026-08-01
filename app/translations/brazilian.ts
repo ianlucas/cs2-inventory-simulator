@@ -258,6 +258,7 @@ export const brazilian = {
   ItemRarityRare: /* csgo_brazilian.txt */"Alta Qualidade",
   ItemRarityUncommon: /* csgo_brazilian.txt */"Nível Moderado",
   ItemSealedGraffiti: /* csgo_brazilian.txt */"Grafite Lacrado",
+  ItemSealedGraffitiDesc: /* csgo_brazilian.txt */"Este é um padrão de grafite ainda lacrado. Ao abri-lo, você receberá cargas para grafitar este padrão 50 vezes no mundo do jogo.",
   ItemSwapStatTrakAccept: /* csgo_brazilian.txt */"ACEITAR",
   ItemSwapStatTrakClose: /* csgo_brazilian.txt */"Fechar",
   ItemSwapStatTrakDesc: /* csgo_brazilian.txt */"Este item troca as contagens StatTrak™ de dois itens do mesmo tipo.",

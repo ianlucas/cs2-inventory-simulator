@@ -257,6 +257,7 @@ export const polish = {
   ItemRarityRare: /* csgo_polish.txt */"wysokiej jakości",
   ItemRarityUncommon: /* csgo_polish.txt */"Średniej jakości",
   ItemSealedGraffiti: /* csgo_polish.txt */"Zalakowane graffiti",
+  ItemSealedGraffitiDesc: /* csgo_polish.txt */"Zalakowany wzór graffiti. Po odlakowaniu będzie można go użyć 50 razy w świecie gry.",
   ItemSwapStatTrakAccept: /* csgo_polish.txt */"AKCEPTUJ",
   ItemSwapStatTrakClose: /* csgo_polish.txt */"Zamknij",
   ItemSwapStatTrakDesc: /* csgo_polish.txt */"Ten przedmiot zamienia wartości liczników StatTrak™ między przedmiotami tego samego rodzaju.",

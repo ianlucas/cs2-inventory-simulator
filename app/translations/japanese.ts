@@ -257,6 +257,7 @@ export const japanese = {
   ItemRarityRare: /* csgo_japanese.txt */"ハイグレード",
   ItemRarityUncommon: /* csgo_japanese.txt */"ミディアムグレード",
   ItemSealedGraffiti: /* csgo_japanese.txt */"未開封グラフィティ",
+  ItemSealedGraffitiDesc: /* csgo_japanese.txt */"グラフィティが入った未開封のコンテナです。開封したグラフィティには50回分のチャージがあり、チャージの数だけゲーム内でグラフィティを適用できます。",
   ItemSwapStatTrakAccept: /* csgo_japanese.txt */"了解",
   ItemSwapStatTrakClose: /* csgo_japanese.txt */"閉じる",
   ItemSwapStatTrakDesc: /* csgo_japanese.txt */"同じタイプのアイテム間で StatTrak™ の値を入れ替えるツールです。",

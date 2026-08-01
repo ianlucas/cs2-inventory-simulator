@@ -257,6 +257,7 @@ export const german = {
   ItemRarityRare: /* csgo_german.txt */"Hohe Qualität",
   ItemRarityUncommon: /* csgo_german.txt */"Mittlere Qualität",
   ItemSealedGraffiti: /* csgo_german.txt */"Versiegeltes Graffito",
+  ItemSealedGraffitiDesc: /* csgo_german.txt */"Dies ist das versiegelte Gefäß eines Graffitimusters. Wenn dieses Graffitimuster entsiegelt wird, erhalten Sie genug Aufladungen, um das Graffitimuster 50-mal in der Spielwelt zu sprühen.",
   ItemSwapStatTrakAccept: /* csgo_german.txt */"ÜBERNEHMEN",
   ItemSwapStatTrakClose: /* csgo_german.txt */"Schließen",
   ItemSwapStatTrakDesc: /* csgo_german.txt */"Dieser Gegenstand tauscht die StatTrak™-Werte zweier Gegenstände gleichen Typs aus.",

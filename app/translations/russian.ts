@@ -257,6 +257,7 @@ export const russian = {
   ItemRarityRare: /* csgo_russian.txt */"высшего класса",
   ItemRarityUncommon: /* csgo_russian.txt */"Среднего класса",
   ItemSealedGraffiti: /* csgo_russian.txt */"Запечатанный граффити",
+  ItemSealedGraffitiDesc: /* csgo_russian.txt */"Это запечатанный контейнер с шаблоном граффити. После вскрытия шаблона вы получите возможность применить его в игровом мире 50 раз.",
   ItemSwapStatTrakAccept: /* csgo_russian.txt */"ПРИНЯТЬ",
   ItemSwapStatTrakClose: /* csgo_russian.txt */"Закрыть",
   ItemSwapStatTrakDesc: /* csgo_russian.txt */"Этот предмет может обменять значения StatTrak™ у двух одинаковых раскрасок предмета.",

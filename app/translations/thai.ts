@@ -258,6 +258,7 @@ export const thai = {
   ItemRarityRare: /* csgo_thai.txt */"เกรดสูง",
   ItemRarityUncommon: /* csgo_thai.txt */"เกรดปานกลาง",
   ItemSealedGraffiti: /* csgo_thai.txt */"กราฟฟิตี้แบบปิดผนึก",
+  ItemSealedGraffitiDesc: /* csgo_thai.txt */"นี่เป็นกล่องปิดผนึกของลายกราฟฟิตี้ เมื่อลายกราฟฟิตี้นี้ถูกเปิดผนึกแล้ว คุณจะได้รับชาร์จเพื่อนำไปใช้กับลายกราฟฟิตี้ 50 ครั้งเพื่อใช้ในเกม",
   ItemSwapStatTrakAccept: /* csgo_thai.txt */"ยอมรับ",
   ItemSwapStatTrakClose: /* csgo_thai.txt */"ปิด",
   ItemSwapStatTrakDesc: /* csgo_thai.txt */"ไอเท็มนี้จะสลับค่า StatTrak™ ระหว่างไอเท็มประเภทเดียวกันสองชิ้น",

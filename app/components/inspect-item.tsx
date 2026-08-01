@@ -163,7 +163,11 @@ function InspectItemShareButton({ item }: { item: CS2InventoryItem }) {
 }
 
 function InspectItemDescription({ item }: { item: CS2InventoryItem }) {
+  const translate = useTranslate();
+  const isSealedGraffiti =
+    item.isGraffiti() && item.hasCharges() && item.isSealed();
   if (
+    !isSealedGraffiti &&
     (item.parent ?? item).description === undefined &&
     item.description === undefined
   ) {
@@ -171,7 +175,13 @@ function InspectItemDescription({ item }: { item: CS2InventoryItem }) {
   }
   return (
     <div className="m-auto max-w-5xl px-24 pb-4 lg:w-5xl">
-      <ItemDescription item={item} />
+      {isSealedGraffiti ? (
+        <p className="mt-4 whitespace-pre-wrap text-neutral-300">
+          {translate("ItemSealedGraffitiDesc")}
+        </p>
+      ) : (
+        <ItemDescription item={item} />
+      )}
     </div>
   );
 }

@@ -254,6 +254,7 @@ export const indonesian = {
   ItemRarityRare: /* csgo_indonesian.txt */"Kualitas Tinggi",
   ItemRarityUncommon: /* csgo_indonesian.txt */"Kualitas Menengah",
   ItemSealedGraffiti: /* csgo_indonesian.txt */"Grafiti Tersegel",
+  ItemSealedGraffitiDesc: /* csgo_indonesian.txt */"Ini adalah kontainer pola grafiti yang masih tersegel. Begitu segel pola grafiti dibuka, kamu akan mendapatkan kesempatan untuk menyemprotkan pola grafiti sebanyak 50 kali di dalam permainan.",
   ItemSwapStatTrakAccept: /* csgo_indonesian.txt */"TERIMA",
   ItemSwapStatTrakClose: /* csgo_indonesian.txt */"Tutup",
   ItemSwapStatTrakDesc: /* csgo_indonesian.txt */"Item ini menukar nilai StatTrak™ antara dua jenis item yang sama.",

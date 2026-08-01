@@ -261,6 +261,7 @@ export const english = {
   ItemRarityRare: /* csgo_english.txt */"High Grade",
   ItemRarityUncommon: /* csgo_english.txt */"Medium Grade",
   ItemSealedGraffiti: /* csgo_english.txt */"Sealed Graffiti",
+  ItemSealedGraffitiDesc: /* csgo_english.txt */"This is a sealed container of a graffiti pattern. Once this graffiti pattern is unsealed, it will provide you with enough charges to apply the graffiti pattern 50 times to the in-game world.",
   ItemSwapStatTrakAccept: /* csgo_english.txt */"ACCEPT",
   ItemSwapStatTrakClose: /* csgo_english.txt */"Close",
   ItemSwapStatTrakDesc: /* csgo_english.txt */"This item swaps StatTrak™ values between two of the same item type.",

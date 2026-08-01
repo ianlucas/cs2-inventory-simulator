@@ -258,6 +258,7 @@ export const ukrainian = {
   ItemRarityRare: /* csgo_ukrainian.txt */"дуже рідкісний предмет",
   ItemRarityUncommon: /* csgo_ukrainian.txt */"рідкісний предмет",
   ItemSealedGraffiti: /* csgo_ukrainian.txt */"Запечатане графіті",
+  ItemSealedGraffitiDesc: /* csgo_ukrainian.txt */"Це запечатаний контейнер із шаблоном графіті. Після розпечатування шаблону ви отримаєте можливість застосувати шаблон 50 разів у ігровому світі.",
   ItemSwapStatTrakAccept: /* csgo_ukrainian.txt */"ПРИЙНЯТИ",
   ItemSwapStatTrakClose: /* csgo_ukrainian.txt */"Закрити",
   ItemSwapStatTrakDesc: /* csgo_ukrainian.txt */"Цей інструмент міняє місцями лічильники СтатТрек™ у двох екземплярів однакової зброї.",

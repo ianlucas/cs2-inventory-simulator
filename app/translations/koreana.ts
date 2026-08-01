@@ -258,6 +258,7 @@ export const koreana = {
   ItemRarityRare: /* csgo_koreana.txt */"고급",
   ItemRarityUncommon: /* csgo_koreana.txt */"중급",
   ItemSealedGraffiti: /* csgo_koreana.txt */"개봉 안 한 그래피티",
+  ItemSealedGraffitiDesc: /* csgo_koreana.txt */"아직 개봉하지 않은 그래피티 패턴입니다. 이 그래피티 패턴을 개봉하면 게임에서 그래피티 패턴을 50번 남길 수 있습니다.",
   ItemSwapStatTrakAccept: /* csgo_koreana.txt */"수락",
   ItemSwapStatTrakClose: /* csgo_koreana.txt */"닫기",
   ItemSwapStatTrakDesc: /* csgo_koreana.txt */"이 아이템으로 유형이 같은 두 아이템의 StatTrak™ 점수를 맞바꿀 수 있습니다.",
