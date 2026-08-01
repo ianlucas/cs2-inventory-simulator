@@ -6,6 +6,7 @@
 import clsx from "clsx";
 import { ComponentProps, ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { useLockScroll } from "./hooks/use-lock-scroll";
 import { useOverlayTransition } from "./hooks/use-overlay-transition";
 import { Viewer } from "./viewer";
 
@@ -23,6 +24,7 @@ export function ViewerOverlay({
   viewerProps: Omit<ComponentProps<typeof Viewer>, "className" | "style">;
 }) {
   const transition = useOverlayTransition();
+  useLockScroll();
   return createPortal(
     <div
       className={clsx(

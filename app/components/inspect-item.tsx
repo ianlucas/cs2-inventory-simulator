@@ -24,6 +24,8 @@ import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
 import { InfoIcon } from "./info-icon";
+import { InspectCharmDetachments } from "./inspect-charm-detachments";
+import { ItemDescription } from "./item-description";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -35,27 +37,40 @@ interface InspectItemProps {
   uid: number;
 }
 
-function InspectItemHeader({ item }: { item: CS2InventoryItem }) {
+export function InspectItemHeader({
+  icon,
+  item,
+  subtitle,
+  title
+}: {
+  icon?: ReactNode;
+  item: CS2InventoryItem;
+  subtitle?: ReactNode;
+  title?: ReactNode;
+}) {
   const nameItemString = useNameItemString();
+  icon ??=
+    item.collectionKey !== undefined ? (
+      <ItemImage className="w-29.5" item={item} type="collection" />
+    ) : undefined;
+  subtitle ??= item.collectionName;
   return (
     <div className="flex flex-col items-center">
       <div className="flex w-fit flex-col">
-        <div className="flex items-center justify-center gap-1">
-          {item.collectionKey !== undefined && (
-            <ItemImage className="w-29.5" item={item} type="collection" />
-          )}
+        <div className="flex items-center justify-center gap-1 px-4">
+          {icon}
           <div
             className={clsx(
               "max-w-200",
-              item.collectionKey !== undefined ? "text-left" : "text-center"
+              icon !== undefined ? "text-left" : "text-center"
             )}
           >
             <div className="font-display text-[36px] leading-tight font-medium text-white/90">
-              {nameItemString(item)}
+              {title ?? nameItemString(item)}
             </div>
-            {item.collectionName !== undefined && (
+            {subtitle !== undefined && (
               <div className="mt-1 font-sans text-[20px] text-neutral-300 drop-shadow">
-                {item.collectionName}
+                {subtitle}
               </div>
             )}
           </div>
@@ -147,6 +162,20 @@ function InspectItemShareButton({ item }: { item: CS2InventoryItem }) {
   );
 }
 
+function InspectItemDescription({ item }: { item: CS2InventoryItem }) {
+  if (
+    (item.parent ?? item).description === undefined &&
+    item.description === undefined
+  ) {
+    return null;
+  }
+  return (
+    <div className="m-auto max-w-5xl px-24 pb-4 lg:w-5xl">
+      <ItemDescription item={item} />
+    </div>
+  );
+}
+
 function InspectItem3d({ onClose, uid }: InspectItemProps) {
   const translate = useTranslate();
   const item = useInventoryItem(uid);
@@ -160,6 +189,7 @@ function InspectItem3d({ onClose, uid }: InspectItemProps) {
       viewerProps={viewerProps}
     >
       <div className="pointer-events-none absolute bottom-8 left-0 w-full">
+        <InspectItemDescription item={item} />
         <UseItemFooter
           left={
             <>
@@ -219,6 +249,7 @@ function InspectItem2d({ onClose, uid }: InspectItemProps) {
                 )}
               </div>
             </div>
+            <InspectItemDescription item={item} />
             <UseItemFooter
               left={
                 <>
@@ -254,6 +285,9 @@ export function InspectItem({ onClose, uid }: InspectItemProps) {
     };
   }, []);
 
+  if (item.isCharmDetachment()) {
+    return <InspectCharmDetachments onClose={onClose} uid={uid} />;
+  }
   return canUse3d ? (
     <InspectItem3d onClose={onClose} uid={uid} />
   ) : (

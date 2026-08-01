@@ -23,6 +23,12 @@ import {
 import { range } from "~/utils/number";
 import { useRules, useTranslate } from "./app-context";
 import { AppliedStickerEditor } from "./applied-sticker-editor";
+import {
+  AttachmentEditorDrawer,
+  AttachmentSlotsDrawer,
+  FORM_ECHO_WINDOW_MS,
+  attachmentName
+} from "./attachment-3d-drawer";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { useNameItemString } from "./hooks/use-name-item";
 import { useViewer } from "./hooks/use-viewer";
@@ -36,17 +42,8 @@ import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
 import { ViewerOverlay } from "./viewer-overlay";
 
-// Window to ignore the viewer's `change` echo of our own form edits, so the
-// panel isn't remounted under an active slider.
-const FORM_ECHO_WINDOW_MS = 400;
-
 type Stickers = NonNullable<CS2BaseInventoryItem["stickers"]>;
 type Sticker = Stickers[string];
-
-function stickerName(name: string): string {
-  const separator = name.indexOf("|");
-  return separator === -1 ? name : name.slice(separator + 1).trim();
-}
 
 function toArray(stickers: Stickers, maxSchema: number): Sticker[] {
   return CS2InventoryItem.stickersToArray(stickers, maxSchema);
@@ -74,36 +71,9 @@ function stickersEqual(a: Sticker[], b: Sticker[]): boolean {
   });
 }
 
-function DrawerTab({
-  className,
-  edge,
-  label,
-  onClick
-}: {
-  className?: string;
-  edge: "left" | "right";
-  label: string;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      className={clsx(
-        "font-display pointer-events-auto flex shrink-0 items-center justify-center self-stretch px-1.5 py-3 text-sm font-bold text-neutral-200 transition",
-        edge === "left" ? "rounded-r" : "rounded-l",
-        className
-      )}
-      onClick={onClick}
-      title={label}
-    >
-      <span className="max-h-full truncate [writing-mode:vertical-rl]">
-        {label}
-      </span>
-    </button>
-  );
-}
-
 function Sticker3dEditorOverlay({
   forItem,
+  keychains,
   nameTag,
   onChange,
   onClose,
@@ -114,6 +84,7 @@ function Sticker3dEditorOverlay({
   wear
 }: {
   forItem: CS2EconomyItem | CS2InventoryItem;
+  keychains?: CS2BaseInventoryItem["keychains"];
   nameTag?: string;
   onChange: (value: Stickers) => void;
   onClose: () => void;
@@ -138,14 +109,12 @@ function Sticker3dEditorOverlay({
     wear,
     statTrak,
     nameTag,
-    stickers: toRecord(toArray(value, maxSchema))
+    stickers: toRecord(toArray(value, maxSchema)),
+    keychains
   }));
   const { api, viewerProps } = useViewer({ item: initialItem });
 
   const [selected, setSelected] = useState<number>();
-  const [leftOpen, setLeftOpen] = useState(true);
-  const [userCollapsedRight, setUserCollapsedRight] = useState(false);
-  const [rightEntered, setRightEntered] = useState(false);
   const [selecting, setSelecting] = useState<
     { mode: "add" } | { mode: "replace"; index: number }
   >();
@@ -224,16 +193,6 @@ function Sticker3dEditorOverlay({
     return () => cancelAnimationFrame(raf);
   }, [noTransition]);
 
-  const hasSelectedSticker = selectedSticker !== undefined;
-  useEffect(() => {
-    if (!hasSelectedSticker) {
-      setRightEntered(false);
-      return;
-    }
-    const raf = requestAnimationFrame(() => setRightEntered(true));
-    return () => cancelAnimationFrame(raf);
-  }, [hasSelectedSticker]);
-
   function stageStickers(next: Sticker[]) {
     stickersRef.current = next;
     setStickers(next);
@@ -251,7 +210,8 @@ function Sticker3dEditorOverlay({
       wear,
       statTrak,
       nameTag,
-      stickers: toRecord(next)
+      stickers: toRecord(next),
+      keychains
     };
   }
 
@@ -442,158 +402,124 @@ function Sticker3dEditorOverlay({
           actionDesc={translate("ApplyStickerUseOn")}
           actionItem={nameItemString(forItem)}
           title={translate("ApplyStickerUse")}
+          warning={translate("ApplyStickerWarn")}
           stickerHint
         />
       }
       viewerClassName={isDragging ? "pointer-events-none" : undefined}
       viewerProps={viewerProps}
     >
-      <div className="pointer-events-none absolute inset-y-0 left-0 flex h-full items-center p-4">
-        <div
-          className={clsx(
-            "flex max-h-full items-center transition-transform duration-150 ease-out",
-            !leftOpen && "-translate-x-84"
-          )}
-        >
-          <div
-            className={clsx(
-              "pointer-events-none flex max-h-full w-80 flex-col gap-1",
-              isDragging ? "overflow-visible" : "overflow-y-auto"
-            )}
-          >
-            {stickers.map((sticker, position) => {
-              const item = CS2Economy.getById(sticker.id);
-              const isDragged = dragIndex === position;
-              const isSelected = selected === position;
-              return (
-                <div
-                  key={position}
-                  ref={(element) => {
-                    rowRefs.current[position] = element;
-                  }}
-                  className={clsx(
-                    "group pointer-events-auto overflow-hidden rounded-l",
-                    isDragged
-                      ? "z-10 bg-neutral-800 shadow-lg"
-                      : clsx(
-                          !noTransition && "transition duration-150",
-                          isSelected
-                            ? "bg-blue-600/40"
-                            : "bg-neutral-900/80 hover:bg-neutral-800/70"
-                        )
-                  )}
-                  style={{ transform: rowTransform(position) }}
-                  onMouseEnter={() => {
-                    if (!isDragging) {
-                      api?.highlightSticker({ index: position });
-                    }
-                  }}
-                >
-                  <div
-                    className="flex items-center gap-1 p-1 pr-2"
-                    onClick={() => handleToggleSelect(position)}
-                  >
-                    <button
-                      className="flex h-12 w-5 shrink-0 cursor-grab touch-none items-center justify-center text-neutral-400 transition hover:text-neutral-200 active:cursor-grabbing"
-                      onClick={(event) => event.stopPropagation()}
-                      onPointerDown={handleDragStart(position)}
-                      onPointerMove={handleDragMove}
-                      onPointerUp={handleDragEnd}
-                      title={translate("StickerPickerReorder")}
-                    >
-                      <FontAwesomeIcon icon={faGripVertical} className="h-4" />
-                    </button>
-                    <button
-                      className="relative aspect-256/192 h-12 shrink-0 overflow-hidden bg-neutral-950/40"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setSelecting({ mode: "replace", index: position });
-                      }}
-                      title={translate("EditorStickerEdit")}
-                    >
-                      <ItemImage item={item} />
-                      <div className="absolute top-0 left-0 size-full border-2 border-transparent group-hover:border-blue-500/50" />
-                    </button>
-                    <span className="flex-1 truncate px-1 text-sm text-neutral-200">
-                      {stickerName(item.name)}
-                    </span>
-                    <ButtonWithTooltip
-                      className="shrink-0 rounded-sm p-2 text-neutral-300 transition hover:bg-red-500/40"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleRemove(position);
-                      }}
-                      tooltip={translate("StickerPickerRemove")}
-                    >
-                      <FontAwesomeIcon icon={faTrashCan} className="h-3.5" />
-                    </ButtonWithTooltip>
-                  </div>
-                </div>
-              );
-            })}
-            {range(inventoryItemMaxStickers - count).map((index) => (
-              <button
-                key={`empty-${index}`}
-                className="group pointer-events-auto flex items-center gap-1 rounded-l bg-neutral-950/40 p-1 transition hover:bg-neutral-900/60"
-                onClick={() => setSelecting({ mode: "add" })}
+      <AttachmentSlotsDrawer
+        label={translate("EditorStickers")}
+        listClassName={isDragging ? "overflow-visible" : "overflow-y-auto"}
+      >
+        {stickers.map((sticker, position) => {
+          const item = CS2Economy.getById(sticker.id);
+          const isDragged = dragIndex === position;
+          const isSelected = selected === position;
+          return (
+            <div
+              key={position}
+              ref={(element) => {
+                rowRefs.current[position] = element;
+              }}
+              className={clsx(
+                "group pointer-events-auto overflow-hidden rounded-l",
+                isDragged
+                  ? "z-10 bg-neutral-800 shadow-lg"
+                  : clsx(
+                      !noTransition && "transition duration-150",
+                      isSelected ? "bg-blue-600/40" : "hover:bg-neutral-700/80"
+                    )
+              )}
+              style={{ transform: rowTransform(position) }}
+              onMouseEnter={() => {
+                if (!isDragging) {
+                  api?.highlightSticker({ index: position });
+                }
+              }}
+            >
+              <div
+                className="flex items-center gap-1 p-1 pr-2"
+                onClick={() => handleToggleSelect(position)}
               >
-                <span className="w-5 shrink-0" />
-                <span className="flex aspect-256/192 h-12 shrink-0 items-center justify-center border-2 border-transparent bg-neutral-900 text-xs text-neutral-600 group-hover:border-blue-500/50">
-                  {translate("StickerPickerNA")}
-                </span>
-              </button>
-            ))}
-          </div>
-          <DrawerTab
-            className="bg-neutral-900/80 hover:bg-neutral-800/70"
-            edge="left"
-            label={translate("EditorStickers")}
-            onClick={() => setLeftOpen((value) => !value)}
-          />
-        </div>
-      </div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 flex h-full items-center p-4">
-        {selected !== undefined && selectedSticker !== undefined && (
-          <div
-            className={clsx(
-              "flex max-h-full items-center transition duration-150 ease-out",
-              rightEntered ? "opacity-100" : "opacity-0",
-              userCollapsedRight || !rightEntered
-                ? "translate-x-94"
-                : "translate-x-0"
-            )}
-          >
-            <DrawerTab
-              className="bg-neutral-900/90 shadow-lg hover:bg-neutral-800/90"
-              edge="right"
-              label={stickerName(CS2Economy.getById(selectedSticker.id).name)}
-              onClick={() => setUserCollapsedRight((value) => !value)}
-            />
-            <div className="pointer-events-auto flex max-h-full w-90 flex-col overflow-hidden rounded-r bg-neutral-900/90 shadow-lg">
-              <div className="overflow-y-auto p-2">
-                <AppliedStickerEditor
-                  forItem={forItem}
-                  isHideItemDisplay
-                  isHidePreview
-                  isResetPlacementOnSchema
-                  item={CS2Economy.getById(selectedSticker.id)}
-                  key={`${selected}-${formVersion}`}
-                  onChange={handleEdit(selected)}
-                  slot={selected}
-                  stickers={toRecord(stickers)}
-                  value={{
-                    rotation: selectedSticker.rotation ?? 0,
-                    schema: selectedSticker.schema ?? -1,
-                    wear: selectedSticker.wear ?? 0,
-                    x: selectedSticker.x ?? 0,
-                    y: selectedSticker.y ?? 0
+                <button
+                  className="flex h-12 w-5 shrink-0 cursor-grab touch-none items-center justify-center text-neutral-400 transition hover:text-neutral-200 active:cursor-grabbing"
+                  onClick={(event) => event.stopPropagation()}
+                  onPointerDown={handleDragStart(position)}
+                  onPointerMove={handleDragMove}
+                  onPointerUp={handleDragEnd}
+                  title={translate("StickerPickerReorder")}
+                >
+                  <FontAwesomeIcon icon={faGripVertical} className="h-4" />
+                </button>
+                <button
+                  className="relative aspect-256/192 h-12 shrink-0 overflow-hidden bg-neutral-950/40"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setSelecting({ mode: "replace", index: position });
                   }}
-                />
+                  title={translate("EditorStickerEdit")}
+                >
+                  <ItemImage item={item} />
+                  <div className="absolute top-0 left-0 size-full border-2 border-transparent group-hover:border-blue-500/50" />
+                </button>
+                <span className="flex-1 truncate px-1 text-sm text-neutral-200">
+                  {attachmentName(item.name)}
+                </span>
+                <ButtonWithTooltip
+                  className="shrink-0 rounded-sm p-2 text-neutral-300 transition hover:bg-red-500/40"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleRemove(position);
+                  }}
+                  tooltip={translate("StickerPickerRemove")}
+                >
+                  <FontAwesomeIcon icon={faTrashCan} className="h-3.5" />
+                </ButtonWithTooltip>
               </div>
             </div>
+          );
+        })}
+        {range(inventoryItemMaxStickers - count).map((index) => (
+          <button
+            key={`empty-${index}`}
+            className="group pointer-events-auto flex items-center gap-1 rounded-l p-1 transition hover:bg-neutral-700/80"
+            onClick={() => setSelecting({ mode: "add" })}
+          >
+            <span className="w-5 shrink-0" />
+            <span className="flex aspect-256/192 h-12 shrink-0 items-center justify-center border-2 border-transparent bg-neutral-900 text-xs text-neutral-600 group-hover:border-blue-500/50">
+              {translate("StickerPickerNA")}
+            </span>
+          </button>
+        ))}
+      </AttachmentSlotsDrawer>
+      {selected !== undefined && selectedSticker !== undefined && (
+        <AttachmentEditorDrawer
+          label={attachmentName(CS2Economy.getById(selectedSticker.id).name)}
+        >
+          <div className="overflow-y-auto p-2">
+            <AppliedStickerEditor
+              forItem={forItem}
+              isHideItemDisplay
+              isHidePreview
+              isResetPlacementOnSchema
+              item={CS2Economy.getById(selectedSticker.id)}
+              key={`${selected}-${formVersion}`}
+              onChange={handleEdit(selected)}
+              slot={selected}
+              stickers={toRecord(stickers)}
+              value={{
+                rotation: selectedSticker.rotation ?? 0,
+                schema: selectedSticker.schema ?? -1,
+                wear: selectedSticker.wear ?? 0,
+                x: selectedSticker.x ?? 0,
+                y: selectedSticker.y ?? 0
+              }}
+            />
           </div>
-        )}
-      </div>
+        </AttachmentEditorDrawer>
+      )}
       <div className="pointer-events-none absolute bottom-8 left-0 w-full">
         <UseItemFooter
           className="w-200"
@@ -614,7 +540,6 @@ function Sticker3dEditorOverlay({
         />
       </div>
       <SelectStickerModal
-        fixed
         hidden={selecting === undefined}
         onClose={() => setSelecting(undefined)}
         onSelect={handleSelect}
@@ -627,6 +552,7 @@ function Sticker3dEditorOverlay({
 export function Sticker3dPicker({
   disabled,
   forItem,
+  keychains,
   nameTag,
   onChange,
   seed,
@@ -637,6 +563,7 @@ export function Sticker3dPicker({
 }: {
   disabled?: boolean;
   forItem: CS2EconomyItem | CS2InventoryItem;
+  keychains?: CS2BaseInventoryItem["keychains"];
   nameTag?: string;
   onChange: (value: Stickers) => void;
   seed?: number;
@@ -658,6 +585,7 @@ export function Sticker3dPicker({
         {isOpen ? (
           <Sticker3dEditorOverlay
             forItem={forItem}
+            keychains={keychains}
             nameTag={nameTag}
             onChange={onChange}
             onClose={() => setIsOpen(false)}

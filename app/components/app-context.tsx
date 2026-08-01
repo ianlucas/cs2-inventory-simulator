@@ -24,7 +24,10 @@ import { SyncAction } from "~/data/sync";
 import type { loader } from "~/root";
 import { pushToSync, sync } from "~/sync";
 import { updateEconomyLanguage } from "~/utils/economy";
-import { getFreeItemsToDisplay } from "~/utils/inventory";
+import {
+  getCharmDetachmentsToDisplay,
+  getFreeItemsToDisplay
+} from "~/utils/inventory";
 import {
   cacheInventoryData,
   getCachedInventoryData,
@@ -165,7 +168,10 @@ export function AppProvider({
           })
         ),
         // Default Game Items
-        getFreeItemsToDisplay(preferences.hideFreeItems)
+        [
+          ...getFreeItemsToDisplay(preferences.hideFreeItems),
+          ...getCharmDetachmentsToDisplay(inventory)
+        ]
       ),
     [
       inventory,

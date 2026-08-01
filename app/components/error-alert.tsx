@@ -36,7 +36,7 @@ export function ErrorAlert() {
   }
 
   return (
-    <Modal className="w-137.5" fixed>
+    <Modal className="w-137.5">
       <ModalHeader title={error.title} />
       <p className="mt-2 px-4 text-sm">{error.body}</p>
       <div className="my-6 flex justify-center px-4">

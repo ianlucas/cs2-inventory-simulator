@@ -13,12 +13,20 @@ const VIEWER_PROTOCOL_VERSION = 1;
 // The subset of a CS2BaseInventoryItem the viewer reads (same shape as `?item=`).
 export type ViewerItem = Pick<
   CS2BaseInventoryItem,
-  "id" | "seed" | "wear" | "stickers" | "statTrak" | "nameTag"
+  "id" | "seed" | "wear" | "stickers" | "keychains" | "statTrak" | "nameTag"
 >;
+
+// What the viewer canvas is editing: a sticker, the charm (index is always 0 —
+// a weapon carries one), or nothing. `activeSticker` is derived from it.
+export type ViewerSelection =
+  | { kind: "sticker"; index: number }
+  | { kind: "keychain"; index: number }
+  | null;
 
 // The observable viewer state, reported by `getState` and the `change` event.
 export interface ViewerState {
   item: ViewerItem;
+  selection: ViewerSelection;
   activeSticker: number | null;
   schemaCount: number;
 }
@@ -32,11 +40,13 @@ export type RateLimitScope = "ip" | "origin" | "partner";
 //                that keeps dying). Device-level → suppress 3D for a good while.
 //  - "network" — an asset/API load failed AFTER the viewer's own retries (e.g. a Great-Firewall-
 //                throttled CDN edge). Transient → short cooldown, but back off if it keeps failing.
-//  - "weapon" / "sticker" — a cs2-lib catalog mismatch (the per-item viewerCatalog gate handles it).
+//  - "weapon" / "sticker" / "keychain" — a cs2-lib catalog mismatch (the per-item viewerCatalog
+//                gate handles it); "keychain" also covers a charmed weapon whose physics engine
+//                failed to load.
 // Any of them flips the host back to its 2D editor. "asset" is the pre-reason-split name, still
 // accepted (and treated as network) from a stale/cached viewer build.
 export type ViewerUnsupportedReason =
-  "weapon" | "sticker" | "network" | "webgl" | "asset";
+  "weapon" | "sticker" | "keychain" | "network" | "webgl" | "asset";
 
 // Events the viewer emits back to us. The `state` reply to `getState` is consumed
 // by that promise, so it isn't surfaced as an event here.
@@ -150,8 +160,46 @@ export class ViewerApi extends EventTarget {
     this.send("setActiveSticker", data);
   }
 
+  setSelection(data: { selection: ViewerSelection }): void {
+    this.send("setSelection", data);
+  }
+
   highlightSticker(data: { index: number }): void {
     this.send("highlightSticker", data);
+  }
+
+  setKeychain(data: { index: number; id: number }): void {
+    this.send("setKeychain", data);
+  }
+
+  removeKeychain(data: { index: number }): void {
+    this.send("removeKeychain", data);
+  }
+
+  setKeychainSeed(data: { index: number; seed: number }): void {
+    this.send("setKeychainSeed", data);
+  }
+
+  // Absolute bone-space point; all three axes required (see the embed API — a
+  // partial position is a silent no-op).
+  setKeychainPosition(data: {
+    index: number;
+    x: number;
+    y: number;
+    z: number;
+  }): void {
+    this.send("setKeychainPosition", data);
+  }
+
+  // Back to the model's default location (the absence of x/y/z, which cannot be
+  // expressed as a setKeychainPosition call).
+  clearKeychainPosition(data: { index: number }): void {
+    this.send("clearKeychainPosition", data);
+  }
+
+  // CS2's "Next Pos": a uniform-random re-roll over the weapon's charm surface.
+  rerollKeychainPosition(data: { index: number }): void {
+    this.send("rerollKeychainPosition", data);
   }
 
   ping(): void {

@@ -34,7 +34,8 @@ export function InventoryItemTile({
   const currDate = getTimestamp();
   const isNew =
     inventoryItem?.updatedAt !== undefined &&
-    currDate - inventoryItem.updatedAt < 120;
+    currDate - inventoryItem.updatedAt < 120 &&
+    !item.isCharmDetachment();
 
   return (
     <div className="w-38.5">
@@ -61,15 +62,17 @@ export function InventoryItemTile({
                 ))}
               </div>
             )}
-            <div className="flex min-h-5 items-center p-1">
-              {inventoryItem.someStickers().map(([slot, { id }]) => (
-                <ItemImage
-                  className="h-5"
-                  item={CS2Economy.getById(id)}
-                  key={slot}
-                />
-              ))}
-            </div>
+            {inventoryItem?.stickers !== undefined && (
+              <div className="flex min-h-5 items-center p-1">
+                {inventoryItem.someStickers().map(([slot, { id }]) => (
+                  <ItemImage
+                    className="h-5"
+                    item={CS2Economy.getById(id)}
+                    key={slot}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
         {inventoryItem?.patches !== undefined && (

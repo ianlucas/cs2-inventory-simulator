@@ -24,12 +24,49 @@ function replace(
   return replaced;
 }
 
+// Reduces an ICU plural expression to its "other" branch, e.g.
+// "Add {n, plural, one{Charm} other{Charms}}" becomes "Add Charms". Some
+// languages wrap the entire string in the plural expression, so this can't be
+// a flat regex.
+function reducePluralToOther(str: string) {
+  const start = str.search(/\{\s*[\w:]+\s*,\s*plural\s*,/);
+  if (start === -1) {
+    return str;
+  }
+  function matchBraces(openIndex: number) {
+    let depth = 0;
+    for (let i = openIndex; i < str.length; i++) {
+      if (str[i] === "{") {
+        depth++;
+      } else if (str[i] === "}" && --depth === 0) {
+        return i;
+      }
+    }
+    fail(`Unbalanced braces in '${str}'`);
+  }
+  const end = matchBraces(start);
+  const otherMatch = str.slice(start, end).match(/other\s*\{/);
+  if (otherMatch?.index === undefined) {
+    fail(`Missing plural 'other' branch in '${str}'`);
+  }
+  const otherOpen = start + otherMatch.index + otherMatch[0].length - 1;
+  const otherClose = matchBraces(otherOpen);
+  return (
+    str.slice(0, start) +
+    str.slice(otherOpen + 1, otherClose) +
+    str.slice(end + 1)
+  );
+}
+
 // prettier-ignore
 const STRINGS_FROM_GAME: Record<string, string | string[] | {
   token: string;
   transform: (value: string, lang: string) => string;
 }> = {
+  ApplyKeychainHintMoveKeychain: "popup_control_tooltip_move_keychain",
+  ApplyKeychainNextPosition: "SFUI_InvUse_Pick_Sticker_slot",
   ApplyKeychainUse: "popup_can_stick_title_keychain",
+  ApplyKeychainWarn: "SFUI_InvUse_Warning_use_can_stick_keychain",
   ApplyPatchCancel: "Cancel_Button",
   ApplyPatchUse: "popup_can_patch_button",
   ApplyPatchUseOn: { token: "popup_can_stick_desc", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}<\/b>/, '') },
@@ -71,6 +108,13 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   CategorySMG: "CSGO_Type_SMG",
   CategorySticker: "CSGO_Tool_Sticker",
   CategoryTool: "CSGO_Type_Tool",
+  CharmDetachmentsAvailable: { token: "Attrib_KeychainRemoveTool_Charges", transform: (value) => replace(value, '{d:item_count}', '{1}') },
+  DetachCharmClose: "GameUI_Close",
+  DetachCharmConfirm: "popup_remove_keychain_button",
+  DetachCharmHint: { token: "SFUI_Keychain_Remove_Tooltip", transform: (value) => value.replace(/<\/?b>/g, '').replace(/<br\s*\/?>/g, '\n').trim() },
+  DetachCharmNeed: { token: "popup_capability_upsell", transform: (value) => replace(value, '<b>{s:itemname}</b>', '{1}') },
+  DetachCharmUseOn: { token: "popup_can_stick_scrape_full_keychain", transform: (value) => replace(value, /<b>\s?[«"„]?\{s:tool_target_name\}[»"“]?<\/b>/, '') },
+  DetachCharmWarn: { token: "Notify_KeychainRemoveTool_ChargesUseToRemove", transform: (value) => replace(value, '{d:item_count}', '{1}').replace(/<br\s*\/?>/g, '\n') },
   EditorApply: "settings_apply",
   EditorCancel: "Cancel_Button",
   EditorKeychainEdit: "Button_Edit_nodots",
@@ -92,6 +136,9 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   EditorStickerX: "Workshop_Preview_X_Offset",
   EditorStickerY: "Workshop_Preview_Y_Offset",
   EditorWear: "Workshop_Preview_Wear",
+  ExtractStickerClose: "GameUI_Close",
+  ExtractStickerDesc: { token: "CSGO_Tool_UnWrapStickerInDisplayCase_Desc", transform: (value) => value.replace(/<br\s*\/?>/g, '\n') },
+  ExtractStickerTitle: "CSGO_Tool_UnWrapStickerInDisplayCase_Title",
   GenericCancel: "Cancel",
   GenericNo: "GameUI_No",
   GenericOK: "GameUI_OK",
@@ -134,11 +181,13 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   InventoryFilterWeaponCases: "Inv_Category_weaponcase",
   InventoryItemContainsOne: "Econ_Revolving_Loot_List",
   InventoryItemDelete: "Button_Delete",
+  InventoryItemDetachCharm: "SFUI_Keychain_Remove",
   InventoryItemDeleteConfirm: "popup_delete_button",
   InventoryItemDeleteConfirmDesc: "popup_delete_desc",
   InventoryItemEdit: "Button_Edit_nodots",
   InventoryItemEquip: "CSGOEcon_Equip",
   InventoryItemExterior: "inv_header_grade",
+  InventoryItemExtractSticker: "inv_context_can_unwrap_sticker",
   InventoryItemInspect: "inv_context_preview",
   InventoryItemInspectFinishCatalog: "SFUI_ItemInfo_FinishCatalog",
   InventoryItemInspectInGame: "CSGO_EconAction_Preview",
@@ -155,6 +204,8 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   InventoryItemRenamePlaceholder: "nameable_textentry_placeholder",
   InventoryItemRenameStorageUnit: "inv_context_yourcasket",
   InventoryItemScrapeSticker: "popup_remove_sticker_button",
+  InventoryItemSealSticker: "inv_context_can_wrap_sticker",
+  InventoryItemSealStickerInSlab: "inv_context_wrap_sticker",
   InventoryItemStatTrak: "CSGO_KillEater_Hud",
   InventoryItemStatTrakCount: ["#KillEaterEventType_Kills", ":"],
   InventoryItemStatTrakDesc: "Attrib_KillEater",
@@ -171,6 +222,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   InventoryItemTeamT: "CSGO_Inventory_Team_T",
   InventoryItemUnequip: "SFUI_InvContextMenu_Unequip",
   InventoryItemUnlockContainer: "inv_context_open_package",
+  InventoryItemUseItem: "inv_context_useitem",
   InventoryItemUseStorageUnit: "inv_context_newcasket",
   InventorySelectAnItem: "inv_select_item_use",
   InventorySelectInspectContents: "inv_select_casketcontents",
@@ -249,9 +301,19 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   ScrapeStickerUse: "SFUI_InvContextMenu_can_stick_Wear_sticker",
   ScrapeStickerUseOn: { token: "popup_can_stick_scrape_full_sticker", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}<\/b>/, '') },
   ScrapeStickerWarn: { token: "popup_can_stick_scrape_sticker", transform: (value) => replace(value, /<b>\s?\{s:tool_target_name\}<\/b>/, '') },
+  SealStickerClose: "GameUI_Close",
+  SealStickerConfirm: "popup_can_wrap_sticker_button",
+  SealStickerDesc: { token: "CSGO_Tool_WrapStickerInDisplayCase_Desc", transform: (value) => value.replace(/<br\s*\/?>/g, '\n') },
+  SealStickerHint: { token: "popup_can_wrap_sticker_button_tooltip", transform: (value) => value.replace(/<\/?b>/g, '') },
+  SealStickerTitle: "CSGO_Tool_WrapStickerInDisplayCase_Title",
   SettingsMasterVolume: "SFUI_Settings_Master_Volume",
   StickerPickerRemove: "Button_Remove",
   StickerScrapeLevel: "popup_scrape_sticker_level",
+  UnpackAddCharges: { token: "popup_useitem_button_getkeychaincharges:f", transform: (value) => replace(reducePluralToOther(value.replace(/<\/?b>/g, '')), '{d:item_count}', '{1}') },
+  UnpackClose: "GameUI_Close",
+  UnpackDesc: "popup_useitem_desc_getkeychaincharges",
+  UnpackNumberOfItems: { token: "Attrib_ItemsCount", transform: (value) => replace(value, '%s1', '{1}') },
+  UnpackTitle: { token: "popup_useitem_title_getkeychaincharges", transform: (value) => replace(value, '{s:itemname}', '{1}') },
 };
 
 assert(CS2_CSGO_PATH, "CS2_CSGO_PATH must be set.");

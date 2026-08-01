@@ -66,7 +66,7 @@ export function markViewerUnsupported(reason: ViewerUnsupportedReason) {
     markViewerRateLimited(WEBGL_COOLDOWN_MS);
     return;
   }
-  if (reason === "weapon" || reason === "sticker") {
+  if (reason === "weapon" || reason === "sticker" || reason === "keychain") {
     markViewerRateLimited(NETWORK_BASE_MS);
     return;
   }
@@ -104,13 +104,13 @@ export function useViewerAvailability(
   const canUse3d =
     globalAvailable &&
     (item === undefined || isViewerItemSupported(viewerCatalog, item));
-  const isStickerSupported = useCallback(
+  const isIdSupported = useCallback(
     (id: number) => isViewerIdSupported(viewerCatalog, id),
     [viewerCatalog]
   );
   return {
     canUse3d,
-    isStickerSupported,
+    isIdSupported,
     markRateLimited: markViewerRateLimited
   };
 }

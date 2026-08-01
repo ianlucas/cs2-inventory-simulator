@@ -71,9 +71,18 @@ export function AppliedKeychainEditor({
     ) {
       attributes.setValue({
         seed: CS2_MIN_KEYCHAIN_SEED,
-        x: getDefaultKeychainPosition(keychainPositionXMin, keychainPositionXMax),
-        y: getDefaultKeychainPosition(keychainPositionYMin, keychainPositionYMax),
-        z: getDefaultKeychainPosition(keychainPositionZMin, keychainPositionZMax)
+        x: getDefaultKeychainPosition(
+          keychainPositionXMin,
+          keychainPositionXMax
+        ),
+        y: getDefaultKeychainPosition(
+          keychainPositionYMin,
+          keychainPositionYMax
+        ),
+        z: getDefaultKeychainPosition(
+          keychainPositionZMin,
+          keychainPositionZMax
+        )
       });
     }
   }
@@ -84,7 +93,7 @@ export function AppliedKeychainEditor({
 
   return (
     <div className={clsx("m-auto text-sm select-none", className)}>
-      <EditorItemDisplay item={item} />
+      <EditorItemDisplay item={item} seed={attributes.value.seed} />
       <div className="space-y-1.5">
         {!isHideKeychainSeed && (
           <EditorLabel label={translate("EditorPattern")}>

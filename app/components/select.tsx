@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ensure } from "@ianlucas/cs2-lib";
 import { useClickAway } from "@uidotdev/usehooks";
 import clsx from "clsx";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 export function Select<T extends { value: string }>({
   children,
@@ -38,6 +38,15 @@ export function Select<T extends { value: string }>({
     setIsOpen(false);
   });
   const selected = ensure(options.find((option) => option.value === value));
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const close = () => setIsOpen(false);
+    window.addEventListener("blur", close);
+    return () => window.removeEventListener("blur", close);
+  }, [isOpen]);
 
   return (
     <div className="relative">

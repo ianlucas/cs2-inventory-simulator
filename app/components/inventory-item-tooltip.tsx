@@ -14,7 +14,7 @@ import { ComponentProps } from "react";
 import { has } from "~/utils/misc";
 import { usePreferences } from "./app-context";
 import { InventoryItemTooltipContents } from "./inventory-item-tooltip-contents";
-import { InventoryItemTooltipDescription } from "./inventory-item-tooltip-description";
+import { ItemDescription } from "./item-description";
 import { InventoryItemTooltipExterior } from "./inventory-item-tooltip-exterior";
 import { InventoryItemTooltipName } from "./inventory-item-tooltip-name";
 import { InventoryItemTooltipRarity } from "./inventory-item-tooltip-rarity";
@@ -76,7 +76,7 @@ export function InventoryItemTooltip({
           statTrak={item.statTrak}
         />
       )}
-      <InventoryItemTooltipDescription item={item} />
+      <ItemDescription item={item} />
       {hasContents && (
         <InventoryItemTooltipContents
           containerItem={containerItem}
