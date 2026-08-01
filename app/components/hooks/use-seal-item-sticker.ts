@@ -6,19 +6,31 @@
 import { assert } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
+import { useTimer } from "~/components/hooks/use-timer";
 import { useItemSelector } from "~/components/item-selector-context";
+
+const OVERLAY_EXIT_MS = 600;
 
 export function useSealItemSticker() {
   const items = useInventoryItems();
   const [inventory] = useInventory();
   const [itemSelector, setItemSelector] = useItemSelector();
   const [sealItemSticker, setSealItemSticker] = useState<{
-    toolUid: number;
+    toolUid?: number;
     stickerUid: number;
   }>();
+  const wait = useTimer();
 
   function handleSealItemSticker(uid: number) {
     const selectedItem = inventory.get(uid);
+    if (
+      selectedItem.isSticker() &&
+      !items.some(
+        ({ uid: itemUid, item }) => itemUid >= 0 && item.isStickerSlab()
+      )
+    ) {
+      return setSealItemSticker({ stickerUid: uid });
+    }
     return setItemSelector({
       uid,
       items: items.filter(
@@ -41,6 +53,13 @@ export function useSealItemSticker() {
     });
   }
 
+  function handleSealItemStickerCrafted(toolUid: number) {
+    assert(sealItemSticker !== undefined);
+    const { stickerUid } = sealItemSticker;
+    setSealItemSticker(undefined);
+    wait(() => setSealItemSticker({ toolUid, stickerUid }), OVERLAY_EXIT_MS);
+  }
+
   function closeSealItemSticker() {
     return setSealItemSticker(undefined);
   }
@@ -54,6 +73,7 @@ export function useSealItemSticker() {
   return {
     closeSealItemSticker,
     handleSealItemSticker,
+    handleSealItemStickerCrafted,
     handleSealItemStickerSelect,
     isSealingItemSticker,
     sealItemSticker

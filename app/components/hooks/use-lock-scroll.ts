@@ -9,6 +9,17 @@ import { useEffect } from "react";
  * @see https://stackoverflow.com/questions/4770025/how-to-disable-scrolling-temporarily
  */
 function preventDefault(event: Event) {
+  let element = event.target instanceof Element ? event.target : null;
+  while (element !== null && element !== document.body) {
+    const { overflowY } = getComputedStyle(element);
+    if (
+      (overflowY === "auto" || overflowY === "scroll") &&
+      element.scrollHeight > element.clientHeight
+    ) {
+      return;
+    }
+    element = element.parentElement;
+  }
   event.preventDefault();
 }
 

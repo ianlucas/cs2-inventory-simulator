@@ -13,8 +13,8 @@ import {
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
-import { useViewerAvailability } from "~/components/hooks/use-viewer-availability";
 import { useEditItemFilter } from "~/components/hooks/use-item-hide-filters";
+import { useViewerAvailability } from "~/components/hooks/use-viewer-availability";
 import {
   EDITABLE_ITEM_TYPE,
   getInventoryItemShareUrl,
@@ -60,7 +60,6 @@ export function InventoryItem({
   ownApplicableKeychains,
   ownApplicablePatches,
   ownApplicableStickers,
-  ownStickerSlabs,
   uid
 }: TransformedInventoryItem & {
   disableContextMenu?: boolean;
@@ -91,7 +90,6 @@ export function InventoryItem({
   ownApplicableKeychains?: boolean;
   ownApplicablePatches?: boolean;
   ownApplicableStickers?: boolean;
-  ownStickerSlabs?: boolean;
 }) {
   const [, copyToClipboard] = useCopyToClipboard();
   const translate = useTranslate();
@@ -201,8 +199,7 @@ export function InventoryItem({
   const isUseItemOnly = item.isCharmDetachmentPack();
   const isCharmDetachments = item.isCharmDetachment();
   const isStickerSlab = item.isStickerSlab();
-  const canSealSticker =
-    ownStickerSlabs && item.isSticker() && item.hasDisplayCase();
+  const canSealSticker = item.isSticker() && item.hasDisplayCase();
   const canExtractSticker = item.isStickerDisplayCase();
 
   function close(callBeforeClosing: () => void) {
@@ -271,6 +268,28 @@ export function InventoryItem({
                               condition: true,
                               label: translate("InventoryItemSealSticker"),
                               onClick: close(() => onSealSticker?.(uid))
+                            }
+                          ],
+                          [
+                            {
+                              condition: true,
+                              label: translate("InventoryItemDelete"),
+                              onClick: close(async () => {
+                                if (
+                                  await confirm({
+                                    titleText: item.name,
+                                    bodyText: translate(
+                                      "InventoryItemDeleteConfirmDesc"
+                                    ),
+                                    cancelText: translate("GenericCancel"),
+                                    confirmText: translate(
+                                      "InventoryItemDeleteConfirm"
+                                    )
+                                  })
+                                ) {
+                                  onRemove?.(uid);
+                                }
+                              })
                             }
                           ]
                         ]

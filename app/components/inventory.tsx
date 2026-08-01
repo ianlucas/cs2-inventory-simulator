@@ -75,10 +75,6 @@ export function Inventory() {
     items.filter(({ item }) => item.isPatch()).length > 0 &&
     items.filter(({ item }) => item.hasPatches()).length > 0;
 
-  const ownStickerSlabs = items.some(
-    ({ uid, item }) => uid >= 0 && item.isStickerSlab()
-  );
-
   const {
     closeUnlockCase,
     handleUnlockCase,
@@ -150,6 +146,7 @@ export function Inventory() {
   const {
     closeSealItemSticker,
     handleSealItemSticker,
+    handleSealItemStickerCrafted,
     handleSealItemStickerSelect,
     isSealingItemSticker,
     sealItemSticker
@@ -355,8 +352,7 @@ export function Inventory() {
                     onUseItem: handleUnpackItem,
                     ownApplicableKeychains,
                     ownApplicablePatches,
-                    ownApplicableStickers,
-                    ownStickerSlabs
+                    ownApplicableStickers
                   })}
             />
           </div>
@@ -421,6 +417,7 @@ export function Inventory() {
         {isSealingItemSticker(sealItemSticker) ? (
           <SealItemSticker
             {...sealItemSticker}
+            onAddTool={handleSealItemStickerCrafted}
             onClose={closeSealItemSticker}
           />
         ) : null}
