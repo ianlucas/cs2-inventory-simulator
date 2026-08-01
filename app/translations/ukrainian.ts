@@ -73,6 +73,9 @@ export const ukrainian = {
   CraftSearchPlaceholder: "Шукати наліпку або нашивку...",
   CraftSelectHeader: "Вибрати наліпки",
   CraftSharedHeader: "Створені предмети",
+  DetachCharmConfirm: /* csgo_ukrainian.txt */"Відчепити брелок",
+  DetachCharmConfirmDesc: /* csgo_ukrainian.txt */"Ви дійсно бажаєте відчепити цей брелок? Ця дія використає один відчіплювач і поверне брелок у ваш інвентар.",
+  DetachCharmNeed: /* csgo_ukrainian.txt */"Для цієї дії необхідно мати {1}",
   EditorApply: /* csgo_ukrainian.txt */"Застосувати",
   EditorCancel: /* csgo_ukrainian.txt */"Скасувати",
   EditorCopiedToClipboard: "Скопійовано до буфера обміну",
@@ -160,6 +163,7 @@ export const ukrainian = {
   InventoryItemDelete: /* csgo_ukrainian.txt */"Видалити",
   InventoryItemDeleteConfirm: /* csgo_ukrainian.txt */"Знищити предмет",
   InventoryItemDeleteConfirmDesc: /* csgo_ukrainian.txt */"Ви дійсно бажаєте видалити цей предмет?",
+  InventoryItemDetachCharm: /* csgo_ukrainian.txt */"Відчепити брелок",
   InventoryItemEdit: /* csgo_ukrainian.txt */"Редагувати",
   InventoryItemEquip: /* csgo_ukrainian.txt */"Спорядити",
   InventoryItemEquipBothTeams: "Екіпірувати обидві команди",
@@ -205,6 +209,7 @@ export const ukrainian = {
   InventoryItemUnequipCT: "Зняти екіпіровку CT",
   InventoryItemUnequipT: "Зняти екіпіровку T",
   InventoryItemUnlockContainer: /* csgo_ukrainian.txt */"Розкрити",
+  InventoryItemUseItem: /* csgo_ukrainian.txt */"Використати предмет",
   InventoryItemUseStorageUnit: /* csgo_ukrainian.txt */"Почати використовувати це сховище",
   InventoryItemWear: "Зношеність:",
   InventoryNoItemsToDisplay: "Немає предметів для відображення.",
@@ -319,5 +324,10 @@ export const ukrainian = {
   SyncErrorContinue: "Продовжити без входу",
   SyncErrorDesc: "Сталася помилка під час входу через Steam. Ваші зміни не будуть синхронізовані.",
   SyncErrorTitle: "Помилка синхронізації",
-  SyncWarnText: "Ви не увійшли в систему. Зміни не будуть синхронізовані."
+  SyncWarnText: "Ви не увійшли в систему. Зміни не будуть синхронізовані.",
+  UnpackAddCharges: /* csgo_ukrainian.txt */"Додати {1} відчіплювача брелоків",
+  UnpackClose: /* csgo_ukrainian.txt */"Закрити",
+  UnpackDesc: /* csgo_ukrainian.txt */"Ви дійсно бажаєте розпакувати цей предмет?",
+  UnpackNumberOfItems: /* csgo_ukrainian.txt */"Кількість предметів: {1}",
+  UnpackTitle: /* csgo_ukrainian.txt */"Розпакувати: {1}"
 };

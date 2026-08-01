@@ -73,6 +73,9 @@ export const thai = {
   CraftSearchPlaceholder: "ค้นหาสติกเกอร์หรือแพทช์...",
   CraftSelectHeader: "เลือกสติกเกอร์",
   CraftSharedHeader: "ไอเท็มที่สร้างขึ้น",
+  DetachCharmConfirm: /* csgo_thai.txt */"ถอดพวงกุญแจ",
+  DetachCharmConfirmDesc: /* csgo_thai.txt */"โปรดยืนยันว่าคุณต้องการถอดพวงกุญแจนี้ การถอดพวงกุญแจจะใช้ตัวถอดพวงกุญแจ 1 อัน และนำพวงกุญแจกลับคืนสู่ช่องเก็บของของคุณ",
+  DetachCharmNeed: /* csgo_thai.txt */"การดำเนินการนี้ต้องใช้ {1}",
   EditorApply: /* csgo_thai.txt */"ใช้ค่า",
   EditorCancel: /* csgo_thai.txt */"ยกเลิก",
   EditorCopiedToClipboard: "คัดลอกไปยังคลิปบอร์ดแล้ว",
@@ -160,6 +163,7 @@ export const thai = {
   InventoryItemDelete: /* csgo_thai.txt */"ลบ",
   InventoryItemDeleteConfirm: /* csgo_thai.txt */"ลบไอเท็ม",
   InventoryItemDeleteConfirmDesc: /* csgo_thai.txt */"คุณแน่ใจหรือไม่ว่าคุณต้องการลบไอเท็มนี้?",
+  InventoryItemDetachCharm: /* csgo_thai.txt */"ถอดพวงกุญแจ",
   InventoryItemEdit: /* csgo_thai.txt */"แก้ไข",
   InventoryItemEquip: /* csgo_thai.txt */"สวมใส่",
   InventoryItemEquipBothTeams: "สวมใส่ทั้งสองทีม",
@@ -205,6 +209,7 @@ export const thai = {
   InventoryItemUnequipCT: "ถอด CT",
   InventoryItemUnequipT: "ถอด T",
   InventoryItemUnlockContainer: /* csgo_thai.txt */"ปลดล็อคบรรจุภัณฑ์",
+  InventoryItemUseItem: /* csgo_thai.txt */"ใช้ไอเท็ม",
   InventoryItemUseStorageUnit: /* csgo_thai.txt */"เริ่มใช้กล่องเก็บของนี้",
   InventoryItemWear: "ความเสื่อมสภาพ:",
   InventoryNoItemsToDisplay: "ไม่มีไอเท็มที่จะแสดง",
@@ -319,5 +324,10 @@ export const thai = {
   SyncErrorContinue: "ดำเนินการต่อโดยไม่เข้าสู่ระบบ",
   SyncErrorDesc: "เกิดข้อผิดพลาดในการเข้าสู่ระบบผ่าน Steam การเปลี่ยนแปลงของคุณจะไม่ถูกซิงค์",
   SyncErrorTitle: "ข้อผิดพลาดการซิงค์",
-  SyncWarnText: "คุณยังไม่ได้เข้าสู่ระบบ การเปลี่ยนแปลงจะไม่ถูกซิงค์"
+  SyncWarnText: "คุณยังไม่ได้เข้าสู่ระบบ การเปลี่ยนแปลงจะไม่ถูกซิงค์",
+  UnpackAddCharges: /* csgo_thai.txt */"เพิ่ม {1} ตัวถอดพวงกุญแจ",
+  UnpackClose: /* csgo_thai.txt */"ปิด",
+  UnpackDesc: /* csgo_thai.txt */"คุณแน่ใจหรือไม่ว่าคุณต้องการแกะไอเท็มนี้?",
+  UnpackNumberOfItems: /* csgo_thai.txt */"จำนวนของไอเท็ม: {1}",
+  UnpackTitle: /* csgo_thai.txt */"แกะ {1}"
 };

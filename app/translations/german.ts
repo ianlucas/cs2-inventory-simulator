@@ -72,6 +72,9 @@ export const german = {
   CraftSearchPlaceholder: "Nach einem Gegenstand suchen...",
   CraftSelectHeader: "Gegenstand herstellen...",
   CraftSharedHeader: "Gemeinsame Herstellung",
+  DetachCharmConfirm: /* csgo_german.txt */"Anhänger ablösen",
+  DetachCharmConfirmDesc: /* csgo_german.txt */"Bitte bestätigen Sie, dass Sie diesen Anhänger wirklich ablösen möchten. Durch das Ablösen des Anhängers wird eine Anhängerablösung verbraucht und der Anhänger kehrt in Ihr Inventar zurück.",
+  DetachCharmNeed: /* csgo_german.txt */"Sie benötigen: {1}",
   EditorApply: /* csgo_german.txt */"Übernehmen",
   EditorCancel: /* csgo_german.txt */"Abbrechen",
   EditorCopiedToClipboard: "In die Zwischenablage kopiert",
@@ -159,6 +162,7 @@ export const german = {
   InventoryItemDelete: /* csgo_german.txt */"Löschen",
   InventoryItemDeleteConfirm: /* csgo_german.txt */"Gegenstand löschen",
   InventoryItemDeleteConfirmDesc: /* csgo_german.txt */"Möchten Sie diesen Gegenstand wirklich löschen?",
+  InventoryItemDetachCharm: /* csgo_german.txt */"Anhänger ablösen",
   InventoryItemEdit: /* csgo_german.txt */"Bearbeiten",
   InventoryItemEquip: /* csgo_german.txt */"Ausrüsten",
   InventoryItemEquipBothTeams: "Beide Teams ausrüsten",
@@ -204,6 +208,7 @@ export const german = {
   InventoryItemUnequipCT: "AT ablegen",
   InventoryItemUnequipT: "T ablegen",
   InventoryItemUnlockContainer: /* csgo_german.txt */"Behälter öffnen",
+  InventoryItemUseItem: /* csgo_german.txt */"Gegenstand benutzen",
   InventoryItemUseStorageUnit: /* csgo_german.txt */"Diese Einheit verwenden",
   InventoryItemWear: "Abnutzung:",
   InventoryNoItemsToDisplay: "Keine Gegenstände zum Anzeigen",
@@ -318,5 +323,10 @@ export const german = {
   SyncErrorContinue: "Erneut versuchen",
   SyncErrorDesc: "Beim Synchronisieren Ihrer Änderungen ist ein Fehler aufgetreten.",
   SyncErrorTitle: "Synchronisierungsfehler",
-  SyncWarnText: "Sie sind nicht authentifiziert, Ihre Änderungen werden nicht synchronisiert."
+  SyncWarnText: "Sie sind nicht authentifiziert, Ihre Änderungen werden nicht synchronisiert.",
+  UnpackAddCharges: /* csgo_german.txt */"{1} Anhängerablösungen hinzufügen",
+  UnpackClose: /* csgo_german.txt */"Schließen",
+  UnpackDesc: /* csgo_german.txt */"Möchten Sie diesen Gegenstand wirklich auspacken?",
+  UnpackNumberOfItems: /* csgo_german.txt */"Anzahl der Gegenstände: {1}",
+  UnpackTitle: /* csgo_german.txt */"{1} auspacken"
 };

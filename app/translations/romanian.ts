@@ -72,6 +72,9 @@ export const romanian = {
   CraftSearchPlaceholder: "Caută după sticker sau ecuson...",
   CraftSelectHeader: "Selectează sticker-uri",
   CraftSharedHeader: "Obiecte create",
+  DetachCharmConfirm: /* csgo_romanian.txt */"Detașează brelocul",
+  DetachCharmConfirmDesc: /* csgo_romanian.txt */"Te rugăm să confirmi faptul că vrei să detașezi brelocul acesta. Detașarea acestui breloc va consuma un instrument de detașat brelocuri și va transfera brelocul în inventarul tău.",
+  DetachCharmNeed: /* csgo_romanian.txt */"Această acțiune necesită: {1}",
   EditorApply: /* csgo_romanian.txt */"Aplică",
   EditorCancel: /* csgo_romanian.txt */"Anulează",
   EditorCopiedToClipboard: "Copiat în clipboard",
@@ -159,6 +162,7 @@ export const romanian = {
   InventoryItemDelete: /* csgo_romanian.txt */"Șterge",
   InventoryItemDeleteConfirm: /* csgo_romanian.txt */"Șterge obiectul",
   InventoryItemDeleteConfirmDesc: /* csgo_romanian.txt */"Sigur vrei să ștergi acest obiect?",
+  InventoryItemDetachCharm: /* csgo_romanian.txt */"Detașează brelocul",
   InventoryItemEdit: /* csgo_romanian.txt */"Editează",
   InventoryItemEquip: /* csgo_romanian.txt */"Echipează",
   InventoryItemEquipBothTeams: "Echipează ambele echipe",
@@ -204,6 +208,7 @@ export const romanian = {
   InventoryItemUnequipCT: "Dezechipează CT",
   InventoryItemUnequipT: "Dezechipează T",
   InventoryItemUnlockContainer: /* csgo_romanian.txt */"Deschide containerul",
+  InventoryItemUseItem: /* csgo_romanian.txt */"Folosește obiectul",
   InventoryItemUseStorageUnit: /* csgo_romanian.txt */"Începe să folosești această unitate de depozitare",
   InventoryItemWear: "Uzură:",
   InventoryNoItemsToDisplay: "Nu există obiecte de afișat.",
@@ -318,5 +323,10 @@ export const romanian = {
   SyncErrorContinue: "Continuă fără autentificare",
   SyncErrorDesc: "A apărut o eroare la autentificarea prin Steam. Modificările tale nu vor fi sincronizate.",
   SyncErrorTitle: "Eroare de sincronizare",
-  SyncWarnText: "Nu ești autentificat. Modificările nu vor fi sincronizate."
+  SyncWarnText: "Nu ești autentificat. Modificările nu vor fi sincronizate.",
+  UnpackAddCharges: /* csgo_romanian.txt */"Adaugă {1} de instrumente de detașat brelocuri",
+  UnpackClose: /* csgo_romanian.txt */"Închide",
+  UnpackDesc: /* csgo_romanian.txt */"Sigur vrei să despachetezi acest obiect?",
+  UnpackNumberOfItems: /* csgo_romanian.txt */"Numărul de obiecte: {1}",
+  UnpackTitle: /* csgo_romanian.txt */"Despachetează: {1}"
 };

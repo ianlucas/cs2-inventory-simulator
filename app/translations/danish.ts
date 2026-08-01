@@ -72,6 +72,9 @@ export const danish = {
   CraftSearchPlaceholder: "Søg efter en genstand...",
   CraftSelectHeader: "Fremstiller en genstand...",
   CraftSharedHeader: "Delt fremstilling",
+  DetachCharmConfirm: /* csgo_danish.txt */"Fjern vedhæng",
+  DetachCharmConfirmDesc: /* csgo_danish.txt */"Bekræft, at du ønsker at fjerne dette vedhæng. Hvis du fjerner det, forbruges der en vedhængsfjerner, og vedhænget returneres til dit inventar.",
+  DetachCharmNeed: /* csgo_danish.txt */"Denne handling kræver en {1}",
   EditorApply: /* csgo_danish.txt */"Anvend",
   EditorCancel: /* csgo_danish.txt */"Annuller",
   EditorCopiedToClipboard: "Kopieret til udklipsholder",
@@ -159,6 +162,7 @@ export const danish = {
   InventoryItemDelete: /* csgo_danish.txt */"Slet",
   InventoryItemDeleteConfirm: /* csgo_danish.txt */"Slet genstand",
   InventoryItemDeleteConfirmDesc: /* csgo_danish.txt */"Er du sikker på, at du vil slette denne genstand?",
+  InventoryItemDetachCharm: /* csgo_danish.txt */"Fjern vedhæng",
   InventoryItemEdit: /* csgo_danish.txt */"Rediger",
   InventoryItemEquip: /* csgo_danish.txt */"Udstyr",
   InventoryItemEquipBothTeams: "Udstyr begge hold",
@@ -204,6 +208,7 @@ export const danish = {
   InventoryItemUnequipCT: "Tag af CT",
   InventoryItemUnequipT: "Tag af T",
   InventoryItemUnlockContainer: /* csgo_danish.txt */"Oplås beholder",
+  InventoryItemUseItem: /* csgo_danish.txt */"Anvend genstand",
   InventoryItemUseStorageUnit: /* csgo_danish.txt */"Anvend denne enhed",
   InventoryItemWear: "Slid:",
   InventoryNoItemsToDisplay: "Ingen genstande at vise",
@@ -318,5 +323,10 @@ export const danish = {
   SyncErrorContinue: "Prøv igen",
   SyncErrorDesc: "Der opstod en fejl under synkronisering af dine ændringer.",
   SyncErrorTitle: "Synkroniseringsfejl",
-  SyncWarnText: "Du er ikke godkendt, dine ændringer vil ikke blive synkroniseret."
+  SyncWarnText: "Du er ikke godkendt, dine ændringer vil ikke blive synkroniseret.",
+  UnpackAddCharges: /* csgo_danish.txt */"Tilføj {1} vedhængsfjernere",
+  UnpackClose: /* csgo_danish.txt */"Luk",
+  UnpackDesc: /* csgo_danish.txt */"Er du sikker på, at du vil pakke denne genstand ud?",
+  UnpackNumberOfItems: /* csgo_danish.txt */"Antal genstande: {1}",
+  UnpackTitle: /* csgo_danish.txt */"Udpak {1}"
 };

@@ -73,6 +73,9 @@ export const schinese = {
   CraftSearchPlaceholder: "搜索印花或徽章...",
   CraftSelectHeader: "选择印花",
   CraftSharedHeader: "制作的物品",
+  DetachCharmConfirm: /* csgo_schinese.txt */"拆卸挂件",
+  DetachCharmConfirmDesc: /* csgo_schinese.txt */"请确认你要拆卸此挂件。拆卸挂件将消耗一个挂件拆卸器，拆卸掉的挂件将返还你的库存。",
+  DetachCharmNeed: /* csgo_schinese.txt */"这个操作需要一个 {1}",
   EditorApply: /* csgo_schinese.txt */"应用",
   EditorCancel: /* csgo_schinese.txt */"取消",
   EditorCopiedToClipboard: "已复制到剪贴板",
@@ -160,6 +163,7 @@ export const schinese = {
   InventoryItemDelete: /* csgo_schinese.txt */"删除",
   InventoryItemDeleteConfirm: /* csgo_schinese.txt */"删除物品",
   InventoryItemDeleteConfirmDesc: /* csgo_schinese.txt */"您确定要删除这件物品？",
+  InventoryItemDetachCharm: /* csgo_schinese.txt */"拆卸挂件",
   InventoryItemEdit: /* csgo_schinese.txt */"编辑",
   InventoryItemEquip: /* csgo_schinese.txt */"装备",
   InventoryItemEquipBothTeams: "装备双方阵营",
@@ -205,6 +209,7 @@ export const schinese = {
   InventoryItemUnequipCT: "卸下反恐精英",
   InventoryItemUnequipT: "卸下恐怖分子",
   InventoryItemUnlockContainer: /* csgo_schinese.txt */"开箱",
+  InventoryItemUseItem: /* csgo_schinese.txt */"使用物品",
   InventoryItemUseStorageUnit: /* csgo_schinese.txt */"开始使用此组件",
   InventoryItemWear: "磨损:",
   InventoryNoItemsToDisplay: "没有可显示的物品。",
@@ -319,5 +324,10 @@ export const schinese = {
   SyncErrorContinue: "不登录继续",
   SyncErrorDesc: "通过 Steam 登录时出错。您的更改将不会同步。",
   SyncErrorTitle: "同步错误",
-  SyncWarnText: "您未登录。更改将不会同步。"
+  SyncWarnText: "您未登录。更改将不会同步。",
+  UnpackAddCharges: /* csgo_schinese.txt */"添加{1}个挂件拆卸器",
+  UnpackClose: /* csgo_schinese.txt */"关闭",
+  UnpackDesc: /* csgo_schinese.txt */"你确定要打开此物品吗？",
+  UnpackNumberOfItems: /* csgo_schinese.txt */"物品数量: {1}",
+  UnpackTitle: /* csgo_schinese.txt */"打开{1}"
 };

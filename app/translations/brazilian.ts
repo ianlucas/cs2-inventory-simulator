@@ -72,6 +72,9 @@ export const brazilian = {
   CraftSearchPlaceholder: "Procurar um item...",
   CraftSelectHeader: "Criando um item...",
   CraftSharedHeader: "Criação compartilhada",
+  DetachCharmConfirm: /* csgo_brazilian.txt */"Remover chaveiro",
+  DetachCharmConfirmDesc: /* csgo_brazilian.txt */"Confirme que deseja remover este chaveiro. Remover o chaveiro consumirá um Removedor de Chaveiro e devolverá o chaveiro ao seu inventário.",
+  DetachCharmNeed: /* csgo_brazilian.txt */"Esta ação requer uma {1}",
   EditorApply: /* csgo_brazilian.txt */"Aplicar",
   EditorCancel: /* csgo_brazilian.txt */"Cancelar",
   EditorCopiedToClipboard: "Copiado",
@@ -159,6 +162,7 @@ export const brazilian = {
   InventoryItemDelete: /* csgo_brazilian.txt */"Excluir",
   InventoryItemDeleteConfirm: /* csgo_brazilian.txt */"Excluir item",
   InventoryItemDeleteConfirmDesc: /* csgo_brazilian.txt */"Tem certeza de que deseja excluir este item?",
+  InventoryItemDetachCharm: /* csgo_brazilian.txt */"Remover chaveiro",
   InventoryItemEdit: /* csgo_brazilian.txt */"Editar",
   InventoryItemEquip: /* csgo_brazilian.txt */"Equipar",
   InventoryItemEquipBothTeams: "Equipar Ambas Equipes",
@@ -204,6 +208,7 @@ export const brazilian = {
   InventoryItemUnequipCT: "Desequipar CT",
   InventoryItemUnequipT: "Desequipar T",
   InventoryItemUnlockContainer: /* csgo_brazilian.txt */"Destrancar recipiente",
+  InventoryItemUseItem: /* csgo_brazilian.txt */"Usar item",
   InventoryItemUseStorageUnit: /* csgo_brazilian.txt */"Começar a usar unidade",
   InventoryItemWear: "Desgaste:",
   InventoryNoItemsToDisplay: "Nenhum item para exibir",
@@ -319,5 +324,10 @@ export const brazilian = {
   SyncErrorContinue: "Tentar novamente",
   SyncErrorDesc: "Não foi possível sincronizar as suas mudanças.",
   SyncErrorTitle: "Erro de sincronização",
-  SyncWarnText: "Você não está autenticado, suas mudanças não serão sincronizadas."
+  SyncWarnText: "Você não está autenticado, suas mudanças não serão sincronizadas.",
+  UnpackAddCharges: /* csgo_brazilian.txt */"Adicionar {1} Removedores de Chaveiro",
+  UnpackClose: /* csgo_brazilian.txt */"Fechar",
+  UnpackDesc: /* csgo_brazilian.txt */"Tem certeza de que deseja abrir este item?",
+  UnpackNumberOfItems: /* csgo_brazilian.txt */"Número de itens: {1}",
+  UnpackTitle: /* csgo_brazilian.txt */"Abrir {1}"
 };

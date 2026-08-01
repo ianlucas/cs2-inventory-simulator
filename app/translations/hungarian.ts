@@ -72,6 +72,9 @@ export const hungarian = {
   CraftSearchPlaceholder: "Tárgy keresése...",
   CraftSelectHeader: "Tárgy készítése...",
   CraftSharedHeader: "Megosztott készítés",
+  DetachCharmConfirm: /* csgo_hungarian.txt */"Talizmán levétele",
+  DetachCharmConfirmDesc: /* csgo_hungarian.txt */"Kérjük, erősítsd meg, hogy le szeretnéd venni ezt a talizmánt. A talizmán levétele elhasznál egy Talizmánlevevőt, és visszajuttatja a talizmánt a felszerelésedbe.",
+  DetachCharmNeed: /* csgo_hungarian.txt */"E művelethez {1} szükséges",
   EditorApply: /* csgo_hungarian.txt */"Alkalmaz",
   EditorCancel: /* csgo_hungarian.txt */"Mégse",
   EditorCopiedToClipboard: "Vágólapra másolva",
@@ -159,6 +162,7 @@ export const hungarian = {
   InventoryItemDelete: /* csgo_hungarian.txt */"Törlés",
   InventoryItemDeleteConfirm: /* csgo_hungarian.txt */"Tárgy törlése",
   InventoryItemDeleteConfirmDesc: /* csgo_hungarian.txt */"Biztosan törölni szeretnéd ezt az elemet?",
+  InventoryItemDetachCharm: /* csgo_hungarian.txt */"Talizmán levétele",
   InventoryItemEdit: /* csgo_hungarian.txt */"Szerkesztés",
   InventoryItemEquip: /* csgo_hungarian.txt */"Felszerel",
   InventoryItemEquipBothTeams: "Mindkét csapat felszerelése",
@@ -204,6 +208,7 @@ export const hungarian = {
   InventoryItemUnequipCT: "CT letevése",
   InventoryItemUnequipT: "T letevése",
   InventoryItemUnlockContainer: /* csgo_hungarian.txt */"Tároló kinyitása",
+  InventoryItemUseItem: /* csgo_hungarian.txt */"Használ",
   InventoryItemUseStorageUnit: /* csgo_hungarian.txt */"Egység használatának megkezdése",
   InventoryItemWear: "Kopottság:",
   InventoryNoItemsToDisplay: "Nincsenek megjeleníthető tárgyak",
@@ -315,5 +320,10 @@ export const hungarian = {
   SyncErrorContinue: "Újrapróbálás",
   SyncErrorDesc: "Hiba történt a módosítások szinkronizálásakor.",
   SyncErrorTitle: "Szinkronizálási hiba",
-  SyncWarnText: "Nem vagy hitelesítve, a módosításaid nem lesznek szinkronizálva."
+  SyncWarnText: "Nem vagy hitelesítve, a módosításaid nem lesznek szinkronizálva.",
+  UnpackAddCharges: /* csgo_hungarian.txt */"{1} Talizmánlevevő hozzáadása",
+  UnpackClose: /* csgo_hungarian.txt */"Bezár",
+  UnpackDesc: /* csgo_hungarian.txt */"Biztosan ki akarod csomagolni ezt a tárgyat?",
+  UnpackNumberOfItems: /* csgo_hungarian.txt */"Tárgyak száma: {1}",
+  UnpackTitle: /* csgo_hungarian.txt */"{1} kicsomagolása"
 };

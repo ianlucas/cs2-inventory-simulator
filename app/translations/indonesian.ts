@@ -72,6 +72,9 @@ export const indonesian = {
   CraftSearchPlaceholder: "Cari item...",
   CraftSelectHeader: "Membuat item...",
   CraftSharedHeader: "Craft bersama",
+  DetachCharmConfirm: /* csgo_indonesian.txt */"Cabut Gantungan",
+  DetachCharmConfirmDesc: /* csgo_indonesian.txt */"Harap konfirmasikan bahwa kamu ingin mencabut gantungan ini. Satu Pencabut Gantungan diperlukan untuk mencabut dan mengembalikan gantungan ke inventarismu.",
+  DetachCharmNeed: /* csgo_indonesian.txt */"Hal ini membutuhkan sebuah {1}",
   EditorApply: /* csgo_indonesian.txt */"Terapkan",
   EditorCancel: /* csgo_indonesian.txt */"Batal",
   EditorCopiedToClipboard: "Disalin ke clipboard",
@@ -156,6 +159,7 @@ export const indonesian = {
   InventoryItemDelete: /* csgo_indonesian.txt */"Hapus",
   InventoryItemDeleteConfirm: /* csgo_indonesian.txt */"Hapus Item",
   InventoryItemDeleteConfirmDesc: /* csgo_indonesian.txt */"Apa kamu yakin ingin menghapus item ini?",
+  InventoryItemDetachCharm: /* csgo_indonesian.txt */"Cabut Gantungan",
   InventoryItemEdit: /* csgo_indonesian.txt */"Edit",
   InventoryItemEquip: /* csgo_indonesian.txt */"Pasang",
   InventoryItemEquipBothTeams: "Pasang Kedua Tim",
@@ -201,6 +205,7 @@ export const indonesian = {
   InventoryItemUnequipCT: "Lepas CT",
   InventoryItemUnequipT: "Lepas T",
   InventoryItemUnlockContainer: /* csgo_indonesian.txt */"Buka Kontainer",
+  InventoryItemUseItem: /* csgo_indonesian.txt */"Gunakan Item",
   InventoryItemUseStorageUnit: /* csgo_indonesian.txt */"Mulai Gunakan Unit Ini",
   InventoryItemWear: "Kondisi:",
   InventoryNoItemsToDisplay: "Tidak ada item untuk ditampilkan",
@@ -315,5 +320,10 @@ export const indonesian = {
   SyncErrorContinue: "Coba lagi",
   SyncErrorDesc: "Terjadi kesalahan saat menyinkronkan perubahan kamu.",
   SyncErrorTitle: "Kesalahan Sinkronisasi",
-  SyncWarnText: "Kamu tidak terautentikasi, perubahan kamu tidak akan disinkronkan."
+  SyncWarnText: "Kamu tidak terautentikasi, perubahan kamu tidak akan disinkronkan.",
+  UnpackAddCharges: /* csgo_indonesian.txt */"Tambahkan {1} Pencabut Gantungan",
+  UnpackClose: /* csgo_indonesian.txt */"Tutup",
+  UnpackDesc: /* csgo_indonesian.txt */"Apa kamu yakin ingin membuka item ini?",
+  UnpackNumberOfItems: /* csgo_indonesian.txt */"Jumlah Item: {1}",
+  UnpackTitle: /* csgo_indonesian.txt */"Buka {1}"
 };

@@ -72,6 +72,9 @@ export const french = {
   CraftSearchPlaceholder: "Rechercher un objet...",
   CraftSelectHeader: "Création d'un objet...",
   CraftSharedHeader: "Création partagée",
+  DetachCharmConfirm: /* csgo_french.txt */"Détacher le porte-bonheur",
+  DetachCharmConfirmDesc: /* csgo_french.txt */"Voulez-vous vraiment détacher ce porte-bonheur ? Cette action consommera un séparateur et transfèrera le porte-bonheur vers votre inventaire.",
+  DetachCharmNeed: /* csgo_french.txt */"Vous devez posséder un(e) {1}",
   EditorApply: /* csgo_french.txt */"Appliquer",
   EditorCancel: /* csgo_french.txt */"Annuler",
   EditorCopiedToClipboard: "Copié dans le presse-papiers",
@@ -159,6 +162,7 @@ export const french = {
   InventoryItemDelete: /* csgo_french.txt */"Supprimer",
   InventoryItemDeleteConfirm: /* csgo_french.txt */"Supprimer cet item",
   InventoryItemDeleteConfirmDesc: /* csgo_french.txt */"Voulez-vous vraiment supprimer cet item ?",
+  InventoryItemDetachCharm: /* csgo_french.txt */"Détacher le porte-bonheur",
   InventoryItemEdit: /* csgo_french.txt */"Modifier",
   InventoryItemEquip: /* csgo_french.txt */"Équiper",
   InventoryItemEquipBothTeams: "Équiper les deux équipes",
@@ -204,6 +208,7 @@ export const french = {
   InventoryItemUnequipCT: "Retirer CT",
   InventoryItemUnequipT: "Retirer T",
   InventoryItemUnlockContainer: /* csgo_french.txt */"Ouvrir le conteneur",
+  InventoryItemUseItem: /* csgo_french.txt */"Utiliser cet item",
   InventoryItemUseStorageUnit: /* csgo_french.txt */"Commencer à utiliser cette unité",
   InventoryItemWear: "Usure :",
   InventoryNoItemsToDisplay: "Aucun objet à afficher",
@@ -318,5 +323,10 @@ export const french = {
   SyncErrorContinue: "Réessayer",
   SyncErrorDesc: "Une erreur s'est produite lors de la synchronisation de vos modifications.",
   SyncErrorTitle: "Erreur de synchronisation",
-  SyncWarnText: "Vous n'êtes pas authentifié, vos modifications ne seront pas synchronisées."
+  SyncWarnText: "Vous n'êtes pas authentifié, vos modifications ne seront pas synchronisées.",
+  UnpackAddCharges: /* csgo_french.txt */"Ajouter {1} séparateurs de porte-bonheurs",
+  UnpackClose: /* csgo_french.txt */"Fermer",
+  UnpackDesc: /* csgo_french.txt */"Voulez-vous vraiment déballer cet item ?",
+  UnpackNumberOfItems: /* csgo_french.txt */"Nombre d'objets : {1}",
+  UnpackTitle: /* csgo_french.txt */"Déballer {1}"
 };

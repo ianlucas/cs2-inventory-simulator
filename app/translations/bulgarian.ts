@@ -73,6 +73,9 @@ export const bulgarian = {
   CraftSearchPlaceholder: "Търсене на артикул...",
   CraftSelectHeader: "Изработка на артикул...",
   CraftSharedHeader: "Споделена изработка",
+  DetachCharmConfirm: /* csgo_bulgarian.txt */"Откачване на джунджурия",
+  DetachCharmConfirmDesc: /* csgo_bulgarian.txt */"Моля, потвърдете, че бихте искали да откачите тази джунджурия. Откачването на джунджурия ще консумира едно „Откачване на джунджурия“ и ще върне джунджурията в инвентара Ви.",
+  DetachCharmNeed: /* csgo_bulgarian.txt */"Това действие изисква {1}",
   EditorApply: /* csgo_bulgarian.txt */"Прилагане",
   EditorCancel: /* csgo_bulgarian.txt */"Отказ",
   EditorCopiedToClipboard: "Копирано в клипборда",
@@ -160,6 +163,7 @@ export const bulgarian = {
   InventoryItemDelete: /* csgo_bulgarian.txt */"Изтриване",
   InventoryItemDeleteConfirm: /* csgo_bulgarian.txt */"Изтриване на артикула",
   InventoryItemDeleteConfirmDesc: /* csgo_bulgarian.txt */"Сигурни ли сте, че искате да изтриете този артикул?",
+  InventoryItemDetachCharm: /* csgo_bulgarian.txt */"Откачване на джунджурия",
   InventoryItemEdit: /* csgo_bulgarian.txt */"Редактиране",
   InventoryItemEquip: /* csgo_bulgarian.txt */"Екипиране",
   InventoryItemEquipBothTeams: "Екипирай за двата отбора",
@@ -205,6 +209,7 @@ export const bulgarian = {
   InventoryItemUnequipCT: "Премахни КТ",
   InventoryItemUnequipT: "Премахни Т",
   InventoryItemUnlockContainer: /* csgo_bulgarian.txt */"Отключване на контейнера",
+  InventoryItemUseItem: /* csgo_bulgarian.txt */"Използване на артикула",
   InventoryItemUseStorageUnit: /* csgo_bulgarian.txt */"Стартиране на ползването на този елемент",
   InventoryItemWear: "Износване:",
   InventoryNoItemsToDisplay: "Няма артикули за показване",
@@ -319,5 +324,10 @@ export const bulgarian = {
   SyncErrorContinue: "Опитай отново",
   SyncErrorDesc: "Възникна грешка при синхронизацията на промените ви.",
   SyncErrorTitle: "Грешка при синхронизация",
-  SyncWarnText: "Не сте удостоверени, промените ви няма да бъдат синхронизирани."
+  SyncWarnText: "Не сте удостоверени, промените ви няма да бъдат синхронизирани.",
+  UnpackAddCharges: /* csgo_bulgarian.txt */"Добавяне на {1} откачвания на джунджурии",
+  UnpackClose: /* csgo_bulgarian.txt */"Затваряне",
+  UnpackDesc: /* csgo_bulgarian.txt */"Сигурни ли сте, че искате да разопаковате този артикул?",
+  UnpackNumberOfItems: /* csgo_bulgarian.txt */"Брой артикули: {1}",
+  UnpackTitle: /* csgo_bulgarian.txt */"Разопаковане на {1}"
 };

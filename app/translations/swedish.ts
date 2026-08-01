@@ -72,6 +72,9 @@ export const swedish = {
   CraftSearchPlaceholder: "Sök efter klistermärke eller tygmärke...",
   CraftSelectHeader: "Välj klistermärken",
   CraftSharedHeader: "Skapade föremål",
+  DetachCharmConfirm: /* csgo_swedish.txt */"Avlägsna hänge",
+  DetachCharmConfirmDesc: /* csgo_swedish.txt */"Vänligen bekräfta att du vill avlägsna hänget. Avlägsning av hängen förbrukar en hängesavlägsnare och hänget återgår till förrådet.",
+  DetachCharmNeed: /* csgo_swedish.txt */"Denna åtgärd kräver en {1}",
   EditorApply: /* csgo_swedish.txt */"Verkställ",
   EditorCancel: /* csgo_swedish.txt */"Avbryt",
   EditorCopiedToClipboard: "Kopierat till urklipp",
@@ -159,6 +162,7 @@ export const swedish = {
   InventoryItemDelete: /* csgo_swedish.txt */"Radera",
   InventoryItemDeleteConfirm: /* csgo_swedish.txt */"Ta bort föremål",
   InventoryItemDeleteConfirmDesc: /* csgo_swedish.txt */"Är du säker på att du vill ta bort detta föremål?",
+  InventoryItemDetachCharm: /* csgo_swedish.txt */"Avlägsna hänge",
   InventoryItemEdit: /* csgo_swedish.txt */"Ändra",
   InventoryItemEquip: /* csgo_swedish.txt */"Utrusta",
   InventoryItemEquipBothTeams: "Utrusta båda lagen",
@@ -204,6 +208,7 @@ export const swedish = {
   InventoryItemUnequipCT: "Avutrusta CT",
   InventoryItemUnequipT: "Avutrusta T",
   InventoryItemUnlockContainer: /* csgo_swedish.txt */"Lås upp behållare",
+  InventoryItemUseItem: /* csgo_swedish.txt */"Använd föremål",
   InventoryItemUseStorageUnit: /* csgo_swedish.txt */"Börja använda denna enhet",
   InventoryItemWear: "Slitage:",
   InventoryNoItemsToDisplay: "Inga föremål att visa.",
@@ -318,5 +323,10 @@ export const swedish = {
   SyncErrorContinue: "Fortsätt utan inloggning",
   SyncErrorDesc: "Ett fel uppstod när du skulle logga in via Steam. Dina ändringar kommer inte att synkroniseras.",
   SyncErrorTitle: "Synkroniseringsfel",
-  SyncWarnText: "Du är inte inloggad. Ändringar kommer inte att synkroniseras."
+  SyncWarnText: "Du är inte inloggad. Ändringar kommer inte att synkroniseras.",
+  UnpackAddCharges: /* csgo_swedish.txt */"Lägg till {1} hängesavlägsnare",
+  UnpackClose: /* csgo_swedish.txt */"Stäng",
+  UnpackDesc: /* csgo_swedish.txt */"Är du säker på att du vill packa upp detta föremål?",
+  UnpackNumberOfItems: /* csgo_swedish.txt */"Antal föremål: {1}",
+  UnpackTitle: /* csgo_swedish.txt */"Packa upp {1}"
 };

@@ -24,9 +24,7 @@ export function UseItemHeader({
   return (
     <>
       <div className="text-center text-white/80 drop-shadow-sm">
-        <div className="font-display text-4xl/10 font-medium tracking-wider">
-          {title}
-        </div>
+        <div className="font-display text-4xl/10 font-medium">{title}</div>
         {actionDesc !== undefined && (
           <div className="mt-2 text-lg">
             {actionDesc}{" "}

@@ -73,6 +73,9 @@ export const spanish = {
   CraftSearchPlaceholder: "Buscar pegatina o parche...",
   CraftSelectHeader: "Seleccionar pegatinas",
   CraftSharedHeader: "Objetos creados",
+  DetachCharmConfirm: /* csgo_spanish.txt */"Desacoplar colgante",
+  DetachCharmConfirmDesc: /* csgo_spanish.txt */"Confirma que quieres desacoplar este colgante. Al hacerlo, se consumirá un desacoplador de colgantes y el colgante volverá a tu inventario.",
+  DetachCharmNeed: /* csgo_spanish.txt */"Esta acción requiere un/a {1}",
   EditorApply: /* csgo_spanish.txt */"Aplicar",
   EditorCancel: /* csgo_spanish.txt */"Cancelar",
   EditorCopiedToClipboard: "Copiado al portapapeles",
@@ -160,6 +163,7 @@ export const spanish = {
   InventoryItemDelete: /* csgo_spanish.txt */"Borrar",
   InventoryItemDeleteConfirm: /* csgo_spanish.txt */"Eliminar artículo",
   InventoryItemDeleteConfirmDesc: /* csgo_spanish.txt */"¿Seguro que quieres eliminar este artículo?",
+  InventoryItemDetachCharm: /* csgo_spanish.txt */"Desacoplar colgante",
   InventoryItemEdit: /* csgo_spanish.txt */"Modificar",
   InventoryItemEquip: /* csgo_spanish.txt */"Equipar",
   InventoryItemEquipBothTeams: "Equipar ambos equipos",
@@ -205,6 +209,7 @@ export const spanish = {
   InventoryItemUnequipCT: "Desequipar antiterroristas",
   InventoryItemUnequipT: "Desequipar terroristas",
   InventoryItemUnlockContainer: /* csgo_spanish.txt */"Abrir paquete",
+  InventoryItemUseItem: /* csgo_spanish.txt */"Usar artículo",
   InventoryItemUseStorageUnit: /* csgo_spanish.txt */"Comenzar a usar esta unidad",
   InventoryItemWear: "Desgaste:",
   InventoryNoItemsToDisplay: "No hay objetos para mostrar.",
@@ -319,5 +324,10 @@ export const spanish = {
   SyncErrorContinue: "Continuar sin iniciar sesión",
   SyncErrorDesc: "Hubo un error al iniciar sesión con Steam. Tus cambios no se sincronizarán.",
   SyncErrorTitle: "Error de sincronización",
-  SyncWarnText: "No has iniciado sesión. Los cambios no se sincronizarán."
+  SyncWarnText: "No has iniciado sesión. Los cambios no se sincronizarán.",
+  UnpackAddCharges: /* csgo_spanish.txt */"Añadir {1} desacopladores de colgantes",
+  UnpackClose: /* csgo_spanish.txt */"Cerrar",
+  UnpackDesc: /* csgo_spanish.txt */"¿Seguro que quieres abrir este artículo?",
+  UnpackNumberOfItems: /* csgo_spanish.txt */"Número de objetos: {1}",
+  UnpackTitle: /* csgo_spanish.txt */"Abrir {1}"
 };

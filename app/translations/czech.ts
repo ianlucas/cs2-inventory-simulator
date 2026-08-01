@@ -72,6 +72,9 @@ export const czech = {
   CraftSearchPlaceholder: "Hledat předmět...",
   CraftSelectHeader: "Vytváření předmětu...",
   CraftSharedHeader: "Sdílené vytvoření",
+  DetachCharmConfirm: /* csgo_czech.txt */"Sundat přívěsek",
+  DetachCharmConfirmDesc: /* csgo_czech.txt */"Potvrď sundání tohoto přívěsku ze zbraně. Sundání spotřebuje jeden oddělovač přívěsků a přívěsek ti bude navrácen do inventáře.",
+  DetachCharmNeed: /* csgo_czech.txt */"Pro tuto akci je vyžadován předmět {1}",
   EditorApply: /* csgo_czech.txt */"Použít",
   EditorCancel: /* csgo_czech.txt */"Zrušit",
   EditorCopiedToClipboard: "Zkopírováno do schránky",
@@ -159,6 +162,7 @@ export const czech = {
   InventoryItemDelete: /* csgo_czech.txt */"Odstranit",
   InventoryItemDeleteConfirm: /* csgo_czech.txt */"Odstranit předmět",
   InventoryItemDeleteConfirmDesc: /* csgo_czech.txt */"Opravdu chceš odstranit tento předmět?",
+  InventoryItemDetachCharm: /* csgo_czech.txt */"Sundat přívěsek",
   InventoryItemEdit: /* csgo_czech.txt */"Upravit",
   InventoryItemEquip: /* csgo_czech.txt */"Vybavit",
   InventoryItemEquipBothTeams: "Vybavit oba týmy",
@@ -204,6 +208,7 @@ export const czech = {
   InventoryItemUnequipCT: "Sundat CT",
   InventoryItemUnequipT: "Sundat T",
   InventoryItemUnlockContainer: /* csgo_czech.txt */"Odemknout bednu",
+  InventoryItemUseItem: /* csgo_czech.txt */"Použít předmět",
   InventoryItemUseStorageUnit: /* csgo_czech.txt */"Začít používat kontejner",
   InventoryItemWear: "Povrch:",
   InventoryNoItemsToDisplay: "Žádné předměty k zobrazení",
@@ -318,5 +323,10 @@ export const czech = {
   SyncErrorContinue: "Zkusit znovu",
   SyncErrorDesc: "Při synchronizaci tvých změn došlo k chybě.",
   SyncErrorTitle: "Chyba synchronizace",
-  SyncWarnText: "Nejsi přihlášen, tvé změny nebudou synchronizovány."
+  SyncWarnText: "Nejsi přihlášen, tvé změny nebudou synchronizovány.",
+  UnpackAddCharges: /* csgo_czech.txt */"Přidat {1} oddělovačů přívěsků",
+  UnpackClose: /* csgo_czech.txt */"Zavřít",
+  UnpackDesc: /* csgo_czech.txt */"Opravdu chceš rozbalit tento předmět?",
+  UnpackNumberOfItems: /* csgo_czech.txt */"Počet předmětů: {1}",
+  UnpackTitle: /* csgo_czech.txt */"Rozbalit {1}"
 };

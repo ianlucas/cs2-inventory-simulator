@@ -184,6 +184,15 @@ const actionShape = z.discriminatedUnion("type", [
   }),
   z.object({
     type: z.literal(SyncAction.RemoveAllItems)
+  }),
+  z.object({
+    type: z.literal(SyncAction.UnpackItem),
+    uid: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.RemoveItemKeychain),
+    targetUid: nonNegativeInt,
+    slot: nonNegativeInt
   })
 ]);
 
@@ -585,6 +594,12 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.RemoveAllItems:
             inventory.removeAll();
+            break;
+          case SyncAction.UnpackItem:
+            inventory.unpackItem(action.uid);
+            break;
+          case SyncAction.RemoveItemKeychain:
+            inventory.removeItemKeychain(action.targetUid, action.slot);
             break;
         }
       }

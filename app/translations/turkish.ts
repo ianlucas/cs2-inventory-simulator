@@ -73,6 +73,9 @@ export const turkish = {
   CraftSearchPlaceholder: "Çıkartma veya yama ara...",
   CraftSelectHeader: "Çıkartma seç",
   CraftSharedHeader: "Oluşturulan eşyalar",
+  DetachCharmConfirm: /* csgo_turkish.txt */"Süsü Çıkart",
+  DetachCharmConfirmDesc: /* csgo_turkish.txt */"Bu süsü çıkarmak istediğini onaylamalısın. Süs çıkarma işlemi bir süs çıkarıcıyı tüketir ve süs envanterine geri döner.",
+  DetachCharmNeed: /* csgo_turkish.txt */"Bu eylem bir {1} gerektirir",
   EditorApply: /* csgo_turkish.txt */"Uygula",
   EditorCancel: /* csgo_turkish.txt */"İptal",
   EditorCopiedToClipboard: "Panoya kopyalandı",
@@ -160,6 +163,7 @@ export const turkish = {
   InventoryItemDelete: /* csgo_turkish.txt */"Sil",
   InventoryItemDeleteConfirm: /* csgo_turkish.txt */"Eşyayı Sil",
   InventoryItemDeleteConfirmDesc: /* csgo_turkish.txt */"Bu eşyayı silmek istediğinize emin misiniz?",
+  InventoryItemDetachCharm: /* csgo_turkish.txt */"Süsü Çıkart",
   InventoryItemEdit: /* csgo_turkish.txt */"Düzenle",
   InventoryItemEquip: /* csgo_turkish.txt */"Kuşan",
   InventoryItemEquipBothTeams: "Her iki takıma da kuşan",
@@ -205,6 +209,7 @@ export const turkish = {
   InventoryItemUnequipCT: "CT'den çıkar",
   InventoryItemUnequipT: "T'den çıkar",
   InventoryItemUnlockContainer: /* csgo_turkish.txt */"Kasayı Aç",
+  InventoryItemUseItem: /* csgo_turkish.txt */"Eşyayı Kullan",
   InventoryItemUseStorageUnit: /* csgo_turkish.txt */"Bu Depoyu Kullanmaya Başla",
   InventoryItemWear: "Yıpranma:",
   InventoryNoItemsToDisplay: "Gösterilecek eşya yok.",
@@ -319,5 +324,10 @@ export const turkish = {
   SyncErrorContinue: "Giriş yapmadan devam et",
   SyncErrorDesc: "Steam ile giriş yaparken bir hata oluştu. Değişiklikleriniz senkronize edilmeyecek.",
   SyncErrorTitle: "Senkronizasyon hatası",
-  SyncWarnText: "Giriş yapmadınız. Değişiklikler senkronize edilmeyecek."
+  SyncWarnText: "Giriş yapmadınız. Değişiklikler senkronize edilmeyecek.",
+  UnpackAddCharges: /* csgo_turkish.txt */"{1} Süs Çıkarıcı Ekle",
+  UnpackClose: /* csgo_turkish.txt */"Kapat",
+  UnpackDesc: /* csgo_turkish.txt */"Bu eşyayı açmak istediğine emin misin?",
+  UnpackNumberOfItems: /* csgo_turkish.txt */"Eşya Sayısı: {1}",
+  UnpackTitle: /* csgo_turkish.txt */"{1} Aç"
 };

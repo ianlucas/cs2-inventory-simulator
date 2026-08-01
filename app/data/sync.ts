@@ -17,6 +17,7 @@ export const SyncAction = {
   Equip: "equip",
   Remove: "remove",
   RemoveAllItems: "remove-all-items",
+  RemoveItemKeychain: "remove-item-keychain",
   RemoveItemPatch: "remove-item-patch",
   RemoveItemSticker: "remove-item-sticker",
   RenameItem: "rename-item",
@@ -24,5 +25,6 @@ export const SyncAction = {
   RetrieveFromStorageUnit: "retrieve-from-storage-unit",
   ScrapeItemSticker: "scrape-item-sticker",
   SwapItemsStatTrak: "swap-items-stattrak",
-  Unequip: "unequip"
+  Unequip: "unequip",
+  UnpackItem: "unpack-item"
 } as const;

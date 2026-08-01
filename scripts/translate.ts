@@ -24,6 +24,40 @@ function replace(
   return replaced;
 }
 
+// Reduces an ICU plural expression to its "other" branch, e.g.
+// "Add {n, plural, one{Charm} other{Charms}}" becomes "Add Charms". Some
+// languages wrap the entire string in the plural expression, so this can't be
+// a flat regex.
+function reducePluralToOther(str: string) {
+  const start = str.search(/\{\s*[\w:]+\s*,\s*plural\s*,/);
+  if (start === -1) {
+    return str;
+  }
+  function matchBraces(openIndex: number) {
+    let depth = 0;
+    for (let i = openIndex; i < str.length; i++) {
+      if (str[i] === "{") {
+        depth++;
+      } else if (str[i] === "}" && --depth === 0) {
+        return i;
+      }
+    }
+    fail(`Unbalanced braces in '${str}'`);
+  }
+  const end = matchBraces(start);
+  const otherMatch = str.slice(start, end).match(/other\s*\{/);
+  if (otherMatch?.index === undefined) {
+    fail(`Missing plural 'other' branch in '${str}'`);
+  }
+  const otherOpen = start + otherMatch.index + otherMatch[0].length - 1;
+  const otherClose = matchBraces(otherOpen);
+  return (
+    str.slice(0, start) +
+    str.slice(otherOpen + 1, otherClose) +
+    str.slice(end + 1)
+  );
+}
+
 // prettier-ignore
 const STRINGS_FROM_GAME: Record<string, string | string[] | {
   token: string;
@@ -73,6 +107,9 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   CategorySMG: "CSGO_Type_SMG",
   CategorySticker: "CSGO_Tool_Sticker",
   CategoryTool: "CSGO_Type_Tool",
+  DetachCharmConfirm: "popup_remove_keychain_button",
+  DetachCharmConfirmDesc: "SFUI_Keychain_Remove_Desc",
+  DetachCharmNeed: { token: "popup_capability_upsell", transform: (value) => replace(value, '<b>{s:itemname}</b>', '{1}') },
   EditorApply: "settings_apply",
   EditorCancel: "Cancel_Button",
   EditorKeychainEdit: "Button_Edit_nodots",
@@ -136,6 +173,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   InventoryFilterWeaponCases: "Inv_Category_weaponcase",
   InventoryItemContainsOne: "Econ_Revolving_Loot_List",
   InventoryItemDelete: "Button_Delete",
+  InventoryItemDetachCharm: "SFUI_Keychain_Remove",
   InventoryItemDeleteConfirm: "popup_delete_button",
   InventoryItemDeleteConfirmDesc: "popup_delete_desc",
   InventoryItemEdit: "Button_Edit_nodots",
@@ -173,6 +211,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   InventoryItemTeamT: "CSGO_Inventory_Team_T",
   InventoryItemUnequip: "SFUI_InvContextMenu_Unequip",
   InventoryItemUnlockContainer: "inv_context_open_package",
+  InventoryItemUseItem: "inv_context_useitem",
   InventoryItemUseStorageUnit: "inv_context_newcasket",
   InventorySelectAnItem: "inv_select_item_use",
   InventorySelectInspectContents: "inv_select_casketcontents",
@@ -254,6 +293,11 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   SettingsMasterVolume: "SFUI_Settings_Master_Volume",
   StickerPickerRemove: "Button_Remove",
   StickerScrapeLevel: "popup_scrape_sticker_level",
+  UnpackAddCharges: { token: "popup_useitem_button_getkeychaincharges:f", transform: (value) => replace(reducePluralToOther(value.replace(/<\/?b>/g, '')), '{d:item_count}', '{1}') },
+  UnpackClose: "GameUI_Close",
+  UnpackDesc: "popup_useitem_desc_getkeychaincharges",
+  UnpackNumberOfItems: { token: "Attrib_ItemsCount", transform: (value) => replace(value, '%s1', '{1}') },
+  UnpackTitle: { token: "popup_useitem_title_getkeychaincharges", transform: (value) => replace(value, '{s:itemname}', '{1}') },
 };
 
 assert(CS2_CSGO_PATH, "CS2_CSGO_PATH must be set.");

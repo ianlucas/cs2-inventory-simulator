@@ -72,6 +72,9 @@ export const norwegian = {
   CraftSearchPlaceholder: "Søk etter en gjenstand...",
   CraftSelectHeader: "Lager en gjenstand...",
   CraftSharedHeader: "Delt produksjon",
+  DetachCharmConfirm: /* csgo_norwegian.txt */"Løsne anheng",
+  DetachCharmConfirmDesc: /* csgo_norwegian.txt */"Bekreft at du vil løsne dette anhenget. Hvis du løsner anhenget, brukes én anhengsavbiter opp og anhenget legges tilbake i lageret ditt.",
+  DetachCharmNeed: /* csgo_norwegian.txt */"Denne handlingen krever en {1}",
   EditorApply: /* csgo_norwegian.txt */"Utfør",
   EditorCancel: /* csgo_norwegian.txt */"Avbryt",
   EditorCopiedToClipboard: "Kopiert til utklippstavlen",
@@ -158,6 +161,7 @@ export const norwegian = {
   InventoryItemDelete: /* csgo_norwegian.txt */"Slett",
   InventoryItemDeleteConfirm: /* csgo_norwegian.txt */"Slett gjenstand",
   InventoryItemDeleteConfirmDesc: /* csgo_norwegian.txt */"Er du sikker på at du vil slette denne gjenstanden?",
+  InventoryItemDetachCharm: /* csgo_norwegian.txt */"Løsne anheng",
   InventoryItemEdit: /* csgo_norwegian.txt */"Rediger",
   InventoryItemEquip: /* csgo_norwegian.txt */"Utstyr",
   InventoryItemEquipBothTeams: "Utstyr begge lag",
@@ -203,6 +207,7 @@ export const norwegian = {
   InventoryItemUnequipCT: "Fjern utstyr CT",
   InventoryItemUnequipT: "Fjern utstyr T",
   InventoryItemUnlockContainer: /* csgo_norwegian.txt */"Lås opp beholder",
+  InventoryItemUseItem: /* csgo_norwegian.txt */"Bruk gjenstand",
   InventoryItemUseStorageUnit: /* csgo_norwegian.txt */"Begynn å bruke denne enheten",
   InventoryItemWear: "Slitasje:",
   InventoryNoItemsToDisplay: "Ingen gjenstander å vise",
@@ -317,5 +322,10 @@ export const norwegian = {
   SyncErrorContinue: "Prøv igjen",
   SyncErrorDesc: "Det oppstod en feil under synkronisering av endringene dine.",
   SyncErrorTitle: "Synkroniseringsfeil",
-  SyncWarnText: "Du er ikke autentisert, endringene dine vil ikke bli synkronisert."
+  SyncWarnText: "Du er ikke autentisert, endringene dine vil ikke bli synkronisert.",
+  UnpackAddCharges: /* csgo_norwegian.txt */"Legg til {1} anhengsavbitere",
+  UnpackClose: /* csgo_norwegian.txt */"Lukk",
+  UnpackDesc: /* csgo_norwegian.txt */"Er du sikker på at du vil pakke opp denne gjenstanden?",
+  UnpackNumberOfItems: /* csgo_norwegian.txt */"Antall gjenstander: {1}",
+  UnpackTitle: /* csgo_norwegian.txt */"Pakk opp {1}"
 };

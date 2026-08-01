@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2ItemType, CS2Team } from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2ItemType, CS2Team } from "@ianlucas/cs2-lib";
 import { useNavigate } from "react-router";
 import { useApplyItemSticker } from "~/components/hooks/use-apply-item-sticker";
 import { useInspectItem } from "~/components/hooks/use-inspect-item";
@@ -13,6 +13,7 @@ import { useStorageUnit } from "~/components/hooks/use-storage-unit";
 import { useSwapItemsStatTrak } from "~/components/hooks/use-swap-items-stattrak";
 import { useSync } from "~/components/hooks/use-sync";
 import { useUnlockCase } from "~/components/hooks/use-unlock-case";
+import { useUnpackItem } from "~/components/hooks/use-unpack-item";
 import { InventoryItem } from "~/components/inventory-item";
 import { SyncAction } from "~/data/sync";
 import { playSound } from "~/utils/sound";
@@ -25,12 +26,14 @@ import {
 } from "./app-context";
 import { ApplyItemPatch } from "./apply-item-patch";
 import { ApplyItemSticker } from "./apply-item-sticker";
+import { attachmentName } from "./attachment-3d-drawer";
 import { useApplyItemPatch } from "./hooks/use-apply-item-patch";
 import { useListenAppEvent } from "./hooks/use-listen-app-event";
 import { useRemoveItemPatch } from "./hooks/use-remove-item-patch";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
+import { alert, confirm } from "./modal-generic";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelector } from "./item-selector-context";
 import { Presence } from "./presence";
@@ -40,6 +43,7 @@ import { RenameStorageUnit } from "./rename-storage-unit";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
+import { UnpackItem } from "./unpack-item";
 
 export function Inventory() {
   const translate = useTranslate();
@@ -130,6 +134,9 @@ export function Inventory() {
   const { closeInspectItem, handleInspectItem, inspectItem, isInspectingItem } =
     useInspectItem();
 
+  const { closeUnpackItem, handleUnpackItem, isUnpackingItem, unpackItem } =
+    useUnpackItem();
+
   function handleEquip(uid: number, team?: CS2Team) {
     playSound(
       inventory.get(uid).type === CS2ItemType.MusicKit
@@ -156,6 +163,42 @@ export function Inventory() {
     return navigate(`/craft?uid=${uid}`, { preventScrollReset: true });
   }
 
+  async function handleDetachCharm(uid: number) {
+    if (inventory.getCharmDetachmentCharges() > 0) {
+      const [slot] = inventory.get(uid).someKeychains()[0] ?? [];
+      if (slot === undefined) {
+        return;
+      }
+      if (
+        await confirm({
+          titleText: translate("InventoryItemDetachCharm"),
+          bodyText: translate("DetachCharmConfirmDesc"),
+          cancelText: translate("GenericCancel"),
+          confirmText: translate("DetachCharmConfirm")
+        })
+      ) {
+        playSound("inventory_item_pickup");
+        setInventory(inventory.removeItemKeychain(uid, slot));
+        sync({ type: SyncAction.RemoveItemKeychain, targetUid: uid, slot });
+      }
+      return;
+    }
+    const pack = items.find(
+      ({ uid: packUid, item }) => packUid >= 0 && item.isCharmDetachmentPack()
+    );
+    if (pack !== undefined) {
+      return handleUnpackItem(pack.uid);
+    }
+    return alert({
+      titleText: translate("InventoryItemDetachCharm"),
+      bodyText: translate(
+        "DetachCharmNeed",
+        attachmentName(CS2Economy.getCharmDetachment().name)
+      ),
+      closeText: translate("GenericOK")
+    });
+  }
+
   function dismissSelectItem() {
     setItemSelector(undefined);
     closeApplyItemPatch();
@@ -167,6 +210,7 @@ export function Inventory() {
     closeScrapeItemSticker();
     closeSwapItemsStatTrak();
     closeUnlockCase();
+    closeUnpackItem();
   }
 
   function handleSelectItem(uid: number) {
@@ -230,6 +274,7 @@ export function Inventory() {
                     onApplyPatch: handleApplyItemPatch,
                     onApplySticker: handleApplyItemSticker,
                     onDepositToStorageUnit: handleDepositToStorageUnit,
+                    onDetachCharm: handleDetachCharm,
                     onEdit: handleEdit,
                     onEquip: handleEquip,
                     onInspectItem: handleInspectItem,
@@ -243,6 +288,7 @@ export function Inventory() {
                     onSwapItemsStatTrak: handleSwapItemsStatTrak,
                     onUnequip: handleUnequip,
                     onUnlockContainer: handleUnlockCase,
+                    onUseItem: handleUnpackItem,
                     ownApplicablePatches,
                     ownApplicableStickers
                   })}
@@ -306,6 +352,11 @@ export function Inventory() {
       <Presence present={isInspectingItem(inspectItem)}>
         {isInspectingItem(inspectItem) ? (
           <InspectItem {...inspectItem} onClose={closeInspectItem} />
+        ) : null}
+      </Presence>
+      <Presence present={isUnpackingItem(unpackItem)}>
+        {isUnpackingItem(unpackItem) ? (
+          <UnpackItem {...unpackItem} onClose={closeUnpackItem} />
         ) : null}
       </Presence>
     </>

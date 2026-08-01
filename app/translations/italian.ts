@@ -72,6 +72,9 @@ export const italian = {
   CraftSearchPlaceholder: "Cerca un oggetto...",
   CraftSelectHeader: "Creazione di un oggetto...",
   CraftSharedHeader: "Creazione condivisa",
+  DetachCharmConfirm: /* csgo_italian.txt */"Rimuovi ciondolo",
+  DetachCharmConfirmDesc: /* csgo_italian.txt */"Conferma di voler rimuovere questo ciondolo. La rimozione del ciondolo consumerà uno strumento di rimozione di ciondoli e il ciondolo rimosso tornerà nel tuo inventario.",
+  DetachCharmNeed: /* csgo_italian.txt */"Questa azione richiede: {1}",
   EditorApply: /* csgo_italian.txt */"Applica",
   EditorCancel: /* csgo_italian.txt */"Annulla",
   EditorCopiedToClipboard: "Copiato negli appunti",
@@ -159,6 +162,7 @@ export const italian = {
   InventoryItemDelete: /* csgo_italian.txt */"Elimina",
   InventoryItemDeleteConfirm: /* csgo_italian.txt */"Elimina oggetto",
   InventoryItemDeleteConfirmDesc: /* csgo_italian.txt */"Vuoi davvero eliminare questo oggetto?",
+  InventoryItemDetachCharm: /* csgo_italian.txt */"Rimuovi ciondolo",
   InventoryItemEdit: /* csgo_italian.txt */"Modifica",
   InventoryItemEquip: /* csgo_italian.txt */"Equipaggia",
   InventoryItemEquipBothTeams: "Equipaggia entrambe le squadre",
@@ -204,6 +208,7 @@ export const italian = {
   InventoryItemUnequipCT: "Rimuovi CT",
   InventoryItemUnequipT: "Rimuovi T",
   InventoryItemUnlockContainer: /* csgo_italian.txt */"Sblocca la cassa",
+  InventoryItemUseItem: /* csgo_italian.txt */"Usa oggetto",
   InventoryItemUseStorageUnit: /* csgo_italian.txt */"Inizia ad usare questa unità",
   InventoryItemWear: "Condizioni:",
   InventoryNoItemsToDisplay: "Nessun oggetto da visualizzare",
@@ -318,5 +323,10 @@ export const italian = {
   SyncErrorContinue: "Riprova",
   SyncErrorDesc: "Si è verificato un errore durante la sincronizzazione delle modifiche.",
   SyncErrorTitle: "Errore di sincronizzazione",
-  SyncWarnText: "Non sei autenticato, le tue modifiche non verranno sincronizzate."
+  SyncWarnText: "Non sei autenticato, le tue modifiche non verranno sincronizzate.",
+  UnpackAddCharges: /* csgo_italian.txt */"Aggiungi {1} strumenti di rimozione di ciondoli",
+  UnpackClose: /* csgo_italian.txt */"Chiudi",
+  UnpackDesc: /* csgo_italian.txt */"Vuoi davvero aprire questo oggetto?",
+  UnpackNumberOfItems: /* csgo_italian.txt */"Numero di oggetti: {1}",
+  UnpackTitle: /* csgo_italian.txt */"Apri {1}"
 };

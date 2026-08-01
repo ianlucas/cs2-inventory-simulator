@@ -72,6 +72,9 @@ export const japanese = {
   CraftSearchPlaceholder: "アイテムを検索...",
   CraftSelectHeader: "アイテムを作成中...",
   CraftSharedHeader: "共有クラフト",
+  DetachCharmConfirm: /* csgo_japanese.txt */"チャームの取り外し",
+  DetachCharmConfirmDesc: /* csgo_japanese.txt */"このチャームを取り外してもよいか確認してください。チャームを取り外すと、1つのチャームデタッチが消費され、チャームはインベントリに戻ります。",
+  DetachCharmNeed: /* csgo_japanese.txt */"このアクションには {1} が必要です",
   EditorApply: /* csgo_japanese.txt */"適用",
   EditorCancel: /* csgo_japanese.txt */"キャンセル",
   EditorCopiedToClipboard: "クリップボードにコピーしました",
@@ -159,6 +162,7 @@ export const japanese = {
   InventoryItemDelete: /* csgo_japanese.txt */"削除",
   InventoryItemDeleteConfirm: /* csgo_japanese.txt */"アイテムを削除",
   InventoryItemDeleteConfirmDesc: /* csgo_japanese.txt */"本当にこのアイテムを削除しますか？",
+  InventoryItemDetachCharm: /* csgo_japanese.txt */"チャームを取り外す",
   InventoryItemEdit: /* csgo_japanese.txt */"編集",
   InventoryItemEquip: /* csgo_japanese.txt */"装備",
   InventoryItemEquipBothTeams: "両チームに装備",
@@ -204,6 +208,7 @@ export const japanese = {
   InventoryItemUnequipCT: "CTの装備解除",
   InventoryItemUnequipT: "Tの装備解除",
   InventoryItemUnlockContainer: /* csgo_japanese.txt */"コンテナを開ける",
+  InventoryItemUseItem: /* csgo_japanese.txt */"アイテムを使用",
   InventoryItemUseStorageUnit: /* csgo_japanese.txt */"このユニットを使い始める",
   InventoryItemWear: "損耗:",
   InventoryNoItemsToDisplay: "表示するアイテムがありません",
@@ -318,5 +323,10 @@ export const japanese = {
   SyncErrorContinue: "再試行",
   SyncErrorDesc: "変更の同期中にエラーが発生しました。",
   SyncErrorTitle: "同期エラー",
-  SyncWarnText: "認証されていないため、変更は同期されません。"
+  SyncWarnText: "認証されていないため、変更は同期されません。",
+  UnpackAddCharges: /* csgo_japanese.txt */"{1}個のチャームデタッチを追加",
+  UnpackClose: /* csgo_japanese.txt */"閉じる",
+  UnpackDesc: /* csgo_japanese.txt */"本当にこのアイテムを開封しますか？",
+  UnpackNumberOfItems: /* csgo_japanese.txt */"アイテム数: {1}",
+  UnpackTitle: /* csgo_japanese.txt */"{1}を開封"
 };

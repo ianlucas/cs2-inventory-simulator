@@ -73,6 +73,9 @@ export const koreana = {
   CraftSearchPlaceholder: "아이템 검색...",
   CraftSelectHeader: "아이템 제작 중...",
   CraftSharedHeader: "공유된 제작",
+  DetachCharmConfirm: /* csgo_koreana.txt */"참 장식 분리",
+  DetachCharmConfirmDesc: /* csgo_koreana.txt */"이 참 장식을 분리할지 확인해 주세요. 참 장식을 분리하면 참 장식 분리 도구 1개가 소모되고 참 장식은 보관함으로 반환됩니다.",
+  DetachCharmNeed: /* csgo_koreana.txt */"이 작업을 수행하려면 {1}가 필요합니다.",
   EditorApply: /* csgo_koreana.txt */"적용",
   EditorCancel: /* csgo_koreana.txt */"취소",
   EditorCopiedToClipboard: "클립보드에 복사됨",
@@ -160,6 +163,7 @@ export const koreana = {
   InventoryItemDelete: /* csgo_koreana.txt */"삭제",
   InventoryItemDeleteConfirm: /* csgo_koreana.txt */"아이템 버리기",
   InventoryItemDeleteConfirmDesc: /* csgo_koreana.txt */"아이템을 삭제할까요?",
+  InventoryItemDetachCharm: /* csgo_koreana.txt */"참 장식 분리",
   InventoryItemEdit: /* csgo_koreana.txt */"편집",
   InventoryItemEquip: /* csgo_koreana.txt */"장착",
   InventoryItemEquipBothTeams: "양쪽 팀 장착",
@@ -205,6 +209,7 @@ export const koreana = {
   InventoryItemUnequipCT: "CT 장착 해제",
   InventoryItemUnequipT: "T 장착 해제",
   InventoryItemUnlockContainer: /* csgo_koreana.txt */"상자 열기",
+  InventoryItemUseItem: /* csgo_koreana.txt */"아이템 사용",
   InventoryItemUseStorageUnit: /* csgo_koreana.txt */"저장 컨테이너 사용",
   InventoryItemWear: "형태:",
   InventoryNoItemsToDisplay: "표시할 아이템이 없습니다",
@@ -319,5 +324,10 @@ export const koreana = {
   SyncErrorContinue: "다시 시도",
   SyncErrorDesc: "변경 사항을 동기화하는 중 오류가 발생했습니다.",
   SyncErrorTitle: "동기화 오류",
-  SyncWarnText: "인증되지 않았습니다. 변경 사항이 동기화되지 않습니다."
+  SyncWarnText: "인증되지 않았습니다. 변경 사항이 동기화되지 않습니다.",
+  UnpackAddCharges: /* csgo_koreana.txt */"참 장식 분리 도구 {1}개 추가",
+  UnpackClose: /* csgo_koreana.txt */"닫기",
+  UnpackDesc: /* csgo_koreana.txt */"이 아이템을 개봉할까요?",
+  UnpackNumberOfItems: /* csgo_koreana.txt */"아이템 개수: {1}",
+  UnpackTitle: /* csgo_koreana.txt */"{1} 아이템 개봉"
 };

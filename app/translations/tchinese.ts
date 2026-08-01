@@ -73,6 +73,9 @@ export const tchinese = {
   CraftSearchPlaceholder: "搜尋貼紙或徽章...",
   CraftSelectHeader: "選擇貼紙",
   CraftSharedHeader: "已製作的物品",
+  DetachCharmConfirm: /* csgo_tchinese.txt */"卸除吊飾",
+  DetachCharmConfirmDesc: /* csgo_tchinese.txt */"請確認您是否要卸除此吊飾。卸除吊飾將消耗一個吊飾卸除器，而吊飾將返回您的物品庫。",
+  DetachCharmNeed: /* csgo_tchinese.txt */"這項動作必須擁有{1}才能進行。",
   EditorApply: /* csgo_tchinese.txt */"套用",
   EditorCancel: /* csgo_tchinese.txt */"取消",
   EditorCopiedToClipboard: "已複製到剪貼簿",
@@ -160,6 +163,7 @@ export const tchinese = {
   InventoryItemDelete: /* csgo_tchinese.txt */"刪除",
   InventoryItemDeleteConfirm: /* csgo_tchinese.txt */"刪除物品",
   InventoryItemDeleteConfirmDesc: /* csgo_tchinese.txt */"您確定要刪除這項物品嗎？",
+  InventoryItemDetachCharm: /* csgo_tchinese.txt */"卸除吊飾",
   InventoryItemEdit: /* csgo_tchinese.txt */"編輯",
   InventoryItemEquip: /* csgo_tchinese.txt */"裝備",
   InventoryItemEquipBothTeams: "裝備雙方陣營",
@@ -205,6 +209,7 @@ export const tchinese = {
   InventoryItemUnequipCT: "卸下反恐部隊",
   InventoryItemUnequipT: "卸下恐怖份子",
   InventoryItemUnlockContainer: /* csgo_tchinese.txt */"開啟箱子",
+  InventoryItemUseItem: /* csgo_tchinese.txt */"使用物品",
   InventoryItemUseStorageUnit: /* csgo_tchinese.txt */"開始使用此儲存單元",
   InventoryItemWear: "磨損:",
   InventoryNoItemsToDisplay: "沒有可顯示的物品。",
@@ -319,5 +324,10 @@ export const tchinese = {
   SyncErrorContinue: "不登入繼續",
   SyncErrorDesc: "透過 Steam 登入時發生錯誤。您的變更將不會同步。",
   SyncErrorTitle: "同步錯誤",
-  SyncWarnText: "您未登入。變更將不會同步。"
+  SyncWarnText: "您未登入。變更將不會同步。",
+  UnpackAddCharges: /* csgo_tchinese.txt */"新增 {1} 個吊飾卸除器",
+  UnpackClose: /* csgo_tchinese.txt */"關閉",
+  UnpackDesc: /* csgo_tchinese.txt */"您確定要開封這項物品嗎？",
+  UnpackNumberOfItems: /* csgo_tchinese.txt */"物品數量：{1}",
+  UnpackTitle: /* csgo_tchinese.txt */"開封「{1}」"
 };

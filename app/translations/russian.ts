@@ -72,6 +72,9 @@ export const russian = {
   CraftSearchPlaceholder: "Поиск наклеек или нашивок...",
   CraftSelectHeader: "Выбрать наклейки",
   CraftSharedHeader: "Созданные предметы",
+  DetachCharmConfirm: /* csgo_russian.txt */"Снять брелок",
+  DetachCharmConfirmDesc: /* csgo_russian.txt */"Вы уверены, что хотите снять этот брелок? Вы потратите один отделитель, а брелок вернётся в ваш инвентарь.",
+  DetachCharmNeed: /* csgo_russian.txt */"Требуется {1}",
   EditorApply: /* csgo_russian.txt */"Применить",
   EditorCancel: /* csgo_russian.txt */"Отмена",
   EditorCopiedToClipboard: "Скопировано в буфер обмена",
@@ -159,6 +162,7 @@ export const russian = {
   InventoryItemDelete: /* csgo_russian.txt */"Удалить",
   InventoryItemDeleteConfirm: /* csgo_russian.txt */"Удалить предмет",
   InventoryItemDeleteConfirmDesc: /* csgo_russian.txt */"Вы уверены, что хотите удалить этот предмет?",
+  InventoryItemDetachCharm: /* csgo_russian.txt */"Снять брелок",
   InventoryItemEdit: /* csgo_russian.txt */"Изменить",
   InventoryItemEquip: /* csgo_russian.txt */"Надеть",
   InventoryItemEquipBothTeams: "Надеть для обеих команд",
@@ -204,6 +208,7 @@ export const russian = {
   InventoryItemUnequipCT: "Снять за спецназ",
   InventoryItemUnequipT: "Снять за террористов",
   InventoryItemUnlockContainer: /* csgo_russian.txt */"Открыть контейнер",
+  InventoryItemUseItem: /* csgo_russian.txt */"Использовать предмет",
   InventoryItemUseStorageUnit: /* csgo_russian.txt */"Активировать хранилище",
   InventoryItemWear: "Износ:",
   InventoryNoItemsToDisplay: "Нет предметов для отображения.",
@@ -318,5 +323,10 @@ export const russian = {
   SyncErrorContinue: "Продолжить без входа",
   SyncErrorDesc: "Произошла ошибка при входе через Steam. Ваши изменения не будут синхронизированы.",
   SyncErrorTitle: "Ошибка синхронизации",
-  SyncWarnText: "Вы не вошли в систему. Изменения не будут синхронизированы."
+  SyncWarnText: "Вы не вошли в систему. Изменения не будут синхронизированы.",
+  UnpackAddCharges: /* csgo_russian.txt */"Добавить {1} отделителя",
+  UnpackClose: /* csgo_russian.txt */"Закрыть",
+  UnpackDesc: /* csgo_russian.txt */"Вы уверены, что хотите распаковать этот предмет?",
+  UnpackNumberOfItems: /* csgo_russian.txt */"Число предметов: {1}",
+  UnpackTitle: /* csgo_russian.txt */"Распаковка: {1}"
 };

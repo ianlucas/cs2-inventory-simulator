@@ -73,6 +73,9 @@ export const english = {
   CraftSearchPlaceholder: "Search for an item...",
   CraftSelectHeader: "Crafting an item...",
   CraftSharedHeader: "Shared craft",
+  DetachCharmConfirm: /* csgo_english.txt */"Detach Charm",
+  DetachCharmConfirmDesc: /* csgo_english.txt */"Please confirm that you would like to detach this charm. Detaching the charm will consume one Charm Detachment and return the charm to your inventory.",
+  DetachCharmNeed: /* csgo_english.txt */"This action requires a {1}",
   EditorApply: /* csgo_english.txt */"Apply",
   EditorCancel: /* csgo_english.txt */"Cancel",
   EditorCopiedToClipboard: "Copied to the clipboard",
@@ -162,6 +165,7 @@ export const english = {
   InventoryItemDelete: /* csgo_english.txt */"Delete",
   InventoryItemDeleteConfirm: /* csgo_english.txt */"Delete Item",
   InventoryItemDeleteConfirmDesc: /* csgo_english.txt */"Are you sure you want to delete this item?",
+  InventoryItemDetachCharm: /* csgo_english.txt */"Detach Charm",
   InventoryItemEdit: /* csgo_english.txt */"Edit",
   InventoryItemEquip: /* csgo_english.txt */"Equip",
   InventoryItemEquipBothTeams: "Equip Both Teams",
@@ -207,6 +211,7 @@ export const english = {
   InventoryItemUnequipCT: "Unequip CT",
   InventoryItemUnequipT: "Unequip T",
   InventoryItemUnlockContainer: /* csgo_english.txt */"Unlock Container",
+  InventoryItemUseItem: /* csgo_english.txt */"Use Item",
   InventoryItemUseStorageUnit: /* csgo_english.txt */"Start Using This Unit",
   InventoryItemWear: "Wear:",
   InventoryNoItemsToDisplay: "No items to display",
@@ -352,5 +357,10 @@ export const english = {
   SyncErrorContinue: "Try again",
   SyncErrorDesc: "An error occurred while syncing your changes.",
   SyncErrorTitle: "Sync Error",
-  SyncWarnText: "You are not authenticated, your changes will not by synchronized."
+  SyncWarnText: "You are not authenticated, your changes will not by synchronized.",
+  UnpackAddCharges: /* csgo_english.txt */"Add {1} Charm Detachments",
+  UnpackClose: /* csgo_english.txt */"Close",
+  UnpackDesc: /* csgo_english.txt */"Are you sure you want to unpack this item?",
+  UnpackNumberOfItems: /* csgo_english.txt */"Number of Items: {1}",
+  UnpackTitle: /* csgo_english.txt */"Unpack {1}"
 };

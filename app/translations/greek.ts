@@ -73,6 +73,9 @@ export const greek = {
   CraftSearchPlaceholder: "Αναζήτηση αντικειμένου...",
   CraftSelectHeader: "Κατασκευή αντικειμένου...",
   CraftSharedHeader: "Κοινή κατασκευή",
+  DetachCharmConfirm: /* csgo_greek.txt */"Αφαίρεση γουριού",
+  DetachCharmConfirmDesc: /* csgo_greek.txt */"Επιβεβαιώστε ότι θέλετε να αφαιρέσετε αυτό το γούρι. Αφαιρώντας το, θα καταναλώσετε μία Αφαίρεση Γουριού και το γούρι θα επιστρέψει στα αντικείμενά σας.",
+  DetachCharmNeed: /* csgo_greek.txt */"Αυτή η ενέργεια απαιτεί {1}",
   EditorApply: /* csgo_greek.txt */"Εφαρμογή",
   EditorCancel: /* csgo_greek.txt */"Άκυρο",
   EditorCopiedToClipboard: "Αντιγράφηκε στο πρόχειρο",
@@ -160,6 +163,7 @@ export const greek = {
   InventoryItemDelete: /* csgo_greek.txt */"Διαγραφή",
   InventoryItemDeleteConfirm: /* csgo_greek.txt */"Διαγραφή αντικειμένου",
   InventoryItemDeleteConfirmDesc: /* csgo_greek.txt */"Θέλετε σίγουρα να διαγράψετε αυτό το αντικείμενο;",
+  InventoryItemDetachCharm: /* csgo_greek.txt */"Αφαίρεση γουριού",
   InventoryItemEdit: /* csgo_greek.txt */"Επεξεργασία",
   InventoryItemEquip: /* csgo_greek.txt */"Εξόπλιση",
   InventoryItemEquipBothTeams: "Εξόπλιση και των δύο ομάδων",
@@ -205,6 +209,7 @@ export const greek = {
   InventoryItemUnequipCT: "Παρόπλιση CT",
   InventoryItemUnequipT: "Παρόπλιση T",
   InventoryItemUnlockContainer: /* csgo_greek.txt */"Ξεκλείδωμα κιβωτίου",
+  InventoryItemUseItem: /* csgo_greek.txt */"Χρήση αντικειμένου",
   InventoryItemUseStorageUnit: /* csgo_greek.txt */"Έναρξη χρήσης κιβωτίου",
   InventoryItemWear: "Φθορά:",
   InventoryNoItemsToDisplay: "Δεν υπάρχουν αντικείμενα προς εμφάνιση",
@@ -319,5 +324,10 @@ export const greek = {
   SyncErrorContinue: "Δοκιμάστε ξανά",
   SyncErrorDesc: "Παρουσιάστηκε σφάλμα κατά τον συγχρονισμό των αλλαγών σας.",
   SyncErrorTitle: "Σφάλμα συγχρονισμού",
-  SyncWarnText: "Δεν έχετε ελέγξει την ταυτότητά σας, οι αλλαγές σας δεν θα συγχρονιστούν."
+  SyncWarnText: "Δεν έχετε ελέγξει την ταυτότητά σας, οι αλλαγές σας δεν θα συγχρονιστούν.",
+  UnpackAddCharges: /* csgo_greek.txt */"Προσθέστε {1} Αφαιρέσεις Γουριού",
+  UnpackClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
+  UnpackDesc: /* csgo_greek.txt */"Θέλετε σίγουρα να ανοίξετε αυτό το αντικείμενο;",
+  UnpackNumberOfItems: /* csgo_greek.txt */"Αριθμός αντικειμένων: {1}",
+  UnpackTitle: /* csgo_greek.txt */"Άνοιγμα {1}"
 };

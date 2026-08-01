@@ -72,6 +72,9 @@ export const finnish = {
   CraftSearchPlaceholder: "Etsi esinettä...",
   CraftSelectHeader: "Valmistetaan esinettä...",
   CraftSharedHeader: "Jaettu valmistus",
+  DetachCharmConfirm: /* csgo_finnish.txt */"Poista riipus",
+  DetachCharmConfirmDesc: /* csgo_finnish.txt */"Vahvista, että haluat irrottaa riipuksen. Irrottaminen kuluttaa yhden riipuksen poistajan ja palauttaa riipuksen varusteluetteloosi.",
+  DetachCharmNeed: /* csgo_finnish.txt */"Toimintoon vaaditaan esinettä: {1}",
   EditorApply: /* csgo_finnish.txt */"Hyväksy",
   EditorCancel: /* csgo_finnish.txt */"Peruuta",
   EditorCopiedToClipboard: "Kopioitu leikepöydälle",
@@ -159,6 +162,7 @@ export const finnish = {
   InventoryItemDelete: /* csgo_finnish.txt */"Poista",
   InventoryItemDeleteConfirm: /* csgo_finnish.txt */"Poista esine",
   InventoryItemDeleteConfirmDesc: /* csgo_finnish.txt */"Haluatko varmasti poistaa tämän esineen?",
+  InventoryItemDetachCharm: /* csgo_finnish.txt */"Poista riipus",
   InventoryItemEdit: /* csgo_finnish.txt */"Muokkaa",
   InventoryItemEquip: /* csgo_finnish.txt */"Ota käyttöön",
   InventoryItemEquipBothTeams: "Varusta molemmat joukkueet",
@@ -204,6 +208,7 @@ export const finnish = {
   InventoryItemUnequipCT: "Poista CT",
   InventoryItemUnequipT: "Poista T",
   InventoryItemUnlockContainer: /* csgo_finnish.txt */"Avaa säiliö",
+  InventoryItemUseItem: /* csgo_finnish.txt */"Käytä esinettä",
   InventoryItemUseStorageUnit: /* csgo_finnish.txt */"Aloita varastolaatikon käyttö",
   InventoryItemWear: "Kuluminen:",
   InventoryNoItemsToDisplay: "Ei näytettäviä esineitä",
@@ -318,5 +323,10 @@ export const finnish = {
   SyncErrorContinue: "Yritä uudelleen",
   SyncErrorDesc: "Virhe synkronoitaessa muutoksiasi.",
   SyncErrorTitle: "Synkronointivirhe",
-  SyncWarnText: "Et ole kirjautunut, muutoksiasi ei synkronoida."
+  SyncWarnText: "Et ole kirjautunut, muutoksiasi ei synkronoida.",
+  UnpackAddCharges: /* csgo_finnish.txt */"Add {1} riipuksen poistajaa",
+  UnpackClose: /* csgo_finnish.txt */"Sulje",
+  UnpackDesc: /* csgo_finnish.txt */"Haluatko varmasti purkaa esineen pakkauksesta?",
+  UnpackNumberOfItems: /* csgo_finnish.txt */"Esineiden määrä: {1}",
+  UnpackTitle: /* csgo_finnish.txt */"Avaa {1}"
 };

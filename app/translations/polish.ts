@@ -72,6 +72,9 @@ export const polish = {
   CraftSearchPlaceholder: "Szukaj przedmiotu...",
   CraftSelectHeader: "Tworzenie przedmiotu...",
   CraftSharedHeader: "Udostępnione stworzenie",
+  DetachCharmConfirm: /* csgo_polish.txt */"Odczep przywieszkę",
+  DetachCharmConfirmDesc: /* csgo_polish.txt */"Potwierdź, że chcesz odczepić tę przywieszkę. Odczepienie przywieszki spowoduje zużycie jednego odczepiacza przywieszek i przywróci twoją przywieszkę do ekwipunku.",
+  DetachCharmNeed: /* csgo_polish.txt */"To działanie wymaga: {1}",
   EditorApply: /* csgo_polish.txt */"Zastosuj",
   EditorCancel: /* csgo_polish.txt */"Anuluj",
   EditorCopiedToClipboard: "Skopiowano do schowka",
@@ -159,6 +162,7 @@ export const polish = {
   InventoryItemDelete: /* csgo_polish.txt */"Usuń",
   InventoryItemDeleteConfirm: /* csgo_polish.txt */"Usuń przedmiot",
   InventoryItemDeleteConfirmDesc: /* csgo_polish.txt */"Czy na pewno chcesz usunąć ten przedmiot?",
+  InventoryItemDetachCharm: /* csgo_polish.txt */"Odczep przywieszkę",
   InventoryItemEdit: /* csgo_polish.txt */"Edytuj",
   InventoryItemEquip: /* csgo_polish.txt */"Użyj",
   InventoryItemEquipBothTeams: "Użyj w obu drużynach",
@@ -204,6 +208,7 @@ export const polish = {
   InventoryItemUnequipCT: "Przestań używać w CT",
   InventoryItemUnequipT: "Przestań używać w T",
   InventoryItemUnlockContainer: /* csgo_polish.txt */"Otwórz pojemnik",
+  InventoryItemUseItem: /* csgo_polish.txt */"Użyj przedmiotu",
   InventoryItemUseStorageUnit: /* csgo_polish.txt */"Zacznij korzystać z tego magazynu",
   InventoryItemWear: "Zużycie:",
   InventoryNoItemsToDisplay: "Brak przedmiotów do wyświetlenia",
@@ -318,5 +323,10 @@ export const polish = {
   SyncErrorContinue: "Spróbuj ponownie",
   SyncErrorDesc: "Wystąpił błąd podczas synchronizowania zmian.",
   SyncErrorTitle: "Błąd synchronizacji",
-  SyncWarnText: "Nie jesteś uwierzytelniony, twoje zmiany nie zostaną zsynchronizowane."
+  SyncWarnText: "Nie jesteś uwierzytelniony, twoje zmiany nie zostaną zsynchronizowane.",
+  UnpackAddCharges: /* csgo_polish.txt */"Dodaj {1} odczepiacza przywieszek",
+  UnpackClose: /* csgo_polish.txt */"Zamknij",
+  UnpackDesc: /* csgo_polish.txt */"Czy na pewno chcesz odpakować ten przedmiot?",
+  UnpackNumberOfItems: /* csgo_polish.txt */"Liczba przedmiotów: {1}",
+  UnpackTitle: /* csgo_polish.txt */"Odpakuj: {1}"
 };

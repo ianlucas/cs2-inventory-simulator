@@ -72,6 +72,9 @@ export const portuguese = {
   CraftSearchPlaceholder: "Procurar um item...",
   CraftSelectHeader: "A criar um item...",
   CraftSharedHeader: "Criação partilhada",
+  DetachCharmConfirm: /* csgo_portuguese.txt */"Remover amuleto",
+  DetachCharmConfirmDesc: /* csgo_portuguese.txt */"Confirma que gostarias de remover este amuleto. Esta ação irá consumir um Removedor de Amuletos e devolver o amuleto ao teu inventário.",
+  DetachCharmNeed: /* csgo_portuguese.txt */"Esta ação requer o item: {1}",
   EditorApply: /* csgo_portuguese.txt */"Aplicar",
   EditorCancel: /* csgo_portuguese.txt */"Cancelar",
   EditorCopiedToClipboard: "Copiado para a área de transferência",
@@ -159,6 +162,7 @@ export const portuguese = {
   InventoryItemDelete: /* csgo_portuguese.txt */"Eliminar",
   InventoryItemDeleteConfirm: /* csgo_portuguese.txt */"Eliminar item",
   InventoryItemDeleteConfirmDesc: /* csgo_portuguese.txt */"Tens a certeza de que queres eliminar este item?",
+  InventoryItemDetachCharm: /* csgo_portuguese.txt */"Remover amuleto",
   InventoryItemEdit: /* csgo_portuguese.txt */"Editar",
   InventoryItemEquip: /* csgo_portuguese.txt */"Equipar",
   InventoryItemEquipBothTeams: "Equipar ambas as equipas",
@@ -204,6 +208,7 @@ export const portuguese = {
   InventoryItemUnequipCT: "Desequipar CT",
   InventoryItemUnequipT: "Desequipar T",
   InventoryItemUnlockContainer: /* csgo_portuguese.txt */"Abrir",
+  InventoryItemUseItem: /* csgo_portuguese.txt */"Usar item",
   InventoryItemUseStorageUnit: /* csgo_portuguese.txt */"Usar esta unidade",
   InventoryItemWear: "Desgaste:",
   InventoryNoItemsToDisplay: "Nenhum item para mostrar",
@@ -319,5 +324,10 @@ export const portuguese = {
   SyncErrorContinue: "Tentar novamente",
   SyncErrorDesc: "Ocorreu um erro ao sincronizar as tuas alterações.",
   SyncErrorTitle: "Erro de sincronização",
-  SyncWarnText: "Não estás autenticado, as tuas alterações não serão sincronizadas."
+  SyncWarnText: "Não estás autenticado, as tuas alterações não serão sincronizadas.",
+  UnpackAddCharges: /* csgo_portuguese.txt */"Adicionar {1} Removedores de Amuletos",
+  UnpackClose: /* csgo_portuguese.txt */"Fechar",
+  UnpackDesc: /* csgo_portuguese.txt */"Tens a certeza de que queres abrir este item?",
+  UnpackNumberOfItems: /* csgo_portuguese.txt */"Número de itens: {1}",
+  UnpackTitle: /* csgo_portuguese.txt */"Abrir {1}"
 };

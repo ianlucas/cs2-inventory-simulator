@@ -73,6 +73,9 @@ export const latam = {
   CraftSearchPlaceholder: "Buscar un objeto...",
   CraftSelectHeader: "Creando un objeto...",
   CraftSharedHeader: "Creación compartida",
+  DetachCharmConfirm: /* csgo_latam.txt */"Desacoplar colgante",
+  DetachCharmConfirmDesc: /* csgo_latam.txt */"Confirma que quieres desacoplar este colgante. Al hacerlo, se consumirá un desacoplador y el colgante volverá a tu inventario.",
+  DetachCharmNeed: /* csgo_latam.txt */"Esta acción requiere un/a {1}",
   EditorApply: /* csgo_latam.txt */"Aplicar",
   EditorCancel: /* csgo_latam.txt */"Cancelar",
   EditorCopiedToClipboard: "Copiado al portapapeles",
@@ -160,6 +163,7 @@ export const latam = {
   InventoryItemDelete: /* csgo_latam.txt */"Borrar",
   InventoryItemDeleteConfirm: /* csgo_latam.txt */"Eliminar objeto",
   InventoryItemDeleteConfirmDesc: /* csgo_latam.txt */"¿Seguro que quieres eliminar este objeto?",
+  InventoryItemDetachCharm: /* csgo_latam.txt */"Desacoplar colgante",
   InventoryItemEdit: /* csgo_latam.txt */"Modificar",
   InventoryItemEquip: /* csgo_latam.txt */"Equipar",
   InventoryItemEquipBothTeams: "Equipar ambos equipos",
@@ -205,6 +209,7 @@ export const latam = {
   InventoryItemUnequipCT: "Desequipar CT",
   InventoryItemUnequipT: "Desequipar T",
   InventoryItemUnlockContainer: /* csgo_latam.txt */"Abrir paquete",
+  InventoryItemUseItem: /* csgo_latam.txt */"Usar objeto",
   InventoryItemUseStorageUnit: /* csgo_latam.txt */"Comenzar a usar esta unidad",
   InventoryItemWear: "Desgaste:",
   InventoryNoItemsToDisplay: "No hay objetos para mostrar",
@@ -319,5 +324,10 @@ export const latam = {
   SyncErrorContinue: "Intentar de nuevo",
   SyncErrorDesc: "Ocurrió un error al sincronizar tus cambios.",
   SyncErrorTitle: "Error de sincronización",
-  SyncWarnText: "No estás autenticado, tus cambios no se sincronizarán."
+  SyncWarnText: "No estás autenticado, tus cambios no se sincronizarán.",
+  UnpackAddCharges: /* csgo_latam.txt */"Agregar {1} desacopladores de colgantes",
+  UnpackClose: /* csgo_latam.txt */"Cerrar",
+  UnpackDesc: /* csgo_latam.txt */"¿Seguro que quieres abrir este artículo?",
+  UnpackNumberOfItems: /* csgo_latam.txt */"Cantidad de artículos: {1}",
+  UnpackTitle: /* csgo_latam.txt */"Abrir {1}"
 };

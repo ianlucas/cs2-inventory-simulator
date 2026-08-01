@@ -73,6 +73,9 @@ export const vietnamese = {
   CraftSearchPlaceholder: "Tìm kiếm hình dán hoặc miếng vá...",
   CraftSelectHeader: "Chọn hình dán",
   CraftSharedHeader: "Vật phẩm đã chế tạo",
+  DetachCharmConfirm: /* csgo_vietnamese.txt */"Gỡ móc treo",
+  DetachCharmConfirmDesc: /* csgo_vietnamese.txt */"Vui lòng xác nhận bạn muốn gỡ móc treo. Hành động này sẽ tiêu thụ một công cụ gỡ móc treo và trả móc treo về kho đồ của bạn.",
+  DetachCharmNeed: /* csgo_vietnamese.txt */"Hành động này cần một {1}",
   EditorApply: /* csgo_vietnamese.txt */"Áp dụng",
   EditorCancel: /* csgo_vietnamese.txt */"Hủy",
   EditorCopiedToClipboard: "Đã sao chép vào bộ nhớ tạm",
@@ -160,6 +163,7 @@ export const vietnamese = {
   InventoryItemDelete: /* csgo_vietnamese.txt */"Xóa",
   InventoryItemDeleteConfirm: /* csgo_vietnamese.txt */"Xóa vật phẩm",
   InventoryItemDeleteConfirmDesc: /* csgo_vietnamese.txt */"Bạn có chắc muốn xóa vật phẩm này không?",
+  InventoryItemDetachCharm: /* csgo_vietnamese.txt */"Gỡ móc treo",
   InventoryItemEdit: /* csgo_vietnamese.txt */"Sửa",
   InventoryItemEquip: /* csgo_vietnamese.txt */"Trang bị",
   InventoryItemEquipBothTeams: "Trang bị cả hai phe",
@@ -205,6 +209,7 @@ export const vietnamese = {
   InventoryItemUnequipCT: "Gỡ trang bị CT",
   InventoryItemUnequipT: "Gỡ trang bị T",
   InventoryItemUnlockContainer: /* csgo_vietnamese.txt */"Mở khóa",
+  InventoryItemUseItem: /* csgo_vietnamese.txt */"Sử dụng vật phẩm",
   InventoryItemUseStorageUnit: /* csgo_vietnamese.txt */"Bắt đầu dùng thùng này",
   InventoryItemWear: "Độ mòn:",
   InventoryNoItemsToDisplay: "Không có vật phẩm để hiển thị.",
@@ -319,5 +324,10 @@ export const vietnamese = {
   SyncErrorContinue: "Tiếp tục mà không đăng nhập",
   SyncErrorDesc: "Đã xảy ra lỗi khi đăng nhập qua Steam. Các thay đổi của bạn sẽ không được đồng bộ hóa.",
   SyncErrorTitle: "Lỗi đồng bộ hóa",
-  SyncWarnText: "Bạn chưa đăng nhập. Các thay đổi sẽ không được đồng bộ hóa."
+  SyncWarnText: "Bạn chưa đăng nhập. Các thay đổi sẽ không được đồng bộ hóa.",
+  UnpackAddCharges: /* csgo_vietnamese.txt */"Thêm {1} công cụ gỡ móc treo",
+  UnpackClose: /* csgo_vietnamese.txt */"Đóng",
+  UnpackDesc: /* csgo_vietnamese.txt */"Bạn có chắc mình muốn mở gói vật phẩm này?",
+  UnpackNumberOfItems: /* csgo_vietnamese.txt */"Số món: {1}",
+  UnpackTitle: /* csgo_vietnamese.txt */"Mở gói {1}"
 };

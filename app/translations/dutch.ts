@@ -72,6 +72,9 @@ export const dutch = {
   CraftSearchPlaceholder: "Zoek naar een voorwerp...",
   CraftSelectHeader: "Een voorwerp maken...",
   CraftSharedHeader: "Gedeelde creatie",
+  DetachCharmConfirm: /* csgo_dutch.txt */"Hangertje losmaken",
+  DetachCharmConfirmDesc: /* csgo_dutch.txt */"Bevestig dat je dit hangertje wilt losmaken. Je hebt één hangertjesverwijderaar nodig om het hangertje los te maken en terug te zetten in je inventaris.",
+  DetachCharmNeed: /* csgo_dutch.txt */"Voor deze actie is een {1} vereist",
   EditorApply: /* csgo_dutch.txt */"Toepassen",
   EditorCancel: /* csgo_dutch.txt */"Annuleren",
   EditorCopiedToClipboard: "Gekopieerd naar klembord",
@@ -159,6 +162,7 @@ export const dutch = {
   InventoryItemDelete: /* csgo_dutch.txt */"Verwijderen",
   InventoryItemDeleteConfirm: /* csgo_dutch.txt */"Voorwerp verwijderen",
   InventoryItemDeleteConfirmDesc: /* csgo_dutch.txt */"Weet je zeker dat je dit voorwerp wilt verwijderen?",
+  InventoryItemDetachCharm: /* csgo_dutch.txt */"Hangertje losmaken",
   InventoryItemEdit: /* csgo_dutch.txt */"Bewerken",
   InventoryItemEquip: /* csgo_dutch.txt */"Uitrusten",
   InventoryItemEquipBothTeams: "Rust beide teams uit",
@@ -204,6 +208,7 @@ export const dutch = {
   InventoryItemUnequipCT: "Uitdoen CT",
   InventoryItemUnequipT: "Uitdoen T",
   InventoryItemUnlockContainer: /* csgo_dutch.txt */"Kist openen",
+  InventoryItemUseItem: /* csgo_dutch.txt */"Voorwerp gebruiken",
   InventoryItemUseStorageUnit: /* csgo_dutch.txt */"Deze eenheid gebruiken",
   InventoryItemWear: "Slijtage:",
   InventoryNoItemsToDisplay: "Geen voorwerpen om weer te geven",
@@ -318,5 +323,10 @@ export const dutch = {
   SyncErrorContinue: "Probeer opnieuw",
   SyncErrorDesc: "Er is een fout opgetreden bij het synchroniseren van je wijzigingen.",
   SyncErrorTitle: "Synchronisatiefout",
-  SyncWarnText: "Je bent niet geverifieerd, je wijzigingen worden niet gesynchroniseerd."
+  SyncWarnText: "Je bent niet geverifieerd, je wijzigingen worden niet gesynchroniseerd.",
+  UnpackAddCharges: /* csgo_dutch.txt */"Voeg {1} hangertjesverwijderaars toe",
+  UnpackClose: /* csgo_dutch.txt */"Sluiten",
+  UnpackDesc: /* csgo_dutch.txt */"Weet je zeker dat je dit voorwerp wilt uitpakken?",
+  UnpackNumberOfItems: /* csgo_dutch.txt */"Aantal voorwerpen: {1}",
+  UnpackTitle: /* csgo_dutch.txt */"{1} uitpakken"
 };
