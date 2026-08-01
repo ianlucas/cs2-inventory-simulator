@@ -9,6 +9,7 @@ import { english } from "./english";
 export const hungarian = {
   ...english,
   APIPageHeader: "API programozóknak",
+  ApplyKeychainHintMoveKeychain: /* csgo_hungarian.txt */"A mozgatáshoz a fegyveren kattints a kulcstartóra, és húzd.",
   ApplyKeychainNextPosition: /* csgo_hungarian.txt */"Következő pozíció",
   ApplyKeychainUse: /* csgo_hungarian.txt */"Talizmán felrögzítése",
   ApplyKeychainWarn: /* csgo_hungarian.txt */"A talizmánokat Talizmánlevevővel lehet levenni.",

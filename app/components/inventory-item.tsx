@@ -13,6 +13,7 @@ import {
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
+import { useViewerAvailability } from "~/components/hooks/use-viewer-availability";
 import { useEditItemFilter } from "~/components/hooks/use-item-hide-filters";
 import {
   EDITABLE_ITEM_TYPE,
@@ -35,6 +36,7 @@ export function InventoryItem({
   item,
   onApplyPatch,
   onApplySticker,
+  onAttachCharm,
   onClick,
   onDepositToStorageUnit,
   onDetachCharm,
@@ -53,6 +55,7 @@ export function InventoryItem({
   onUnequip,
   onUnlockContainer,
   onUseItem,
+  ownApplicableKeychains,
   ownApplicablePatches,
   ownApplicableStickers,
   uid
@@ -61,6 +64,7 @@ export function InventoryItem({
   disableHover?: boolean;
   onApplyPatch?: (uid: number) => void;
   onApplySticker?: (uid: number) => void;
+  onAttachCharm?: (uid: number) => void;
   onClick?: (uid: number) => void;
   onDepositToStorageUnit?: (uid: number) => void;
   onDetachCharm?: (uid: number) => void;
@@ -79,6 +83,7 @@ export function InventoryItem({
   onUnequip?: (uid: number, team?: CS2Team) => void;
   onUnlockContainer?: (uid: number) => void;
   onUseItem?: (uid: number) => void;
+  ownApplicableKeychains?: boolean;
   ownApplicablePatches?: boolean;
   ownApplicableStickers?: boolean;
 }) {
@@ -102,6 +107,9 @@ export function InventoryItem({
   const [inventory] = useInventory();
   const user = useUser();
   const isItemEditable = useEditItemFilter();
+  const { canUse3d: canUse3dAttach } = useViewerAvailability(item, {
+    attachment: true
+  });
 
   const {
     clickContext,
@@ -159,6 +167,14 @@ export function InventoryItem({
     ((item.hasStickers() &&
       item.getStickersCount() < inventoryItemMaxStickers) ||
       item.isSticker());
+  // Attaching a charm is a 3D-only flow (there is no schema-based 2D
+  // placement like stickers), so the entry only shows when the viewer can
+  // render this item.
+  const canAttachCharm =
+    canUse3dAttach &&
+    ownApplicableKeychains &&
+    ((item.hasKeychains() && item.getKeychainsCount() === 0) ||
+      item.isKeychain());
   const canDetachCharm = item.hasKeychains() && item.getKeychainsCount() > 0;
   const canScrapeSticker =
     inventoryItemAllowScrapeSticker &&
@@ -327,6 +343,11 @@ export function InventoryItem({
                               condition: canSwapStatTrak,
                               label: translate("InventoryItemSwapStatTrak"),
                               onClick: close(() => onSwapItemsStatTrak?.(uid))
+                            },
+                            {
+                              condition: canAttachCharm,
+                              label: translate("ApplyKeychainUse"),
+                              onClick: close(() => onAttachCharm?.(uid))
                             },
                             {
                               condition: canDetachCharm,

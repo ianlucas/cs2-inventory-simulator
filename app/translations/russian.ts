@@ -9,6 +9,7 @@ import { english } from "./english";
 export const russian = {
   ...english,
   APIPageHeader: "API для разработчиков",
+  ApplyKeychainHintMoveKeychain: /* csgo_russian.txt */"Перетаскивайте брелок по оружию, зажав левую кнопку мыши",
   ApplyKeychainNextPosition: /* csgo_russian.txt */"След. место",
   ApplyKeychainUse: /* csgo_russian.txt */"Прикрепить брелок",
   ApplyKeychainWarn: /* csgo_russian.txt */"Брелки можно снять с помощью отделителя",

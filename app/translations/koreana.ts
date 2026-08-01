@@ -9,6 +9,7 @@ import { english } from "./english";
 export const koreana = {
   ...english,
   APIPageHeader: "프로그래머용 API",
+  ApplyKeychainHintMoveKeychain: /* csgo_koreana.txt */"참 장식을 무기에 부착하려면 클릭한 후 무기에 끌어다 놓으세요.",
   ApplyKeychainNextPosition: /* csgo_koreana.txt */"다음 위치",
   ApplyKeychainUse: /* csgo_koreana.txt */"참 장식 장착",
   ApplyKeychainWarn: /* csgo_koreana.txt */"참 장식 분리 도구를 사용하여 참 장식을 분리할 수 있습니다.",

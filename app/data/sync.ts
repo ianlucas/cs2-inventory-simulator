@@ -8,8 +8,10 @@ export const ApiActionSyncUrl = "/api/action/sync";
 export const SyncAction = {
   Add: "add",
   AddFromCache: "add-from-cache",
+  AddWithKeychain: "add-with-keychain",
   AddWithNametag: "add-with-nametag",
   AddWithSticker: "add-with-sticker",
+  ApplyItemKeychain: "apply-item-keychain",
   ApplyItemPatch: "apply-item-patch",
   ApplyItemSticker: "apply-item-sticker",
   DepositToStorageUnit: "deposit-to-storage-unit",

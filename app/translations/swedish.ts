@@ -9,6 +9,7 @@ import { english } from "./english";
 export const swedish = {
   ...english,
   APIPageHeader: "API för utvecklare",
+  ApplyKeychainHintMoveKeychain: /* csgo_swedish.txt */"Klicka och dra en nyckelring för att flytta det på vapnet",
   ApplyKeychainNextPosition: /* csgo_swedish.txt */"Nästa position",
   ApplyKeychainUse: /* csgo_swedish.txt */"Fäst hänge",
   ApplyKeychainWarn: /* csgo_swedish.txt */"Hängen kan avlägsnas med en hängesavlägsnare",

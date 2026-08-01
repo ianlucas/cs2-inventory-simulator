@@ -9,6 +9,7 @@ import { english } from "./english";
 export const latam = {
   ...english,
   APIPageHeader: "API para programadores",
+  ApplyKeychainHintMoveKeychain: /* csgo_latam.txt */"Haz clic y arrastra el llavero para colocarlo sobre el arma.",
   ApplyKeychainNextPosition: /* csgo_latam.txt */"Siguiente posición",
   ApplyKeychainUse: /* csgo_latam.txt */"Acoplar colgante",
   ApplyKeychainWarn: /* csgo_latam.txt */"Los colgantes se pueden quitar con un desacoplador de colgantes",

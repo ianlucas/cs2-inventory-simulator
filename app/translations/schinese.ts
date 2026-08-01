@@ -9,6 +9,7 @@ import { english } from "./english";
 export const schinese = {
   ...english,
   APIPageHeader: "开发者 API",
+  ApplyKeychainHintMoveKeychain: /* csgo_schinese.txt */"点击并拖动挂件以在武器上移动它",
   ApplyKeychainNextPosition: /* csgo_schinese.txt */"下一位置",
   ApplyKeychainUse: /* csgo_schinese.txt */"装配挂件",
   ApplyKeychainWarn: /* csgo_schinese.txt */"可以使用一个挂件拆卸器来拆卸挂件",

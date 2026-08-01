@@ -9,6 +9,7 @@ import { english } from "./english";
 export const thai = {
   ...english,
   APIPageHeader: "API สำหรับนักพัฒนา",
+  ApplyKeychainHintMoveKeychain: /* csgo_thai.txt */"คลิกและลากพวงกุญแจเพื่อย้ายไปยังอาวุธ",
   ApplyKeychainNextPosition: /* csgo_thai.txt */"ตำแหน่งถัดไป",
   ApplyKeychainUse: /* csgo_thai.txt */"ติดพวงกุญแจ",
   ApplyKeychainWarn: /* csgo_thai.txt */"พวงกุญแจสามารถถอดได้ด้วยตัวถอดพวงกุญแจ",

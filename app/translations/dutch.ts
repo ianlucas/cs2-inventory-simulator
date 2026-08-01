@@ -9,6 +9,7 @@ import { english } from "./english";
 export const dutch = {
   ...english,
   APIPageHeader: "API voor programmeurs",
+  ApplyKeychainHintMoveKeychain: /* csgo_dutch.txt */"Klik op het hangertje en sleep hem naar het wapen",
   ApplyKeychainNextPosition: /* csgo_dutch.txt */"Volgende positie",
   ApplyKeychainUse: /* csgo_dutch.txt */"Hangertje vastmaken",
   ApplyKeychainWarn: /* csgo_dutch.txt */"Hangertjes kunnen losgemaakt worden met een hangertjesverwijderaar",

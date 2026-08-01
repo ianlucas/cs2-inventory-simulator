@@ -79,6 +79,12 @@ import {
 } from "~/utils/shapes.server";
 import type { Route } from "./+types/api.action.sync._index";
 
+const keychainPlacementShape = {
+  x: optionalNumber,
+  y: optionalNumber,
+  z: optionalNumber
+};
+
 const stickerPlacementShape = {
   schema: nonNegativeInt,
   x: optionalNumber,
@@ -101,6 +107,12 @@ const actionShape = z.discriminatedUnion("type", [
     toolUid: nonNegativeInt,
     itemId: nonNegativeInt,
     nameTag: z.string()
+  }),
+  z.object({
+    type: z.literal(SyncAction.ApplyItemKeychain),
+    keychainUid: nonNegativeInt,
+    targetUid: nonNegativeInt,
+    ...keychainPlacementShape
   }),
   z.object({
     type: z.literal(SyncAction.ApplyItemPatch),
@@ -175,6 +187,12 @@ const actionShape = z.discriminatedUnion("type", [
     type: z.literal(SyncAction.Edit),
     uid: nonNegativeInt,
     attributes: itemEditorAttributesShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.AddWithKeychain),
+    itemId: nonNegativeInt,
+    keychainUid: nonNegativeInt,
+    ...keychainPlacementShape
   }),
   z.object({
     type: z.literal(SyncAction.AddWithSticker),
@@ -499,6 +517,13 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             );
             break;
           }
+          case SyncAction.ApplyItemKeychain:
+            inventory.applyItemKeychain(action.targetUid, action.keychainUid, {
+              x: action.x,
+              y: action.y,
+              z: action.z
+            });
+            break;
           case SyncAction.ApplyItemSticker: {
             await inventoryItemAllowApplySticker.for(userId).truthy();
             const count = inventory.get(action.targetUid).getStickersCount();
@@ -574,6 +599,14 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
               inventory.get(action.uid)
             );
             editInventoryItem(inventory, action.uid, action.attributes);
+            break;
+          case SyncAction.AddWithKeychain:
+            await enforceItemHideRules(action.itemId, userId, craftHideRules);
+            inventory.addWithKeychain(action.keychainUid, action.itemId, {
+              x: action.x,
+              y: action.y,
+              z: action.z
+            });
             break;
           case SyncAction.AddWithSticker:
             await enforceItemHideRules(action.itemId, userId, craftHideRules);
