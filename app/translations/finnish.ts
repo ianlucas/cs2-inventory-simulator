@@ -57,6 +57,7 @@ export const finnish = {
   CategorySMG: /* csgo_finnish.txt */"konepistooli",
   CategorySticker: /* csgo_finnish.txt */"Tarra",
   CategoryTool: /* csgo_finnish.txt */"työkalu",
+  CharmDetachmentsAvailable: /* csgo_finnish.txt */"Saatavilla olevat riipuksen poistajat: {1}",
   CraftBy: "Valmistanut",
   CraftConfirmHeader: "Vahvista valmistus",
   CraftImportButton: "Tuo",

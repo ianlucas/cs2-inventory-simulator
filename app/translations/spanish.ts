@@ -57,6 +57,7 @@ export const spanish = {
   CategorySMG: /* csgo_spanish.txt */"Subfusil",
   CategorySticker: /* csgo_spanish.txt */"Pegatina",
   CategoryTool: /* csgo_spanish.txt */"Herramienta",
+  CharmDetachmentsAvailable: /* csgo_spanish.txt */"Desacopladores de colgantes disponibles: {1}",
   CraftBy: "Creado por",
   CraftConfirmHeader: "Confirmar creación",
   CraftImportButton: "Importar",

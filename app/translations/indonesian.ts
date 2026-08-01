@@ -57,6 +57,7 @@ export const indonesian = {
   CategorySMG: /* csgo_indonesian.txt */"SMG",
   CategorySticker: /* csgo_indonesian.txt */"Stiker",
   CategoryTool: /* csgo_indonesian.txt */"Alat",
+  CharmDetachmentsAvailable: /* csgo_indonesian.txt */"Pencabut Gantungan Tersedia: {1}",
   CraftBy: "Dibuat oleh",
   CraftConfirmHeader: "Konfirmasi craft",
   CraftImportButton: "Impor",

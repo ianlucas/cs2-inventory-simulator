@@ -57,6 +57,7 @@ export const swedish = {
   CategorySMG: /* csgo_swedish.txt */"SMG",
   CategorySticker: /* csgo_swedish.txt */"Klistermärke",
   CategoryTool: /* csgo_swedish.txt */"Verktyg",
+  CharmDetachmentsAvailable: /* csgo_swedish.txt */"Antal hängesavlägsnare tillgängliga: {1}",
   CraftBy: "Skapad av",
   CraftConfirmHeader: "Bekräfta skapande",
   CraftImportButton: "Importera",

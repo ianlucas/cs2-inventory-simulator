@@ -57,6 +57,7 @@ export const french = {
   CategorySMG: /* csgo_french.txt */"PM",
   CategorySticker: /* csgo_french.txt */"Sticker",
   CategoryTool: /* csgo_french.txt */"Outil",
+  CharmDetachmentsAvailable: /* csgo_french.txt */"Séparateurs de porte-bonheurs disponibles : {1}",
   CraftBy: "Créé par",
   CraftConfirmHeader: "Confirmer la création",
   CraftImportButton: "Importer",

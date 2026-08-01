@@ -57,6 +57,7 @@ export const koreana = {
   CategorySMG: /* csgo_koreana.txt */"기관단총",
   CategorySticker: /* csgo_koreana.txt */"스티커",
   CategoryTool: /* csgo_koreana.txt */"도구",
+  CharmDetachmentsAvailable: /* csgo_koreana.txt */"사용 가능한 참 장식 분리 도구: {1}개",
   CraftBy: "제작자",
   CraftConfirmHeader: "제작 확인",
   CraftImportButton: "가져오기",

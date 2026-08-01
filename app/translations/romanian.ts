@@ -57,6 +57,7 @@ export const romanian = {
   CategorySMG: /* csgo_romanian.txt */"Pistol-mitralieră",
   CategorySticker: /* csgo_romanian.txt */"Abțibild",
   CategoryTool: /* csgo_romanian.txt */"Instrument",
+  CharmDetachmentsAvailable: /* csgo_romanian.txt */"Instrumente de detașat brelocuri disponibile: {1}",
   CraftBy: "Creat de",
   CraftConfirmHeader: "Confirmă crearea",
   CraftImportButton: "Importă",

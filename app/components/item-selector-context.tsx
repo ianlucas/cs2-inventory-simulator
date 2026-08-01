@@ -23,6 +23,7 @@ export interface ItemSelectorContextProps {
     | "apply-item-patch"
     | "apply-item-sticker"
     | "deposit-to-storage-unit"
+    | "detach-charm"
     | "inspect-storage-unit"
     | "rename-item"
     | "retrieve-from-storage-unit"

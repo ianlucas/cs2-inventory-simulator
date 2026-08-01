@@ -57,6 +57,7 @@ export const czech = {
   CategorySMG: /* csgo_czech.txt */"Samopal",
   CategorySticker: /* csgo_czech.txt */"Samolepka",
   CategoryTool: /* csgo_czech.txt */"Nástroj",
+  CharmDetachmentsAvailable: /* csgo_czech.txt */"Dostupné oddělovače přívěsků: {1}",
   CraftBy: "Vytvořil",
   CraftConfirmHeader: "Potvrdit vytvoření",
   CraftImportButton: "Importovat",

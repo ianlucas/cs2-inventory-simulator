@@ -57,6 +57,7 @@ export const turkish = {
   CategorySMG: /* csgo_turkish.txt */"Hafif Makineli",
   CategorySticker: /* csgo_turkish.txt */"Çıkartma",
   CategoryTool: /* csgo_turkish.txt */"Araç",
+  CharmDetachmentsAvailable: /* csgo_turkish.txt */"Kullanılabilir Süs Çıkarıcı: {1}",
   CraftBy: "Oluşturan",
   CraftConfirmHeader: "Oluşturmayı onayla",
   CraftImportButton: "İçe Aktar",

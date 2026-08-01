@@ -57,6 +57,7 @@ export const vietnamese = {
   CategorySMG: /* csgo_vietnamese.txt */"Súng tiểu liên",
   CategorySticker: /* csgo_vietnamese.txt */"Hình dán",
   CategoryTool: /* csgo_vietnamese.txt */"Dụng cụ",
+  CharmDetachmentsAvailable: /* csgo_vietnamese.txt */"Số lượng móc treo có thể gỡ: {1}",
   CraftBy: "Chế tạo bởi",
   CraftConfirmHeader: "Xác nhận chế tạo",
   CraftImportButton: "Nhập",

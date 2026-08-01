@@ -57,6 +57,7 @@ export const german = {
   CategorySMG: /* csgo_german.txt */"MP",
   CategorySticker: /* csgo_german.txt */"Aufkleber",
   CategoryTool: /* csgo_german.txt */"Werkzeug",
+  CharmDetachmentsAvailable: /* csgo_german.txt */"Verfügbare Anhängerablösungen: {1}",
   CraftBy: "Hergestellt von",
   CraftConfirmHeader: "Herstellung bestätigen",
   CraftImportButton: "Importieren",

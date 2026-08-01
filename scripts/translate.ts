@@ -107,6 +107,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   CategorySMG: "CSGO_Type_SMG",
   CategorySticker: "CSGO_Tool_Sticker",
   CategoryTool: "CSGO_Type_Tool",
+  CharmDetachmentsAvailable: { token: "Attrib_KeychainRemoveTool_Charges", transform: (value) => replace(value, '{d:item_count}', '{1}') },
   DetachCharmConfirm: "popup_remove_keychain_button",
   DetachCharmConfirmDesc: "SFUI_Keychain_Remove_Desc",
   DetachCharmNeed: { token: "popup_capability_upsell", transform: (value) => replace(value, '<b>{s:itemname}</b>', '{1}') },

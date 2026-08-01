@@ -57,6 +57,7 @@ export const italian = {
   CategorySMG: /* csgo_italian.txt */"Mitra",
   CategorySticker: /* csgo_italian.txt */"Adesivo",
   CategoryTool: /* csgo_italian.txt */"Strumento",
+  CharmDetachmentsAvailable: /* csgo_italian.txt */"Strumenti di rimozione di ciondoli disponibili: {1}",
   CraftBy: "Creato da",
   CraftConfirmHeader: "Conferma creazione",
   CraftImportButton: "Importa",

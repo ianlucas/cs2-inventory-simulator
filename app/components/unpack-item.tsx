@@ -20,9 +20,11 @@ import { UseItemHeader } from "./use-item-header";
 
 export function UnpackItem({
   onClose,
+  onUnpacked,
   uid
 }: {
   onClose: () => void;
+  onUnpacked?: (uid: number) => void;
   uid: number;
 }) {
   const translate = useTranslate();
@@ -34,9 +36,16 @@ export function UnpackItem({
 
   function handleUnpack() {
     playSound("inventory_new_item_accept");
-    setInventory(inventory.unpackItem(uid));
+    const next = inventory.unpackItem(uid);
+    setInventory(next);
     sync({ type: SyncAction.UnpackItem, uid });
     onClose();
+    const detachmentsUid = next
+      .getAll()
+      .find((item) => item.isCharmDetachment())?.uid;
+    if (detachmentsUid !== undefined) {
+      onUnpacked?.(detachmentsUid);
+    }
   }
 
   return (

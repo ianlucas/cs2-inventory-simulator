@@ -57,6 +57,7 @@ export const norwegian = {
   CategorySMG: /* csgo_norwegian.txt */"Maskinpistol",
   CategorySticker: /* csgo_norwegian.txt */"Klistremerke",
   CategoryTool: /* csgo_norwegian.txt */"Verktøy",
+  CharmDetachmentsAvailable: /* csgo_norwegian.txt */"Anhengsavbitere tilgjengelig: {1}",
   CraftBy: "Laget av",
   CraftConfirmHeader: "Bekreft produksjon",
   CraftImportButton: "Importer",

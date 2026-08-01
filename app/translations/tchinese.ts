@@ -57,6 +57,7 @@ export const tchinese = {
   CategorySMG: /* csgo_tchinese.txt */"衝鋒槍",
   CategorySticker: /* csgo_tchinese.txt */"貼紙",
   CategoryTool: /* csgo_tchinese.txt */"工具",
+  CharmDetachmentsAvailable: /* csgo_tchinese.txt */"剩餘的吊飾卸除器： {1}",
   CraftBy: "製作者:",
   CraftConfirmHeader: "確認製作",
   CraftImportButton: "匯入",

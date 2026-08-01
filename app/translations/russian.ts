@@ -57,6 +57,7 @@ export const russian = {
   CategorySMG: /* csgo_russian.txt */"Пистолет-пулемёт",
   CategorySticker: /* csgo_russian.txt */"Наклейка",
   CategoryTool: /* csgo_russian.txt */"Инструмент",
+  CharmDetachmentsAvailable: /* csgo_russian.txt */"Доступных отделителей брелков: {1}",
   CraftBy: "Создано",
   CraftConfirmHeader: "Подтвердить создание",
   CraftImportButton: "Импортировать",

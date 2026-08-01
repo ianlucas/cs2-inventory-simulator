@@ -56,6 +56,7 @@ export const english = {
   CategorySMG: /* csgo_english.txt */"SMG",
   CategorySticker: /* csgo_english.txt */"Sticker",
   CategoryTool: /* csgo_english.txt */"Tool",
+  CharmDetachmentsAvailable: /* csgo_english.txt */"Charm Detachments Available: {1}",
   CraftBy: "Crafted by",
   CraftConfirmHeader: "Confirm craft",
   CraftImportButton: "Import",

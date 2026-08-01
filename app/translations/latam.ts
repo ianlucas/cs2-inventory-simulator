@@ -57,6 +57,7 @@ export const latam = {
   CategorySMG: /* csgo_latam.txt */"Subfusil",
   CategorySticker: /* csgo_latam.txt */"Calcomanía",
   CategoryTool: /* csgo_latam.txt */"Herramienta",
+  CharmDetachmentsAvailable: /* csgo_latam.txt */"Desacopladores de colgantes disponibles: {1}",
   CraftBy: "Creado por",
   CraftConfirmHeader: "Confirmar creación",
   CraftImportButton: "Importar",

@@ -57,6 +57,7 @@ export const greek = {
   CategorySMG: /* csgo_greek.txt */"Υποπολυβόλο",
   CategorySticker: /* csgo_greek.txt */"Αυτοκόλλητο",
   CategoryTool: /* csgo_greek.txt */"Εργαλείο",
+  CharmDetachmentsAvailable: /* csgo_greek.txt */"Διαθέσιμες Αφαιρέσεις Γουριού: {1}",
   CraftBy: "Κατασκευάστηκε από",
   CraftConfirmHeader: "Επιβεβαίωση κατασκευής",
   CraftImportButton: "Εισαγωγή",

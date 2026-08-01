@@ -57,6 +57,7 @@ export const hungarian = {
   CategorySMG: /* csgo_hungarian.txt */"Géppisztoly",
   CategorySticker: /* csgo_hungarian.txt */"Matrica",
   CategoryTool: /* csgo_hungarian.txt */"Eszköz",
+  CharmDetachmentsAvailable: /* csgo_hungarian.txt */"Elérhető Talizmánlevevő: {1}",
   CraftBy: "Készítette",
   CraftConfirmHeader: "Készítés megerősítése",
   CraftImportButton: "Importálás",

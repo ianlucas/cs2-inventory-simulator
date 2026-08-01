@@ -57,6 +57,7 @@ export const thai = {
   CategorySMG: /* csgo_thai.txt */"ปืนกลมือ",
   CategorySticker: /* csgo_thai.txt */"สติกเกอร์",
   CategoryTool: /* csgo_thai.txt */"เครื่องมือ",
+  CharmDetachmentsAvailable: /* csgo_thai.txt */"ตัวถอดพวงกุญแจที่ใช้ได้: {1}",
   CraftBy: "สร้างโดย",
   CraftConfirmHeader: "ยืนยันการสร้าง",
   CraftImportButton: "นำเข้า",

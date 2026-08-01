@@ -57,6 +57,7 @@ export const schinese = {
   CategorySMG: /* csgo_schinese.txt */"微型冲锋枪",
   CategorySticker: /* csgo_schinese.txt */"印花",
   CategoryTool: /* csgo_schinese.txt */"工具",
+  CharmDetachmentsAvailable: /* csgo_schinese.txt */"获取挂件拆卸器：{1}",
   CraftBy: "制作者:",
   CraftConfirmHeader: "确认制作",
   CraftImportButton: "导入",

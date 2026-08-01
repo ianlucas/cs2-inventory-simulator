@@ -57,6 +57,7 @@ export const japanese = {
   CategorySMG: /* csgo_japanese.txt */"SMG",
   CategorySticker: /* csgo_japanese.txt */"ステッカー",
   CategoryTool: /* csgo_japanese.txt */"ツール",
+  CharmDetachmentsAvailable: /* csgo_japanese.txt */"チャームデタッチの残数：{1}",
   CraftBy: "製作者",
   CraftConfirmHeader: "クラフトの確認",
   CraftImportButton: "インポート",

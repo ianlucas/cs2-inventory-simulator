@@ -57,6 +57,7 @@ export const ukrainian = {
   CategorySMG: /* csgo_ukrainian.txt */"Пістолет-кулемет",
   CategorySticker: /* csgo_ukrainian.txt */"Наліпка",
   CategoryTool: /* csgo_ukrainian.txt */"Інструмент",
+  CharmDetachmentsAvailable: /* csgo_ukrainian.txt */"Доступно відчіплювачів брелоків: {1}",
   CraftBy: "Створено",
   CraftConfirmHeader: "Підтвердити створення",
   CraftImportButton: "Імпортувати",

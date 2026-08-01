@@ -163,26 +163,7 @@ export function Inventory() {
     return navigate(`/craft?uid=${uid}`, { preventScrollReset: true });
   }
 
-  async function handleDetachCharm(uid: number) {
-    if (inventory.getCharmDetachmentCharges() > 0) {
-      const [slot] = inventory.get(uid).someKeychains()[0] ?? [];
-      if (slot === undefined) {
-        return;
-      }
-      if (
-        await confirm({
-          titleText: translate("InventoryItemDetachCharm"),
-          bodyText: translate("DetachCharmConfirmDesc"),
-          cancelText: translate("GenericCancel"),
-          confirmText: translate("DetachCharmConfirm")
-        })
-      ) {
-        playSound("inventory_item_pickup");
-        setInventory(inventory.removeItemKeychain(uid, slot));
-        sync({ type: SyncAction.RemoveItemKeychain, targetUid: uid, slot });
-      }
-      return;
-    }
+  function handleNeedCharmDetachment() {
     const pack = items.find(
       ({ uid: packUid, item }) => packUid >= 0 && item.isCharmDetachmentPack()
     );
@@ -196,6 +177,41 @@ export function Inventory() {
         attachmentName(CS2Economy.getCharmDetachment().name)
       ),
       closeText: translate("GenericOK")
+    });
+  }
+
+  async function handleDetachCharm(uid: number) {
+    if (inventory.getCharmDetachmentCharges() === 0) {
+      return handleNeedCharmDetachment();
+    }
+    const [slot] = inventory.get(uid).someKeychains()[0] ?? [];
+    if (slot === undefined) {
+      return;
+    }
+    if (
+      await confirm({
+        titleText: translate("InventoryItemDetachCharm"),
+        bodyText: translate("DetachCharmConfirmDesc"),
+        cancelText: translate("GenericCancel"),
+        confirmText: translate("DetachCharmConfirm")
+      })
+    ) {
+      playSound("inventory_item_pickup");
+      setInventory(inventory.removeItemKeychain(uid, slot));
+      sync({ type: SyncAction.RemoveItemKeychain, targetUid: uid, slot });
+    }
+  }
+
+  function handleDetachCharmWithTool(uid: number) {
+    if (inventory.getCharmDetachmentCharges() === 0) {
+      return handleNeedCharmDetachment();
+    }
+    return setItemSelector({
+      uid,
+      items: items.filter(
+        ({ uid: itemUid, item }) => itemUid >= 0 && item.getKeychainsCount() > 0
+      ),
+      type: "detach-charm"
     });
   }
 
@@ -233,6 +249,9 @@ export function Inventory() {
         case "apply-item-sticker":
           setItemSelector(undefined);
           return handleApplyItemStickerSelect(uid);
+        case "detach-charm":
+          setItemSelector(undefined);
+          return handleDetachCharm(uid);
         case "deposit-to-storage-unit":
           return handleDepositToStorageUnitSelect(uid);
         case "retrieve-from-storage-unit":
@@ -275,6 +294,7 @@ export function Inventory() {
                     onApplySticker: handleApplyItemSticker,
                     onDepositToStorageUnit: handleDepositToStorageUnit,
                     onDetachCharm: handleDetachCharm,
+                    onDetachCharmWithTool: handleDetachCharmWithTool,
                     onEdit: handleEdit,
                     onEquip: handleEquip,
                     onInspectItem: handleInspectItem,
@@ -356,7 +376,11 @@ export function Inventory() {
       </Presence>
       <Presence present={isUnpackingItem(unpackItem)}>
         {isUnpackingItem(unpackItem) ? (
-          <UnpackItem {...unpackItem} onClose={closeUnpackItem} />
+          <UnpackItem
+            {...unpackItem}
+            onClose={closeUnpackItem}
+            onUnpacked={handleInspectItem}
+          />
         ) : null}
       </Presence>
     </>

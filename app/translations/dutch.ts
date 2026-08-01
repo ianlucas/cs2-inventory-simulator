@@ -57,6 +57,7 @@ export const dutch = {
   CategorySMG: /* csgo_dutch.txt */"SMG",
   CategorySticker: /* csgo_dutch.txt */"Sticker",
   CategoryTool: /* csgo_dutch.txt */"Gereedschap",
+  CharmDetachmentsAvailable: /* csgo_dutch.txt */"Beschikbare hangertjesverwijderaars: {1}",
   CraftBy: "Gemaakt door",
   CraftConfirmHeader: "Bevestig creatie",
   CraftImportButton: "Importeren",

@@ -127,6 +127,23 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
     }));
 }
 
+export const CHARM_DETACHMENTS_DISPLAY_UID = -9999;
+
+export function getCharmDetachmentsToDisplay(inventory: CS2Inventory) {
+  if (inventory.getAll().some((item) => item.isCharmDetachment())) {
+    return [];
+  }
+  return [
+    {
+      equipped: [],
+      item: createFakeInventoryItem(CS2Economy.getCharmDetachment(), {
+        uid: CHARM_DETACHMENTS_DISPLAY_UID
+      }),
+      uid: CHARM_DETACHMENTS_DISPLAY_UID
+    }
+  ];
+}
+
 export function getInventoryItemShareUrl(
   item: CS2InventoryItem,
   userId?: string

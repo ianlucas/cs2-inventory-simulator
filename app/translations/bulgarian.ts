@@ -57,6 +57,7 @@ export const bulgarian = {
   CategorySMG: /* csgo_bulgarian.txt */"Автомат",
   CategorySticker: /* csgo_bulgarian.txt */"Стикер",
   CategoryTool: /* csgo_bulgarian.txt */"Инструмент",
+  CharmDetachmentsAvailable: /* csgo_bulgarian.txt */"Достъпни откачвания на джунджурии: {1}",
   CraftBy: "Изработено от",
   CraftConfirmHeader: "Потвърди изработка",
   CraftImportButton: "Импортиране",

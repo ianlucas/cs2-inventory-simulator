@@ -57,6 +57,7 @@ export const brazilian = {
   CategorySMG: /* csgo_brazilian.txt */"Submetralhadora",
   CategorySticker: /* csgo_brazilian.txt */"Adesivo",
   CategoryTool: /* csgo_brazilian.txt */"Ferramenta",
+  CharmDetachmentsAvailable: /* csgo_brazilian.txt */"Removedores de Chaveiro disponíveis: {1}",
   CraftBy: "Criação de",
   CraftConfirmHeader: "Confirmar criação",
   CraftImportButton: "Importar",

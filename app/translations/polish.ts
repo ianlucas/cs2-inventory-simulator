@@ -57,6 +57,7 @@ export const polish = {
   CategorySMG: /* csgo_polish.txt */"PM",
   CategorySticker: /* csgo_polish.txt */"Naklejka",
   CategoryTool: /* csgo_polish.txt */"Narzędzie",
+  CharmDetachmentsAvailable: /* csgo_polish.txt */"Dostępne odczepiacze przywieszek: {1}",
   CraftBy: "Stworzony przez",
   CraftConfirmHeader: "Potwierdź stworzenie",
   CraftImportButton: "Importuj",

@@ -57,6 +57,7 @@ export const portuguese = {
   CategorySMG: /* csgo_portuguese.txt */"Submetralhadora",
   CategorySticker: /* csgo_portuguese.txt */"Autocolante",
   CategoryTool: /* csgo_portuguese.txt */"Ferramenta",
+  CharmDetachmentsAvailable: /* csgo_portuguese.txt */"Removedores de Amuletos disponíveis: {1}",
   CraftBy: "Criado por",
   CraftConfirmHeader: "Confirmar criação",
   CraftImportButton: "Importar",

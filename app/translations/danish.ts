@@ -57,6 +57,7 @@ export const danish = {
   CategorySMG: /* csgo_danish.txt */"Maskinpistol",
   CategorySticker: /* csgo_danish.txt */"Klistermærke",
   CategoryTool: /* csgo_danish.txt */"Værktøj",
+  CharmDetachmentsAvailable: /* csgo_danish.txt */"Tilgængelige vedhængsfjernere: {1}",
   CraftBy: "Lavet af",
   CraftConfirmHeader: "Bekræft fremstilling",
   CraftImportButton: "Importer",

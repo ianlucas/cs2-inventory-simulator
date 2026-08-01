@@ -38,6 +38,7 @@ export function InventoryItem({
   onClick,
   onDepositToStorageUnit,
   onDetachCharm,
+  onDetachCharmWithTool,
   onEdit,
   onEquip,
   onInspectItem,
@@ -63,6 +64,7 @@ export function InventoryItem({
   onClick?: (uid: number) => void;
   onDepositToStorageUnit?: (uid: number) => void;
   onDetachCharm?: (uid: number) => void;
+  onDetachCharmWithTool?: (uid: number) => void;
   onEdit?: (uid: number) => void;
   onEquip?: (uid: number, team?: CS2Team) => void;
   onInspectItem?: (uid: number) => void;
@@ -174,8 +176,8 @@ export function InventoryItem({
     (CS2_PREVIEW_INSPECTABLE_ITEMS.includes(item.type) || item.isNameTag());
   const canEdit = inventoryItemAllowEdit && isEditable && isItemEditable(item);
   const canShare = inventoryItemAllowShare && item.isPaintable();
-  // Unpackable items only offer "Use Item", like in-game.
   const isUseItemOnly = item.isCharmDetachmentPack();
+  const isCharmDetachments = item.isCharmDetachment();
 
   function close(callBeforeClosing: () => void) {
     return function close() {
@@ -203,232 +205,259 @@ export function InventoryItem({
           }
         />
       </div>
-      {!isFreeInventoryItem && !disableContextMenu && isClickOpen && (
-        <FloatingFocusManager context={clickContext} modal={false}>
-          <div
-            role="menu"
-            className="font-display z-20 w-48 rounded-sm bg-neutral-800 py-2 text-sm text-white outline-hidden"
-            ref={clickRefs.setFloating}
-            style={clickStyles}
-            {...getClickFloatingProps()}
-          >
-            <InventoryItemContextMenu
-              menu={
-                isUseItemOnly
-                  ? [
-                      [
-                        {
-                          condition: true,
-                          label: translate("InventoryItemUseItem"),
-                          onClick: close(() => onUseItem?.(uid))
-                        }
-                      ]
-                    ]
-                  : [
-                      [
-                        {
-                          condition: canInspect,
-                          label: translate("InventoryItemInspect"),
-                          onClick: close(() => onInspectItem?.(uid))
-                        },
-                        {
-                          condition: canInspectInGame,
-                          label: translate("InventoryItemInspectInGame"),
-                          onClick: ({ setClickLabel }) => {
-                            const inspectLink = generateInspectLink(item);
-                            const isCommand = isCommandInspect(inspectLink);
-                            copyToClipboard(inspectLink);
-                            if (!isCommand) {
-                              window.location.assign(inspectLink);
-                            }
-                            return setClickLabel(
-                              isCommand
-                                ? translate("InventoryItemInspectCopied")
-                                : translate("InventoryItemInspectURLCopied")
-                            );
+      {(!isFreeInventoryItem || isCharmDetachments) &&
+        !disableContextMenu &&
+        isClickOpen && (
+          <FloatingFocusManager context={clickContext} modal={false}>
+            <div
+              role="menu"
+              className="font-display z-20 w-48 rounded-sm bg-neutral-800 py-2 text-sm text-white outline-hidden"
+              ref={clickRefs.setFloating}
+              style={clickStyles}
+              {...getClickFloatingProps()}
+            >
+              <InventoryItemContextMenu
+                menu={
+                  isCharmDetachments
+                    ? [
+                        [
+                          {
+                            condition: true,
+                            label: translate("InventoryItemInspect"),
+                            onClick: close(() => onInspectItem?.(uid))
+                          },
+                          {
+                            condition: true,
+                            label: translate("InventoryItemDetachCharm"),
+                            onClick: close(() => onDetachCharmWithTool?.(uid))
                           }
-                        }
-                      ],
-                      [
-                        {
-                          condition: canEquip,
-                          label: translate("InventoryItemEquip"),
-                          onClick: close(() => onEquip?.(uid))
-                        },
-                        {
-                          condition: canEquipT,
-                          label: translate("InventoryItemEquipT"),
-                          onClick: close(() => onEquip?.(uid, CS2Team.T))
-                        },
-                        {
-                          condition: canEquipCT,
-                          label: translate("InventoryItemEquipCT"),
-                          onClick: close(() => onEquip?.(uid, CS2Team.CT))
-                        },
-                        {
-                          condition: canEquipCT && canEquipT,
-                          label: translate("InventoryItemEquipBothTeams"),
-                          onClick: close(() => {
-                            onEquip?.(uid, CS2Team.CT);
-                            onEquip?.(uid, CS2Team.T);
-                          })
-                        }
-                      ],
-                      [
-                        {
-                          condition: canUnequip,
-                          label: translate("InventoryItemUnequip"),
-                          onClick: close(() => onUnequip?.(uid))
-                        },
-                        {
-                          condition: canUnequipT,
-                          label: translate("InventoryItemUnequipT"),
-                          onClick: close(() => onUnequip?.(uid, CS2Team.T))
-                        },
-                        {
-                          condition: canUnequipCT,
-                          label: translate("InventoryItemUnequipCT"),
-                          onClick: close(() => onUnequip?.(uid, CS2Team.CT))
-                        }
-                      ],
-                      [
-                        {
-                          condition: canUnlockContainer,
-                          label: translate("InventoryItemUnlockContainer"),
-                          onClick: close(() => onUnlockContainer?.(uid))
-                        }
-                      ],
-                      [
-                        {
-                          condition: canRename,
-                          label: translate("InventoryItemRename"),
-                          onClick: close(() => onRename?.(uid))
-                        },
-                        {
-                          condition: canSwapStatTrak,
-                          label: translate("InventoryItemSwapStatTrak"),
-                          onClick: close(() => onSwapItemsStatTrak?.(uid))
-                        },
-                        {
-                          condition: canDetachCharm,
-                          label: translate("InventoryItemDetachCharm"),
-                          onClick: close(() => onDetachCharm?.(uid))
-                        },
-                        {
-                          condition: canApplySticker,
-                          label: translate("InventoryApplySticker"),
-                          onClick: close(() => onApplySticker?.(uid))
-                        },
-                        {
-                          condition: canScrapeSticker,
-                          label: translate("InventoryItemScrapeSticker"),
-                          onClick: close(() => onScrapeSticker?.(uid))
-                        },
-                        {
-                          condition: canApplyPatch,
-                          label: translate("InventoryApplyPatch"),
-                          onClick: close(() => onApplyPatch?.(uid))
-                        },
-                        {
-                          condition: canRemovePatch,
-                          label: translate("InventoryItemRemovePatch"),
-                          onClick: close(() => onRemovePatch?.(uid))
-                        }
-                      ],
-                      [
-                        {
-                          condition:
-                            isStorageUnit &&
-                            (inventory.canDepositToStorageUnit(uid) ||
-                              inventory.canRetrieveFromStorageUnit(uid)),
-                          label: translate("InventoryItemStorageUnitInspect"),
-                          onClick: close(() => {
-                            if (inventory.getStorageUnitSize(uid) === 0) {
-                              return alert({
-                                bodyText: translate(
-                                  "InventoryItemStorageUnitEmptyBody",
-                                  format(inventoryStorageUnitMaxItems)
-                                ),
-                                closeText: translate(
-                                  "InventoryItemStorageUnitEmptyClose"
-                                ),
-                                titleText: translate(
-                                  "InventoryItemStorageUnitEmptyTitle"
-                                )
-                              });
-                            }
-
-                            onInspectStorageUnit?.(uid);
-                          })
-                        }
-                      ],
-                      [
-                        {
-                          condition:
-                            isStorageUnit &&
-                            inventory.canRetrieveFromStorageUnit(uid),
-                          label: translate("InventoryItemStorageUnitRetrieve"),
-                          onClick: close(() => onRetrieveFromStorageUnit?.(uid))
-                        },
-                        {
-                          condition:
-                            isStorageUnit &&
-                            inventory.canDepositToStorageUnit(uid),
-                          label: translate("InventoryItemStorageUnitDeposit"),
-                          onClick: close(() => onDepositToStorageUnit?.(uid))
-                        }
-                      ],
-                      [
-                        {
-                          condition: isStorageUnit,
-                          label: hasNametag
-                            ? translate("InventoryItemRenameStorageUnit")
-                            : translate("InventoryItemUseStorageUnit"),
-                          onClick: close(() => onRenameStorageUnit?.(uid))
-                        }
-                      ],
-                      [
-                        {
-                          condition: canEdit,
-                          label: translate("InventoryItemEdit"),
-                          onClick: close(() => onEdit?.(uid))
-                        },
-                        {
-                          condition: canShare,
-                          label: translate("InventoryItemShare"),
-                          clickLabel: translate("InventoryItemShareCopied"),
-                          onClick: () =>
-                            copyToClipboard(
-                              getInventoryItemShareUrl(item, user?.id)
-                            )
-                        },
-                        {
-                          condition: true,
-                          label: translate("InventoryItemDelete"),
-                          onClick: close(async () => {
-                            if (
-                              await confirm({
-                                titleText: item.name,
-                                bodyText: translate(
-                                  "InventoryItemDeleteConfirmDesc"
-                                ),
-                                cancelText: translate("GenericCancel"),
-                                confirmText: translate(
-                                  "InventoryItemDeleteConfirm"
-                                )
-                              })
-                            ) {
-                              onRemove?.(uid);
-                            }
-                          })
-                        }
+                        ]
                       ]
-                    ]
-              }
-            />
-          </div>
-        </FloatingFocusManager>
-      )}
+                    : isUseItemOnly
+                      ? [
+                          [
+                            {
+                              condition: true,
+                              label: translate("InventoryItemUseItem"),
+                              onClick: close(() => onUseItem?.(uid))
+                            }
+                          ]
+                        ]
+                      : [
+                          [
+                            {
+                              condition: canInspect,
+                              label: translate("InventoryItemInspect"),
+                              onClick: close(() => onInspectItem?.(uid))
+                            },
+                            {
+                              condition: canInspectInGame,
+                              label: translate("InventoryItemInspectInGame"),
+                              onClick: ({ setClickLabel }) => {
+                                const inspectLink = generateInspectLink(item);
+                                const isCommand = isCommandInspect(inspectLink);
+                                copyToClipboard(inspectLink);
+                                if (!isCommand) {
+                                  window.location.assign(inspectLink);
+                                }
+                                return setClickLabel(
+                                  isCommand
+                                    ? translate("InventoryItemInspectCopied")
+                                    : translate("InventoryItemInspectURLCopied")
+                                );
+                              }
+                            }
+                          ],
+                          [
+                            {
+                              condition: canEquip,
+                              label: translate("InventoryItemEquip"),
+                              onClick: close(() => onEquip?.(uid))
+                            },
+                            {
+                              condition: canEquipT,
+                              label: translate("InventoryItemEquipT"),
+                              onClick: close(() => onEquip?.(uid, CS2Team.T))
+                            },
+                            {
+                              condition: canEquipCT,
+                              label: translate("InventoryItemEquipCT"),
+                              onClick: close(() => onEquip?.(uid, CS2Team.CT))
+                            },
+                            {
+                              condition: canEquipCT && canEquipT,
+                              label: translate("InventoryItemEquipBothTeams"),
+                              onClick: close(() => {
+                                onEquip?.(uid, CS2Team.CT);
+                                onEquip?.(uid, CS2Team.T);
+                              })
+                            }
+                          ],
+                          [
+                            {
+                              condition: canUnequip,
+                              label: translate("InventoryItemUnequip"),
+                              onClick: close(() => onUnequip?.(uid))
+                            },
+                            {
+                              condition: canUnequipT,
+                              label: translate("InventoryItemUnequipT"),
+                              onClick: close(() => onUnequip?.(uid, CS2Team.T))
+                            },
+                            {
+                              condition: canUnequipCT,
+                              label: translate("InventoryItemUnequipCT"),
+                              onClick: close(() => onUnequip?.(uid, CS2Team.CT))
+                            }
+                          ],
+                          [
+                            {
+                              condition: canUnlockContainer,
+                              label: translate("InventoryItemUnlockContainer"),
+                              onClick: close(() => onUnlockContainer?.(uid))
+                            }
+                          ],
+                          [
+                            {
+                              condition: canRename,
+                              label: translate("InventoryItemRename"),
+                              onClick: close(() => onRename?.(uid))
+                            },
+                            {
+                              condition: canSwapStatTrak,
+                              label: translate("InventoryItemSwapStatTrak"),
+                              onClick: close(() => onSwapItemsStatTrak?.(uid))
+                            },
+                            {
+                              condition: canDetachCharm,
+                              label: translate("InventoryItemDetachCharm"),
+                              onClick: close(() => onDetachCharm?.(uid))
+                            },
+                            {
+                              condition: canApplySticker,
+                              label: translate("InventoryApplySticker"),
+                              onClick: close(() => onApplySticker?.(uid))
+                            },
+                            {
+                              condition: canScrapeSticker,
+                              label: translate("InventoryItemScrapeSticker"),
+                              onClick: close(() => onScrapeSticker?.(uid))
+                            },
+                            {
+                              condition: canApplyPatch,
+                              label: translate("InventoryApplyPatch"),
+                              onClick: close(() => onApplyPatch?.(uid))
+                            },
+                            {
+                              condition: canRemovePatch,
+                              label: translate("InventoryItemRemovePatch"),
+                              onClick: close(() => onRemovePatch?.(uid))
+                            }
+                          ],
+                          [
+                            {
+                              condition:
+                                isStorageUnit &&
+                                (inventory.canDepositToStorageUnit(uid) ||
+                                  inventory.canRetrieveFromStorageUnit(uid)),
+                              label: translate(
+                                "InventoryItemStorageUnitInspect"
+                              ),
+                              onClick: close(() => {
+                                if (inventory.getStorageUnitSize(uid) === 0) {
+                                  return alert({
+                                    bodyText: translate(
+                                      "InventoryItemStorageUnitEmptyBody",
+                                      format(inventoryStorageUnitMaxItems)
+                                    ),
+                                    closeText: translate(
+                                      "InventoryItemStorageUnitEmptyClose"
+                                    ),
+                                    titleText: translate(
+                                      "InventoryItemStorageUnitEmptyTitle"
+                                    )
+                                  });
+                                }
+
+                                onInspectStorageUnit?.(uid);
+                              })
+                            }
+                          ],
+                          [
+                            {
+                              condition:
+                                isStorageUnit &&
+                                inventory.canRetrieveFromStorageUnit(uid),
+                              label: translate(
+                                "InventoryItemStorageUnitRetrieve"
+                              ),
+                              onClick: close(() =>
+                                onRetrieveFromStorageUnit?.(uid)
+                              )
+                            },
+                            {
+                              condition:
+                                isStorageUnit &&
+                                inventory.canDepositToStorageUnit(uid),
+                              label: translate(
+                                "InventoryItemStorageUnitDeposit"
+                              ),
+                              onClick: close(() =>
+                                onDepositToStorageUnit?.(uid)
+                              )
+                            }
+                          ],
+                          [
+                            {
+                              condition: isStorageUnit,
+                              label: hasNametag
+                                ? translate("InventoryItemRenameStorageUnit")
+                                : translate("InventoryItemUseStorageUnit"),
+                              onClick: close(() => onRenameStorageUnit?.(uid))
+                            }
+                          ],
+                          [
+                            {
+                              condition: canEdit,
+                              label: translate("InventoryItemEdit"),
+                              onClick: close(() => onEdit?.(uid))
+                            },
+                            {
+                              condition: canShare,
+                              label: translate("InventoryItemShare"),
+                              clickLabel: translate("InventoryItemShareCopied"),
+                              onClick: () =>
+                                copyToClipboard(
+                                  getInventoryItemShareUrl(item, user?.id)
+                                )
+                            },
+                            {
+                              condition: true,
+                              label: translate("InventoryItemDelete"),
+                              onClick: close(async () => {
+                                if (
+                                  await confirm({
+                                    titleText: item.name,
+                                    bodyText: translate(
+                                      "InventoryItemDeleteConfirmDesc"
+                                    ),
+                                    cancelText: translate("GenericCancel"),
+                                    confirmText: translate(
+                                      "InventoryItemDeleteConfirm"
+                                    )
+                                  })
+                                ) {
+                                  onRemove?.(uid);
+                                }
+                              })
+                            }
+                          ]
+                        ]
+                }
+              />
+            </div>
+          </FloatingFocusManager>
+        )}
       {!isFreeInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
         <FloatingFocusManager context={hoverContext} modal={false}>
           <InventoryItemTooltip
