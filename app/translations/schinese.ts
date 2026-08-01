@@ -257,6 +257,7 @@ export const schinese = {
   ItemRarityNameTool: /* csgo_schinese.txt */"工具",
   ItemRarityRare: /* csgo_schinese.txt */"高级",
   ItemRarityUncommon: /* csgo_schinese.txt */"中级",
+  ItemSealedGraffiti: /* csgo_schinese.txt */"封装的涂鸦",
   ItemSwapStatTrakAccept: /* csgo_schinese.txt */"接受",
   ItemSwapStatTrakClose: /* csgo_schinese.txt */"关闭",
   ItemSwapStatTrakDesc: /* csgo_schinese.txt */"该物品可以将两种相同物品类型的 StatTrak™ 数据互换。",

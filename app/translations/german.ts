@@ -256,6 +256,7 @@ export const german = {
   ItemRarityNameTool: /* csgo_german.txt */"Werkzeug",
   ItemRarityRare: /* csgo_german.txt */"Hohe Qualität",
   ItemRarityUncommon: /* csgo_german.txt */"Mittlere Qualität",
+  ItemSealedGraffiti: /* csgo_german.txt */"Versiegeltes Graffito",
   ItemSwapStatTrakAccept: /* csgo_german.txt */"ÜBERNEHMEN",
   ItemSwapStatTrakClose: /* csgo_german.txt */"Schließen",
   ItemSwapStatTrakDesc: /* csgo_german.txt */"Dieser Gegenstand tauscht die StatTrak™-Werte zweier Gegenstände gleichen Typs aus.",

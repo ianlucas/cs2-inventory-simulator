@@ -256,6 +256,7 @@ export const polish = {
   ItemRarityNameTool: /* csgo_polish.txt */"Narzędzie",
   ItemRarityRare: /* csgo_polish.txt */"wysokiej jakości",
   ItemRarityUncommon: /* csgo_polish.txt */"Średniej jakości",
+  ItemSealedGraffiti: /* csgo_polish.txt */"Zalakowane graffiti",
   ItemSwapStatTrakAccept: /* csgo_polish.txt */"AKCEPTUJ",
   ItemSwapStatTrakClose: /* csgo_polish.txt */"Zamknij",
   ItemSwapStatTrakDesc: /* csgo_polish.txt */"Ten przedmiot zamienia wartości liczników StatTrak™ między przedmiotami tego samego rodzaju.",

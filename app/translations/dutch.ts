@@ -256,6 +256,7 @@ export const dutch = {
   ItemRarityNameTool: /* csgo_dutch.txt */"Gereedschap",
   ItemRarityRare: /* csgo_dutch.txt */"Hoogwaardig",
   ItemRarityUncommon: /* csgo_dutch.txt */"Gemiddeld",
+  ItemSealedGraffiti: /* csgo_dutch.txt */"Verzegelde graffiti",
   ItemSwapStatTrakAccept: /* csgo_dutch.txt */"ACCEPTEREN",
   ItemSwapStatTrakClose: /* csgo_dutch.txt */"Sluiten",
   ItemSwapStatTrakDesc: /* csgo_dutch.txt */"Hiermee verwissel je de StatTrak™-waarden van twee voorwerpen van hetzelfde type.",

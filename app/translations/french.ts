@@ -256,6 +256,7 @@ export const french = {
   ItemRarityNameTool: /* csgo_french.txt */"Outil",
   ItemRarityRare: /* csgo_french.txt */"Qualité supérieure",
   ItemRarityUncommon: /* csgo_french.txt */"Qualité moyenne",
+  ItemSealedGraffiti: /* csgo_french.txt */"Graffiti scellé",
   ItemSwapStatTrakAccept: /* csgo_french.txt */"ACCEPTER",
   ItemSwapStatTrakClose: /* csgo_french.txt */"Fermer",
   ItemSwapStatTrakDesc: /* csgo_french.txt */"Cet item permet de permuter les valeurs StatTrak™ entre deux types d'items identiques.",

@@ -255,6 +255,7 @@ export const norwegian = {
   ItemRarityNameTool: /* csgo_norwegian.txt */"Verktøy",
   ItemRarityRare: /* csgo_norwegian.txt */"Høy klasse",
   ItemRarityUncommon: /* csgo_norwegian.txt */"Mellomklasse",
+  ItemSealedGraffiti: /* csgo_norwegian.txt */"Forseglet graffiti",
   ItemSwapStatTrakAccept: /* csgo_norwegian.txt */"GODTA",
   ItemSwapStatTrakClose: /* csgo_norwegian.txt */"Lukk",
   ItemSwapStatTrakDesc: /* csgo_norwegian.txt */"Denne gjenstanden bytter StatTrak™-verdier mellom to gjenstander av samme type.",

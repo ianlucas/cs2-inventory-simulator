@@ -257,6 +257,7 @@ export const ukrainian = {
   ItemRarityNameTool: /* csgo_ukrainian.txt */"Інструмент",
   ItemRarityRare: /* csgo_ukrainian.txt */"дуже рідкісний предмет",
   ItemRarityUncommon: /* csgo_ukrainian.txt */"рідкісний предмет",
+  ItemSealedGraffiti: /* csgo_ukrainian.txt */"Запечатане графіті",
   ItemSwapStatTrakAccept: /* csgo_ukrainian.txt */"ПРИЙНЯТИ",
   ItemSwapStatTrakClose: /* csgo_ukrainian.txt */"Закрити",
   ItemSwapStatTrakDesc: /* csgo_ukrainian.txt */"Цей інструмент міняє місцями лічильники СтатТрек™ у двох екземплярів однакової зброї.",

@@ -256,6 +256,7 @@ export const hungarian = {
   ItemRarityNameTool: /* csgo_hungarian.txt */"Eszköz",
   ItemRarityRare: /* csgo_hungarian.txt */"Magas fokozatú",
   ItemRarityUncommon: /* csgo_hungarian.txt */"Közép fokozatú",
+  ItemSealedGraffiti: /* csgo_hungarian.txt */"Lezárt falfirka",
   ItemSwapStatTrakAccept: /* csgo_hungarian.txt */"ELFOGAD",
   ItemSwapStatTrakClose: /* csgo_hungarian.txt */"Bezár",
   ItemSwapStatTrakDesc: /* csgo_hungarian.txt */"Ez a tárgy StatTrak™ értékeket cserél két ugyanolyan típusú tárgy között.",

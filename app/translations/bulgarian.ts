@@ -257,6 +257,7 @@ export const bulgarian = {
   ItemRarityNameTool: /* csgo_bulgarian.txt */"Инструмент",
   ItemRarityRare: /* csgo_bulgarian.txt */"Висок клас",
   ItemRarityUncommon: /* csgo_bulgarian.txt */"Средна поредица",
+  ItemSealedGraffiti: /* csgo_bulgarian.txt */"Запечатани графити",
   ItemSwapStatTrakAccept: /* csgo_bulgarian.txt */"ПРИЕМАНЕ",
   ItemSwapStatTrakClose: /* csgo_bulgarian.txt */"Затваряне",
   ItemSwapStatTrakDesc: /* csgo_bulgarian.txt */"Този артикул разменя StatTrak™ стойностите между две оръжия от еднакъв тип.",

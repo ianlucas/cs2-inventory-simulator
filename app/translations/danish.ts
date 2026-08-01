@@ -256,6 +256,7 @@ export const danish = {
   ItemRarityNameTool: /* csgo_danish.txt */"Værktøj",
   ItemRarityRare: /* csgo_danish.txt */"Højkvalitet",
   ItemRarityUncommon: /* csgo_danish.txt */"Middelkvalitet",
+  ItemSealedGraffiti: /* csgo_danish.txt */"Forseglet graffiti",
   ItemSwapStatTrakAccept: /* csgo_danish.txt */"ACCEPTER",
   ItemSwapStatTrakClose: /* csgo_danish.txt */"Luk",
   ItemSwapStatTrakDesc: /* csgo_danish.txt */"Denne genstand bytter StatTrak™-værdier mellem to af den samme genstandstype.",

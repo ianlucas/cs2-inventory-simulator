@@ -257,6 +257,7 @@ export const portuguese = {
   ItemRarityNameTool: /* csgo_portuguese.txt */"Ferramenta",
   ItemRarityRare: /* csgo_portuguese.txt */"Alta Qualidade",
   ItemRarityUncommon: /* csgo_portuguese.txt */"Qualidade Média",
+  ItemSealedGraffiti: /* csgo_portuguese.txt */"Grafíti selado",
   ItemSwapStatTrakAccept: /* csgo_portuguese.txt */"ACEITAR",
   ItemSwapStatTrakClose: /* csgo_portuguese.txt */"Fechar",
   ItemSwapStatTrakDesc: /* csgo_portuguese.txt */"Este item troca as estatísticas StatTrak™ entre dois itens do mesmo tipo.",

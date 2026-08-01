@@ -256,6 +256,7 @@ export const swedish = {
   ItemRarityNameTool: /* csgo_swedish.txt */"Verktyg",
   ItemRarityRare: /* csgo_swedish.txt */"Högkvalitet",
   ItemRarityUncommon: /* csgo_swedish.txt */"Medelvärdig",
+  ItemSealedGraffiti: /* csgo_swedish.txt */"Förseglad graffiti",
   ItemSwapStatTrakAccept: /* csgo_swedish.txt */"ACCEPTERA",
   ItemSwapStatTrakClose: /* csgo_swedish.txt */"Stäng",
   ItemSwapStatTrakDesc: /* csgo_swedish.txt */"Detta föremål byter StatTrak™-värden mellan två likadana föremålstyper.",

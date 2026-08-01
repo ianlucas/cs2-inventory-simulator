@@ -256,6 +256,7 @@ export const italian = {
   ItemRarityNameTool: /* csgo_italian.txt */"Strumento",
   ItemRarityRare: /* csgo_italian.txt */"Qualità elevata",
   ItemRarityUncommon: /* csgo_italian.txt */"Qualità media",
+  ItemSealedGraffiti: /* csgo_italian.txt */"Graffito sigillato",
   ItemSwapStatTrakAccept: /* csgo_italian.txt */"ACCETTA",
   ItemSwapStatTrakClose: /* csgo_italian.txt */"Chiudi",
   ItemSwapStatTrakDesc: /* csgo_italian.txt */"Questo oggetto scambia i valori dei contatori StatTrak™ di due oggetti dello stesso tipo.",

@@ -253,6 +253,7 @@ export const indonesian = {
   ItemRarityNameTool: /* csgo_indonesian.txt */"Alat",
   ItemRarityRare: /* csgo_indonesian.txt */"Kualitas Tinggi",
   ItemRarityUncommon: /* csgo_indonesian.txt */"Kualitas Menengah",
+  ItemSealedGraffiti: /* csgo_indonesian.txt */"Grafiti Tersegel",
   ItemSwapStatTrakAccept: /* csgo_indonesian.txt */"TERIMA",
   ItemSwapStatTrakClose: /* csgo_indonesian.txt */"Tutup",
   ItemSwapStatTrakDesc: /* csgo_indonesian.txt */"Item ini menukar nilai StatTrak™ antara dua jenis item yang sama.",

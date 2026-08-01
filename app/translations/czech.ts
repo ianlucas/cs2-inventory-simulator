@@ -256,6 +256,7 @@ export const czech = {
   ItemRarityNameTool: /* csgo_czech.txt */"Nástroj",
   ItemRarityRare: /* csgo_czech.txt */"Vyšší třída",
   ItemRarityUncommon: /* csgo_czech.txt */"Střední třída",
+  ItemSealedGraffiti: /* csgo_czech.txt */"Zabalené graffiti",
   ItemSwapStatTrakAccept: /* csgo_czech.txt */"PŘIJMOUT",
   ItemSwapStatTrakClose: /* csgo_czech.txt */"Zavřít",
   ItemSwapStatTrakDesc: /* csgo_czech.txt */"Tento nástroj prohodí statistiky mezi dvěma předměty stejného typu.",

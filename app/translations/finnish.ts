@@ -256,6 +256,7 @@ export const finnish = {
   ItemRarityNameTool: /* csgo_finnish.txt */"työkalu",
   ItemRarityRare: /* csgo_finnish.txt */"Korkean tason",
   ItemRarityUncommon: /* csgo_finnish.txt */"Keskitason",
+  ItemSealedGraffiti: /* csgo_finnish.txt */"Sinetöity graffiti",
   ItemSwapStatTrakAccept: /* csgo_finnish.txt */"HYVÄKSY",
   ItemSwapStatTrakClose: /* csgo_finnish.txt */"Sulje",
   ItemSwapStatTrakDesc: /* csgo_finnish.txt */"Tämä esine vaihtaa kahden samanlaisen aseen StatTrak™-arvot keskenään.",

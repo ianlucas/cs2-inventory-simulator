@@ -257,6 +257,7 @@ export const vietnamese = {
   ItemRarityNameTool: /* csgo_vietnamese.txt */"Dụng cụ",
   ItemRarityRare: /* csgo_vietnamese.txt */"Hạng cao cấp",
   ItemRarityUncommon: /* csgo_vietnamese.txt */"Hạng trung bình",
+  ItemSealedGraffiti: /* csgo_vietnamese.txt */"Graffiti nguyên bọc",
   ItemSwapStatTrakAccept: /* csgo_vietnamese.txt */"CHẤP NHẬN",
   ItemSwapStatTrakClose: /* csgo_vietnamese.txt */"Đóng",
   ItemSwapStatTrakDesc: /* csgo_vietnamese.txt */"Vật phẩm sẽ đổi giá trị StatTrak™ giữa hai vật phẩm trong cùng thể loại.",

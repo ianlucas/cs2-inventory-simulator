@@ -256,6 +256,7 @@ export const russian = {
   ItemRarityNameTool: /* csgo_russian.txt */"Инструмент",
   ItemRarityRare: /* csgo_russian.txt */"высшего класса",
   ItemRarityUncommon: /* csgo_russian.txt */"Среднего класса",
+  ItemSealedGraffiti: /* csgo_russian.txt */"Запечатанный граффити",
   ItemSwapStatTrakAccept: /* csgo_russian.txt */"ПРИНЯТЬ",
   ItemSwapStatTrakClose: /* csgo_russian.txt */"Закрыть",
   ItemSwapStatTrakDesc: /* csgo_russian.txt */"Этот предмет может обменять значения StatTrak™ у двух одинаковых раскрасок предмета.",

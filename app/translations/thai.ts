@@ -257,6 +257,7 @@ export const thai = {
   ItemRarityNameTool: /* csgo_thai.txt */"เครื่องมือ",
   ItemRarityRare: /* csgo_thai.txt */"เกรดสูง",
   ItemRarityUncommon: /* csgo_thai.txt */"เกรดปานกลาง",
+  ItemSealedGraffiti: /* csgo_thai.txt */"กราฟฟิตี้แบบปิดผนึก",
   ItemSwapStatTrakAccept: /* csgo_thai.txt */"ยอมรับ",
   ItemSwapStatTrakClose: /* csgo_thai.txt */"ปิด",
   ItemSwapStatTrakDesc: /* csgo_thai.txt */"ไอเท็มนี้จะสลับค่า StatTrak™ ระหว่างไอเท็มประเภทเดียวกันสองชิ้น",

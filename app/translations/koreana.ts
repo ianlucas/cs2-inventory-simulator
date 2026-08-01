@@ -257,6 +257,7 @@ export const koreana = {
   ItemRarityNameTool: /* csgo_koreana.txt */"도구",
   ItemRarityRare: /* csgo_koreana.txt */"고급",
   ItemRarityUncommon: /* csgo_koreana.txt */"중급",
+  ItemSealedGraffiti: /* csgo_koreana.txt */"개봉 안 한 그래피티",
   ItemSwapStatTrakAccept: /* csgo_koreana.txt */"수락",
   ItemSwapStatTrakClose: /* csgo_koreana.txt */"닫기",
   ItemSwapStatTrakDesc: /* csgo_koreana.txt */"이 아이템으로 유형이 같은 두 아이템의 StatTrak™ 점수를 맞바꿀 수 있습니다.",

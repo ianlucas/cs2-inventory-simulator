@@ -260,6 +260,7 @@ export const english = {
   ItemRarityNameTool: /* csgo_english.txt */"Tool",
   ItemRarityRare: /* csgo_english.txt */"High Grade",
   ItemRarityUncommon: /* csgo_english.txt */"Medium Grade",
+  ItemSealedGraffiti: /* csgo_english.txt */"Sealed Graffiti",
   ItemSwapStatTrakAccept: /* csgo_english.txt */"ACCEPT",
   ItemSwapStatTrakClose: /* csgo_english.txt */"Close",
   ItemSwapStatTrakDesc: /* csgo_english.txt */"This item swaps StatTrak™ values between two of the same item type.",

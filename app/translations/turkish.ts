@@ -257,6 +257,7 @@ export const turkish = {
   ItemRarityNameTool: /* csgo_turkish.txt */"Araç",
   ItemRarityRare: /* csgo_turkish.txt */"Yüksek Sınıf",
   ItemRarityUncommon: /* csgo_turkish.txt */"Orta Sınıf",
+  ItemSealedGraffiti: /* csgo_turkish.txt */"Mühürlü Grafiti",
   ItemSwapStatTrakAccept: /* csgo_turkish.txt */"KABUL ET",
   ItemSwapStatTrakClose: /* csgo_turkish.txt */"Kapat",
   ItemSwapStatTrakDesc: /* csgo_turkish.txt */"Bu eşya aynı iki eşya arasındaki StatTrak™ değerlerini değiştirir.",

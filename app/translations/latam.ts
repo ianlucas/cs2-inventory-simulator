@@ -257,6 +257,7 @@ export const latam = {
   ItemRarityNameTool: /* csgo_latam.txt */"Herramienta",
   ItemRarityRare: /* csgo_latam.txt */"de grado alto",
   ItemRarityUncommon: /* csgo_latam.txt */"de grado medio",
+  ItemSealedGraffiti: /* csgo_latam.txt */"Grafiti precintado",
   ItemSwapStatTrakAccept: /* csgo_latam.txt */"ACEPTAR",
   ItemSwapStatTrakClose: /* csgo_latam.txt */"Cerrar",
   ItemSwapStatTrakDesc: /* csgo_latam.txt */"Este objeto intercambia los valores StatTrak™ entre dos artículos del mismo tipo.",

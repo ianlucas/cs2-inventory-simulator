@@ -256,6 +256,7 @@ export const romanian = {
   ItemRarityNameTool: /* csgo_romanian.txt */"Instrument",
   ItemRarityRare: /* csgo_romanian.txt */"Calitate ridicată",
   ItemRarityUncommon: /* csgo_romanian.txt */"Calitate medie",
+  ItemSealedGraffiti: /* csgo_romanian.txt */"Graffiti sigilat",
   ItemSwapStatTrakAccept: /* csgo_romanian.txt */"ACCEPTĂ",
   ItemSwapStatTrakClose: /* csgo_romanian.txt */"Închide",
   ItemSwapStatTrakDesc: /* csgo_romanian.txt */"Acest obiect schimbă între ele valorile StatTrak™ pentru două obiecte de același tip.",

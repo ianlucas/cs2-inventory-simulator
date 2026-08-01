@@ -257,6 +257,7 @@ export const greek = {
   ItemRarityNameTool: /* csgo_greek.txt */"Εργαλείο",
   ItemRarityRare: /* csgo_greek.txt */"High Grade",
   ItemRarityUncommon: /* csgo_greek.txt */"Medium Grade",
+  ItemSealedGraffiti: /* csgo_greek.txt */"Σφραγισμένο γκράφιτι",
   ItemSwapStatTrakAccept: /* csgo_greek.txt */"ΑΠΟΔΟΧΗ",
   ItemSwapStatTrakClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
   ItemSwapStatTrakDesc: /* csgo_greek.txt */"Αυτό το αντικείμενο εναλλάσσει τις τιμές StatTrak™ μεταξύ δύο αντικειμένων ίδιου τύπου.",

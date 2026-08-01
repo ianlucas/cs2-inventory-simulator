@@ -256,6 +256,7 @@ export const japanese = {
   ItemRarityNameTool: /* csgo_japanese.txt */"ツール",
   ItemRarityRare: /* csgo_japanese.txt */"ハイグレード",
   ItemRarityUncommon: /* csgo_japanese.txt */"ミディアムグレード",
+  ItemSealedGraffiti: /* csgo_japanese.txt */"未開封グラフィティ",
   ItemSwapStatTrakAccept: /* csgo_japanese.txt */"了解",
   ItemSwapStatTrakClose: /* csgo_japanese.txt */"閉じる",
   ItemSwapStatTrakDesc: /* csgo_japanese.txt */"同じタイプのアイテム間で StatTrak™ の値を入れ替えるツールです。",

@@ -257,6 +257,7 @@ export const tchinese = {
   ItemRarityNameTool: /* csgo_tchinese.txt */"工具",
   ItemRarityRare: /* csgo_tchinese.txt */"高級",
   ItemRarityUncommon: /* csgo_tchinese.txt */"中階",
+  ItemSealedGraffiti: /* csgo_tchinese.txt */"密封的塗鴉",
   ItemSwapStatTrakAccept: /* csgo_tchinese.txt */"接受",
   ItemSwapStatTrakClose: /* csgo_tchinese.txt */"關閉",
   ItemSwapStatTrakDesc: /* csgo_tchinese.txt */"此物品能夠交換兩項相同物品類型的 StatTrak™ 數值。",

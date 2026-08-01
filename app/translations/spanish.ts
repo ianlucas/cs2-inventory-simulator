@@ -257,6 +257,7 @@ export const spanish = {
   ItemRarityNameTool: /* csgo_spanish.txt */"Herramienta",
   ItemRarityRare: /* csgo_spanish.txt */"de grado alto",
   ItemRarityUncommon: /* csgo_spanish.txt */"de grado medio",
+  ItemSealedGraffiti: /* csgo_spanish.txt */"Grafiti precintado",
   ItemSwapStatTrakAccept: /* csgo_spanish.txt */"ACEPTAR",
   ItemSwapStatTrakClose: /* csgo_spanish.txt */"Cerrar",
   ItemSwapStatTrakDesc: /* csgo_spanish.txt */"Este artículo intercambia los valores StatTrak™ entre dos artículos del mismo tipo.",
