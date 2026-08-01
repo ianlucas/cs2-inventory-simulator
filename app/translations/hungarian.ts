@@ -228,6 +228,7 @@ export const hungarian = {
   InventorySelectInspectContents: /* csgo_hungarian.txt */"Tartalom megvizsgálása",
   InventorySelectItemToDeposit: /* csgo_hungarian.txt */"Válassz behelyezendő tárgyakat",
   InventorySelectItemToRetrieve: /* csgo_hungarian.txt */"Válassz kiveendő tárgyakat",
+  ItemGraffitiChargesRemaining: /* csgo_hungarian.txt */"Maradék töltet: {1}",
   ItemRarityAncient: /* csgo_hungarian.txt */"Rendkívüli",
   ItemRarityCommon: /* csgo_hungarian.txt */"Alap fokozatú",
   ItemRarityDefault: /* csgo_hungarian.txt */"Alapértelmezett",

@@ -227,6 +227,7 @@ export const norwegian = {
   InventorySelectInspectContents: /* csgo_norwegian.txt */"Inspiserer innholdet i",
   InventorySelectItemToDeposit: /* csgo_norwegian.txt */"Velg gjenstander du vil oppbevare i",
   InventorySelectItemToRetrieve: /* csgo_norwegian.txt */"Velg gjenstander du vil hente fra",
+  ItemGraffitiChargesRemaining: /* csgo_norwegian.txt */"Ladninger igjen: {1}",
   ItemRarityAncient: /* csgo_norwegian.txt */"Ekstraordinær",
   ItemRarityCommon: /* csgo_norwegian.txt */"Vanlig",
   ItemRarityDefault: /* csgo_norwegian.txt */"Standard",

@@ -229,6 +229,7 @@ export const latam = {
   InventorySelectInspectContents: /* csgo_latam.txt */"Revisando el contenido de",
   InventorySelectItemToDeposit: /* csgo_latam.txt */"Selecciona los artículos que deseas recuperar de",
   InventorySelectItemToRetrieve: /* csgo_latam.txt */"Selecciona los artículos que deseas recuperar de",
+  ItemGraffitiChargesRemaining: /* csgo_latam.txt */"Cargas restantes: {1}",
   ItemRarityAncient: /* csgo_latam.txt */"de aspecto extraordinario",
   ItemRarityCommon: /* csgo_latam.txt */"de grado básico",
   ItemRarityDefault: /* csgo_latam.txt */"estándar",

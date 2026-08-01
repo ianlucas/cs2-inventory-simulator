@@ -228,6 +228,7 @@ export const czech = {
   InventorySelectInspectContents: /* csgo_czech.txt */"Prohlížíš si obsah",
   InventorySelectItemToDeposit: /* csgo_czech.txt */"Vyber předměty, které chceš přesunout do",
   InventorySelectItemToRetrieve: /* csgo_czech.txt */"Vyber předměty, které chceš vyzvednout z",
+  ItemGraffitiChargesRemaining: /* csgo_czech.txt */"Zbývající použití: {1}",
   ItemRarityAncient: /* csgo_czech.txt */"Mimořádná",
   ItemRarityCommon: /* csgo_czech.txt */"Základní třída",
   ItemRarityDefault: /* csgo_czech.txt */"Základní",

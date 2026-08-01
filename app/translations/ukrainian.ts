@@ -229,6 +229,7 @@ export const ukrainian = {
   InventorySelectInspectContents: /* csgo_ukrainian.txt */"Огляд вмісту:",
   InventorySelectItemToDeposit: /* csgo_ukrainian.txt */"Оберіть предмети для переносу до",
   InventorySelectItemToRetrieve: /* csgo_ukrainian.txt */"Дістати предмети:",
+  ItemGraffitiChargesRemaining: /* csgo_ukrainian.txt */"Зарядів залишилося: {1}",
   ItemRarityAncient: /* csgo_ukrainian.txt */"надзвичайний предмет",
   ItemRarityCommon: /* csgo_ukrainian.txt */"звичайний предмет",
   ItemRarityDefault: /* csgo_ukrainian.txt */"стандартний предмет",

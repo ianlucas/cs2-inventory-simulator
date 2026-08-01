@@ -229,6 +229,7 @@ export const tchinese = {
   InventorySelectInspectContents: /* csgo_tchinese.txt */"檢視內容",
   InventorySelectItemToDeposit: /* csgo_tchinese.txt */"選擇物品以移入",
   InventorySelectItemToRetrieve: /* csgo_tchinese.txt */"選擇一項物品取回",
+  ItemGraffitiChargesRemaining: /* csgo_tchinese.txt */"剩餘使用次數：{1}",
   ItemRarityAncient: /* csgo_tchinese.txt */"超絕",
   ItemRarityCommon: /* csgo_tchinese.txt */"初級",
   ItemRarityDefault: /* csgo_tchinese.txt */"預設",

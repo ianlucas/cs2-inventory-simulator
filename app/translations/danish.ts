@@ -228,6 +228,7 @@ export const danish = {
   InventorySelectInspectContents: /* csgo_danish.txt */"Inspicerer indholdet af",
   InventorySelectItemToDeposit: /* csgo_danish.txt */"Vælg genstande at flytte til",
   InventorySelectItemToRetrieve: /* csgo_danish.txt */"Vælg genstande at hente fra",
+  ItemGraffitiChargesRemaining: /* csgo_danish.txt */"Ladninger tilbage: {1}",
   ItemRarityAncient: /* csgo_danish.txt */"Ekstraordinær",
   ItemRarityCommon: /* csgo_danish.txt */"Basiskvalitet",
   ItemRarityDefault: /* csgo_danish.txt */"Standard",

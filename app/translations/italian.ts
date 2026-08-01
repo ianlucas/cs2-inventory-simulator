@@ -228,6 +228,7 @@ export const italian = {
   InventorySelectInspectContents: /* csgo_italian.txt */"Ispezione dei contenuti di",
   InventorySelectItemToDeposit: /* csgo_italian.txt */"Seleziona gli oggetti da spostare",
   InventorySelectItemToRetrieve: /* csgo_italian.txt */"Seleziona gli oggetti da recuperare dal",
+  ItemGraffitiChargesRemaining: /* csgo_italian.txt */"Utilizzi rimasti: {1}",
   ItemRarityAncient: /* csgo_italian.txt */"Straordinario",
   ItemRarityCommon: /* csgo_italian.txt */"Qualità base",
   ItemRarityDefault: /* csgo_italian.txt */"Predefinito",

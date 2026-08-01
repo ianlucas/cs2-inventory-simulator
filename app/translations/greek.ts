@@ -229,6 +229,7 @@ export const greek = {
   InventorySelectInspectContents: /* csgo_greek.txt */"Επιθεωρείτε τα περιεχόμενα από",
   InventorySelectItemToDeposit: /* csgo_greek.txt */"Επιλέξτε αντικείμενα για να μετακινήσετε σε",
   InventorySelectItemToRetrieve: /* csgo_greek.txt */"Επιλέξτε αντικείμενα για να λάβετε",
+  ItemGraffitiChargesRemaining: /* csgo_greek.txt */"Υπόλοιπες φορτίσεις: {1}",
   ItemRarityAncient: /* csgo_greek.txt */"Extraordinary",
   ItemRarityCommon: /* csgo_greek.txt */"Base Grade",
   ItemRarityDefault: /* csgo_greek.txt */"Προεπιλογή",

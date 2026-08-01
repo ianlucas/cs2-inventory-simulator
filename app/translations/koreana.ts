@@ -229,6 +229,7 @@ export const koreana = {
   InventorySelectInspectContents: /* csgo_koreana.txt */"관찰 중인 저장 컨테이너:",
   InventorySelectItemToDeposit: /* csgo_koreana.txt */"다음 저장 컨테이너로 이동할 아이템 선택:",
   InventorySelectItemToRetrieve: /* csgo_koreana.txt */"다음 저장 컨테이너에서 가져올 아이템 선택:",
+  ItemGraffitiChargesRemaining: /* csgo_koreana.txt */"남은 사용 횟수: {1}번",
   ItemRarityAncient: /* csgo_koreana.txt */"희귀",
   ItemRarityCommon: /* csgo_koreana.txt */"일반",
   ItemRarityDefault: /* csgo_koreana.txt */"기본",

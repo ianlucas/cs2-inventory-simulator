@@ -229,6 +229,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   InventorySelectInspectContents: "inv_select_casketcontents",
   InventorySelectItemToDeposit: "inv_select_casketstore",
   InventorySelectItemToRetrieve: "inv_select_casketretrieve",
+  ItemGraffitiChargesRemaining: { token: "Attrib_SpraysRemaining", transform: (value) => replace(value, '%s1', '{1}') },
   ItemRarityAncient: "Rarity_Ancient",
   ItemRarityCommon: "Rarity_Common",
   ItemRarityDefault: "Rarity_Default",

@@ -165,10 +165,11 @@ function InspectItemShareButton({ item }: { item: CS2InventoryItem }) {
 
 function InspectItemDescription({ item }: { item: CS2InventoryItem }) {
   const translate = useTranslate();
-  const isSealedGraffiti =
-    item.isGraffiti() && item.hasCharges() && item.isSealed();
+  const isGraffitiWithCharges = item.isGraffiti() && item.hasCharges();
+  const isSealedGraffiti = isGraffitiWithCharges && item.isSealed();
+  const isUnsealedGraffiti = isGraffitiWithCharges && !item.isSealed();
   if (
-    !isSealedGraffiti &&
+    !isGraffitiWithCharges &&
     (item.parent ?? item).description === undefined &&
     item.description === undefined
   ) {
@@ -180,6 +181,16 @@ function InspectItemDescription({ item }: { item: CS2InventoryItem }) {
         <p className="mt-4 whitespace-pre-wrap text-neutral-300">
           {translate("ItemSealedGraffitiDesc")}
         </p>
+      ) : isUnsealedGraffiti ? (
+        <>
+          <ItemDescription item={item} />
+          <p className="mt-4 text-cyan-200/80">
+            {translate(
+              "ItemGraffitiChargesRemaining",
+              String(item.getCharges())
+            )}
+          </p>
+        </>
       ) : (
         <ItemDescription item={item} />
       )}
