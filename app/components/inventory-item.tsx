@@ -24,7 +24,7 @@ import {
 import { TransformedInventoryItem } from "~/utils/inventory-transform";
 import { format } from "~/utils/number";
 import { useInventory, useRules, useTranslate, useUser } from "./app-context";
-import { isStickerSlabTool } from "~/utils/sticker-slab";
+import { isSealedStickerSlab, isStickerSlabTool } from "~/utils/sticker-slab";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemTile } from "./inventory-item-tile";
 import { InventoryItemTooltip } from "./inventory-item-tooltip";
@@ -44,6 +44,7 @@ export function InventoryItem({
   onDetachCharmWithTool,
   onEdit,
   onEquip,
+  onExtractSticker,
   onInspectItem,
   onInspectStorageUnit,
   onRemove,
@@ -74,6 +75,7 @@ export function InventoryItem({
   onDetachCharmWithTool?: (uid: number) => void;
   onEdit?: (uid: number) => void;
   onEquip?: (uid: number, team?: CS2Team) => void;
+  onExtractSticker?: (uid: number) => void;
   onInspectItem?: (uid: number) => void;
   onInspectStorageUnit?: (uid: number) => void;
   onRemove?: (uid: number) => void;
@@ -201,6 +203,7 @@ export function InventoryItem({
   const isCharmDetachments = item.isCharmDetachment();
   const isStickerSlab = isStickerSlabTool(item);
   const canSealSticker = ownStickerSlabs && item.isSticker();
+  const canExtractSticker = isSealedStickerSlab(item);
 
   function close(callBeforeClosing: () => void) {
     return function close() {
@@ -411,6 +414,13 @@ export function InventoryItem({
                                 condition: canRemovePatch,
                                 label: translate("InventoryItemRemovePatch"),
                                 onClick: close(() => onRemovePatch?.(uid))
+                              }
+                            ],
+                            [
+                              {
+                                condition: canExtractSticker,
+                                label: translate("InventoryItemExtractSticker"),
+                                onClick: close(() => onExtractSticker?.(uid))
                               }
                             ],
                             [

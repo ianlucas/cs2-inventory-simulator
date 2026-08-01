@@ -17,6 +17,7 @@ export const SyncAction = {
   DepositToStorageUnit: "deposit-to-storage-unit",
   Edit: "edit",
   Equip: "equip",
+  ExtractItemSticker: "extract-item-sticker",
   Remove: "remove",
   RemoveAllItems: "remove-all-items",
   RemoveItemKeychain: "remove-item-keychain",

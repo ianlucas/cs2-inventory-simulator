@@ -45,6 +45,16 @@ export function isStickerSlabTool(item: CS2EconomyItem) {
   return item.id === slabToolId;
 }
 
+export function isSealedStickerSlab(item: CS2EconomyItem) {
+  return item.displayedStickerId !== undefined;
+}
+
+export function extractItemSticker(inventory: CS2Inventory, slabUid: number) {
+  const slab = inventory.get(slabUid);
+  const stickerId = ensure(slab.displayedStickerId);
+  return inventory.remove(slabUid).add({ id: stickerId });
+}
+
 export function sealItemSticker(
   inventory: CS2Inventory,
   toolUid: number,

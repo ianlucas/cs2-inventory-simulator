@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import clsx from "clsx";
 import { InfoIcon } from "./info-icon";
 import { KeychainControlHints } from "./keychain-control-hints";
 import { StickerControlHints } from "./sticker-control-hints";
@@ -35,7 +36,12 @@ export function UseItemHeader({
           </div>
         )}
         {warning !== undefined && (
-          <div className="mx-auto mt-2 flex max-w-160 items-center justify-center gap-2 text-sm">
+          <div
+            className={clsx(
+              "mx-auto flex max-w-160 items-center justify-center gap-2 text-sm",
+              actionDesc !== undefined ? "mt-2" : "mt-8"
+            )}
+          >
             <InfoIcon className="h-6" />
             <span className="text-left whitespace-pre-line">{warning}</span>
             {warningItem !== undefined && <strong>{warningItem}</strong>}

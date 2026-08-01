@@ -30,6 +30,8 @@ import { ApplyItemPatch } from "./apply-item-patch";
 import { ApplyItemSticker } from "./apply-item-sticker";
 import { attachmentName } from "./attachment-3d-drawer";
 import { DetachCharm } from "./detach-charm";
+import { ExtractItemSticker } from "./extract-item-sticker";
+import { useExtractItemSticker } from "./hooks/use-extract-item-sticker";
 import { useApplyItemKeychain } from "./hooks/use-apply-item-keychain";
 import { useApplyItemPatch } from "./hooks/use-apply-item-patch";
 import { useDetachCharm } from "./hooks/use-detach-charm";
@@ -140,6 +142,13 @@ export function Inventory() {
   } = useApplyItemSticker();
 
   const {
+    closeExtractItemSticker,
+    extractItemSticker,
+    handleExtractItemSticker,
+    isExtractingItemSticker
+  } = useExtractItemSticker();
+
+  const {
     closeSealItemSticker,
     handleSealItemSticker,
     handleSealItemStickerSelect,
@@ -244,6 +253,7 @@ export function Inventory() {
     closeApplyItemPatch();
     closeDetachCharm();
     closeApplyItemSticker();
+    closeExtractItemSticker();
     closeInspectItem();
     closeRemoveItemPatch();
     closeRenameItem();
@@ -330,6 +340,7 @@ export function Inventory() {
                     onDetachCharmWithTool: handleDetachCharmWithTool,
                     onEdit: handleEdit,
                     onEquip: handleEquip,
+                    onExtractSticker: handleExtractItemSticker,
                     onInspectItem: handleInspectItem,
                     onInspectStorageUnit: handleInspectStorageUnit,
                     onRemove: handleRemove,
@@ -396,6 +407,14 @@ export function Inventory() {
           <ApplyItemSticker
             {...applyItemSticker}
             onClose={closeApplyItemSticker}
+          />
+        ) : null}
+      </Presence>
+      <Presence present={isExtractingItemSticker(extractItemSticker)}>
+        {isExtractingItemSticker(extractItemSticker) ? (
+          <ExtractItemSticker
+            {...extractItemSticker}
+            onClose={closeExtractItemSticker}
           />
         ) : null}
       </Presence>
