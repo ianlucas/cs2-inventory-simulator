@@ -25,9 +25,6 @@ export function IconInput({
 }) {
   const ref = useRef<HTMLInputElement>(null);
 
-  // Focus manually instead of via the autoFocus attribute so the browser
-  // doesn't scroll an absolutely-positioned modal's input into view (which
-  // would yank the page back to the top).
   useEffect(() => {
     if (autoFocus) {
       ref.current?.focus({ preventScroll: true });

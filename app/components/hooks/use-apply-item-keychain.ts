@@ -27,8 +27,6 @@ export function useApplyItemKeychain() {
     const selectedItem = inventory.get(uid);
     return setItemSelector({
       uid,
-      // Attaching is 3D-only, so a candidate the viewer cannot render would
-      // dead-end the flow.
       items: items.filter(
         ({ item }) =>
           (selectedItem.isKeychain()

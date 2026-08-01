@@ -78,8 +78,6 @@ function isViewerRenderableKind(item: ViewerItemInput): boolean {
       economyItem.isMelee() ||
       economyItem.isSticker() ||
       economyItem.isKeychain() ||
-      // The Sticker Slab tool carries the display-case model that all sealed
-      // slab keychains inherit, so the viewer can render it empty.
       economyItem.isStickerSlab())
   );
 }

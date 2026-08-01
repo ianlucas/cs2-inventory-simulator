@@ -104,7 +104,6 @@ export function useViewerAvailability(
   const canUse3d =
     globalAvailable &&
     (item === undefined || isViewerItemSupported(viewerCatalog, item));
-  // Generic per-id catalog check — gates sticker and keychain (charm) ids alike.
   const isIdSupported = useCallback(
     (id: number) => isViewerIdSupported(viewerCatalog, id),
     [viewerCatalog]
