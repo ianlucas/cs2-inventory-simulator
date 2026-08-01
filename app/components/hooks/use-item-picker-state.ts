@@ -64,6 +64,9 @@ export function useItemPickerState({
 
   function filterItem(item: CS2EconomyItem) {
     const { alternateName, name } = item;
+    if (item.isCharmDetachment()) {
+      return false;
+    }
     if (item.isDefault && item.isKeychain()) {
       return false;
     }
