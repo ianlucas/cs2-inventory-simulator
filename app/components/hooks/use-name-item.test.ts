@@ -15,7 +15,8 @@ CS2Economy.load({
   language: english
 });
 
-const translate = () => "statTrak™";
+const translate = (token: string) =>
+  token === "ItemSealedGraffiti" ? "Sealed Graffiti" : "statTrak™";
 const nameItem = nameItemFactory(translate);
 const nameItemString = (...args: Parameters<typeof nameItem>) =>
   nameItem(...args)
@@ -86,7 +87,7 @@ describe("test useNameItem hook", () => {
       "Music Kit",
       "Austin Wintory, Desert Fire"
     ]);
-    expect(nameItem(GRAFFITI_EZ_ITEM)).toEqual(["Graffiti", "EZ"]);
+    expect(nameItem(GRAFFITI_EZ_ITEM)).toEqual(["Sealed Graffiti", "EZ"]);
     expect(nameItem(COLLECTIBLE_ALYX_PIN_ITEM)).toEqual(["Alyx Pin", ""]);
     expect(nameItem(CONTAINER_KILOWATT_CASE_ITEM)).toEqual([
       "Kilowatt Case",
@@ -195,7 +196,7 @@ describe("test useNameItem hook", () => {
       "Austin Wintory, Desert Fire"
     ]);
     expect(nameItem(GRAFFITI_EZ_ITEM, "editor-name")).toEqual([
-      "Graffiti",
+      "Sealed Graffiti",
       "EZ"
     ]);
     expect(nameItem(COLLECTIBLE_ALYX_PIN_ITEM, "editor-name")).toEqual([
@@ -286,7 +287,7 @@ describe("test useNameItem hook", () => {
       "Austin Wintory, Desert Fire"
     ]);
     expect(nameItem(GRAFFITI_EZ_ITEM, "inventory-name")).toEqual([
-      "Graffiti",
+      "Sealed Graffiti",
       "EZ"
     ]);
     expect(nameItem(COLLECTIBLE_ALYX_PIN_ITEM, "inventory-name")).toEqual([

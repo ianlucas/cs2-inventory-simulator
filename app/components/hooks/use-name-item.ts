@@ -48,7 +48,7 @@ export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
     if (
       item.isGraffiti() &&
       item.hasCharges() &&
-      inventoryItem?.isSealed() === true
+      (inventoryItem === undefined || inventoryItem.isSealed())
     ) {
       model = translate("ItemSealedGraffiti");
     }
