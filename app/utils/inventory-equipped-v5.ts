@@ -16,6 +16,7 @@ import {
 import hashObject from "hash-object";
 
 interface EconItem {
+  charges?: number;
   def?: number;
   hash?: string;
   musicId?: number;
@@ -173,8 +174,10 @@ export async function generate(
         case CS2ItemType.Graffiti:
           assert(data.variantIndex);
           graffiti = {
+            charges: item.getCharges(),
             def: data.variantIndex,
-            tint: data.tintIndex ?? 0
+            tint: data.tintIndex ?? 0,
+            uid: item.uid
           };
           break;
       }
