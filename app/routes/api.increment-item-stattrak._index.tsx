@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { assert } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { middleware } from "~/middleware.server";
@@ -52,6 +53,12 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       rawInventory,
       userId,
       manipulate(inventory) {
+        const item = inventory.get(targetUid);
+        assert(
+          item.equipped === true ||
+            item.equippedCT === true ||
+            item.equippedT === true
+        );
         inventory.incrementItemStatTrak(targetUid);
       }
     });

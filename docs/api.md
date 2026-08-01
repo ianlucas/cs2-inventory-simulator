@@ -193,7 +193,7 @@ type PostIncrementItemStatTrakRequest = {
 ### Response
 
 - Returns `401` when using an invalid API key.
-- Returns `400` when the user does not exist or target uid is invalid.
+- Returns `400` when the user does not exist, target uid is invalid, or the item is not equipped.
 - Returns `204` when the increment was successful.
 
 ## Consume item Spray
@@ -220,7 +220,7 @@ type PostConsumeItemSprayRequest = {
 ### Response
 
 - Returns `401` when using an invalid API key.
-- Returns `400` when the user does not exist or target uid is not an unsealed graffiti with charges.
+- Returns `400` when the user does not exist or target uid is not an equipped, unsealed graffiti with charges.
 - Returns `204` when the charge was consumed.
 
 ## Add Item

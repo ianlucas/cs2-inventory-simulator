@@ -53,7 +53,9 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       rawInventory,
       userId,
       manipulate(inventory) {
-        assert(inventory.get(targetUid).isGraffiti());
+        const item = inventory.get(targetUid);
+        assert(item.isGraffiti());
+        assert(item.equipped === true);
         inventory.consumeItemCharges(targetUid);
       }
     });
