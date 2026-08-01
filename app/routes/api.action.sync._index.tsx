@@ -217,6 +217,10 @@ const actionShape = z.discriminatedUnion("type", [
     uid: nonNegativeInt
   }),
   z.object({
+    type: z.literal(SyncAction.UnsealItem),
+    uid: nonNegativeInt
+  }),
+  z.object({
     type: z.literal(SyncAction.RemoveItemKeychain),
     targetUid: nonNegativeInt,
     slot: nonNegativeInt
@@ -645,6 +649,9 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.UnpackItem:
             inventory.unpackItem(action.uid);
+            break;
+          case SyncAction.UnsealItem:
+            inventory.unsealItem(action.uid);
             break;
           case SyncAction.RemoveItemKeychain:
             inventory.removeItemKeychain(action.targetUid, action.slot);

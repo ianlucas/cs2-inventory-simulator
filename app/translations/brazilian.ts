@@ -219,6 +219,7 @@ export const brazilian = {
   InventoryItemUnequipCT: "Desequipar CT",
   InventoryItemUnequipT: "Desequipar T",
   InventoryItemUnlockContainer: /* csgo_brazilian.txt */"Destrancar recipiente",
+  InventoryItemUnsealGraffiti: /* csgo_brazilian.txt */"Abrir e equipar",
   InventoryItemUseItem: /* csgo_brazilian.txt */"Usar item",
   InventoryItemUseStorageUnit: /* csgo_brazilian.txt */"Começar a usar unidade",
   InventoryItemWear: "Desgaste:",
@@ -227,6 +228,7 @@ export const brazilian = {
   InventorySelectInspectContents: /* csgo_brazilian.txt */"Inspecionando o conteúdo de",
   InventorySelectItemToDeposit: /* csgo_brazilian.txt */"Selecione quais itens guardar",
   InventorySelectItemToRetrieve: /* csgo_brazilian.txt */"Selecione quais itens retirar",
+  ItemGraffitiChargesRemaining: /* csgo_brazilian.txt */"Cargas restantes: {1}",
   ItemRarityAncient: /* csgo_brazilian.txt */"Extraordinário",
   ItemRarityCommon: /* csgo_brazilian.txt */"Nível Básico",
   ItemRarityDefault: /* csgo_brazilian.txt */"Padrão",
@@ -257,6 +259,8 @@ export const brazilian = {
   ItemRarityNameTool: /* csgo_brazilian.txt */"Ferramenta",
   ItemRarityRare: /* csgo_brazilian.txt */"Alta Qualidade",
   ItemRarityUncommon: /* csgo_brazilian.txt */"Nível Moderado",
+  ItemSealedGraffiti: /* csgo_brazilian.txt */"Grafite Lacrado",
+  ItemSealedGraffitiDesc: /* csgo_brazilian.txt */"Este é um padrão de grafite ainda lacrado. Ao abri-lo, você receberá cargas para grafitar este padrão 50 vezes no mundo do jogo.",
   ItemSwapStatTrakAccept: /* csgo_brazilian.txt */"ACEITAR",
   ItemSwapStatTrakClose: /* csgo_brazilian.txt */"Fechar",
   ItemSwapStatTrakDesc: /* csgo_brazilian.txt */"Este item troca as contagens StatTrak™ de dois itens do mesmo tipo.",
@@ -345,5 +349,10 @@ export const brazilian = {
   UnpackClose: /* csgo_brazilian.txt */"Fechar",
   UnpackDesc: /* csgo_brazilian.txt */"Tem certeza de que deseja abrir este item?",
   UnpackNumberOfItems: /* csgo_brazilian.txt */"Número de itens: {1}",
-  UnpackTitle: /* csgo_brazilian.txt */"Abrir {1}"
+  UnpackTitle: /* csgo_brazilian.txt */"Abrir {1}",
+  UnsealGraffitiClose: /* csgo_brazilian.txt */"Fechar",
+  UnsealGraffitiDesc: /* csgo_brazilian.txt */"Abrir",
+  UnsealGraffitiTitle: /* csgo_brazilian.txt */"Abrir grafite",
+  UnsealGraffitiUse: /* csgo_brazilian.txt */"Abrir grafite",
+  UnsealGraffitiWarn: /* csgo_brazilian.txt */"Este grafite só pode ser aberto uma vez"
 };

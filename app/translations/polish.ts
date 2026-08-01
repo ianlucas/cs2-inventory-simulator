@@ -219,6 +219,7 @@ export const polish = {
   InventoryItemUnequipCT: "Przestań używać w CT",
   InventoryItemUnequipT: "Przestań używać w T",
   InventoryItemUnlockContainer: /* csgo_polish.txt */"Otwórz pojemnik",
+  InventoryItemUnsealGraffiti: /* csgo_polish.txt */"Otwórz i użyj",
   InventoryItemUseItem: /* csgo_polish.txt */"Użyj przedmiotu",
   InventoryItemUseStorageUnit: /* csgo_polish.txt */"Zacznij korzystać z tego magazynu",
   InventoryItemWear: "Zużycie:",
@@ -227,6 +228,7 @@ export const polish = {
   InventorySelectInspectContents: /* csgo_polish.txt */"Sprawdzanie zawartości:",
   InventorySelectItemToDeposit: /* csgo_polish.txt */"Wybierz przedmioty do zdeponowania",
   InventorySelectItemToRetrieve: /* csgo_polish.txt */"Wybierz przedmioty do odzyskania",
+  ItemGraffitiChargesRemaining: /* csgo_polish.txt */"Możliwe użycia: {1}",
   ItemRarityAncient: /* csgo_polish.txt */"wyjątkowej jakości",
   ItemRarityCommon: /* csgo_polish.txt */"standardowej jakości",
   ItemRarityDefault: /* csgo_polish.txt */"(standardowe wyposażenie)",
@@ -256,6 +258,8 @@ export const polish = {
   ItemRarityNameTool: /* csgo_polish.txt */"Narzędzie",
   ItemRarityRare: /* csgo_polish.txt */"wysokiej jakości",
   ItemRarityUncommon: /* csgo_polish.txt */"Średniej jakości",
+  ItemSealedGraffiti: /* csgo_polish.txt */"Zalakowane graffiti",
+  ItemSealedGraffitiDesc: /* csgo_polish.txt */"Zalakowany wzór graffiti. Po odlakowaniu będzie można go użyć 50 razy w świecie gry.",
   ItemSwapStatTrakAccept: /* csgo_polish.txt */"AKCEPTUJ",
   ItemSwapStatTrakClose: /* csgo_polish.txt */"Zamknij",
   ItemSwapStatTrakDesc: /* csgo_polish.txt */"Ten przedmiot zamienia wartości liczników StatTrak™ między przedmiotami tego samego rodzaju.",
@@ -344,5 +348,10 @@ export const polish = {
   UnpackClose: /* csgo_polish.txt */"Zamknij",
   UnpackDesc: /* csgo_polish.txt */"Czy na pewno chcesz odpakować ten przedmiot?",
   UnpackNumberOfItems: /* csgo_polish.txt */"Liczba przedmiotów: {1}",
-  UnpackTitle: /* csgo_polish.txt */"Odpakuj: {1}"
+  UnpackTitle: /* csgo_polish.txt */"Odpakuj: {1}",
+  UnsealGraffitiClose: /* csgo_polish.txt */"Zamknij",
+  UnsealGraffitiDesc: /* csgo_polish.txt */"Otwórz:",
+  UnsealGraffitiTitle: /* csgo_polish.txt */"Otwórz graffiti",
+  UnsealGraffitiUse: /* csgo_polish.txt */"Odlakuj graffiti",
+  UnsealGraffitiWarn: /* csgo_polish.txt */"To graffiti może zostać odlakowane tylko raz"
 };

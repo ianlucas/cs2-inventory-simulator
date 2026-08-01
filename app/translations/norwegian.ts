@@ -218,6 +218,7 @@ export const norwegian = {
   InventoryItemUnequipCT: "Fjern utstyr CT",
   InventoryItemUnequipT: "Fjern utstyr T",
   InventoryItemUnlockContainer: /* csgo_norwegian.txt */"Lås opp beholder",
+  InventoryItemUnsealGraffiti: /* csgo_norwegian.txt */"Åpne og utstyr",
   InventoryItemUseItem: /* csgo_norwegian.txt */"Bruk gjenstand",
   InventoryItemUseStorageUnit: /* csgo_norwegian.txt */"Begynn å bruke denne enheten",
   InventoryItemWear: "Slitasje:",
@@ -226,6 +227,7 @@ export const norwegian = {
   InventorySelectInspectContents: /* csgo_norwegian.txt */"Inspiserer innholdet i",
   InventorySelectItemToDeposit: /* csgo_norwegian.txt */"Velg gjenstander du vil oppbevare i",
   InventorySelectItemToRetrieve: /* csgo_norwegian.txt */"Velg gjenstander du vil hente fra",
+  ItemGraffitiChargesRemaining: /* csgo_norwegian.txt */"Ladninger igjen: {1}",
   ItemRarityAncient: /* csgo_norwegian.txt */"Ekstraordinær",
   ItemRarityCommon: /* csgo_norwegian.txt */"Vanlig",
   ItemRarityDefault: /* csgo_norwegian.txt */"Standard",
@@ -255,6 +257,8 @@ export const norwegian = {
   ItemRarityNameTool: /* csgo_norwegian.txt */"Verktøy",
   ItemRarityRare: /* csgo_norwegian.txt */"Høy klasse",
   ItemRarityUncommon: /* csgo_norwegian.txt */"Mellomklasse",
+  ItemSealedGraffiti: /* csgo_norwegian.txt */"Forseglet graffiti",
+  ItemSealedGraffitiDesc: /* csgo_norwegian.txt */"Dette er en forseglet beholder med et graffitimønster. Når forseglingen brytes, har den nok innhold til å påføre graffitimønsteret 50 ganger i spillverdenen.",
   ItemSwapStatTrakAccept: /* csgo_norwegian.txt */"GODTA",
   ItemSwapStatTrakClose: /* csgo_norwegian.txt */"Lukk",
   ItemSwapStatTrakDesc: /* csgo_norwegian.txt */"Denne gjenstanden bytter StatTrak™-verdier mellom to gjenstander av samme type.",
@@ -343,5 +347,10 @@ export const norwegian = {
   UnpackClose: /* csgo_norwegian.txt */"Lukk",
   UnpackDesc: /* csgo_norwegian.txt */"Er du sikker på at du vil pakke opp denne gjenstanden?",
   UnpackNumberOfItems: /* csgo_norwegian.txt */"Antall gjenstander: {1}",
-  UnpackTitle: /* csgo_norwegian.txt */"Pakk opp {1}"
+  UnpackTitle: /* csgo_norwegian.txt */"Pakk opp {1}",
+  UnsealGraffitiClose: /* csgo_norwegian.txt */"Lukk",
+  UnsealGraffitiDesc: /* csgo_norwegian.txt */"Åpne",
+  UnsealGraffitiTitle: /* csgo_norwegian.txt */"Åpne graffiti",
+  UnsealGraffitiUse: /* csgo_norwegian.txt */"Åpne graffiti",
+  UnsealGraffitiWarn: /* csgo_norwegian.txt */"Denne graffitien kan kun åpnes én gang"
 };

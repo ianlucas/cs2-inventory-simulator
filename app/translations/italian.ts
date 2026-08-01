@@ -219,6 +219,7 @@ export const italian = {
   InventoryItemUnequipCT: "Rimuovi CT",
   InventoryItemUnequipT: "Rimuovi T",
   InventoryItemUnlockContainer: /* csgo_italian.txt */"Sblocca la cassa",
+  InventoryItemUnsealGraffiti: /* csgo_italian.txt */"Apri ed equipaggia",
   InventoryItemUseItem: /* csgo_italian.txt */"Usa oggetto",
   InventoryItemUseStorageUnit: /* csgo_italian.txt */"Inizia ad usare questa unità",
   InventoryItemWear: "Condizioni:",
@@ -227,6 +228,7 @@ export const italian = {
   InventorySelectInspectContents: /* csgo_italian.txt */"Ispezione dei contenuti di",
   InventorySelectItemToDeposit: /* csgo_italian.txt */"Seleziona gli oggetti da spostare",
   InventorySelectItemToRetrieve: /* csgo_italian.txt */"Seleziona gli oggetti da recuperare dal",
+  ItemGraffitiChargesRemaining: /* csgo_italian.txt */"Utilizzi rimasti: {1}",
   ItemRarityAncient: /* csgo_italian.txt */"Straordinario",
   ItemRarityCommon: /* csgo_italian.txt */"Qualità base",
   ItemRarityDefault: /* csgo_italian.txt */"Predefinito",
@@ -256,6 +258,8 @@ export const italian = {
   ItemRarityNameTool: /* csgo_italian.txt */"Strumento",
   ItemRarityRare: /* csgo_italian.txt */"Qualità elevata",
   ItemRarityUncommon: /* csgo_italian.txt */"Qualità media",
+  ItemSealedGraffiti: /* csgo_italian.txt */"Graffito sigillato",
+  ItemSealedGraffitiDesc: /* csgo_italian.txt */"Un contenitore sigillato con un motivo per graffiti. Una volta sbloccato questo motivo, otterrai abbastanza utilizzi da applicare il graffito per 50 volte nell'ambiente di gioco.",
   ItemSwapStatTrakAccept: /* csgo_italian.txt */"ACCETTA",
   ItemSwapStatTrakClose: /* csgo_italian.txt */"Chiudi",
   ItemSwapStatTrakDesc: /* csgo_italian.txt */"Questo oggetto scambia i valori dei contatori StatTrak™ di due oggetti dello stesso tipo.",
@@ -344,5 +348,10 @@ export const italian = {
   UnpackClose: /* csgo_italian.txt */"Chiudi",
   UnpackDesc: /* csgo_italian.txt */"Vuoi davvero aprire questo oggetto?",
   UnpackNumberOfItems: /* csgo_italian.txt */"Numero di oggetti: {1}",
-  UnpackTitle: /* csgo_italian.txt */"Apri {1}"
+  UnpackTitle: /* csgo_italian.txt */"Apri {1}",
+  UnsealGraffitiClose: /* csgo_italian.txt */"Chiudi",
+  UnsealGraffitiDesc: /* csgo_italian.txt */"Apri",
+  UnsealGraffitiTitle: /* csgo_italian.txt */"Apri graffito",
+  UnsealGraffitiUse: /* csgo_italian.txt */"Apri graffito",
+  UnsealGraffitiWarn: /* csgo_italian.txt */"Questo graffito può essere aperto solo una volta"
 };

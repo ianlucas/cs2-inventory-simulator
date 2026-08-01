@@ -219,6 +219,7 @@ export const dutch = {
   InventoryItemUnequipCT: "Uitdoen CT",
   InventoryItemUnequipT: "Uitdoen T",
   InventoryItemUnlockContainer: /* csgo_dutch.txt */"Kist openen",
+  InventoryItemUnsealGraffiti: /* csgo_dutch.txt */"Openen en uitrusten",
   InventoryItemUseItem: /* csgo_dutch.txt */"Voorwerp gebruiken",
   InventoryItemUseStorageUnit: /* csgo_dutch.txt */"Deze eenheid gebruiken",
   InventoryItemWear: "Slijtage:",
@@ -227,6 +228,7 @@ export const dutch = {
   InventorySelectInspectContents: /* csgo_dutch.txt */"Inhoud controleren van",
   InventorySelectItemToDeposit: /* csgo_dutch.txt */"Kies de voorwerpen die je wilt verplaatsen in",
   InventorySelectItemToRetrieve: /* csgo_dutch.txt */"Kies de voorwerpen die je wilt ophalen van",
+  ItemGraffitiChargesRemaining: /* csgo_dutch.txt */"Resterende ladingen: {1}",
   ItemRarityAncient: /* csgo_dutch.txt */"Bijzonder",
   ItemRarityCommon: /* csgo_dutch.txt */"Standaard",
   ItemRarityDefault: /* csgo_dutch.txt */"Standaard",
@@ -256,6 +258,8 @@ export const dutch = {
   ItemRarityNameTool: /* csgo_dutch.txt */"Gereedschap",
   ItemRarityRare: /* csgo_dutch.txt */"Hoogwaardig",
   ItemRarityUncommon: /* csgo_dutch.txt */"Gemiddeld",
+  ItemSealedGraffiti: /* csgo_dutch.txt */"Verzegelde graffiti",
+  ItemSealedGraffitiDesc: /* csgo_dutch.txt */"Dit is een verzegelde doos met een graffitipatroon. Zodra het graffitipatroon wordt ontzegeld, geeft het je genoeg ladingen om het graffitipatroon 50 keer op de wereld in het spel toe te passen.",
   ItemSwapStatTrakAccept: /* csgo_dutch.txt */"ACCEPTEREN",
   ItemSwapStatTrakClose: /* csgo_dutch.txt */"Sluiten",
   ItemSwapStatTrakDesc: /* csgo_dutch.txt */"Hiermee verwissel je de StatTrak™-waarden van twee voorwerpen van hetzelfde type.",
@@ -344,5 +348,10 @@ export const dutch = {
   UnpackClose: /* csgo_dutch.txt */"Sluiten",
   UnpackDesc: /* csgo_dutch.txt */"Weet je zeker dat je dit voorwerp wilt uitpakken?",
   UnpackNumberOfItems: /* csgo_dutch.txt */"Aantal voorwerpen: {1}",
-  UnpackTitle: /* csgo_dutch.txt */"{1} uitpakken"
+  UnpackTitle: /* csgo_dutch.txt */"{1} uitpakken",
+  UnsealGraffitiClose: /* csgo_dutch.txt */"Sluiten",
+  UnsealGraffitiDesc: /* csgo_dutch.txt */"openen",
+  UnsealGraffitiTitle: /* csgo_dutch.txt */"Graffiti openen",
+  UnsealGraffitiUse: /* csgo_dutch.txt */"Graffiti ontzegelen",
+  UnsealGraffitiWarn: /* csgo_dutch.txt */"Deze graffiti kan maar één keer uitgepakt worden"
 };

@@ -220,6 +220,7 @@ export const ukrainian = {
   InventoryItemUnequipCT: "Зняти екіпіровку CT",
   InventoryItemUnequipT: "Зняти екіпіровку T",
   InventoryItemUnlockContainer: /* csgo_ukrainian.txt */"Розкрити",
+  InventoryItemUnsealGraffiti: /* csgo_ukrainian.txt */"Відкрити і спорядити",
   InventoryItemUseItem: /* csgo_ukrainian.txt */"Використати предмет",
   InventoryItemUseStorageUnit: /* csgo_ukrainian.txt */"Почати використовувати це сховище",
   InventoryItemWear: "Зношеність:",
@@ -228,6 +229,7 @@ export const ukrainian = {
   InventorySelectInspectContents: /* csgo_ukrainian.txt */"Огляд вмісту:",
   InventorySelectItemToDeposit: /* csgo_ukrainian.txt */"Оберіть предмети для переносу до",
   InventorySelectItemToRetrieve: /* csgo_ukrainian.txt */"Дістати предмети:",
+  ItemGraffitiChargesRemaining: /* csgo_ukrainian.txt */"Зарядів залишилося: {1}",
   ItemRarityAncient: /* csgo_ukrainian.txt */"надзвичайний предмет",
   ItemRarityCommon: /* csgo_ukrainian.txt */"звичайний предмет",
   ItemRarityDefault: /* csgo_ukrainian.txt */"стандартний предмет",
@@ -257,6 +259,8 @@ export const ukrainian = {
   ItemRarityNameTool: /* csgo_ukrainian.txt */"Інструмент",
   ItemRarityRare: /* csgo_ukrainian.txt */"дуже рідкісний предмет",
   ItemRarityUncommon: /* csgo_ukrainian.txt */"рідкісний предмет",
+  ItemSealedGraffiti: /* csgo_ukrainian.txt */"Запечатане графіті",
+  ItemSealedGraffitiDesc: /* csgo_ukrainian.txt */"Це запечатаний контейнер із шаблоном графіті. Після розпечатування шаблону ви отримаєте можливість застосувати шаблон 50 разів у ігровому світі.",
   ItemSwapStatTrakAccept: /* csgo_ukrainian.txt */"ПРИЙНЯТИ",
   ItemSwapStatTrakClose: /* csgo_ukrainian.txt */"Закрити",
   ItemSwapStatTrakDesc: /* csgo_ukrainian.txt */"Цей інструмент міняє місцями лічильники СтатТрек™ у двох екземплярів однакової зброї.",
@@ -345,5 +349,10 @@ export const ukrainian = {
   UnpackClose: /* csgo_ukrainian.txt */"Закрити",
   UnpackDesc: /* csgo_ukrainian.txt */"Ви дійсно бажаєте розпакувати цей предмет?",
   UnpackNumberOfItems: /* csgo_ukrainian.txt */"Кількість предметів: {1}",
-  UnpackTitle: /* csgo_ukrainian.txt */"Розпакувати: {1}"
+  UnpackTitle: /* csgo_ukrainian.txt */"Розпакувати: {1}",
+  UnsealGraffitiClose: /* csgo_ukrainian.txt */"Закрити",
+  UnsealGraffitiDesc: /* csgo_ukrainian.txt */"Відкрити",
+  UnsealGraffitiTitle: /* csgo_ukrainian.txt */"Відкрити графіті",
+  UnsealGraffitiUse: /* csgo_ukrainian.txt */"Відкрити графіті",
+  UnsealGraffitiWarn: /* csgo_ukrainian.txt */"Це графіти можна відкрити лише раз"
 };

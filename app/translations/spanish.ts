@@ -220,6 +220,7 @@ export const spanish = {
   InventoryItemUnequipCT: "Desequipar antiterroristas",
   InventoryItemUnequipT: "Desequipar terroristas",
   InventoryItemUnlockContainer: /* csgo_spanish.txt */"Abrir paquete",
+  InventoryItemUnsealGraffiti: /* csgo_spanish.txt */"Abrir y equipar",
   InventoryItemUseItem: /* csgo_spanish.txt */"Usar artículo",
   InventoryItemUseStorageUnit: /* csgo_spanish.txt */"Comenzar a usar esta unidad",
   InventoryItemWear: "Desgaste:",
@@ -228,6 +229,7 @@ export const spanish = {
   InventorySelectInspectContents: /* csgo_spanish.txt */"Viendo el contenido de",
   InventorySelectItemToDeposit: /* csgo_spanish.txt */"Selecciona los artículos que deseas transferir a",
   InventorySelectItemToRetrieve: /* csgo_spanish.txt */"Selecciona los artículos que deseas recuperar de",
+  ItemGraffitiChargesRemaining: /* csgo_spanish.txt */"Cargas restantes: {1}",
   ItemRarityAncient: /* csgo_spanish.txt */"de aspecto extraordinario",
   ItemRarityCommon: /* csgo_spanish.txt */"de grado básico",
   ItemRarityDefault: /* csgo_spanish.txt */"por defecto",
@@ -257,6 +259,8 @@ export const spanish = {
   ItemRarityNameTool: /* csgo_spanish.txt */"Herramienta",
   ItemRarityRare: /* csgo_spanish.txt */"de grado alto",
   ItemRarityUncommon: /* csgo_spanish.txt */"de grado medio",
+  ItemSealedGraffiti: /* csgo_spanish.txt */"Grafiti precintado",
+  ItemSealedGraffitiDesc: /* csgo_spanish.txt */"Esto es un contenedor precintado de un patrón de grafiti. Al abrirlo obtendrás cargas suficientes para hacer el grafiti 50 veces en el mundo del juego.",
   ItemSwapStatTrakAccept: /* csgo_spanish.txt */"ACEPTAR",
   ItemSwapStatTrakClose: /* csgo_spanish.txt */"Cerrar",
   ItemSwapStatTrakDesc: /* csgo_spanish.txt */"Este artículo intercambia los valores StatTrak™ entre dos artículos del mismo tipo.",
@@ -345,5 +349,10 @@ export const spanish = {
   UnpackClose: /* csgo_spanish.txt */"Cerrar",
   UnpackDesc: /* csgo_spanish.txt */"¿Seguro que quieres abrir este artículo?",
   UnpackNumberOfItems: /* csgo_spanish.txt */"Número de objetos: {1}",
-  UnpackTitle: /* csgo_spanish.txt */"Abrir {1}"
+  UnpackTitle: /* csgo_spanish.txt */"Abrir {1}",
+  UnsealGraffitiClose: /* csgo_spanish.txt */"Cerrar",
+  UnsealGraffitiDesc: /* csgo_spanish.txt */"Abrir",
+  UnsealGraffitiTitle: /* csgo_spanish.txt */"Abrir grafiti",
+  UnsealGraffitiUse: /* csgo_spanish.txt */"Abrir grafiti",
+  UnsealGraffitiWarn: /* csgo_spanish.txt */"Este grafiti solo se puede abrir una vez"
 };

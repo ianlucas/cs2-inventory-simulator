@@ -220,6 +220,7 @@ export const vietnamese = {
   InventoryItemUnequipCT: "Gỡ trang bị CT",
   InventoryItemUnequipT: "Gỡ trang bị T",
   InventoryItemUnlockContainer: /* csgo_vietnamese.txt */"Mở khóa",
+  InventoryItemUnsealGraffiti: /* csgo_vietnamese.txt */"Mở và dán vào",
   InventoryItemUseItem: /* csgo_vietnamese.txt */"Sử dụng vật phẩm",
   InventoryItemUseStorageUnit: /* csgo_vietnamese.txt */"Bắt đầu dùng thùng này",
   InventoryItemWear: "Độ mòn:",
@@ -228,6 +229,7 @@ export const vietnamese = {
   InventorySelectInspectContents: /* csgo_vietnamese.txt */"Xem vật phẩm bên trong",
   InventorySelectItemToDeposit: /* csgo_vietnamese.txt */"Chọn các món để chuyển vào",
   InventorySelectItemToRetrieve: /* csgo_vietnamese.txt */"Chọn các món để lấy ra",
+  ItemGraffitiChargesRemaining: /* csgo_vietnamese.txt */"Lần dùng còn lại: {1}",
   ItemRarityAncient: /* csgo_vietnamese.txt */"Phi thường",
   ItemRarityCommon: /* csgo_vietnamese.txt */"Hạng cơ bản",
   ItemRarityDefault: /* csgo_vietnamese.txt */"Mặc định",
@@ -257,6 +259,8 @@ export const vietnamese = {
   ItemRarityNameTool: /* csgo_vietnamese.txt */"Dụng cụ",
   ItemRarityRare: /* csgo_vietnamese.txt */"Hạng cao cấp",
   ItemRarityUncommon: /* csgo_vietnamese.txt */"Hạng trung bình",
+  ItemSealedGraffiti: /* csgo_vietnamese.txt */"Graffiti nguyên bọc",
+  ItemSealedGraffitiDesc: /* csgo_vietnamese.txt */"Đây là một gói niêm phong chứa hình vẽ graffiti. Một khi mở niêm phong, nó sẽ cho bạn 50 lần vẽ graffiti đó lên thế giới trong trò chơi.",
   ItemSwapStatTrakAccept: /* csgo_vietnamese.txt */"CHẤP NHẬN",
   ItemSwapStatTrakClose: /* csgo_vietnamese.txt */"Đóng",
   ItemSwapStatTrakDesc: /* csgo_vietnamese.txt */"Vật phẩm sẽ đổi giá trị StatTrak™ giữa hai vật phẩm trong cùng thể loại.",
@@ -345,5 +349,10 @@ export const vietnamese = {
   UnpackClose: /* csgo_vietnamese.txt */"Đóng",
   UnpackDesc: /* csgo_vietnamese.txt */"Bạn có chắc mình muốn mở gói vật phẩm này?",
   UnpackNumberOfItems: /* csgo_vietnamese.txt */"Số món: {1}",
-  UnpackTitle: /* csgo_vietnamese.txt */"Mở gói {1}"
+  UnpackTitle: /* csgo_vietnamese.txt */"Mở gói {1}",
+  UnsealGraffitiClose: /* csgo_vietnamese.txt */"Đóng",
+  UnsealGraffitiDesc: /* csgo_vietnamese.txt */"Mở bọc",
+  UnsealGraffitiTitle: /* csgo_vietnamese.txt */"Mở graffiti",
+  UnsealGraffitiUse: /* csgo_vietnamese.txt */"Mở bọc graffiti",
+  UnsealGraffitiWarn: /* csgo_vietnamese.txt */"Graffiti này chỉ có thể mở bọc một lần"
 };

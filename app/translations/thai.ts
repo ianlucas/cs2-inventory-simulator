@@ -220,6 +220,7 @@ export const thai = {
   InventoryItemUnequipCT: "ถอด CT",
   InventoryItemUnequipT: "ถอด T",
   InventoryItemUnlockContainer: /* csgo_thai.txt */"ปลดล็อคบรรจุภัณฑ์",
+  InventoryItemUnsealGraffiti: /* csgo_thai.txt */"เปิดและสวมใส่",
   InventoryItemUseItem: /* csgo_thai.txt */"ใช้ไอเท็ม",
   InventoryItemUseStorageUnit: /* csgo_thai.txt */"เริ่มใช้กล่องเก็บของนี้",
   InventoryItemWear: "ความเสื่อมสภาพ:",
@@ -228,6 +229,7 @@ export const thai = {
   InventorySelectInspectContents: /* csgo_thai.txt */"ตรวจสอบเนื้อหาของ",
   InventorySelectItemToDeposit: /* csgo_thai.txt */"เลือกไอเท็มเพื่อย้ายไปยัง",
   InventorySelectItemToRetrieve: /* csgo_thai.txt */"เลือกไอเท็มเพื่อเอาคืนจาก",
+  ItemGraffitiChargesRemaining: /* csgo_thai.txt */"ชาร์จคงเหลือ: {1}",
   ItemRarityAncient: /* csgo_thai.txt */"Extraordinary",
   ItemRarityCommon: /* csgo_thai.txt */"เกรดพื้นฐาน",
   ItemRarityDefault: /* csgo_thai.txt */"เริ่มต้น",
@@ -257,6 +259,8 @@ export const thai = {
   ItemRarityNameTool: /* csgo_thai.txt */"เครื่องมือ",
   ItemRarityRare: /* csgo_thai.txt */"เกรดสูง",
   ItemRarityUncommon: /* csgo_thai.txt */"เกรดปานกลาง",
+  ItemSealedGraffiti: /* csgo_thai.txt */"กราฟฟิตี้แบบปิดผนึก",
+  ItemSealedGraffitiDesc: /* csgo_thai.txt */"นี่เป็นกล่องปิดผนึกของลายกราฟฟิตี้ เมื่อลายกราฟฟิตี้นี้ถูกเปิดผนึกแล้ว คุณจะได้รับชาร์จเพื่อนำไปใช้กับลายกราฟฟิตี้ 50 ครั้งเพื่อใช้ในเกม",
   ItemSwapStatTrakAccept: /* csgo_thai.txt */"ยอมรับ",
   ItemSwapStatTrakClose: /* csgo_thai.txt */"ปิด",
   ItemSwapStatTrakDesc: /* csgo_thai.txt */"ไอเท็มนี้จะสลับค่า StatTrak™ ระหว่างไอเท็มประเภทเดียวกันสองชิ้น",
@@ -345,5 +349,10 @@ export const thai = {
   UnpackClose: /* csgo_thai.txt */"ปิด",
   UnpackDesc: /* csgo_thai.txt */"คุณแน่ใจหรือไม่ว่าคุณต้องการแกะไอเท็มนี้?",
   UnpackNumberOfItems: /* csgo_thai.txt */"จำนวนของไอเท็ม: {1}",
-  UnpackTitle: /* csgo_thai.txt */"แกะ {1}"
+  UnpackTitle: /* csgo_thai.txt */"แกะ {1}",
+  UnsealGraffitiClose: /* csgo_thai.txt */"ปิด",
+  UnsealGraffitiDesc: /* csgo_thai.txt */"เปิด",
+  UnsealGraffitiTitle: /* csgo_thai.txt */"เปิดกราฟฟิตี้",
+  UnsealGraffitiUse: /* csgo_thai.txt */"เปิดผนึกกราฟฟิตี้",
+  UnsealGraffitiWarn: /* csgo_thai.txt */"กราฟฟิตี้นี้สามารถเปิดผนึกได้แค่ครั้งเดียวเท่านั้น"
 };

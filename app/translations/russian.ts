@@ -219,6 +219,7 @@ export const russian = {
   InventoryItemUnequipCT: "Снять за спецназ",
   InventoryItemUnequipT: "Снять за террористов",
   InventoryItemUnlockContainer: /* csgo_russian.txt */"Открыть контейнер",
+  InventoryItemUnsealGraffiti: /* csgo_russian.txt */"Использовать",
   InventoryItemUseItem: /* csgo_russian.txt */"Использовать предмет",
   InventoryItemUseStorageUnit: /* csgo_russian.txt */"Активировать хранилище",
   InventoryItemWear: "Износ:",
@@ -227,6 +228,7 @@ export const russian = {
   InventorySelectInspectContents: /* csgo_russian.txt */"Просмотр содержимого:",
   InventorySelectItemToDeposit: /* csgo_russian.txt */"Убрать в хранилище:",
   InventorySelectItemToRetrieve: /* csgo_russian.txt */"Извлечь предметы:",
+  ItemGraffitiChargesRemaining: /* csgo_russian.txt */"Зарядов: {1}",
   ItemRarityAncient: /* csgo_russian.txt */"экстраординарного типа",
   ItemRarityCommon: /* csgo_russian.txt */"базового класса",
   ItemRarityDefault: /* csgo_russian.txt */"Стандартное",
@@ -256,6 +258,8 @@ export const russian = {
   ItemRarityNameTool: /* csgo_russian.txt */"Инструмент",
   ItemRarityRare: /* csgo_russian.txt */"высшего класса",
   ItemRarityUncommon: /* csgo_russian.txt */"Среднего класса",
+  ItemSealedGraffiti: /* csgo_russian.txt */"Запечатанный граффити",
+  ItemSealedGraffitiDesc: /* csgo_russian.txt */"Это запечатанный контейнер с шаблоном граффити. После вскрытия шаблона вы получите возможность применить его в игровом мире 50 раз.",
   ItemSwapStatTrakAccept: /* csgo_russian.txt */"ПРИНЯТЬ",
   ItemSwapStatTrakClose: /* csgo_russian.txt */"Закрыть",
   ItemSwapStatTrakDesc: /* csgo_russian.txt */"Этот предмет может обменять значения StatTrak™ у двух одинаковых раскрасок предмета.",
@@ -344,5 +348,10 @@ export const russian = {
   UnpackClose: /* csgo_russian.txt */"Закрыть",
   UnpackDesc: /* csgo_russian.txt */"Вы уверены, что хотите распаковать этот предмет?",
   UnpackNumberOfItems: /* csgo_russian.txt */"Число предметов: {1}",
-  UnpackTitle: /* csgo_russian.txt */"Распаковка: {1}"
+  UnpackTitle: /* csgo_russian.txt */"Распаковка: {1}",
+  UnsealGraffitiClose: /* csgo_russian.txt */"Закрыть",
+  UnsealGraffitiDesc: /* csgo_russian.txt */"Открыть",
+  UnsealGraffitiTitle: /* csgo_russian.txt */"Открыть граффити",
+  UnsealGraffitiUse: /* csgo_russian.txt */"Распечатать граффити",
+  UnsealGraffitiWarn: /* csgo_russian.txt */"Этот граффити можно распечатать только один раз"
 };

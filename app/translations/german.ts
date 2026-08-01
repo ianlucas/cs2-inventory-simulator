@@ -219,6 +219,7 @@ export const german = {
   InventoryItemUnequipCT: "AT ablegen",
   InventoryItemUnequipT: "T ablegen",
   InventoryItemUnlockContainer: /* csgo_german.txt */"Behälter öffnen",
+  InventoryItemUnsealGraffiti: /* csgo_german.txt */"Öffnen & Ausrüsten",
   InventoryItemUseItem: /* csgo_german.txt */"Gegenstand benutzen",
   InventoryItemUseStorageUnit: /* csgo_german.txt */"Diese Einheit verwenden",
   InventoryItemWear: "Abnutzung:",
@@ -227,6 +228,7 @@ export const german = {
   InventorySelectInspectContents: /* csgo_german.txt */"Inhalte von:",
   InventorySelectItemToDeposit: /* csgo_german.txt */"Gegenstände zum Verschieben auswählen:",
   InventorySelectItemToRetrieve: /* csgo_german.txt */"Gegenstände zum Abrufen auswählen:",
+  ItemGraffitiChargesRemaining: /* csgo_german.txt */"Verbleibende Sprays: {1}",
   ItemRarityAncient: /* csgo_german.txt */"Außerordentlich",
   ItemRarityCommon: /* csgo_german.txt */"Standardqualität",
   ItemRarityDefault: /* csgo_german.txt */"Standard",
@@ -256,6 +258,8 @@ export const german = {
   ItemRarityNameTool: /* csgo_german.txt */"Werkzeug",
   ItemRarityRare: /* csgo_german.txt */"Hohe Qualität",
   ItemRarityUncommon: /* csgo_german.txt */"Mittlere Qualität",
+  ItemSealedGraffiti: /* csgo_german.txt */"Versiegeltes Graffito",
+  ItemSealedGraffitiDesc: /* csgo_german.txt */"Dies ist das versiegelte Gefäß eines Graffitimusters. Wenn dieses Graffitimuster entsiegelt wird, erhalten Sie genug Aufladungen, um das Graffitimuster 50-mal in der Spielwelt zu sprühen.",
   ItemSwapStatTrakAccept: /* csgo_german.txt */"ÜBERNEHMEN",
   ItemSwapStatTrakClose: /* csgo_german.txt */"Schließen",
   ItemSwapStatTrakDesc: /* csgo_german.txt */"Dieser Gegenstand tauscht die StatTrak™-Werte zweier Gegenstände gleichen Typs aus.",
@@ -344,5 +348,10 @@ export const german = {
   UnpackClose: /* csgo_german.txt */"Schließen",
   UnpackDesc: /* csgo_german.txt */"Möchten Sie diesen Gegenstand wirklich auspacken?",
   UnpackNumberOfItems: /* csgo_german.txt */"Anzahl der Gegenstände: {1}",
-  UnpackTitle: /* csgo_german.txt */"{1} auspacken"
+  UnpackTitle: /* csgo_german.txt */"{1} auspacken",
+  UnsealGraffitiClose: /* csgo_german.txt */"Schließen",
+  UnsealGraffitiDesc: /* csgo_german.txt */"öffnen",
+  UnsealGraffitiTitle: /* csgo_german.txt */"Graffito öffnen",
+  UnsealGraffitiUse: /* csgo_german.txt */"Graffito entsiegeln",
+  UnsealGraffitiWarn: /* csgo_german.txt */"Dieses Graffito kann nur einmal entsiegelt werden"
 };

@@ -220,6 +220,7 @@ export const tchinese = {
   InventoryItemUnequipCT: "卸下反恐部隊",
   InventoryItemUnequipT: "卸下恐怖份子",
   InventoryItemUnlockContainer: /* csgo_tchinese.txt */"開啟箱子",
+  InventoryItemUnsealGraffiti: /* csgo_tchinese.txt */"開啟並裝備",
   InventoryItemUseItem: /* csgo_tchinese.txt */"使用物品",
   InventoryItemUseStorageUnit: /* csgo_tchinese.txt */"開始使用此儲存單元",
   InventoryItemWear: "磨損:",
@@ -228,6 +229,7 @@ export const tchinese = {
   InventorySelectInspectContents: /* csgo_tchinese.txt */"檢視內容",
   InventorySelectItemToDeposit: /* csgo_tchinese.txt */"選擇物品以移入",
   InventorySelectItemToRetrieve: /* csgo_tchinese.txt */"選擇一項物品取回",
+  ItemGraffitiChargesRemaining: /* csgo_tchinese.txt */"剩餘使用次數：{1}",
   ItemRarityAncient: /* csgo_tchinese.txt */"超絕",
   ItemRarityCommon: /* csgo_tchinese.txt */"初級",
   ItemRarityDefault: /* csgo_tchinese.txt */"預設",
@@ -257,6 +259,8 @@ export const tchinese = {
   ItemRarityNameTool: /* csgo_tchinese.txt */"工具",
   ItemRarityRare: /* csgo_tchinese.txt */"高級",
   ItemRarityUncommon: /* csgo_tchinese.txt */"中階",
+  ItemSealedGraffiti: /* csgo_tchinese.txt */"密封的塗鴉",
+  ItemSealedGraffitiDesc: /* csgo_tchinese.txt */"這是密封的塗鴉圖案。一旦開封後，會提供你 50 次將此塗鴉圖案用於遊戲內的機會。",
   ItemSwapStatTrakAccept: /* csgo_tchinese.txt */"接受",
   ItemSwapStatTrakClose: /* csgo_tchinese.txt */"關閉",
   ItemSwapStatTrakDesc: /* csgo_tchinese.txt */"此物品能夠交換兩項相同物品類型的 StatTrak™ 數值。",
@@ -345,5 +349,10 @@ export const tchinese = {
   UnpackClose: /* csgo_tchinese.txt */"關閉",
   UnpackDesc: /* csgo_tchinese.txt */"您確定要開封這項物品嗎？",
   UnpackNumberOfItems: /* csgo_tchinese.txt */"物品數量：{1}",
-  UnpackTitle: /* csgo_tchinese.txt */"開封「{1}」"
+  UnpackTitle: /* csgo_tchinese.txt */"開封「{1}」",
+  UnsealGraffitiClose: /* csgo_tchinese.txt */"關閉",
+  UnsealGraffitiDesc: /* csgo_tchinese.txt */"開啟",
+  UnsealGraffitiTitle: /* csgo_tchinese.txt */"開啟塗鴉",
+  UnsealGraffitiUse: /* csgo_tchinese.txt */"開封塗鴉",
+  UnsealGraffitiWarn: /* csgo_tchinese.txt */"此塗鴉僅可開封一次"
 };

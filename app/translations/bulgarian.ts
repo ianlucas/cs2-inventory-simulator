@@ -220,6 +220,7 @@ export const bulgarian = {
   InventoryItemUnequipCT: "Премахни КТ",
   InventoryItemUnequipT: "Премахни Т",
   InventoryItemUnlockContainer: /* csgo_bulgarian.txt */"Отключване на контейнера",
+  InventoryItemUnsealGraffiti: /* csgo_bulgarian.txt */"Отваряне и екипиране",
   InventoryItemUseItem: /* csgo_bulgarian.txt */"Използване на артикула",
   InventoryItemUseStorageUnit: /* csgo_bulgarian.txt */"Стартиране на ползването на този елемент",
   InventoryItemWear: "Износване:",
@@ -228,6 +229,7 @@ export const bulgarian = {
   InventorySelectInspectContents: /* csgo_bulgarian.txt */"Оглед на съдържанието",
   InventorySelectItemToDeposit: /* csgo_bulgarian.txt */"Избиране на артикули, които да преместите",
   InventorySelectItemToRetrieve: /* csgo_bulgarian.txt */"Избиране на артикули за набавяне от",
+  ItemGraffitiChargesRemaining: /* csgo_bulgarian.txt */"Оставащи заряди: {1}",
   ItemRarityAncient: /* csgo_bulgarian.txt */"Необикновен тип",
   ItemRarityCommon: /* csgo_bulgarian.txt */"Базов клас",
   ItemRarityDefault: /* csgo_bulgarian.txt */"По подразбиране",
@@ -257,6 +259,8 @@ export const bulgarian = {
   ItemRarityNameTool: /* csgo_bulgarian.txt */"Инструмент",
   ItemRarityRare: /* csgo_bulgarian.txt */"Висок клас",
   ItemRarityUncommon: /* csgo_bulgarian.txt */"Средна поредица",
+  ItemSealedGraffiti: /* csgo_bulgarian.txt */"Запечатани графити",
+  ItemSealedGraffitiDesc: /* csgo_bulgarian.txt */"Това е запечатан контейнер с шаблон за графити. След като бъде разпечатан, ще Ви предостави с достатъчно заряди, така че да приложите шаблона с графити 50 пъти в игралния свят.",
   ItemSwapStatTrakAccept: /* csgo_bulgarian.txt */"ПРИЕМАНЕ",
   ItemSwapStatTrakClose: /* csgo_bulgarian.txt */"Затваряне",
   ItemSwapStatTrakDesc: /* csgo_bulgarian.txt */"Този артикул разменя StatTrak™ стойностите между две оръжия от еднакъв тип.",
@@ -345,5 +349,10 @@ export const bulgarian = {
   UnpackClose: /* csgo_bulgarian.txt */"Затваряне",
   UnpackDesc: /* csgo_bulgarian.txt */"Сигурни ли сте, че искате да разопаковате този артикул?",
   UnpackNumberOfItems: /* csgo_bulgarian.txt */"Брой артикули: {1}",
-  UnpackTitle: /* csgo_bulgarian.txt */"Разопаковане на {1}"
+  UnpackTitle: /* csgo_bulgarian.txt */"Разопаковане на {1}",
+  UnsealGraffitiClose: /* csgo_bulgarian.txt */"Затваряне",
+  UnsealGraffitiDesc: /* csgo_bulgarian.txt */"Отваряне на",
+  UnsealGraffitiTitle: /* csgo_bulgarian.txt */"Отваряне на графити",
+  UnsealGraffitiUse: /* csgo_bulgarian.txt */"Разпечатване на графити",
+  UnsealGraffitiWarn: /* csgo_bulgarian.txt */"Тези графити могат да бъдат разпечатани само веднъж"
 };

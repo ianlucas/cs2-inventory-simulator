@@ -219,6 +219,7 @@ export const danish = {
   InventoryItemUnequipCT: "Tag af CT",
   InventoryItemUnequipT: "Tag af T",
   InventoryItemUnlockContainer: /* csgo_danish.txt */"Oplås beholder",
+  InventoryItemUnsealGraffiti: /* csgo_danish.txt */"Åbn og tag i brug",
   InventoryItemUseItem: /* csgo_danish.txt */"Anvend genstand",
   InventoryItemUseStorageUnit: /* csgo_danish.txt */"Anvend denne enhed",
   InventoryItemWear: "Slid:",
@@ -227,6 +228,7 @@ export const danish = {
   InventorySelectInspectContents: /* csgo_danish.txt */"Inspicerer indholdet af",
   InventorySelectItemToDeposit: /* csgo_danish.txt */"Vælg genstande at flytte til",
   InventorySelectItemToRetrieve: /* csgo_danish.txt */"Vælg genstande at hente fra",
+  ItemGraffitiChargesRemaining: /* csgo_danish.txt */"Ladninger tilbage: {1}",
   ItemRarityAncient: /* csgo_danish.txt */"Ekstraordinær",
   ItemRarityCommon: /* csgo_danish.txt */"Basiskvalitet",
   ItemRarityDefault: /* csgo_danish.txt */"Standard",
@@ -256,6 +258,8 @@ export const danish = {
   ItemRarityNameTool: /* csgo_danish.txt */"Værktøj",
   ItemRarityRare: /* csgo_danish.txt */"Højkvalitet",
   ItemRarityUncommon: /* csgo_danish.txt */"Middelkvalitet",
+  ItemSealedGraffiti: /* csgo_danish.txt */"Forseglet graffiti",
+  ItemSealedGraffitiDesc: /* csgo_danish.txt */"Dette er en forseglet beholder med et graffitimønster. Når dette graffitimønsters forsegling brydes, giver den dig nok ladninger til at anvende graffitimønsteret 50 gange i spillets verden.",
   ItemSwapStatTrakAccept: /* csgo_danish.txt */"ACCEPTER",
   ItemSwapStatTrakClose: /* csgo_danish.txt */"Luk",
   ItemSwapStatTrakDesc: /* csgo_danish.txt */"Denne genstand bytter StatTrak™-værdier mellem to af den samme genstandstype.",
@@ -344,5 +348,10 @@ export const danish = {
   UnpackClose: /* csgo_danish.txt */"Luk",
   UnpackDesc: /* csgo_danish.txt */"Er du sikker på, at du vil pakke denne genstand ud?",
   UnpackNumberOfItems: /* csgo_danish.txt */"Antal genstande: {1}",
-  UnpackTitle: /* csgo_danish.txt */"Udpak {1}"
+  UnpackTitle: /* csgo_danish.txt */"Udpak {1}",
+  UnsealGraffitiClose: /* csgo_danish.txt */"Luk",
+  UnsealGraffitiDesc: /* csgo_danish.txt */"Åbn",
+  UnsealGraffitiTitle: /* csgo_danish.txt */"Åbn graffiti",
+  UnsealGraffitiUse: /* csgo_danish.txt */"Bryd forseglingen på graffitien",
+  UnsealGraffitiWarn: /* csgo_danish.txt */"Forseglingen på denne graffiti kan kun brydes én gang"
 };

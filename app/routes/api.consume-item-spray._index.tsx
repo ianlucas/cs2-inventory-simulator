@@ -9,7 +9,7 @@ import { api } from "~/api.server";
 import { middleware } from "~/middleware.server";
 import {
   API_SCOPE,
-  STATTRAK_INCREMENT_SCOPE,
+  SPRAY_CONSUME_SCOPE,
   isApiKeyValid
 } from "~/models/api-credential.server";
 import {
@@ -24,7 +24,7 @@ import {
   unauthorized
 } from "~/responses.server";
 import { nonNegativeInt } from "~/utils/shapes";
-import type { Route } from "./+types/api.increment-item-stattrak._index";
+import type { Route } from "./+types/api.consume-item-spray._index";
 
 export const action = api(async ({ request }: Route.ActionArgs) => {
   await middleware(request);
@@ -39,7 +39,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     })
     .parse(await request.json());
 
-  if (!(await isApiKeyValid(apiKey, [API_SCOPE, STATTRAK_INCREMENT_SCOPE]))) {
+  if (!(await isApiKeyValid(apiKey, [API_SCOPE, SPRAY_CONSUME_SCOPE]))) {
     throw unauthorized;
   }
 
@@ -54,12 +54,9 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       userId,
       manipulate(inventory) {
         const item = inventory.get(targetUid);
-        assert(
-          item.equipped === true ||
-            item.equippedCT === true ||
-            item.equippedT === true
-        );
-        inventory.incrementItemStatTrak(targetUid);
+        assert(item.isGraffiti());
+        assert(item.equipped === true);
+        inventory.consumeItemCharges(targetUid);
       }
     });
     return noContent;

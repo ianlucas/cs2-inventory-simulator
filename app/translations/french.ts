@@ -219,6 +219,7 @@ export const french = {
   InventoryItemUnequipCT: "Retirer CT",
   InventoryItemUnequipT: "Retirer T",
   InventoryItemUnlockContainer: /* csgo_french.txt */"Ouvrir le conteneur",
+  InventoryItemUnsealGraffiti: /* csgo_french.txt */"Ouvrir et équiper",
   InventoryItemUseItem: /* csgo_french.txt */"Utiliser cet item",
   InventoryItemUseStorageUnit: /* csgo_french.txt */"Commencer à utiliser cette unité",
   InventoryItemWear: "Usure :",
@@ -227,6 +228,7 @@ export const french = {
   InventorySelectInspectContents: /* csgo_french.txt */"Examen du contenu de",
   InventorySelectItemToDeposit: /* csgo_french.txt */"Sélectionnez les objets à déplacer",
   InventorySelectItemToRetrieve: /* csgo_french.txt */"Sélectionner les objets à récupérer",
+  ItemGraffitiChargesRemaining: /* csgo_french.txt */"Charges restantes : {1}",
   ItemRarityAncient: /* csgo_french.txt */"Extraordinaire",
   ItemRarityCommon: /* csgo_french.txt */"Qualité de base",
   ItemRarityDefault: /* csgo_french.txt */"Défaut",
@@ -256,6 +258,8 @@ export const french = {
   ItemRarityNameTool: /* csgo_french.txt */"Outil",
   ItemRarityRare: /* csgo_french.txt */"Qualité supérieure",
   ItemRarityUncommon: /* csgo_french.txt */"Qualité moyenne",
+  ItemSealedGraffiti: /* csgo_french.txt */"Graffiti scellé",
+  ItemSealedGraffitiDesc: /* csgo_french.txt */"Ceci est un conteneur scellé d'un motif graffiti. Une fois ce motif graffiti descellé, vous pourrez l'appliquer en jeu 50 fois.",
   ItemSwapStatTrakAccept: /* csgo_french.txt */"ACCEPTER",
   ItemSwapStatTrakClose: /* csgo_french.txt */"Fermer",
   ItemSwapStatTrakDesc: /* csgo_french.txt */"Cet item permet de permuter les valeurs StatTrak™ entre deux types d'items identiques.",
@@ -344,5 +348,10 @@ export const french = {
   UnpackClose: /* csgo_french.txt */"Fermer",
   UnpackDesc: /* csgo_french.txt */"Voulez-vous vraiment déballer cet item ?",
   UnpackNumberOfItems: /* csgo_french.txt */"Nombre d'objets : {1}",
-  UnpackTitle: /* csgo_french.txt */"Déballer {1}"
+  UnpackTitle: /* csgo_french.txt */"Déballer {1}",
+  UnsealGraffitiClose: /* csgo_french.txt */"Fermer",
+  UnsealGraffitiDesc: /* csgo_french.txt */"Ouvrir",
+  UnsealGraffitiTitle: /* csgo_french.txt */"Ouvrir le graffiti",
+  UnsealGraffitiUse: /* csgo_french.txt */"Desceller le graffiti",
+  UnsealGraffitiWarn: /* csgo_french.txt */"Ce graffiti ne peut être descellé qu'une seule fois"
 };

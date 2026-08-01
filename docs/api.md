@@ -193,8 +193,35 @@ type PostIncrementItemStatTrakRequest = {
 ### Response
 
 - Returns `401` when using an invalid API key.
-- Returns `400` when the user does not exist or target uid is invalid.
+- Returns `400` when the user does not exist, target uid is invalid, or the item is not equipped.
 - Returns `204` when the increment was successful.
+
+## Consume item Spray
+
+```http
+POST https://inventory.cstrike.app/api/consume-item-spray
+```
+
+Consumes a charge of an unsealed graffiti. The item is removed from the inventory when its last charge is consumed.
+
+### Request
+
+> [!IMPORTANT]  
+> API key must have `api` or `spray_consume` scope.
+
+```typescript
+type PostConsumeItemSprayRequest = {
+  apiKey: string;
+  targetUid: number;
+  userId: string;
+};
+```
+
+### Response
+
+- Returns `401` when using an invalid API key.
+- Returns `400` when the user does not exist or target uid is not an equipped, unsealed graffiti with charges.
+- Returns `204` when the charge was consumed.
 
 ## Add Item
 

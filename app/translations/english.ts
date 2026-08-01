@@ -222,6 +222,7 @@ export const english = {
   InventoryItemUnequipCT: "Unequip CT",
   InventoryItemUnequipT: "Unequip T",
   InventoryItemUnlockContainer: /* csgo_english.txt */"Unlock Container",
+  InventoryItemUnsealGraffiti: /* csgo_english.txt */"Open and Equip",
   InventoryItemUseItem: /* csgo_english.txt */"Use Item",
   InventoryItemUseStorageUnit: /* csgo_english.txt */"Start Using This Unit",
   InventoryItemWear: "Wear:",
@@ -230,6 +231,7 @@ export const english = {
   InventorySelectInspectContents: /* csgo_english.txt */"Inspecting contents of",
   InventorySelectItemToDeposit: /* csgo_english.txt */"Select items to move into",
   InventorySelectItemToRetrieve: /* csgo_english.txt */"Select items to retrieve from",
+  ItemGraffitiChargesRemaining: /* csgo_english.txt */"Charges Remaining: {1}",
   ItemRarityAncient: /* csgo_english.txt */"Extraordinary",
   ItemRarityCommon: /* csgo_english.txt */"Base Grade",
   ItemRarityDefault: /* csgo_english.txt */"Default",
@@ -260,6 +262,8 @@ export const english = {
   ItemRarityNameTool: /* csgo_english.txt */"Tool",
   ItemRarityRare: /* csgo_english.txt */"High Grade",
   ItemRarityUncommon: /* csgo_english.txt */"Medium Grade",
+  ItemSealedGraffiti: /* csgo_english.txt */"Sealed Graffiti",
+  ItemSealedGraffitiDesc: /* csgo_english.txt */"This is a sealed container of a graffiti pattern. Once this graffiti pattern is unsealed, it will provide you with enough charges to apply the graffiti pattern 50 times to the in-game world.",
   ItemSwapStatTrakAccept: /* csgo_english.txt */"ACCEPT",
   ItemSwapStatTrakClose: /* csgo_english.txt */"Close",
   ItemSwapStatTrakDesc: /* csgo_english.txt */"This item swaps StatTrak™ values between two of the same item type.",
@@ -378,5 +382,10 @@ export const english = {
   UnpackClose: /* csgo_english.txt */"Close",
   UnpackDesc: /* csgo_english.txt */"Are you sure you want to unpack this item?",
   UnpackNumberOfItems: /* csgo_english.txt */"Number of Items: {1}",
-  UnpackTitle: /* csgo_english.txt */"Unpack {1}"
+  UnpackTitle: /* csgo_english.txt */"Unpack {1}",
+  UnsealGraffitiClose: /* csgo_english.txt */"Close",
+  UnsealGraffitiDesc: /* csgo_english.txt */"Open",
+  UnsealGraffitiTitle: /* csgo_english.txt */"Open Graffiti",
+  UnsealGraffitiUse: /* csgo_english.txt */"Unseal Graffiti",
+  UnsealGraffitiWarn: /* csgo_english.txt */"This graffiti can only be unsealed once"
 };

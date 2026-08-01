@@ -220,6 +220,7 @@ export const schinese = {
   InventoryItemUnequipCT: "卸下反恐精英",
   InventoryItemUnequipT: "卸下恐怖分子",
   InventoryItemUnlockContainer: /* csgo_schinese.txt */"开箱",
+  InventoryItemUnsealGraffiti: /* csgo_schinese.txt */"开启并装备",
   InventoryItemUseItem: /* csgo_schinese.txt */"使用物品",
   InventoryItemUseStorageUnit: /* csgo_schinese.txt */"开始使用此组件",
   InventoryItemWear: "磨损:",
@@ -228,6 +229,7 @@ export const schinese = {
   InventorySelectInspectContents: /* csgo_schinese.txt */"检视内容",
   InventorySelectItemToDeposit: /* csgo_schinese.txt */"选择物品以存入",
   InventorySelectItemToRetrieve: /* csgo_schinese.txt */"选择要取回的物品",
+  ItemGraffitiChargesRemaining: /* csgo_schinese.txt */"剩余次数：{1}",
   ItemRarityAncient: /* csgo_schinese.txt */"非凡",
   ItemRarityCommon: /* csgo_schinese.txt */"普通级",
   ItemRarityDefault: /* csgo_schinese.txt */"默认",
@@ -257,6 +259,8 @@ export const schinese = {
   ItemRarityNameTool: /* csgo_schinese.txt */"工具",
   ItemRarityRare: /* csgo_schinese.txt */"高级",
   ItemRarityUncommon: /* csgo_schinese.txt */"中级",
+  ItemSealedGraffiti: /* csgo_schinese.txt */"封装的涂鸦",
+  ItemSealedGraffitiDesc: /* csgo_schinese.txt */"这个罐子里封装着一个涂鸦图案。涂鸦一经开封，可以在游戏内喷涂 50 次。",
   ItemSwapStatTrakAccept: /* csgo_schinese.txt */"接受",
   ItemSwapStatTrakClose: /* csgo_schinese.txt */"关闭",
   ItemSwapStatTrakDesc: /* csgo_schinese.txt */"该物品可以将两种相同物品类型的 StatTrak™ 数据互换。",
@@ -345,5 +349,10 @@ export const schinese = {
   UnpackClose: /* csgo_schinese.txt */"关闭",
   UnpackDesc: /* csgo_schinese.txt */"你确定要打开此物品吗？",
   UnpackNumberOfItems: /* csgo_schinese.txt */"物品数量: {1}",
-  UnpackTitle: /* csgo_schinese.txt */"打开{1}"
+  UnpackTitle: /* csgo_schinese.txt */"打开{1}",
+  UnsealGraffitiClose: /* csgo_schinese.txt */"关闭",
+  UnsealGraffitiDesc: /* csgo_schinese.txt */"开启",
+  UnsealGraffitiTitle: /* csgo_schinese.txt */"开启涂鸦",
+  UnsealGraffitiUse: /* csgo_schinese.txt */"启封涂鸦",
+  UnsealGraffitiWarn: /* csgo_schinese.txt */"该涂鸦仅可被启封一次"
 };

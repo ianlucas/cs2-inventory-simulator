@@ -219,6 +219,7 @@ export const swedish = {
   InventoryItemUnequipCT: "Avutrusta CT",
   InventoryItemUnequipT: "Avutrusta T",
   InventoryItemUnlockContainer: /* csgo_swedish.txt */"Lås upp behållare",
+  InventoryItemUnsealGraffiti: /* csgo_swedish.txt */"Öppna och utrusta",
   InventoryItemUseItem: /* csgo_swedish.txt */"Använd föremål",
   InventoryItemUseStorageUnit: /* csgo_swedish.txt */"Börja använda denna enhet",
   InventoryItemWear: "Slitage:",
@@ -227,6 +228,7 @@ export const swedish = {
   InventorySelectInspectContents: /* csgo_swedish.txt */"Inspekterar innehåll i",
   InventorySelectItemToDeposit: /* csgo_swedish.txt */"Välj föremål att lagra i",
   InventorySelectItemToRetrieve: /* csgo_swedish.txt */"Välj föremål att hämta från",
+  ItemGraffitiChargesRemaining: /* csgo_swedish.txt */"Återstående laddningar: {1}",
   ItemRarityAncient: /* csgo_swedish.txt */"Extraordinär",
   ItemRarityCommon: /* csgo_swedish.txt */"Grundkvalitet",
   ItemRarityDefault: /* csgo_swedish.txt */"Standard",
@@ -256,6 +258,8 @@ export const swedish = {
   ItemRarityNameTool: /* csgo_swedish.txt */"Verktyg",
   ItemRarityRare: /* csgo_swedish.txt */"Högkvalitet",
   ItemRarityUncommon: /* csgo_swedish.txt */"Medelvärdig",
+  ItemSealedGraffiti: /* csgo_swedish.txt */"Förseglad graffiti",
+  ItemSealedGraffitiDesc: /* csgo_swedish.txt */"Det här är en förseglad behållare för ett graffitimönster. När behållaren har öppnats så kommer den ge dig tillräckligt med laddningar för att använda graffitimönstret 50 gånger i spelvärlden.",
   ItemSwapStatTrakAccept: /* csgo_swedish.txt */"ACCEPTERA",
   ItemSwapStatTrakClose: /* csgo_swedish.txt */"Stäng",
   ItemSwapStatTrakDesc: /* csgo_swedish.txt */"Detta föremål byter StatTrak™-värden mellan två likadana föremålstyper.",
@@ -344,5 +348,10 @@ export const swedish = {
   UnpackClose: /* csgo_swedish.txt */"Stäng",
   UnpackDesc: /* csgo_swedish.txt */"Är du säker på att du vill packa upp detta föremål?",
   UnpackNumberOfItems: /* csgo_swedish.txt */"Antal föremål: {1}",
-  UnpackTitle: /* csgo_swedish.txt */"Packa upp {1}"
+  UnpackTitle: /* csgo_swedish.txt */"Packa upp {1}",
+  UnsealGraffitiClose: /* csgo_swedish.txt */"Stäng",
+  UnsealGraffitiDesc: /* csgo_swedish.txt */"Öppna",
+  UnsealGraffitiTitle: /* csgo_swedish.txt */"Öppna graffiti",
+  UnsealGraffitiUse: /* csgo_swedish.txt */"Öppna graffiti",
+  UnsealGraffitiWarn: /* csgo_swedish.txt */"Denna graffiti kan endast öppnas en gång"
 };

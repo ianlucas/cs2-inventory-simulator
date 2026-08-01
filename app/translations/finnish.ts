@@ -219,6 +219,7 @@ export const finnish = {
   InventoryItemUnequipCT: "Poista CT",
   InventoryItemUnequipT: "Poista T",
   InventoryItemUnlockContainer: /* csgo_finnish.txt */"Avaa säiliö",
+  InventoryItemUnsealGraffiti: /* csgo_finnish.txt */"Avaa ja varusta",
   InventoryItemUseItem: /* csgo_finnish.txt */"Käytä esinettä",
   InventoryItemUseStorageUnit: /* csgo_finnish.txt */"Aloita varastolaatikon käyttö",
   InventoryItemWear: "Kuluminen:",
@@ -227,6 +228,7 @@ export const finnish = {
   InventorySelectInspectContents: /* csgo_finnish.txt */"Tarkastellaan sisältöä kohteelle:",
   InventorySelectItemToDeposit: /* csgo_finnish.txt */"Valitse siirrettävät esineet",
   InventorySelectItemToRetrieve: /* csgo_finnish.txt */"Valitse siirrettävät esineet",
+  ItemGraffitiChargesRemaining: /* csgo_finnish.txt */"Käyttökertoja jäljellä: {1}",
   ItemRarityAncient: /* csgo_finnish.txt */"Merkittävä",
   ItemRarityCommon: /* csgo_finnish.txt */"Perustason",
   ItemRarityDefault: /* csgo_finnish.txt */"Oletus",
@@ -256,6 +258,8 @@ export const finnish = {
   ItemRarityNameTool: /* csgo_finnish.txt */"työkalu",
   ItemRarityRare: /* csgo_finnish.txt */"Korkean tason",
   ItemRarityUncommon: /* csgo_finnish.txt */"Keskitason",
+  ItemSealedGraffiti: /* csgo_finnish.txt */"Sinetöity graffiti",
+  ItemSealedGraffitiDesc: /* csgo_finnish.txt */"Tämä on sinetöity graffitikuviosäiliö. Säiliön avaaminen antaa 50 latausta kyseisen graffitin käyttöön.",
   ItemSwapStatTrakAccept: /* csgo_finnish.txt */"HYVÄKSY",
   ItemSwapStatTrakClose: /* csgo_finnish.txt */"Sulje",
   ItemSwapStatTrakDesc: /* csgo_finnish.txt */"Tämä esine vaihtaa kahden samanlaisen aseen StatTrak™-arvot keskenään.",
@@ -344,5 +348,10 @@ export const finnish = {
   UnpackClose: /* csgo_finnish.txt */"Sulje",
   UnpackDesc: /* csgo_finnish.txt */"Haluatko varmasti purkaa esineen pakkauksesta?",
   UnpackNumberOfItems: /* csgo_finnish.txt */"Esineiden määrä: {1}",
-  UnpackTitle: /* csgo_finnish.txt */"Avaa {1}"
+  UnpackTitle: /* csgo_finnish.txt */"Avaa {1}",
+  UnsealGraffitiClose: /* csgo_finnish.txt */"Sulje",
+  UnsealGraffitiDesc: /* csgo_finnish.txt */"Avaa",
+  UnsealGraffitiTitle: /* csgo_finnish.txt */"Avaa graffiti",
+  UnsealGraffitiUse: /* csgo_finnish.txt */"Avaa graffiti",
+  UnsealGraffitiWarn: /* csgo_finnish.txt */"Graffitin voi avata vain kerran"
 };

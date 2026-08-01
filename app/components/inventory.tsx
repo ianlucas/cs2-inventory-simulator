@@ -52,6 +52,8 @@ import { useSealItemSticker } from "./hooks/use-seal-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
 import { UnpackItem } from "./unpack-item";
+import { UnsealGraffiti } from "./unseal-graffiti";
+import { useUnsealGraffiti } from "./hooks/use-unseal-graffiti";
 
 export function Inventory() {
   const translate = useTranslate();
@@ -174,6 +176,13 @@ export function Inventory() {
     useUnpackItem();
 
   const {
+    closeUnsealGraffiti,
+    handleUnsealGraffiti,
+    isUnsealingGraffiti,
+    unsealGraffiti
+  } = useUnsealGraffiti();
+
+  const {
     closeDetachCharm,
     detachCharm,
     handleDetachCharm: openDetachCharm,
@@ -259,6 +268,7 @@ export function Inventory() {
     closeSwapItemsStatTrak();
     closeUnlockCase();
     closeUnpackItem();
+    closeUnsealGraffiti();
   }
 
   function handleSelectItem(uid: number) {
@@ -349,6 +359,7 @@ export function Inventory() {
                     onSwapItemsStatTrak: handleSwapItemsStatTrak,
                     onUnequip: handleUnequip,
                     onUnlockContainer: handleUnlockCase,
+                    onUnsealGraffiti: handleUnsealGraffiti,
                     onUseItem: handleUnpackItem,
                     ownApplicableKeychains,
                     ownApplicablePatches,
@@ -438,7 +449,11 @@ export function Inventory() {
       )}
       <Presence present={isInspectingItem(inspectItem)}>
         {isInspectingItem(inspectItem) ? (
-          <InspectItem {...inspectItem} onClose={closeInspectItem} />
+          <InspectItem
+            {...inspectItem}
+            onClose={closeInspectItem}
+            onUnsealGraffiti={handleUnsealGraffiti}
+          />
         ) : null}
       </Presence>
       <Presence present={isDetachingCharm(detachCharm)}>
@@ -453,6 +468,11 @@ export function Inventory() {
             onClose={closeUnpackItem}
             onUnpacked={handleInspectItem}
           />
+        ) : null}
+      </Presence>
+      <Presence present={isUnsealingGraffiti(unsealGraffiti)}>
+        {isUnsealingGraffiti(unsealGraffiti) ? (
+          <UnsealGraffiti {...unsealGraffiti} onClose={closeUnsealGraffiti} />
         ) : null}
       </Presence>
     </>

@@ -219,6 +219,7 @@ export const czech = {
   InventoryItemUnequipCT: "Sundat CT",
   InventoryItemUnequipT: "Sundat T",
   InventoryItemUnlockContainer: /* csgo_czech.txt */"Odemknout bednu",
+  InventoryItemUnsealGraffiti: /* csgo_czech.txt */"Rozbalit a vybavit",
   InventoryItemUseItem: /* csgo_czech.txt */"Použít předmět",
   InventoryItemUseStorageUnit: /* csgo_czech.txt */"Začít používat kontejner",
   InventoryItemWear: "Povrch:",
@@ -227,6 +228,7 @@ export const czech = {
   InventorySelectInspectContents: /* csgo_czech.txt */"Prohlížíš si obsah",
   InventorySelectItemToDeposit: /* csgo_czech.txt */"Vyber předměty, které chceš přesunout do",
   InventorySelectItemToRetrieve: /* csgo_czech.txt */"Vyber předměty, které chceš vyzvednout z",
+  ItemGraffitiChargesRemaining: /* csgo_czech.txt */"Zbývající použití: {1}",
   ItemRarityAncient: /* csgo_czech.txt */"Mimořádná",
   ItemRarityCommon: /* csgo_czech.txt */"Základní třída",
   ItemRarityDefault: /* csgo_czech.txt */"Základní",
@@ -256,6 +258,8 @@ export const czech = {
   ItemRarityNameTool: /* csgo_czech.txt */"Nástroj",
   ItemRarityRare: /* csgo_czech.txt */"Vyšší třída",
   ItemRarityUncommon: /* csgo_czech.txt */"Střední třída",
+  ItemSealedGraffiti: /* csgo_czech.txt */"Zabalené graffiti",
+  ItemSealedGraffitiDesc: /* csgo_czech.txt */"Tento předmět je zabalená plechovka s graffiti. Jakmile graffiti rozbalíš, budeš ho moci ve hře 50× nasprejovat.",
   ItemSwapStatTrakAccept: /* csgo_czech.txt */"PŘIJMOUT",
   ItemSwapStatTrakClose: /* csgo_czech.txt */"Zavřít",
   ItemSwapStatTrakDesc: /* csgo_czech.txt */"Tento nástroj prohodí statistiky mezi dvěma předměty stejného typu.",
@@ -344,5 +348,10 @@ export const czech = {
   UnpackClose: /* csgo_czech.txt */"Zavřít",
   UnpackDesc: /* csgo_czech.txt */"Opravdu chceš rozbalit tento předmět?",
   UnpackNumberOfItems: /* csgo_czech.txt */"Počet předmětů: {1}",
-  UnpackTitle: /* csgo_czech.txt */"Rozbalit {1}"
+  UnpackTitle: /* csgo_czech.txt */"Rozbalit {1}",
+  UnsealGraffitiClose: /* csgo_czech.txt */"Zavřít",
+  UnsealGraffitiDesc: /* csgo_czech.txt */"Otevřít",
+  UnsealGraffitiTitle: /* csgo_czech.txt */"Rozbalit graffiti",
+  UnsealGraffitiUse: /* csgo_czech.txt */"Rozbalit graffiti",
+  UnsealGraffitiWarn: /* csgo_czech.txt */"Toto graffiti lze rozbalit pouze jednou"
 };

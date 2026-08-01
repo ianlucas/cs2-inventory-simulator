@@ -12,7 +12,7 @@ import {
 import clsx from "clsx";
 import { ComponentProps } from "react";
 import { has } from "~/utils/misc";
-import { usePreferences } from "./app-context";
+import { usePreferences, useTranslate } from "./app-context";
 import { InventoryItemTooltipContents } from "./inventory-item-tooltip-contents";
 import { ItemDescription } from "./item-description";
 import { InventoryItemTooltipExterior } from "./inventory-item-tooltip-exterior";
@@ -31,6 +31,7 @@ export function InventoryItemTooltip({
   item: CS2InventoryItem;
   forwardRef: typeof props.ref;
 }) {
+  const translate = useTranslate();
   const { statsForNerds } = usePreferences();
   const isContainer = item.isContainer();
   const containerItem =
@@ -42,6 +43,9 @@ export function InventoryItemTooltip({
   const hasSeed = !item.isDefault && item.hasSeed();
   const hasAttributes = hasWear || hasSeed;
   const hasStatTrak = item.statTrak !== undefined;
+  const isUnsealedGraffiti =
+    item.isGraffiti() && item.hasCharges() && !item.isSealed();
+  const isCharmDetachment = item.isCharmDetachment();
   const wear = item.getWear();
 
   // We don't treat graffiti as equippable for a particular team, but in-game it
@@ -77,6 +81,16 @@ export function InventoryItemTooltip({
         />
       )}
       <ItemDescription item={item} />
+      {isUnsealedGraffiti && (
+        <p className="mt-4 text-cyan-200/80">
+          {translate("ItemGraffitiChargesRemaining", String(item.getCharges()))}
+        </p>
+      )}
+      {isCharmDetachment && (
+        <p className="mt-4 text-cyan-200/80">
+          {translate("CharmDetachmentsAvailable", String(item.getCharges()))}
+        </p>
+      )}
       {hasContents && (
         <InventoryItemTooltipContents
           containerItem={containerItem}

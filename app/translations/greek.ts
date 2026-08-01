@@ -220,6 +220,7 @@ export const greek = {
   InventoryItemUnequipCT: "Παρόπλιση CT",
   InventoryItemUnequipT: "Παρόπλιση T",
   InventoryItemUnlockContainer: /* csgo_greek.txt */"Ξεκλείδωμα κιβωτίου",
+  InventoryItemUnsealGraffiti: /* csgo_greek.txt */"Άνοιγμα & εξόπλιση",
   InventoryItemUseItem: /* csgo_greek.txt */"Χρήση αντικειμένου",
   InventoryItemUseStorageUnit: /* csgo_greek.txt */"Έναρξη χρήσης κιβωτίου",
   InventoryItemWear: "Φθορά:",
@@ -228,6 +229,7 @@ export const greek = {
   InventorySelectInspectContents: /* csgo_greek.txt */"Επιθεωρείτε τα περιεχόμενα από",
   InventorySelectItemToDeposit: /* csgo_greek.txt */"Επιλέξτε αντικείμενα για να μετακινήσετε σε",
   InventorySelectItemToRetrieve: /* csgo_greek.txt */"Επιλέξτε αντικείμενα για να λάβετε",
+  ItemGraffitiChargesRemaining: /* csgo_greek.txt */"Υπόλοιπες φορτίσεις: {1}",
   ItemRarityAncient: /* csgo_greek.txt */"Extraordinary",
   ItemRarityCommon: /* csgo_greek.txt */"Base Grade",
   ItemRarityDefault: /* csgo_greek.txt */"Προεπιλογή",
@@ -257,6 +259,8 @@ export const greek = {
   ItemRarityNameTool: /* csgo_greek.txt */"Εργαλείο",
   ItemRarityRare: /* csgo_greek.txt */"High Grade",
   ItemRarityUncommon: /* csgo_greek.txt */"Medium Grade",
+  ItemSealedGraffiti: /* csgo_greek.txt */"Σφραγισμένο γκράφιτι",
+  ItemSealedGraffitiDesc: /* csgo_greek.txt */"Πρόκειται για ένα σφραγισμένο κιβώτιο ενός σχεδίου γκράφιτι. Μόλις αυτό το σχέδιο γκράφιτι αποσφραγιστεί, θα σας παρέχει αρκετές χρήσεις για να εφαρμόσετε το σχέδιο 50 φορές στον εντός παιχνιδιού κόσμο.",
   ItemSwapStatTrakAccept: /* csgo_greek.txt */"ΑΠΟΔΟΧΗ",
   ItemSwapStatTrakClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
   ItemSwapStatTrakDesc: /* csgo_greek.txt */"Αυτό το αντικείμενο εναλλάσσει τις τιμές StatTrak™ μεταξύ δύο αντικειμένων ίδιου τύπου.",
@@ -345,5 +349,10 @@ export const greek = {
   UnpackClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
   UnpackDesc: /* csgo_greek.txt */"Θέλετε σίγουρα να ανοίξετε αυτό το αντικείμενο;",
   UnpackNumberOfItems: /* csgo_greek.txt */"Αριθμός αντικειμένων: {1}",
-  UnpackTitle: /* csgo_greek.txt */"Άνοιγμα {1}"
+  UnpackTitle: /* csgo_greek.txt */"Άνοιγμα {1}",
+  UnsealGraffitiClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
+  UnsealGraffitiDesc: /* csgo_greek.txt */"Άνοιγμα",
+  UnsealGraffitiTitle: /* csgo_greek.txt */"Άνοιγμα γκράφιτι",
+  UnsealGraffitiUse: /* csgo_greek.txt */"Ξεσφράγισμα γκράφιτι",
+  UnsealGraffitiWarn: /* csgo_greek.txt */"Αυτό το γκράφιτι μπορεί να ξεσφραγιστεί μόνο μία φορά"
 };

@@ -220,6 +220,7 @@ export const turkish = {
   InventoryItemUnequipCT: "CT'den çıkar",
   InventoryItemUnequipT: "T'den çıkar",
   InventoryItemUnlockContainer: /* csgo_turkish.txt */"Kasayı Aç",
+  InventoryItemUnsealGraffiti: /* csgo_turkish.txt */"Aç ve Kuşan",
   InventoryItemUseItem: /* csgo_turkish.txt */"Eşyayı Kullan",
   InventoryItemUseStorageUnit: /* csgo_turkish.txt */"Bu Depoyu Kullanmaya Başla",
   InventoryItemWear: "Yıpranma:",
@@ -228,6 +229,7 @@ export const turkish = {
   InventorySelectInspectContents: /* csgo_turkish.txt */"Şunun içeriği inceleniyor:",
   InventorySelectItemToDeposit: /* csgo_turkish.txt */"Şuraya kaldırılacak eşyaları seç:",
   InventorySelectItemToRetrieve: /* csgo_turkish.txt */"Alınacak eşyaları seç",
+  ItemGraffitiChargesRemaining: /* csgo_turkish.txt */"Kalan Kullanım: {1}",
   ItemRarityAncient: /* csgo_turkish.txt */"Olağandışı",
   ItemRarityCommon: /* csgo_turkish.txt */"Temel Sınıf",
   ItemRarityDefault: /* csgo_turkish.txt */"Varsayılan",
@@ -257,6 +259,8 @@ export const turkish = {
   ItemRarityNameTool: /* csgo_turkish.txt */"Araç",
   ItemRarityRare: /* csgo_turkish.txt */"Yüksek Sınıf",
   ItemRarityUncommon: /* csgo_turkish.txt */"Orta Sınıf",
+  ItemSealedGraffiti: /* csgo_turkish.txt */"Mühürlü Grafiti",
+  ItemSealedGraffitiDesc: /* csgo_turkish.txt */"Bu bir grafiti kalıbının mühürlü kasasıdır. Bu kasanın mührü bozulduğunda, içinden çıkan kalıp 50 defa kullanılabilir.",
   ItemSwapStatTrakAccept: /* csgo_turkish.txt */"KABUL ET",
   ItemSwapStatTrakClose: /* csgo_turkish.txt */"Kapat",
   ItemSwapStatTrakDesc: /* csgo_turkish.txt */"Bu eşya aynı iki eşya arasındaki StatTrak™ değerlerini değiştirir.",
@@ -345,5 +349,10 @@ export const turkish = {
   UnpackClose: /* csgo_turkish.txt */"Kapat",
   UnpackDesc: /* csgo_turkish.txt */"Bu eşyayı açmak istediğine emin misin?",
   UnpackNumberOfItems: /* csgo_turkish.txt */"Eşya Sayısı: {1}",
-  UnpackTitle: /* csgo_turkish.txt */"{1} Aç"
+  UnpackTitle: /* csgo_turkish.txt */"{1} Aç",
+  UnsealGraffitiClose: /* csgo_turkish.txt */"Kapat",
+  UnsealGraffitiDesc: /* csgo_turkish.txt */"Öğesini Aç",
+  UnsealGraffitiTitle: /* csgo_turkish.txt */"Grafitiyi Aç",
+  UnsealGraffitiUse: /* csgo_turkish.txt */"Grafitinin Mührünü Kır",
+  UnsealGraffitiWarn: /* csgo_turkish.txt */"Bu grafitinin mührü sadece bir defa kırılabilir"
 };

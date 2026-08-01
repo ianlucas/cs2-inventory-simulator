@@ -219,6 +219,7 @@ export const portuguese = {
   InventoryItemUnequipCT: "Desequipar CT",
   InventoryItemUnequipT: "Desequipar T",
   InventoryItemUnlockContainer: /* csgo_portuguese.txt */"Abrir",
+  InventoryItemUnsealGraffiti: /* csgo_portuguese.txt */"Abrir e equipar",
   InventoryItemUseItem: /* csgo_portuguese.txt */"Usar item",
   InventoryItemUseStorageUnit: /* csgo_portuguese.txt */"Usar esta unidade",
   InventoryItemWear: "Desgaste:",
@@ -227,6 +228,7 @@ export const portuguese = {
   InventorySelectInspectContents: /* csgo_portuguese.txt */"A ver conteúdo de",
   InventorySelectItemToDeposit: /* csgo_portuguese.txt */"Seleciona quais itens guardar em",
   InventorySelectItemToRetrieve: /* csgo_portuguese.txt */"Seleciona quais itens retirar de",
+  ItemGraffitiChargesRemaining: /* csgo_portuguese.txt */"Utilizações restantes: {1}",
   ItemRarityAncient: /* csgo_portuguese.txt */"Extraordinário",
   ItemRarityCommon: /* csgo_portuguese.txt */"Qualidade Básica",
   ItemRarityDefault: /* csgo_portuguese.txt */"Standard",
@@ -257,6 +259,8 @@ export const portuguese = {
   ItemRarityNameTool: /* csgo_portuguese.txt */"Ferramenta",
   ItemRarityRare: /* csgo_portuguese.txt */"Alta Qualidade",
   ItemRarityUncommon: /* csgo_portuguese.txt */"Qualidade Média",
+  ItemSealedGraffiti: /* csgo_portuguese.txt */"Grafíti selado",
+  ItemSealedGraffitiDesc: /* csgo_portuguese.txt */"Uma caixa selada que contém um padrão de grafíti. Assim que esta caixa for aberta, poderás aplicar o grafíti 50 vezes em superfícies planas durante partidas em qualquer mapa.",
   ItemSwapStatTrakAccept: /* csgo_portuguese.txt */"ACEITAR",
   ItemSwapStatTrakClose: /* csgo_portuguese.txt */"Fechar",
   ItemSwapStatTrakDesc: /* csgo_portuguese.txt */"Este item troca as estatísticas StatTrak™ entre dois itens do mesmo tipo.",
@@ -345,5 +349,10 @@ export const portuguese = {
   UnpackClose: /* csgo_portuguese.txt */"Fechar",
   UnpackDesc: /* csgo_portuguese.txt */"Tens a certeza de que queres abrir este item?",
   UnpackNumberOfItems: /* csgo_portuguese.txt */"Número de itens: {1}",
-  UnpackTitle: /* csgo_portuguese.txt */"Abrir {1}"
+  UnpackTitle: /* csgo_portuguese.txt */"Abrir {1}",
+  UnsealGraffitiClose: /* csgo_portuguese.txt */"Fechar",
+  UnsealGraffitiDesc: /* csgo_portuguese.txt */"Abrir",
+  UnsealGraffitiTitle: /* csgo_portuguese.txt */"Abrir grafíti",
+  UnsealGraffitiUse: /* csgo_portuguese.txt */"Abrir grafíti",
+  UnsealGraffitiWarn: /* csgo_portuguese.txt */"Este grafíti só pode ser aberto uma vez"
 };

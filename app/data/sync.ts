@@ -30,5 +30,6 @@ export const SyncAction = {
   SealItemSticker: "seal-item-sticker",
   SwapItemsStatTrak: "swap-items-stattrak",
   Unequip: "unequip",
-  UnpackItem: "unpack-item"
+  UnpackItem: "unpack-item",
+  UnsealItem: "unseal-item"
 } as const;

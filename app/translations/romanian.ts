@@ -219,6 +219,7 @@ export const romanian = {
   InventoryItemUnequipCT: "Dezechipează CT",
   InventoryItemUnequipT: "Dezechipează T",
   InventoryItemUnlockContainer: /* csgo_romanian.txt */"Deschide containerul",
+  InventoryItemUnsealGraffiti: /* csgo_romanian.txt */"Deschide și echipează",
   InventoryItemUseItem: /* csgo_romanian.txt */"Folosește obiectul",
   InventoryItemUseStorageUnit: /* csgo_romanian.txt */"Începe să folosești această unitate de depozitare",
   InventoryItemWear: "Uzură:",
@@ -227,6 +228,7 @@ export const romanian = {
   InventorySelectInspectContents: /* csgo_romanian.txt */"Inspectezi conținutul pentru:",
   InventorySelectItemToDeposit: /* csgo_romanian.txt */"Selecteză obiectele pe care să le depozitezi",
   InventorySelectItemToRetrieve: /* csgo_romanian.txt */"Selectează obiectele pe care să le preiei",
+  ItemGraffitiChargesRemaining: /* csgo_romanian.txt */"Aplicări rămase: {1}",
   ItemRarityAncient: /* csgo_romanian.txt */"Extraordinar(ă)",
   ItemRarityCommon: /* csgo_romanian.txt */"Calitate de bază",
   ItemRarityDefault: /* csgo_romanian.txt */"Implicit(ă)",
@@ -256,6 +258,8 @@ export const romanian = {
   ItemRarityNameTool: /* csgo_romanian.txt */"Instrument",
   ItemRarityRare: /* csgo_romanian.txt */"Calitate ridicată",
   ItemRarityUncommon: /* csgo_romanian.txt */"Calitate medie",
+  ItemSealedGraffiti: /* csgo_romanian.txt */"Graffiti sigilat",
+  ItemSealedGraffitiDesc: /* csgo_romanian.txt */"Acesta este un container sigilat cu un model graffiti. Odată ce acest model graffiti este desigilat, îți va oferi suficiente folosiri pentru a aplica modelul graffiti de 50 de ori în lumea jocului.",
   ItemSwapStatTrakAccept: /* csgo_romanian.txt */"ACCEPTĂ",
   ItemSwapStatTrakClose: /* csgo_romanian.txt */"Închide",
   ItemSwapStatTrakDesc: /* csgo_romanian.txt */"Acest obiect schimbă între ele valorile StatTrak™ pentru două obiecte de același tip.",
@@ -344,5 +348,10 @@ export const romanian = {
   UnpackClose: /* csgo_romanian.txt */"Închide",
   UnpackDesc: /* csgo_romanian.txt */"Sigur vrei să despachetezi acest obiect?",
   UnpackNumberOfItems: /* csgo_romanian.txt */"Numărul de obiecte: {1}",
-  UnpackTitle: /* csgo_romanian.txt */"Despachetează: {1}"
+  UnpackTitle: /* csgo_romanian.txt */"Despachetează: {1}",
+  UnsealGraffitiClose: /* csgo_romanian.txt */"Închide",
+  UnsealGraffitiDesc: /* csgo_romanian.txt */"Deschide:",
+  UnsealGraffitiTitle: /* csgo_romanian.txt */"Deschide graffitiul",
+  UnsealGraffitiUse: /* csgo_romanian.txt */"Desigilează graffitiul",
+  UnsealGraffitiWarn: /* csgo_romanian.txt */"Acest graffiti poate fi desigilat doar o singură dată."
 };

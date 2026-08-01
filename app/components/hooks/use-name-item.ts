@@ -45,6 +45,13 @@ export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
     let [model, ...names] = item.name.split("|").map((s) => s.trim());
     let name = names.join(" | ");
     model = `${quality}${statTrak}${model}`;
+    if (
+      item.isGraffiti() &&
+      item.hasCharges() &&
+      (inventoryItem === undefined || inventoryItem.isSealed())
+    ) {
+      model = translate("ItemSealedGraffiti");
+    }
     if (item.isAgent()) {
       [model, name] = name.split(" | ");
     } else if (ITEM_TYPES_WITHOUT_NAME.includes(item.type)) {

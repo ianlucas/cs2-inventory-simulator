@@ -219,6 +219,7 @@ export const japanese = {
   InventoryItemUnequipCT: "CTの装備解除",
   InventoryItemUnequipT: "Tの装備解除",
   InventoryItemUnlockContainer: /* csgo_japanese.txt */"コンテナを開ける",
+  InventoryItemUnsealGraffiti: /* csgo_japanese.txt */"開封して装備する",
   InventoryItemUseItem: /* csgo_japanese.txt */"アイテムを使用",
   InventoryItemUseStorageUnit: /* csgo_japanese.txt */"このユニットを使い始める",
   InventoryItemWear: "損耗:",
@@ -227,6 +228,7 @@ export const japanese = {
   InventorySelectInspectContents: /* csgo_japanese.txt */"中身を確認中",
   InventorySelectItemToDeposit: /* csgo_japanese.txt */"移動させるアイテムを選択",
   InventorySelectItemToRetrieve: /* csgo_japanese.txt */"取り出すアイテムを選択",
+  ItemGraffitiChargesRemaining: /* csgo_japanese.txt */"チャージ残量: {1}",
   ItemRarityAncient: /* csgo_japanese.txt */"レア",
   ItemRarityCommon: /* csgo_japanese.txt */"ベースグレード",
   ItemRarityDefault: /* csgo_japanese.txt */"デフォルト",
@@ -256,6 +258,8 @@ export const japanese = {
   ItemRarityNameTool: /* csgo_japanese.txt */"ツール",
   ItemRarityRare: /* csgo_japanese.txt */"ハイグレード",
   ItemRarityUncommon: /* csgo_japanese.txt */"ミディアムグレード",
+  ItemSealedGraffiti: /* csgo_japanese.txt */"未開封グラフィティ",
+  ItemSealedGraffitiDesc: /* csgo_japanese.txt */"グラフィティが入った未開封のコンテナです。開封したグラフィティには50回分のチャージがあり、チャージの数だけゲーム内でグラフィティを適用できます。",
   ItemSwapStatTrakAccept: /* csgo_japanese.txt */"了解",
   ItemSwapStatTrakClose: /* csgo_japanese.txt */"閉じる",
   ItemSwapStatTrakDesc: /* csgo_japanese.txt */"同じタイプのアイテム間で StatTrak™ の値を入れ替えるツールです。",
@@ -344,5 +348,10 @@ export const japanese = {
   UnpackClose: /* csgo_japanese.txt */"閉じる",
   UnpackDesc: /* csgo_japanese.txt */"本当にこのアイテムを開封しますか？",
   UnpackNumberOfItems: /* csgo_japanese.txt */"アイテム数: {1}",
-  UnpackTitle: /* csgo_japanese.txt */"{1}を開封"
+  UnpackTitle: /* csgo_japanese.txt */"{1}を開封",
+  UnsealGraffitiClose: /* csgo_japanese.txt */"閉じる",
+  UnsealGraffitiDesc: /* csgo_japanese.txt */"を開ける",
+  UnsealGraffitiTitle: /* csgo_japanese.txt */"グラフィティを開封する",
+  UnsealGraffitiUse: /* csgo_japanese.txt */"グラフィティを開封する",
+  UnsealGraffitiWarn: /* csgo_japanese.txt */"このグラフィティは一度しか開封できません"
 };

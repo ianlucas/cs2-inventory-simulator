@@ -220,6 +220,7 @@ export const koreana = {
   InventoryItemUnequipCT: "CT 장착 해제",
   InventoryItemUnequipT: "T 장착 해제",
   InventoryItemUnlockContainer: /* csgo_koreana.txt */"상자 열기",
+  InventoryItemUnsealGraffiti: /* csgo_koreana.txt */"개봉 후 장착",
   InventoryItemUseItem: /* csgo_koreana.txt */"아이템 사용",
   InventoryItemUseStorageUnit: /* csgo_koreana.txt */"저장 컨테이너 사용",
   InventoryItemWear: "형태:",
@@ -228,6 +229,7 @@ export const koreana = {
   InventorySelectInspectContents: /* csgo_koreana.txt */"관찰 중인 저장 컨테이너:",
   InventorySelectItemToDeposit: /* csgo_koreana.txt */"다음 저장 컨테이너로 이동할 아이템 선택:",
   InventorySelectItemToRetrieve: /* csgo_koreana.txt */"다음 저장 컨테이너에서 가져올 아이템 선택:",
+  ItemGraffitiChargesRemaining: /* csgo_koreana.txt */"남은 사용 횟수: {1}번",
   ItemRarityAncient: /* csgo_koreana.txt */"희귀",
   ItemRarityCommon: /* csgo_koreana.txt */"일반",
   ItemRarityDefault: /* csgo_koreana.txt */"기본",
@@ -257,6 +259,8 @@ export const koreana = {
   ItemRarityNameTool: /* csgo_koreana.txt */"도구",
   ItemRarityRare: /* csgo_koreana.txt */"고급",
   ItemRarityUncommon: /* csgo_koreana.txt */"중급",
+  ItemSealedGraffiti: /* csgo_koreana.txt */"개봉 안 한 그래피티",
+  ItemSealedGraffitiDesc: /* csgo_koreana.txt */"아직 개봉하지 않은 그래피티 패턴입니다. 이 그래피티 패턴을 개봉하면 게임에서 그래피티 패턴을 50번 남길 수 있습니다.",
   ItemSwapStatTrakAccept: /* csgo_koreana.txt */"수락",
   ItemSwapStatTrakClose: /* csgo_koreana.txt */"닫기",
   ItemSwapStatTrakDesc: /* csgo_koreana.txt */"이 아이템으로 유형이 같은 두 아이템의 StatTrak™ 점수를 맞바꿀 수 있습니다.",
@@ -345,5 +349,10 @@ export const koreana = {
   UnpackClose: /* csgo_koreana.txt */"닫기",
   UnpackDesc: /* csgo_koreana.txt */"이 아이템을 개봉할까요?",
   UnpackNumberOfItems: /* csgo_koreana.txt */"아이템 개수: {1}",
-  UnpackTitle: /* csgo_koreana.txt */"{1} 아이템 개봉"
+  UnpackTitle: /* csgo_koreana.txt */"{1} 아이템 개봉",
+  UnsealGraffitiClose: /* csgo_koreana.txt */"닫기",
+  UnsealGraffitiDesc: /* csgo_koreana.txt */"열기",
+  UnsealGraffitiTitle: /* csgo_koreana.txt */"그래피티 열기",
+  UnsealGraffitiUse: /* csgo_koreana.txt */"미개봉 그래피티",
+  UnsealGraffitiWarn: /* csgo_koreana.txt */"이 그래피티는 한 번만 개봉할 수 있습니다."
 };
