@@ -24,7 +24,8 @@ export function useStorageUnit() {
     (!item.isDefault ||
       item.nameTag !== undefined ||
       item.stickers !== undefined) &&
-    !item.isTool();
+    !item.isTool() &&
+    (!item.hasCharges() || item.isSealed());
 
   function handleRenameStorageUnit(uid: number) {
     return setRenameStorageUnit({ uid });
