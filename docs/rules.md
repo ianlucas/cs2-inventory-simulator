@@ -563,7 +563,7 @@ Enable the 3D viewer (e.g. the craft sticker editor). Still gated by a reachable
 - **Type:** `boolean`
 - **Default:** `false`
 
-Restrict the 3D viewer to attachment features (applying, scraping, and positioning stickers - and keychains in the future). Item inspection and the craft item preview fall back to 2D images. Has no effect when `viewerEnabled` is `false`.
+Restrict the 3D viewer to attachment features (applying, scraping, and positioning stickers, and attaching and positioning charms). Everything else (e.g. item inspection and the craft item preview) falls back to 2D images. Has no effect when `viewerEnabled` is `false`.
 
 ### `viewerKey`
 
