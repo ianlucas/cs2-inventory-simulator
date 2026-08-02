@@ -5,8 +5,9 @@
 
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
-import { useInventory, useTranslate } from "./app-context";
+import { useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import {
   ItemSelectorContextProps,
@@ -35,9 +36,8 @@ export function InventorySelectedItem({
 }) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
-  const [inventory] = useInventory();
   const [itemSelector] = useItemSelector();
-  const item = inventory.get(uid);
+  const item = useInventoryItem(uid);
 
   return (
     <div className="m-auto w-full px-4 pb-4 text-xs drop-shadow-sm lg:flex lg:w-5xl lg:items-center lg:px-0 lg:pb-0 lg:text-base">
