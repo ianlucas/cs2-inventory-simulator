@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2ItemType, CS2Team } from "@ianlucas/cs2-lib";
+import { CS2ItemType, CS2Team } from "@ianlucas/cs2-lib";
 import { useNavigate } from "react-router";
 import { useApplyItemSticker } from "~/components/hooks/use-apply-item-sticker";
 import { useInspectItem } from "~/components/hooks/use-inspect-item";
@@ -27,19 +27,19 @@ import {
 import { ApplyItemKeychain } from "./apply-item-keychain";
 import { ApplyItemPatch } from "./apply-item-patch";
 import { ApplyItemSticker } from "./apply-item-sticker";
-import { attachmentName } from "./attachment-3d-drawer";
 import { DetachCharm } from "./detach-charm";
 import { ExtractItemSticker } from "./extract-item-sticker";
-import { useExtractItemSticker } from "./hooks/use-extract-item-sticker";
 import { useApplyItemKeychain } from "./hooks/use-apply-item-keychain";
 import { useApplyItemPatch } from "./hooks/use-apply-item-patch";
 import { useDetachCharm } from "./hooks/use-detach-charm";
+import { useExtractItemSticker } from "./hooks/use-extract-item-sticker";
 import { useListenAppEvent } from "./hooks/use-listen-app-event";
 import { useRemoveItemPatch } from "./hooks/use-remove-item-patch";
+import { useSealItemSticker } from "./hooks/use-seal-item-sticker";
+import { useUnsealGraffiti } from "./hooks/use-unseal-graffiti";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
-import { alert } from "./modal-generic";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelector } from "./item-selector-context";
 import { Presence } from "./presence";
@@ -48,12 +48,10 @@ import { RenameItem } from "./rename-item";
 import { RenameStorageUnit } from "./rename-storage-unit";
 import { ScrapeItemSticker } from "./scrape-item-sticker";
 import { SealItemSticker } from "./seal-item-sticker";
-import { useSealItemSticker } from "./hooks/use-seal-item-sticker";
 import { SwapItemsStatTrak } from "./swap-items-stattrak";
 import { UnlockCase } from "./unlock-case";
 import { UnpackItem } from "./unpack-item";
 import { UnsealGraffiti } from "./unseal-graffiti";
-import { useUnsealGraffiti } from "./hooks/use-unseal-graffiti";
 
 export function Inventory() {
   const translate = useTranslate();
@@ -215,34 +213,19 @@ export function Inventory() {
     return navigate(`/craft?uid=${uid}`, { preventScrollReset: true });
   }
 
-  function handleNeedCharmDetachment() {
-    const pack = items.find(
-      ({ uid: packUid, item }) => packUid >= 0 && item.isCharmDetachmentPack()
-    );
-    if (pack !== undefined) {
-      return handleUnpackItem(pack.uid);
-    }
-    return alert({
-      titleText: translate("InventoryItemDetachCharm"),
-      bodyText: translate(
-        "DetachCharmNeed",
-        attachmentName(CS2Economy.getCharmDetachment().name)
-      ),
-      closeText: translate("GenericOK")
-    });
-  }
-
   function handleDetachCharm(uid: number) {
     if (inventory.getCharmDetachmentCharges() === 0) {
-      return handleNeedCharmDetachment();
+      const pack = items.find(
+        ({ uid: packUid, item }) => packUid >= 0 && item.isCharmDetachmentPack()
+      );
+      if (pack !== undefined) {
+        return handleUnpackItem(pack.uid);
+      }
     }
     return openDetachCharm(uid);
   }
 
   function handleDetachCharmWithTool(uid: number) {
-    if (inventory.getCharmDetachmentCharges() === 0) {
-      return handleNeedCharmDetachment();
-    }
     return setItemSelector({
       uid,
       items: items.filter(
