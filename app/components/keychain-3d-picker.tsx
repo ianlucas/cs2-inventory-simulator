@@ -32,9 +32,9 @@ import { range } from "~/utils/number";
 import { useTranslate } from "./app-context";
 import {
   AttachmentEditorDrawer,
+  attachmentName,
   AttachmentSlotsDrawer,
-  FORM_ECHO_WINDOW_MS,
-  attachmentName
+  FORM_ECHO_WINDOW_MS
 } from "./attachment-3d-drawer";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorLabel } from "./editor-label";
@@ -53,8 +53,6 @@ import { ViewerOverlay } from "./viewer-overlay";
 type Keychains = NonNullable<CS2BaseInventoryItem["keychains"]>;
 type Keychain = Keychains[string];
 
-// A weapon carries one charm, so only the lowest-keyed entry applies (the same
-// rule the viewer follows for the `keychains` Record).
 function toKeychain(keychains: Keychains): Keychain | undefined {
   const keys = Object.keys(keychains);
   if (keys.length === 0) {
@@ -64,8 +62,6 @@ function toKeychain(keychains: Keychains): Keychain | undefined {
   return keychains[lowest];
 }
 
-// Absent axes are meaningful (the model's default location), so compare them
-// raw — an explicit 0 is a real position, not a default.
 function keychainsEqual(
   a: Keychain | undefined,
   b: Keychain | undefined
@@ -127,6 +123,11 @@ function Keychain3dEditorOverlay({
 
   const [selected, setSelected] = useState(false);
   const [selecting, setSelecting] = useState(false);
+  const [keychainDefault, setKeychainDefault] = useState<{
+    x: number;
+    y: number;
+    z: number;
+  } | null>(null);
 
   const keychainRef = useRef(keychain);
   const lastEditAtRef = useRef(0);
@@ -151,17 +152,25 @@ function Keychain3dEditorOverlay({
     if (api === undefined) {
       return;
     }
-    const offChange = api.on("change", ({ item }) => {
-      if (Date.now() - lastEditAtRef.current < FORM_ECHO_WINDOW_MS) {
-        return;
+    const offChange = api.on(
+      "change",
+      ({ item, keychainDefault: incomingDefault }) => {
+        setKeychainDefault(incomingDefault ?? null);
+        if (Date.now() - lastEditAtRef.current < FORM_ECHO_WINDOW_MS) {
+          return;
+        }
+        const incoming = toKeychain(item.keychains ?? {});
+        if (keychainsEqual(keychainRef.current, incoming)) {
+          return;
+        }
+        keychainRef.current = incoming;
+        setKeychain(incoming);
       }
-      const incoming = toKeychain(item.keychains ?? {});
-      if (keychainsEqual(keychainRef.current, incoming)) {
-        return;
-      }
-      keychainRef.current = incoming;
-      setKeychain(incoming);
-    });
+    );
+    api
+      .getState()
+      .then((state) => setKeychainDefault(state.keychainDefault ?? null))
+      .catch(() => undefined);
     return () => offChange();
   }, [api]);
 
@@ -211,8 +220,6 @@ function Keychain3dEditorOverlay({
   function handleSelect(item: CS2EconomyItem) {
     setSelecting(false);
     const current = keychainRef.current;
-    // A swap keeps the seed and the position, matching the viewer's own
-    // setKeychain semantics — a user auditioning charms doesn't re-place each.
     const next: Keychain =
       current !== undefined ? { ...current, id: item.id } : { id: item.id };
     stageKeychain(next);
@@ -249,8 +256,6 @@ function Keychain3dEditorOverlay({
   }
 
   function handleRerollPosition() {
-    // The re-rolled position comes back through `change` (no echo window set,
-    // so it flows into the form).
     api?.rerollKeychainPosition({ index: 0 });
   }
 
@@ -259,8 +264,6 @@ function Keychain3dEditorOverlay({
     if (current === undefined) {
       return;
     }
-    // Dropping the axes (not zeroing them) puts the charm back at the model's
-    // default location — 0,0,0 is a real point inside the weapon.
     const next: Keychain = { id: current.id, seed: current.seed };
     stageKeychain(next);
     api?.setItem(buildItem(next));
@@ -386,7 +389,7 @@ function Keychain3dEditorOverlay({
               />
             </EditorLabel>
             {positionAxes.map(({ axis, label, bounds, rule }) => {
-              const axisValue = keychain[axis];
+              const axisValue = keychain[axis] ?? keychainDefault?.[axis];
               if (
                 axisValue === undefined ||
                 bounds?.min === undefined ||

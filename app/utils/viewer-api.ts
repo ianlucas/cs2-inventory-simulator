@@ -29,6 +29,12 @@ export interface ViewerState {
   selection: ViewerSelection;
   activeSticker: number | null;
   schemaCount: number;
+  // Where an UNMOVED charm renders — the model's default location, which the economy data
+  // doesn't publish (a keychains entry with absent axes falls to it). Display-only: showing
+  // it is not the same as storing it (reset-to-default must stay expressible as absent axes).
+  // null while no charm is applied or the weapon's markup hasn't loaded; optional because an
+  // older viewer build omits the field entirely.
+  keychainDefault?: { x: number; y: number; z: number } | null;
 }
 
 // Which rate limit bound; absent when the server didn't report a known bucket.
