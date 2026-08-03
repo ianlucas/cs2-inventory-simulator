@@ -127,6 +127,15 @@ function Keychain3dEditorOverlay({
 
   const [selected, setSelected] = useState(false);
   const [selecting, setSelecting] = useState(false);
+  // Where an unmoved charm renders, reported by the viewer once the weapon's markup loads
+  // (state/change `keychainDefault`). It backs the position fields for a charm whose stored
+  // axes are absent, so x/y/z show immediately instead of only after the first move; null
+  // until the viewer resolves it (the fields then wait, as they always did).
+  const [keychainDefault, setKeychainDefault] = useState<{
+    x: number;
+    y: number;
+    z: number;
+  } | null>(null);
 
   const keychainRef = useRef(keychain);
   const lastEditAtRef = useRef(0);
@@ -151,17 +160,30 @@ function Keychain3dEditorOverlay({
     if (api === undefined) {
       return;
     }
-    const offChange = api.on("change", ({ item }) => {
-      if (Date.now() - lastEditAtRef.current < FORM_ECHO_WINDOW_MS) {
-        return;
+    const offChange = api.on(
+      "change",
+      ({ item, keychainDefault: incomingDefault }) => {
+        // Viewer-owned, not form state, so it lands before (and regardless of) the echo
+        // window — the default resolving is never an echo of our own edit.
+        setKeychainDefault(incomingDefault ?? null);
+        if (Date.now() - lastEditAtRef.current < FORM_ECHO_WINDOW_MS) {
+          return;
+        }
+        const incoming = toKeychain(item.keychains ?? {});
+        if (keychainsEqual(keychainRef.current, incoming)) {
+          return;
+        }
+        keychainRef.current = incoming;
+        setKeychain(incoming);
       }
-      const incoming = toKeychain(item.keychains ?? {});
-      if (keychainsEqual(keychainRef.current, incoming)) {
-        return;
-      }
-      keychainRef.current = incoming;
-      setKeychain(incoming);
-    });
+    );
+    // `change` only fires on a change, and the default may have resolved before this
+    // subscription attached (e.g. the editor opened on an already-charmed item), so seed it
+    // with a one-shot pull. A timeout just leaves the fields waiting, as before.
+    api
+      .getState()
+      .then((state) => setKeychainDefault(state.keychainDefault ?? null))
+      .catch(() => undefined);
     return () => offChange();
   }, [api]);
 
@@ -386,7 +408,11 @@ function Keychain3dEditorOverlay({
               />
             </EditorLabel>
             {positionAxes.map(({ axis, label, bounds, rule }) => {
-              const axisValue = keychain[axis];
+              // A stored axis wins; an absent one shows the viewer-reported default (where
+              // the charm actually renders), so the fields are populated from the start.
+              // Editing writes only the touched axis, so the others stay stored-absent and
+              // "reset position" keeps meaning something.
+              const axisValue = keychain[axis] ?? keychainDefault?.[axis];
               if (
                 axisValue === undefined ||
                 bounds?.min === undefined ||
