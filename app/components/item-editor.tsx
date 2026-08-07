@@ -334,7 +334,7 @@ export function ItemEditor({
           <EditorInput
             className={clsx("w-full", isDisabled && "text-right")}
             disabled={isDisabled}
-            maxLength={20}
+            maxCodePoints={20}
             onChange={attributes.input("nameTag")}
             placeholder={
               isDisabled ? "N/A" : translate("EditorNametagPlaceholder")

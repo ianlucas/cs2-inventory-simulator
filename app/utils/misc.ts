@@ -45,6 +45,10 @@ export function trim(value: string) {
   return value.length > 0 ? value : undefined;
 }
 
+export function truncateCodePoints(value: string, maximum: number) {
+  return [...value].slice(0, maximum).join("");
+}
+
 export function nonEmptyString(value: string | undefined) {
   return value !== undefined
     ? value.length > 0
