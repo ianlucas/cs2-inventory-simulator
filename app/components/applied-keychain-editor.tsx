@@ -125,7 +125,6 @@ export function AppliedKeychainEditor({
                 )}
                 min={keychainPositionXMin}
                 onChange={attributes.update("x")}
-                randomizable
                 step={CS2_KEYCHAIN_POSITION_FACTOR}
                 stepRangeStyles="flex-1"
                 transform={keychainPositionToString}
@@ -151,7 +150,6 @@ export function AppliedKeychainEditor({
                 )}
                 min={keychainPositionYMin}
                 onChange={attributes.update("y")}
-                randomizable
                 step={CS2_KEYCHAIN_POSITION_FACTOR}
                 stepRangeStyles="flex-1"
                 transform={keychainPositionToString}
@@ -177,7 +175,6 @@ export function AppliedKeychainEditor({
                 )}
                 min={keychainPositionZMin}
                 onChange={attributes.update("z")}
-                randomizable
                 step={CS2_KEYCHAIN_POSITION_FACTOR}
                 stepRangeStyles="flex-1"
                 transform={keychainPositionToString}
