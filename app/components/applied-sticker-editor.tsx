@@ -224,7 +224,6 @@ export function AppliedStickerEditor({
                 maxLength={stickerOffsetStringMaxLen}
                 min={stickerOffsetXMin}
                 onChange={attributes.update("x")}
-                randomizable
                 step={CS2_STICKER_OFFSET_FACTOR}
                 stepRangeStyles="flex-1"
                 transform={stickerOffsetToString}
@@ -247,7 +246,6 @@ export function AppliedStickerEditor({
                 maxLength={stickerOffsetStringMaxLen}
                 min={stickerOffsetYMin}
                 onChange={attributes.update("y")}
-                randomizable
                 step={CS2_STICKER_OFFSET_FACTOR}
                 stepRangeStyles="flex-1"
                 transform={stickerOffsetToString}
