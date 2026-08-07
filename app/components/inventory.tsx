@@ -366,6 +366,7 @@ export function Inventory() {
           {...unlockCase}
           key={unlockCaseKey}
           onClose={closeUnlockCase}
+          onInspect={handleInspectItem}
         />
       )}
       {isRenamingItem(renameItem) && (

@@ -5,7 +5,7 @@
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, test } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { useOverlayTransition } from "./hooks/use-overlay-transition";
 import { Presence } from "./presence";
 
@@ -78,5 +78,25 @@ describe("Presence + useOverlayTransition", () => {
     expect(overlay()?.getAttribute("data-state")).toBe("open");
     endAnimation();
     expect(overlay()).not.toBeNull();
+  });
+
+  test("notifies when the exit animation completes", () => {
+    const onExitComplete = vi.fn();
+    act(() => {
+      root.render(
+        <Presence present={true} onExitComplete={onExitComplete}>
+          <TestOverlay />
+        </Presence>
+      );
+    });
+    act(() => {
+      root.render(
+        <Presence present={false} onExitComplete={onExitComplete}>
+          {null}
+        </Presence>
+      );
+    });
+    endAnimation();
+    expect(onExitComplete).toHaveBeenCalledOnce();
   });
 });
