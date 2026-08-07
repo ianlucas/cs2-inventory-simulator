@@ -14,7 +14,6 @@ import { UnlockCaseContainerBackground } from "./unlock-case-container-backgroun
 import { UnlockCaseContainerContents } from "./unlock-case-container-contents";
 import { UnlockCaseWheel } from "./unlock-case-wheel";
 import { UseItemFooter } from "./use-item-footer";
-import { UseItemHeader } from "./use-item-header";
 
 export function UnlockCaseContainer({
   canUnlock,
@@ -51,18 +50,14 @@ export function UnlockCaseContainer({
         canUnlock={canUnlock}
         caseItem={caseItem}
       />
-      <div className="flex w-full flex-col justify-center gap-4">
-        <UseItemHeader
-          actionDesc={translate("CaseUnlock")}
-          actionItem={nameItemString(caseItem)}
-          title={translate("CaseUnlockContainer")}
-          warning={translate("CaseOnceWarn")}
-        />
+      <div className="flex size-full items-center justify-center">
         <UnlockCaseWheel
           caseItem={caseItem}
           isDisplaying={isDisplaying}
           items={items}
         />
+      </div>
+      <div className="absolute bottom-8 left-0 w-full">
         <div className="relative">
           <UnlockCaseContainerContents
             caseItem={caseItem}

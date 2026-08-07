@@ -25,9 +25,11 @@ export function usePresenceContext() {
 
 export function Presence({
   children,
+  onExitComplete,
   present
 }: {
   children: ReactNode;
+  onExitComplete?: () => void;
   present: boolean;
 }) {
   const [mounted, setMounted] = useState(present);
@@ -53,7 +55,10 @@ export function Presence({
     <PresenceContext.Provider
       value={{
         state: present ? "open" : "closed",
-        onExitComplete: () => setMounted(false)
+        onExitComplete: () => {
+          setMounted(false);
+          onExitComplete?.();
+        }
       }}
     >
       {present ? children : lastChildren.current}
