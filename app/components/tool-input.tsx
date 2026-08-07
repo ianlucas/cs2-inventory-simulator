@@ -5,15 +5,19 @@
 
 import clsx from "clsx";
 import { ComponentProps } from "react";
+import { truncateCodePoints } from "~/utils/misc";
 
 export function ToolInput({
   inflexible,
+  maxCodePoints,
+  onChange,
   pattern,
   unstyled,
   validate,
   ...props
 }: Omit<ComponentProps<"input">, "pattern" | "value"> & {
   inflexible?: boolean;
+  maxCodePoints?: number;
   pattern?: RegExp;
   unstyled?: boolean;
   validate?: (value?: string) => boolean;
@@ -29,6 +33,18 @@ export function ToolInput({
   return (
     <input
       {...props}
+      maxLength={
+        maxCodePoints === undefined ? props.maxLength : maxCodePoints * 2
+      }
+      onChange={(event) => {
+        if (maxCodePoints !== undefined) {
+          event.currentTarget.value = truncateCodePoints(
+            event.currentTarget.value,
+            maxCodePoints
+          );
+        }
+        onChange?.(event);
+      }}
       className={clsx(
         "font-display border border-white/35 tracking-widest placeholder-neutral-700 outline-hidden placeholder:font-sans placeholder:tracking-normal disabled:bg-transparent disabled:px-0 disabled:text-white",
         !inflexible && "w-0 min-w-0 flex-1",

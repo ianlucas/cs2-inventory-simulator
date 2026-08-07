@@ -95,7 +95,7 @@ export function RenameItem({
               <ToolInput
                 autoFocus
                 className="text-2xl lg:max-w-107"
-                maxLength={20}
+                maxCodePoints={20}
                 onChange={setNameTag}
                 placeholder={translate("InventoryItemRenamePlaceholder")}
                 validate={(nameTag) =>
