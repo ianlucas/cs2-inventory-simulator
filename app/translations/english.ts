@@ -31,6 +31,7 @@ export const english = {
   CaseAddKeyConfirm: "Confirm key craft",
   CaseClose: /* csgo_english.txt */"Close",
   CaseContainsOne: /* csgo_english.txt */"Contains one of the following:",
+  CaseInspecting: "Inspecting the {1}",
   CaseNeed: /* csgo_english.txt */"This action requires a",
   CaseOnceWarn: /* csgo_english.txt */"This Container can only be opened once",
   CaseRareItem: /* csgo_english.txt */"★ Rare Special Item ★",

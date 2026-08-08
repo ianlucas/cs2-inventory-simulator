@@ -3,11 +3,19 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2InventoryItem, CS2ItemType } from "@ianlucas/cs2-lib";
+import {
+  CS2EconomyItem,
+  CS2InventoryItem,
+  CS2ItemType
+} from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { has } from "~/utils/misc";
 
-export function ItemDescription({ item }: { item: CS2InventoryItem }) {
+export function ItemDescription({
+  item
+}: {
+  item: CS2EconomyItem | CS2InventoryItem;
+}) {
   const isAgent = item.type === CS2ItemType.Agent;
   const baseDescription = (item.isStickerSlab() ? item : (item.parent ?? item))
     .description;

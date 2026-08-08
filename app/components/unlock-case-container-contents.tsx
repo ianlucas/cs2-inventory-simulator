@@ -5,9 +5,72 @@
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { ElementRef, useEffect, useRef, useState } from "react";
+import { FloatingFocusManager } from "@floating-ui/react";
 import { useTranslate } from "./app-context";
+import { useInventoryItemFloating } from "./hooks/use-inventory-item-floating";
+import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemTile } from "./inventory-item-tile";
 import { InventoryItemTileSpecial } from "./inventory-item-tile-special";
+import { Presence } from "./presence";
+import { UnlockCaseContentsInspect } from "./unlock-case-contents-inspect";
+
+function UnlockCaseContainerContentsItem({
+  item,
+  onInspect
+}: {
+  item: CS2EconomyItem;
+  onInspect: () => void;
+}) {
+  const {
+    clickContext,
+    clickRefs,
+    clickStyles,
+    getClickFloatingProps,
+    getClickReferenceProps,
+    isClickOpen,
+    setIsClickOpen
+  } = useInventoryItemFloating();
+  const translate = useTranslate();
+
+  return (
+    <>
+      <div
+        className="relative w-38.5"
+        ref={clickRefs.setReference}
+        tabIndex={0}
+        {...getClickReferenceProps()}
+      >
+        <InventoryItemTile item={item} />
+      </div>
+      {isClickOpen && (
+        <FloatingFocusManager context={clickContext} modal={false}>
+          <div
+            role="menu"
+            className="font-display z-60 w-48 rounded-sm bg-neutral-800 py-2 text-sm text-white outline-hidden"
+            ref={clickRefs.setFloating}
+            style={clickStyles}
+            {...getClickFloatingProps()}
+          >
+            <InventoryItemContextMenu
+              menu={[
+                [
+                  {
+                    condition: true,
+                    label: translate("InventoryItemInspect"),
+                    onClick: () => {
+                      setIsClickOpen(false);
+                      onInspect();
+                    }
+                  }
+                ]
+              ]}
+            />
+          </div>
+        </FloatingFocusManager>
+      )}
+    </>
+  );
+}
 
 export function UnlockCaseContainerContents({
   caseItem,
@@ -19,6 +82,8 @@ export function UnlockCaseContainerContents({
   const translate = useTranslate();
   const [translateY, setTranslateY] = useState(0);
   const [opacity, setOpacity] = useState(0);
+  const [inspectItemIndex, setInspectItemIndex] = useState<number>();
+  const items = caseItem.listContents(true);
 
   const ref = useRef<ElementRef<"div">>(null);
 
@@ -44,17 +109,29 @@ export function UnlockCaseContainerContents({
         <h2 className="my-2">{translate("CaseContainsOne")}</h2>
         <div className="flex h-80 flex-wrap gap-3 overflow-y-scroll pb-4">
           {[
-            ...caseItem
-              .listContents(true)
-              .map((item, index) => (
-                <InventoryItemTile key={index} item={item} />
-              )),
+            ...items.map((item, index) => (
+              <UnlockCaseContainerContentsItem
+                item={item}
+                key={index}
+                onInspect={() => setInspectItemIndex(index)}
+              />
+            )),
             caseItem.specials !== undefined && (
               <InventoryItemTileSpecial key={-1} containerItem={caseItem} />
             )
           ]}
         </div>
       </div>
+      <Presence present={inspectItemIndex !== undefined}>
+        {inspectItemIndex !== undefined && (
+          <UnlockCaseContentsInspect
+            caseItem={caseItem}
+            initialItemIndex={inspectItemIndex}
+            items={items}
+            onClose={() => setInspectItemIndex(undefined)}
+          />
+        )}
+      </Presence>
     </div>
   );
 }

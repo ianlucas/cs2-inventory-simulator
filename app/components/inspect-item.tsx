@@ -6,7 +6,12 @@
 import { FloatingFocusManager } from "@floating-ui/react";
 import { faCheck, faShare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CS2Economy, CS2InventoryItem, CS2_MIN_SEED } from "@ianlucas/cs2-lib";
+import {
+  CS2Economy,
+  CS2EconomyItem,
+  CS2InventoryItem,
+  CS2_MIN_SEED
+} from "@ianlucas/cs2-lib";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { ReactNode, useEffect } from "react";
@@ -46,7 +51,7 @@ export function InspectItemHeader({
   title
 }: {
   icon?: ReactNode;
-  item: CS2InventoryItem;
+  item: CS2EconomyItem | CS2InventoryItem;
   subtitle?: ReactNode;
   title?: ReactNode;
 }) {
