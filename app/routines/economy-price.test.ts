@@ -10,7 +10,7 @@ import {
   getEconomyPriceSourceDate,
   getEconomyPriceSourceUrl,
   mapEconomyPrice
-} from "./economy-price";
+} from "./economy-price-data";
 
 CS2Economy.load({ items: CS2_ITEMS, language: english });
 
