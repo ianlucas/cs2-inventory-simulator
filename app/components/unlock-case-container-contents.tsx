@@ -3,14 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2EconomyItem } from "@ianlucas/cs2-lib";
-import { ElementRef, useEffect, useRef, useState } from "react";
 import { FloatingFocusManager } from "@floating-ui/react";
+import { CS2EconomyItem } from "@ianlucas/cs2-lib";
+import { ComponentRef, useEffect, useRef, useState } from "react";
 import { useTranslate } from "./app-context";
 import { useInventoryItemFloating } from "./hooks/use-inventory-item-floating";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemTile } from "./inventory-item-tile";
 import { InventoryItemTileSpecial } from "./inventory-item-tile-special";
+import { ModalButton } from "./modal-button";
 import { Presence } from "./presence";
 import { UnlockCaseContentsInspect } from "./unlock-case-contents-inspect";
 
@@ -35,12 +36,12 @@ function UnlockCaseContainerContentsItem({
   return (
     <>
       <div
-        className="relative w-38.5"
+        className="relative w-30"
         ref={clickRefs.setReference}
         tabIndex={0}
         {...getClickReferenceProps()}
       >
-        <InventoryItemTile item={item} />
+        <InventoryItemTile item={item} small />
       </div>
       {isClickOpen && (
         <FloatingFocusManager context={clickContext} modal={false}>
@@ -85,7 +86,7 @@ export function UnlockCaseContainerContents({
   const [inspectItemIndex, setInspectItemIndex] = useState<number>();
   const items = caseItem.listContents(true);
 
-  const ref = useRef<ElementRef<"div">>(null);
+  const ref = useRef<ComponentRef<"div">>(null);
 
   useEffect(() => {
     setOpacity(1);
@@ -98,7 +99,7 @@ export function UnlockCaseContainerContents({
 
   return (
     <div
-      className="absolute w-full rounded-sm [transition:all_cubic-bezier(0.4,0,0.2,1)_1s]"
+      className="absolute w-full rounded-sm backdrop-blur-md [transition:all_cubic-bezier(0.4,0,0.2,1)_1s]"
       style={{
         transform: `translateY(${translateY}px)`,
         opacity
@@ -106,8 +107,18 @@ export function UnlockCaseContainerContents({
       ref={ref}
     >
       <div className="m-auto lg:max-w-5xl">
-        <h2 className="my-2">{translate("CaseContainsOne")}</h2>
-        <div className="flex h-80 flex-wrap gap-3 overflow-y-scroll pb-4">
+        <h2 className="relative block border-b border-b-white/20 py-3 text-center text-sm">
+          {translate("CaseContainsOne")}
+          <div className="absolute top-0 right-0 flex h-full items-center">
+            <ModalButton
+              variant="secondary"
+              onClick={() => setInspectItemIndex(0)}
+            >
+              {translate("CaseInspectAll")}
+            </ModalButton>
+          </div>
+        </h2>
+        <div className="scrollbar-transparent mt-4 flex h-80 flex-wrap gap-5 overflow-y-scroll px-4 pb-4">
           {[
             ...items.map((item, index) => (
               <UnlockCaseContainerContentsItem
@@ -117,7 +128,11 @@ export function UnlockCaseContainerContents({
               />
             )),
             caseItem.specials !== undefined && (
-              <InventoryItemTileSpecial key={-1} containerItem={caseItem} />
+              <InventoryItemTileSpecial
+                key={-1}
+                containerItem={caseItem}
+                small
+              />
             )
           ]}
         </div>
