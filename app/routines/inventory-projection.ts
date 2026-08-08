@@ -257,13 +257,13 @@ async function projectUserInventory(userId: string): Promise<ProjectionResult> {
         WHERE "userId" = ${userId}
         FOR UPDATE
       `;
-      const [user, projection] = await Promise.all([
-        tx.user.findUnique({
-          select: { inventory: true, syncedAt: true },
-          where: { id: userId }
-        }),
-        tx.userInventoryProjection.findUniqueOrThrow({ where: { userId } })
-      ]);
+      const user = await tx.user.findUnique({
+        select: { inventory: true, syncedAt: true },
+        where: { id: userId }
+      });
+      const projection = await tx.userInventoryProjection.findUniqueOrThrow({
+        where: { userId }
+      });
       if (user === null) {
         return "skipped";
       }

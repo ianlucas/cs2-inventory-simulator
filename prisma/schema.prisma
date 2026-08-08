@@ -13,6 +13,14 @@ datasource db {
   provider = "postgresql"
 }
 
+enum CS2ItemWear {
+  FN
+  MW
+  FT
+  WW
+  BS
+}
+
 model User {
   authTokens          ApiAuthToken[]
   avatar              String
@@ -47,6 +55,38 @@ model EconomyItem {
   name       String
   rarity     String?
   type       String
+  prices     EconomyPrice[]
+}
+
+model EconomyPrice {
+  currency       String   @default("USD")
+  economyItem    EconomyItem @relation(fields: [economyItemId], references: [id], onDelete: Cascade)
+  economyItemId  Int
+  exterior       CS2ItemWear?
+  last24h        Decimal? @db.Decimal(14, 6)
+  last7d         Decimal? @db.Decimal(14, 6)
+  last30d        Decimal? @db.Decimal(14, 6)
+  last90d        Decimal? @db.Decimal(14, 6)
+  marketHashName String
+  sourceDate     DateTime @db.Date
+  souvenir       Boolean  @default(false)
+  statTrak       Boolean  @default(false)
+
+  @@id([sourceDate, marketHashName])
+  @@index([economyItemId, sourceDate])
+}
+
+model EconomyPriceMeta {
+  id                      Int       @id @default(1)
+  lastAttemptedAt         DateTime?
+  lastAttemptedSourceDate DateTime? @db.Date
+  lastFailureAt           DateTime?
+  lastFailureMessage      String?
+  lastSucceededAt         DateTime?
+  lastSucceededSourceDate DateTime? @db.Date
+  lastUnmatchedCount      Int?
+  lastUnmatchedNames      String?
+  updatedAt               DateTime  @updatedAt
 }
 
 model UserInventoryItem {

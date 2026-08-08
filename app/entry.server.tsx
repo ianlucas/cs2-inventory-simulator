@@ -16,6 +16,7 @@ import { warmViewerCaches } from "./data/viewer.server";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule";
 import { scheduleInactivityReset } from "./routines/reset-inactive-inventory";
+import { scheduleEconomyPrices } from "./routines/economy-price";
 import { scheduleInventoryProjection } from "./routines/inventory-projection";
 import { setupPurge } from "./routines/setup-purge";
 import { setupTranslation } from "./translation.server";
@@ -26,6 +27,7 @@ CS2Economy.load({ items: CS2_ITEMS, language: english });
 setupTranslation();
 void setupPurge();
 scheduleInactivityReset();
+scheduleEconomyPrices();
 scheduleInventoryProjection();
 void setupRules().then(() => {
   void setupLogo();
