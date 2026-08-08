@@ -9,9 +9,11 @@ import { useTranslate } from "./app-context";
 import { InventoryItemTile } from "./inventory-item-tile";
 
 export function InventoryItemTileSpecial({
-  containerItem
+  containerItem,
+  small
 }: {
   containerItem: CS2EconomyItem;
+  small?: boolean;
 }) {
   const translate = useTranslate();
 
@@ -22,6 +24,7 @@ export function InventoryItemTileSpecial({
         imagePath: containerItem.specialsImagePath,
         rarityColor: "#e4ae39"
       })}
+      small={small}
     />
   );
 }

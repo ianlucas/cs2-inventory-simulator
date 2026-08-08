@@ -175,7 +175,6 @@ export function UnlockCase({
                   actionDesc={translate("CaseUnlock")}
                   actionItem={nameItemString(caseItem)}
                   title={translate("CaseUnlockContainer")}
-                  warning={translate("CaseOnceWarn")}
                 />
               }
             >

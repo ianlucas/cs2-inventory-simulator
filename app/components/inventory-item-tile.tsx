@@ -20,11 +20,13 @@ import { ItemImage } from "./item-image";
 export function InventoryItemTile({
   equipped,
   item,
-  onClick
+  onClick,
+  small
 }: {
   equipped?: (string | false | undefined)[];
   item: CS2EconomyItem | CS2InventoryItem;
   onClick?: () => void;
+  small?: boolean;
 }) {
   const translate = useTranslate();
   const nameItem = useNameItem();
@@ -38,10 +40,10 @@ export function InventoryItemTile({
     !item.isCharmDetachment();
 
   return (
-    <div className="w-38.5">
+    <div className={small ? "w-30" : "w-38.5"}>
       <div className="group relative bg-linear-to-b from-neutral-600 to-neutral-400 p-px">
         <div className="bg-linear-to-b from-neutral-500 to-neutral-300 px-1">
-          <ItemImage className="w-36" item={item} />
+          <ItemImage className={small ? "w-30" : "w-38.5"} item={item} />
         </div>
         {isNew && (
           <div className="absolute top-px left-px bg-sky-600 p-1 text-[10px] font-bold text-sky-200 shadow-lg transition-all group-hover:text-white">

@@ -20,7 +20,7 @@ export function InGameOverlay({
   return (
     <div
       className={clsx(
-        "fixed top-0 left-0 z-50 size-full overflow-hidden bg-black/20 backdrop-blur-xs select-none",
+        "fixed top-0 left-0 z-50 size-full overflow-hidden bg-gray-950/40 backdrop-blur-xs select-none",
         transition.className,
         overlayClassName
       )}
