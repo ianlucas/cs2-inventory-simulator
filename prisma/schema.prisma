@@ -4,9 +4,9 @@
 //--------------------------------------------------------------------------------------------*/
 
 generator client {
-  provider = "prisma-client"
+  provider        = "prisma-client"
   previewFeatures = ["fullTextSearchPostgres"]
-  output = "../app/generated/prisma"
+  output          = "../app/generated/prisma"
 }
 
 datasource db {
@@ -14,116 +14,226 @@ datasource db {
 }
 
 model User {
-  authTokens ApiAuthToken[]
-  avatar String
-  caches UserCache[]
-  createdAt DateTime @default(now())
-  groups UserGroup[]
-  id String @id
-  inventory String?
+  authTokens          ApiAuthToken[]
+  avatar              String
+  caches              UserCache[]
+  createdAt           DateTime                 @default(now())
+  groups              UserGroup[]
+  id                  String                   @id
+  inventory           String?
+  inventoryItems      UserInventoryItem[]
+  inventoryProjection UserInventoryProjection?
   inventoryRecoveries InventoryRecovery[]
-  lastSeen DateTime @default(now())
-  name String
-  overwrites UserRule[]
-  preferences UserPreference?
-  syncedAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  lastSeen            DateTime                 @default(now())
+  name                String
+  overwrites          UserRule[]
+  preferences         UserPreference?
+  syncedAt            DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+
+  @@index([syncedAt])
+}
+
+model EconomyItem {
+  altName    String?
+  base       Boolean
+  baseItemId Int?
+  category   String?
+  collection String?
+  def        Int?
+  free       Boolean
+  id         Int     @id
+  model      String?
+  name       String
+  rarity     String?
+  type       String
+}
+
+model UserInventoryItem {
+  charges           Int?
+  containerUid      Int?
+  equipped          Boolean                     @default(false)
+  equippedCT        Boolean                     @default(false)
+  equippedT         Boolean                     @default(false)
+  id                String                      @id @default(uuid())
+  inventoryKey      String
+  itemId            Int
+  itemUpdatedAt     DateTime?
+  keychains         UserInventoryItemKeychain[]
+  nameTag           String?
+  patches           UserInventoryItemPatch[]
+  seed              Int?
+  sourceContainerId Int?
+  statTrak          Int?
+  stickers          UserInventoryItemSticker[]
+  uid               Int
+  user              User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+  wear              Float?
+
+  @@unique([userId, inventoryKey])
+  @@index([itemId])
+}
+
+model UserInventoryItemSticker {
+  id                  String            @id @default(uuid())
+  itemId              Int
+  rotation            Float?
+  schema              Int?
+  slot                Int
+  userInventoryItem   UserInventoryItem @relation(fields: [userInventoryItemId], references: [id], onDelete: Cascade)
+  userInventoryItemId String
+  wear                Float?
+  x                   Float?
+  y                   Float?
+
+  @@unique([userInventoryItemId, slot])
+  @@index([itemId])
+}
+
+model UserInventoryItemPatch {
+  id                  String            @id @default(uuid())
+  itemId              Int
+  slot                Int
+  userInventoryItem   UserInventoryItem @relation(fields: [userInventoryItemId], references: [id], onDelete: Cascade)
+  userInventoryItemId String
+
+  @@unique([userInventoryItemId, slot])
+  @@index([itemId])
+}
+
+model UserInventoryItemKeychain {
+  id                  String            @id @default(uuid())
+  itemId              Int
+  seed                Int?
+  slot                Int
+  userInventoryItem   UserInventoryItem @relation(fields: [userInventoryItemId], references: [id], onDelete: Cascade)
+  userInventoryItemId String
+  x                   Float?
+  y                   Float?
+  z                   Float?
+
+  @@unique([userInventoryItemId, slot])
+  @@index([itemId])
+}
+
+model UserInventoryProjection {
+  failedSyncedAt    DateTime?
+  projectedAt       DateTime?
+  projectedSyncedAt DateTime?
+  updatedAt         DateTime  @updatedAt
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String    @id
+}
+
+model InventoryProjectionMeta {
+  backfillCompletedAt      DateTime?
+  backfillCursor           String?
+  cs2LibVersion            String?
+  economyProjectionVersion Int       @default(1)
+  id                       Int       @id @default(1)
+  updatedAt                DateTime  @updatedAt
 }
 
 model InventoryRecovery {
-  @@index([userId])
-  changes String?
+  changes   String?
   createdAt DateTime @default(now())
-  id String @id @default(uuid())
+  id        String   @id @default(uuid())
   inventory String
-  reason String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  reason    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@index([userId])
 }
 
 model UserCache {
-  @@id([url, userId])
-  args String?
-  body String
+  args      String?
+  body      String
   timestamp DateTime
-  url String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  url       String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@id([url, userId])
 }
 
 model UserPreference {
-  background String?
-  hideFilters String?
-  hideFreeItems String?
-  hideNewItemLabel String?
-  language String?
+  background            String?
+  hideFilters           String?
+  hideFreeItems         String?
+  hideNewItemLabel      String?
+  language              String?
   prefer2dStickerEditor String?
-  statsForNerds String?
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @id
+  statsForNerds         String?
+  user                  User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                String  @id
 }
 
 model ApiCredential {
-  apiKey String @id
+  apiKey     String         @id
   authTokens ApiAuthToken[]
-  comment String?
-  createdAt DateTime @default(now())
-  scope String?
-  updatedAt DateTime @updatedAt
+  comment    String?
+  createdAt  DateTime       @default(now())
+  scope      String?
+  updatedAt  DateTime       @updatedAt
 }
 
 model ApiAuthToken {
-  apiKey String
-  createdAt DateTime @default(now())
+  apiKey     String
+  createdAt  DateTime      @default(now())
   credential ApiCredential @relation(fields: [apiKey], references: [apiKey], onDelete: Cascade)
-  token String @id @default(uuid())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  token      String        @id @default(uuid())
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
 }
 
 model Rule {
   groupOverwrites GroupRule[]
-  name String @id @unique
-  type String @default("string")
-  userOverwrites UserRule[]
-  value String
+  name            String      @id @unique
+  type            String      @default("string")
+  userOverwrites  UserRule[]
+  value           String
 }
 
 model UserRule {
-  @@id([name, userId])
-  name String
-  rule Rule @relation(fields: [name], references: [name], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name   String
+  rule   Rule   @relation(fields: [name], references: [name], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  value String
+  value  String
+
+  @@id([name, userId])
 }
 
 model Group {
-  id String @id
+  id         String      @id
   overwrites GroupRule[]
-  priority Int @default(0)
-  users UserGroup[]
+  priority   Int         @default(0)
+  users      UserGroup[]
 }
 
 model UserGroup {
-  @@id([groupId, userId])
-  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+
+  @@id([groupId, userId])
 }
 
 model GroupRule {
-  @@id([groupId, name])
-  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
   groupId String
-  name String
-  rule Rule @relation(fields: [name], references: [name], onDelete: Cascade)
-  value String
+  name    String
+  rule    Rule   @relation(fields: [name], references: [name], onDelete: Cascade)
+  value   String
+
+  @@id([groupId, name])
 }
 
 model RateLimitBucket {
-  key String @id
-  tokens Float
+  key       String   @id
+  tokens    Float
   updatedAt DateTime
 }
