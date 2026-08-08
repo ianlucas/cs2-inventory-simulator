@@ -32,6 +32,7 @@ export const swedish = {
   CaseAddKeyConfirm: "Bekräfta skapande av nyckel",
   CaseClose: /* csgo_swedish.txt */"Stäng",
   CaseContainsOne: /* csgo_swedish.txt */"Innehåller ett av följande:",
+  CaseInspecting: "Inspekterar {1}",
   CaseNeed: /* csgo_swedish.txt */"Denna åtgärd kräver en",
   CaseOnceWarn: /* csgo_swedish.txt */"Denna behållare kan endast öppnas en gång",
   CaseRareItem: /* csgo_swedish.txt */"★ Sällsynt specialföremål ★",

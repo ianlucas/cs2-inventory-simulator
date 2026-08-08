@@ -32,6 +32,7 @@ export const thai = {
   CaseAddKeyConfirm: "ยืนยันการสร้างกุญแจ",
   CaseClose: /* csgo_thai.txt */"ปิด",
   CaseContainsOne: /* csgo_thai.txt */"บรรจุหนึ่งในไอเท็มต่อไปนี้:",
+  CaseInspecting: "กำลังตรวจสอบ {1}",
   CaseNeed: /* csgo_thai.txt */"การดำเนินการนี้ต้องใช้",
   CaseOnceWarn: /* csgo_thai.txt */"กล่องนี้สามารถเปิดได้เพียงครั้งเดียว",
   CaseRareItem: /* csgo_thai.txt */"★ ไอเท็มพิเศษหายาก ★",

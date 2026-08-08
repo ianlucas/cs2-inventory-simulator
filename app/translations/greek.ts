@@ -32,6 +32,7 @@ export const greek = {
   CaseAddKeyConfirm: "Επιβεβαίωση κατασκευής κλειδιού",
   CaseClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
   CaseContainsOne: /* csgo_greek.txt */"Περιέχει ένα από τα παρακάτω αντικείμενα:",
+  CaseInspecting: "Επιθεώρηση: {1}",
   CaseNeed: /* csgo_greek.txt */"Αυτή η ενέργεια απαιτεί",
   CaseOnceWarn: /* csgo_greek.txt */"Το κιβώτιο αυτό μπορεί να ανοιχθεί μόνο μία φορά",
   CaseRareItem: /* csgo_greek.txt */"★ Εξαιρετικά σπάνιο αντικείμενο ★",

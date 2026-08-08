@@ -32,6 +32,7 @@ export const tchinese = {
   CaseAddKeyConfirm: "確認製作鑰匙",
   CaseClose: /* csgo_tchinese.txt */"關閉",
   CaseContainsOne: /* csgo_tchinese.txt */"含有下列其中一項物品：",
+  CaseInspecting: "正在檢視 {1}",
   CaseNeed: /* csgo_tchinese.txt */"這項動作必須擁有才能進行。",
   CaseOnceWarn: /* csgo_tchinese.txt */"這個容器只能打開一次",
   CaseRareItem: /* csgo_tchinese.txt */"★ 特殊稀有物品 ★",

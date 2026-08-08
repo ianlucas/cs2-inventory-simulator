@@ -32,6 +32,7 @@ export const schinese = {
   CaseAddKeyConfirm: "确认制作钥匙",
   CaseClose: /* csgo_schinese.txt */"关闭",
   CaseContainsOne: /* csgo_schinese.txt */"包含下列物品之一：",
+  CaseInspecting: "正在检视 {1}",
   CaseNeed: /* csgo_schinese.txt */"这个操作需要一个",
   CaseOnceWarn: /* csgo_schinese.txt */"这个武器箱只能打开一次",
   CaseRareItem: /* csgo_schinese.txt */"★ 罕见的特殊物品 ★",

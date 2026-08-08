@@ -32,6 +32,7 @@ export const italian = {
   CaseAddKeyConfirm: "Conferma creazione chiave",
   CaseClose: /* csgo_italian.txt */"Chiudi",
   CaseContainsOne: /* csgo_italian.txt */"Contiene uno dei seguenti oggetti:",
+  CaseInspecting: "Ispezione di {1}",
   CaseNeed: /* csgo_italian.txt */"Questa azione richiede:",
   CaseOnceWarn: /* csgo_italian.txt */"Questa cassa può essere aperta una volta sola",
   CaseRareItem: /* csgo_italian.txt */"★ Oggetto speciale raro ★",

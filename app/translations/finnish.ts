@@ -32,6 +32,7 @@ export const finnish = {
   CaseAddKeyConfirm: "Vahvista avaimen valmistus",
   CaseClose: /* csgo_finnish.txt */"Sulje",
   CaseContainsOne: /* csgo_finnish.txt */"Sisältää yhden seuraavista:",
+  CaseInspecting: "Tarkastellaan: {1}",
   CaseNeed: /* csgo_finnish.txt */"Toimintoon vaaditaan esinettä:",
   CaseOnceWarn: /* csgo_finnish.txt */"Tämä säiliö voidaan avata vain kerran",
   CaseRareItem: /* csgo_finnish.txt */"★ Harvinainen erikoisesine ★",

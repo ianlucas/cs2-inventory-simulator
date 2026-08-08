@@ -32,6 +32,7 @@ export const vietnamese = {
   CaseAddKeyConfirm: "Xác nhận chế tạo chìa khóa",
   CaseClose: /* csgo_vietnamese.txt */"Đóng",
   CaseContainsOne: /* csgo_vietnamese.txt */"Chứa một trong những vật phẩm sau:",
+  CaseInspecting: "Đang kiểm tra {1}",
   CaseNeed: /* csgo_vietnamese.txt */"Hành động này cần một",
   CaseOnceWarn: /* csgo_vietnamese.txt */"Hộp này chỉ có thể mở được một lần",
   CaseRareItem: /* csgo_vietnamese.txt */"★ Vật phẩm hiếm đặc biệt ★",

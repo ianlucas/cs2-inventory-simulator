@@ -32,6 +32,7 @@ export const brazilian = {
   CaseAddKeyConfirm: "Confirmar criação de chave",
   CaseClose: /* csgo_brazilian.txt */"Fechar",
   CaseContainsOne: /* csgo_brazilian.txt */"Contém um dos seguintes itens:",
+  CaseInspecting: "Inspecionando {1}",
   CaseNeed: /* csgo_brazilian.txt */"Esta ação requer uma",
   CaseOnceWarn: /* csgo_brazilian.txt */"Este recipiente só pode ser aberto uma vez",
   CaseRareItem: /* csgo_brazilian.txt */"★ Item raro e especial ★",

@@ -32,6 +32,7 @@ export const czech = {
   CaseAddKeyConfirm: "Potvrdit vytvoření klíče",
   CaseClose: /* csgo_czech.txt */"Zavřít",
   CaseContainsOne: /* csgo_czech.txt */"Obsahuje jeden z následujících předmětů:",
+  CaseInspecting: "Prohlížíte {1}",
   CaseNeed: /* csgo_czech.txt */"Pro tuto akci je vyžadován předmět",
   CaseOnceWarn: /* csgo_czech.txt */"Tuto bednu je možné otevřít pouze jednou",
   CaseRareItem: /* csgo_czech.txt */"★ Speciální předmět ★",

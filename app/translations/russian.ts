@@ -32,6 +32,7 @@ export const russian = {
   CaseAddKeyConfirm: "Подтвердить создание ключа",
   CaseClose: /* csgo_russian.txt */"Закрыть",
   CaseContainsOne: /* csgo_russian.txt */"Внутри находится один из следующих предметов:",
+  CaseInspecting: "Осмотр: {1}",
   CaseNeed: /* csgo_russian.txt */"Требуется",
   CaseOnceWarn: /* csgo_russian.txt */"Этот контейнер можно открыть только один раз",
   CaseRareItem: /* csgo_russian.txt */"★ Особый редкий предмет ★",

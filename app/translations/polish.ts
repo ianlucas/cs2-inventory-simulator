@@ -32,6 +32,7 @@ export const polish = {
   CaseAddKeyConfirm: "Potwierdź stworzenie klucza",
   CaseClose: /* csgo_polish.txt */"Zamknij",
   CaseContainsOne: /* csgo_polish.txt */"Zawiera jedną rzecz z poniższych:",
+  CaseInspecting: "Oglądanie: {1}",
   CaseNeed: /* csgo_polish.txt */"To działanie wymaga:",
   CaseOnceWarn: /* csgo_polish.txt */"Ten pojemnik może zostać otwarty tylko raz",
   CaseRareItem: /* csgo_polish.txt */"★ Rzadki przedmiot specjalny ★",

@@ -32,6 +32,7 @@ export const romanian = {
   CaseAddKeyConfirm: "Confirmă crearea cheii",
   CaseClose: /* csgo_romanian.txt */"Închide",
   CaseContainsOne: /* csgo_romanian.txt */"Conține unul din obiectele următoarele:",
+  CaseInspecting: "Inspectare: {1}",
   CaseNeed: /* csgo_romanian.txt */"Această acțiune necesită:",
   CaseOnceWarn: /* csgo_romanian.txt */"Acest container poate fi deschis doar o singură dată.",
   CaseRareItem: /* csgo_romanian.txt */"★ Obiect special rar ★",

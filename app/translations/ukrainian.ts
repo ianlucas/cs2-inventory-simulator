@@ -32,6 +32,7 @@ export const ukrainian = {
   CaseAddKeyConfirm: "Підтвердити створення ключа",
   CaseClose: /* csgo_ukrainian.txt */"Закрити",
   CaseContainsOne: /* csgo_ukrainian.txt */"Містить одне з перелічених:",
+  CaseInspecting: "Огляд: {1}",
   CaseNeed: /* csgo_ukrainian.txt */"Для цієї дії необхідно мати",
   CaseOnceWarn: /* csgo_ukrainian.txt */"Цей контейнер одноразовий",
   CaseRareItem: /* csgo_ukrainian.txt */"★ Особливо рідкісний предмет ★",

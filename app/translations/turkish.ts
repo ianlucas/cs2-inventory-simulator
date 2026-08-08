@@ -32,6 +32,7 @@ export const turkish = {
   CaseAddKeyConfirm: "Anahtar oluşturmayı onayla",
   CaseClose: /* csgo_turkish.txt */"Kapat",
   CaseContainsOne: /* csgo_turkish.txt */"Aşağıdaki eşyalardan birini içerir:",
+  CaseInspecting: "İnceleniyor: {1}",
   CaseNeed: /* csgo_turkish.txt */"Bu eylem bir  gerektirir",
   CaseOnceWarn: /* csgo_turkish.txt */"Bu kutu sadece bir kere açılabilir",
   CaseRareItem: /* csgo_turkish.txt */"★ Nadir Özel Eşya ★",

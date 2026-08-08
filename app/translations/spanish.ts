@@ -32,6 +32,7 @@ export const spanish = {
   CaseAddKeyConfirm: "Confirmar creación de llave",
   CaseClose: /* csgo_spanish.txt */"Cerrar",
   CaseContainsOne: /* csgo_spanish.txt */"Contiene uno de los siguientes artículos:",
+  CaseInspecting: "Inspeccionando {1}",
   CaseNeed: /* csgo_spanish.txt */"Esta acción requiere un/a",
   CaseOnceWarn: /* csgo_spanish.txt */"Este contenedor solo se puede abrir una vez",
   CaseRareItem: /* csgo_spanish.txt */"★ Artículo especial raro ★",

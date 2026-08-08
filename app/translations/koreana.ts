@@ -32,6 +32,7 @@ export const koreana = {
   CaseAddKeyConfirm: "키 제작 확인",
   CaseClose: /* csgo_koreana.txt */"닫기",
   CaseContainsOne: /* csgo_koreana.txt */"다음 중 하나가 들어 있습니다.",
+  CaseInspecting: "{1} 검사 중",
   CaseNeed: /* csgo_koreana.txt */"이 작업을 수행하려면 가 필요합니다.",
   CaseOnceWarn: /* csgo_koreana.txt */"이 아이템은 한 번만 열 수 있습니다",
   CaseRareItem: /* csgo_koreana.txt */"★ 특별하고 희귀한 아이템 ★",

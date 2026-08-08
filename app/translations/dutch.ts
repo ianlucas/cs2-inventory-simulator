@@ -32,6 +32,7 @@ export const dutch = {
   CaseAddKeyConfirm: "Bevestig sleutelcreatie",
   CaseClose: /* csgo_dutch.txt */"Sluiten",
   CaseContainsOne: /* csgo_dutch.txt */"Bevat één van de volgende:",
+  CaseInspecting: "Inspecteren van {1}",
   CaseNeed: /* csgo_dutch.txt */"Voor deze actie is een  vereist",
   CaseOnceWarn: /* csgo_dutch.txt */"Deze kist kan maar één keer geopend worden",
   CaseRareItem: /* csgo_dutch.txt */"★ Zeldzaam speciaal voorwerp ★",

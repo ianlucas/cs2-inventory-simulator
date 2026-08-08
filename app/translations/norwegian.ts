@@ -32,6 +32,7 @@ export const norwegian = {
   CaseAddKeyConfirm: "Bekreft nøkkelproduksjon",
   CaseClose: /* csgo_norwegian.txt */"Lukk",
   CaseContainsOne: /* csgo_norwegian.txt */"Inneholder én av de følgende:",
+  CaseInspecting: "Inspiserer {1}",
   CaseNeed: /* csgo_norwegian.txt */"Denne handlingen krever en",
   CaseOnceWarn: /* csgo_norwegian.txt */"Denne beholderen kan kun åpnes én gang",
   CaseRareItem: /* csgo_norwegian.txt */"★ Sjelden spesialgjenstand ★",

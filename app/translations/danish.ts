@@ -32,6 +32,7 @@ export const danish = {
   CaseAddKeyConfirm: "Bekræft nøglefremstilling",
   CaseClose: /* csgo_danish.txt */"Luk",
   CaseContainsOne: /* csgo_danish.txt */"Indeholder én af følgende:",
+  CaseInspecting: "Inspicerer {1}",
   CaseNeed: /* csgo_danish.txt */"Denne handling kræver en",
   CaseOnceWarn: /* csgo_danish.txt */"Denne beholder kan kun åbnes én gang",
   CaseRareItem: /* csgo_danish.txt */"★ Sjælden specialgenstand ★",

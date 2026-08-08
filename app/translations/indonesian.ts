@@ -32,6 +32,7 @@ export const indonesian = {
   CaseAddKeyConfirm: "Konfirmasi craft kunci",
   CaseClose: /* csgo_indonesian.txt */"Tutup",
   CaseContainsOne: /* csgo_indonesian.txt */"Berisi salah satu dari item berikut:",
+  CaseInspecting: "Memeriksa {1}",
   CaseNeed: /* csgo_indonesian.txt */"Hal ini membutuhkan sebuah",
   CaseOnceWarn: /* csgo_indonesian.txt */"Kontainer ini hanya bisa dibuka satu kali",
   CaseRareItem: /* csgo_indonesian.txt */"★ Item Langka Spesial ★",

@@ -32,6 +32,7 @@ export const japanese = {
   CaseAddKeyConfirm: "キー作成の確認",
   CaseClose: /* csgo_japanese.txt */"閉じる",
   CaseContainsOne: /* csgo_japanese.txt */"次のいずれかが一つ入っています：",
+  CaseInspecting: "{1}を検査中",
   CaseNeed: /* csgo_japanese.txt */"このアクションには  が必要です",
   CaseOnceWarn: /* csgo_japanese.txt */"このコンテナは一度しか開けません",
   CaseRareItem: /* csgo_japanese.txt */"★ レアなスペシャルアイテム ★",

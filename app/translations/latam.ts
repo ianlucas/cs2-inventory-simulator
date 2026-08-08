@@ -32,6 +32,7 @@ export const latam = {
   CaseAddKeyConfirm: "Confirmar creación de llave",
   CaseClose: /* csgo_latam.txt */"Cerrar",
   CaseContainsOne: /* csgo_latam.txt */"Contiene uno de los siguientes artículos:",
+  CaseInspecting: "Inspeccionando {1}",
   CaseNeed: /* csgo_latam.txt */"Esta acción requiere un/a",
   CaseOnceWarn: /* csgo_latam.txt */"Este contenedor solo se puede abrir una vez",
   CaseRareItem: /* csgo_latam.txt */"★ Artículo especial raro ★",

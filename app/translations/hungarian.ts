@@ -32,6 +32,7 @@ export const hungarian = {
   CaseAddKeyConfirm: "Kulcs készítésének megerősítése",
   CaseClose: /* csgo_hungarian.txt */"Bezár",
   CaseContainsOne: /* csgo_hungarian.txt */"A következők egyikét tartalmazza:",
+  CaseInspecting: "Ellenőrzés alatt: {1}",
   CaseNeed: /* csgo_hungarian.txt */"E művelethez  szükséges",
   CaseOnceWarn: /* csgo_hungarian.txt */"Ez a tároló csak egyszer nyitható ki.",
   CaseRareItem: /* csgo_hungarian.txt */"★ Ritka különleges tárgy ★",

@@ -32,6 +32,7 @@ export const bulgarian = {
   CaseAddKeyConfirm: "Потвърди изработка на ключ",
   CaseClose: /* csgo_bulgarian.txt */"Затваряне",
   CaseContainsOne: /* csgo_bulgarian.txt */"Съдържа един от следните артикули:",
+  CaseInspecting: "Разглеждане на {1}",
   CaseNeed: /* csgo_bulgarian.txt */"Това действие изисква",
   CaseOnceWarn: /* csgo_bulgarian.txt */"Този контейнер може да бъде отворен само веднъж",
   CaseRareItem: /* csgo_bulgarian.txt */"★ Рядък специален артикул ★",

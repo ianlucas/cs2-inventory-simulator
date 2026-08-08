@@ -32,6 +32,7 @@ export const german = {
   CaseAddKeyConfirm: "Schlüsselherstellung bestätigen",
   CaseClose: /* csgo_german.txt */"Schließen",
   CaseContainsOne: /* csgo_german.txt */"Enthält einen der folgende Gegenstände:",
+  CaseInspecting: "Untersuche {1}",
   CaseNeed: /* csgo_german.txt */"Sie benötigen:",
   CaseOnceWarn: /* csgo_german.txt */"Dieser Behälter kann nur einmal geöffnet werden",
   CaseRareItem: /* csgo_german.txt */"★ Seltener Spezialgegenstand ★",
