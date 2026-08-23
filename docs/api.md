@@ -13,71 +13,44 @@ GET https://inventory.cstrike.app/api/inventory/{steamID64}.json
 - Returns `200` (`application/json`).
 
 ```typescript
-type GetUserInventoryResponse = {
-  items: Record<
+type InventoryItem = {
+  charges?: number;
+  containerId?: number;
+  equipped?: boolean;
+  equippedCT?: boolean;
+  equippedT?: boolean;
+  id: number;
+  keychains?: Record<
     number,
     {
-      containerId?: number;
-      equipped?: boolean;
-      equippedCT?: boolean;
-      equippedT?: boolean;
       id: number;
-      keychains?: Record<
-        number,
-        {
-          id: number;
-          seed?: number;
-          x?: number;
-          y?: number;
-          z?: number;
-        }
-      >;
-      nameTag?: string;
-      patches?: Record<number, number>;
       seed?: number;
-      statTrak?: number;
-      stickers?: Record<
-        number,
-        {
-          id: number;
-          rotation?: number;
-          schema?: number;
-          wear?: number;
-          x?: number;
-          y?: number;
-        }
-      >;
-      storage?: Record<
-        number,
-        {
-          containerId?: number;
-          equipped?: boolean;
-          equippedCT?: boolean;
-          equippedT?: boolean;
-          id: number;
-          nameTag?: string;
-          patches?: Record<number, number>;
-          seed?: number;
-          statTrak?: number;
-          stickers?: Record<
-            number,
-            {
-              id: number;
-              rotation?: number;
-              schema?: number;
-              wear?: number;
-              x?: number;
-              y?: number;
-            }
-          >;
-          updatedAt?: number;
-          wear?: number;
-        }
-      >;
-      updatedAt?: number;
-      wear?: number;
+      x?: number;
+      y?: number;
+      z?: number;
     }
   >;
+  nameTag?: string;
+  patches?: Record<number, number>;
+  seed?: number;
+  statTrak?: number;
+  stickers?: Record<
+    number,
+    {
+      id: number;
+      rotation?: number;
+      schema?: number;
+      wear?: number;
+      x?: number;
+      y?: number;
+    }
+  >;
+  storage?: Record<number, InventoryItem>;
+  updatedAt?: number;
+  wear?: number;
+};
+type GetUserInventoryResponse = {
+  items: Record<number, InventoryItem>;
   version: number;
 };
 ```
@@ -85,7 +58,7 @@ type GetUserInventoryResponse = {
 ## Get user equipped items
 
 ```http
-GET https://inventory.cstrike.app/api/equipped/v4/{steamID64}.json
+GET https://inventory.cstrike.app/api/equipped/v5/{steamID64}.json
 ```
 
 ### Response
@@ -244,7 +217,18 @@ type PostAddItemRequest = {
   userId: string;
   inventoryItem: {
     id: number;
-    wear?: number | undefined;
+    keychains?:
+      | Record<
+          string,
+          {
+            id: number;
+            seed?: number | undefined;
+            x?: number | undefined;
+            y?: number | undefined;
+            z?: number | undefined;
+          }
+        >
+      | undefined;
     nameTag?: string | undefined;
     patches?: Record<string, number> | undefined;
     seed?: number | undefined;
@@ -262,6 +246,7 @@ type PostAddItemRequest = {
           }
         >
       | undefined;
+    wear?: number | undefined;
   };
 };
 ```
@@ -304,37 +289,62 @@ type PostAddContainerRequest = {
 
 ```typescript
 type PostAddContainerResponse = {
-  altName?: string | undefined;
-  base?: boolean | undefined;
-  baseId?: number | undefined;
-  category?: string | undefined;
-  collection?: string | undefined;
-  collectionDesc?: string | undefined;
+  alternateName?: string | undefined;
+  categoryName?: string | undefined;
+  collectionDescription?: string | undefined;
+  collectionImagePath?: string | undefined;
+  collectionKey?: string | undefined;
   collectionName?: string | undefined;
-  containerType?: CS2ContainerTypeValues | undefined;
-  contents?: number[] | undefined;
-  def?: number | undefined;
-  desc?: string | undefined;
-  free?: boolean | undefined;
+  containerType?: CS2ContainerType | undefined;
+  contentIds?: number[] | undefined;
+  definitionIndex?: number | undefined;
+  description?: string | undefined;
+  displayedStickerId?: number | undefined;
+  hasColliderData?: boolean | undefined;
   id: number;
-  image?: string | undefined;
-  index?: number | undefined;
-  keys?: number[] | undefined;
-  legacy?: boolean | undefined;
-  model?: string | undefined;
+  imagePath?: string | undefined;
+  isBase?: boolean | undefined;
+  isDefault?: boolean | undefined;
+  isLegacyModel?: boolean | undefined;
+  keyIds?: number[] | undefined;
+  keychainPositionXMax?: number | undefined;
+  keychainPositionXMin?: number | undefined;
+  keychainPositionYMax?: number | undefined;
+  keychainPositionYMin?: number | undefined;
+  keychainPositionZMax?: number | undefined;
+  keychainPositionZMin?: number | undefined;
+  legacyKeychainPositionXMax?: number | undefined;
+  legacyKeychainPositionXMin?: number | undefined;
+  legacyKeychainPositionYMax?: number | undefined;
+  legacyKeychainPositionYMin?: number | undefined;
+  legacyKeychainPositionZMax?: number | undefined;
+  legacyKeychainPositionZMin?: number | undefined;
+  legacyStickerOffsetXMax?: number | undefined;
+  legacyStickerOffsetXMin?: number | undefined;
+  legacyStickerOffsetYMax?: number | undefined;
+  legacyStickerOffsetYMin?: number | undefined;
+  legacyStickerSchemaCount?: number | undefined;
+  loadoutCategory?: string | undefined;
+  materialPath?: string | undefined;
+  modelKey?: string | undefined;
+  modelPath?: string | undefined;
   name: string;
-  rarity?: CS2RarityColorValues | undefined;
-  specials?: number[] | undefined;
-  specialsImage?: boolean | undefined;
-  statTrakless?: boolean | undefined;
-  statTrakOnly?: boolean | undefined;
-  teams?: CS2ItemTeamValues | undefined;
-  tint?: number | undefined;
-  tournamentDesc?: string | undefined;
-  type: CS2ItemTypeValues;
-  voFallback?: boolean | undefined;
-  voFemale?: boolean | undefined;
-  voPrefix?: string | undefined;
+  parentId?: number | undefined;
+  previewSeed?: number | undefined;
+  rarityColor?: CS2RarityColor | undefined;
+  specialIds?: number[] | undefined;
+  specialsImagePath?: string | undefined;
+  statTrakMode?: CS2StatTrakMode | undefined;
+  stickerOffsetXMax?: number | undefined;
+  stickerOffsetXMin?: number | undefined;
+  stickerOffsetYMax?: number | undefined;
+  stickerOffsetYMin?: number | undefined;
+  stickerSchemaCount?: number | undefined;
+  team?: CS2ItemTeam | undefined;
+  tintIndex?: number | undefined;
+  tournamentDescription?: string | undefined;
+  type: CS2ItemType;
+  variantIndex?: number | undefined;
   wearMax?: number | undefined;
   wearMin?: number | undefined;
 };
