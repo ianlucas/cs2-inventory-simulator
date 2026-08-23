@@ -6,56 +6,74 @@
 import { CS2BaseInventoryItem } from "@ianlucas/cs2-lib";
 import { ViewerItemInput, toViewerItem } from "~/data/viewer";
 
-// The viewer's postMessage namespace + protocol version.
+/**
+ * The viewer's postMessage namespace.
+ */
 const VIEWER_SOURCE = "3d.cstrike.app";
+
+/**
+ * The viewer's postMessage protocol version.
+ */
 const VIEWER_PROTOCOL_VERSION = 1;
 
-// The subset of a CS2BaseInventoryItem the viewer reads (same shape as `?item=`).
+/**
+ * The subset of a CS2BaseInventoryItem the viewer reads, the same shape as the
+ * `?item=` query parameter.
+ */
 export type ViewerItem = Pick<
   CS2BaseInventoryItem,
   "id" | "seed" | "wear" | "stickers" | "keychains" | "statTrak" | "nameTag"
 >;
 
-// What the viewer canvas is editing: a sticker, the charm (index is always 0 —
-// a weapon carries one), or nothing. `activeSticker` is derived from it.
+/**
+ * What the viewer canvas is editing: a sticker, the charm (whose index is always
+ * 0, as a weapon carries one), or nothing. `activeSticker` is derived from it.
+ */
 export type ViewerSelection =
   | { kind: "sticker"; index: number }
   | { kind: "keychain"; index: number }
   | null;
 
-// The observable viewer state, reported by `getState` and the `change` event.
+/**
+ * The observable viewer state, reported by `getState` and the `change` event.
+ */
 export interface ViewerState {
   item: ViewerItem;
   selection: ViewerSelection;
   activeSticker: number | null;
   schemaCount: number;
-  // Where an UNMOVED charm renders — the model's default location, which the economy data
-  // doesn't publish (a keychains entry with absent axes falls to it). Display-only: showing
-  // it is not the same as storing it (reset-to-default must stay expressible as absent axes).
-  // null while no charm is applied or the weapon's markup hasn't loaded; optional because an
-  // older viewer build omits the field entirely.
   keychainDefault?: { x: number; y: number; z: number } | null;
 }
 
-// Which rate limit bound; absent when the server didn't report a known bucket.
+/**
+ * Which rate limit bound; absent when the server didn't report a known bucket.
+ */
 export type RateLimitScope = "ip" | "origin" | "partner";
 
-// Why the viewer can't render the requested item, which the host maps to a cooldown LENGTH (see
-// markViewerUnsupported):
-//  - "webgl"   — the device can't do 3D at all (WebGL / hardware acceleration unavailable, or a context
-//                that keeps dying). Device-level → suppress 3D for a good while.
-//  - "network" — an asset/API load failed AFTER the viewer's own retries (e.g. a Great-Firewall-
-//                throttled CDN edge). Transient → short cooldown, but back off if it keeps failing.
-//  - "weapon" / "sticker" / "keychain" — a cs2-lib catalog mismatch (the per-item viewerCatalog
-//                gate handles it); "keychain" also covers a charmed weapon whose physics engine
-//                failed to load.
-// Any of them flips the host back to its 2D editor. "asset" is the pre-reason-split name, still
-// accepted (and treated as network) from a stale/cached viewer build.
+/**
+ * Why the viewer can't render the requested item, which the host maps to a
+ * cooldown LENGTH (see markViewerUnsupported).
+ *
+ * `webgl` means the device can't do 3D at all (WebGL or hardware acceleration
+ * unavailable, or a context that keeps dying); being device-level, it suppresses
+ * 3D for a good while. `network` means an asset or API load failed AFTER the
+ * viewer's own retries (e.g. a Great-Firewall-throttled CDN edge); being
+ * transient, it gets a short cooldown that backs off if it keeps failing.
+ * `weapon`, `sticker` and `keychain` are cs2-lib catalog mismatches, handled by
+ * the per-item viewerCatalog gate; `keychain` also covers a charmed weapon whose
+ * physics engine failed to load.
+ *
+ * Any of them flips the host back to its 2D editor. `asset` is the
+ * pre-reason-split name, still accepted (and treated as network) from a stale or
+ * cached viewer build.
+ */
 export type ViewerUnsupportedReason =
   "weapon" | "sticker" | "keychain" | "network" | "webgl" | "asset";
 
-// Events the viewer emits back to us. The `state` reply to `getState` is consumed
-// by that promise, so it isn't surfaced as an event here.
+/**
+ * Events the viewer emits back to us. The `state` reply to `getState` is
+ * consumed by that promise, so it isn't surfaced as an event here.
+ */
 export interface ViewerEventMap {
   ready: { v: number };
   change: ViewerState;
@@ -66,8 +84,10 @@ export interface ViewerEventMap {
 }
 
 export interface ViewerApiOptions {
-  // The viewer's origin, for postMessage targeting and inbound filtering.
-  // Defaults to the origin of the iframe's `src`.
+  /**
+   * The viewer's origin, for postMessage targeting and inbound filtering.
+   * Defaults to the origin of the iframe's `src`.
+   */
   origin?: string;
 }
 
@@ -102,6 +122,11 @@ export class ViewerApi extends EventTarget {
   private readyWaiters: (() => void)[] = [];
   private readonly pending = new Map<string, PendingReply>();
 
+  /**
+   * Attaches to the viewer iframe and starts the readiness handshake. The iframe
+   * may already have loaded (e.g. from cache) before the load listener is
+   * attached, so `ready` is solicited once up front as well.
+   */
   constructor(iframe: HTMLIFrameElement, options?: ViewerApiOptions) {
     super();
     this.iframe = iframe;
@@ -109,14 +134,12 @@ export class ViewerApi extends EventTarget {
       options?.origin ?? new URL(iframe.src, window.location.href).origin;
     window.addEventListener("message", this.onMessage);
     iframe.addEventListener("load", this.onLoad);
-    // The iframe may already have loaded (e.g. from cache) before we attached the
-    // load listener, so solicit `ready` once now as well.
     this.solicitReady();
   }
 
-  // --- events -------------------------------------------------------------
-
-  // Subscribe to a viewer event. Returns an unsubscribe function.
+  /**
+   * Subscribes to a viewer event. Returns an unsubscribe function.
+   */
   on<K extends keyof ViewerEventMap>(
     type: K,
     listener: (data: ViewerEventMap[K]) => void
@@ -128,7 +151,9 @@ export class ViewerApi extends EventTarget {
     return () => this.removeEventListener(type, handler);
   }
 
-  // Subscribe to the next occurrence of a viewer event, then auto-unsubscribe.
+  /**
+   * Subscribes to the next occurrence of a viewer event, then auto-unsubscribes.
+   */
   once<K extends keyof ViewerEventMap>(
     type: K,
     listener: (data: ViewerEventMap[K]) => void
@@ -140,15 +165,15 @@ export class ViewerApi extends EventTarget {
     return off;
   }
 
-  // Resolves once the viewer is ready (immediately if it already is).
+  /**
+   * Resolves once the viewer is ready, immediately if it already is.
+   */
   whenReady(): Promise<void> {
     if (this.isReady) {
       return Promise.resolve();
     }
     return new Promise((resolve) => this.readyWaiters.push(resolve));
   }
-
-  // --- commands -----------------------------------------------------------
 
   setItem(item: ViewerItemInput): void {
     this.send("setItem", { item: toViewerItem(item) });
@@ -186,8 +211,10 @@ export class ViewerApi extends EventTarget {
     this.send("setKeychainSeed", data);
   }
 
-  // Absolute bone-space point; all three axes required (see the embed API — a
-  // partial position is a silent no-op).
+  /**
+   * Moves the charm to an absolute bone-space point. All three axes are
+   * required, as the embed API treats a partial position as a silent no-op.
+   */
   setKeychainPosition(data: {
     index: number;
     x: number;
@@ -197,13 +224,17 @@ export class ViewerApi extends EventTarget {
     this.send("setKeychainPosition", data);
   }
 
-  // Back to the model's default location (the absence of x/y/z, which cannot be
-  // expressed as a setKeychainPosition call).
+  /**
+   * Sends the charm back to the model's default location, i.e. the absence of
+   * x/y/z, which cannot be expressed as a setKeychainPosition call.
+   */
   clearKeychainPosition(data: { index: number }): void {
     this.send("clearKeychainPosition", data);
   }
 
-  // CS2's "Next Pos": a uniform-random re-roll over the weapon's charm surface.
+  /**
+   * CS2's "Next Pos": a uniform-random re-roll over the weapon's charm surface.
+   */
   rerollKeychainPosition(data: { index: number }): void {
     this.send("rerollKeychainPosition", data);
   }
@@ -212,9 +243,12 @@ export class ViewerApi extends EventTarget {
     this.send("ping");
   }
 
-  // Pull the current viewer state. Rejects if no reply arrives within
-  // `timeoutMs`; the timer starts when the request is actually sent (i.e. after
-  // the viewer is ready), not while it is still queued.
+  /**
+   * Pulls the current viewer state. Rejects if no reply arrives within
+   * `timeoutMs`; the timer starts when the request is actually sent (i.e. after
+   * the viewer is ready), not while it is still queued. The pending reply is
+   * registered up front so that destroy() can reject it even while queued.
+   */
   getState(timeoutMs = 5000): Promise<ViewerState> {
     const id = crypto.randomUUID();
     return new Promise<ViewerState>((resolve, reject) => {
@@ -222,8 +256,6 @@ export class ViewerApi extends EventTarget {
         reject(new Error("ViewerApi: destroyed."));
         return;
       }
-      // Register the pending reply now so destroy() can reject it even while it
-      // is still queued; the timeout only starts once it is actually sent.
       const entry: PendingReply = { resolve, reject };
       this.pending.set(id, entry);
       this.enqueue(() => {
@@ -239,16 +271,21 @@ export class ViewerApi extends EventTarget {
     });
   }
 
-  // Low-level escape hatch for protocol commands not yet wrapped above (additive
-  // commands stay on `v: 1`). Buffered until ready, like the typed commands.
+  /**
+   * Low-level escape hatch for protocol commands not yet wrapped above (additive
+   * commands stay on `v: 1`). Buffered until ready, like the typed commands,
+   * except for `ping`, which must go out immediately as it is how we solicit
+   * `ready`.
+   */
   send(type: string, data?: unknown): void {
     const envelope = this.envelope(type, data);
-    // `ping` must go out immediately — it is how we solicit `ready`.
     this.enqueue(() => this.post(envelope), type === "ping");
   }
 
-  // Detach listeners, drop the command queue, and fail any in-flight getState.
-  // Subsequent calls are no-ops.
+  /**
+   * Detaches listeners, drops the command queue, and fails any in-flight
+   * getState. Subsequent calls are no-ops.
+   */
   destroy(): void {
     if (this.destroyed) {
       return;
@@ -267,8 +304,6 @@ export class ViewerApi extends EventTarget {
     this.pending.clear();
   }
 
-  // --- internals ----------------------------------------------------------
-
   private envelope(type: string, data?: unknown, id?: string): Envelope {
     const envelope: Envelope = {
       source: VIEWER_SOURCE,
@@ -280,8 +315,10 @@ export class ViewerApi extends EventTarget {
     return envelope;
   }
 
-  // Run `task` now if the viewer is ready (or if it is the handshake itself),
-  // otherwise buffer it until the next `ready`.
+  /**
+   * Runs `task` now if the viewer is ready (or if it is the handshake itself),
+   * otherwise buffers it until the next `ready`.
+   */
   private enqueue(task: () => void, immediate = false): void {
     if (this.destroyed) {
       return;
@@ -351,10 +388,12 @@ export class ViewerApi extends EventTarget {
     this.solicitReady();
   };
 
+  /**
+   * Handles inbound viewer messages, obeying only our own viewer: matching
+   * origin, our iframe's window, and our namespace plus protocol version.
+   */
   private readonly onMessage = (event: MessageEvent): void => {
     if (this.destroyed) return;
-    // Only obey our own viewer: matching origin, our iframe's window, our
-    // namespace + protocol version.
     if (event.origin !== this.origin) return;
     if (event.source !== this.iframe.contentWindow) return;
     const message = event.data as Partial<Envelope> | null;
