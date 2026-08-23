@@ -48,8 +48,6 @@ export class Rule<RuleName extends string, RuleValue> {
             ? "number-array"
             : never;
   public name: RuleName;
-  // Type-erased so RuleValue stays covariant, otherwise a Rule<Name, Value> no
-  // longer satisfies the Rule<string, unknown> constraint getRules relies on.
   private transform?: (value: unknown) => unknown;
 
   constructor({

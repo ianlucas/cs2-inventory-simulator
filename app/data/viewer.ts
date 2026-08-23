@@ -78,7 +78,8 @@ function isViewerRenderableKind(item: ViewerItemInput): boolean {
       economyItem.isMelee() ||
       economyItem.isSticker() ||
       economyItem.isKeychain() ||
-      economyItem.isStickerSlab())
+      economyItem.isStickerSlab() ||
+      economyItem.isGloves())
   );
 }
 

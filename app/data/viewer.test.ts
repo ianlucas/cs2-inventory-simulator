@@ -3,15 +3,21 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2ItemType, CS2RarityColor } from "@ianlucas/cs2-lib";
+import {
+  CS2_ITEMS,
+  CS2Economy,
+  CS2ItemType,
+  CS2RarityColor,
+  ensure
+} from "@ianlucas/cs2-lib";
 import { describe, expect, it } from "vitest";
 import {
   buildViewerSrc,
   DEFAULT_VIEWER_EMBED_URL,
+  getViewerItemIds,
   isViewerIdSupported,
   isViewerItemSupported,
-  toViewerItem,
-  getViewerItemIds
+  toViewerItem
 } from "./viewer";
 
 const catalog = {
@@ -22,8 +28,24 @@ const catalog = {
   ] as [number, number][]
 };
 
+const gloves = ensure(
+  CS2_ITEMS.filter((item) => item.type === CS2ItemType.Gloves)
+);
+const gloveFamilyBase = ensure(
+  gloves.find((item) => item.isBase === true && item.isDefault !== true)
+);
+const gloveTeamDefault = ensure(gloves.find((item) => item.isDefault === true));
+const paintedGlove = ensure(gloves.find((item) => item.isBase !== true));
+const gloveCatalog = {
+  maxId: 30_000,
+  holes: [] as [number, number][]
+};
+
 CS2Economy.load({
   items: [
+    gloveFamilyBase,
+    gloveTeamDefault,
+    paintedGlove,
     { id: 5, type: CS2ItemType.Weapon, rarityColor: CS2RarityColor.Common },
     { id: 11, type: CS2ItemType.Weapon, rarityColor: CS2RarityColor.Common },
     { id: 50, type: CS2ItemType.Sticker, rarityColor: CS2RarityColor.Common },
@@ -33,7 +55,6 @@ CS2Economy.load({
       type: CS2ItemType.Collectible,
       rarityColor: CS2RarityColor.Common
     },
-    { id: 62, type: CS2ItemType.Gloves, rarityColor: CS2RarityColor.Common },
     { id: 63, type: CS2ItemType.Melee, rarityColor: CS2RarityColor.Common },
     { id: 64, type: CS2ItemType.Sticker, rarityColor: CS2RarityColor.Common },
     { id: 200, type: CS2ItemType.Sticker, rarityColor: CS2RarityColor.Common }
@@ -124,7 +145,27 @@ describe("isViewerItemSupported", () => {
     expect(isViewerItemSupported(catalog, { id: 64 })).toBe(true);
     expect(isViewerItemSupported(catalog, { id: 60 })).toBe(false);
     expect(isViewerItemSupported(catalog, { id: 61 })).toBe(false);
-    expect(isViewerItemSupported(catalog, { id: 62 })).toBe(false);
+  });
+
+  it("offers gloves a player can wear, painted or team default", () => {
+    expect(isViewerItemSupported(gloveCatalog, { id: paintedGlove.id })).toBe(
+      true
+    );
+    expect(
+      isViewerItemSupported(gloveCatalog, { id: gloveTeamDefault.id })
+    ).toBe(true);
+    expect(
+      isViewerItemSupported(gloveCatalog, CS2Economy.getById(paintedGlove.id))
+    ).toBe(true);
+  });
+
+  it("still gates gloves on the manifest", () => {
+    expect(
+      isViewerItemSupported(
+        { maxId: 30_000, holes: [[paintedGlove.id, paintedGlove.id]] },
+        { id: paintedGlove.id }
+      )
+    ).toBe(false);
   });
 
   it("classifies CS2EconomyItem instances without an economy lookup", () => {

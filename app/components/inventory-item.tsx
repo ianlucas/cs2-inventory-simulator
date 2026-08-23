@@ -174,9 +174,6 @@ export function InventoryItem({
     ((item.hasStickers() &&
       item.getStickersCount() < inventoryItemMaxStickers) ||
       item.isSticker());
-  // Attaching a charm is a 3D-only flow (there is no schema-based 2D
-  // placement like stickers), so the entry only shows when the viewer can
-  // render this item.
   const canAttachCharm =
     canUse3dAttach &&
     ownApplicableKeychains &&
