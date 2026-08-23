@@ -105,7 +105,9 @@ export const stickerWearStringMaxLen = String(CS2_STICKER_WEAR_FACTOR).length;
 const stickerOffsetDecimalPlaces = countDecimals(CS2_STICKER_OFFSET_FACTOR);
 export const stickerOffsetStringMaxLen =
   "-0.".length + stickerOffsetDecimalPlaces;
-const keychainPositionDecimalPlaces = countDecimals(CS2_KEYCHAIN_POSITION_FACTOR);
+const keychainPositionDecimalPlaces = countDecimals(
+  CS2_KEYCHAIN_POSITION_FACTOR
+);
 export const stickerRotationStringMaxLen =
   String(CS2_MIN_STICKER_ROTATION).length + ".5".length;
 
