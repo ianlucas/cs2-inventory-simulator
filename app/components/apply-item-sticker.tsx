@@ -22,7 +22,6 @@ import { SyncAction } from "~/data/sync";
 import { range } from "~/utils/number";
 import { playSound } from "~/utils/sound";
 import { useInventory, useTranslate } from "./app-context";
-import { ViewerOverlay } from "./viewer-overlay";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
@@ -32,6 +31,7 @@ import { Overlay } from "./overlay";
 import { ScrapeLevelSlider } from "./scrape-level-slider";
 import { UseItemFooter } from "./use-item-footer";
 import { UseItemHeader } from "./use-item-header";
+import { ViewerOverlay } from "./viewer-overlay";
 
 const CONFIRM_POSITION_DELAY_MS = 3500;
 
@@ -133,8 +133,6 @@ function ApplyItemSticker3d({
   );
   const [newSticker] = useState(() => ({
     id: stickerItem.id,
-    // Anchor on the first free schema, never the stack index (overflows on
-    // reduced-anchor models).
     schema: getNextStickerSchema(existing, maxSchema)
   }));
   const newIndex = existing.length;
