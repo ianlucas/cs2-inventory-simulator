@@ -11,6 +11,7 @@ import {
   mapEconomyPrices,
   priceSourceDateString
 } from "./economy-price-data";
+import { waitForEconomyProjection } from "./inventory-projection";
 
 const ECONOMY_PRICE_INTERVAL_MS = 60 * 60_000;
 const META_ID = 1;
@@ -45,34 +46,55 @@ export async function syncEconomyPrices() {
     where: { id: META_ID }
   });
   try {
+    await waitForEconomyProjection();
     const { prices, unmatchedNames } = await fetchEconomyPrices(sourceDate);
-    await prisma.$transaction(async (tx) => {
-      for (
-        let index = 0;
-        index < prices.length;
-        index += PRICE_INSERT_BATCH_SIZE
-      ) {
-        await tx.economyPrice.createMany({
-          data: prices
-            .slice(index, index + PRICE_INSERT_BATCH_SIZE)
-            .map((price) => ({ ...price, sourceDate })),
-          skipDuplicates: true
+    const result = await prisma.$transaction(
+      async (tx) => {
+        const projectedIds = new Set(
+          (await tx.economyItem.findMany({ select: { id: true } })).map(
+            ({ id }) => id
+          )
+        );
+        if (projectedIds.size === 0) {
+          throw new Error("Economy items are not projected yet.");
+        }
+        const unmatched = [...unmatchedNames];
+        const mirrored = prices.filter((price) => {
+          if (projectedIds.has(price.economyItemId)) {
+            return true;
+          }
+          unmatched.push(price.marketHashName);
+          return false;
         });
-      }
-      await tx.economyPriceMeta.update({
-        data: {
-          lastFailureAt: null,
-          lastFailureMessage: null,
-          lastSucceededAt: new Date(),
-          lastSucceededSourceDate: sourceDate,
-          lastUnmatchedCount: unmatchedNames.length,
-          lastUnmatchedNames: unmatchedNames.slice(0, 20).join("\n") || null
-        },
-        where: { id: META_ID }
-      });
-    });
+        for (
+          let index = 0;
+          index < mirrored.length;
+          index += PRICE_INSERT_BATCH_SIZE
+        ) {
+          await tx.economyPrice.createMany({
+            data: mirrored
+              .slice(index, index + PRICE_INSERT_BATCH_SIZE)
+              .map((price) => ({ ...price, sourceDate })),
+            skipDuplicates: true
+          });
+        }
+        await tx.economyPriceMeta.update({
+          data: {
+            lastFailureAt: null,
+            lastFailureMessage: null,
+            lastSucceededAt: new Date(),
+            lastSucceededSourceDate: sourceDate,
+            lastUnmatchedCount: unmatched.length,
+            lastUnmatchedNames: unmatched.slice(0, 20).join("\n") || null
+          },
+          where: { id: META_ID }
+        });
+        return { mirrored: mirrored.length, unmatched: unmatched.length };
+      },
+      { maxWait: 30_000, timeout: 180_000 }
+    );
     console.log(
-      `Economy prices: mirrored ${prices.length} items for ${priceSourceDateString(sourceDate)} (${unmatchedNames.length} unmatched) in ${Math.round(performance.now() - startedAt)}ms.`
+      `Economy prices: mirrored ${result.mirrored} items for ${priceSourceDateString(sourceDate)} (${result.unmatched} unmatched) in ${Math.round(performance.now() - startedAt)}ms.`
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error.";
@@ -84,7 +106,7 @@ export async function syncEconomyPrices() {
       where: { id: META_ID }
     });
     console.log(
-      `Economy prices: failed to mirror ${priceSourceDateString(sourceDate)}.`
+      `Economy prices: failed to mirror ${priceSourceDateString(sourceDate)}. ${message}`
     );
   }
 }

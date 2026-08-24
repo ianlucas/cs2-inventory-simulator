@@ -3,21 +3,25 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import {
   CS2Economy,
   CS2_INVENTORY_TIMESTAMP,
   type CS2InventoryItem
 } from "@ianlucas/cs2-lib";
+import { randomUUID } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { setTimeout as sleep } from "node:timers/promises";
+import { fileURLToPath } from "node:url";
 import { prisma } from "~/db.server";
 import { singleton } from "~/singleton.server";
 import { safeLoadInventory } from "~/utils/inventory";
 
 const BACKFILL_BATCH_SIZE = 200;
 const BACKFILL_INTERVAL_MS = 10 * 60_000;
+const ECONOMY_PROJECTION_INTERVAL_MS = 60 * 60_000;
+const ECONOMY_PROJECTION_POLL_MS = 2_000;
+const ECONOMY_PROJECTION_WAIT_MS = 5 * 60_000;
 const ECONOMY_PROJECTION_VERSION = 1;
 const LIVE_BATCH_SIZE = 100;
 const LIVE_INTERVAL_MS = 60_000;
@@ -25,13 +29,17 @@ const META_ID = 1;
 
 type ProjectedInventory = ReturnType<typeof projectInventory>;
 
+let cs2LibVersion: string | undefined;
 function getCs2LibVersion() {
-  const entry = fileURLToPath(import.meta.resolve("@ianlucas/cs2-lib"));
-  const packageJson = readFileSync(
-    join(dirname(entry), "..", "package.json"),
-    "utf8"
-  );
-  return (JSON.parse(packageJson) as { version: string }).version;
+  if (cs2LibVersion === undefined) {
+    const entry = fileURLToPath(import.meta.resolve("@ianlucas/cs2-lib"));
+    const packageJson = readFileSync(
+      join(dirname(entry), "..", "package.json"),
+      "utf8"
+    );
+    cs2LibVersion = (JSON.parse(packageJson) as { version: string }).version;
+  }
+  return cs2LibVersion;
 }
 
 function toDate(timestamp: number | undefined) {
@@ -192,12 +200,35 @@ async function createMeta() {
   });
 }
 
+export async function isEconomyProjectionCurrent() {
+  const meta = await prisma.inventoryProjectionMeta.findUnique({
+    where: { id: META_ID }
+  });
+  return (
+    meta !== null &&
+    meta.cs2LibVersion === getCs2LibVersion() &&
+    meta.economyProjectionVersion === ECONOMY_PROJECTION_VERSION
+  );
+}
+
+export async function waitForEconomyProjection(
+  timeoutMs = ECONOMY_PROJECTION_WAIT_MS
+) {
+  const deadline = Date.now() + timeoutMs;
+  while (!(await isEconomyProjectionCurrent())) {
+    if (Date.now() >= deadline) {
+      throw new Error("Economy items were not projected in time.");
+    }
+    await sleep(ECONOMY_PROJECTION_POLL_MS);
+  }
+}
+
 export async function syncEconomyProjection() {
   const startedAt = performance.now();
-  const cs2LibVersion = getCs2LibVersion();
+  const version = getCs2LibVersion();
   const meta = await createMeta();
   if (
-    meta.cs2LibVersion === cs2LibVersion &&
+    meta.cs2LibVersion === version &&
     meta.economyProjectionVersion === ECONOMY_PROJECTION_VERSION
   ) {
     console.log(
@@ -206,21 +237,27 @@ export async function syncEconomyProjection() {
     return;
   }
   const items = projectEconomyItems();
-  await prisma.$transaction(async (tx) => {
-    await tx.economyItem.deleteMany();
-    for (let index = 0; index < items.length; index += 1_000) {
-      await tx.economyItem.createMany({
-        data: items.slice(index, index + 1_000)
+  await prisma.$transaction(
+    async (tx) => {
+      await tx.economyItem.deleteMany();
+      for (let index = 0; index < items.length; index += 1_000) {
+        await tx.economyItem.createMany({
+          data: items.slice(index, index + 1_000)
+        });
+      }
+      await tx.inventoryProjectionMeta.update({
+        data: {
+          cs2LibVersion: version,
+          economyProjectionVersion: ECONOMY_PROJECTION_VERSION
+        },
+        where: { id: META_ID }
       });
-    }
-    await tx.inventoryProjectionMeta.update({
-      data: {
-        cs2LibVersion,
-        economyProjectionVersion: ECONOMY_PROJECTION_VERSION
-      },
-      where: { id: META_ID }
-    });
-  });
+      await tx.economyPriceMeta.updateMany({
+        data: { lastSucceededSourceDate: null }
+      });
+    },
+    { maxWait: 30_000, timeout: 180_000 }
+  );
   console.log(
     `Inventory economy projection: refreshed ${items.length} items in ${Math.round(performance.now() - startedAt)}ms.`
   );
@@ -381,7 +418,7 @@ export async function runInventoryBackfill() {
   );
 }
 
-function schedule(intervalMs: number, run: () => Promise<void>) {
+function schedule(name: string, intervalMs: number, run: () => Promise<void>) {
   let running = false;
   const invoke = async () => {
     if (running) {
@@ -390,8 +427,9 @@ function schedule(intervalMs: number, run: () => Promise<void>) {
     running = true;
     try {
       await run();
-    } catch {
-      console.log("Inventory projection: job failed.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error.";
+      console.log(`${name}: job failed. ${message}`);
     } finally {
       running = false;
     }
@@ -402,15 +440,16 @@ function schedule(intervalMs: number, run: () => Promise<void>) {
 
 export function scheduleInventoryProjection() {
   singleton("inventoryProjection", () => {
-    void syncEconomyProjection()
-      .catch(() => {
-        console.log("Inventory economy projection: failed.");
-      })
-      .then(() => {
-        const liveSince = new Date(Date.now() - LIVE_INTERVAL_MS);
-        schedule(LIVE_INTERVAL_MS, () => runLiveInventoryProjection(liveSince));
-        schedule(BACKFILL_INTERVAL_MS, runInventoryBackfill);
-      });
+    schedule(
+      "Inventory economy projection",
+      ECONOMY_PROJECTION_INTERVAL_MS,
+      syncEconomyProjection
+    );
+    const liveSince = new Date(Date.now() - LIVE_INTERVAL_MS);
+    schedule("Inventory live projection", LIVE_INTERVAL_MS, () =>
+      runLiveInventoryProjection(liveSince)
+    );
+    schedule("Inventory backfill", BACKFILL_INTERVAL_MS, runInventoryBackfill);
     return true;
   });
 }
