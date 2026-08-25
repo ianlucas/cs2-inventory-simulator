@@ -131,7 +131,7 @@ Max items a storage unit can store.
 - **Type:** `number`
 - **Default:** `0`
 
-Resets (deletes) a user's inventory after this many days without logging into the website or being fetched by the game server. `0` disables the rule. Set a per-user or per-group overwrite to `0` to make them immune.
+Resets (deletes) a user's inventory after this many days without logging into the website or being fetched by the game server. `0` disables the rule. Set a per-user or per-group override to `0` to make them immune.
 
 ## Inventory items
 
@@ -590,7 +590,7 @@ Can anyone consume a charge of the user's equipped graffiti using `POST /api/con
 
 ## Rule overwriting
 
-There are two ways to overwrite rules: by adding records to `GroupRule` and `UserRule` tables. Users can be grouped by creating a record on `Group` table, and then associating each user to a group on `UserGroup`.
+There are two ways to override rules: by adding records to `GroupRule` and `UserRule` tables. Users can be grouped by creating a record on `Group` table, and then associating each user to a group on `UserGroup`.
 
 1. If the system finds a rule for a user in `UserRule`, that rule will be enforced.
 2. If the system finds a rule for a group the user is in, on `GroupRule` table, that rule will enforced. If the user is associated to multiple groups, the rule for the group with the higher `priority` will be enforced.

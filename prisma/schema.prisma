@@ -13,7 +13,7 @@ datasource db {
   provider = "postgresql"
 }
 
-enum CS2ItemWear {
+enum CS2ItemExterior {
   FN
   MW
   FT
@@ -22,19 +22,19 @@ enum CS2ItemWear {
 }
 
 model User {
+  apiResponseCaches   UserApiResponseCache[]
   authTokens          ApiAuthToken[]
   avatar              String
-  caches              UserCache[]
   createdAt           DateTime                 @default(now())
   groups              UserGroup[]
   id                  String                   @id
-  inventory           String?
   inventoryItems      UserInventoryItem[]
   inventoryProjection UserInventoryProjection?
-  inventoryRecoveries InventoryRecovery[]
-  lastSeen            DateTime                 @default(now())
+  inventoryRecoveries UserInventoryRecovery[]
+  lastSeenAt          DateTime                 @default(now())
   name                String
-  overwrites          UserRule[]
+  rawInventory        String?
+  overrides           UserRule[]
   preferences         UserPreference?
   syncedAt            DateTime                 @default(now())
   updatedAt           DateTime                 @updatedAt
@@ -43,40 +43,40 @@ model User {
 }
 
 model EconomyItem {
-  altName    String?
-  base       Boolean
-  baseItemId Int?
-  category   String?
-  collection String?
-  def        Int?
-  free       Boolean
-  id         Int     @id
-  model      String?
-  name       String
-  rarity     String?
-  type       String
-  prices     EconomyPrice[]
+  altName       String?
+  base          Boolean
+  baseItemId    Int?
+  category      String?
+  collectionKey String?
+  def           Int?
+  free          Boolean
+  id            Int            @id
+  modelKey      String?
+  name          String
+  rarityColor   String?
+  type          String
+  prices        EconomyPrice[]
 }
 
 model EconomyPrice {
-  currency       String   @default("USD")
-  economyItem    EconomyItem @relation(fields: [economyItemId], references: [id], onDelete: Cascade)
+  currency       String           @default("USD")
+  economyItem    EconomyItem      @relation(fields: [economyItemId], references: [id], onDelete: Cascade)
   economyItemId  Int
-  exterior       CS2ItemWear?
-  last24h        Decimal? @db.Decimal(14, 6)
-  last7d         Decimal? @db.Decimal(14, 6)
-  last30d        Decimal? @db.Decimal(14, 6)
-  last90d        Decimal? @db.Decimal(14, 6)
+  exterior       CS2ItemExterior?
+  avgPrice24h    Decimal?         @db.Decimal(14, 6)
+  avgPrice7d     Decimal?         @db.Decimal(14, 6)
+  avgPrice30d    Decimal?         @db.Decimal(14, 6)
+  avgPrice90d    Decimal?         @db.Decimal(14, 6)
   marketHashName String
-  sourceDate     DateTime @db.Date
-  souvenir       Boolean  @default(false)
-  statTrak       Boolean  @default(false)
+  sourceDate     DateTime         @db.Date
+  souvenir       Boolean          @default(false)
+  statTrak       Boolean          @default(false)
 
   @@id([sourceDate, marketHashName])
   @@index([economyItemId, sourceDate])
 }
 
-model EconomyPriceMeta {
+model EconomyPriceSyncState {
   id                      Int       @id @default(1)
   lastAttemptedAt         DateTime?
   lastAttemptedSourceDate DateTime? @db.Date
@@ -158,15 +158,18 @@ model UserInventoryItemKeychain {
 }
 
 model UserInventoryProjection {
-  failedSyncedAt    DateTime?
-  projectedAt       DateTime?
-  projectedSyncedAt DateTime?
-  updatedAt         DateTime  @updatedAt
-  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String    @id
+  /// Copy of User.syncedAt for the last failed projection attempt. Cleared on
+  /// success, unlike projectedUserSyncedAt, which is never cleared: after a
+  /// failure both may be set, holding different watermarks.
+  failedUserSyncedAt    DateTime?
+  projectedAt           DateTime?
+  projectedUserSyncedAt DateTime?
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                String    @id
 }
 
-model InventoryProjectionMeta {
+model InventoryProjectionState {
   backfillCompletedAt      DateTime?
   backfillCursor           String?
   cs2LibVersion            String?
@@ -175,25 +178,27 @@ model InventoryProjectionMeta {
   updatedAt                DateTime  @updatedAt
 }
 
-model InventoryRecovery {
-  changes   String?
-  createdAt DateTime @default(now())
-  id        String   @id @default(uuid())
-  inventory String
-  reason    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+model UserInventoryRecovery {
+  changes      String?
+  createdAt    DateTime @default(now())
+  id           String   @id @default(uuid())
+  rawInventory String
+  reason       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
 
   @@index([userId])
 }
 
-model UserCache {
-  args      String?
-  body      String
-  timestamp DateTime
-  url       String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+model UserApiResponseCache {
+  args         String?
+  body         String
+  url          String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  /// Copy of User.syncedAt at write time, used as the cache-validity
+  /// watermark: a response is reused only while the user has not re-synced.
+  userSyncedAt DateTime
 
   @@id([url, userId])
 }
@@ -220,20 +225,20 @@ model ApiCredential {
 }
 
 model ApiAuthToken {
-  apiKey     String
-  createdAt  DateTime      @default(now())
-  credential ApiCredential @relation(fields: [apiKey], references: [apiKey], onDelete: Cascade)
-  token      String        @id @default(uuid())
-  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
+  createdAt        DateTime      @default(now())
+  credential       ApiCredential @relation(fields: [credentialApiKey], references: [apiKey], onDelete: Cascade)
+  credentialApiKey String
+  token            String        @id @default(uuid())
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String
 }
 
 model Rule {
-  groupOverwrites GroupRule[]
-  name            String      @id @unique
-  type            String      @default("string")
-  userOverwrites  UserRule[]
-  value           String
+  groupOverrides GroupRule[]
+  name           String      @id @unique
+  type           String      @default("string")
+  userOverrides  UserRule[]
+  value          String
 }
 
 model UserRule {
@@ -247,10 +252,10 @@ model UserRule {
 }
 
 model Group {
-  id         String      @id
-  overwrites GroupRule[]
-  priority   Int         @default(0)
-  users      UserGroup[]
+  id        String      @id
+  overrides GroupRule[]
+  priority  Int         @default(0)
+  users     UserGroup[]
 }
 
 model UserGroup {

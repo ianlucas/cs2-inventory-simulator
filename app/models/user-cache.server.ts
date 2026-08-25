@@ -40,14 +40,14 @@ export async function handleUserCachedResponse({
       ? res(throwBody, mimeType)
       : Response.json(throwBody);
   }
-  const timestamp = await getUserSyncedAt(userId);
-  const cache = await prisma.userCache.findFirst({
+  const userSyncedAt = await getUserSyncedAt(userId);
+  const cache = await prisma.userApiResponseCache.findFirst({
     select: { body: true },
     where: {
       args,
+      userSyncedAt,
       url,
-      userId,
-      timestamp
+      userId
     }
   });
   if (cache !== null) {
@@ -67,18 +67,18 @@ export async function handleUserCachedResponse({
     mimeType === "application/json"
       ? JSON.stringify(generated)
       : z.string().parse(generated);
-  await prisma.userCache.upsert({
+  await prisma.userApiResponseCache.upsert({
     create: {
       args,
       body,
-      timestamp,
+      userSyncedAt,
       url,
       userId
     },
     update: {
       args,
       body,
-      timestamp
+      userSyncedAt
     },
     where: {
       url_userId: {

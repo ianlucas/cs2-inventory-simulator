@@ -181,19 +181,19 @@ export function projectEconomyItems() {
     base: item.isBase ?? false,
     baseItemId: item.parentId,
     category: item.categoryName,
-    collection: item.collectionKey,
+    collectionKey: item.collectionKey,
     def: item.definitionIndex,
     free: item.isDefault ?? false,
     id: item.id,
-    model: item.modelKey,
+    modelKey: item.modelKey,
     name: item.name,
-    rarity: item.rarityColor,
+    rarityColor: item.rarityColor,
     type: item.type
   }));
 }
 
 async function createMeta() {
-  return await prisma.inventoryProjectionMeta.upsert({
+  return await prisma.inventoryProjectionState.upsert({
     create: { id: META_ID },
     update: {},
     where: { id: META_ID }
@@ -201,7 +201,7 @@ async function createMeta() {
 }
 
 export async function isEconomyProjectionCurrent() {
-  const meta = await prisma.inventoryProjectionMeta.findUnique({
+  const meta = await prisma.inventoryProjectionState.findUnique({
     where: { id: META_ID }
   });
   return (
@@ -245,14 +245,14 @@ export async function syncEconomyProjection() {
           data: items.slice(index, index + 1_000)
         });
       }
-      await tx.inventoryProjectionMeta.update({
+      await tx.inventoryProjectionState.update({
         data: {
           cs2LibVersion: version,
           economyProjectionVersion: ECONOMY_PROJECTION_VERSION
         },
         where: { id: META_ID }
       });
-      await tx.economyPriceMeta.updateMany({
+      await tx.economyPriceSyncState.updateMany({
         data: { lastSucceededSourceDate: null }
       });
     },
@@ -274,8 +274,8 @@ async function markProjectionFailed(userId: string) {
     return;
   }
   await prisma.userInventoryProjection.upsert({
-    create: { failedSyncedAt: user.syncedAt, userId },
-    update: { failedSyncedAt: user.syncedAt },
+    create: { failedUserSyncedAt: user.syncedAt, userId },
+    update: { failedUserSyncedAt: user.syncedAt },
     where: { userId }
   });
 }
@@ -295,7 +295,7 @@ async function projectUserInventory(userId: string): Promise<ProjectionResult> {
         FOR UPDATE
       `;
       const user = await tx.user.findUnique({
-        select: { inventory: true, syncedAt: true },
+        select: { rawInventory: true, syncedAt: true },
         where: { id: userId }
       });
       const projection = await tx.userInventoryProjection.findUniqueOrThrow({
@@ -306,12 +306,12 @@ async function projectUserInventory(userId: string): Promise<ProjectionResult> {
       }
       const syncedAt = user.syncedAt.getTime();
       if (
-        projection.projectedSyncedAt?.getTime() === syncedAt ||
-        projection.failedSyncedAt?.getTime() === syncedAt
+        projection.projectedUserSyncedAt?.getTime() === syncedAt ||
+        projection.failedUserSyncedAt?.getTime() === syncedAt
       ) {
         return "skipped";
       }
-      const inventory = projectInventory(user.inventory);
+      const inventory = projectInventory(user.rawInventory);
       await tx.userInventoryItem.deleteMany({ where: { userId } });
       if (inventory.items.length > 0) {
         await tx.userInventoryItem.createMany({
@@ -333,9 +333,9 @@ async function projectUserInventory(userId: string): Promise<ProjectionResult> {
       }
       await tx.userInventoryProjection.update({
         data: {
-          failedSyncedAt: null,
+          failedUserSyncedAt: null,
           projectedAt: new Date(),
-          projectedSyncedAt: user.syncedAt
+          projectedUserSyncedAt: user.syncedAt
         },
         where: { userId }
       });
@@ -370,8 +370,8 @@ export async function runLiveInventoryProjection(liveSince: Date) {
       AND (
         "UserInventoryProjection"."userId" IS NULL
         OR (
-          "UserInventoryProjection"."projectedSyncedAt" IS DISTINCT FROM "User"."syncedAt"
-          AND "UserInventoryProjection"."failedSyncedAt" IS DISTINCT FROM "User"."syncedAt"
+          "UserInventoryProjection"."projectedUserSyncedAt" IS DISTINCT FROM "User"."syncedAt"
+          AND "UserInventoryProjection"."failedUserSyncedAt" IS DISTINCT FROM "User"."syncedAt"
         )
       )
     ORDER BY "User"."syncedAt", "User"."id"
@@ -403,7 +403,7 @@ export async function runInventoryBackfill() {
   });
   const counts = await projectUsers(users.map((user) => user.id));
   const lastUser = users.at(-1);
-  await prisma.inventoryProjectionMeta.update({
+  await prisma.inventoryProjectionState.update({
     data:
       users.length < BACKFILL_BATCH_SIZE
         ? {

@@ -18,7 +18,7 @@ export async function generateAuthToken({
         token: true
       },
       data: {
-        apiKey,
+        credentialApiKey: apiKey,
         userId
       }
     })

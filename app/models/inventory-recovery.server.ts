@@ -6,11 +6,14 @@
 import { CS2InventoryLoadChanges } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 
-export async function recordInventoryWipe(userId: string, inventory: string) {
+export async function recordInventoryWipe(
+  userId: string,
+  rawInventory: string
+) {
   try {
-    await prisma.inventoryRecovery.create({
+    await prisma.userInventoryRecovery.create({
       data: {
-        inventory,
+        rawInventory,
         reason: "wipe",
         userId
       }
@@ -22,14 +25,14 @@ export async function recordInventoryWipe(userId: string, inventory: string) {
 
 export async function recordInventoryLoadChanges(
   userId: string,
-  inventory: string,
+  rawInventory: string,
   changes: CS2InventoryLoadChanges
 ) {
   try {
-    await prisma.inventoryRecovery.create({
+    await prisma.userInventoryRecovery.create({
       data: {
         changes: JSON.stringify(changes),
-        inventory,
+        rawInventory,
         reason: "load-change",
         userId
       }
