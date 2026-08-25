@@ -40,10 +40,10 @@ export async function getUserInventory(userId: string) {
   return (
     (
       await prisma.user.findFirst({
-        select: { inventory: true },
+        select: { rawInventory: true },
         where: { id: userId }
       })
-    )?.inventory ?? null
+    )?.rawInventory ?? null
   );
 }
 
@@ -105,14 +105,17 @@ export async function existsUser(userId: string) {
   );
 }
 
-export async function updateUserInventory(userId: string, inventory: string) {
+export async function updateUserInventory(
+  userId: string,
+  rawInventory: string
+) {
   const syncedAt = new Date();
   return await prisma.user.update({
     select: {
       syncedAt: true
     },
     data: {
-      inventory,
+      rawInventory,
       syncedAt
     },
     where: {
@@ -123,10 +126,10 @@ export async function updateUserInventory(userId: string, inventory: string) {
 
 export async function touchLastSeen(userId: string, throttleMs = 3_600_000) {
   await prisma.user.updateMany({
-    data: { lastSeen: new Date() },
+    data: { lastSeenAt: new Date() },
     where: {
       id: userId,
-      lastSeen: { lt: new Date(Date.now() - throttleMs) }
+      lastSeenAt: { lt: new Date(Date.now() - throttleMs) }
     }
   });
 }
@@ -155,9 +158,9 @@ export async function manipulateUserInventory({
   return await prisma.$transaction(
     async (tx) => {
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${userId}))`;
-      const { inventory: rawInventory, syncedAt: currentSyncedAt } =
+      const { rawInventory, syncedAt: currentSyncedAt } =
         await tx.user.findUniqueOrThrow({
-          select: { inventory: true, syncedAt: true },
+          select: { rawInventory: true, syncedAt: true },
           where: { id: userId }
         });
       const loadedInventory = safeLoadInventory(rawInventory, options);
@@ -188,7 +191,7 @@ export async function manipulateUserInventory({
       }
       return await tx.user.update({
         select: { syncedAt: true },
-        data: { inventory: inventory.stringify(), syncedAt: new Date() },
+        data: { rawInventory: inventory.stringify(), syncedAt: new Date() },
         where: { id: userId }
       });
     },

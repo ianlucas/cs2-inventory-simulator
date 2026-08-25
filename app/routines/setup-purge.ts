@@ -6,5 +6,5 @@
 import { prisma } from "~/db.server";
 
 export async function setupPurge() {
-  await prisma.userCache.deleteMany();
+  await prisma.userApiResponseCache.deleteMany();
 }

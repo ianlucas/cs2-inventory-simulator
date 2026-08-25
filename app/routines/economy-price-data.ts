@@ -26,10 +26,10 @@ type SteamPrices = z.infer<typeof SteamPricesSchema>;
 export type EconomyPriceData = {
   economyItemId: number;
   exterior: CS2ItemWear | null;
-  last24h: number | null;
-  last7d: number | null;
-  last30d: number | null;
-  last90d: number | null;
+  avgPrice24h: number | null;
+  avgPrice7d: number | null;
+  avgPrice30d: number | null;
+  avgPrice90d: number | null;
   marketHashName: string;
   souvenir: boolean;
   statTrak: boolean;
@@ -118,10 +118,10 @@ export function mapEconomyPrice(
   return {
     economyItemId,
     exterior,
-    last24h: prices.last_24h,
-    last7d: prices.last_7d,
-    last30d: prices.last_30d,
-    last90d: prices.last_90d,
+    avgPrice24h: prices.last_24h,
+    avgPrice7d: prices.last_7d,
+    avgPrice30d: prices.last_30d,
+    avgPrice90d: prices.last_90d,
     marketHashName,
     souvenir,
     statTrak

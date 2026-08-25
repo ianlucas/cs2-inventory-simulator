@@ -27,7 +27,7 @@ async function fetchEconomyPrices(sourceDate: Date) {
 }
 
 async function createMeta() {
-  return await prisma.economyPriceMeta.upsert({
+  return await prisma.economyPriceSyncState.upsert({
     create: { id: META_ID },
     update: {},
     where: { id: META_ID }
@@ -41,7 +41,7 @@ export async function syncEconomyPrices() {
   if (meta.lastSucceededSourceDate?.getTime() === sourceDate.getTime()) {
     return;
   }
-  await prisma.economyPriceMeta.update({
+  await prisma.economyPriceSyncState.update({
     data: { lastAttemptedAt: new Date(), lastAttemptedSourceDate: sourceDate },
     where: { id: META_ID }
   });
@@ -78,7 +78,7 @@ export async function syncEconomyPrices() {
             skipDuplicates: true
           });
         }
-        await tx.economyPriceMeta.update({
+        await tx.economyPriceSyncState.update({
           data: {
             lastFailureAt: null,
             lastFailureMessage: null,
@@ -98,7 +98,7 @@ export async function syncEconomyPrices() {
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error.";
-    await prisma.economyPriceMeta.update({
+    await prisma.economyPriceSyncState.update({
       data: {
         lastFailureAt: new Date(),
         lastFailureMessage: message.slice(0, 1_000)

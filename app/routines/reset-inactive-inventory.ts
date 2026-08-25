@@ -26,19 +26,19 @@ export async function resetInactiveInventories() {
   }
   const now = Date.now();
   const users = await prisma.user.findMany({
-    select: { id: true, lastSeen: true },
+    select: { id: true, lastSeenAt: true },
     where: {
-      inventory: { not: null },
-      lastSeen: { lt: new Date(now - days * DAY_IN_MS) }
+      rawInventory: { not: null },
+      lastSeenAt: { lt: new Date(now - days * DAY_IN_MS) }
     }
   });
   let count = 0;
-  for (const { id, lastSeen } of users) {
+  for (const { id, lastSeenAt } of users) {
     try {
-      // Re-evaluate per user to honor user/group overwrites: 0 = immune, a
+      // Re-evaluate per user to honor user/group overrides: 0 = immune, a
       // larger value = a longer grace period that may not have elapsed yet.
       const userDays = await inventoryInactivityResetDays.for(id).get();
-      if (!isInactive(lastSeen, userDays, now)) {
+      if (!isInactive(lastSeenAt, userDays, now)) {
         continue;
       }
       // Skip already-empty inventories so a permanently-inactive user isn't

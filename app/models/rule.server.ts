@@ -68,7 +68,7 @@ export class Rule<RuleName extends string, RuleValue> {
     Rule.instances.push(this);
   }
 
-  private async getUserRuleOverwrite(userId: string) {
+  private async getUserRuleOverride(userId: string) {
     return (
       await prisma.userRule.findUnique({
         select: { value: true },
@@ -77,13 +77,13 @@ export class Rule<RuleName extends string, RuleValue> {
     )?.value;
   }
 
-  private async getUserGroupRuleOverwrite(userId: string) {
+  private async getUserGroupRuleOverride(userId: string) {
     return (
       await prisma.userGroup.findFirst({
         select: {
           group: {
             select: {
-              overwrites: {
+              overrides: {
                 select: { value: true },
                 where: { name: this.name }
               }
@@ -97,7 +97,7 @@ export class Rule<RuleName extends string, RuleValue> {
           }
         }
       })
-    )?.group.overwrites[0]?.value;
+    )?.group.overrides[0]?.value;
   }
 
   private toValue(str: string): RuleValue {
@@ -188,8 +188,8 @@ export class Rule<RuleName extends string, RuleValue> {
 
   for(userId: string): RuleFor<RuleValue> {
     return new RuleFor(
-      this.getUserRuleOverwrite(userId)
-        .then((v) => v ?? this.getUserGroupRuleOverwrite(userId))
+      this.getUserRuleOverride(userId)
+        .then((v) => v ?? this.getUserGroupRuleOverride(userId))
         .then((v) =>
           v !== undefined ? this.toRuleValue(this.toValue(v)) : this.get()
         )
