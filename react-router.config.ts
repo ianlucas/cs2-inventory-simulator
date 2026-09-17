@@ -5,4 +5,9 @@
 
 import type { Config } from "@react-router/dev/config";
 
-export default {} satisfies Config;
+export default {
+  // Allows any Origin: behind a TLS-terminating proxy the request URL is `http://`, so React
+  // Router's check would reject every `https://` submission. It only covers `.data` requests
+  // anyway, since every action lives in an `api.*` resource route, which it never checks.
+  allowedActionOrigins: ["**"]
+} satisfies Config;
