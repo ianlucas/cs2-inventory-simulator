@@ -218,6 +218,17 @@ describe("buildViewerSrc", () => {
     expect(new URL(buildViewerSrc()).searchParams.has("item")).toBe(false);
   });
 
+  it("sets ?capture= only when capture mode is requested", () => {
+    expect(
+      new URL(buildViewerSrc({ id: 7 }, { capture: true })).searchParams.has(
+        "capture"
+      )
+    ).toBe(true);
+    expect(new URL(buildViewerSrc({ id: 7 })).searchParams.has("capture")).toBe(
+      false
+    );
+  });
+
   it("sets ?icon= only when icon mode is requested", () => {
     expect(
       new URL(buildViewerSrc({ id: 7 }, { icon: true })).searchParams.has(

@@ -12,6 +12,7 @@ import {
   getTimestamp
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
+import { useItemIcon } from "~/components/hooks/use-item-icon";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { has } from "~/utils/misc";
 import { useTranslate } from "./app-context";
@@ -21,15 +22,18 @@ export function InventoryItemTile({
   equipped,
   item,
   onClick,
+  preview,
   small
 }: {
   equipped?: (string | false | undefined)[];
   item: CS2EconomyItem | CS2InventoryItem;
   onClick?: () => void;
+  preview?: boolean;
   small?: boolean;
 }) {
   const translate = useTranslate();
   const nameItem = useNameItem();
+  const { iconRef, iconUrl } = useItemIcon(item, preview === true);
   const inventoryItem = item instanceof CS2InventoryItem ? item : undefined;
   const [model, name] = nameItem(item, "inventory-name");
 
@@ -42,8 +46,20 @@ export function InventoryItemTile({
   return (
     <div className={small ? "w-30" : "w-38.5"}>
       <div className="group relative bg-linear-to-b from-neutral-600 to-neutral-400 p-px">
-        <div className="bg-linear-to-b from-neutral-500 to-neutral-300 px-1">
-          <ItemImage className={small ? "w-30" : "w-38.5"} item={item} />
+        <div
+          className="bg-linear-to-b from-neutral-500 to-neutral-300 px-1"
+          ref={iconRef}
+        >
+          {iconUrl !== undefined ? (
+            <img
+              alt={item.name}
+              className={clsx("aspect-256/192", small ? "w-30" : "w-38.5")}
+              draggable={false}
+              src={iconUrl}
+            />
+          ) : (
+            <ItemImage className={small ? "w-30" : "w-38.5"} item={item} />
+          )}
         </div>
         {isNew && (
           <div className="absolute top-px left-px bg-sky-600 p-1 text-[10px] font-bold text-sky-200 shadow-lg transition-all group-hover:text-white">

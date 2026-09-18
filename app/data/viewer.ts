@@ -112,7 +112,13 @@ export function toViewerItem(item: ViewerItemInput): ViewerItem {
 
 export function buildViewerSrc(
   item?: ViewerItemInput,
-  options?: { embedUrl?: string; cdn?: string; key?: string; icon?: boolean }
+  options?: {
+    embedUrl?: string;
+    cdn?: string;
+    key?: string;
+    icon?: boolean;
+    capture?: boolean;
+  }
 ): string {
   const url = new URL(options?.embedUrl ?? DEFAULT_VIEWER_EMBED_URL);
   url.searchParams.set("halfRotation", "1");
@@ -127,6 +133,9 @@ export function buildViewerSrc(
   }
   if (options?.icon === true) {
     url.searchParams.set("icon", "");
+  }
+  if (options?.capture === true) {
+    url.searchParams.set("capture", "");
   }
   return url.toString();
 }
