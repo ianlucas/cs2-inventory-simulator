@@ -30,9 +30,7 @@ export function Viewer({
   origin?: string;
 }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  // `?item=` only seeds the initial state; capture the src once so re-renders
-  // (or a changed `item` prop) don't reload the iframe. Drive later changes
-  // through the api, or remount with a `key`.
+
   const [src] = useState(() =>
     buildViewerSrc(item, { embedUrl, cdn, key: apiKey, icon, capture })
   );
@@ -43,9 +41,6 @@ export function Viewer({
     onApiRef.current = onApi;
   }, [onApi]);
 
-  // An interactive viewer and the icon generator draw from one per-IP budget
-  // and one GPU, and only one of them has someone waiting on it. The generator
-  // is itself a Viewer, so it must not pause itself.
   useEffect(
     () => (capture === true ? undefined : pauseIconGeneration()),
     [capture]

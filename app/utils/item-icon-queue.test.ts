@@ -28,6 +28,12 @@ vi.mock("./item-icon-store", () => ({
   }
 }));
 
+const tabLock = vi.hoisted(() => ({ granted: true }));
+
+vi.mock("./tab-leader", () => ({
+  claimTabLock: async () => tabLock.granted
+}));
+
 type Queue = typeof import("./item-icon-queue");
 
 interface FakeApi {
@@ -38,10 +44,6 @@ interface FakeApi {
   reply: (result: Partial<ViewerCaptured>) => void;
 }
 
-/**
- * A viewer whose captures are resolved by the test, so ordering and pacing are
- * observable without waiting on a real render.
- */
 function fakeApi(): FakeApi {
   const captured: string[] = [];
   const handlers = new Map<string, (data: unknown) => void>();
@@ -78,6 +80,18 @@ function fakeApi(): FakeApi {
   };
 }
 
+function stubVisibility(initial: DocumentVisibilityState) {
+  let state = initial;
+  Object.defineProperty(document, "visibilityState", {
+    configurable: true,
+    get: () => state
+  });
+  return (next: DocumentVisibilityState) => {
+    state = next;
+    document.dispatchEvent(new Event("visibilitychange"));
+  };
+}
+
 async function flush(): Promise<void> {
   for (let index = 0; index < 20; index++) {
     await Promise.resolve();
@@ -91,12 +105,12 @@ async function load(): Promise<Queue> {
 
 beforeEach(() => {
   vi.useFakeTimers();
+  tabLock.granted = true;
   store.entries.clear();
   store.written.length = 0;
-  // The budget outlives a reload, so it outlives a test too.
+
   window.localStorage.clear();
-  // happy-dom ships no object-URL support, and the identifier is what the tile
-  // renders, so it is stubbed to something the assertions can name.
+
   URL.createObjectURL = (blob: Blob | MediaSource) =>
     `blob:${(blob as Blob).size}`;
   URL.revokeObjectURL = () => {};
@@ -105,6 +119,7 @@ beforeEach(() => {
 afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllGlobals();
+  Reflect.deleteProperty(document, "visibilityState");
 });
 
 describe("icon queue", () => {
@@ -158,7 +173,7 @@ describe("icon queue", () => {
 
     await queue.requestIcon("a", { id: 4 });
     await flush();
-    // Drains the whole burst in one capture, the way a cold five-sticker knife would.
+
     viewer.reply({
       apiCalls: ICON_API_CALL_BURST,
       image: new Blob(["x"])
@@ -169,7 +184,6 @@ describe("icon queue", () => {
     await flush();
     expect(viewer.captured).toEqual(["4"]);
 
-    // One request's worth of budget refills, and the queue moves again.
     await vi.advanceTimersByTimeAsync(
       (60_000 / ICON_API_CALLS_PER_MINUTE) * 1.1
     );
@@ -237,8 +251,6 @@ describe("icon queue", () => {
     await flush();
     expect(viewer.captured).toEqual(["4"]);
 
-    // Opening the inspector on the tile currently being generated: tearing the
-    // generator down here would destroy that tile's own capture.
     const resume = queue.pauseIconGeneration();
     expect(queue.isIconGeneratorWanted()).toBe(true);
 
@@ -328,14 +340,11 @@ describe("icon queue", () => {
     await flush();
     expect(viewer.captured).toEqual(["4"]);
 
-    // The viewer discovered while loading that it cannot draw the charm. It
-    // reports that rather than replying to the capture.
     viewer.emit("unsupported", { reason: "keychain" });
     await flush();
 
     expect(store.written).toEqual([{ error: "keychain", key: "a" }]);
 
-    // And the queue moved on rather than stalling on the dead capture.
     await queue.requestIcon("b", { id: 5 });
     await flush();
     expect(viewer.captured).toEqual(["4", "5"]);
@@ -389,8 +398,7 @@ describe("icon queue", () => {
     const queue = await load();
     const viewer = fakeApi();
     queue.setIconGeneratorApi(viewer.api);
-    // Budget stalls are short by construction -- one request refills in seconds
-    // -- so the wait that actually outlasts the idle window is a rate limit.
+
     const cooldown = queue.ICON_IDLE_TEARDOWN_MS * 3;
 
     await queue.requestIcon("a", { id: 4 });
@@ -406,7 +414,6 @@ describe("icon queue", () => {
     await vi.advanceTimersByTimeAsync(queue.ICON_IDLE_TEARDOWN_MS + 1);
     await flush();
 
-    // Still queued: it is the budget that is missing, not the work.
     expect(viewer.captured).toEqual(["4"]);
     expect(queue.isIconGeneratorWanted()).toBe(false);
 
@@ -431,6 +438,78 @@ describe("icon queue", () => {
     await vi.advanceTimersByTimeAsync(queue.ICON_IDLE_TEARDOWN_MS + 1);
     await flush();
 
+    expect(queue.isIconGeneratorWanted()).toBe(false);
+  });
+  it("leaves the work to the tab already holding the lock", async () => {
+    tabLock.granted = false;
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+
+    expect(viewer.captured).toEqual([]);
+    expect(queue.isIconGeneratorWanted()).toBe(false);
+  });
+
+  it("serves an already generated icon while another tab holds the lock", async () => {
+    tabLock.granted = false;
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+    store.entries.set("a", { image: new Blob(["x"]) });
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+
+    expect(viewer.captured).toEqual([]);
+    expect(queue.getIconUrl("a")).toBeDefined();
+  });
+
+  it("stops generating while the tab is hidden and resumes when it returns", async () => {
+    const setVisibility = stubVisibility("visible");
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    viewer.reply({ image: new Blob(["x"]) });
+    await flush();
+    expect(viewer.captured).toEqual(["4"]);
+
+    setVisibility("hidden");
+    await queue.requestIcon("b", { id: 5 });
+    await flush();
+
+    expect(viewer.captured).toEqual(["4"]);
+    expect(queue.isIconGeneratorWanted()).toBe(false);
+
+    setVisibility("visible");
+    await flush();
+
+    expect(viewer.captured).toEqual(["4", "5"]);
+  });
+
+  it("keeps a capture already in flight when the tab hides", async () => {
+    const setVisibility = stubVisibility("visible");
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    expect(queue.isIconGeneratorWanted()).toBe(true);
+
+    setVisibility("hidden");
+    await flush();
+    expect(queue.isIconGeneratorWanted()).toBe(true);
+
+    viewer.reply({ image: new Blob(["x"]) });
+    await flush();
+
+    expect(store.written).toEqual([{ key: "a" }]);
     expect(queue.isIconGeneratorWanted()).toBe(false);
   });
 });

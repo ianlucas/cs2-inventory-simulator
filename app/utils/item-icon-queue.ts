@@ -16,45 +16,20 @@ import {
   writeIcon,
   writeIconFailure
 } from "./item-icon-store";
+import { claimTabLock } from "./tab-leader";
 import type { ViewerApi } from "./viewer-api";
 
-/** Bounds a capture whose iframe the browser throttled into never settling. */
 export const ICON_CAPTURE_TIMEOUT_MS = 45_000;
 export const ICON_IDLE_TEARDOWN_MS = 30_000;
+export const ICON_GENERATOR_LOCK = "cs2-inventory-simulator:icon-generator";
 
-/** Prunes on a multiple of writes rather than every one, which would double the write traffic. */
 const PRUNE_EVERY = 32;
-
-/**
- * Failures that describe the item and will repeat for it forever, so they are
- * remembered. Everything else describes a moment and is retried next session.
- */
 const PERMANENT_ITEM_ERRORS = new Set(["weapon", "sticker", "keychain"]);
-
-/**
- * Reasons the viewer reports out-of-band, through `unsupported`, for an item it
- * turns out it cannot draw. They name the same failures as a capture's own
- * `error`, so they are treated the same way once routed to the capture.
- */
 const UNSUPPORTED_ITEM_REASONS = new Set(["weapon", "sticker", "keychain"]);
-
-/**
- * Failures that are about the deployment rather than any item: an untrusted
- * session (whose frames carry a watermark) or an iframe that lost its capture
- * flag. Retrying per item would just spend the budget discovering the same
- * thing 256 times.
- */
 const SESSION_ERRORS = new Set(["untrusted", "disabled"]);
-
-/**
- * How many times a capture that never answered is retried before the item is
- * left on its flat image for the session.
- *
- * A capture dies whenever the generator goes away under it, which a user does
- * simply by opening the inspector. Dropping the item on the first of those
- * would mean the items someone looks at are the least likely to get an icon.
- */
 const MAX_ATTEMPTS = 3;
+
+type GeneratorRole = "unclaimed" | "claiming" | "generator" | "bystander";
 
 interface Pending {
   key: string;
@@ -64,7 +39,6 @@ interface Pending {
   attempts: number;
 }
 
-/** What a capture produced, narrowed to what the queue acts on. */
 interface CaptureOutcome {
   apiCalls: number;
   error?: string;
@@ -85,6 +59,8 @@ let paused = 0;
 let running = false;
 let wanted = false;
 let writes = 0;
+let role: GeneratorRole = "unclaimed";
+let resumeWhenVisible: (() => void) | undefined;
 let failInflight: ((reason: string) => void) | undefined;
 let pumpTimer: ReturnType<typeof setTimeout> | undefined;
 let teardownTimer: ReturnType<typeof setTimeout> | undefined;
@@ -106,7 +82,6 @@ function setWanted(next: boolean): void {
   }
 }
 
-/** Whether a generator iframe should be mounted right now. */
 export function isIconGeneratorWanted(): boolean {
   return wanted;
 }
@@ -120,7 +95,6 @@ export function subscribeIconGeneratorWanted(listener: () => void): () => void {
   return () => wantedListeners.delete(listener);
 }
 
-/** Reads a generated icon's object URL, if this session has one. */
 export function getIconUrl(key: string): string | undefined {
   return urls.get(key);
 }
@@ -144,12 +118,6 @@ export function subscribeIcon(key: string, listener: () => void): () => void {
   };
 }
 
-/**
- * Stops generating for the rest of the session.
- *
- * Used for the failures that no amount of budget resolves: no WebGL on this
- * device, or a viewer that will not hand back an unwatermarked frame.
- */
 export function disableIconGeneration(): void {
   disabled = true;
   pending.clear();
@@ -160,19 +128,8 @@ export function isIconGenerationDisabled(): boolean {
   return disabled;
 }
 
-/**
- * Suspends background generation while an interactive viewer is on screen, and
- * resumes on the returned call.
- *
- * The two draw from one per-IP budget and one GPU, and only one of them is
- * something the user is waiting on.
- */
 export function pauseIconGeneration(): () => void {
   paused++;
-  // A capture in flight keeps its generator until it lands. Tearing the iframe
-  // down here destroys that capture, and since visible items are generated
-  // first, the item being paused *for* is usually the one in flight -- opening
-  // the inspector on a tile would reliably destroy that tile's own icon.
   if (!running) {
     setWanted(false);
   }
@@ -185,6 +142,40 @@ export function pauseIconGeneration(): () => void {
     paused--;
     pump();
   };
+}
+
+function pauseWhileTabIsHidden(): void {
+  if (typeof document === "undefined") {
+    return;
+  }
+  function syncWithVisibility(): void {
+    if (document.visibilityState === "hidden") {
+      resumeWhenVisible ??= pauseIconGeneration();
+      return;
+    }
+    const resume = resumeWhenVisible;
+    resumeWhenVisible = undefined;
+    resume?.();
+  }
+  document.addEventListener("visibilitychange", syncWithVisibility);
+  syncWithVisibility();
+}
+
+function claimIconGeneratorRole(): void {
+  if (role !== "unclaimed") {
+    return;
+  }
+  role = "claiming";
+  void claimTabLock(ICON_GENERATOR_LOCK).then((granted) => {
+    role = granted ? "generator" : "bystander";
+    if (!granted) {
+      pending.clear();
+      setWanted(false);
+      return;
+    }
+    pauseWhileTabIsHidden();
+    pump();
+  });
 }
 
 function schedule(delayMs: number): void {
@@ -206,9 +197,6 @@ function scheduleTeardown(): void {
   }
   teardownTimer = setTimeout(() => {
     teardownTimer = undefined;
-    // Unconditional: the next pump mounts a generator again the moment it has
-    // both work and the budget to do it, so holding one here only keeps a
-    // context warm for a wait that has already outlasted the idle window.
     setWanted(false);
   }, ICON_IDLE_TEARDOWN_MS);
 }
@@ -220,7 +208,6 @@ function cancelTeardown(): void {
   }
 }
 
-/** Spends the budget on what the user is looking at before what they scrolled past. */
 function pickNext(): Pending | undefined {
   let fallback: Pending | undefined;
   for (const entry of pending.values()) {
@@ -262,22 +249,12 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
   try {
     const captured: CaptureOutcome = await Promise.race([
       generator.capture(entry.item, { timeoutMs: ICON_CAPTURE_TIMEOUT_MS }),
-      // The viewer discovers some failures while loading assets rather than
-      // while answering, and reports those through `unsupported` instead of
-      // replying. Without this the capture waits out its whole timeout and is
-      // then retried on every future visit, because a timeout is not written
-      // off the way the underlying reason would be.
       new Promise<CaptureOutcome>((resolve) => {
         failInflight = (error) => resolve({ apiCalls: 1, error });
       })
     ]);
-    // Reported rather than estimated: the viewer's recipe cache makes the cost
-    // of an item unknowable from the item.
     spendIconBudget(captured.apiCalls);
     if (captured.error !== undefined && SESSION_ERRORS.has(captured.error)) {
-      // Loud, because the alternative is indistinguishable from the feature not
-      // existing: the tiles keep the flat image they were already showing and
-      // the generator quietly unmounts.
       console.error(
         `[InventorySimulator] 3D inventory icons disabled: the viewer refused to capture (${captured.error}). ` +
           "An untrusted session means the viewer put this origin on the public tier, where frames carry a " +
@@ -290,13 +267,9 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
     await record(entry.key, captured);
     settle(entry.key, captured.image);
   } catch {
-    // A timed-out or destroyed capture is about this moment, not this item, so
-    // nothing is written: a retry now, and failing that the next session --
-    // with a warm recipe cache and no record of the failure -- starts over.
     entry.attempts++;
     spendIconBudget(1);
     if (entry.attempts < MAX_ATTEMPTS) {
-      // Re-queued at the back, so one unlucky item cannot hold up the rest.
       pending.delete(entry.key);
       pending.set(entry.key, entry);
     } else {
@@ -306,8 +279,6 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
   } finally {
     failInflight = undefined;
     running = false;
-    // A pause that arrived mid-capture left the generator up on purpose; now
-    // that the capture has landed, it can go.
     if (paused > 0) {
       setWanted(false);
     }
@@ -320,7 +291,7 @@ function pump(): void {
     clearTimeout(pumpTimer);
     pumpTimer = undefined;
   }
-  if (disabled || running || paused > 0) {
+  if (disabled || running || paused > 0 || role !== "generator") {
     return;
   }
   const next = pickNext();
@@ -328,10 +299,6 @@ function pump(): void {
     scheduleTeardown();
     return;
   }
-  // The budget is checked before the iframe is asked for, so a queue that has
-  // work but cannot spend anything on it does not stand up a viewer to watch
-  // the clock: booting one costs a WebGL context and the asset downloads for
-  // whatever it draws first.
   const now = Date.now();
   const { cooldownUntil, tokens } = loadIconBudget(now);
   if (now < cooldownUntil) {
@@ -346,7 +313,6 @@ function pump(): void {
   }
   cancelTeardown();
   setWanted(true);
-  // The generator iframe mounts asynchronously; its api pumps again on arrival.
   const generator = api;
   if (generator === undefined) {
     return;
@@ -354,7 +320,6 @@ function pump(): void {
   void run(generator, next);
 }
 
-/** Connects the generator iframe's api, or drops it when the iframe goes away. */
 export function setIconGeneratorApi(next: ViewerApi | undefined): void {
   unsubscribeApi?.();
   unsubscribeApi = undefined;
@@ -381,11 +346,6 @@ export function setIconGeneratorApi(next: ViewerApi | undefined): void {
   pump();
 }
 
-/**
- * Queues `item` for generation unless this session already answered for it.
- *
- * Resolves the cache first, so a reload costs a read rather than a render.
- */
 export async function requestIcon(
   key: string,
   item: ViewerItemInput
@@ -403,9 +363,10 @@ export async function requestIcon(
   if (entry?.error !== undefined) {
     return;
   }
-  if (disabled) {
+  if (disabled || role === "bystander") {
     return;
   }
+  claimIconGeneratorRole();
   pending.set(key, {
     attempts: 0,
     elements: new Set(),
@@ -437,7 +398,6 @@ function ensureObserver(): IntersectionObserver | undefined {
   return observer;
 }
 
-/** Tracks a tile's visibility so on-screen items are generated first. */
 export function observeIconTile(key: string, element: Element): () => void {
   const active = ensureObserver();
   if (active === undefined) {

@@ -14,7 +14,6 @@ import {
 export const ICON_WIDTH = 512;
 export const ICON_HEIGHT = 384;
 
-/** Invalidates every cached icon when bumped. */
 export const ICON_CACHE_VERSION = 1;
 
 export function isIconRenderable(
@@ -49,10 +48,6 @@ function stableStringify(value: unknown): string {
   return `{${entries.join(",")}}`;
 }
 
-/**
- * Identifies the picture an item produces, so an icon is reused for every item
- * that would render identically.
- */
 export function getItemIconKey(item: ViewerItemInput): string {
   return stableStringify(toViewerItem(item));
 }

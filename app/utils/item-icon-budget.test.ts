@@ -47,7 +47,6 @@ describe("icon budget", () => {
   });
 
   it("does not overwrite another tab's spending with its own stale balance", () => {
-    // Both tabs observe a full bucket, then each spends half of it.
     expect(loadIconBudget(START).tokens).toBe(ICON_API_CALL_BURST);
     spendIconBudget(ICON_API_CALL_BURST / 2, START);
     spendIconBudget(ICON_API_CALL_BURST / 2, START);

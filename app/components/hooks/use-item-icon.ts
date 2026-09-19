@@ -18,14 +18,6 @@ import { isOurHostname } from "~/utils/misc";
 
 const NOOP = () => {};
 
-/**
- * Whether this deployment may generate 3D icons at all.
- *
- * The viewer refuses to hand back a public-tier frame, since it carries a
- * watermark, so a deployment without a partner key can only do this on an
- * origin the viewer trusts built-in. Our own hostname is that origin; a
- * self-hosted copy of this app is not, and gets the flat CDN images.
- */
 export function useItemIconEnabled(): boolean {
   const {
     viewerAttachmentsOnly,
@@ -43,18 +35,6 @@ export function useItemIconEnabled(): boolean {
   );
 }
 
-/**
- * Resolves the 3D icon for an item, queueing its generation if this browser has
- * never drawn it.
- *
- * Returns nothing until an icon exists, which is most of the time: the caller
- * shows the flat CDN image meanwhile and swaps when this fills in.
- * `iconRef` goes on the tile so the queue can spend its budget on the items
- * actually on screen.
- *
- * `wanted` is the caller's answer about its own surface; whether the deployment
- * and the user allow it at all is this hook's business, not the tile's.
- */
 export function useItemIcon(item: ViewerItemInput, wanted: boolean) {
   const { viewerCatalog } = useRules();
   const enabled = useItemIconEnabled();

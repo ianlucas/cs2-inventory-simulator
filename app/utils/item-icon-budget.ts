@@ -16,17 +16,9 @@ export interface IconBudget {
 }
 
 interface StoredBudget extends IconBudget {
-  /** Wall-clock time the token count was accurate for. */
   at: number;
 }
 
-/**
- * Refills a stored bucket to `now`.
- *
- * A clock that moved backwards yields no refill rather than a negative one, and
- * an arbitrarily old record cannot yield more than the burst, so neither a
- * long-closed tab nor a tampered-with record buys extra budget.
- */
 function refill(stored: StoredBudget, now: number): IconBudget {
   const elapsed = Math.max(0, now - stored.at);
   return {
@@ -57,28 +49,23 @@ function read(now: number): IconBudget {
     : { cooldownUntil: 0, tokens: ICON_API_CALL_BURST };
 }
 
-function write(budget: IconBudget, now: number): IconBudget {
+function tryPersist(stored: StoredBudget): void {
   try {
-    setToLocalStorage(STORAGE_KEY, JSON.stringify({ ...budget, at: now }));
+    setToLocalStorage(STORAGE_KEY, JSON.stringify(stored));
   } catch {
-    // A denied or full quota only costs the bucket its memory across reloads;
-    // the server's own per-IP cap is what actually enforces the limit.
+    return;
   }
+}
+
+function write(budget: IconBudget, now: number): IconBudget {
+  tryPersist({ ...budget, at: now });
   return budget;
 }
 
-/** Reads the budget as of `now`, without spending any of it. */
 export function loadIconBudget(now = Date.now()): IconBudget {
   return read(now);
 }
 
-/**
- * Debits what a capture reported spending.
- *
- * The stored value is re-read rather than tracked in memory so that a second
- * tab's spending is never overwritten by this one's stale idea of the balance:
- * two tabs share one IP, and so one budget.
- */
 export function spendIconBudget(
   apiCalls: number,
   now = Date.now()
@@ -90,7 +77,6 @@ export function spendIconBudget(
   );
 }
 
-/** Records a rate limit the server reported, keeping the longest wait seen. */
 export function setIconBudgetCooldown(
   retryAfterMs: number,
   now = Date.now()
