@@ -18,10 +18,22 @@ export const DEFAULT_VIEWER_EMBED_URL = "https://3d.cstrike.app/view";
 export type ViewerItemInput =
   CS2EconomyItem | CS2InventoryItem | CS2BaseInventoryItem;
 
+export type ViewerItemKind =
+  "weapon" | "melee" | "gloves" | "sticker" | "stickerSlab" | "keychain";
+
+const VIEWER_RENDERABLE_KINDS: ReadonlySet<ViewerItemKind> = new Set([
+  "weapon",
+  "melee",
+  "gloves",
+  "sticker",
+  "stickerSlab",
+  "keychain"
+]);
+
 // The viewer's `/api/catalog` manifest: supported(id) = id <= maxId && id not
 // inside a [lo, hi] hole. Carries no kind information (non-renderable kinds sit
 // interleaved as "present" ids), so it only answers for ids the host already
-// classified as renderable via isViewerRenderableKind.
+// classified as renderable via getViewerItemKind.
 export interface ViewerCatalog {
   maxId: number;
   holes: [number, number][];
@@ -69,26 +81,32 @@ export function getViewerItemIds(item: ViewerItemInput): number[] {
   return ids;
 }
 
-function isViewerRenderableKind(item: ViewerItemInput): boolean {
+export function getViewerItemKind(
+  item: ViewerItemInput
+): ViewerItemKind | undefined {
   const economyItem =
     item instanceof CS2EconomyItem ? item : CS2Economy.items.get(item.id);
-  return (
-    economyItem !== undefined &&
-    (economyItem.isWeapon() ||
-      economyItem.isMelee() ||
-      economyItem.isSticker() ||
-      economyItem.isKeychain() ||
-      economyItem.isStickerSlab() ||
-      economyItem.isGloves())
-  );
+  if (economyItem === undefined) {
+    return undefined;
+  }
+  if (economyItem.isWeapon()) return "weapon";
+  if (economyItem.isMelee()) return "melee";
+  if (economyItem.isGloves()) return "gloves";
+  if (economyItem.isStickerSlab()) return "stickerSlab";
+  if (economyItem.isSticker()) return "sticker";
+  if (economyItem.isKeychain()) return "keychain";
+  return undefined;
 }
 
 export function isViewerItemSupported(
   catalog: ViewerCatalogLike | undefined,
-  item: ViewerItemInput
+  item: ViewerItemInput,
+  kinds: ReadonlySet<ViewerItemKind> = VIEWER_RENDERABLE_KINDS
 ): boolean {
+  const kind = getViewerItemKind(item);
   return (
-    isViewerRenderableKind(item) &&
+    kind !== undefined &&
+    kinds.has(kind) &&
     getViewerItemIds(item).every((id) => isViewerIdSupported(catalog, id))
   );
 }
@@ -110,14 +128,38 @@ export function toViewerItem(item: ViewerItemInput): ViewerItem {
   return viewerItem;
 }
 
+function stableStringify(value: unknown): string {
+  if (value === null || typeof value !== "object") {
+    return JSON.stringify(value) ?? "null";
+  }
+  if (Array.isArray(value)) {
+    return `[${value.map(stableStringify).join(",")}]`;
+  }
+  const entries = Object.entries(value as Record<string, unknown>)
+    .filter(([, entry]) => entry !== undefined)
+    .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
+    .map(([key, entry]) => `${JSON.stringify(key)}:${stableStringify(entry)}`);
+  return `{${entries.join(",")}}`;
+}
+
+export function stringifyViewerItem(item: ViewerItemInput): string {
+  return stableStringify(toViewerItem(item));
+}
+
 export function buildViewerSrc(
   item?: ViewerItemInput,
-  options?: { embedUrl?: string; cdn?: string; key?: string; icon?: boolean }
+  options?: {
+    embedUrl?: string;
+    cdn?: string;
+    key?: string;
+    icon?: boolean;
+    capture?: boolean;
+  }
 ): string {
   const url = new URL(options?.embedUrl ?? DEFAULT_VIEWER_EMBED_URL);
   url.searchParams.set("halfRotation", "1");
   if (item !== undefined) {
-    url.searchParams.set("item", JSON.stringify(toViewerItem(item)));
+    url.searchParams.set("item", stringifyViewerItem(item));
   }
   if (options?.key !== undefined) {
     url.searchParams.set("key", options.key);
@@ -127,6 +169,9 @@ export function buildViewerSrc(
   }
   if (options?.icon === true) {
     url.searchParams.set("icon", "");
+  }
+  if (options?.capture === true) {
+    url.searchParams.set("capture", "");
   }
   return url.toString();
 }
