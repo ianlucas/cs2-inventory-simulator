@@ -224,6 +224,7 @@ export function InventoryItem({
         <InventoryItemTile
           equipped={equipped}
           item={item}
+          preview
           onClick={
             onClick !== undefined ? close(() => onClick(uid)) : undefined
           }

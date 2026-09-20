@@ -71,6 +71,41 @@ export type ViewerUnsupportedReason =
   "weapon" | "sticker" | "keychain" | "network" | "webgl" | "asset";
 
 /**
+ * Why a capture produced no frame.
+ *
+ * Most arrive from the viewer: the `ViewerUnsupportedReason` set, plus
+ * `untrusted` (the public tier declining to hand back a watermarked frame) and
+ * `disabled` (a viewer built without capture support). `timeout` is synthesised
+ * by the host when its own capture deadline expires, so a capture that never
+ * answered can be recorded like any other refusal.
+ */
+export type ViewerCaptureError =
+  ViewerUnsupportedReason | "untrusted" | "disabled" | "timeout";
+
+/**
+ * How long to wait for one capture. Generous because the viewer must compile
+ * shaders and upload textures before the first frame of a cold item settles.
+ */
+export const VIEWER_CAPTURE_TIMEOUT_MS = 45_000;
+
+/**
+ * The reply to one `capture`: a WebP frame of the settled render, or why there
+ * isn't one.
+ *
+ * `apiCalls` is what the capture spent against the viewer's per-IP cap. It is
+ * reported rather than inferred because the viewer answers most repeat items
+ * from a recipe cache keyed by economy id, so the cost of an item is not a
+ * function of the item: the second Redline is free however its seed, wear and
+ * stickers differ from the first.
+ */
+export interface ViewerCaptured {
+  item: ViewerItem;
+  image?: Blob;
+  apiCalls: number;
+  error?: ViewerCaptureError;
+}
+
+/**
  * Events the viewer emits back to us. The `state` reply to `getState` is
  * consumed by that promise, so it isn't surfaced as an event here.
  */
@@ -99,11 +134,24 @@ interface Envelope {
   data?: unknown;
 }
 
-interface PendingReply {
-  resolve: (state: ViewerState) => void;
+/**
+ * Which kind of correlated reply a pending request is waiting for. A `captured`
+ * reply rides the same correlation path as a state snapshot but describes one
+ * frame, so it must not become `lastState`.
+ */
+interface ReplyMap {
+  state: ViewerState;
+  captured: ViewerCaptured;
+}
+
+interface PendingReplyOf<K extends keyof ReplyMap> {
+  kind: K;
+  resolve: (data: ReplyMap[K]) => void;
   reject: (error: Error) => void;
   timer?: ReturnType<typeof setTimeout>;
 }
+
+type PendingReply = PendingReplyOf<"state"> | PendingReplyOf<"captured">;
 
 /**
  * Typed wrapper over the CS2 3D viewer's postMessage embed API. Construct it with
@@ -250,13 +298,52 @@ export class ViewerApi extends EventTarget {
    * registered up front so that destroy() can reject it even while queued.
    */
   getState(timeoutMs = 5000): Promise<ViewerState> {
+    return this.request("state", "getState", undefined, timeoutMs);
+  }
+
+  /**
+   * Renders `item` and resolves with a WebP frame of it once the viewer has
+   * quiesced: shaders compiled, textures uploaded, frame drawn.
+   *
+   * Only a viewer loaded with `capture` can answer, and only on the trusted
+   * tier — a public-tier frame carries a watermark, which the viewer refuses to
+   * hand back rather than let a host cache it. Both refusals arrive as an
+   * `error` on a resolved reply, not a rejection: they are answers about the
+   * item, and only a viewer that never replied at all is a timeout.
+   */
+  capture(
+    item: ViewerItemInput,
+    options?: { quality?: number; timeoutMs?: number }
+  ): Promise<ViewerCaptured> {
+    return this.request(
+      "captured",
+      "capture",
+      { item: toViewerItem(item), quality: options?.quality },
+      options?.timeoutMs ?? VIEWER_CAPTURE_TIMEOUT_MS
+    );
+  }
+
+  /**
+   * Sends a command that expects one correlated reply. The timeout starts when
+   * the command is actually sent (i.e. after the viewer is ready), not while it
+   * is still queued; the pending reply is registered up front so that destroy()
+   * can reject it even while queued.
+   */
+  private request<K extends keyof ReplyMap>(
+    kind: K,
+    type: string,
+    data: unknown,
+    timeoutMs: number
+  ): Promise<ReplyMap[K]> {
     const id = crypto.randomUUID();
-    return new Promise<ViewerState>((resolve, reject) => {
+    return new Promise<ReplyMap[K]>((resolve, reject) => {
       if (this.destroyed) {
         reject(new Error("ViewerApi: destroyed."));
         return;
       }
-      const entry: PendingReply = { resolve, reject };
+      // The map holds every reply kind, so the entry widens to the union here;
+      // onMessage narrows it back by `kind` before resolving.
+      const entry = { kind, resolve, reject } as PendingReply;
       this.pending.set(id, entry);
       this.enqueue(() => {
         if (this.destroyed) {
@@ -264,9 +351,9 @@ export class ViewerApi extends EventTarget {
         }
         entry.timer = setTimeout(() => {
           this.pending.delete(id);
-          reject(new Error("ViewerApi: getState timed out."));
+          reject(new Error(`ViewerApi: ${type} timed out.`));
         }, timeoutMs);
-        this.post(this.envelope("getState", undefined, id));
+        this.post(this.envelope(type, data, id));
       });
     });
   }
@@ -412,9 +499,13 @@ export class ViewerApi extends EventTarget {
         if (pending.timer !== undefined) {
           clearTimeout(pending.timer);
         }
-        const state = data as ViewerState;
-        this.lastState = state;
-        pending.resolve(state);
+        if (pending.kind === "state") {
+          const state = data as ViewerState;
+          this.lastState = state;
+          pending.resolve(state);
+        } else {
+          pending.resolve(data as ViewerCaptured);
+        }
         return;
       }
     }
