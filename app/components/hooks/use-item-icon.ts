@@ -3,13 +3,22 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
+import { CS2EconomyItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useSyncExternalStore
+} from "react";
 import { usePreferences, useRules } from "~/components/app-context";
 import { ViewerItemInput } from "~/data/viewer";
 import { getItemIconKey, isIconRenderable } from "~/utils/item-icon";
 import {
   getIconUrl,
   getIconUrlServer,
+  isIconUnavailable,
+  isIconUnavailableServer,
   observeIconTile,
   requestIcon,
   subscribeIcon
@@ -17,6 +26,13 @@ import {
 import { isOurHostname } from "~/utils/misc";
 
 const NOOP = () => {};
+
+function getItemEditedAt(item: ViewerItemInput): number | undefined {
+  if (item instanceof CS2InventoryItem) {
+    return item.updatedAt;
+  }
+  return item instanceof CS2EconomyItem ? undefined : item.updatedAt;
+}
 
 export function useItemIconEnabled(): boolean {
   const {
@@ -39,24 +55,48 @@ export function useItemIcon(item: ViewerItemInput, wanted: boolean) {
   const { viewerCatalog } = useRules();
   const enabled = useItemIconEnabled();
   const renderable = wanted && enabled && isIconRenderable(viewerCatalog, item);
+  const editedAt = getItemEditedAt(item);
   const key = useMemo(
     () => (renderable ? getItemIconKey(item) : undefined),
-    [renderable, item]
+    [renderable, item, editedAt]
+  );
+
+  const subscribe = useCallback(
+    (listener: () => void) =>
+      key === undefined ? NOOP : subscribeIcon(key, listener),
+    [key]
   );
 
   const iconUrl = useSyncExternalStore(
-    useCallback(
-      (listener: () => void) =>
-        key === undefined ? NOOP : subscribeIcon(key, listener),
-      [key]
-    ),
+    subscribe,
     useCallback(() => (key === undefined ? undefined : getIconUrl(key)), [key]),
     getIconUrlServer
   );
 
+  const unavailable = useSyncExternalStore(
+    subscribe,
+    useCallback(() => key !== undefined && isIconUnavailable(key), [key]),
+    isIconUnavailableServer
+  );
+
+  const lastRenderedIconUrl = useRef<string | undefined>(undefined);
+  if (iconUrl !== undefined) {
+    lastRenderedIconUrl.current = iconUrl;
+  } else if (key === undefined || unavailable) {
+    lastRenderedIconUrl.current = undefined;
+  }
+
+  const lastRequestedKey = useRef<string | undefined>(undefined);
   useEffect(() => {
-    if (key !== undefined && iconUrl === undefined) {
-      void requestIcon(key, item);
+    if (key === undefined) {
+      return;
+    }
+    const regeneratesEditedItem =
+      lastRequestedKey.current !== undefined &&
+      lastRequestedKey.current !== key;
+    lastRequestedKey.current = key;
+    if (iconUrl === undefined) {
+      void requestIcon(key, item, { priority: regeneratesEditedItem });
     }
   }, [key, iconUrl]);
 
@@ -68,5 +108,5 @@ export function useItemIcon(item: ViewerItemInput, wanted: boolean) {
     [key]
   );
 
-  return { iconRef, iconUrl };
+  return { iconRef, iconUrl: iconUrl ?? lastRenderedIconUrl.current };
 }

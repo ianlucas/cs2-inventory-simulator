@@ -512,4 +512,72 @@ describe("icon queue", () => {
     expect(store.written).toEqual([{ key: "a" }]);
     expect(queue.isIconGeneratorWanted()).toBe(false);
   });
+
+  it("renders an edited item before everything already queued", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+
+    await queue.requestIcon("a", { id: 4 });
+    await queue.requestIcon("b", { id: 5 });
+    await queue.requestIcon("c", { id: 6 }, { priority: true });
+    queue.setIconGeneratorApi(viewer.api);
+    await flush();
+
+    expect(viewer.captured).toEqual(["6"]);
+  });
+
+  it("renders the most recent edit first when several are waiting", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+
+    await queue.requestIcon("a", { id: 4 });
+    await queue.requestIcon("b", { id: 5 }, { priority: true });
+    await queue.requestIcon("c", { id: 6 }, { priority: true });
+    queue.setIconGeneratorApi(viewer.api);
+    await flush();
+    expect(viewer.captured).toEqual(["6"]);
+
+    viewer.reply({ image: new Blob(["x"]) });
+    await flush();
+
+    expect(viewer.captured).toEqual(["6", "5"]);
+  });
+
+  it("tells the tile no icon is coming when the viewer cannot render the item", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    expect(queue.isIconUnavailable("a")).toBe(false);
+
+    viewer.reply({ error: "weapon" });
+    await flush();
+
+    expect(queue.isIconUnavailable("a")).toBe(true);
+    expect(queue.getIconUrl("a")).toBeUndefined();
+  });
+
+  it("tells the tile no icon is coming for an item a previous session found unrenderable", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+    store.entries.set("a", { error: "weapon" });
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+
+    expect(queue.isIconUnavailable("a")).toBe(true);
+  });
+
+  it("tells the tile no icon is coming while another tab holds the generator", async () => {
+    tabLock.granted = false;
+    const queue = await load();
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+
+    expect(queue.isIconUnavailable("a")).toBe(true);
+  });
 });

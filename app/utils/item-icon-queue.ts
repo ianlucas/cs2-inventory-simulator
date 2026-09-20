@@ -35,6 +35,7 @@ interface Pending {
   key: string;
   item: ViewerItemInput;
   elements: Set<Element>;
+  priority: boolean;
   visible: boolean;
   attempts: number;
 }
@@ -48,6 +49,7 @@ interface CaptureOutcome {
 const urls = new Map<string, string>();
 const pending = new Map<string, Pending>();
 const known = new Set<string>();
+const unavailable = new Set<string>();
 const listeners = new Map<string, Set<() => void>>();
 const wantedListeners = new Set<() => void>();
 const elementKeys = new WeakMap<Element, string>();
@@ -103,6 +105,27 @@ export function getIconUrlServer(): undefined {
   return undefined;
 }
 
+export function isIconUnavailable(key: string): boolean {
+  return unavailable.has(key);
+}
+
+export function isIconUnavailableServer(): boolean {
+  return false;
+}
+
+function markIconUnavailable(key: string): void {
+  unavailable.add(key);
+  notify(key);
+}
+
+function abandonPendingIcons(): void {
+  const abandoned = Array.from(pending.keys());
+  pending.clear();
+  for (const key of abandoned) {
+    markIconUnavailable(key);
+  }
+}
+
 export function subscribeIcon(key: string, listener: () => void): () => void {
   let entry = listeners.get(key);
   if (entry === undefined) {
@@ -120,7 +143,7 @@ export function subscribeIcon(key: string, listener: () => void): () => void {
 
 export function disableIconGeneration(): void {
   disabled = true;
-  pending.clear();
+  abandonPendingIcons();
   setWanted(false);
 }
 
@@ -169,7 +192,7 @@ function claimIconGeneratorRole(): void {
   void claimTabLock(ICON_GENERATOR_LOCK).then((granted) => {
     role = granted ? "generator" : "bystander";
     if (!granted) {
-      pending.clear();
+      abandonPendingIcons();
       setWanted(false);
       return;
     }
@@ -209,20 +232,28 @@ function cancelTeardown(): void {
 }
 
 function pickNext(): Pending | undefined {
-  let fallback: Pending | undefined;
+  let newestPrioritized: Pending | undefined;
+  let firstVisible: Pending | undefined;
+  let firstQueued: Pending | undefined;
   for (const entry of pending.values()) {
-    if (entry.visible) {
-      return entry;
+    if (entry.priority) {
+      newestPrioritized = entry;
+      continue;
     }
-    fallback ??= entry;
+    if (entry.visible) {
+      firstVisible ??= entry;
+    }
+    firstQueued ??= entry;
   }
-  return fallback;
+  return newestPrioritized ?? firstVisible ?? firstQueued;
 }
 
 function settle(key: string, image: Blob | undefined): void {
   pending.delete(key);
   if (image !== undefined) {
     urls.set(key, URL.createObjectURL(image));
+  } else {
+    unavailable.add(key);
   }
   notify(key);
 }
@@ -256,10 +287,7 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
     spendIconBudget(captured.apiCalls);
     if (captured.error !== undefined && SESSION_ERRORS.has(captured.error)) {
       console.error(
-        `[InventorySimulator] 3D inventory icons disabled: the viewer refused to capture (${captured.error}). ` +
-          "An untrusted session means the viewer put this origin on the public tier, where frames carry a " +
-          "watermark. Locally, run the viewer with `npm run dev` rather than `npm start` -- it only trusts " +
-          "localhost outside production -- or give this app a viewerKey the viewer accepts for this origin."
+        `[InventorySimulator] 3D inventory icons disabled: the viewer refused to capture (${captured.error}). `
       );
       disableIconGeneration();
       return;
@@ -274,7 +302,7 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
       pending.set(entry.key, entry);
     } else {
       pending.delete(entry.key);
-      notify(entry.key);
+      markIconUnavailable(entry.key);
     }
   } finally {
     failInflight = undefined;
@@ -348,7 +376,8 @@ export function setIconGeneratorApi(next: ViewerApi | undefined): void {
 
 export async function requestIcon(
   key: string,
-  item: ViewerItemInput
+  item: ViewerItemInput,
+  { priority = false }: { priority?: boolean } = {}
 ): Promise<void> {
   if (disabled || urls.has(key) || known.has(key) || pending.has(key)) {
     return;
@@ -361,9 +390,11 @@ export async function requestIcon(
     return;
   }
   if (entry?.error !== undefined) {
+    markIconUnavailable(key);
     return;
   }
   if (disabled || role === "bystander") {
+    markIconUnavailable(key);
     return;
   }
   claimIconGeneratorRole();
@@ -372,6 +403,7 @@ export async function requestIcon(
     elements: new Set(),
     item,
     key,
+    priority,
     visible: false
   });
   pump();
