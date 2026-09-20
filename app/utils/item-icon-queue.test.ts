@@ -12,29 +12,46 @@ import type { ViewerCaptured } from "./viewer-api";
 import type { ViewerApi } from "./viewer-api";
 
 const store = vi.hoisted(() => ({
-  entries: new Map<string, { error?: string; image?: Blob }>(),
-  written: [] as { error?: string; key: string }[]
+  entries: new Map<
+    string,
+    { error?: string; image?: Blob; retryAfter?: number }
+  >(),
+  pruned: 0,
+  written: [] as { error?: string; key: string; retryAfter?: number }[]
 }));
 
 vi.mock("./item-icon-store", () => ({
   MAX_STORED_ICONS: 512,
-  pruneIcons: async () => {},
+  pruneIcons: async () => {
+    store.pruned++;
+  },
   readIcon: async (key: string) => store.entries.get(key),
   writeIcon: async (key: string) => {
     store.written.push({ key });
   },
-  writeIconFailure: async (key: string, error: string) => {
-    store.written.push({ error, key });
+  writeIconFailure: async (key: string, error: string, retryAfter?: number) => {
+    store.written.push(
+      retryAfter === undefined ? { error, key } : { error, key, retryAfter }
+    );
   }
 }));
 
-const tabLock = vi.hoisted(() => ({ granted: true }));
-
-vi.mock("./tab-leader", () => ({
-  claimTabLock: async () => tabLock.granted
+const tabLock = vi.hoisted(() => ({
+  granted: true,
+  promote: undefined as (() => void) | undefined
 }));
 
-type Queue = typeof import("./item-icon-queue");
+vi.mock("./tab-leader", () => ({
+  claimTabLock: async (_name: string, options?: { onGranted?: () => void }) => {
+    tabLock.promote = options?.onGranted;
+    return tabLock.granted;
+  }
+}));
+
+type Queue = typeof import("./item-icon-queue") &
+  typeof import("./item-icon-generator-role") &
+  typeof import("./item-icon-registry") &
+  typeof import("./item-icon-visibility");
 
 interface FakeApi {
   api: ViewerApi;
@@ -100,13 +117,21 @@ async function flush(): Promise<void> {
 
 async function load(): Promise<Queue> {
   vi.resetModules();
-  return await import("./item-icon-queue");
+  const [queue, generator, registry, visibility] = await Promise.all([
+    import("./item-icon-queue"),
+    import("./item-icon-generator-role"),
+    import("./item-icon-registry"),
+    import("./item-icon-visibility")
+  ]);
+  return { ...queue, ...generator, ...registry, ...visibility };
 }
 
 beforeEach(() => {
   vi.useFakeTimers();
   tabLock.granted = true;
+  tabLock.promote = undefined;
   store.entries.clear();
+  store.pruned = 0;
   store.written.length = 0;
 
   window.localStorage.clear();
@@ -579,5 +604,167 @@ describe("icon queue", () => {
     await flush();
 
     expect(queue.isIconUnavailable("a")).toBe(true);
+  });
+
+  it("backs off the CDN rather than asking it again straight away", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    viewer.reply({ error: "network" });
+    await flush();
+
+    expect(viewer.captured).toEqual(["4"]);
+
+    await vi.advanceTimersByTimeAsync(29_000);
+    await flush();
+    expect(viewer.captured).toEqual(["4"]);
+
+    await vi.advanceTimersByTimeAsync(2_000);
+    await flush();
+    expect(viewer.captured).toEqual(["4", "4"]);
+  });
+
+  it("waits longer each time the CDN refuses again", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    viewer.reply({ error: "network" });
+    await flush();
+    await vi.advanceTimersByTimeAsync(31_000);
+    await flush();
+    expect(viewer.captured).toEqual(["4", "4"]);
+
+    viewer.reply({ error: "asset" });
+    await flush();
+
+    await vi.advanceTimersByTimeAsync(31_000);
+    await flush();
+    expect(viewer.captured).toEqual(["4", "4"]);
+
+    await vi.advanceTimersByTimeAsync(31_000);
+    await flush();
+    expect(viewer.captured).toEqual(["4", "4", "4"]);
+  });
+
+  it("remembers an item whose captures kept dying, so the next load will not repeat them", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+
+    await queue.requestIcon("a", { id: 4 });
+    for (let attempt = 0; attempt < 3; attempt++) {
+      await flush();
+      viewer.destroy();
+      await flush();
+    }
+
+    expect(store.written).toEqual([
+      { error: "timeout", key: "a", retryAfter: expect.any(Number) }
+    ]);
+    expect(queue.isIconUnavailable("a")).toBe(true);
+  });
+
+  it("tries a timed-out item again only once its retry window has passed", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+    store.entries.set("later", {
+      error: "timeout",
+      retryAfter: Date.now() + 60_000
+    });
+    store.entries.set("ready", {
+      error: "timeout",
+      retryAfter: Date.now() - 1
+    });
+
+    await queue.requestIcon("later", { id: 5 });
+    await queue.requestIcon("ready", { id: 4 });
+    await flush();
+
+    expect(viewer.captured).toEqual(["4"]);
+    expect(queue.isIconUnavailable("later")).toBe(true);
+  });
+
+  it("takes over generating when the tab holding the lock goes away", async () => {
+    tabLock.granted = false;
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    expect(viewer.captured).toEqual([]);
+    expect(queue.isIconUnavailable("a")).toBe(true);
+
+    tabLock.promote?.();
+    await flush();
+
+    expect(viewer.captured).toEqual(["4"]);
+    expect(queue.isIconUnavailable("a")).toBe(false);
+  });
+
+  it("still prefers a tile seen on screen before the queue knew of its item", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    let notify: (
+      entries: { isIntersecting: boolean; target: Element }[]
+    ) => void = () => {};
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        constructor(callback: typeof notify) {
+          notify = callback;
+        }
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      }
+    );
+
+    const element = document.createElement("div");
+    queue.observeIconTile("onscreen", element);
+    notify([{ isIntersecting: true, target: element }]);
+
+    await queue.requestIcon("offscreen", { id: 4 });
+    await queue.requestIcon("onscreen", { id: 5 });
+    queue.setIconGeneratorApi(viewer.api);
+    await flush();
+
+    expect(viewer.captured).toEqual(["5"]);
+  });
+
+  it("stands the generator down when the viewer never hands back an api", async () => {
+    const queue = await load();
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    expect(queue.isIconGeneratorWanted()).toBe(true);
+
+    await vi.advanceTimersByTimeAsync(61_000);
+    await flush();
+
+    expect(queue.isIconGeneratorWanted()).toBe(false);
+  });
+
+  it("counts failures towards the prune, not only the frames it stored", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+
+    for (let index = 0; index < 32; index++) {
+      await queue.requestIcon(`k${index}`, { id: 4 });
+      await flush();
+      viewer.reply({ apiCalls: 0, error: "weapon" });
+      await flush();
+    }
+
+    expect(store.written).toHaveLength(32);
+    expect(store.pruned).toBe(1);
   });
 });

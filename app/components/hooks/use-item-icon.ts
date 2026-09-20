@@ -14,15 +14,16 @@ import {
 import { usePreferences, useRules } from "~/components/app-context";
 import { ViewerItemInput } from "~/data/viewer";
 import { getItemIconKey, isIconRenderable } from "~/utils/item-icon";
+import { pauseIconGeneration } from "~/utils/item-icon-generator-role";
+import { forgetIcon, requestIcon } from "~/utils/item-icon-queue";
 import {
   getIconUrl,
   getIconUrlServer,
   isIconUnavailable,
   isIconUnavailableServer,
-  observeIconTile,
-  requestIcon,
   subscribeIcon
-} from "~/utils/item-icon-queue";
+} from "~/utils/item-icon-registry";
+import { observeIconTile } from "~/utils/item-icon-visibility";
 import { isOurHostname } from "~/utils/misc";
 
 const NOOP = () => {};
@@ -49,6 +50,10 @@ export function useItemIconEnabled(): boolean {
     !prefer2dStickerEditor &&
     (viewerKey.trim() !== "" || isOurHostname())
   );
+}
+
+export function useIconGenerationPausedWhile(active: boolean): void {
+  useEffect(() => (active ? pauseIconGeneration() : undefined), [active]);
 }
 
 export function useItemIcon(item: ViewerItemInput, wanted: boolean) {
@@ -87,16 +92,25 @@ export function useItemIcon(item: ViewerItemInput, wanted: boolean) {
   }
 
   const lastRequestedKey = useRef<string | undefined>(undefined);
+  const supersededKey = useRef<string | undefined>(undefined);
   useEffect(() => {
     if (key === undefined) {
       return;
     }
-    const regeneratesEditedItem =
-      lastRequestedKey.current !== undefined &&
-      lastRequestedKey.current !== key;
+    const previous = lastRequestedKey.current;
+    const regeneratesEditedItem = previous !== undefined && previous !== key;
+    if (regeneratesEditedItem) {
+      supersededKey.current = previous;
+    }
     lastRequestedKey.current = key;
     if (iconUrl === undefined) {
       void requestIcon(key, item, { priority: regeneratesEditedItem });
+      return;
+    }
+    const superseded = supersededKey.current;
+    if (superseded !== undefined) {
+      supersededKey.current = undefined;
+      forgetIcon(superseded);
     }
   }, [key, iconUrl]);
 

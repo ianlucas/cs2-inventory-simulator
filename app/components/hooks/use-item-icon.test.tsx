@@ -26,6 +26,7 @@ CS2Economy.load({
 });
 
 const queue = vi.hoisted(() => ({
+  forgotten: [] as string[],
   listeners: new Map<string, Set<() => void>>(),
   requests: [] as { key: string; priority: boolean }[],
   unavailable: new Set<string>(),
@@ -33,24 +34,35 @@ const queue = vi.hoisted(() => ({
 }));
 
 vi.mock("~/utils/item-icon-queue", () => ({
-  getIconUrl: (key: string) => queue.urls.get(key),
-  getIconUrlServer: () => undefined,
-  isIconUnavailable: (key: string) => queue.unavailable.has(key),
-  isIconUnavailableServer: () => false,
-  observeIconTile: () => () => {},
+  forgetIcon: (key: string) => {
+    queue.forgotten.push(key);
+    queue.urls.delete(key);
+  },
+  pauseIconGeneration: () => () => {},
   requestIcon: async (
     key: string,
     _item: unknown,
     options?: { priority?: boolean }
   ) => {
     queue.requests.push({ key, priority: options?.priority === true });
-  },
+  }
+}));
+
+vi.mock("~/utils/item-icon-registry", () => ({
+  getIconUrl: (key: string) => queue.urls.get(key),
+  getIconUrlServer: () => undefined,
+  isIconUnavailable: (key: string) => queue.unavailable.has(key),
+  isIconUnavailableServer: () => false,
   subscribeIcon: (key: string, listener: () => void) => {
     const entry = queue.listeners.get(key) ?? new Set<() => void>();
     entry.add(listener);
     queue.listeners.set(key, entry);
     return () => entry.delete(listener);
   }
+}));
+
+vi.mock("~/utils/item-icon-visibility", () => ({
+  observeIconTile: () => () => {}
 }));
 
 vi.mock("~/components/app-context", () => ({
@@ -86,6 +98,7 @@ describe("useItemIcon", () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
+    queue.forgotten.length = 0;
     queue.listeners.clear();
     queue.requests.length = 0;
     queue.unavailable.clear();
@@ -150,6 +163,22 @@ describe("useItemIcon", () => {
       queue.urls.set(getItemIconKey(item), "blob:after")
     );
     expect(container.textContent).toBe("blob:after");
+  });
+
+  it("hands back the object URL of the icon the edit replaced", () => {
+    render();
+    const beforeEdit = getItemIconKey(item);
+    publish(beforeEdit, () => queue.urls.set(beforeEdit, "blob:before"));
+
+    editItem();
+    render();
+    expect(queue.forgotten).toEqual([]);
+
+    publish(getItemIconKey(item), () =>
+      queue.urls.set(getItemIconKey(item), "blob:after")
+    );
+
+    expect(queue.forgotten).toEqual([beforeEdit]);
   });
 
   it("stops showing the stale icon once no new one is coming", () => {

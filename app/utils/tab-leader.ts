@@ -3,18 +3,44 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-export function claimTabLock(name: string): Promise<boolean> {
+function holdForever(): Promise<never> {
+  return new Promise<never>(() => {});
+}
+
+function waitForRelease(
+  locks: LockManager,
+  name: string,
+  onGranted: () => void
+): void {
+  void locks
+    .request(name, () => {
+      onGranted();
+      return holdForever();
+    })
+    .catch(() => {});
+}
+
+export function claimTabLock(
+  name: string,
+  { onGranted }: { onGranted?: () => void } = {}
+): Promise<boolean> {
   const locks = typeof navigator === "undefined" ? undefined : navigator.locks;
   if (locks === undefined) {
-    return Promise.resolve(true);
+    return Promise.resolve(false);
   }
   return new Promise<boolean>((resolve) => {
     void locks
       .request(name, { ifAvailable: true }, (lock) => {
         const granted = lock !== null;
         resolve(granted);
-        return granted ? new Promise<never>(() => {}) : undefined;
+        if (granted) {
+          return holdForever();
+        }
+        if (onGranted !== undefined) {
+          waitForRelease(locks, name, onGranted);
+        }
+        return undefined;
       })
-      .catch(() => resolve(true));
+      .catch(() => resolve(false));
   });
 }

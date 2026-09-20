@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ICON_CACHE_VERSION } from "./item-icon";
+import type { ViewerCaptureError } from "./viewer-api";
 
 const DATABASE_NAME = "cs2-inventory-simulator-icons";
 const STORE_NAME = "icons";
@@ -14,7 +15,8 @@ export const MAX_STORED_ICONS = 512;
 export interface IconEntry {
   key: string;
   image?: Blob;
-  error?: string;
+  error?: ViewerCaptureError;
+  retryAfter?: number;
   usedAt: number;
 }
 
@@ -88,23 +90,27 @@ export function readIcon(key: string): Promise<IconEntry | undefined> {
   );
 }
 
-export function writeIcon(key: string, image: Blob): Promise<void> {
+function putIcon(entry: Omit<IconEntry, "usedAt">): Promise<void> {
   return withStore(
     "readwrite",
     async (store) => {
-      await request(store.put({ key, image, usedAt: Date.now() }));
+      await request(store.put({ ...entry, usedAt: Date.now() }));
     },
     undefined
   );
 }
 
-export function writeIconFailure(key: string, error: string): Promise<void> {
-  return withStore(
-    "readwrite",
-    async (store) => {
-      await request(store.put({ key, error, usedAt: Date.now() }));
-    },
-    undefined
+export function writeIcon(key: string, image: Blob): Promise<void> {
+  return putIcon({ key, image });
+}
+
+export function writeIconFailure(
+  key: string,
+  error: ViewerCaptureError,
+  retryAfter?: number
+): Promise<void> {
+  return putIcon(
+    retryAfter === undefined ? { key, error } : { key, error, retryAfter }
   );
 }
 

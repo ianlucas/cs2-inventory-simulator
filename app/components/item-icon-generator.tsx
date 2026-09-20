@@ -9,9 +9,9 @@ import { ICON_HEIGHT, ICON_WIDTH } from "~/utils/item-icon";
 import {
   isIconGeneratorWanted,
   isIconGeneratorWantedServer,
-  setIconGeneratorApi,
   subscribeIconGeneratorWanted
-} from "~/utils/item-icon-queue";
+} from "~/utils/item-icon-generator-role";
+import { setIconGeneratorApi } from "~/utils/item-icon-queue";
 import { Viewer } from "./viewer";
 
 const PAINTED_BUT_INVISIBLE_STYLE: CSSProperties = {

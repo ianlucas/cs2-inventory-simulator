@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ComponentPropsWithoutRef, useEffect, useRef, useState } from "react";
+import { useIconGenerationPausedWhile } from "~/components/hooks/use-item-icon";
 import { buildViewerSrc, ViewerItemInput } from "~/data/viewer";
-import { pauseIconGeneration } from "~/utils/item-icon-queue";
 import { ViewerApi } from "~/utils/viewer-api";
 
 export function Viewer({
@@ -30,7 +30,9 @@ export function Viewer({
   origin?: string;
 }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-
+  // `?item=` only seeds the initial state; capture the src once so re-renders
+  // (or a changed `item` prop) don't reload the iframe. Drive later changes
+  // through the api, or remount with a `key`.
   const [src] = useState(() =>
     buildViewerSrc(item, { embedUrl, cdn, key: apiKey, icon, capture })
   );
@@ -41,10 +43,7 @@ export function Viewer({
     onApiRef.current = onApi;
   }, [onApi]);
 
-  useEffect(
-    () => (capture === true ? undefined : pauseIconGeneration()),
-    [capture]
-  );
+  useIconGenerationPausedWhile(capture !== true);
 
   useEffect(() => {
     const iframe = iframeRef.current;

@@ -6,116 +6,162 @@
 import { ViewerItemInput } from "~/data/viewer";
 import {
   ICON_API_CALLS_PER_MINUTE,
+  backOffIconNetwork,
+  clearIconNetworkBackoff,
+  disableIconBudget,
   loadIconBudget,
   setIconBudgetCooldown,
   spendIconBudget
 } from "./item-icon-budget";
 import {
+  IconGeneratorRole,
+  claimIconGeneratorRole,
+  getIconGeneratorRole,
+  isIconGenerationPaused,
+  setIconGeneratorWanted,
+  subscribeIconGeneratorRole
+} from "./item-icon-generator-role";
+import {
+  hasIcon,
+  markIconUnavailable,
+  publishIcon,
+  releaseIcon,
+  retractIconUnavailable
+} from "./item-icon-registry";
+import {
+  IconEntry,
   pruneIcons,
   readIcon,
   writeIcon,
   writeIconFailure
 } from "./item-icon-store";
-import { claimTabLock } from "./tab-leader";
-import type { ViewerApi } from "./viewer-api";
+import {
+  isIconTileVisible,
+  subscribeIconTileVisibility
+} from "./item-icon-visibility";
+import { VIEWER_CAPTURE_TIMEOUT_MS } from "./viewer-api";
+import type {
+  ViewerApi,
+  ViewerCaptureError,
+  ViewerCaptured
+} from "./viewer-api";
 
-export const ICON_CAPTURE_TIMEOUT_MS = 45_000;
+export const ICON_CAPTURE_TIMEOUT_MS = VIEWER_CAPTURE_TIMEOUT_MS;
 export const ICON_IDLE_TEARDOWN_MS = 30_000;
-export const ICON_GENERATOR_LOCK = "cs2-inventory-simulator:icon-generator";
 
 const PRUNE_EVERY = 32;
-const PERMANENT_ITEM_ERRORS = new Set(["weapon", "sticker", "keychain"]);
-const UNSUPPORTED_ITEM_REASONS = new Set(["weapon", "sticker", "keychain"]);
-const SESSION_ERRORS = new Set(["untrusted", "disabled"]);
 const MAX_ATTEMPTS = 3;
 
-type GeneratorRole = "unclaimed" | "claiming" | "generator" | "bystander";
+const ITEM_ERRORS: ReadonlySet<ViewerCaptureError> = new Set([
+  "weapon",
+  "sticker",
+  "keychain"
+]);
+
+const SESSION_ERRORS: ReadonlySet<ViewerCaptureError> = new Set([
+  "untrusted",
+  "disabled"
+]);
+
+const NETWORK_ERRORS: ReadonlySet<ViewerCaptureError> = new Set([
+  "network",
+  "asset"
+]);
+
+const TRANSIENT_RETRY_AFTER_MS = 24 * 60 * 60_000;
+const WEBGL_DISABLE_MS = 6 * 60 * 60_000;
+const DEPLOYMENT_DISABLE_MS = 24 * 60 * 60_000;
+const GENERATOR_STARTUP_TIMEOUT_MS = 60_000;
+const GENERATOR_STARTUP_POLL_MS = 1_000;
+const GENERATOR_RETRY_MS = 60_000;
 
 interface Pending {
   key: string;
   item: ViewerItemInput;
-  elements: Set<Element>;
   priority: boolean;
-  visible: boolean;
   attempts: number;
 }
 
-interface CaptureOutcome {
-  apiCalls: number;
-  error?: string;
-  image?: Blob;
-}
+type CaptureOutcome = Omit<ViewerCaptured, "item">;
 
-const urls = new Map<string, string>();
 const pending = new Map<string, Pending>();
 const known = new Set<string>();
-const unavailable = new Set<string>();
-const listeners = new Map<string, Set<() => void>>();
-const wantedListeners = new Set<() => void>();
-const elementKeys = new WeakMap<Element, string>();
+const deferred = new Map<string, ViewerItemInput>();
 
 let api: ViewerApi | undefined;
 let unsubscribeApi: (() => void) | undefined;
 let disabled = false;
-let paused = 0;
+let disabledUntil: number | undefined;
 let running = false;
-let wanted = false;
 let writes = 0;
-let role: GeneratorRole = "unclaimed";
-let resumeWhenVisible: (() => void) | undefined;
-let failInflight: ((reason: string) => void) | undefined;
+let lastRole: IconGeneratorRole = "unclaimed";
+let failInflight: ((error: ViewerCaptureError) => void) | undefined;
 let pumpTimer: ReturnType<typeof setTimeout> | undefined;
 let teardownTimer: ReturnType<typeof setTimeout> | undefined;
-let observer: IntersectionObserver | undefined;
+let waitingForApiSince: number | undefined;
 
-function notify(key: string): void {
-  for (const listener of listeners.get(key) ?? []) {
-    listener();
+subscribeIconTileVisibility(() => pump());
+subscribeIconGeneratorRole(onGeneratorChanged);
+
+function onGeneratorChanged(): void {
+  const role = getIconGeneratorRole();
+  if (role !== lastRole) {
+    lastRole = role;
+    if (role === "bystander") {
+      standDown();
+      return;
+    }
+    if (role === "generator") {
+      adoptDeferredIcons();
+    }
   }
-}
-
-function setWanted(next: boolean): void {
-  if (wanted === next) {
-    return;
+  if (isIconGenerationPaused() && !running) {
+    setIconGeneratorWanted(false);
   }
-  wanted = next;
-  for (const listener of wantedListeners) {
-    listener();
+  pump();
+}
+
+function standDown(): void {
+  for (const entry of pending.values()) {
+    deferred.set(entry.key, entry.item);
   }
+  pending.clear();
+  for (const key of deferred.keys()) {
+    markIconUnavailable(key);
+  }
+  setIconGeneratorWanted(false);
 }
 
-export function isIconGeneratorWanted(): boolean {
-  return wanted;
+function adoptDeferredIcons(): void {
+  for (const [key, item] of deferred) {
+    retractIconUnavailable(key);
+    pending.set(key, { attempts: 0, item, key, priority: false });
+  }
+  deferred.clear();
 }
 
-export function isIconGeneratorWantedServer(): boolean {
-  return false;
+function isDisabled(): boolean {
+  if (disabled) {
+    return true;
+  }
+  disabledUntil ??= loadIconBudget().disabledUntil;
+  if (Date.now() >= disabledUntil) {
+    return false;
+  }
+  disabled = true;
+  return true;
 }
 
-export function subscribeIconGeneratorWanted(listener: () => void): () => void {
-  wantedListeners.add(listener);
-  return () => wantedListeners.delete(listener);
+export function isIconGenerationDisabled(): boolean {
+  return isDisabled();
 }
 
-export function getIconUrl(key: string): string | undefined {
-  return urls.get(key);
-}
-
-export function getIconUrlServer(): undefined {
-  return undefined;
-}
-
-export function isIconUnavailable(key: string): boolean {
-  return unavailable.has(key);
-}
-
-export function isIconUnavailableServer(): boolean {
-  return false;
-}
-
-function markIconUnavailable(key: string): void {
-  unavailable.add(key);
-  notify(key);
+export function disableIconGeneration(forMs = DEPLOYMENT_DISABLE_MS): void {
+  disabled = true;
+  disableIconBudget(forMs);
+  deferred.clear();
+  abandonPendingIcons();
+  setIconGeneratorWanted(false);
 }
 
 function abandonPendingIcons(): void {
@@ -124,81 +170,6 @@ function abandonPendingIcons(): void {
   for (const key of abandoned) {
     markIconUnavailable(key);
   }
-}
-
-export function subscribeIcon(key: string, listener: () => void): () => void {
-  let entry = listeners.get(key);
-  if (entry === undefined) {
-    entry = new Set();
-    listeners.set(key, entry);
-  }
-  entry.add(listener);
-  return () => {
-    entry.delete(listener);
-    if (entry.size === 0) {
-      listeners.delete(key);
-    }
-  };
-}
-
-export function disableIconGeneration(): void {
-  disabled = true;
-  abandonPendingIcons();
-  setWanted(false);
-}
-
-export function isIconGenerationDisabled(): boolean {
-  return disabled;
-}
-
-export function pauseIconGeneration(): () => void {
-  paused++;
-  if (!running) {
-    setWanted(false);
-  }
-  let released = false;
-  return () => {
-    if (released) {
-      return;
-    }
-    released = true;
-    paused--;
-    pump();
-  };
-}
-
-function pauseWhileTabIsHidden(): void {
-  if (typeof document === "undefined") {
-    return;
-  }
-  function syncWithVisibility(): void {
-    if (document.visibilityState === "hidden") {
-      resumeWhenVisible ??= pauseIconGeneration();
-      return;
-    }
-    const resume = resumeWhenVisible;
-    resumeWhenVisible = undefined;
-    resume?.();
-  }
-  document.addEventListener("visibilitychange", syncWithVisibility);
-  syncWithVisibility();
-}
-
-function claimIconGeneratorRole(): void {
-  if (role !== "unclaimed") {
-    return;
-  }
-  role = "claiming";
-  void claimTabLock(ICON_GENERATOR_LOCK).then((granted) => {
-    role = granted ? "generator" : "bystander";
-    if (!granted) {
-      abandonPendingIcons();
-      setWanted(false);
-      return;
-    }
-    pauseWhileTabIsHidden();
-    pump();
-  });
 }
 
 function schedule(delayMs: number): void {
@@ -220,7 +191,7 @@ function scheduleTeardown(): void {
   }
   teardownTimer = setTimeout(() => {
     teardownTimer = undefined;
-    setWanted(false);
+    setIconGeneratorWanted(false);
   }, ICON_IDLE_TEARDOWN_MS);
 }
 
@@ -240,39 +211,54 @@ function pickNext(): Pending | undefined {
       newestPrioritized = entry;
       continue;
     }
-    if (entry.visible) {
-      firstVisible ??= entry;
+    if (firstVisible === undefined && isIconTileVisible(entry.key)) {
+      firstVisible = entry;
     }
     firstQueued ??= entry;
   }
   return newestPrioritized ?? firstVisible ?? firstQueued;
 }
 
-function settle(key: string, image: Blob | undefined): void {
-  pending.delete(key);
-  if (image !== undefined) {
-    urls.set(key, URL.createObjectURL(image));
-  } else {
-    unavailable.add(key);
-  }
-  notify(key);
+function requeue(entry: Pending): void {
+  pending.delete(entry.key);
+  pending.set(entry.key, entry);
 }
 
-async function record(key: string, captured: { image?: Blob; error?: string }) {
+function settle(key: string, image: Blob | undefined): void {
+  pending.delete(key);
+  publishIcon(key, image);
+}
+
+async function countWrite(): Promise<void> {
+  writes++;
+  if (writes % PRUNE_EVERY === 0) {
+    await pruneIcons();
+  }
+}
+
+async function record(key: string, captured: CaptureOutcome): Promise<void> {
   if (captured.image !== undefined) {
     await writeIcon(key, captured.image);
-    writes++;
-    if (writes % PRUNE_EVERY === 0) {
-      await pruneIcons();
-    }
+    await countWrite();
     return;
   }
-  if (
-    captured.error !== undefined &&
-    PERMANENT_ITEM_ERRORS.has(captured.error)
-  ) {
+  if (captured.error !== undefined && ITEM_ERRORS.has(captured.error)) {
     await writeIconFailure(key, captured.error);
+    await countWrite();
   }
+}
+
+async function giveUp(entry: Pending): Promise<void> {
+  pending.delete(entry.key);
+  markIconUnavailable(entry.key);
+  try {
+    await writeIconFailure(
+      entry.key,
+      "timeout",
+      Date.now() + TRANSIENT_RETRY_AFTER_MS
+    );
+    await countWrite();
+  } catch {}
 }
 
 async function run(generator: ViewerApi, entry: Pending): Promise<void> {
@@ -285,12 +271,21 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
       })
     ]);
     spendIconBudget(captured.apiCalls);
-    if (captured.error !== undefined && SESSION_ERRORS.has(captured.error)) {
+    const { error } = captured;
+    if (error !== undefined && SESSION_ERRORS.has(error)) {
       console.error(
-        `[InventorySimulator] 3D inventory icons disabled: the viewer refused to capture (${captured.error}). `
+        `[InventorySimulator] 3D inventory icons disabled: the viewer refused to capture (${error}). `
       );
       disableIconGeneration();
       return;
+    }
+    if (error !== undefined && NETWORK_ERRORS.has(error)) {
+      backOffIconNetwork();
+      requeue(entry);
+      return;
+    }
+    if (captured.image !== undefined) {
+      clearIconNetworkBackoff();
     }
     await record(entry.key, captured);
     settle(entry.key, captured.image);
@@ -298,20 +293,29 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
     entry.attempts++;
     spendIconBudget(1);
     if (entry.attempts < MAX_ATTEMPTS) {
-      pending.delete(entry.key);
-      pending.set(entry.key, entry);
+      requeue(entry);
     } else {
-      pending.delete(entry.key);
-      markIconUnavailable(entry.key);
+      await giveUp(entry);
     }
   } finally {
     failInflight = undefined;
     running = false;
-    if (paused > 0) {
-      setWanted(false);
+    if (isIconGenerationPaused()) {
+      setIconGeneratorWanted(false);
     }
     pump();
   }
+}
+
+function awaitGenerator(now: number): void {
+  waitingForApiSince ??= now;
+  if (now - waitingForApiSince < GENERATOR_STARTUP_TIMEOUT_MS) {
+    schedule(GENERATOR_STARTUP_POLL_MS);
+    return;
+  }
+  waitingForApiSince = undefined;
+  setIconGeneratorWanted(false);
+  schedule(GENERATOR_RETRY_MS);
 }
 
 function pump(): void {
@@ -319,7 +323,12 @@ function pump(): void {
     clearTimeout(pumpTimer);
     pumpTimer = undefined;
   }
-  if (disabled || running || paused > 0 || role !== "generator") {
+  if (
+    isDisabled() ||
+    running ||
+    isIconGenerationPaused() ||
+    getIconGeneratorRole() !== "generator"
+  ) {
     return;
   }
   const next = pickNext();
@@ -340,11 +349,13 @@ function pump(): void {
     return;
   }
   cancelTeardown();
-  setWanted(true);
+  setIconGeneratorWanted(true);
   const generator = api;
   if (generator === undefined) {
+    awaitGenerator(now);
     return;
   }
+  waitingForApiSince = undefined;
   void run(generator, next);
 }
 
@@ -353,16 +364,26 @@ export function setIconGeneratorApi(next: ViewerApi | undefined): void {
   unsubscribeApi = undefined;
   api = next;
   if (next !== undefined) {
+    waitingForApiSince = undefined;
     const offRateLimited = next.on("rateLimited", ({ retryAfterMs }) => {
       setIconBudgetCooldown(retryAfterMs);
       schedule(retryAfterMs);
     });
     const offUnsupported = next.on("unsupported", ({ reason }) => {
       if (reason === "webgl") {
-        disableIconGeneration();
+        disableIconGeneration(WEBGL_DISABLE_MS);
         return;
       }
-      if (UNSUPPORTED_ITEM_REASONS.has(reason)) {
+      if (NETWORK_ERRORS.has(reason)) {
+        if (failInflight !== undefined) {
+          failInflight(reason);
+          return;
+        }
+        backOffIconNetwork();
+        pump();
+        return;
+      }
+      if (ITEM_ERRORS.has(reason)) {
         failInflight?.(reason);
       }
     });
@@ -374,72 +395,45 @@ export function setIconGeneratorApi(next: ViewerApi | undefined): void {
   pump();
 }
 
+function isWorthRetrying(entry: IconEntry): boolean {
+  return entry.retryAfter !== undefined && Date.now() >= entry.retryAfter;
+}
+
 export async function requestIcon(
   key: string,
   item: ViewerItemInput,
   { priority = false }: { priority?: boolean } = {}
 ): Promise<void> {
-  if (disabled || urls.has(key) || known.has(key) || pending.has(key)) {
+  if (isDisabled() || hasIcon(key) || known.has(key) || pending.has(key)) {
     return;
   }
   known.add(key);
   const entry = await readIcon(key);
   if (entry?.image !== undefined) {
-    urls.set(key, URL.createObjectURL(entry.image));
-    notify(key);
+    publishIcon(key, entry.image);
     return;
   }
-  if (entry?.error !== undefined) {
+  if (entry?.error !== undefined && !isWorthRetrying(entry)) {
     markIconUnavailable(key);
     return;
   }
-  if (disabled || role === "bystander") {
+  if (isDisabled()) {
+    markIconUnavailable(key);
+    return;
+  }
+  if (getIconGeneratorRole() === "bystander") {
+    deferred.set(key, item);
     markIconUnavailable(key);
     return;
   }
   claimIconGeneratorRole();
-  pending.set(key, {
-    attempts: 0,
-    elements: new Set(),
-    item,
-    key,
-    priority,
-    visible: false
-  });
+  pending.set(key, { attempts: 0, item, key, priority });
   pump();
 }
 
-function ensureObserver(): IntersectionObserver | undefined {
-  if (typeof IntersectionObserver === "undefined") {
-    return undefined;
-  }
-  observer ??= new IntersectionObserver((entries) => {
-    let changed = false;
-    for (const { target, isIntersecting } of entries) {
-      const key = elementKeys.get(target);
-      const entry = key === undefined ? undefined : pending.get(key);
-      if (entry !== undefined && entry.visible !== isIntersecting) {
-        entry.visible = isIntersecting;
-        changed = true;
-      }
-    }
-    if (changed) {
-      pump();
-    }
-  });
-  return observer;
-}
-
-export function observeIconTile(key: string, element: Element): () => void {
-  const active = ensureObserver();
-  if (active === undefined) {
-    return () => {};
-  }
-  elementKeys.set(element, key);
-  pending.get(key)?.elements.add(element);
-  active.observe(element);
-  return () => {
-    active.unobserve(element);
-    pending.get(key)?.elements.delete(element);
-  };
+export function forgetIcon(key: string): void {
+  known.delete(key);
+  pending.delete(key);
+  deferred.delete(key);
+  releaseIcon(key);
 }
