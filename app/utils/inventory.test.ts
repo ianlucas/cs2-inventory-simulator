@@ -6,11 +6,14 @@
 import {
   CS2_INVENTORY_VERSION,
   CS2_ITEMS,
-  CS2Economy
+  CS2Economy,
+  CS2Inventory
 } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations";
 import { expect, test } from "vitest";
 import {
+  CHARM_DETACHMENTS_DISPLAY_UID,
+  getCharmDetachmentsToDisplay,
   hasInventoryContent,
   loadOrCreateInventory,
   safeLoadInventory
@@ -161,4 +164,22 @@ test("hasInventoryContent is true for anything not provably empty", () => {
   expect(hasInventoryContent(`{"items":`)).toBe(true);
   expect(hasInventoryContent("null")).toBe(true);
   expect(hasInventoryContent("[]")).toBe(true);
+});
+
+test("getCharmDetachmentsToDisplay shows a free charm detachment by default", () => {
+  const items = getCharmDetachmentsToDisplay(new CS2Inventory());
+  expect(items).toHaveLength(1);
+  expect(items[0].uid).toBe(CHARM_DETACHMENTS_DISPLAY_UID);
+  expect(items[0].item.isCharmDetachment()).toBe(true);
+});
+
+test("getCharmDetachmentsToDisplay hides the free charm detachment with hideFreeItems", () => {
+  expect(getCharmDetachmentsToDisplay(new CS2Inventory(), true)).toEqual([]);
+});
+
+test("getCharmDetachmentsToDisplay hides the free charm detachment when one is owned", () => {
+  const inventory = new CS2Inventory().add({
+    id: CS2Economy.getCharmDetachment().id
+  });
+  expect(getCharmDetachmentsToDisplay(inventory)).toEqual([]);
 });

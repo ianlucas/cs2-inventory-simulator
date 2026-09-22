@@ -161,16 +161,21 @@ export function AppProvider({
         ? sortItemsByEquipped
         : inventoryFilter.sortItems)(
         // Inventory Items
-        inventory.getAll().map((item) =>
-          transform(item, {
-            models: rules.inventoryItemEquipHideModel,
-            types: rules.inventoryItemEquipHideType
-          })
-        ),
+        inventory
+          .getAll()
+          .filter(
+            (item) => !preferences.hideFreeItems || !item.isCharmDetachment()
+          )
+          .map((item) =>
+            transform(item, {
+              models: rules.inventoryItemEquipHideModel,
+              types: rules.inventoryItemEquipHideType
+            })
+          ),
         // Default Game Items
         [
           ...getFreeItemsToDisplay(preferences.hideFreeItems),
-          ...getCharmDetachmentsToDisplay(inventory)
+          ...getCharmDetachmentsToDisplay(inventory, preferences.hideFreeItems)
         ]
       ),
     [
