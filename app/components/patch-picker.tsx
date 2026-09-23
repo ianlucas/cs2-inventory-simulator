@@ -3,31 +3,19 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  faBan,
-  faMagnifyingGlass,
-  faTrashCan
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CS2BaseInventoryItem,
-  CS2Economy,
   CS2EconomyItem,
-  CS2ItemType,
-  CS2_MAX_PATCHES,
   ensure
 } from "@ianlucas/cs2-lib";
-import { useMemo, useState } from "react";
-import { useInput } from "~/components/hooks/use-input";
-import { sortByName } from "~/utils/economy";
-import { range } from "~/utils/number";
-import { useRules, useTranslate } from "./app-context";
+import { useState } from "react";
+import { useTranslate } from "./app-context";
 import { ButtonWithTooltip } from "./button-with-tooltip";
-import { IconInput } from "./icon-input";
-import { ItemBrowser } from "./item-browser";
-import { ItemImage } from "./item-image";
-import { Modal, ModalHeader, ModalNav } from "./modal";
 import { confirm } from "./modal-generic";
+import { PatchSlotGrid } from "./patch-slot-grid";
+import { SelectPatchModal } from "./select-patch-modal";
 
 export function PatchPicker({
   disabled,
@@ -41,21 +29,7 @@ export function PatchPicker({
   value: NonNullable<CS2BaseInventoryItem["patches"]>;
 }) {
   const translate = useTranslate();
-  const { inventoryItemMaxPatches } = useRules();
-  const isCapped = Object.keys(value).length >= inventoryItemMaxPatches;
-
-  const [search, setSearch] = useInput("");
   const [activeIndex, setActiveIndex] = useState<number>();
-  const patches = useMemo(
-    () => CS2Economy.filterItems({ type: CS2ItemType.Patch }).sort(sortByName),
-    []
-  );
-
-  function handleClickSlot(index: number) {
-    return function handleClickSlot() {
-      setActiveIndex(index);
-    };
-  }
 
   function handleAddPatch(item: CS2EconomyItem) {
     onChange({
@@ -86,85 +60,28 @@ export function PatchPicker({
     setActiveIndex(undefined);
   }
 
-  const filtered = useMemo(() => {
-    const words = search.split(" ").map((word) => word.toLowerCase());
-    return patches.filter((item) => {
-      if (patchFilter !== undefined && !patchFilter(item)) {
-        return false;
-      }
-      const name = item.name.toLowerCase();
-      for (const word of words) {
-        if (word.length > 0 && name.indexOf(word) === -1) {
-          return false;
-        }
-      }
-      return true;
-    });
-  }, [search]);
-
   return (
     <>
-      <div className="grid grid-cols-5 gap-1">
-        {range(CS2_MAX_PATCHES).map((index) => {
-          const patchId = value[index];
-          const item =
-            patchId !== undefined ? CS2Economy.getById(patchId) : undefined;
-          const isSlotDisabled = disabled || (item === undefined && isCapped);
-          return (
-            <div className="relative aspect-256/192" key={index}>
-              <button
-                disabled={isSlotDisabled}
-                className="absolute size-full cursor-default overflow-hidden bg-neutral-950/40"
-                onClick={handleClickSlot(index)}
-              >
-                {item !== undefined ? (
-                  <ItemImage item={item} />
-                ) : (
-                  <div className="flex items-center justify-center text-neutral-700">
-                    {isSlotDisabled && isCapped ? (
-                      <FontAwesomeIcon icon={faBan} className="h-3" />
-                    ) : (
-                      translate("PatchPickerNA")
-                    )}
-                  </div>
-                )}
-                {!isSlotDisabled && (
-                  <div className="absolute top-0 left-0 size-full border-2 border-transparent hover:border-blue-500/50" />
-                )}
-              </button>
-              {item !== undefined && !disabled && (
-                <ButtonWithTooltip
-                  onClick={handleRemovePatch(index)}
-                  className="absolute bottom-1 left-1 hover:bg-red-500/50"
-                  tooltip={translate("PatchPickerRemove")}
-                >
-                  <FontAwesomeIcon icon={faTrashCan} className="h-3" />
-                </ButtonWithTooltip>
-              )}
-            </div>
-          );
-        })}
-      </div>
-      <Modal className="w-135 pb-1" hidden={activeIndex === undefined} blur>
-        <ModalHeader
-          title={translate("PatchPickerHeader")}
-          onClose={handleCloseModal}
-        />
-        <ModalNav
-          items={[]}
-          right={
-            <IconInput
-              autoFocus
-              icon={faMagnifyingGlass}
-              labelStyles="w-64"
-              onChange={setSearch}
-              placeholder={translate("PatchPickerSearchPlaceholder")}
-              value={search}
-            />
-          }
-        />
-        <ItemBrowser items={filtered} onClick={handleAddPatch} />
-      </Modal>
+      <PatchSlotGrid
+        disabled={disabled}
+        onSlotClick={setActiveIndex}
+        renderSlotOverlay={(index) => (
+          <ButtonWithTooltip
+            onClick={handleRemovePatch(index)}
+            className="absolute bottom-1 left-1 hover:bg-red-500/50"
+            tooltip={translate("PatchPickerRemove")}
+          >
+            <FontAwesomeIcon icon={faTrashCan} className="h-3" />
+          </ButtonWithTooltip>
+        )}
+        value={value}
+      />
+      <SelectPatchModal
+        hidden={activeIndex === undefined}
+        onClose={handleCloseModal}
+        onSelect={handleAddPatch}
+        patchFilter={patchFilter}
+      />
     </>
   );
 }

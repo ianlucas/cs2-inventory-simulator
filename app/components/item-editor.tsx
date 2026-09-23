@@ -17,6 +17,7 @@ import {
 import { useMeasure } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useCallback, useEffect, useState } from "react";
+import { VIEWER_INSPECT_KINDS } from "~/data/viewer";
 import {
   isItemCountable,
   wearStringMaxLen,
@@ -36,6 +37,7 @@ import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { Keychain3dPicker } from "./keychain-3d-picker";
 import { KeychainPicker } from "./keychain-picker";
 import { confirm } from "./modal-generic";
+import { Patch3dPicker } from "./patch-3d-picker";
 import { PatchPicker } from "./patch-picker";
 import { Sticker3dPicker } from "./sticker-3d-picker";
 import { StickerPicker } from "./sticker-picker";
@@ -122,7 +124,8 @@ export function ItemEditor({
   const translate = useTranslate();
   const isDesktop = useIsDesktop();
   const { canUse3d, isIdSupported } = useViewerAvailability(item, {
-    attachment: true
+    attachment: true,
+    kinds: VIEWER_INSPECT_KINDS
   });
 
   const use3dStickerPicker =
@@ -142,6 +145,8 @@ export function ItemEditor({
     !isHideKeychainY &&
     !isHideKeychainZ;
 
+  const use3dPatchPicker = canUse3d && !isDisabled;
+
   const sticker3dFilter = useCallback(
     (economyItem: CS2EconomyItem) =>
       isIdSupported(economyItem.id) &&
@@ -154,6 +159,13 @@ export function ItemEditor({
       isIdSupported(economyItem.id) &&
       (keychainFilter === undefined || keychainFilter(economyItem)),
     [isIdSupported, keychainFilter]
+  );
+
+  const patch3dFilter = useCallback(
+    (economyItem: CS2EconomyItem) =>
+      isIdSupported(economyItem.id) &&
+      (patchFilter === undefined || patchFilter(economyItem)),
+    [isIdSupported, patchFilter]
   );
 
   const [attributesRef, { height: attributesHeight }] = useMeasure();
@@ -283,12 +295,22 @@ export function ItemEditor({
       )}
       {hasPatches && (
         <EditorLabel block label={translate("EditorPatches")}>
-          <PatchPicker
-            patchFilter={patchFilter}
-            disabled={isDisabled}
-            value={attributes.value.patches}
-            onChange={attributes.update("patches")}
-          />
+          {use3dPatchPicker ? (
+            <Patch3dPicker
+              disabled={isDisabled}
+              forItem={item}
+              onChange={attributes.update("patches")}
+              patchFilter={patch3dFilter}
+              value={attributes.value.patches}
+            />
+          ) : (
+            <PatchPicker
+              patchFilter={patchFilter}
+              disabled={isDisabled}
+              value={attributes.value.patches}
+              onChange={attributes.update("patches")}
+            />
+          )}
         </EditorLabel>
       )}
       {hasKeychains && (

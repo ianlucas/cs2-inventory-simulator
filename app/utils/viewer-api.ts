@@ -254,6 +254,10 @@ export class ViewerApi extends EventTarget {
     this.send("highlightSticker", data);
   }
 
+  focusPatch(data: { slot: number }): void {
+    this.send("focusPatch", data);
+  }
+
   setKeychain(data: { index: number; id: number }): void {
     this.send("setKeychain", data);
   }
