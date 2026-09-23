@@ -55,7 +55,8 @@ const MAX_ATTEMPTS = 3;
 const ITEM_ERRORS: ReadonlySet<ViewerCaptureError> = new Set([
   "weapon",
   "sticker",
-  "keychain"
+  "keychain",
+  "patch"
 ]);
 
 const SESSION_ERRORS: ReadonlySet<ViewerCaptureError> = new Set([

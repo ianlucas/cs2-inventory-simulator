@@ -22,7 +22,14 @@ const VIEWER_PROTOCOL_VERSION = 1;
  */
 export type ViewerItem = Pick<
   CS2BaseInventoryItem,
-  "id" | "seed" | "wear" | "stickers" | "keychains" | "statTrak" | "nameTag"
+  | "id"
+  | "seed"
+  | "wear"
+  | "stickers"
+  | "keychains"
+  | "statTrak"
+  | "nameTag"
+  | "patches"
 >;
 
 /**
@@ -59,16 +66,16 @@ export type RateLimitScope = "ip" | "origin" | "partner";
  * 3D for a good while. `network` means an asset or API load failed AFTER the
  * viewer's own retries (e.g. a Great-Firewall-throttled CDN edge); being
  * transient, it gets a short cooldown that backs off if it keeps failing.
- * `weapon`, `sticker` and `keychain` are cs2-lib catalog mismatches, handled by
- * the per-item viewerCatalog gate; `keychain` also covers a charmed weapon whose
- * physics engine failed to load.
+ * `weapon`, `sticker`, `keychain` and `patch` are cs2-lib catalog mismatches,
+ * handled by the per-item viewerCatalog gate; `keychain` also covers a charmed
+ * weapon whose physics engine failed to load.
  *
  * Any of them flips the host back to its 2D editor. `asset` is the
  * pre-reason-split name, still accepted (and treated as network) from a stale or
  * cached viewer build.
  */
 export type ViewerUnsupportedReason =
-  "weapon" | "sticker" | "keychain" | "network" | "webgl" | "asset";
+  "weapon" | "sticker" | "keychain" | "patch" | "network" | "webgl" | "asset";
 
 /**
  * Why a capture produced no frame.

@@ -20,6 +20,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/components/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
+import { VIEWER_INSPECT_KINDS } from "~/data/viewer";
 import { clientGlobals } from "~/globals";
 import { wearToString } from "~/utils/economy";
 import { getInventoryItemShareUrl } from "~/utils/inventory";
@@ -307,6 +308,17 @@ function InspectItem2d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
                     ))}
                   </div>
                 )}
+                {item.patches !== undefined && (
+                  <div className="absolute bottom-0 left-0 flex items-center justify-center">
+                    {item.somePatches().map(([slot, id]) => (
+                      <ItemImage
+                        className="w-32"
+                        item={CS2Economy.getById(id)}
+                        key={slot}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
             <div className="absolute bottom-8 left-0 w-full">
@@ -356,7 +368,9 @@ export function InspectItem({
   uid
 }: InspectItemProps) {
   const item = useInventoryItem(uid);
-  const { canUse3d } = useViewerAvailability(item);
+  const { canUse3d } = useViewerAvailability(item, {
+    kinds: VIEWER_INSPECT_KINDS
+  });
 
   useKeyRelease("Escape", onClose);
 
