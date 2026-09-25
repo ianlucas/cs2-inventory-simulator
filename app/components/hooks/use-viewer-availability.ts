@@ -7,6 +7,7 @@ import { useCallback, useSyncExternalStore } from "react";
 import { usePreferences, useRules } from "~/components/app-context";
 import {
   ViewerItemInput,
+  ViewerItemKind,
   isViewerIdSupported,
   isViewerItemSupported
 } from "~/data/viewer";
@@ -66,7 +67,12 @@ export function markViewerUnsupported(reason: ViewerUnsupportedReason) {
     markViewerRateLimited(WEBGL_COOLDOWN_MS);
     return;
   }
-  if (reason === "weapon" || reason === "sticker" || reason === "keychain") {
+  if (
+    reason === "weapon" ||
+    reason === "sticker" ||
+    reason === "keychain" ||
+    reason === "patch"
+  ) {
     markViewerRateLimited(NETWORK_BASE_MS);
     return;
   }
@@ -86,7 +92,10 @@ export function markViewerUnsupported(reason: ViewerUnsupportedReason) {
 
 export function useViewerAvailability(
   item?: ViewerItemInput,
-  { attachment = false }: { attachment?: boolean } = {}
+  {
+    attachment = false,
+    kinds
+  }: { attachment?: boolean; kinds?: ReadonlySet<ViewerItemKind> } = {}
 ) {
   const {
     viewerAttachmentsOnly,
@@ -103,7 +112,7 @@ export function useViewerAvailability(
     Date.now() >= until;
   const canUse3d =
     globalAvailable &&
-    (item === undefined || isViewerItemSupported(viewerCatalog, item));
+    (item === undefined || isViewerItemSupported(viewerCatalog, item, kinds));
   const isIdSupported = useCallback(
     (id: number) => isViewerIdSupported(viewerCatalog, id),
     [viewerCatalog]
