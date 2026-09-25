@@ -380,12 +380,19 @@ export function Inventory() {
           onClose={closeRenameStorageUnit}
         />
       )}
-      {isApplyingItemPatch(applyItemPatch) && (
-        <ApplyItemPatch {...applyItemPatch} onClose={closeApplyItemPatch} />
-      )}
-      {isRemovingItemPatch(removeItemPatch) && (
-        <RemoveItemPatch {...removeItemPatch} onClose={closeRemoveItemPatch} />
-      )}
+      <Presence present={isApplyingItemPatch(applyItemPatch)}>
+        {isApplyingItemPatch(applyItemPatch) ? (
+          <ApplyItemPatch {...applyItemPatch} onClose={closeApplyItemPatch} />
+        ) : null}
+      </Presence>
+      <Presence present={isRemovingItemPatch(removeItemPatch)}>
+        {isRemovingItemPatch(removeItemPatch) ? (
+          <RemoveItemPatch
+            {...removeItemPatch}
+            onClose={closeRemoveItemPatch}
+          />
+        ) : null}
+      </Presence>
       <Presence present={isApplyingItemKeychain(applyItemKeychain)}>
         {isApplyingItemKeychain(applyItemKeychain) ? (
           <ApplyItemKeychain
