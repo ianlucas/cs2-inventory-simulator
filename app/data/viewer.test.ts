@@ -17,7 +17,8 @@ import {
   getViewerItemIds,
   isViewerIdSupported,
   isViewerItemSupported,
-  toViewerItem
+  toViewerItem,
+  VIEWER_INSPECT_KINDS
 } from "./viewer";
 
 const catalog = {
@@ -57,7 +58,10 @@ CS2Economy.load({
     },
     { id: 63, type: CS2ItemType.Melee, rarityColor: CS2RarityColor.Common },
     { id: 64, type: CS2ItemType.Sticker, rarityColor: CS2RarityColor.Common },
-    { id: 200, type: CS2ItemType.Sticker, rarityColor: CS2RarityColor.Common }
+    { id: 200, type: CS2ItemType.Sticker, rarityColor: CS2RarityColor.Common },
+    { id: 80, type: CS2ItemType.Agent, rarityColor: CS2RarityColor.Common },
+    { id: 81, type: CS2ItemType.Patch, rarityColor: CS2RarityColor.Common },
+    { id: 12, type: CS2ItemType.Patch, rarityColor: CS2RarityColor.Common }
   ]
 });
 
@@ -96,6 +100,12 @@ describe("getViewerItemIds", () => {
     ).toEqual([7, 30, 40]);
   });
 
+  it("returns the agent id plus every applied patch id", () => {
+    expect(getViewerItemIds({ id: 80, patches: { "0": 81, "2": 12 } })).toEqual(
+      [80, 81, 12]
+    );
+  });
+
   it("returns just the weapon id when there are no stickers", () => {
     expect(getViewerItemIds({ id: 7 })).toEqual([7]);
   });
@@ -114,6 +124,13 @@ describe("toViewerItem", () => {
     expect(toViewerItem({ id: 7, statTrak: 0 })).toEqual({
       id: 7,
       statTrak: 0
+    });
+  });
+
+  it("passes patches through to the viewer payload", () => {
+    expect(toViewerItem({ id: 80, patches: { "1": 81 } })).toEqual({
+      id: 80,
+      patches: { "1": 81 }
     });
   });
 
@@ -145,6 +162,30 @@ describe("isViewerItemSupported", () => {
     expect(isViewerItemSupported(catalog, { id: 64 })).toBe(true);
     expect(isViewerItemSupported(catalog, { id: 60 })).toBe(false);
     expect(isViewerItemSupported(catalog, { id: 61 })).toBe(false);
+  });
+
+  it("offers agents only when asked for the inspect kinds", () => {
+    expect(isViewerItemSupported(catalog, { id: 80 })).toBe(false);
+    expect(
+      isViewerItemSupported(catalog, { id: 80 }, VIEWER_INSPECT_KINDS)
+    ).toBe(true);
+  });
+
+  it("requires the agent AND all its patches to be renderable", () => {
+    expect(
+      isViewerItemSupported(
+        catalog,
+        { id: 80, patches: { "0": 81 } },
+        VIEWER_INSPECT_KINDS
+      )
+    ).toBe(true);
+    expect(
+      isViewerItemSupported(
+        catalog,
+        { id: 80, patches: { "0": 12 } },
+        VIEWER_INSPECT_KINDS
+      )
+    ).toBe(false);
   });
 
   it("offers gloves a player can wear, painted or team default", () => {

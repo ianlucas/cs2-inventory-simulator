@@ -19,7 +19,13 @@ export type ViewerItemInput =
   CS2EconomyItem | CS2InventoryItem | CS2BaseInventoryItem;
 
 export type ViewerItemKind =
-  "weapon" | "melee" | "gloves" | "sticker" | "stickerSlab" | "keychain";
+  | "weapon"
+  | "melee"
+  | "gloves"
+  | "sticker"
+  | "stickerSlab"
+  | "keychain"
+  | "agent";
 
 const VIEWER_RENDERABLE_KINDS: ReadonlySet<ViewerItemKind> = new Set([
   "weapon",
@@ -28,6 +34,12 @@ const VIEWER_RENDERABLE_KINDS: ReadonlySet<ViewerItemKind> = new Set([
   "sticker",
   "stickerSlab",
   "keychain"
+]);
+
+// Agents render only where their patches are previewed, not in every 3D editor.
+export const VIEWER_INSPECT_KINDS: ReadonlySet<ViewerItemKind> = new Set([
+  ...VIEWER_RENDERABLE_KINDS,
+  "agent"
 ]);
 
 // The viewer's `/api/catalog` manifest: supported(id) = id <= maxId && id not
@@ -78,6 +90,9 @@ export function getViewerItemIds(item: ViewerItemInput): number[] {
       }
     }
   }
+  if (viewerItem.patches !== undefined) {
+    ids.push(...Object.values(viewerItem.patches));
+  }
   return ids;
 }
 
@@ -95,6 +110,7 @@ export function getViewerItemKind(
   if (economyItem.isStickerSlab()) return "stickerSlab";
   if (economyItem.isSticker()) return "sticker";
   if (economyItem.isKeychain()) return "keychain";
+  if (economyItem.isAgent()) return "agent";
   return undefined;
 }
 
@@ -125,6 +141,7 @@ export function toViewerItem(item: ViewerItemInput): ViewerItem {
   if (item.keychains !== undefined) viewerItem.keychains = item.keychains;
   if (item.statTrak !== undefined) viewerItem.statTrak = item.statTrak;
   if (item.nameTag !== undefined) viewerItem.nameTag = item.nameTag;
+  if (item.patches !== undefined) viewerItem.patches = item.patches;
   return viewerItem;
 }
 

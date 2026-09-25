@@ -31,6 +31,7 @@ export const EDITABLE_ITEM_TYPE: CS2ItemType[] = [
 ];
 
 export const INSPECTABLE_ITEM_TYPE: CS2ItemType[] = [
+  CS2ItemType.Agent,
   CS2ItemType.Collectible,
   CS2ItemType.Gloves,
   CS2ItemType.Graffiti,
