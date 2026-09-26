@@ -9,7 +9,8 @@ import {
   ViewerItemInput,
   ViewerItemKind,
   isViewerItemSupported,
-  stringifyViewerItem
+  stringifyViewerItem,
+  toViewerItem
 } from "~/data/viewer";
 
 export const ICON_WIDTH = 512;
@@ -40,6 +41,6 @@ export function isIconRedundant(item: ViewerItemInput): boolean {
     item instanceof CS2EconomyItem ? item : CS2Economy.items.get(item.id);
   return (
     economyItem?.isDefault === true &&
-    getItemIconKey(item) === getItemIconKey({ id: item.id })
+    Object.keys(toViewerItem(item)).length === 1
   );
 }

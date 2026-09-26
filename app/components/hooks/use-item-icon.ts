@@ -64,15 +64,20 @@ export function useItemIcon(item: ViewerItemInput, wanted: boolean) {
   const { viewerCatalog } = useRules();
   const enabled = useItemIconEnabled();
   const editedAt = getItemEditedAt(item);
-  const redundant = useMemo(() => isIconRedundant(item), [item, editedAt]);
+  const redundantKey = useMemo(
+    () => (isIconRedundant(item) ? getItemIconKey(item) : undefined),
+    [item, editedAt]
+  );
   const renderable =
-    wanted && enabled && !redundant && isIconRenderable(viewerCatalog, item);
+    wanted &&
+    enabled &&
+    redundantKey === undefined &&
+    isIconRenderable(viewerCatalog, item);
   const key = useMemo(
     () => (renderable ? getItemIconKey(item) : undefined),
     [renderable, item, editedAt]
   );
 
-  const redundantKey = redundant ? getItemIconKey(item) : undefined;
   useEffect(() => {
     if (redundantKey !== undefined) {
       void discardIcon(redundantKey);
