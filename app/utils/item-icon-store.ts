@@ -53,7 +53,16 @@ function open(): Promise<IDBDatabase | undefined> {
       const store = db.createObjectStore(STORE_NAME, { keyPath: "key" });
       store.createIndex(USED_AT_INDEX, USED_AT_INDEX);
     };
-    opening.onsuccess = () => resolve(opening.result);
+    opening.onsuccess = () => {
+      const db = opening.result;
+      // Lets a newer ICON_CACHE_VERSION in another tab upgrade instead of
+      // being blocked by this connection; the next read reopens.
+      db.onversionchange = () => {
+        db.close();
+        database = undefined;
+      };
+      resolve(db);
+    };
     opening.onerror = () => resolve(undefined);
     opening.onblocked = () => resolve(undefined);
   });
