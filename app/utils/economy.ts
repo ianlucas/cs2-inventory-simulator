@@ -97,7 +97,7 @@ export function isItemCountable(item: CS2EconomyItem) {
   return COUNTABLE_ITEM_TYPES.includes(item.type);
 }
 
-export const newItemStartingId = 26817;
+export const newItemStartingId = 28160;
 export const newItemEndAt = 1784841228427;
 export const seedStringMaxLen = String(CS2_MAX_SEED).length;
 export const wearStringMaxLen = String(CS2_WEAR_FACTOR).length;
