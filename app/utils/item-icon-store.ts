@@ -114,6 +114,16 @@ export function writeIconFailure(
   );
 }
 
+export function deleteIcon(key: string): Promise<void> {
+  return withStore(
+    "readwrite",
+    async (store) => {
+      await request(store.delete(key));
+    },
+    undefined
+  );
+}
+
 export function pruneIcons(max = MAX_STORED_ICONS): Promise<void> {
   return withStore(
     "readwrite",

@@ -7,7 +7,9 @@ import {
   CS2Economy,
   CS2Inventory,
   CS2InventoryItem,
-  CS2_ITEMS
+  CS2ItemType,
+  CS2_ITEMS,
+  ensure
 } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations";
 import { act } from "react";
@@ -26,6 +28,7 @@ CS2Economy.load({
 });
 
 const queue = vi.hoisted(() => ({
+  discarded: [] as string[],
   forgotten: [] as string[],
   listeners: new Map<string, Set<() => void>>(),
   requests: [] as { key: string; priority: boolean }[],
@@ -34,6 +37,9 @@ const queue = vi.hoisted(() => ({
 }));
 
 vi.mock("~/utils/item-icon-queue", () => ({
+  discardIcon: async (key: string) => {
+    queue.discarded.push(key);
+  },
   forgetIcon: (key: string) => {
     queue.forgotten.push(key);
     queue.urls.delete(key);
@@ -98,6 +104,7 @@ describe("useItemIcon", () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
+    queue.discarded.length = 0;
     queue.forgotten.length = 0;
     queue.listeners.clear();
     queue.requests.length = 0;
@@ -132,6 +139,22 @@ describe("useItemIcon", () => {
     expect(queue.requests).toEqual([
       { key: getItemIconKey(item), priority: false }
     ]);
+  });
+
+  it("leaves a free item on its CDN image and drops any icon generated for it", () => {
+    const free = inventory.add({
+      id: ensure(
+        CS2_ITEMS.find(
+          (item) => item.type === CS2ItemType.Weapon && item.isDefault === true
+        )
+      ).id
+    });
+    item = free.getAll()[1];
+    render();
+
+    expect(queue.requests).toEqual([]);
+    expect(queue.discarded).toEqual([getItemIconKey(item)]);
+    expect(container.textContent).toBe("none");
   });
 
   it("requests a new icon when the item is edited in place", () => {
