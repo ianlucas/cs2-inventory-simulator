@@ -3,12 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS2Economy, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import {
   ViewerCatalogLike,
   ViewerItemInput,
   ViewerItemKind,
   isViewerItemSupported,
-  stringifyViewerItem
+  stringifyViewerItem,
+  toViewerItem
 } from "~/data/viewer";
 
 export const ICON_WIDTH = 512;
@@ -32,4 +34,13 @@ export function isIconRenderable(
 
 export function getItemIconKey(item: ViewerItemInput): string {
   return stringifyViewerItem(item);
+}
+
+export function isIconRedundant(item: ViewerItemInput): boolean {
+  const economyItem =
+    item instanceof CS2EconomyItem ? item : CS2Economy.items.get(item.id);
+  return (
+    economyItem?.isDefault === true &&
+    Object.keys(toViewerItem(item)).length === 1
+  );
 }
