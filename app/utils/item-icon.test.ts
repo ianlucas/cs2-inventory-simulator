@@ -3,17 +3,35 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_ITEMS, CS2Economy } from "@ianlucas/cs2-lib";
+import { CS2_ITEMS, CS2Economy, CS2ItemType, ensure } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations";
 import { describe, expect, it } from "vitest";
 import { ViewerCatalogLike } from "~/data/viewer";
-import { getItemIconKey, isIconRenderable } from "./item-icon";
+import { getItemIconKey, isIconRedundant, isIconRenderable } from "./item-icon";
 
 CS2Economy.load({ items: CS2_ITEMS, language: english });
 
 const AK47_ID = 4;
 const KARAMBIT_ID = 41;
 const STICKER_ID = 2226;
+const FREE_WEAPON_ID = ensure(
+  CS2_ITEMS.find(
+    (item) => item.type === CS2ItemType.Weapon && item.isDefault === true
+  )
+).id;
+const FREE_GLOVES_ID = ensure(
+  CS2_ITEMS.find(
+    (item) => item.type === CS2ItemType.Gloves && item.isDefault === true
+  )
+).id;
+const PAINTED_WEAPON_ID = ensure(
+  CS2_ITEMS.find(
+    (item) =>
+      item.type === CS2ItemType.Weapon &&
+      item.isDefault !== true &&
+      item.isBase !== true
+  )
+).id;
 const CATALOG: ViewerCatalogLike = { maxId: 100000, holes: [] };
 
 describe("getItemIconKey", () => {
@@ -84,5 +102,30 @@ describe("isIconRenderable", () => {
 
   it("refuses an id that names nothing", () => {
     expect(isIconRenderable(CATALOG, { id: -1 })).toBe(false);
+  });
+});
+
+describe("isIconRedundant", () => {
+  it("leaves free weapons and gloves on their static CDN image", () => {
+    expect(isIconRedundant({ id: FREE_WEAPON_ID })).toBe(true);
+    expect(isIconRedundant({ id: FREE_GLOVES_ID })).toBe(true);
+    expect(isIconRedundant(CS2Economy.getById(FREE_WEAPON_ID))).toBe(true);
+  });
+
+  it("draws a free item the user customized, which the CDN image cannot show", () => {
+    expect(
+      isIconRedundant({
+        id: FREE_WEAPON_ID,
+        stickers: { 0: { id: STICKER_ID } }
+      })
+    ).toBe(false);
+    expect(isIconRedundant({ id: FREE_WEAPON_ID, nameTag: "mine" })).toBe(
+      false
+    );
+  });
+
+  it("draws items that are not free", () => {
+    expect(isIconRedundant({ id: PAINTED_WEAPON_ID })).toBe(false);
+    expect(isIconRedundant({ id: KARAMBIT_ID })).toBe(false);
   });
 });

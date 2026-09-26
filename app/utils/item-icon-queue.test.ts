@@ -16,12 +16,17 @@ const store = vi.hoisted(() => ({
     string,
     { error?: string; image?: Blob; retryAfter?: number }
   >(),
+  deleted: [] as string[],
   pruned: 0,
   written: [] as { error?: string; key: string; retryAfter?: number }[]
 }));
 
 vi.mock("./item-icon-store", () => ({
   MAX_STORED_ICONS: 512,
+  deleteIcon: async (key: string) => {
+    store.deleted.push(key);
+    store.entries.delete(key);
+  },
   pruneIcons: async () => {
     store.pruned++;
   },
@@ -131,6 +136,7 @@ beforeEach(() => {
   tabLock.granted = true;
   tabLock.promote = undefined;
   store.entries.clear();
+  store.deleted.length = 0;
   store.pruned = 0;
   store.written.length = 0;
 
@@ -766,5 +772,21 @@ describe("icon queue", () => {
 
     expect(store.written).toHaveLength(32);
     expect(store.pruned).toBe(1);
+  });
+
+  it("deletes an icon that is no longer wanted, so the tile falls back to its CDN image", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+    store.entries.set("a", { image: new Blob(["x"]) });
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    expect(queue.getIconUrl("a")).toBeDefined();
+
+    await queue.discardIcon("a");
+    await queue.discardIcon("a");
+
+    expect(store.deleted).toEqual(["a"]);
+    expect(queue.getIconUrl("a")).toBeUndefined();
   });
 });

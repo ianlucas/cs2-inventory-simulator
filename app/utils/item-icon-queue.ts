@@ -30,6 +30,7 @@ import {
 } from "./item-icon-registry";
 import {
   IconEntry,
+  deleteIcon,
   pruneIcons,
   readIcon,
   writeIcon,
@@ -88,6 +89,7 @@ type CaptureOutcome = Omit<ViewerCaptured, "item">;
 const pending = new Map<string, Pending>();
 const known = new Set<string>();
 const deferred = new Map<string, ViewerItemInput>();
+const discarded = new Set<string>();
 
 let api: ViewerApi | undefined;
 let unsubscribeApi: (() => void) | undefined;
@@ -437,4 +439,13 @@ export function forgetIcon(key: string): void {
   pending.delete(key);
   deferred.delete(key);
   releaseIcon(key);
+}
+
+export async function discardIcon(key: string): Promise<void> {
+  if (discarded.has(key)) {
+    return;
+  }
+  discarded.add(key);
+  forgetIcon(key);
+  await deleteIcon(key);
 }

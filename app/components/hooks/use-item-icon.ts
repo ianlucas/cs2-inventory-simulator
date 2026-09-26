@@ -13,9 +13,13 @@ import {
 } from "react";
 import { usePreferences, useRules } from "~/components/app-context";
 import { ViewerItemInput } from "~/data/viewer";
-import { getItemIconKey, isIconRenderable } from "~/utils/item-icon";
+import {
+  getItemIconKey,
+  isIconRedundant,
+  isIconRenderable
+} from "~/utils/item-icon";
 import { pauseIconGeneration } from "~/utils/item-icon-generator-role";
-import { forgetIcon, requestIcon } from "~/utils/item-icon-queue";
+import { discardIcon, forgetIcon, requestIcon } from "~/utils/item-icon-queue";
 import {
   getIconUrl,
   getIconUrlServer,
@@ -59,12 +63,26 @@ export function useIconGenerationPausedWhile(active: boolean): void {
 export function useItemIcon(item: ViewerItemInput, wanted: boolean) {
   const { viewerCatalog } = useRules();
   const enabled = useItemIconEnabled();
-  const renderable = wanted && enabled && isIconRenderable(viewerCatalog, item);
   const editedAt = getItemEditedAt(item);
+  const redundantKey = useMemo(
+    () => (isIconRedundant(item) ? getItemIconKey(item) : undefined),
+    [item, editedAt]
+  );
+  const renderable =
+    wanted &&
+    enabled &&
+    redundantKey === undefined &&
+    isIconRenderable(viewerCatalog, item);
   const key = useMemo(
     () => (renderable ? getItemIconKey(item) : undefined),
     [renderable, item, editedAt]
   );
+
+  useEffect(() => {
+    if (redundantKey !== undefined) {
+      void discardIcon(redundantKey);
+    }
+  }, [redundantKey]);
 
   const subscribe = useCallback(
     (listener: () => void) =>
