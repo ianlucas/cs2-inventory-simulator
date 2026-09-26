@@ -7,11 +7,16 @@ import { CSSProperties, useSyncExternalStore } from "react";
 import { useRules } from "~/components/app-context";
 import { ICON_HEIGHT, ICON_WIDTH } from "~/utils/item-icon";
 import {
+  getIconGeneratorGeneration,
+  getIconGeneratorGenerationServer,
   isIconGeneratorWanted,
   isIconGeneratorWantedServer,
   subscribeIconGeneratorWanted
 } from "~/utils/item-icon-generator-role";
-import { setIconGeneratorApi } from "~/utils/item-icon-queue";
+import {
+  getIconGeneratorSeed,
+  setIconGeneratorApi
+} from "~/utils/item-icon-queue";
 import { Viewer } from "./viewer";
 
 const PAINTED_BUT_INVISIBLE_STYLE: CSSProperties = {
@@ -33,6 +38,11 @@ export function ItemIconGenerator() {
     isIconGeneratorWanted,
     isIconGeneratorWantedServer
   );
+  const generation = useSyncExternalStore(
+    subscribeIconGeneratorWanted,
+    getIconGeneratorGeneration,
+    getIconGeneratorGenerationServer
+  );
   if (!wanted) {
     return null;
   }
@@ -44,6 +54,8 @@ export function ItemIconGenerator() {
       cdn={viewerAssetsBaseUrl || undefined}
       embedUrl={viewerEmbedUrl || undefined}
       icon
+      item={getIconGeneratorSeed()}
+      key={generation}
       onApi={setIconGeneratorApi}
       style={PAINTED_BUT_INVISIBLE_STYLE}
       tabIndex={-1}

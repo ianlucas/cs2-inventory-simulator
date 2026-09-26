@@ -81,13 +81,14 @@ export type ViewerUnsupportedReason =
  * Why a capture produced no frame.
  *
  * Most arrive from the viewer: the `ViewerUnsupportedReason` set, plus
- * `untrusted` (the public tier declining to hand back a watermarked frame) and
- * `disabled` (a viewer built without capture support). `timeout` is synthesised
- * by the host when its own capture deadline expires, so a capture that never
- * answered can be recorded like any other refusal.
+ * `untrusted` (the server reporting the partner key untrusted, as the public
+ * tier declines to hand back a watermarked frame), `disabled` (a viewer loaded
+ * without capture support) and `encode` (the frame failed to encode). `timeout`
+ * comes from the viewer when the render never settled, or is synthesised by the
+ * host when its own capture deadline expires.
  */
 export type ViewerCaptureError =
-  ViewerUnsupportedReason | "untrusted" | "disabled" | "timeout";
+  ViewerUnsupportedReason | "untrusted" | "disabled" | "timeout" | "encode";
 
 /**
  * How long to wait for one capture. Generous because the viewer must compile
@@ -174,7 +175,10 @@ export class ViewerApi extends EventTarget {
   private readonly iframe: HTMLIFrameElement;
   private destroyed = false;
   private queue: (() => void)[] = [];
-  private readyWaiters: (() => void)[] = [];
+  private readyWaiters: {
+    resolve: () => void;
+    reject: (error: Error) => void;
+  }[] = [];
   private readonly pending = new Map<string, PendingReply>();
 
   /**
@@ -221,13 +225,19 @@ export class ViewerApi extends EventTarget {
   }
 
   /**
-   * Resolves once the viewer is ready, immediately if it already is.
+   * Resolves once the viewer is ready, immediately if it already is. Rejects if
+   * the viewer is destroyed first.
    */
   whenReady(): Promise<void> {
     if (this.isReady) {
       return Promise.resolve();
     }
-    return new Promise((resolve) => this.readyWaiters.push(resolve));
+    if (this.destroyed) {
+      return Promise.reject(new Error("ViewerApi: destroyed."));
+    }
+    return new Promise((resolve, reject) =>
+      this.readyWaiters.push({ resolve, reject })
+    );
   }
 
   setItem(item: ViewerItemInput): void {
@@ -382,7 +392,7 @@ export class ViewerApi extends EventTarget {
 
   /**
    * Detaches listeners, drops the command queue, and fails any in-flight
-   * getState. Subsequent calls are no-ops.
+   * getState, capture or whenReady. Subsequent calls are no-ops.
    */
   destroy(): void {
     if (this.destroyed) {
@@ -392,7 +402,11 @@ export class ViewerApi extends EventTarget {
     window.removeEventListener("message", this.onMessage);
     this.iframe.removeEventListener("load", this.onLoad);
     this.queue = [];
+    const waiters = this.readyWaiters;
     this.readyWaiters = [];
+    for (const { reject } of waiters) {
+      reject(new Error("ViewerApi: destroyed."));
+    }
     for (const { reject, timer } of this.pending.values()) {
       if (timer !== undefined) {
         clearTimeout(timer);
@@ -463,7 +477,7 @@ export class ViewerApi extends EventTarget {
     }
     const waiters = this.readyWaiters;
     this.readyWaiters = [];
-    for (const resolve of waiters) {
+    for (const { resolve } of waiters) {
       resolve();
     }
   }

@@ -66,7 +66,7 @@ interface FakeApi {
   reply: (result: Partial<ViewerCaptured>) => void;
 }
 
-function fakeApi(): FakeApi {
+function fakeApi({ ready = true }: { ready?: boolean } = {}): FakeApi {
   const captured: string[] = [];
   const handlers = new Map<string, (data: unknown) => void>();
   let pending: ((result: ViewerCaptured) => void) | undefined;
@@ -82,7 +82,8 @@ function fakeApi(): FakeApi {
     on: (type: string, listener: (data: unknown) => void) => {
       handlers.set(type, listener);
       return () => handlers.delete(type);
-    }
+    },
+    whenReady: () => (ready ? Promise.resolve() : new Promise<void>(() => {}))
   } as unknown as ViewerApi;
   return {
     api,
@@ -100,6 +101,38 @@ function fakeApi(): FakeApi {
       resolve?.({ apiCalls: 1, item: { id: 0 }, ...result });
     }
   };
+}
+
+/**
+ * Stands in for ItemIconGenerator: mounts a viewer whenever the queue wants
+ * one, and remounts it when the queue recycles the generator.
+ */
+function attachGenerator(
+  queue: Queue,
+  next: () => FakeApi
+): { mounts: FakeApi[] } {
+  const mounts: FakeApi[] = [];
+  let mounted: number | undefined;
+  const sync = () => {
+    const generation = queue.isIconGeneratorWanted()
+      ? queue.getIconGeneratorGeneration()
+      : undefined;
+    if (generation === mounted) {
+      return;
+    }
+    mounted = generation;
+    if (generation === undefined) {
+      queue.setIconGeneratorApi(undefined);
+      return;
+    }
+    const viewer = next();
+    mounts.push(viewer);
+    queue.setIconGeneratorApi(viewer.api);
+  };
+  // React commits the generator after the store change, not during it.
+  queue.subscribeIconGeneratorWanted(() => queueMicrotask(sync));
+  sync();
+  return { mounts };
 }
 
 function stubVisibility(initial: DocumentVisibilityState) {
@@ -172,7 +205,10 @@ describe("icon queue", () => {
     const queue = await load();
     const viewer = fakeApi();
     queue.setIconGeneratorApi(viewer.api);
-    store.entries.set("a", { error: "weapon" });
+    store.entries.set("a", {
+      error: "weapon",
+      retryAfter: Date.now() + 60_000
+    });
 
     await queue.requestIcon("a", { id: 4 });
     await flush();
@@ -296,7 +332,7 @@ describe("icon queue", () => {
   it("retries a capture that died with the generator, rather than losing the item", async () => {
     const queue = await load();
     const viewer = fakeApi();
-    queue.setIconGeneratorApi(viewer.api);
+    attachGenerator(queue, () => viewer);
 
     await queue.requestIcon("a", { id: 4 });
     await flush();
@@ -313,7 +349,7 @@ describe("icon queue", () => {
   it("stops retrying an item whose captures keep dying, so it cannot hog the queue", async () => {
     const queue = await load();
     const viewer = fakeApi();
-    queue.setIconGeneratorApi(viewer.api);
+    attachGenerator(queue, () => viewer);
 
     await queue.requestIcon("a", { id: 4 });
     for (let attempt = 0; attempt < 5; attempt++) {
@@ -353,16 +389,54 @@ describe("icon queue", () => {
     await flush();
     viewer.reply({ error: "weapon" });
     await flush();
-    expect(store.written).toEqual([{ error: "weapon", key: "a" }]);
+    const itemFailure = {
+      error: "weapon",
+      key: "a",
+      retryAfter: expect.any(Number)
+    };
+    expect(store.written).toEqual([itemFailure]);
 
     await queue.requestIcon("b", { id: 5 });
     await flush();
     viewer.reply({ error: "timeout" });
     await flush();
-    expect(store.written).toEqual([{ error: "weapon", key: "a" }]);
+    expect(store.written).toEqual([itemFailure]);
   });
 
-  it("fails a capture the viewer only rejects out-of-band, instead of waiting out its timeout", async () => {
+  it("gives an item the viewer rejected another chance once its retry window has passed", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+    store.entries.set("later", {
+      error: "weapon",
+      retryAfter: Date.now() + 60_000
+    });
+    store.entries.set("ready", {
+      error: "weapon",
+      retryAfter: Date.now() - 1
+    });
+
+    await queue.requestIcon("later", { id: 5 });
+    await queue.requestIcon("ready", { id: 4 });
+    await flush();
+
+    expect(viewer.captured).toEqual(["4"]);
+    expect(queue.isIconUnavailable("later")).toBe(true);
+  });
+
+  it("retries an item a previous session rejected without a retry window", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+    store.entries.set("a", { error: "weapon" });
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+
+    expect(viewer.captured).toEqual(["4"]);
+  });
+
+  it("does not blame the capture in flight for an item the viewer rejected out of band", async () => {
     const queue = await load();
     const viewer = fakeApi();
     queue.setIconGeneratorApi(viewer.api);
@@ -373,12 +447,11 @@ describe("icon queue", () => {
 
     viewer.emit("unsupported", { reason: "keychain" });
     await flush();
+    expect(store.written).toEqual([]);
 
-    expect(store.written).toEqual([{ error: "keychain", key: "a" }]);
-
-    await queue.requestIcon("b", { id: 5 });
+    viewer.reply({ image: new Blob(["x"]) });
     await flush();
-    expect(viewer.captured).toEqual(["4", "5"]);
+    expect(queue.getIconUrl("a")).toBeDefined();
   });
 
   it("keeps generating when the viewer reports an unsupported item with nothing in flight", async () => {
@@ -416,7 +489,10 @@ describe("icon queue", () => {
   it("never stands up a generator for an inventory it already has icons for", async () => {
     const queue = await load();
     store.entries.set("a", { image: new Blob(["x"]) });
-    store.entries.set("b", { error: "weapon" });
+    store.entries.set("b", {
+      error: "weapon",
+      retryAfter: Date.now() + 60_000
+    });
 
     await queue.requestIcon("a", { id: 4 });
     await queue.requestIcon("b", { id: 5 });
@@ -428,7 +504,7 @@ describe("icon queue", () => {
   it("drops the generator while it waits out a rate limit, rather than idling a context", async () => {
     const queue = await load();
     const viewer = fakeApi();
-    queue.setIconGeneratorApi(viewer.api);
+    attachGenerator(queue, () => viewer);
 
     const cooldown = queue.ICON_IDLE_TEARDOWN_MS * 3;
 
@@ -437,7 +513,7 @@ describe("icon queue", () => {
     expect(queue.isIconGeneratorWanted()).toBe(true);
 
     viewer.emit("rateLimited", { retryAfterMs: cooldown });
-    viewer.reply({ error: "timeout" });
+    viewer.reply({ image: new Blob(["x"]) });
     await flush();
 
     await queue.requestIcon("b", { id: 5 });
@@ -594,7 +670,10 @@ describe("icon queue", () => {
     const queue = await load();
     const viewer = fakeApi();
     queue.setIconGeneratorApi(viewer.api);
-    store.entries.set("a", { error: "weapon" });
+    store.entries.set("a", {
+      error: "weapon",
+      retryAfter: Date.now() + 60_000
+    });
 
     await queue.requestIcon("a", { id: 4 });
     await flush();
@@ -615,7 +694,7 @@ describe("icon queue", () => {
   it("backs off the CDN rather than asking it again straight away", async () => {
     const queue = await load();
     const viewer = fakeApi();
-    queue.setIconGeneratorApi(viewer.api);
+    attachGenerator(queue, () => viewer);
 
     await queue.requestIcon("a", { id: 4 });
     await flush();
@@ -636,7 +715,7 @@ describe("icon queue", () => {
   it("waits longer each time the CDN refuses again", async () => {
     const queue = await load();
     const viewer = fakeApi();
-    queue.setIconGeneratorApi(viewer.api);
+    attachGenerator(queue, () => viewer);
 
     await queue.requestIcon("a", { id: 4 });
     await flush();
@@ -661,7 +740,7 @@ describe("icon queue", () => {
   it("remembers an item whose captures kept dying, so the next load will not repeat them", async () => {
     const queue = await load();
     const viewer = fakeApi();
-    queue.setIconGeneratorApi(viewer.api);
+    attachGenerator(queue, () => viewer);
 
     await queue.requestIcon("a", { id: 4 });
     for (let attempt = 0; attempt < 3; attempt++) {
@@ -788,5 +867,161 @@ describe("icon queue", () => {
 
     expect(store.deleted).toEqual(["a"]);
     expect(queue.getIconUrl("a")).toBeUndefined();
+  });
+
+  it("replaces a viewer that never becomes ready, rather than stalling the queue behind it", async () => {
+    const queue = await load();
+    const viewers = [fakeApi({ ready: false }), fakeApi()];
+    const { mounts } = attachGenerator(queue, () => viewers[mounts.length]);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    expect(mounts).toHaveLength(1);
+
+    await vi.advanceTimersByTimeAsync(queue.ICON_GENERATOR_STARTUP_TIMEOUT_MS);
+    await flush();
+    expect(queue.isIconGeneratorWanted()).toBe(false);
+    expect(viewers[0].captured).toEqual([]);
+
+    await vi.advanceTimersByTimeAsync(queue.ICON_GENERATOR_RETRY_MS);
+    await flush();
+    expect(mounts).toHaveLength(2);
+    expect(viewers[1].captured).toEqual(["4"]);
+    expect(queue.isIconUnavailable("a")).toBe(false);
+  });
+
+  it("retries a render the viewer gave up on, on a fresh viewer", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    const { mounts } = attachGenerator(queue, () => viewer);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    viewer.reply({ error: "timeout" });
+    await flush();
+
+    expect(mounts).toHaveLength(2);
+    expect(viewer.captured).toEqual(["4", "4"]);
+    expect(queue.isIconUnavailable("a")).toBe(false);
+
+    viewer.reply({ image: new Blob(["x"]) });
+    await flush();
+    expect(queue.getIconUrl("a")).toBeDefined();
+  });
+
+  it("stops retrying an item whose renders keep timing out or failing to encode", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    attachGenerator(queue, () => viewer);
+
+    await queue.requestIcon("a", { id: 4 });
+    for (const error of ["timeout", "encode", "timeout"] as const) {
+      await flush();
+      viewer.reply({ error });
+      await flush();
+    }
+
+    expect(viewer.captured).toEqual(["4", "4", "4"]);
+    expect(store.written).toEqual([
+      { error: "timeout", key: "a", retryAfter: expect.any(Number) }
+    ]);
+    expect(queue.isIconUnavailable("a")).toBe(true);
+  });
+
+  it("replaces the viewer after a network failure, as a fatal viewer stops answering", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    const { mounts } = attachGenerator(queue, () => viewer);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    viewer.emit("unsupported", { reason: "network" });
+    await flush();
+
+    expect(queue.isIconGeneratorWanted()).toBe(false);
+
+    await vi.advanceTimersByTimeAsync(31_000);
+    await flush();
+    expect(mounts).toHaveLength(2);
+    expect(viewer.captured).toEqual(["4", "4"]);
+  });
+
+  it("replaces a viewer that turned fatal with nothing in flight", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    const { mounts } = attachGenerator(queue, () => viewer);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    viewer.reply({ image: new Blob(["x"]) });
+    await flush();
+
+    viewer.emit("unsupported", { reason: "network" });
+    await flush();
+    await queue.requestIcon("b", { id: 5 });
+    await vi.advanceTimersByTimeAsync(31_000);
+    await flush();
+
+    expect(mounts).toHaveLength(2);
+    expect(viewer.captured).toEqual(["4", "5"]);
+  });
+
+  it("gives up on an item whose renders keep failing on the network, so it cannot throttle the rest", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    attachGenerator(queue, () => viewer);
+
+    await queue.requestIcon("a", { id: 4 });
+    for (let failure = 0; failure < 5; failure++) {
+      await flush();
+      viewer.reply({ error: "network" });
+      await flush();
+      await vi.advanceTimersByTimeAsync(8 * 60_000 + 1_000);
+    }
+    await flush();
+
+    expect(viewer.captured).toEqual(["4", "4", "4", "4", "4"]);
+    expect(store.written).toEqual([
+      { error: "network", key: "a", retryAfter: expect.any(Number) }
+    ]);
+    expect(queue.isIconUnavailable("a")).toBe(true);
+  });
+
+  it("boots the viewer on the item it is about to capture", async () => {
+    const queue = await load();
+    let seeded: unknown;
+    attachGenerator(queue, () => {
+      seeded = queue.getIconGeneratorSeed();
+      return fakeApi();
+    });
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+
+    expect(seeded).toEqual({ id: 4 });
+  });
+
+  it("turns icons off for a device the viewer cannot render on", async () => {
+    const queue = await load();
+    const viewer = fakeApi();
+    queue.setIconGeneratorApi(viewer.api);
+
+    await queue.requestIcon("a", { id: 4 });
+    await flush();
+    viewer.reply({ error: "webgl" });
+    await flush();
+
+    expect(queue.isIconGenerationDisabled()).toBe(true);
+    expect(store.written).toEqual([]);
+  });
+
+  it("generates again once a disable window has passed", async () => {
+    const queue = await load();
+
+    queue.disableIconGeneration(60_000);
+    expect(queue.isIconGenerationDisabled()).toBe(true);
+
+    await vi.advanceTimersByTimeAsync(60_001);
+    expect(queue.isIconGenerationDisabled()).toBe(false);
   });
 });

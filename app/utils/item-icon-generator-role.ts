@@ -15,6 +15,7 @@ const wantedListeners = new Set<() => void>();
 
 let role: IconGeneratorRole = "unclaimed";
 let wanted = false;
+let generation = 0;
 let paused = 0;
 let watchingVisibility = false;
 let resumeWhenVisible: (() => void) | undefined;
@@ -53,14 +54,36 @@ export function subscribeIconGeneratorWanted(listener: () => void): () => void {
   return () => wantedListeners.delete(listener);
 }
 
+function emitWanted(): void {
+  for (const listener of wantedListeners) {
+    listener();
+  }
+}
+
 export function setIconGeneratorWanted(next: boolean): void {
   if (wanted === next) {
     return;
   }
   wanted = next;
-  for (const listener of wantedListeners) {
-    listener();
-  }
+  emitWanted();
+}
+
+export function getIconGeneratorGeneration(): number {
+  return generation;
+}
+
+export function getIconGeneratorGenerationServer(): number {
+  return 0;
+}
+
+/**
+ * Tears the generator down so the next one boots a fresh viewer, even if work
+ * wants it back before React has unmounted this one.
+ */
+export function recycleIconGenerator(): void {
+  generation++;
+  wanted = false;
+  emitWanted();
 }
 
 export function pauseIconGeneration(): () => void {

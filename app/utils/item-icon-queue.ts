@@ -18,6 +18,7 @@ import {
   claimIconGeneratorRole,
   getIconGeneratorRole,
   isIconGenerationPaused,
+  recycleIconGenerator,
   setIconGeneratorWanted,
   subscribeIconGeneratorRole
 } from "./item-icon-generator-role";
@@ -49,9 +50,12 @@ import type {
 
 export const ICON_CAPTURE_TIMEOUT_MS = VIEWER_CAPTURE_TIMEOUT_MS;
 export const ICON_IDLE_TEARDOWN_MS = 30_000;
+export const ICON_GENERATOR_STARTUP_TIMEOUT_MS = 60_000;
+export const ICON_GENERATOR_RETRY_MS = 60_000;
 
 const PRUNE_EVERY = 32;
 const MAX_ATTEMPTS = 3;
+const MAX_NETWORK_FAILURES = 5;
 
 const ITEM_ERRORS: ReadonlySet<ViewerCaptureError> = new Set([
   "weapon",
@@ -71,17 +75,17 @@ const NETWORK_ERRORS: ReadonlySet<ViewerCaptureError> = new Set([
 ]);
 
 const TRANSIENT_RETRY_AFTER_MS = 24 * 60 * 60_000;
+const ITEM_RETRY_AFTER_MS = 5 * 60_000;
 const WEBGL_DISABLE_MS = 6 * 60 * 60_000;
 const DEPLOYMENT_DISABLE_MS = 24 * 60 * 60_000;
-const GENERATOR_STARTUP_TIMEOUT_MS = 60_000;
 const GENERATOR_STARTUP_POLL_MS = 1_000;
-const GENERATOR_RETRY_MS = 60_000;
 
 interface Pending {
   key: string;
   item: ViewerItemInput;
   priority: boolean;
   attempts: number;
+  networkFailures: number;
 }
 
 type CaptureOutcome = Omit<ViewerCaptured, "item">;
@@ -93,7 +97,6 @@ const discarded = new Set<string>();
 
 let api: ViewerApi | undefined;
 let unsubscribeApi: (() => void) | undefined;
-let disabled = false;
 let disabledUntil: number | undefined;
 let running = false;
 let writes = 0;
@@ -102,6 +105,8 @@ let failInflight: ((error: ViewerCaptureError) => void) | undefined;
 let pumpTimer: ReturnType<typeof setTimeout> | undefined;
 let teardownTimer: ReturnType<typeof setTimeout> | undefined;
 let waitingForApiSince: number | undefined;
+let generatorRetryAt = 0;
+let seed: Pending | undefined;
 
 subscribeIconTileVisibility(() => pump());
 subscribeIconGeneratorRole(onGeneratorChanged);
@@ -138,21 +143,20 @@ function standDown(): void {
 function adoptDeferredIcons(): void {
   for (const [key, item] of deferred) {
     retractIconUnavailable(key);
-    pending.set(key, { attempts: 0, item, key, priority: false });
+    pending.set(key, {
+      attempts: 0,
+      item,
+      key,
+      networkFailures: 0,
+      priority: false
+    });
   }
   deferred.clear();
 }
 
 function isDisabled(): boolean {
-  if (disabled) {
-    return true;
-  }
   disabledUntil ??= loadIconBudget().disabledUntil;
-  if (Date.now() >= disabledUntil) {
-    return false;
-  }
-  disabled = true;
-  return true;
+  return Date.now() < disabledUntil;
 }
 
 export function isIconGenerationDisabled(): boolean {
@@ -160,8 +164,11 @@ export function isIconGenerationDisabled(): boolean {
 }
 
 export function disableIconGeneration(forMs = DEPLOYMENT_DISABLE_MS): void {
-  disabled = true;
   disableIconBudget(forMs);
+  disabledUntil = Math.max(
+    disabledUntil ?? loadIconBudget().disabledUntil,
+    Date.now() + forMs
+  );
   deferred.clear();
   abandonPendingIcons();
   setIconGeneratorWanted(false);
@@ -205,6 +212,30 @@ function cancelTeardown(): void {
   }
 }
 
+function detachApi(): void {
+  unsubscribeApi?.();
+  unsubscribeApi = undefined;
+  api = undefined;
+}
+
+// A viewer that failed or stalled may be wedged (a fatal viewer stops
+// answering altogether), so the next capture gets a fresh one. A generator
+// already replaced or unmounted is left alone.
+function recycleGenerator(failed: ViewerApi | undefined = api): void {
+  if (failed === undefined || failed !== api) {
+    return;
+  }
+  detachApi();
+  waitingForApiSince = undefined;
+  recycleIconGenerator();
+}
+
+function retryGeneratorLater(failed: ViewerApi | undefined = api): void {
+  generatorRetryAt = Date.now() + ICON_GENERATOR_RETRY_MS;
+  recycleGenerator(failed);
+  setIconGeneratorWanted(false);
+}
+
 function pickNext(): Pending | undefined {
   let newestPrioritized: Pending | undefined;
   let firstVisible: Pending | undefined;
@@ -220,6 +251,12 @@ function pickNext(): Pending | undefined {
     firstQueued ??= entry;
   }
   return newestPrioritized ?? firstVisible ?? firstQueued;
+}
+
+// Boots the viewer on the item it will most likely capture first, rather than
+// on its own default item.
+export function getIconGeneratorSeed(): ViewerItemInput | undefined {
+  return seed?.item;
 }
 
 function requeue(entry: Pending): void {
@@ -239,34 +276,82 @@ async function countWrite(): Promise<void> {
   }
 }
 
-async function record(key: string, captured: CaptureOutcome): Promise<void> {
-  if (captured.image !== undefined) {
-    await writeIcon(key, captured.image);
-    await countWrite();
-    return;
-  }
-  if (captured.error !== undefined && ITEM_ERRORS.has(captured.error)) {
-    await writeIconFailure(key, captured.error);
-    await countWrite();
-  }
-}
-
-async function giveUp(entry: Pending): Promise<void> {
+async function giveUp(
+  entry: Pending,
+  error: ViewerCaptureError = "timeout"
+): Promise<void> {
   pending.delete(entry.key);
   markIconUnavailable(entry.key);
   try {
     await writeIconFailure(
       entry.key,
-      "timeout",
+      error,
       Date.now() + TRANSIENT_RETRY_AFTER_MS
     );
     await countWrite();
   } catch {}
 }
 
+async function retryOrGiveUp(
+  generator: ViewerApi,
+  entry: Pending
+): Promise<void> {
+  entry.attempts++;
+  recycleGenerator(generator);
+  if (entry.attempts < MAX_ATTEMPTS) {
+    requeue(entry);
+  } else {
+    await giveUp(entry);
+  }
+}
+
+async function retryAfterNetworkFailure(
+  generator: ViewerApi,
+  entry: Pending,
+  error: ViewerCaptureError
+): Promise<void> {
+  backOffIconNetwork();
+  recycleGenerator(generator);
+  entry.networkFailures++;
+  if (entry.networkFailures < MAX_NETWORK_FAILURES) {
+    requeue(entry);
+  } else {
+    await giveUp(entry, error);
+  }
+}
+
+async function rejectItem(
+  entry: Pending,
+  error: ViewerCaptureError
+): Promise<void> {
+  console.warn(
+    `[InventorySimulator] The 3D viewer could not render an item's icon (${error}): ${entry.key}`
+  );
+  await writeIconFailure(entry.key, error, Date.now() + ITEM_RETRY_AFTER_MS);
+  await countWrite();
+  settle(entry.key, undefined);
+}
+
+function awaitReady(generator: ViewerApi): Promise<boolean> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  return Promise.race([
+    generator.whenReady().then(() => true),
+    new Promise<boolean>((resolve) => {
+      timer = setTimeout(
+        () => resolve(false),
+        ICON_GENERATOR_STARTUP_TIMEOUT_MS
+      );
+    })
+  ]).finally(() => clearTimeout(timer));
+}
+
 async function run(generator: ViewerApi, entry: Pending): Promise<void> {
   running = true;
   try {
+    if (!(await awaitReady(generator))) {
+      retryGeneratorLater(generator);
+      return;
+    }
     const captured: CaptureOutcome = await Promise.race([
       generator.capture(entry.item, { timeoutMs: ICON_CAPTURE_TIMEOUT_MS }),
       new Promise<CaptureOutcome>((resolve) => {
@@ -274,7 +359,18 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
       })
     ]);
     spendIconBudget(captured.apiCalls);
-    const { error } = captured;
+    const { error, image } = captured;
+    if (image !== undefined) {
+      clearIconNetworkBackoff();
+      await writeIcon(entry.key, image);
+      await countWrite();
+      settle(entry.key, image);
+      return;
+    }
+    if (error === "webgl") {
+      disableIconGeneration(WEBGL_DISABLE_MS);
+      return;
+    }
     if (error !== undefined && SESSION_ERRORS.has(error)) {
       console.error(
         `[InventorySimulator] 3D inventory icons disabled: the viewer refused to capture (${error}). `
@@ -283,23 +379,17 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
       return;
     }
     if (error !== undefined && NETWORK_ERRORS.has(error)) {
-      backOffIconNetwork();
-      requeue(entry);
+      await retryAfterNetworkFailure(generator, entry, error);
       return;
     }
-    if (captured.image !== undefined) {
-      clearIconNetworkBackoff();
+    if (error !== undefined && ITEM_ERRORS.has(error)) {
+      await rejectItem(entry, error);
+      return;
     }
-    await record(entry.key, captured);
-    settle(entry.key, captured.image);
+    await retryOrGiveUp(generator, entry);
   } catch {
-    entry.attempts++;
     spendIconBudget(1);
-    if (entry.attempts < MAX_ATTEMPTS) {
-      requeue(entry);
-    } else {
-      await giveUp(entry);
-    }
+    await retryOrGiveUp(generator, entry);
   } finally {
     failInflight = undefined;
     running = false;
@@ -312,13 +402,13 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
 
 function awaitGenerator(now: number): void {
   waitingForApiSince ??= now;
-  if (now - waitingForApiSince < GENERATOR_STARTUP_TIMEOUT_MS) {
+  if (now - waitingForApiSince < ICON_GENERATOR_STARTUP_TIMEOUT_MS) {
     schedule(GENERATOR_STARTUP_POLL_MS);
     return;
   }
   waitingForApiSince = undefined;
-  setIconGeneratorWanted(false);
-  schedule(GENERATOR_RETRY_MS);
+  retryGeneratorLater();
+  schedule(ICON_GENERATOR_RETRY_MS);
 }
 
 function pump(): void {
@@ -351,20 +441,26 @@ function pump(): void {
     schedule(((1 - tokens) / ICON_API_CALLS_PER_MINUTE) * 60_000);
     return;
   }
+  if (now < generatorRetryAt) {
+    schedule(generatorRetryAt - now);
+    return;
+  }
   cancelTeardown();
-  setIconGeneratorWanted(true);
   const generator = api;
   if (generator === undefined) {
+    seed = next;
+    setIconGeneratorWanted(true);
     awaitGenerator(now);
     return;
   }
+  setIconGeneratorWanted(true);
+  seed = undefined;
   waitingForApiSince = undefined;
   void run(generator, next);
 }
 
 export function setIconGeneratorApi(next: ViewerApi | undefined): void {
-  unsubscribeApi?.();
-  unsubscribeApi = undefined;
+  detachApi();
   api = next;
   if (next !== undefined) {
     waitingForApiSince = undefined;
@@ -383,12 +479,11 @@ export function setIconGeneratorApi(next: ViewerApi | undefined): void {
           return;
         }
         backOffIconNetwork();
+        recycleGenerator();
         pump();
-        return;
       }
-      if (ITEM_ERRORS.has(reason)) {
-        failInflight?.(reason);
-      }
+      // An item reason out of band is about the item the viewer booted with;
+      // a capture's own item errors arrive on its reply.
     });
     unsubscribeApi = () => {
       offRateLimited();
@@ -399,7 +494,7 @@ export function setIconGeneratorApi(next: ViewerApi | undefined): void {
 }
 
 function isWorthRetrying(entry: IconEntry): boolean {
-  return entry.retryAfter !== undefined && Date.now() >= entry.retryAfter;
+  return entry.retryAfter === undefined || Date.now() >= entry.retryAfter;
 }
 
 export async function requestIcon(
@@ -430,7 +525,7 @@ export async function requestIcon(
     return;
   }
   claimIconGeneratorRole();
-  pending.set(key, { attempts: 0, item, key, priority });
+  pending.set(key, { attempts: 0, item, key, networkFailures: 0, priority });
   pump();
 }
 
