@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
+import { noop } from "~/utils/misc";
 import { ViewerApi } from "~/utils/viewer-api";
 import { viewerClientAvailability } from "~/utils/viewer-availability";
 
@@ -48,14 +49,17 @@ export function useViewerStatus(api: ViewerApi | undefined) {
       clearTimeout(timer);
       setStatus("unavailable");
     });
-    void api.whenReady().then(() => {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      clearTimeout(timer);
-      setStatus("ready");
-    });
+    api
+      .whenReady()
+      .then(() => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        clearTimeout(timer);
+        setStatus("ready");
+      })
+      .catch(noop);
     return () => {
       clearTimeout(timer);
       offRateLimited();
