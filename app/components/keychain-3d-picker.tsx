@@ -141,12 +141,12 @@ function Keychain3dEditorOverlay({
   const viewerStatus = useViewerStatus(api);
 
   useEffect(() => {
-    if (viewerStatus !== "unavailable") {
+    if (!viewerStatus.isUnavailable) {
       return;
     }
     onChangeRef.current(toStored(keychainRef.current));
     onCloseRef.current();
-  }, [viewerStatus]);
+  }, [viewerStatus.isUnavailable]);
 
   useEffect(() => {
     if (api === undefined) {

@@ -229,8 +229,18 @@ function InspectItem3d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
   const translate = useTranslate();
   const item = useInventoryItem(uid);
   const { api, viewerProps } = useViewer({ item });
-  useViewerStatus(api);
+  const viewerStatus = useViewerStatus(api);
   const { infoButton, infoTooltip } = useInspectInfo(item);
+
+  if (viewerStatus.isUnavailable) {
+    return (
+      <InspectItem2d
+        onClose={onClose}
+        onUnsealGraffiti={onUnsealGraffiti}
+        uid={uid}
+      />
+    );
+  }
 
   return (
     <ViewerOverlay

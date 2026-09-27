@@ -151,7 +151,7 @@ function CaseContentsInspectDisplay({
   };
   const { api, viewerProps } = useViewer({ item: previewItem });
   const { canUse3d } = useViewerAvailability(previewItem);
-  useViewerStatus(api);
+  const viewerStatus = useViewerStatus(api);
 
   const header = (
     <CaseContentsInspectHeader
@@ -179,7 +179,7 @@ function CaseContentsInspectDisplay({
     </div>
   );
 
-  return canUse3d ? (
+  return canUse3d && !viewerStatus.isUnavailable ? (
     <ViewerOverlay
       header={header}
       overlayClassName={clsx(

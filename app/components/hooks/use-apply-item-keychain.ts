@@ -11,11 +11,11 @@ import {
   useRules
 } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
-import { isViewerItemSupported } from "~/data/viewer";
+import { viewerClientAvailability } from "~/utils/viewer-availability";
 
 export function useApplyItemKeychain() {
   const items = useInventoryItems();
-  const { viewerCatalog } = useRules();
+  const { viewer } = useRules();
   const [inventory] = useInventory();
   const [itemSelector, setItemSelector] = useItemSelector();
   const [applyItemKeychain, setApplyItemKeychain] = useState<{
@@ -32,7 +32,7 @@ export function useApplyItemKeychain() {
           (selectedItem.isKeychain()
             ? item.hasKeychains() && item.getKeychainsCount() === 0
             : selectedItem.getKeychainsCount() === 0 && item.isKeychain()) &&
-          isViewerItemSupported(viewerCatalog, item)
+          viewerClientAvailability.isItemSupported(viewer, item)
       ),
       type: "apply-item-keychain"
     });

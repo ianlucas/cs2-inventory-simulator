@@ -27,6 +27,19 @@ interface EditorItemDisplayProps {
   wear?: number;
 }
 
+function EditorItem2dPreview({
+  item,
+  wear
+}: Pick<EditorItemDisplayProps, "item" | "wear">) {
+  return (
+    <ItemImage
+      className="m-auto w-[256px]"
+      item={item}
+      wear={item.hasWear() ? wear : undefined}
+    />
+  );
+}
+
 function EditorItem3dPreview({
   item,
   keychains,
@@ -46,7 +59,7 @@ function EditorItem3dPreview({
     wear
   }));
   const { api, viewerProps } = useViewer({ item: initialItem });
-  useViewerStatus(api);
+  const viewerStatus = useViewerStatus(api);
   const imageLoadedRef = useRef(false);
   const [reveal, setReveal] = useState<"pending" | "instant" | "fade">(
     "pending"
@@ -72,6 +85,10 @@ function EditorItem3dPreview({
       wear
     });
   }, [api, item.id, keychains, nameTag, seed, statTrak, stickers, wear]);
+
+  if (viewerStatus.isUnavailable) {
+    return <EditorItem2dPreview item={item} wear={wear} />;
+  }
 
   return (
     <div className="relative m-auto aspect-256/192 w-[256px]">
@@ -130,11 +147,7 @@ export function EditorItemDisplay({
           wear={wear}
         />
       ) : (
-        <ItemImage
-          className="m-auto w-[256px]"
-          item={item}
-          wear={item.hasWear() ? wear : undefined}
-        />
+        <EditorItem2dPreview item={item} wear={wear} />
       )}
       <div
         className={clsx(

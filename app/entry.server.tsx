@@ -12,7 +12,7 @@ import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import type { EntryContext } from "react-router";
 import { ServerRouter } from "react-router";
-import { warmViewerCaches } from "./data/viewer.server";
+import { viewerServerAvailability } from "./data/viewer.server";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule";
 import { scheduleInactivityReset } from "./routines/reset-inactive-inventory";
@@ -31,7 +31,7 @@ scheduleEconomyPrices();
 scheduleInventoryProjection();
 void setupRules().then(() => {
   void setupLogo();
-  void warmViewerCaches();
+  viewerServerAvailability.start();
 });
 
 export default function handleRequest(

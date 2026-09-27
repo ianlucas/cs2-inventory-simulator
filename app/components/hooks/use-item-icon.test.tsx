@@ -74,11 +74,9 @@ vi.mock("~/utils/item-icon-visibility", () => ({
 vi.mock("~/components/app-context", () => ({
   usePreferences: () => ({ prefer2dStickerEditor: false }),
   useRules: () => ({
+    viewer: { available: true, catalog: { holes: [], maxId: 1_000_000 } },
     viewerAttachmentsOnly: false,
-    viewerCatalog: { holes: [], maxId: 1_000_000 },
-    viewerEnabled: true,
-    viewerKey: "key",
-    viewerOriginAllowed: true
+    viewerKey: "key"
   })
 }));
 

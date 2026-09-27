@@ -5,16 +5,16 @@
 
 import { useEffect, useState } from "react";
 import { ViewerApi } from "~/utils/viewer-api";
-import {
-  markViewerRateLimited,
-  markViewerUnsupported
-} from "./use-viewer-availability";
+import { viewerClientAvailability } from "~/utils/viewer-availability";
 
-const VIEWER_READY_TIMEOUT_MS = 6000;
+const VIEWER_READY_TIMEOUT_MS = 6_000;
 
-export type ViewerStatus = "pending" | "ready" | "unavailable";
+type ViewerStatus = "pending" | "ready" | "unavailable";
 
-export function useViewerStatus(api: ViewerApi | undefined): ViewerStatus {
+// Reports this viewer's failures to viewerClientAvailability, which gates
+// viewers mounted afterwards; the host itself falls back on `isUnavailable`.
+// Neither flag is set while the viewer is still loading.
+export function useViewerStatus(api: ViewerApi | undefined) {
   const [status, setStatus] = useState<ViewerStatus>("pending");
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function useViewerStatus(api: ViewerApi | undefined): ViewerStatus {
         return;
       }
       settled = true;
-      markViewerUnsupported("network");
+      viewerClientAvailability.reportTimeout();
       setStatus("unavailable");
     }, VIEWER_READY_TIMEOUT_MS);
     const offRateLimited = api.on("rateLimited", ({ retryAfterMs, scope }) => {
@@ -37,13 +37,13 @@ export function useViewerStatus(api: ViewerApi | undefined): ViewerStatus {
       if (scope === "ip") {
         return;
       }
-      markViewerRateLimited(retryAfterMs);
+      viewerClientAvailability.reportRateLimited(retryAfterMs);
       settled = true;
       clearTimeout(timer);
       setStatus("unavailable");
     });
     const offUnsupported = api.on("unsupported", ({ reason }) => {
-      markViewerUnsupported(reason);
+      viewerClientAvailability.reportUnsupported(api.item, reason);
       settled = true;
       clearTimeout(timer);
       setStatus("unavailable");
@@ -63,5 +63,8 @@ export function useViewerStatus(api: ViewerApi | undefined): ViewerStatus {
     };
   }, [api]);
 
-  return status;
+  return {
+    isReady: status === "ready",
+    isUnavailable: status === "unavailable"
+  };
 }

@@ -139,7 +139,7 @@ export function ApplyItemKeychain({
   }, [api]);
 
   useEffect(() => {
-    if (api === undefined || viewerStatus !== "ready") {
+    if (api === undefined || !viewerStatus.isReady) {
       return;
     }
     api.setSelection({ selection: { kind: "keychain", index: 0 } });
@@ -148,7 +148,7 @@ export function ApplyItemKeychain({
       CONFIRM_POSITION_DELAY_MS
     );
     return () => clearTimeout(unlock);
-  }, [api, viewerStatus]);
+  }, [api, viewerStatus.isReady]);
 
   function handleNextPreset() {
     api?.rerollKeychainPosition({ index: 0 });

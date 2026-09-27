@@ -249,7 +249,11 @@ function DetachCharm3d({ onClose, uid }: DetachCharmProps) {
   }));
   const { api, viewerProps } = useViewer({ item: initialItem });
 
-  useViewerStatus(api);
+  const viewerStatus = useViewerStatus(api);
+
+  if (viewerStatus.isUnavailable) {
+    return <DetachCharm2d onClose={onClose} uid={uid} />;
+  }
 
   return (
     <ViewerOverlay

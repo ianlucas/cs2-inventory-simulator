@@ -9,8 +9,6 @@ import {
   CS2EconomyItem,
   CS2InventoryItem
 } from "@ianlucas/cs2-lib";
-// Type-only so this module never depends on viewer-api at runtime (it is also
-// imported server-side).
 import type { ViewerItem } from "~/utils/viewer-api";
 
 export const DEFAULT_VIEWER_EMBED_URL = "https://3d.cstrike.app/view";
@@ -58,6 +56,36 @@ export type ViewerCatalogLike = {
   holes: readonly (readonly number[])[];
 };
 
+/**
+ * Why the server withholds the viewer, in priority order when several apply.
+ */
+export type ViewerServerReason =
+  | "disabled"
+  | "pending"
+  | "catalog-failed"
+  | "rate-limit-check-failed"
+  | "rate-limit-check-throttled"
+  | "rate-limit-exhausted";
+
+/**
+ * The server's verdict for one request, shipped through the root loader.
+ * `retryAt` is when the server expects the reason to clear, when known.
+ */
+export type ViewerServerStatus =
+  | { available: true; catalog: ViewerCatalog }
+  | { available: false; reason: ViewerServerReason; retryAt?: number };
+
+// Loose for the same reason as ViewerCatalogLike.
+export type ViewerServerStatusLike =
+  | { available: true; catalog: ViewerCatalogLike }
+  | { available: false; reason: ViewerServerReason; retryAt?: number };
+
+export function getViewerCatalog(
+  status: ViewerServerStatusLike
+): ViewerCatalogLike | undefined {
+  return status.available ? status.catalog : undefined;
+}
+
 export function isViewerIdSupported(
   catalog: ViewerCatalogLike | undefined,
   id: number
@@ -94,6 +122,14 @@ export function getViewerItemIds(item: ViewerItemInput): number[] {
     ids.push(...Object.values(viewerItem.patches));
   }
   return ids;
+}
+
+// Identifies what the viewer resolves against its catalog, so seed, wear and
+// sticker placement edits don't escape a block on an unsupported composition.
+export function getViewerItemKey(item: ViewerItemInput): string {
+  return [...new Set(getViewerItemIds(item))]
+    .sort((left, right) => left - right)
+    .join(",");
 }
 
 export function getViewerItemKind(

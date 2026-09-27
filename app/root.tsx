@@ -32,10 +32,7 @@ import { ItemSelectorProvider } from "./components/item-selector-context";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
-import {
-  resolveViewerCatalog,
-  resolveViewerOriginAllowed
-} from "./data/viewer.server";
+import { viewerServerAvailability } from "./data/viewer.server";
 import {
   ASSETS_BASE_URL,
   CLOUDFLARE_ANALYTICS_TOKEN,
@@ -45,7 +42,7 @@ import {
 } from "./env.server";
 import { middleware } from "./middleware.server";
 import { getClientRules } from "./models/rule";
-import { steamCallbackUrl } from "./models/rule.server";
+import { steamCallbackUrl, viewerKey } from "./models/rule.server";
 import { loadOrCreateUserInventory } from "./models/user.server";
 import { getBackground } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
@@ -98,14 +95,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
       viewerAssetsBaseUrl: nonEmptyString(VIEWER_ASSETS_BASE_URL),
       cloudflareAnalyticsToken: CLOUDFLARE_ANALYTICS_TOKEN,
       sourceCommit: SOURCE_COMMIT,
-      viewerOriginAllowed: resolveViewerOriginAllowed({
-        enabled: clientRules.viewerEnabled,
-        hostname: new URL(appUrl).hostname,
-        key: clientRules.viewerKey
-      }),
-      viewerCatalog: clientRules.viewerEnabled
-        ? await resolveViewerCatalog()
-        : undefined,
+      viewerKey: await viewerKey.get(),
+      viewer: viewerServerAvailability.getStatus(clientRules.viewerEnabled),
       meta: { appUrl, appSiteName }
     },
     preferences: {

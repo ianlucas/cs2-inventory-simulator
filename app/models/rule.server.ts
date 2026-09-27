@@ -195,6 +195,16 @@ export class Rule<RuleName extends string, RuleValue> {
         )
     );
   }
+
+  async isTrueForAnyone() {
+    const where = { name: this.name, value: "true" };
+    const [rule, userOverrides, groupOverrides] = await Promise.all([
+      prisma.rule.count({ where }),
+      prisma.userRule.count({ where }),
+      prisma.groupRule.count({ where })
+    ]);
+    return rule + userOverrides + groupOverrides > 0;
+  }
 }
 
 export const inventoryMaxItems = new Rule({
