@@ -7,121 +7,269 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("~/env.server", () => ({ VIEWER_EMBED_URL: undefined }));
 
+vi.mock("~/singleton.server", () => ({
+  singleton: (_name: string, factory: () => unknown) => factory()
+}));
+
 const ruleState = vi.hoisted(() => ({
   enabled: true,
-  callbackUrl: "http://localhost:3000/sign-in/steam/callback",
+  callbackUrl: "https://inventory.example.com/sign-in/steam/callback",
   key: ""
 }));
 vi.mock("~/models/rule.server", () => ({
-  viewerEnabled: { get: async () => ruleState.enabled },
+  viewerEnabled: { isTrueForAnyone: async () => ruleState.enabled },
   steamCallbackUrl: { get: async () => ruleState.callbackUrl },
   viewerKey: { get: async () => ruleState.key }
 }));
 
-async function loadModule() {
-  vi.resetModules();
-  return await import("./viewer.server");
+import {
+  VIEWER_CATALOG_REFRESH_MS,
+  VIEWER_CATALOG_RETRY_MS,
+  VIEWER_RATE_LIMIT_REFRESH_MS,
+  VIEWER_RATE_LIMIT_RETRY_MS,
+  ViewerServerAvailability
+} from "./viewer.server";
+
+const CATALOG = { maxId: 10, holes: [[2, 3]] };
+
+type Reply = {
+  status?: number;
+  body?: unknown;
+  headers?: Record<string, string>;
+};
+
+function reply({ status = 200, body, headers = {} }: Reply) {
+  return {
+    ok: status >= 200 && status < 300,
+    status,
+    headers: new Headers(headers),
+    json: async () => body
+  };
 }
 
-function okJson(body: unknown) {
-  return { ok: true, json: async () => body };
+// Routes fetches by endpoint; each handler may be swapped mid-test.
+function stubViewer(handlers: {
+  catalog?: () => Reply | Promise<Reply>;
+  rateLimit?: () => Reply | Promise<Reply>;
+}) {
+  const fetchMock = vi.fn(async (input: unknown) => {
+    const url = String(input);
+    const handler = url.endsWith("/api/catalog")
+      ? handlers.catalog
+      : url.endsWith("/api/rate-limit")
+        ? handlers.rateLimit
+        : undefined;
+    if (handler === undefined) {
+      throw new Error(`unexpected fetch ${url}`);
+    }
+    return reply(await handler());
+  });
+  vi.stubGlobal("fetch", fetchMock);
+  return {
+    fetchMock,
+    calls: (endpoint: string) =>
+      fetchMock.mock.calls.filter(([input]) => String(input).endsWith(endpoint))
+        .length
+  };
 }
+
+const healthyQuota = () => ({
+  body: { limit: 1000, remaining: 900, resetAt: null }
+});
+
+async function settle(ms = 0) {
+  await vi.advanceTimersByTimeAsync(ms);
+}
+
+beforeEach(() => {
+  vi.useFakeTimers();
+  vi.spyOn(console, "warn").mockImplementation(() => {});
+  ruleState.enabled = true;
+  ruleState.callbackUrl =
+    "https://inventory.example.com/sign-in/steam/callback";
+  ruleState.key = "";
+});
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
   vi.useRealTimers();
 });
 
-describe("resolveViewerCatalog", () => {
-  it("cold resolve awaits the first fetch and returns the manifest", async () => {
-    vi.useFakeTimers();
-    const fetchMock = vi.fn(async () => okJson({ maxId: 10, holes: [[2, 3]] }));
-    vi.stubGlobal("fetch", fetchMock);
-    const { resolveViewerCatalog } = await loadModule();
-    expect(await resolveViewerCatalog()).toEqual({
-      maxId: 10,
-      holes: [[2, 3]]
+describe("ViewerServerAvailability", () => {
+  it("reports disabled without starting the loops", async () => {
+    const { fetchMock } = stubViewer({});
+    const availability = new ViewerServerAvailability();
+    expect(availability.getStatus(false)).toEqual({
+      available: false,
+      reason: "disabled"
     });
-    expect(await resolveViewerCatalog()).toEqual({
-      maxId: 10,
-      holes: [[2, 3]]
-    });
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-  });
-
-  it("cold resolve fails closed after the bounded wait on a hung fetch, then recovers", async () => {
-    vi.useFakeTimers();
-    let settleFetch: ((value: unknown) => void) | undefined;
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(
-        () =>
-          new Promise((resolve) => {
-            settleFetch = resolve;
-          })
-      )
-    );
-    const { resolveViewerCatalog } = await loadModule();
-    const cold = resolveViewerCatalog();
-    await vi.advanceTimersByTimeAsync(1500);
-    expect(await cold).toBeUndefined();
-    settleFetch?.(okJson({ maxId: 5, holes: [] }));
-    await vi.advanceTimersByTimeAsync(0);
-    expect(await resolveViewerCatalog()).toEqual({ maxId: 5, holes: [] });
-  });
-
-  it("caches a fail-closed verdict on fetch failure instead of re-awaiting every request", async () => {
-    vi.useFakeTimers();
-    const fetchMock = vi.fn(async () => {
-      throw new Error("down");
-    });
-    vi.stubGlobal("fetch", fetchMock);
-    const { resolveViewerCatalog } = await loadModule();
-    expect(await resolveViewerCatalog()).toBeUndefined();
-    expect(await resolveViewerCatalog()).toBeUndefined();
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-  });
-});
-
-describe("warmViewerCaches", () => {
-  beforeEach(() => {
-    ruleState.enabled = true;
-    ruleState.callbackUrl = "http://localhost:3000/sign-in/steam/callback";
-    ruleState.key = "";
-  });
-
-  it("does nothing when 3D is disabled", async () => {
-    const fetchMock = vi.fn(async () => okJson({}));
-    vi.stubGlobal("fetch", fetchMock);
-    ruleState.enabled = false;
-    const { warmViewerCaches } = await loadModule();
-    await warmViewerCaches();
+    await settle();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("warms the catalog and skips the peek for a trusted origin", async () => {
-    const fetchMock = vi.fn(async (...args: unknown[]) => {
-      expect(String(args[0])).toContain("/api/catalog");
-      return okJson({ maxId: 5, holes: [] });
+  it("fails closed as pending until both loops answer, then ships the catalog", async () => {
+    stubViewer({ catalog: () => ({ body: CATALOG }), rateLimit: healthyQuota });
+    const availability = new ViewerServerAvailability();
+    expect(availability.getStatus(true)).toEqual({
+      available: false,
+      reason: "pending"
     });
-    vi.stubGlobal("fetch", fetchMock);
-    const { warmViewerCaches } = await loadModule();
-    await warmViewerCaches();
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    await settle();
+    expect(availability.getStatus(true)).toEqual({
+      available: true,
+      catalog: CATALOG
+    });
   });
 
-  it("also warms the origin peek for a non-trusted origin", async () => {
-    const fetchMock = vi.fn(async (input: unknown) =>
-      String(input).includes("/api/catalog")
-        ? okJson({ maxId: 5, holes: [] })
-        : okJson({ limit: null, remaining: null })
-    );
-    vi.stubGlobal("fetch", fetchMock);
-    ruleState.callbackUrl = "https://inventory.example.com/sign-in";
-    const { warmViewerCaches } = await loadModule();
-    await warmViewerCaches();
-    const urls = fetchMock.mock.calls.map(([input]) => String(input));
-    expect(urls.some((url) => url.includes("/api/catalog"))).toBe(true);
-    expect(urls.some((url) => url.includes("/api/rate-limit"))).toBe(true);
+  it("skips the rate limit check with a partner key", async () => {
+    ruleState.key = "partner";
+    const { calls } = stubViewer({ catalog: () => ({ body: CATALOG }) });
+    const availability = new ViewerServerAvailability();
+    availability.start();
+    await settle();
+    expect(availability.getStatus(true).available).toBe(true);
+    expect(calls("/api/rate-limit")).toBe(0);
+  });
+
+  it("skips the rate limit check on a trusted hostname", async () => {
+    ruleState.callbackUrl = "https://inventory.cstrike.app/sign-in";
+    const { calls } = stubViewer({ catalog: () => ({ body: CATALOG }) });
+    const availability = new ViewerServerAvailability();
+    availability.start();
+    await settle();
+    expect(availability.getStatus(true).available).toBe(true);
+    expect(calls("/api/rate-limit")).toBe(0);
+  });
+
+  it("refreshes the catalog on its own cycle", async () => {
+    const { calls } = stubViewer({
+      catalog: () => ({ body: CATALOG }),
+      rateLimit: healthyQuota
+    });
+    const availability = new ViewerServerAvailability();
+    availability.start();
+    await settle();
+    expect(calls("/api/catalog")).toBe(1);
+    await settle(VIEWER_CATALOG_REFRESH_MS);
+    expect(calls("/api/catalog")).toBe(2);
+  });
+
+  it("reports catalog-failed and retries on the shorter cycle", async () => {
+    let catalog: () => Reply = () => ({ status: 503 });
+    const { calls } = stubViewer({
+      catalog: () => catalog(),
+      rateLimit: healthyQuota
+    });
+    const availability = new ViewerServerAvailability();
+    availability.start();
+    await settle();
+    expect(availability.getStatus(true)).toEqual({
+      available: false,
+      reason: "catalog-failed"
+    });
+    catalog = () => ({ body: CATALOG });
+    await settle(VIEWER_CATALOG_RETRY_MS);
+    expect(calls("/api/catalog")).toBe(2);
+    expect(availability.getStatus(true).available).toBe(true);
+  });
+
+  it("treats an invalid catalog payload as a failure", async () => {
+    stubViewer({
+      catalog: () => ({ body: { maxId: "nope" } }),
+      rateLimit: healthyQuota
+    });
+    const availability = new ViewerServerAvailability();
+    availability.start();
+    await settle();
+    expect(availability.getStatus(true)).toMatchObject({
+      reason: "catalog-failed"
+    });
+  });
+
+  it("reports rate-limit-check-failed when the check errors, and retries", async () => {
+    let rateLimit: () => Reply = () => {
+      throw new Error("timeout");
+    };
+    const { calls } = stubViewer({
+      catalog: () => ({ body: CATALOG }),
+      rateLimit: () => rateLimit()
+    });
+    const availability = new ViewerServerAvailability();
+    availability.start();
+    await settle();
+    expect(availability.getStatus(true)).toEqual({
+      available: false,
+      reason: "rate-limit-check-failed",
+      retryAt: Date.now() + VIEWER_RATE_LIMIT_RETRY_MS
+    });
+    rateLimit = healthyQuota;
+    await settle(VIEWER_RATE_LIMIT_RETRY_MS);
+    expect(calls("/api/rate-limit")).toBe(2);
+    expect(availability.getStatus(true).available).toBe(true);
+  });
+
+  it("respects Retry-After when the check itself is throttled", async () => {
+    const { calls } = stubViewer({
+      catalog: () => ({ body: CATALOG }),
+      rateLimit: () => ({ status: 429, headers: { "Retry-After": "45" } })
+    });
+    const availability = new ViewerServerAvailability();
+    availability.start();
+    await settle();
+    expect(availability.getStatus(true)).toEqual({
+      available: false,
+      reason: "rate-limit-check-throttled",
+      retryAt: Date.now() + 45_000
+    });
+    await settle(44_999);
+    expect(calls("/api/rate-limit")).toBe(1);
+    await settle(1);
+    expect(calls("/api/rate-limit")).toBe(2);
+  });
+
+  it("holds an exhausted quota until it resets", async () => {
+    const resetAt = Date.now() + 20 * 60_000;
+    const { calls } = stubViewer({
+      catalog: () => ({ body: CATALOG }),
+      rateLimit: () => ({ body: { limit: 1000, remaining: 100, resetAt } })
+    });
+    const availability = new ViewerServerAvailability();
+    availability.start();
+    await settle();
+    expect(availability.getStatus(true)).toEqual({
+      available: false,
+      reason: "rate-limit-exhausted",
+      retryAt: resetAt
+    });
+    await settle(VIEWER_RATE_LIMIT_REFRESH_MS);
+    expect(calls("/api/rate-limit")).toBe(1);
+    await settle(resetAt - Date.now());
+    expect(calls("/api/rate-limit")).toBe(2);
+  });
+
+  it("stops the loops and forgets its answers once disabled everywhere", async () => {
+    const { calls } = stubViewer({
+      catalog: () => ({ body: CATALOG }),
+      rateLimit: healthyQuota
+    });
+    const availability = new ViewerServerAvailability();
+    availability.start();
+    await settle();
+    ruleState.enabled = false;
+    await settle(VIEWER_CATALOG_REFRESH_MS);
+    const catalogCalls = calls("/api/catalog");
+    const rateLimitCalls = calls("/api/rate-limit");
+    await settle(VIEWER_CATALOG_REFRESH_MS * 2);
+    expect(calls("/api/catalog")).toBe(catalogCalls);
+    expect(calls("/api/rate-limit")).toBe(rateLimitCalls);
+
+    ruleState.enabled = true;
+    expect(availability.getStatus(true)).toEqual({
+      available: false,
+      reason: "pending"
+    });
+    await settle();
+    expect(availability.getStatus(true).available).toBe(true);
   });
 });

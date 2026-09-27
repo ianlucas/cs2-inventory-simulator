@@ -143,12 +143,12 @@ function Sticker3dEditorOverlay({
   const viewerStatus = useViewerStatus(api);
 
   useEffect(() => {
-    if (viewerStatus !== "unavailable") {
+    if (!viewerStatus.isUnavailable) {
       return;
     }
     onChangeRef.current(toRecord(stickersRef.current));
     onCloseRef.current();
-  }, [viewerStatus]);
+  }, [viewerStatus.isUnavailable]);
 
   useEffect(() => {
     if (api === undefined) {

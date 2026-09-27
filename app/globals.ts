@@ -5,6 +5,7 @@
 
 import { type CS2ItemTranslationByLanguage } from "@ianlucas/cs2-lib";
 import { type SystemTranslationByLanguage } from "~/translation.server";
+import { type ViewerStatusReport } from "~/utils/viewer-availability";
 
 interface ServerGlobals {
   appLogoBase64Url: string | undefined;
@@ -24,6 +25,8 @@ interface ClientGlobals {
   systemTranslationMap: SystemTranslationByLanguage[string];
 
   inspectedItem?: unknown;
+
+  getViewerStatus?: () => ViewerStatusReport;
 }
 
 type Globals = ServerGlobals & ClientGlobals;

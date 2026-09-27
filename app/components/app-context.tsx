@@ -40,6 +40,7 @@ import {
 } from "~/utils/inventory-transform";
 import { SerializeFrom } from "~/utils/misc";
 import { cacheAuthenticatedUserId } from "~/utils/user-cached-data";
+import { viewerClientAvailability } from "~/utils/viewer-availability";
 
 const AppContext = createContext<
   | ({
@@ -117,6 +118,10 @@ export function AppProvider({
   useEffect(() => {
     CS2Economy.baseUrl = rules.assetsBaseUrl ?? CS2Economy.baseUrl;
   }, [rules.assetsBaseUrl]);
+
+  useEffect(() => {
+    viewerClientAvailability.setServerStatus(rules.viewer);
+  }, [rules.viewer]);
 
   useEffect(() => {
     cacheInventoryData(inventory.stringify());

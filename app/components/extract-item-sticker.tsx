@@ -86,7 +86,11 @@ function ExtractItemSticker3d(props: ExtractItemStickerProps) {
   const { handleExtract } = useExtractSticker(props);
   const { api, viewerProps } = useViewer({ item });
 
-  useViewerStatus(api);
+  const viewerStatus = useViewerStatus(api);
+
+  if (viewerStatus.isUnavailable) {
+    return <ExtractItemSticker2d {...props} />;
+  }
 
   return (
     <ViewerOverlay

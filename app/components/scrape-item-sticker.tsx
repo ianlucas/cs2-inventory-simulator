@@ -272,9 +272,11 @@ function ScrapeItemSticker3d({ onClose, uid }: ScrapeItemStickerProps) {
     }
   });
 
-  // Bare call: flips availability so the parent swaps to 2D when the viewer
-  // is rate-limited or never becomes ready.
-  useViewerStatus(api);
+  const viewerStatus = useViewerStatus(api);
+
+  if (viewerStatus.isUnavailable) {
+    return <ScrapeItemSticker2d onClose={onClose} uid={uid} />;
+  }
 
   return (
     <ViewerOverlay

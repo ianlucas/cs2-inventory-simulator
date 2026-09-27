@@ -58,17 +58,15 @@ export interface ViewerState {
 export type RateLimitScope = "ip" | "origin" | "partner";
 
 /**
- * Why the viewer can't render the requested item, which the host maps to a
- * cooldown LENGTH (see markViewerUnsupported).
+ * Why the viewer can't render the requested item (see
+ * ViewerClientAvailability.reportUnsupported for how the host reacts).
  *
  * `webgl` means the device can't do 3D at all (WebGL or hardware acceleration
- * unavailable, or a context that keeps dying); being device-level, it suppresses
- * 3D for a good while. `network` means an asset or API load failed AFTER the
- * viewer's own retries (e.g. a Great-Firewall-throttled CDN edge); being
- * transient, it gets a short cooldown that backs off if it keeps failing.
- * `weapon`, `sticker`, `keychain` and `patch` are cs2-lib catalog mismatches,
- * handled by the per-item viewerCatalog gate; `keychain` also covers a charmed
- * weapon whose physics engine failed to load.
+ * unavailable, or a context that keeps dying). `network` means an asset or API
+ * load failed AFTER the viewer's own retries (e.g. a Great-Firewall-throttled
+ * CDN edge). `weapon`, `sticker`, `keychain` and `patch` are cs2-lib catalog
+ * mismatches for the requested item; `keychain` also covers a charmed weapon
+ * whose physics engine failed to load.
  *
  * Any of them flips the host back to its 2D editor. `asset` is the
  * pre-reason-split name, still accepted (and treated as network) from a stale or
@@ -161,6 +159,18 @@ interface PendingReplyOf<K extends keyof ReplyMap> {
 
 type PendingReply = PendingReplyOf<"state"> | PendingReplyOf<"captured">;
 
+function parseViewerItem(value: string | null): ViewerItem | undefined {
+  if (value === null) {
+    return undefined;
+  }
+  try {
+    const item = JSON.parse(value) as ViewerItem | null;
+    return typeof item?.id === "number" ? item : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /**
  * Typed wrapper over the CS2 3D viewer's postMessage embed API. Construct it with
  * the viewer iframe; it owns the readiness handshake, buffers commands issued
@@ -171,6 +181,11 @@ export class ViewerApi extends EventTarget {
   readonly origin: string;
   isReady = false;
   lastState: ViewerState | undefined;
+  /**
+   * The item the viewer was last asked to show: seeded from the iframe's
+   * `?item=`, then tracked through setItem and state reports.
+   */
+  item: ViewerItem | undefined;
 
   private readonly iframe: HTMLIFrameElement;
   private destroyed = false;
@@ -189,8 +204,9 @@ export class ViewerApi extends EventTarget {
   constructor(iframe: HTMLIFrameElement, options?: ViewerApiOptions) {
     super();
     this.iframe = iframe;
-    this.origin =
-      options?.origin ?? new URL(iframe.src, window.location.href).origin;
+    const src = new URL(iframe.src, window.location.href);
+    this.origin = options?.origin ?? src.origin;
+    this.item = parseViewerItem(src.searchParams.get("item"));
     window.addEventListener("message", this.onMessage);
     iframe.addEventListener("load", this.onLoad);
     this.solicitReady();
@@ -241,7 +257,8 @@ export class ViewerApi extends EventTarget {
   }
 
   setItem(item: ViewerItemInput): void {
-    this.send("setItem", { item: toViewerItem(item) });
+    this.item = toViewerItem(item);
+    this.send("setItem", { item: this.item });
   }
 
   setStickerWear(data: { index: number; wear: number }): void {
@@ -527,6 +544,7 @@ export class ViewerApi extends EventTarget {
         if (pending.kind === "state") {
           const state = data as ViewerState;
           this.lastState = state;
+          this.item = state.item;
           pending.resolve(state);
         } else {
           pending.resolve(data as ViewerCaptured);
@@ -542,6 +560,7 @@ export class ViewerApi extends EventTarget {
       case "change": {
         const state = data as ViewerState;
         this.lastState = state;
+        this.item = state.item;
         this.dispatch("change", state);
         break;
       }

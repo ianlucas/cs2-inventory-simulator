@@ -193,7 +193,7 @@ function ApplyItemSticker3d({
   }, [api, newIndex]);
 
   useEffect(() => {
-    if (api === undefined || viewerStatus !== "ready") {
+    if (api === undefined || !viewerStatus.isReady) {
       return;
     }
     api.setActiveSticker({ index: newIndex });
@@ -210,7 +210,7 @@ function ApplyItemSticker3d({
       clearInterval(pulse);
       clearTimeout(unlock);
     };
-  }, [api, viewerStatus, newIndex]);
+  }, [api, viewerStatus.isReady, newIndex]);
 
   function handleWearChange(nextWear: number) {
     setWear(nextWear);
@@ -232,6 +232,16 @@ function ApplyItemSticker3d({
   function handleCancelConfirm() {
     confirmedRef.current = false;
     setConfirmed(false);
+  }
+
+  if (viewerStatus.isUnavailable) {
+    return (
+      <ApplyItemSticker2d
+        onClose={onClose}
+        stickerUid={stickerUid}
+        targetUid={targetUid}
+      />
+    );
   }
 
   return (

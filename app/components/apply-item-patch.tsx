@@ -18,6 +18,7 @@ import { playSound } from "~/utils/sound";
 import { useInventory, useTranslate } from "./app-context";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
 import { Overlay } from "./overlay";
@@ -78,6 +79,7 @@ function ApplyItemPatch3d({
     patches: { ...existing, [slot]: patchItem.id }
   }));
   const { api, viewerProps } = useViewer({ item: initialItem });
+  const viewerStatus = useViewerStatus(api);
   const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
@@ -97,6 +99,16 @@ function ApplyItemPatch3d({
       patches: { ...existing, [nextSlot]: patchItem.id }
     });
     api?.focusPatch({ slot: nextSlot });
+  }
+
+  if (viewerStatus.isUnavailable) {
+    return (
+      <ApplyItemPatch2d
+        onClose={onClose}
+        patchUid={patchUid}
+        targetUid={targetUid}
+      />
+    );
   }
 
   return (

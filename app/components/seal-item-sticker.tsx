@@ -226,7 +226,11 @@ function SealItemSticker3d(props: SealItemStickerProps) {
     item: { id: stickerItem.getDisplayCase().id }
   });
 
-  useViewerStatus(api);
+  const viewerStatus = useViewerStatus(api);
+
+  if (viewerStatus.isUnavailable) {
+    return <SealItemSticker2d {...props} />;
+  }
 
   return (
     <ViewerOverlay header={<SealItemStickerHeader />} viewerProps={viewerProps}>
