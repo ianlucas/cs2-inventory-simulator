@@ -7,7 +7,8 @@ import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { createHash } from "crypto";
 import { readdirSync, readFileSync } from "fs";
-import { resolve } from "path";
+import { dirname, relative, resolve } from "path";
+import { reactRouterHonoServer } from "react-router-hono-server/dev";
 import { minify_sync } from "terser";
 import ts from "typescript";
 import { defineConfig } from "vite";
@@ -15,6 +16,19 @@ import { defineConfig } from "vite";
 export default defineConfig({
   server: {
     port: 3000
+  },
+  environments: {
+    client: {
+      build: {
+        sourcemap: process.env.BUILD_SOURCE_MAPS === "true" ? "hidden" : false,
+        rolldownOptions: {
+          output: {
+            sourcemapPathTransform: (source, sourcemapPath) =>
+              relative(process.cwd(), resolve(dirname(sourcemapPath), source))
+          }
+        }
+      }
+    }
   },
   build: {
     rolldownOptions: {
@@ -33,7 +47,11 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true
   },
-  plugins: [tailwindcss(), !process.env.VITEST && reactRouter()],
+  plugins: [
+    tailwindcss(),
+    !process.env.VITEST && reactRouterHonoServer(),
+    !process.env.VITEST && reactRouter()
+  ],
   define: {
     __SPLASH_SCRIPT__: JSON.stringify(
       minify_sync(

@@ -5,6 +5,7 @@
 
 import { prisma } from "~/db.server";
 import { singleton } from "~/singleton.server";
+import { logError } from "~/utils/monitoring";
 import {
   getEconomyPriceSourceDate,
   getEconomyPriceSourceUrl,
@@ -35,7 +36,6 @@ async function createMeta() {
 }
 
 export async function syncEconomyPrices() {
-  const startedAt = performance.now();
   const sourceDate = getEconomyPriceSourceDate();
   const meta = await createMeta();
   if (meta.lastSucceededSourceDate?.getTime() === sourceDate.getTime()) {
@@ -48,7 +48,7 @@ export async function syncEconomyPrices() {
   try {
     await waitForEconomyProjection();
     const { prices, unmatchedNames } = await fetchEconomyPrices(sourceDate);
-    const result = await prisma.$transaction(
+    await prisma.$transaction(
       async (tx) => {
         const projectedIds = new Set(
           (await tx.economyItem.findMany({ select: { id: true } })).map(
@@ -89,12 +89,8 @@ export async function syncEconomyPrices() {
           },
           where: { id: META_ID }
         });
-        return { mirrored: mirrored.length, unmatched: unmatched.length };
       },
       { maxWait: 30_000, timeout: 180_000 }
-    );
-    console.log(
-      `Economy prices: mirrored ${result.mirrored} items for ${priceSourceDateString(sourceDate)} (${result.unmatched} unmatched) in ${Math.round(performance.now() - startedAt)}ms.`
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error.";
@@ -105,9 +101,10 @@ export async function syncEconomyPrices() {
       },
       where: { id: META_ID }
     });
-    console.log(
-      `Economy prices: failed to mirror ${priceSourceDateString(sourceDate)}. ${message}`
-    );
+    logError("Economy prices: failed to mirror.", {
+      error,
+      extra: { sourceDate: priceSourceDateString(sourceDate) }
+    });
   }
 }
 
@@ -120,8 +117,8 @@ function schedule(intervalMs: number, run: () => Promise<void>) {
     running = true;
     try {
       await run();
-    } catch {
-      console.log("Economy prices: job failed.");
+    } catch (error) {
+      logError("Economy prices: job failed.", { error });
     } finally {
       running = false;
     }

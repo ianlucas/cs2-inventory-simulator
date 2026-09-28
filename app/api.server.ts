@@ -3,6 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { logError } from "./utils/monitoring";
+
 export function api<T, U>(action: (args: T) => Promise<U>) {
   return async function handler(args: T): Promise<U> {
     try {
@@ -12,19 +14,18 @@ export function api<T, U>(action: (args: T) => Promise<U>) {
         throw error;
       }
       let errorMessage = "Internal server error";
-      let logError = true;
+      let shouldLog = true;
       let statusCode = 500;
       if (error instanceof Error) {
         if (error.name === "ZodError") {
-          console.log(error);
           errorMessage =
             "Please check this endpoint's documentation for the correct request parameters.";
-          logError = false;
+          shouldLog = false;
           statusCode = 400;
         }
       }
-      if (logError) {
-        console.error(error);
+      if (shouldLog) {
+        logError("API request failed.", { error });
       }
       throw new Response(JSON.stringify({ error: errorMessage }), {
         status: statusCode,

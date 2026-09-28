@@ -14,6 +14,7 @@ import {
   ViewerServerStatusLike
 } from "~/data/viewer";
 import { clientGlobals, isServerContext } from "~/globals";
+import { logWarning } from "~/utils/monitoring";
 import type { ViewerUnsupportedReason } from "~/utils/viewer-api";
 
 // How long a `timeout` or `network` failure keeps new viewers from mounting,
@@ -153,8 +154,9 @@ export class ViewerClientAvailability {
         }
         const key = getViewerItemKey(item);
         this.blocked.set(key, { key, reason, at: Date.now() });
-        console.warn(
-          `[InventorySimulator] 3D viewer can't render item ${key} (${reason}); using 2D for it.`
+        logWarning(
+          `[InventorySimulator] 3D viewer can't render an item (${reason}); using 2D for it.`,
+          { extra: { key } }
         );
         return this.emit();
       }

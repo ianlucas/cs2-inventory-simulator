@@ -4,12 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2Inventory } from "@ianlucas/cs2-lib";
-import { safeLoadInventory } from "~/utils/inventory";
 import { prisma } from "~/db.server";
 import { inventoryInactivityResetDays } from "~/models/rule.server";
 import { getUserInventory, updateUserInventory } from "~/models/user.server";
 import { singleton } from "~/singleton.server";
 import { DAY_IN_MS, isInactive } from "~/utils/inactivity";
+import { safeLoadInventory } from "~/utils/inventory";
+import { logError } from "~/utils/monitoring";
 
 function isInventoryEmpty(rawInventory: string | null) {
   if (rawInventory === null) {
@@ -32,7 +33,6 @@ export async function resetInactiveInventories() {
       lastSeenAt: { lt: new Date(now - days * DAY_IN_MS) }
     }
   });
-  let count = 0;
   for (const { id, lastSeenAt } of users) {
     try {
       // Re-evaluate per user to honor user/group overrides: 0 = immune, a
@@ -47,15 +47,12 @@ export async function resetInactiveInventories() {
         continue;
       }
       await updateUserInventory(id, new CS2Inventory().stringify());
-      count += 1;
     } catch (error) {
-      console.error(`Failed to reset inventory for user ${id}.`, error);
+      logError("Failed to reset an inactive inventory.", {
+        error,
+        extra: { userId: id }
+      });
     }
-  }
-  if (count > 0) {
-    console.log(
-      `Reset ${count} inactive ${count === 1 ? "inventory" : "inventories"}.`
-    );
   }
 }
 

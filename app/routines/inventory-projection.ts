@@ -16,6 +16,7 @@ import { fileURLToPath } from "node:url";
 import { prisma } from "~/db.server";
 import { singleton } from "~/singleton.server";
 import { safeLoadInventory } from "~/utils/inventory";
+import { logError } from "~/utils/monitoring";
 
 const BACKFILL_BATCH_SIZE = 200;
 const BACKFILL_INTERVAL_MS = 10 * 60_000;
@@ -224,16 +225,12 @@ export async function waitForEconomyProjection(
 }
 
 export async function syncEconomyProjection() {
-  const startedAt = performance.now();
   const version = getCs2LibVersion();
   const meta = await createMeta();
   if (
     meta.cs2LibVersion === version &&
     meta.economyProjectionVersion === ECONOMY_PROJECTION_VERSION
   ) {
-    console.log(
-      `Inventory economy projection: unchanged in ${Math.round(performance.now() - startedAt)}ms.`
-    );
     return;
   }
   const items = projectEconomyItems();
@@ -257,9 +254,6 @@ export async function syncEconomyProjection() {
       });
     },
     { maxWait: 30_000, timeout: 180_000 }
-  );
-  console.log(
-    `Inventory economy projection: refreshed ${items.length} items in ${Math.round(performance.now() - startedAt)}ms.`
   );
 }
 
@@ -360,7 +354,6 @@ async function projectUsers(userIds: string[]) {
 }
 
 export async function runLiveInventoryProjection(liveSince: Date) {
-  const startedAt = performance.now();
   const users = await prisma.$queryRaw<Array<{ id: string }>>`
     SELECT "User"."id"
     FROM "User"
@@ -378,16 +371,14 @@ export async function runLiveInventoryProjection(liveSince: Date) {
     LIMIT ${LIVE_BATCH_SIZE}
   `;
   const counts = await projectUsers(users.map((user) => user.id));
-  if (users.length === 0) {
-    return;
+  if (counts.failed > 0) {
+    logError("Inventory live projection: some users failed to project.", {
+      extra: counts
+    });
   }
-  console.log(
-    `Inventory live projection: selected ${users.length}, projected ${counts.projected}, skipped ${counts.skipped}, failed ${counts.failed} in ${Math.round(performance.now() - startedAt)}ms.`
-  );
 }
 
 export async function runInventoryBackfill() {
-  const startedAt = performance.now();
   const meta = await createMeta();
   if (meta.backfillCompletedAt !== null) {
     return;
@@ -413,9 +404,11 @@ export async function runInventoryBackfill() {
         : { backfillCursor: lastUser?.id },
     where: { id: META_ID }
   });
-  console.log(
-    `Inventory backfill: selected ${users.length}, projected ${counts.projected}, skipped ${counts.skipped}, failed ${counts.failed} in ${Math.round(performance.now() - startedAt)}ms.`
-  );
+  if (counts.failed > 0) {
+    logError("Inventory backfill: some users failed to project.", {
+      extra: counts
+    });
+  }
 }
 
 function schedule(name: string, intervalMs: number, run: () => Promise<void>) {
@@ -428,8 +421,10 @@ function schedule(name: string, intervalMs: number, run: () => Promise<void>) {
     try {
       await run();
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unknown error.";
-      console.log(`${name}: job failed. ${message}`);
+      logError("Inventory projection: job failed.", {
+        error,
+        extra: { job: name }
+      });
     } finally {
       running = false;
     }
