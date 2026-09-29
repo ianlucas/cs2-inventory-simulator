@@ -21,14 +21,14 @@ import {
   recycleIconGenerator,
   setIconGeneratorWanted,
   subscribeIconGeneratorRole
-} from "./item-icon-generator-role";
+} from "./item-icon-generator-role.client";
 import {
   hasIcon,
   markIconUnavailable,
   publishIcon,
   releaseIcon,
   retractIconUnavailable
-} from "./item-icon-registry";
+} from "./item-icon-registry.client";
 import {
   IconEntry,
   deleteIcon,

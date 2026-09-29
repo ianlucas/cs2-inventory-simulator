@@ -32,16 +32,8 @@ export function getIconUrl(key: string): string | undefined {
   return urls.get(key);
 }
 
-export function getIconUrlServer(): undefined {
-  return undefined;
-}
-
 export function isIconUnavailable(key: string): boolean {
   return unavailable.has(key);
-}
-
-export function isIconUnavailableServer(): boolean {
-  return false;
 }
 
 export function hasIcon(key: string): boolean {

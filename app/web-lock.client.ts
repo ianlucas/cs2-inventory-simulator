@@ -20,7 +20,7 @@ function waitForRelease(
     .catch(() => {});
 }
 
-export function claimTabLock(
+export function holdWebLock(
   name: string,
   { onGranted }: { onGranted?: () => void } = {}
 ): Promise<boolean> {

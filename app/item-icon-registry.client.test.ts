@@ -5,14 +5,14 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-type Registry = typeof import("./item-icon-registry");
+type Registry = typeof import("./item-icon-registry.client");
 
 const revoked: string[] = [];
 let nextUrl = 0;
 
 async function load(): Promise<Registry> {
   vi.resetModules();
-  return await import("./item-icon-registry");
+  return await import("./item-icon-registry.client");
 }
 
 beforeEach(() => {

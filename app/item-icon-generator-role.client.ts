@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { claimTabLock } from "./tab-leader.client";
+import { holdWebLock } from "./web-lock.client";
 
 export const ICON_GENERATOR_LOCK = "cs2-inventory-simulator:icon-generator";
 
@@ -45,10 +45,6 @@ export function isIconGeneratorWanted(): boolean {
   return wanted;
 }
 
-export function isIconGeneratorWantedServer(): boolean {
-  return false;
-}
-
 export function subscribeIconGeneratorWanted(listener: () => void): () => void {
   wantedListeners.add(listener);
   return () => wantedListeners.delete(listener);
@@ -70,10 +66,6 @@ export function setIconGeneratorWanted(next: boolean): void {
 
 export function getIconGeneratorGeneration(): number {
   return generation;
-}
-
-export function getIconGeneratorGenerationServer(): number {
-  return 0;
 }
 
 /**
@@ -134,7 +126,7 @@ export function claimIconGeneratorRole(): void {
     return;
   }
   setRole("claiming");
-  void claimTabLock(ICON_GENERATOR_LOCK, {
+  void holdWebLock(ICON_GENERATOR_LOCK, {
     onGranted: () => setRole("generator")
   }).then((granted) => setRole(granted ? "generator" : "bystander"));
 }
