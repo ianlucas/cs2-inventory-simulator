@@ -127,7 +127,7 @@ export const ukrainian = {
   HeaderCraftCannotCraft: "Ви не можете створювати предмети.",
   HeaderCraftInventoryFull: "Інвентар заповнено.",
   HeaderCraftLabel: "Створити предмети",
-  HeaderDonate: "Підтримати",
+  HeaderDonate: "Пригостити кавою",
   HeaderInventoryLabel: "Інвентар",
   HeaderSettingsLabel: "Налаштування",
   HeaderSignInLabel: "Увійти",

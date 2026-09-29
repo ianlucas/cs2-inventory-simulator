@@ -125,7 +125,7 @@ export const norwegian = {
   HeaderCraftCannotCraft: "Du kan ikke lage.",
   HeaderCraftInventoryFull: "Lageret ditt er fullt.",
   HeaderCraftLabel: "Lag gjenstand",
-  HeaderDonate: "Doner",
+  HeaderDonate: "Spander en kaffe",
   HeaderInventoryLabel: "Lager",
   HeaderSettingsLabel: "Innstillinger",
   HeaderSignInLabel: "Logg på for å synkronisere",

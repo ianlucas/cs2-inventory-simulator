@@ -123,7 +123,7 @@ export const indonesian = {
   GridItemNoItemsToDisplay: "Tidak ada item untuk ditampilkan",
   HeaderCraftCannotCraft: "Kamu tidak bisa craft.",
   HeaderCraftInventoryFull: "Inventaris kamu penuh.",
-  HeaderDonate: "Donasi",
+  HeaderDonate: "Traktir kopi",
   HeaderInventoryLabel: "Inventaris",
   HeaderSettingsLabel: "Pengaturan",
   HeaderSignInLabel: "Masuk untuk sinkronisasi",

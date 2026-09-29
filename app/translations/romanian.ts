@@ -126,7 +126,7 @@ export const romanian = {
   HeaderCraftCannotCraft: "Nu poți crea.",
   HeaderCraftInventoryFull: "Inventarul este plin.",
   HeaderCraftLabel: "Creează obiecte",
-  HeaderDonate: "Donează",
+  HeaderDonate: "Cumpără-mi o cafea",
   HeaderInventoryLabel: "Inventar",
   HeaderSettingsLabel: "Setări",
   HeaderSignInLabel: "Autentifică-te",

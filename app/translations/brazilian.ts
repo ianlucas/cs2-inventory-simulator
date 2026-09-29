@@ -126,7 +126,7 @@ export const brazilian = {
   HeaderCraftCannotCraft: "Você não pode criar itens.",
   HeaderCraftInventoryFull: "Seu inventário está cheio.",
   HeaderCraftLabel: "Criar Item",
-  HeaderDonate: "Doar",
+  HeaderDonate: "Doe-me um café",
   HeaderInventoryLabel: "Inventário",
   HeaderSettingsLabel: "Configurações",
   HeaderSignInLabel: "Entrar e sincronizar",

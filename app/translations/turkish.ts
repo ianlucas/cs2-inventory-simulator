@@ -127,7 +127,7 @@ export const turkish = {
   HeaderCraftCannotCraft: "Eşya oluşturamazsın.",
   HeaderCraftInventoryFull: "Envanter dolu.",
   HeaderCraftLabel: "Eşya oluştur",
-  HeaderDonate: "Bağış yap",
+  HeaderDonate: "Bana bir kahve ısmarla",
   HeaderInventoryLabel: "Envanter",
   HeaderSettingsLabel: "Ayarlar",
   HeaderSignInLabel: "Giriş yap",

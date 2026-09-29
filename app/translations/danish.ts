@@ -126,7 +126,7 @@ export const danish = {
   HeaderCraftCannotCraft: "Du kan ikke fremstille.",
   HeaderCraftInventoryFull: "Dit inventar er fuldt.",
   HeaderCraftLabel: "Fremstil genstand",
-  HeaderDonate: "Donér",
+  HeaderDonate: "Giv en kop kaffe",
   HeaderInventoryLabel: "Inventar",
   HeaderSettingsLabel: "Indstillinger",
   HeaderSignInLabel: "Log ind for at synkronisere",

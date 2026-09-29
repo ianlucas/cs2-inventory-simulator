@@ -127,7 +127,7 @@ export const thai = {
   HeaderCraftCannotCraft: "คุณไม่สามารถสร้างไอเท็มได้",
   HeaderCraftInventoryFull: "คลังเต็มแล้ว",
   HeaderCraftLabel: "สร้างไอเท็ม",
-  HeaderDonate: "บริจาค",
+  HeaderDonate: "เลี้ยงกาแฟผมสักแก้ว",
   HeaderInventoryLabel: "คลัง",
   HeaderSettingsLabel: "การตั้งค่า",
   HeaderSignInLabel: "เข้าสู่ระบบ",

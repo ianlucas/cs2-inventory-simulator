@@ -22,6 +22,7 @@
 
   --animate-overlay-open: overlay-open 467ms ease-out both;
   --animate-overlay-close: overlay-close 517ms ease-in both;
+  --animate-wiggle: wiggle 600ms ease-in-out infinite;
 }
 
 /*
@@ -140,6 +141,19 @@
   100% {
     filter: brightness(1);
     transform: scale(1);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-12deg);
+  }
+  75% {
+    transform: rotate(12deg);
   }
 }
 
