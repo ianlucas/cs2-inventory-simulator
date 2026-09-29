@@ -9,7 +9,7 @@ import {
   CS2ItemType
 } from "@ianlucas/cs2-lib";
 import { useTranslate } from "~/components/app-context";
-import { has } from "~/utils/misc";
+import { has } from "~/shared/misc";
 
 const ITEM_TYPES_WITHOUT_NAME: CS2ItemType[] = [
   CS2ItemType.Collectible,

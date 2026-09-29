@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
-import { noop } from "~/utils/misc";
-import { ViewerApi } from "~/utils/viewer-api";
-import { viewerClientAvailability } from "~/utils/viewer-availability";
+import { noop } from "~/shared/misc";
+import { ViewerApi } from "~/viewer-api.client";
+import { viewerClientAvailability } from "~/viewer-client-availability";
 
 const VIEWER_READY_TIMEOUT_MS = 6_000;
 

@@ -8,7 +8,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
-import { playSound } from "~/utils/sound";
+import { playSound } from "~/sound.client";
 import { useInventory, useTranslate } from "./app-context";
 import { HoldButton } from "./hold-button";
 import { useViewer } from "./hooks/use-viewer";

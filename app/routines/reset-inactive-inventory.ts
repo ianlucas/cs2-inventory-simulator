@@ -7,10 +7,10 @@ import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { inventoryInactivityResetDays } from "~/models/rule.server";
 import { getUserInventory, updateUserInventory } from "~/models/user.server";
+import { DAY_IN_MS, isInactive } from "~/shared/inactivity";
+import { safeLoadInventory } from "~/shared/inventory";
+import { logError } from "~/shared/monitoring";
 import { singleton } from "~/singleton.server";
-import { DAY_IN_MS, isInactive } from "~/utils/inactivity";
-import { safeLoadInventory } from "~/utils/inventory";
-import { logError } from "~/utils/monitoring";
 
 function isInventoryEmpty(rawInventory: string | null) {
   if (rawInventory === null) {

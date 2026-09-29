@@ -13,7 +13,7 @@ import {
   INVENTORY_PRIMARY_FILTERS,
   INVENTORY_SECONDARY_FILTERS,
   INVENTORY_SORTERS
-} from "~/utils/inventory-filters";
+} from "~/shared/inventory-filters";
 import { useInventoryFilter, useTranslate } from "./app-context";
 import { InventoryFilterButton } from "./inventory-filter-button";
 import { Select } from "./select";

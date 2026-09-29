@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { claimTabLock } from "./tab-leader";
+import { claimTabLock } from "./tab-leader.client";
 
 export const ICON_GENERATOR_LOCK = "cs2-inventory-simulator:icon-generator";
 

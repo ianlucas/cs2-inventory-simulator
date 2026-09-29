@@ -13,7 +13,7 @@ import {
   useState,
   WheelEvent
 } from "react";
-import { range } from "~/utils/number";
+import { range } from "~/shared/number";
 import { useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
 

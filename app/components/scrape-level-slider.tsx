@@ -9,7 +9,7 @@ import {
   CS2_STICKER_WEAR_FACTOR
 } from "@ianlucas/cs2-lib";
 import { useEffect, useRef } from "react";
-import { getTypedFromLocalStorage } from "~/utils/localstorage";
+import { getTypedFromLocalStorage } from "~/localstorage";
 
 const SCRATCH_THROTTLE_MS = 500;
 

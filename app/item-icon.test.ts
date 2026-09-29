@@ -6,7 +6,7 @@
 import { CS2_ITEMS, CS2Economy, CS2ItemType, ensure } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations";
 import { describe, expect, it } from "vitest";
-import { ViewerCatalogLike } from "~/data/viewer";
+import { ViewerCatalogLike } from "~/viewer";
 import { getItemIconKey, isIconRedundant, isIconRenderable } from "./item-icon";
 
 CS2Economy.load({ items: CS2_ITEMS, language: english });

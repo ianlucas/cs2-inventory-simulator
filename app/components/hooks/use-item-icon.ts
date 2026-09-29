@@ -12,25 +12,19 @@ import {
   useSyncExternalStore
 } from "react";
 import { usePreferences, useRules } from "~/components/app-context";
-import { getViewerCatalog, ViewerItemInput } from "~/data/viewer";
-import {
-  getItemIconKey,
-  isIconRedundant,
-  isIconRenderable
-} from "~/utils/item-icon";
-import { pauseIconGeneration } from "~/utils/item-icon-generator-role";
-import { discardIcon, forgetIcon, requestIcon } from "~/utils/item-icon-queue";
+import { getViewerCatalog, ViewerItemInput } from "~/viewer";
+import { getItemIconKey, isIconRedundant, isIconRenderable } from "~/item-icon";
+import { pauseIconGeneration } from "~/item-icon-generator-role";
+import { discardIcon, forgetIcon, requestIcon } from "~/item-icon-queue.client";
 import {
   getIconUrl,
   getIconUrlServer,
   isIconUnavailable,
   isIconUnavailableServer,
   subscribeIcon
-} from "~/utils/item-icon-registry";
-import { observeIconTile } from "~/utils/item-icon-visibility";
-import { isOurHostname } from "~/utils/misc";
-
-const NOOP = () => {};
+} from "~/item-icon-registry";
+import { observeIconTile } from "~/item-icon-visibility.client";
+import { isOurHostname, noop } from "~/shared/misc";
 
 function getItemEditedAt(item: ViewerItemInput): number | undefined {
   if (item instanceof CS2InventoryItem) {
@@ -80,7 +74,7 @@ export function useItemIcon(item: ViewerItemInput, wanted: boolean) {
 
   const subscribe = useCallback(
     (listener: () => void) =>
-      key === undefined ? NOOP : subscribeIcon(key, listener),
+      key === undefined ? noop : subscribeIcon(key, listener),
     [key]
   );
 

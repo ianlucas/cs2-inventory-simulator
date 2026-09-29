@@ -27,8 +27,8 @@ import {
   keychainPositionToString,
   keychainSeedStringMaxLen,
   validateKeychainSeed
-} from "~/utils/economy";
-import { range } from "~/utils/number";
+} from "~/shared/economy";
+import { range } from "~/shared/number";
 import { useTranslate } from "./app-context";
 import {
   AttachmentEditorDrawer,

@@ -5,7 +5,7 @@
 
 import { type CS2ItemTranslationByLanguage } from "@ianlucas/cs2-lib";
 import { type SystemTranslationByLanguage } from "~/translation.server";
-import { type ViewerStatusReport } from "~/utils/viewer-availability";
+import { type ViewerStatusReport } from "~/viewer-client-availability";
 
 interface ServerGlobals {
   appLogoBase64Url: string | undefined;

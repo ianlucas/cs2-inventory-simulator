@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { isOurHostname } from "~/utils/misc";
+import { isOurHostname } from "~/shared/misc";
 import { useTranslate } from "./app-context";
 import { HeaderLink } from "./header-link";
 

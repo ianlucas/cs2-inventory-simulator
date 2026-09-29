@@ -25,7 +25,7 @@ import {
   tooManyRequests,
   unauthorized
 } from "~/responses.server";
-import { nonNegativeInt } from "~/utils/shapes";
+import { nonNegativeInt } from "~/shared/shapes";
 import type { Route } from "./+types/api.consume-item-spray._index";
 
 export const action = api(async ({ request }: Route.ActionArgs) => {

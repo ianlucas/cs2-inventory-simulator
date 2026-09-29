@@ -7,7 +7,7 @@ import { assert } from "@ianlucas/cs2-lib";
 import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
-import { playSound } from "~/utils/sound";
+import { playSound } from "~/sound.client";
 
 export function useUnlockCase() {
   const [inventory] = useInventory();

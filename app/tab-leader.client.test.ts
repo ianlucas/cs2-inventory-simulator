@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { claimTabLock } from "./tab-leader";
+import { claimTabLock } from "./tab-leader.client";
 
 type RequestArgs =
   | [string, LockOptions, LockGrantedCallback<unknown>]

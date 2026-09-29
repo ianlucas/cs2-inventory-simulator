@@ -9,8 +9,10 @@ import {
   viewerEnabled,
   viewerKey
 } from "~/models/rule.server";
+import { Loop } from "~/shared/loop";
+import { getErrorMessage } from "~/shared/misc";
+import { logError } from "~/shared/monitoring";
 import { singleton } from "~/singleton.server";
-import { logError } from "~/utils/monitoring";
 import {
   DEFAULT_VIEWER_EMBED_URL,
   ViewerCatalog,
@@ -87,37 +89,6 @@ function parseCatalog(data: unknown): ViewerCatalog | undefined {
   return { maxId: catalog.maxId, holes };
 }
 
-function describeError(error: unknown) {
-  return error instanceof Error ? error.message : String(error);
-}
-
-/**
- * A self-rescheduling task: `tick` returns the delay until its next run, or
- * `undefined` to stop. `start` is idempotent.
- */
-class Loop {
-  private running = false;
-
-  constructor(private readonly tick: () => Promise<number | undefined>) {}
-
-  start() {
-    if (this.running) {
-      return;
-    }
-    this.running = true;
-    void this.run();
-  }
-
-  private async run() {
-    const delay = await this.tick();
-    if (delay === undefined) {
-      this.running = false;
-      return;
-    }
-    setTimeout(() => void this.run(), delay);
-  }
-}
-
 /**
  * Decides, per request, whether the client may use the 3D viewer.
  *
@@ -191,7 +162,7 @@ export class ViewerServerAvailability {
         failure = `HTTP ${response.status}`;
       }
     } catch (error) {
-      failure = describeError(error);
+      failure = getErrorMessage(error);
     }
     if (catalog !== undefined) {
       this.catalog = { status: "ok", catalog };
@@ -215,7 +186,7 @@ export class ViewerServerAvailability {
       hostname = new URL(await steamCallbackUrl.get()).hostname;
       key = await viewerKey.get();
     } catch (error) {
-      return this.setRateLimitFailure(describeError(error));
+      return this.setRateLimitFailure(getErrorMessage(error));
     }
     if (key.trim() !== "" || isTrustedHostname(hostname)) {
       this.rateLimit = { status: "ok" };
@@ -230,7 +201,7 @@ export class ViewerServerAvailability {
         signal: AbortSignal.timeout(VIEWER_FETCH_TIMEOUT_MS)
       });
     } catch (error) {
-      return this.setRateLimitFailure(describeError(error));
+      return this.setRateLimitFailure(getErrorMessage(error));
     }
     if (response.status === 429) {
       const retryAfterSeconds = Number(response.headers.get("Retry-After"));
@@ -249,7 +220,7 @@ export class ViewerServerAvailability {
     try {
       body = (await response.json()) as RateLimitResponse;
     } catch (error) {
-      return this.setRateLimitFailure(describeError(error));
+      return this.setRateLimitFailure(getErrorMessage(error));
     }
     const { limit, remaining, resetAt } = body;
     if (

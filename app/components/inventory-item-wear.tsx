@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { wearToString } from "~/utils/economy";
+import { wearToString } from "~/shared/economy";
 import { useTranslate } from "./app-context";
 
 export function InventoryItemTooltipWear({ wear }: { wear: number }) {

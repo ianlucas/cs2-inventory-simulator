@@ -11,7 +11,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { ComponentProps } from "react";
-import { has } from "~/utils/misc";
+import { has } from "~/shared/misc";
 import { usePreferences, useTranslate } from "./app-context";
 import { InventoryItemTooltipContents } from "./inventory-item-tooltip-contents";
 import { ItemDescription } from "./item-description";

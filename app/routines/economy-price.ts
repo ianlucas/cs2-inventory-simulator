@@ -4,8 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { prisma } from "~/db.server";
+import { getErrorMessage } from "~/shared/misc";
+import { logError } from "~/shared/monitoring";
 import { singleton } from "~/singleton.server";
-import { logError } from "~/utils/monitoring";
 import {
   getEconomyPriceSourceDate,
   getEconomyPriceSourceUrl,
@@ -93,7 +94,7 @@ export async function syncEconomyPrices() {
       { maxWait: 30_000, timeout: 180_000 }
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error.";
+    const message = getErrorMessage(error);
     await prisma.economyPriceSyncState.update({
       data: {
         lastFailureAt: new Date(),

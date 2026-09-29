@@ -5,7 +5,7 @@
 
 import * as Sentry from "@sentry/node";
 import { SENTRY_DSN, SENTRY_ENVIRONMENT, SOURCE_COMMIT } from "./env.server";
-import { nonEmptyString } from "./utils/misc";
+import { nonEmptyString } from "./shared/misc";
 
 export function initServerMonitoring() {
   const dsn = nonEmptyString(SENTRY_DSN);

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { logError } from "./utils/monitoring";
+import { logError } from "./shared/monitoring";
 
 export function api<T, U>(action: (args: T) => Promise<U>) {
   return async function handler(args: T): Promise<U> {

@@ -5,7 +5,7 @@
 
 import { useMemo } from "react";
 import { useRules } from "~/components/app-context";
-import { EconomyItemFilter } from "~/utils/economy-filters";
+import { EconomyItemFilter } from "~/shared/economy-filters";
 
 export function useCraftFilterRules() {
   const { craftHideCategory, craftHideType, craftHideFilterType } = useRules();

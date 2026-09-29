@@ -5,7 +5,7 @@
 
 import { useMemo } from "react";
 import { useRules } from "~/components/app-context";
-import { createItemHideFilter } from "~/utils/economy";
+import { createItemHideFilter } from "~/shared/economy";
 
 export function useCraftItemFilter() {
   const { craftHideCategory, craftHideType, craftHideModel, craftHideId } =

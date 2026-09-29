@@ -18,7 +18,7 @@ import clsx from "clsx";
 import { useCraftFilterRules } from "~/components/hooks/use-craft-filter-rules";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useIsOnTop } from "~/components/hooks/use-is-on-top";
-import { ECONOMY_ITEM_FILTERS } from "~/utils/economy-filters";
+import { ECONOMY_ITEM_FILTERS } from "~/shared/economy-filters";
 import {
   useInventory,
   usePreferences,

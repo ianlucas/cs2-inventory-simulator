@@ -32,7 +32,7 @@ import { ItemSelectorProvider } from "./components/item-selector-context";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
-import { viewerServerAvailability } from "./data/viewer.server";
+import { viewerServerAvailability } from "./viewer-server-availability.server";
 import {
   ASSETS_BASE_URL,
   CLOUDFLARE_ANALYTICS_TOKEN,
@@ -52,8 +52,8 @@ import { getLanguage } from "./preferences/language.server";
 import { getToggleable } from "./preferences/toggleable.server";
 import { getSeoLinks, getSeoMeta } from "./root-seo";
 import { getSession } from "./session.server";
+import { nonEmptyString } from "./shared/misc";
 import styles from "./tailwind.css?url";
-import { nonEmptyString } from "./utils/misc";
 
 const bodyFontUrl =
   "https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wdth,wght@0,62.5..100,400..800;1,62.5..100,400..800&display=swap";

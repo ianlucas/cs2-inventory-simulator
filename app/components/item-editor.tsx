@@ -17,13 +17,13 @@ import {
 import { useMeasure } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useCallback, useEffect, useState } from "react";
-import { VIEWER_INSPECT_KINDS } from "~/data/viewer";
+import { VIEWER_INSPECT_KINDS } from "~/viewer";
 import {
   isItemCountable,
   wearStringMaxLen,
   wearToString
-} from "~/utils/economy";
-import { hasKeys } from "~/utils/misc";
+} from "~/shared/economy";
+import { hasKeys } from "~/shared/misc";
 import { useTranslate } from "./app-context";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorInput } from "./editor-input";

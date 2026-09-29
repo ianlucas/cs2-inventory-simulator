@@ -5,8 +5,8 @@
 
 import { useState } from "react";
 import { useRules } from "~/components/app-context";
-import { ViewerItemInput } from "~/data/viewer";
-import { ViewerApi } from "~/utils/viewer-api";
+import { ViewerItemInput } from "~/viewer";
+import { ViewerApi } from "~/viewer-api.client";
 
 export function useViewer(options?: {
   item?: ViewerItemInput;

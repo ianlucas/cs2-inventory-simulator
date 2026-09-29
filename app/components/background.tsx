@@ -5,7 +5,7 @@
 
 import { useMemo } from "react";
 import { backgrounds } from "~/data/backgrounds";
-import { random } from "~/utils/misc";
+import { random } from "~/shared/misc";
 import { usePreferences } from "./app-context";
 
 export function Background() {

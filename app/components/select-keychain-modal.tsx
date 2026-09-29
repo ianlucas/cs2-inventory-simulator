@@ -7,7 +7,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { CS2Economy, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { useMemo } from "react";
 import { useInput } from "~/components/hooks/use-input";
-import { sortByName } from "~/utils/economy";
+import { sortByName } from "~/shared/economy";
 import { useTranslate } from "./app-context";
 import { IconInput } from "./icon-input";
 import { ItemBrowser } from "./item-browser";

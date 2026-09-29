@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { clientGlobals, isServerContext, serverGlobals } from "../globals";
+import { clientGlobals, isServerContext, serverGlobals } from "./globals";
 
 export function getSystemTranslation(key: string, language?: string) {
   return (

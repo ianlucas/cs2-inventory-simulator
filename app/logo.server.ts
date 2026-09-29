@@ -5,7 +5,7 @@
 
 import { serverGlobals } from "./globals";
 import { appLogoUrl } from "./models/rule.server";
-import { logError } from "./utils/monitoring";
+import { logError } from "./shared/monitoring";
 
 export async function setupLogo() {
   try {

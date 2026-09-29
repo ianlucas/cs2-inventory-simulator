@@ -9,7 +9,7 @@ import {
   CS2EconomyItem,
   CS2InventoryItem
 } from "@ianlucas/cs2-lib";
-import type { ViewerItem } from "~/utils/viewer-api";
+import type { ViewerItem } from "~/viewer-api.client";
 
 export const DEFAULT_VIEWER_EMBED_URL = "https://3d.cstrike.app/view";
 

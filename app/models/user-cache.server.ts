@@ -7,7 +7,7 @@ import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { res } from "~/responses.server";
-import { safeLoadInventory } from "~/utils/inventory";
+import { safeLoadInventory } from "~/shared/inventory";
 import {
   getUserInventory,
   getUserInventoryOptions,

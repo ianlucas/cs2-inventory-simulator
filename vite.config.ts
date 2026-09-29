@@ -56,7 +56,7 @@ export default defineConfig({
     __SPLASH_SCRIPT__: JSON.stringify(
       minify_sync(
         ts.transpileModule(
-          readFileSync(resolve(process.cwd(), "app/utils/splash.ts"), {
+          readFileSync(resolve(process.cwd(), "app/splash.client.ts"), {
             encoding: "utf-8"
           }),
           {

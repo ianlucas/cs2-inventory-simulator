@@ -6,7 +6,7 @@
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
-import { isNewItem } from "~/utils/economy";
+import { isNewItem } from "~/shared/economy";
 import { usePreferences, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { TextSlider } from "./text-slider";

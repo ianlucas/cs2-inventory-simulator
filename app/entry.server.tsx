@@ -12,15 +12,15 @@ import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import type { EntryContext, HandleErrorFunction } from "react-router";
 import { isRouteErrorResponse, ServerRouter } from "react-router";
-import { viewerServerAvailability } from "./data/viewer.server";
+import { viewerServerAvailability } from "./viewer-server-availability.server";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule";
 import { scheduleEconomyPrices } from "./routines/economy-price";
 import { scheduleInventoryProjection } from "./routines/inventory-projection";
 import { scheduleInactivityReset } from "./routines/reset-inactive-inventory";
 import { setupPurge } from "./routines/setup-purge";
+import { logError } from "./shared/monitoring";
 import { setupTranslation } from "./translation.server";
-import { logError } from "./utils/monitoring";
 
 const ABORT_DELAY = 5_000;
 

@@ -9,7 +9,7 @@ import {
   CS2ItemType
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { has } from "~/utils/misc";
+import { has } from "~/shared/misc";
 
 export function ItemDescription({
   item

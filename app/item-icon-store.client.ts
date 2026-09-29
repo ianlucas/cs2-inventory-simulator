@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ICON_CACHE_VERSION } from "./item-icon";
-import type { ViewerCaptureError } from "./viewer-api";
+import type { ViewerCaptureError } from "./viewer-api.client";
 
 const DATABASE_NAME = "cs2-inventory-simulator-icons";
 const STORE_NAME = "icons";

@@ -14,9 +14,9 @@ import { dirname, join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
 import { prisma } from "~/db.server";
+import { safeLoadInventory } from "~/shared/inventory";
+import { logError } from "~/shared/monitoring";
 import { singleton } from "~/singleton.server";
-import { safeLoadInventory } from "~/utils/inventory";
-import { logError } from "~/utils/monitoring";
 
 const BACKFILL_BATCH_SIZE = 200;
 const BACKFILL_INTERVAL_MS = 10 * 60_000;

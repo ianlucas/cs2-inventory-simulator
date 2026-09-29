@@ -15,7 +15,7 @@ import {
 } from "~/models/api-credential.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { badRequest, methodNotAllowed, unauthorized } from "~/responses.server";
-import { random } from "~/utils/misc";
+import { random } from "~/shared/misc";
 import type { Route } from "./+types/api.add-container._index";
 
 export const action = api(async ({ request }: Route.ActionArgs) => {

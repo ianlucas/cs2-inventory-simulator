@@ -18,7 +18,7 @@ import {
   noContent,
   unauthorized
 } from "~/responses.server";
-import { clientInventoryItemShape } from "~/utils/shapes.server";
+import { clientInventoryItemShape } from "~/shared/shapes";
 import type { Route } from "./+types/api.add-item._index";
 
 export const action = api(async ({ request }: Route.ActionArgs) => {

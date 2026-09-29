@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import clsx from "clsx";
-import { EconomyItemFilter } from "~/utils/economy-filters";
+import { EconomyItemFilter } from "~/shared/economy-filters";
 import { useTranslate } from "./app-context";
 
 export function ItemPickerFilterMobile({

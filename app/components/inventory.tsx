@@ -16,7 +16,7 @@ import { useUnlockCase } from "~/components/hooks/use-unlock-case";
 import { useUnpackItem } from "~/components/hooks/use-unpack-item";
 import { InventoryItem } from "~/components/inventory-item";
 import { SyncAction } from "~/data/sync";
-import { playSound } from "~/utils/sound";
+import { playSound } from "~/sound.client";
 import {
   useInventory,
   useInventoryFilter,

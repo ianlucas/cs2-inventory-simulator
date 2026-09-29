@@ -21,26 +21,26 @@ import { useInventoryFilterState } from "~/components/hooks/use-inventory-filter
 import { useInventoryState } from "~/components/hooks/use-inventory-state";
 import { useTranslation } from "~/components/hooks/use-translation";
 import { SyncAction } from "~/data/sync";
-import type { loader } from "~/root";
-import { pushToSync, sync } from "~/sync";
-import { updateEconomyLanguage } from "~/utils/economy";
-import {
-  getCharmDetachmentsToDisplay,
-  getFreeItemsToDisplay
-} from "~/utils/inventory";
 import {
   cacheInventoryData,
   getCachedInventoryData,
   getSanitizedCachedInventoryData
-} from "~/utils/inventory-cached-data";
+} from "~/inventory-cached-data";
+import type { loader } from "~/root";
+import { updateEconomyLanguage } from "~/shared/economy";
+import {
+  getCharmDetachmentsToDisplay,
+  getFreeItemsToDisplay
+} from "~/shared/inventory";
 import {
   TransformedInventoryItems,
   sortItemsByEquipped,
   transform
-} from "~/utils/inventory-transform";
-import { SerializeFrom } from "~/utils/misc";
-import { cacheAuthenticatedUserId } from "~/utils/user-cached-data";
-import { viewerClientAvailability } from "~/utils/viewer-availability";
+} from "~/shared/inventory-transform";
+import { SerializeFrom } from "~/shared/misc";
+import { pushToSync, sync } from "~/sync";
+import { cacheAuthenticatedUserId } from "~/user-cached-data";
+import { viewerClientAvailability } from "~/viewer-client-availability";
 
 const AppContext = createContext<
   | ({

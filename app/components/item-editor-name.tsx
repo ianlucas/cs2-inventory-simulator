@@ -6,7 +6,7 @@
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
-import { has } from "~/utils/misc";
+import { has } from "~/shared/misc";
 
 export function ItemEditorName({ item }: { item: CS2EconomyItem }) {
   const nameItem = useNameItem();

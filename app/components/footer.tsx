@@ -5,7 +5,7 @@
 
 import { ClientOnly } from "remix-utils/client-only";
 import { DEFAULT_APP_FOOTER_NAME } from "~/app-defaults";
-import { isOurHostname } from "~/utils/misc";
+import { isOurHostname } from "~/shared/misc";
 import { useRules } from "./app-context";
 
 export function Footer() {

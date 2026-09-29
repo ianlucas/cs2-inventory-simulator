@@ -7,7 +7,7 @@ import { CS2EconomyItem, CS2UnlockedItem, randomInt } from "@ianlucas/cs2-lib";
 import { ComponentRef, useRef, useState } from "react";
 import { useDetectCollision } from "~/components/hooks/use-detect-collision";
 import { useResponsiveScale } from "~/components/hooks/use-responsive-scale";
-import { playSound } from "~/utils/sound";
+import { playSound } from "~/sound.client";
 import { UnlockCaseWheelItems } from "./unlock-case-wheel-items";
 
 export function UnlockCaseWheel({

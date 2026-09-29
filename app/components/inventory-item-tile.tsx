@@ -14,7 +14,7 @@ import {
 import clsx from "clsx";
 import { useItemIcon } from "~/components/hooks/use-item-icon";
 import { useNameItem } from "~/components/hooks/use-name-item";
-import { has } from "~/utils/misc";
+import { has } from "~/shared/misc";
 import { useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 
