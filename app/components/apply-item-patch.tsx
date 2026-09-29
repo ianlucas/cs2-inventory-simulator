@@ -14,7 +14,7 @@ import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
 import { VIEWER_INSPECT_KINDS } from "~/data/viewer";
-import { playSound } from "~/utils/sound";
+import { playSound } from "~/sound.client";
 import { useInventory, useTranslate } from "./app-context";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";

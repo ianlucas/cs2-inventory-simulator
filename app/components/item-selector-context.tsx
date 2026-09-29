@@ -14,7 +14,7 @@ import {
 } from "react";
 import { ClientOnly } from "remix-utils/client-only";
 import { useWatch } from "~/components/hooks/use-watch";
-import { TransformedInventoryItems } from "~/utils/inventory-transform";
+import { TransformedInventoryItems } from "~/shared/inventory-transform";
 
 export interface ItemSelectorContextProps {
   items: TransformedInventoryItems;

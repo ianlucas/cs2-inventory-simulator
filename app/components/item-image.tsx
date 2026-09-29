@@ -7,7 +7,7 @@ import { CS2EconomyItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { ComponentProps, useEffect, useState } from "react";
 import { isServerContext } from "~/globals";
-import { noop } from "~/utils/misc";
+import { noop } from "~/shared/misc";
 import { FillSpinner } from "./fill-spinner";
 
 const cached: string[] = [];

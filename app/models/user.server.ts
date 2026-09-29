@@ -10,7 +10,7 @@ import {
   hasInventoryContent,
   loadOrCreateInventory,
   safeLoadInventory
-} from "~/utils/inventory";
+} from "~/shared/inventory";
 import {
   hasInventoryLoadChanges,
   recordInventoryLoadChanges,

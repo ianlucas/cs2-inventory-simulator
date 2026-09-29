@@ -12,7 +12,7 @@ import {
   loadIconBudget,
   setIconBudgetCooldown,
   spendIconBudget
-} from "./item-icon-budget";
+} from "./item-icon-budget.client";
 import {
   IconGeneratorRole,
   claimIconGeneratorRole,
@@ -36,18 +36,18 @@ import {
   readIcon,
   writeIcon,
   writeIconFailure
-} from "./item-icon-store";
+} from "./item-icon-store.client";
 import {
   isIconTileVisible,
   subscribeIconTileVisibility
-} from "./item-icon-visibility";
-import { logError, logWarning } from "./monitoring";
+} from "./item-icon-visibility.client";
+import { logError, logWarning } from "./shared/monitoring";
 import type {
   ViewerApi,
   ViewerCaptureError,
   ViewerCaptured
-} from "./viewer-api";
-import { VIEWER_CAPTURE_TIMEOUT_MS } from "./viewer-api";
+} from "./viewer-api.client";
+import { VIEWER_CAPTURE_TIMEOUT_MS } from "./viewer-api.client";
 
 export const ICON_CAPTURE_TIMEOUT_MS = VIEWER_CAPTURE_TIMEOUT_MS;
 export const ICON_IDLE_TEARDOWN_MS = 30_000;

@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { prisma } from "~/db.server";
+import { logError } from "~/shared/monitoring";
 import { singleton } from "~/singleton.server";
-import { logError } from "~/utils/monitoring";
 import {
   getEconomyPriceSourceDate,
   getEconomyPriceSourceUrl,

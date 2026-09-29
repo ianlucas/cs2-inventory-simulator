@@ -6,7 +6,7 @@
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ClientOnly } from "remix-utils/client-only";
-import { didUserAuthenticateInThisBrowser } from "~/utils/user-cached-data";
+import { didUserAuthenticateInThisBrowser } from "~/user-cached-data";
 import { useTranslate, useUser } from "./app-context";
 
 export function SyncWarn() {

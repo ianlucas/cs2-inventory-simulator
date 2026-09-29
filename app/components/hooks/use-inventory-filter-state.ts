@@ -7,7 +7,7 @@ import {
   INVENTORY_PRIMARY_FILTERS,
   INVENTORY_SECONDARY_FILTERS,
   INVENTORY_SORTERS
-} from "~/utils/inventory-filters";
+} from "~/shared/inventory-filters";
 import {
   TransformedInventoryItem,
   TransformedInventoryItems,
@@ -18,7 +18,7 @@ import {
   sortByQuality,
   sortByType,
   sortItemsByEquipped
-} from "~/utils/inventory-transform";
+} from "~/shared/inventory-transform";
 import { useStorageInput } from "./use-storage-input";
 import { useStorageState } from "./use-storage-state";
 import { useWatch } from "./use-watch";

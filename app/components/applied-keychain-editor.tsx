@@ -20,7 +20,7 @@ import {
   keychainPositionToString,
   keychainSeedStringMaxLen,
   validateKeychainSeed
-} from "~/utils/economy";
+} from "~/shared/economy";
 import { useTranslate } from "./app-context";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorItemDisplay } from "./editor-item-display";

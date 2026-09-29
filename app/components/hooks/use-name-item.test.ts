@@ -6,8 +6,8 @@
 import { CS2Economy, CS2EconomyItem, CS2_ITEMS } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations";
 import { describe, expect, test } from "vitest";
-import { createFakeInventoryItem } from "~/utils/inventory";
-import { has } from "~/utils/misc";
+import { createFakeInventoryItem } from "~/shared/inventory";
+import { has } from "~/shared/misc";
 import { nameItemFactory } from "./use-name-item";
 
 CS2Economy.load({

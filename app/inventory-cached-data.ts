@@ -3,12 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { safeLoadInventory } from "./inventory";
 import {
   getFromLocalStorage,
   removeFromLocalStorage,
   setToLocalStorage
 } from "./localstorage";
+import { safeLoadInventory } from "./shared/inventory";
 
 export function cacheInventoryData(value: string) {
   return setToLocalStorage("inventoryItems", value);

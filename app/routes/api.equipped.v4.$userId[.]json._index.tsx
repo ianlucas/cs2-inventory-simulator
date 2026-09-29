@@ -11,7 +11,7 @@ import {
   inventoryItemEquipHideType
 } from "~/models/rule.server";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
-import { generate } from "~/utils/inventory-equipped-v4";
+import { generate } from "~/shared/inventory-equipped-v4";
 import type { Route } from "./+types/api.equipped.v4.$userId[.]json._index";
 
 export const ApiEquippedV4UserIdJsonUrl = "/api/equipped/v4/$userId.json";

@@ -20,7 +20,7 @@ import {
   useRef,
   useState
 } from "react";
-import { range } from "~/utils/number";
+import { range } from "~/shared/number";
 import { useRules, useTranslate } from "./app-context";
 import { AppliedStickerEditor } from "./applied-sticker-editor";
 import {

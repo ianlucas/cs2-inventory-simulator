@@ -9,7 +9,7 @@ import type {
   ApiActionSyncData
 } from "~/routes/api.action.sync._index";
 import { ApiActionSyncUrl } from "./data/sync";
-import { postJson } from "./utils/fetch";
+import { postJson } from "./shared/fetch";
 
 export const sync = new (class Sync extends EventTarget {
   isSyncing = false;

@@ -10,7 +10,7 @@ import {
   loadIconBudget,
   setIconBudgetCooldown,
   spendIconBudget
-} from "./item-icon-budget";
+} from "./item-icon-budget.client";
 
 const STORAGE_KEY = "inventoryItemIconBudget";
 const START = 1_700_000_000_000;

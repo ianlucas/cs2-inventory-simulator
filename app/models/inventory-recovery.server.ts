@@ -5,7 +5,7 @@
 
 import { CS2InventoryLoadChanges } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
-import { logError } from "~/utils/monitoring";
+import { logError } from "~/shared/monitoring";
 
 export async function recordInventoryWipe(
   userId: string,

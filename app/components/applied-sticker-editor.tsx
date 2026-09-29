@@ -34,8 +34,8 @@ import {
   stickerWearStringMaxLen,
   stickerWearToString,
   validateStickerSchema
-} from "~/utils/economy";
-import { createFakeInventoryItemFromBase } from "~/utils/inventory";
+} from "~/shared/economy";
+import { createFakeInventoryItemFromBase } from "~/shared/inventory";
 import { useTranslate } from "./app-context";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorItemDisplay } from "./editor-item-display";

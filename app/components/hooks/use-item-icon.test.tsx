@@ -15,7 +15,7 @@ import { english } from "@ianlucas/cs2-lib/translations";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getItemIconKey } from "~/utils/item-icon";
+import { getItemIconKey } from "~/item-icon";
 import { useItemIcon } from "./use-item-icon";
 
 (
@@ -36,7 +36,7 @@ const queue = vi.hoisted(() => ({
   urls: new Map<string, string>()
 }));
 
-vi.mock("~/utils/item-icon-queue", () => ({
+vi.mock("~/item-icon-queue.client", () => ({
   discardIcon: async (key: string) => {
     queue.discarded.push(key);
   },
@@ -54,7 +54,7 @@ vi.mock("~/utils/item-icon-queue", () => ({
   }
 }));
 
-vi.mock("~/utils/item-icon-registry", () => ({
+vi.mock("~/item-icon-registry", () => ({
   getIconUrl: (key: string) => queue.urls.get(key),
   getIconUrlServer: () => undefined,
   isIconUnavailable: (key: string) => queue.unavailable.has(key),
@@ -67,7 +67,7 @@ vi.mock("~/utils/item-icon-registry", () => ({
   }
 }));
 
-vi.mock("~/utils/item-icon-visibility", () => ({
+vi.mock("~/item-icon-visibility.client", () => ({
   observeIconTile: () => () => {}
 }));
 

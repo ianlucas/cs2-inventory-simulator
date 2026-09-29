@@ -31,15 +31,15 @@ import { SyncAction } from "~/data/sync";
 import { middleware } from "~/middleware.server";
 import { getUserBasicData } from "~/models/user.server";
 import { getMetaTitle } from "~/root-meta";
-import { isItemCountable } from "~/utils/economy";
+import { isItemCountable } from "~/shared/economy";
 import {
   createFakeInventoryItemFromBase,
   editInventoryItem
-} from "~/utils/inventory";
-import { tryOrDefault } from "~/utils/misc";
-import { range } from "~/utils/number";
-import { baseInventoryItemProps } from "~/utils/shapes";
-import { playSound } from "~/utils/sound";
+} from "~/shared/inventory";
+import { tryOrDefault } from "~/shared/misc";
+import { range } from "~/shared/number";
+import { baseInventoryItemProps } from "~/shared/shapes";
+import { playSound } from "~/sound.client";
 import type { Route } from "./+types/craft._index";
 
 export const meta = getMetaTitle("HeaderCraftLabel");

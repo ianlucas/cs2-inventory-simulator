@@ -22,8 +22,8 @@ import {
   isItemCountable,
   wearStringMaxLen,
   wearToString
-} from "~/utils/economy";
-import { hasKeys } from "~/utils/misc";
+} from "~/shared/economy";
+import { hasKeys } from "~/shared/misc";
 import { useTranslate } from "./app-context";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorInput } from "./editor-input";

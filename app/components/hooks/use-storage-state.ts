@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect, useState } from "react";
-import { safeParseJson } from "~/utils/misc";
+import { safeParseJson } from "~/shared/misc";
 
 export function useStorageState<T>(key: string, defaultValue: T) {
   const [state, setState] = useState<T>(() => {

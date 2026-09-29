@@ -6,7 +6,7 @@
 import { MetaFunction } from "react-router";
 import { loader as rootLoader } from "~/root";
 import { DEFAULT_APP_NAME } from "./app-defaults";
-import { getSystemTranslation } from "./utils/translation";
+import { getSystemTranslation } from "./translation";
 
 export function getMetaTitle(
   key?: string

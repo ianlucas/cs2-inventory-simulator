@@ -7,7 +7,7 @@ import { CS2BaseInventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useImportInspectLinkFetcher } from "~/routes/api.action.import-inspect-link";
-import { isValidInspectLink, normalizeInspectLink } from "~/utils/economy";
+import { isValidInspectLink, normalizeInspectLink } from "~/shared/economy";
 import { useTranslate } from "./app-context";
 import { EditorInput } from "./editor-input";
 import { FillSpinner } from "./fill-spinner";

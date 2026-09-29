@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { safeParseJson } from "./misc";
+import { safeParseJson } from "./shared/misc";
 
 export function getFromLocalStorage(key: string) {
   if (typeof document !== "undefined") {

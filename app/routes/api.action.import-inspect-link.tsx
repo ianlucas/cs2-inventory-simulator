@@ -30,8 +30,8 @@ import {
   methodNotAllowed,
   tooManyRequests
 } from "~/responses.server";
-import { isValidInspectLink } from "~/utils/economy";
-import { RateLimiter } from "~/utils/rate-limiter.server";
+import { isValidInspectLink } from "~/shared/economy";
+import { RateLimiter } from "~/shared/rate-limiter";
 import type { Route } from "./+types/api.action.import-inspect-link";
 
 const rateLimiter = new RateLimiter(1000);

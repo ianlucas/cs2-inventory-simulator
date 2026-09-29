@@ -5,8 +5,8 @@
 
 import { useEffect, useState } from "react";
 import { clientGlobals, isServerContext, serverGlobals } from "~/globals";
+import { fetchTranslation } from "~/translation-api.client";
 import type { SystemTranslationTokens } from "~/translation.server";
-import { fetchTranslation } from "~/utils/translation-api";
 
 export function useTranslation({ language }: { language: string }) {
   function getSystemTranslationMap() {

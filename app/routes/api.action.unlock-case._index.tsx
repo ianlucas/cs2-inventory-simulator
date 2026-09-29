@@ -11,7 +11,7 @@ import { middleware } from "~/middleware.server";
 import { inventoryItemAllowUnlockContainer } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { badRequest, methodNotAllowed } from "~/responses.server";
-import { nonNegativeInt, positiveInt } from "~/utils/shapes";
+import { nonNegativeInt, positiveInt } from "~/shared/shapes";
 import type { Route } from "./+types/api.action.unlock-case._index";
 
 export const ApiActionUnlockCaseUrl = "/api/action/unlock-case";

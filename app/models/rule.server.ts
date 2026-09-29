@@ -12,8 +12,8 @@ import {
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL, VIEWER_KEY } from "~/env.server";
-import { resolveMaxAttachments } from "~/utils/attachments";
-import { noop } from "~/utils/misc";
+import { resolveMaxAttachments } from "~/shared/attachments";
+import { noop } from "~/shared/misc";
 
 class RuleFor<RuleValue> {
   constructor(private value: Promise<RuleValue>) {}

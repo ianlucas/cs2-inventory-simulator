@@ -8,7 +8,7 @@ import { CS2Economy, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
-import { sortByName } from "~/utils/economy";
+import { sortByName } from "~/shared/economy";
 import { useTranslate } from "./app-context";
 import { IconInput } from "./icon-input";
 import { IconSelect } from "./icon-select";

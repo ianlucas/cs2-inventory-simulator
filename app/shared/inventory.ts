@@ -12,7 +12,6 @@ import {
   CS2InventorySpec,
   CS2ItemType
 } from "@ianlucas/cs2-lib";
-import lzstring from "lz-string";
 import type { ItemEditorAttributes } from "~/components/item-editor";
 import { safeParseJson } from "./misc";
 
@@ -149,15 +148,6 @@ export function getCharmDetachmentsToDisplay(
       uid: CHARM_DETACHMENTS_DISPLAY_UID
     }
   ];
-}
-
-export function getInventoryItemShareUrl(
-  item: CS2InventoryItem,
-  userId?: string
-) {
-  return `${window.location.origin}/craft?share=${lzstring.compressToEncodedURIComponent(
-    JSON.stringify({ u: userId, i: item.asBase() })
-  )}`;
 }
 
 export function editInventoryItem(

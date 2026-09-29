@@ -3,8 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { range } from "~/shared/number";
+import { clientGlobals, isServerContext, serverGlobals } from "./globals";
 
-export function InventoryGridPlaceholder() {
-  return range(6).map((index) => <div className="w-38.5" key={index} />);
+export function getSystemTranslation(key: string, language?: string) {
+  return (
+    isServerContext
+      ? serverGlobals.systemTranslationByLanguage[language ?? "english"]
+      : clientGlobals.systemTranslationMap
+  )[key];
 }

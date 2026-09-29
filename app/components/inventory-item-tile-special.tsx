@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
-import { createFakeItem } from "~/utils/economy";
+import { createFakeItem } from "~/shared/economy";
 import { useTranslate } from "./app-context";
 import { InventoryItemTile } from "./inventory-item-tile";
 

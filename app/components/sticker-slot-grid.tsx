@@ -12,7 +12,7 @@ import {
   CS2_MAX_STICKERS
 } from "@ianlucas/cs2-lib";
 import { ReactNode } from "react";
-import { range } from "~/utils/number";
+import { range } from "~/shared/number";
 import { useRules, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 

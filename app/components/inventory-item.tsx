@@ -15,14 +15,14 @@ import clsx from "clsx";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
 import { useEditItemFilter } from "~/components/hooks/use-item-hide-filters";
 import { useViewerAvailability } from "~/components/hooks/use-viewer-availability";
+import { getInventoryItemShareUrl } from "~/inventory.client";
 import {
   EDITABLE_ITEM_TYPE,
-  getInventoryItemShareUrl,
   INSPECTABLE_ITEM_TYPE,
   UNLOCKABLE_ITEM_TYPE
-} from "~/utils/inventory";
-import { TransformedInventoryItem } from "~/utils/inventory-transform";
-import { format } from "~/utils/number";
+} from "~/shared/inventory";
+import { TransformedInventoryItem } from "~/shared/inventory-transform";
+import { format } from "~/shared/number";
 import { useInventory, useRules, useTranslate, useUser } from "./app-context";
 import { InventoryItemContextMenu } from "./inventory-item-context-menu";
 import { InventoryItemTile } from "./inventory-item-tile";

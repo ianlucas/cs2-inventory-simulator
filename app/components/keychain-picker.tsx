@@ -20,8 +20,8 @@ import {
 } from "@ianlucas/cs2-lib";
 import { useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
-import { getDefaultKeychainPosition, sortByName } from "~/utils/economy";
-import { range } from "~/utils/number";
+import { getDefaultKeychainPosition, sortByName } from "~/shared/economy";
+import { range } from "~/shared/number";
 import { useTranslate } from "./app-context";
 import { AppliedKeychainEditor } from "./applied-keychain-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";

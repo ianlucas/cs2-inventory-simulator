@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useInventory, useInventoryItems } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
 import { SyncAction } from "~/data/sync";
-import { transform } from "~/utils/inventory-transform";
+import { transform } from "~/shared/inventory-transform";
 import { useSync } from "./use-sync";
 
 export function useStorageUnit() {

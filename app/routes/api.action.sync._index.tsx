@@ -68,15 +68,17 @@ import {
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
-import { isAttachmentCountAllowed } from "~/utils/attachments";
-import { editInventoryItem } from "~/utils/inventory";
-import { hasKeys } from "~/utils/misc";
-import { nonNegativeInt, optionalNumber, teamShape } from "~/utils/shapes";
+import { isAttachmentCountAllowed } from "~/shared/attachments";
+import { editInventoryItem } from "~/shared/inventory";
+import { hasKeys } from "~/shared/misc";
 import {
   clientInventoryItemShape,
   itemEditorAttributesShape,
-  syncInventoryShape
-} from "~/utils/shapes.server";
+  nonNegativeInt,
+  optionalNumber,
+  syncInventoryShape,
+  teamShape
+} from "~/shared/shapes";
 import type { Route } from "./+types/api.action.sync._index";
 
 const keychainPlacementShape = {

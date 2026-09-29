@@ -14,8 +14,8 @@ import {
   ViewerServerStatusLike
 } from "~/data/viewer";
 import { clientGlobals, isServerContext } from "~/globals";
-import { logWarning } from "~/utils/monitoring";
-import type { ViewerUnsupportedReason } from "~/utils/viewer-api";
+import { logWarning } from "~/shared/monitoring";
+import type { ViewerUnsupportedReason } from "~/viewer-api.client";
 
 // How long a `timeout` or `network` failure keeps new viewers from mounting,
 // indexed by consecutive failures; the last entry repeats.

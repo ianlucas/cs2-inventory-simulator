@@ -5,18 +5,18 @@
 
 import { CSSProperties, useSyncExternalStore } from "react";
 import { useRules } from "~/components/app-context";
-import { ICON_HEIGHT, ICON_WIDTH } from "~/utils/item-icon";
+import { ICON_HEIGHT, ICON_WIDTH } from "~/item-icon";
 import {
   getIconGeneratorGeneration,
   getIconGeneratorGenerationServer,
   isIconGeneratorWanted,
   isIconGeneratorWantedServer,
   subscribeIconGeneratorWanted
-} from "~/utils/item-icon-generator-role";
+} from "~/item-icon-generator-role";
 import {
   getIconGeneratorSeed,
   setIconGeneratorApi
-} from "~/utils/item-icon-queue";
+} from "~/item-icon-queue.client";
 import { Viewer } from "./viewer";
 
 const PAINTED_BUT_INVISIBLE_STYLE: CSSProperties = {

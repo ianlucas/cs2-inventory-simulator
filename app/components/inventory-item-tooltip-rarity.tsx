@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
-import { RarityLabel, getRarityItemName } from "~/utils/economy";
+import { RarityLabel, getRarityItemName } from "~/shared/economy";
 import { useTranslate } from "./app-context";
 import { InventoryItemTooltipInfo } from "./inventory-item-tooltip-info";
 

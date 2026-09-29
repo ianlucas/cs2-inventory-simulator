@@ -5,7 +5,7 @@
 
 import clsx from "clsx";
 import { ComponentProps } from "react";
-import { truncateCodePoints } from "~/utils/misc";
+import { truncateCodePoints } from "~/shared/misc";
 
 export function EditorInput({
   inflexible,

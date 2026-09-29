@@ -6,8 +6,8 @@
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
-import { newItemStartingId } from "~/utils/economy";
-import { EconomyItemFilter } from "~/utils/economy-filters";
+import { newItemStartingId } from "~/shared/economy";
+import { EconomyItemFilter } from "~/shared/economy-filters";
 import { useTranslate } from "./app-context";
 import { GridList } from "./grid-list";
 import { useStorageState } from "./hooks/use-storage-state";

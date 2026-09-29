@@ -9,8 +9,8 @@ import {
   viewerEnabled,
   viewerKey
 } from "~/models/rule.server";
+import { logError } from "~/shared/monitoring";
 import { singleton } from "~/singleton.server";
-import { logError } from "~/utils/monitoring";
 import {
   DEFAULT_VIEWER_EMBED_URL,
   ViewerCatalog,

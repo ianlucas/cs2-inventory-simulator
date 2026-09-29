@@ -19,8 +19,8 @@ import { scheduleEconomyPrices } from "./routines/economy-price";
 import { scheduleInventoryProjection } from "./routines/inventory-projection";
 import { scheduleInactivityReset } from "./routines/reset-inactive-inventory";
 import { setupPurge } from "./routines/setup-purge";
+import { logError } from "./shared/monitoring";
 import { setupTranslation } from "./translation.server";
-import { logError } from "./utils/monitoring";
 
 const ABORT_DELAY = 5_000;
 

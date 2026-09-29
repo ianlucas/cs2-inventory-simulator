@@ -9,7 +9,7 @@ import { MouseEvent } from "react";
 import { Links, Scripts, useRouteError } from "react-router";
 import { ClientOnly } from "remix-utils/client-only";
 import { ApiActionResetInventoryUrl } from "~/routes/api.action.reset-inventory._index";
-import { isOurHostname } from "~/utils/misc";
+import { isOurHostname } from "~/shared/misc";
 import { confirm } from "./modal-generic";
 
 export function ErrorBoundary() {

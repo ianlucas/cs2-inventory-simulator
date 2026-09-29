@@ -5,7 +5,7 @@
 
 import { assert } from "@ianlucas/cs2-lib";
 import dotenv from "dotenv";
-import { nonEmptyString } from "./utils/misc";
+import { nonEmptyString } from "./shared/misc";
 
 dotenv.config({
   quiet: true

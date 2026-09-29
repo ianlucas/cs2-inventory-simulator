@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { getTypedFromLocalStorage } from "./localstorage";
-import { range } from "./number";
+import { range } from "./shared/number";
 
 let sounds: HTMLAudioElement[] = [];
 let index = 0;

@@ -11,8 +11,8 @@ import { type ClientOnErrorFunction, isRouteErrorResponse } from "react-router";
 import { HydratedRouter } from "react-router/dom";
 import { clientGlobals } from "./globals";
 import { initClientMonitoring } from "./monitoring.client";
-import { logError } from "./utils/monitoring";
-import { fetchTranslation } from "./utils/translation-api";
+import { logError } from "./shared/monitoring";
+import { fetchTranslation } from "./translation-api.client";
 
 initClientMonitoring();
 

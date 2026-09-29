@@ -7,9 +7,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   ICON_API_CALLS_PER_MINUTE,
   ICON_API_CALL_BURST
-} from "./item-icon-budget";
-import type { ViewerCaptured } from "./viewer-api";
-import type { ViewerApi } from "./viewer-api";
+} from "./item-icon-budget.client";
+import type { ViewerCaptured } from "./viewer-api.client";
+import type { ViewerApi } from "./viewer-api.client";
 
 const store = vi.hoisted(() => ({
   entries: new Map<
@@ -21,7 +21,7 @@ const store = vi.hoisted(() => ({
   written: [] as { error?: string; key: string; retryAfter?: number }[]
 }));
 
-vi.mock("./item-icon-store", () => ({
+vi.mock("./item-icon-store.client", () => ({
   MAX_STORED_ICONS: 512,
   deleteIcon: async (key: string) => {
     store.deleted.push(key);
@@ -46,17 +46,17 @@ const tabLock = vi.hoisted(() => ({
   promote: undefined as (() => void) | undefined
 }));
 
-vi.mock("./tab-leader", () => ({
+vi.mock("./tab-leader.client", () => ({
   claimTabLock: async (_name: string, options?: { onGranted?: () => void }) => {
     tabLock.promote = options?.onGranted;
     return tabLock.granted;
   }
 }));
 
-type Queue = typeof import("./item-icon-queue") &
+type Queue = typeof import("./item-icon-queue.client") &
   typeof import("./item-icon-generator-role") &
   typeof import("./item-icon-registry") &
-  typeof import("./item-icon-visibility");
+  typeof import("./item-icon-visibility.client");
 
 interface FakeApi {
   api: ViewerApi;
@@ -156,10 +156,10 @@ async function flush(): Promise<void> {
 async function load(): Promise<Queue> {
   vi.resetModules();
   const [queue, generator, registry, visibility] = await Promise.all([
-    import("./item-icon-queue"),
+    import("./item-icon-queue.client"),
     import("./item-icon-generator-role"),
     import("./item-icon-registry"),
-    import("./item-icon-visibility")
+    import("./item-icon-visibility.client")
   ]);
   return { ...queue, ...generator, ...registry, ...visibility };
 }

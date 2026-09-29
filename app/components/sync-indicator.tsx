@@ -10,9 +10,9 @@ import {
   ApiActionResyncData,
   ApiActionResyncUrl
 } from "~/routes/api.action.resync._index";
+import { getJson } from "~/shared/fetch";
+import { loadOrCreateInventory } from "~/shared/inventory";
 import { sync } from "~/sync";
-import { getJson } from "~/utils/fetch";
-import { loadOrCreateInventory } from "~/utils/inventory";
 import { useInventory, useRules, useTranslate } from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { Modal, ModalHeader } from "./modal";

@@ -5,7 +5,7 @@
 
 import clsx from "clsx";
 import { ComponentProps, PointerEvent, useRef, useState } from "react";
-import { getTypedFromLocalStorage } from "~/utils/localstorage";
+import { getTypedFromLocalStorage } from "~/localstorage";
 import { ModalButton } from "./modal-button";
 import { TooltipBubble, useTooltip } from "./tooltip";
 

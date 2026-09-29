@@ -7,7 +7,7 @@ import { redirect } from "react-router";
 import { authenticator } from "~/auth.server";
 import { middleware } from "~/middleware.server";
 import { commitSession, getSession } from "~/session.server";
-import { logError } from "~/utils/monitoring";
+import { logError } from "~/shared/monitoring";
 import type { Route } from "./+types/sign-in.steam.callback._index";
 
 export async function loader({ request }: Route.LoaderArgs) {

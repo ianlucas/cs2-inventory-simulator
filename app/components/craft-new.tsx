@@ -5,7 +5,7 @@
 
 import { CS2EconomyItem, CS2ItemType } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { toArrayIf } from "~/utils/misc";
+import { toArrayIf } from "~/shared/misc";
 import { useInventory, useRules, useTranslate } from "./app-context";
 import { useCraftItemFilter } from "./hooks/use-item-hide-filters";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";

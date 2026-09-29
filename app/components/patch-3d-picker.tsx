@@ -13,7 +13,7 @@ import {
   CS2_MAX_PATCHES
 } from "@ianlucas/cs2-lib";
 import { useEffect, useRef, useState } from "react";
-import { range } from "~/utils/number";
+import { range } from "~/shared/number";
 import { useRules, useTranslate } from "./app-context";
 import { AttachmentSlotsDrawer, attachmentName } from "./attachment-3d-drawer";
 import { ButtonWithTooltip } from "./button-with-tooltip";

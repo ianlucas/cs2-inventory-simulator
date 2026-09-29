@@ -14,7 +14,7 @@ import {
   useRef,
   useState
 } from "react";
-import { colorText, safeParseJson } from "~/utils/misc";
+import { colorText, safeParseJson } from "~/shared/misc";
 import { useStorageState } from "./hooks/use-storage-state";
 
 type Command = (params: {

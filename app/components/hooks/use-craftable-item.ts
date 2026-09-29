@@ -10,7 +10,7 @@ import {
   CS2EconomyItem,
   CS2ItemType
 } from "@ianlucas/cs2-lib";
-import { isItemCountable } from "~/utils/economy";
+import { isItemCountable } from "~/shared/economy";
 import { useInventory, useRules } from "../app-context";
 import { useCraftItemFilter } from "./use-item-hide-filters";
 
