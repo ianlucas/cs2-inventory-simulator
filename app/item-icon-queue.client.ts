@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ViewerItemInput } from "~/data/viewer";
+import { ViewerItemInput } from "~/viewer";
 import {
   ICON_API_CALLS_PER_MINUTE,
   backOffIconNetwork,

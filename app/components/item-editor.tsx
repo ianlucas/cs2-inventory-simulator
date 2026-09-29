@@ -17,7 +17,7 @@ import {
 import { useMeasure } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useCallback, useEffect, useState } from "react";
-import { VIEWER_INSPECT_KINDS } from "~/data/viewer";
+import { VIEWER_INSPECT_KINDS } from "~/viewer";
 import {
   isItemCountable,
   wearStringMaxLen,

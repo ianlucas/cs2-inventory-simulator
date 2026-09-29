@@ -12,7 +12,7 @@ import {
   ViewerItemKind,
   ViewerServerReason,
   ViewerServerStatusLike
-} from "~/data/viewer";
+} from "~/viewer";
 import { clientGlobals, isServerContext } from "~/globals";
 import { logWarning } from "~/shared/monitoring";
 import type { ViewerUnsupportedReason } from "~/viewer-api.client";

@@ -5,7 +5,7 @@
 
 import { ComponentPropsWithoutRef, useEffect, useRef, useState } from "react";
 import { useIconGenerationPausedWhile } from "~/components/hooks/use-item-icon";
-import { buildViewerSrc, ViewerItemInput } from "~/data/viewer";
+import { buildViewerSrc, ViewerItemInput } from "~/viewer";
 import { ViewerApi } from "~/viewer-api.client";
 
 export function Viewer({

@@ -20,7 +20,7 @@ import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/components/hooks/use-inspect-floating";
 import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
-import { VIEWER_INSPECT_KINDS } from "~/data/viewer";
+import { VIEWER_INSPECT_KINDS } from "~/viewer";
 import { clientGlobals } from "~/globals";
 import { getInventoryItemShareUrl } from "~/inventory.client";
 import { wearToString } from "~/shared/economy";

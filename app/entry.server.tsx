@@ -12,7 +12,7 @@ import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import type { EntryContext, HandleErrorFunction } from "react-router";
 import { isRouteErrorResponse, ServerRouter } from "react-router";
-import { viewerServerAvailability } from "./data/viewer.server";
+import { viewerServerAvailability } from "./viewer.server";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule";
 import { scheduleEconomyPrices } from "./routines/economy-price";

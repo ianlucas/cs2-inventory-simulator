@@ -12,7 +12,7 @@ import {
   useSyncExternalStore
 } from "react";
 import { usePreferences, useRules } from "~/components/app-context";
-import { getViewerCatalog, ViewerItemInput } from "~/data/viewer";
+import { getViewerCatalog, ViewerItemInput } from "~/viewer";
 import { getItemIconKey, isIconRedundant, isIconRenderable } from "~/item-icon";
 import { pauseIconGeneration } from "~/item-icon-generator-role";
 import { discardIcon, forgetIcon, requestIcon } from "~/item-icon-queue.client";

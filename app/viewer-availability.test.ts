@@ -5,7 +5,7 @@
 
 import { CS2Economy, CS2ItemType, CS2RarityColor } from "@ianlucas/cs2-lib";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { ViewerServerStatus } from "~/data/viewer";
+import { ViewerServerStatus } from "~/viewer";
 import {
   VIEWER_BACKOFF_DELAYS_MS,
   VIEWER_BACKOFF_RESET_MS,

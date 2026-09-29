@@ -11,7 +11,7 @@ import {
   isViewerItemSupported,
   stringifyViewerItem,
   toViewerItem
-} from "~/data/viewer";
+} from "~/viewer";
 
 export const ICON_WIDTH = 512;
 export const ICON_HEIGHT = 384;

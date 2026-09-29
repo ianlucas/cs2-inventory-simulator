@@ -13,7 +13,7 @@ import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
-import { VIEWER_INSPECT_KINDS } from "~/data/viewer";
+import { VIEWER_INSPECT_KINDS } from "~/viewer";
 import { playSound } from "~/sound.client";
 import { useInventory, useTranslate } from "./app-context";
 import { useViewer } from "./hooks/use-viewer";

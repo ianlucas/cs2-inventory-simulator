@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2BaseInventoryItem } from "@ianlucas/cs2-lib";
-import { ViewerItemInput, toViewerItem } from "~/data/viewer";
+import { ViewerItemInput, toViewerItem } from "~/viewer";
 
 /**
  * The viewer's postMessage namespace.
