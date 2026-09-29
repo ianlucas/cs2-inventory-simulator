@@ -129,7 +129,7 @@ export const english = {
   HeaderCraftCannotCraft: "You cannot craft.",
   HeaderCraftInventoryFull: "Your inventory is full.",
   HeaderCraftLabel: "Craft Item",
-  HeaderDonate: "Donate",
+  HeaderDonate: "Buy me a coffee",
   HeaderInventoryLabel: "Inventory",
   HeaderSettingsLabel: "Settings",
   HeaderSignInLabel: "Sign-in to sync",

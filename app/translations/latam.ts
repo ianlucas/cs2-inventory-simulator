@@ -127,7 +127,7 @@ export const latam = {
   HeaderCraftCannotCraft: "No puedes crear.",
   HeaderCraftInventoryFull: "Tu inventario está lleno.",
   HeaderCraftLabel: "Crear objeto",
-  HeaderDonate: "Donar",
+  HeaderDonate: "Invítame un café",
   HeaderInventoryLabel: "Inventario",
   HeaderSettingsLabel: "Configuración",
   HeaderSignInLabel: "Iniciar sesión para sincronizar",

@@ -126,7 +126,7 @@ export const russian = {
   HeaderCraftCannotCraft: "Вы не можете создавать предметы.",
   HeaderCraftInventoryFull: "Инвентарь заполнен.",
   HeaderCraftLabel: "Создать предметы",
-  HeaderDonate: "Поддержать",
+  HeaderDonate: "Угостить кофе",
   HeaderInventoryLabel: "Инвентарь",
   HeaderSettingsLabel: "Настройки",
   HeaderSignInLabel: "Войти",

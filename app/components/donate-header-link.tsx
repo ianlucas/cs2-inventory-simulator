@@ -3,24 +3,25 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faMugHot } from "@fortawesome/free-solid-svg-icons";
 import { isOurHostname } from "~/shared/misc";
 import { useTranslate } from "./app-context";
 import { HeaderLink } from "./header-link";
 
 export function DonateHeaderLink() {
   const translate = useTranslate();
-  /* Consider donating to the project on donate.cstrike.app if you are
+  /* Consider buying me a coffee on buymeacoffee.com/ianlucas if you are
   self-hosting this app! */
   return (
     typeof window !== "undefined" &&
     isOurHostname() && (
       <HeaderLink
-        className="font-bold"
-        icon={faHeart}
+        className="group rounded-sm font-bold text-amber-300 ring-1 ring-amber-300/40 hover:text-amber-200 hover:ring-amber-300/80 active:bg-amber-300/20"
+        icon={faMugHot}
+        iconStyles="h-4 origin-bottom group-hover:animate-wiggle"
         label={translate("HeaderDonate")}
         target="_blank"
-        to="https://www.paypal.com/donate/?hosted_button_id=KKE7AT623ALX2"
+        to="https://buymeacoffee.com/ianlucas"
       />
     )
   );

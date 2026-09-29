@@ -126,7 +126,7 @@ export const hungarian = {
   HeaderCraftCannotCraft: "Nem tudsz készíteni.",
   HeaderCraftInventoryFull: "A raktárad tele van.",
   HeaderCraftLabel: "Tárgy készítése",
-  HeaderDonate: "Adományozás",
+  HeaderDonate: "Hívj meg egy kávéra",
   HeaderInventoryLabel: "Raktár",
   HeaderSettingsLabel: "Beállítások",
   HeaderSignInLabel: "Bejelentkezés szinkronizáláshoz",
