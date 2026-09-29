@@ -7,9 +7,20 @@ import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
 import { CS2Economy, CS2_ITEMS } from "@ianlucas/cs2-lib";
 import { StrictMode, startTransition } from "react";
 import { hydrateRoot } from "react-dom/client";
+import { type ClientOnErrorFunction, isRouteErrorResponse } from "react-router";
 import { HydratedRouter } from "react-router/dom";
 import { clientGlobals } from "./globals";
+import { initClientMonitoring } from "./monitoring.client";
+import { logError } from "./utils/monitoring";
 import { fetchTranslation } from "./utils/translation-api";
+
+initClientMonitoring();
+
+const handleRouteError: ClientOnErrorFunction = (error, { pattern }) => {
+  if (!isRouteErrorResponse(error)) {
+    logError("Route failed.", { error, extra: { pattern } });
+  }
+};
 
 function hydrate() {
   const { itemTranslationMap } = clientGlobals;
@@ -18,7 +29,7 @@ function hydrate() {
     itemTranslationMap === null ||
     Object.keys(itemTranslationMap).length === 0
   ) {
-    console.error(
+    logError(
       "[InventorySimulator] Item translation map is missing or empty. " +
         "This usually happens when your browser cached a stale translation " +
         "file during a deployment. Please clear your browser cache and reload."
@@ -36,7 +47,7 @@ function hydrate() {
     hydrateRoot(
       document,
       <StrictMode>
-        <HydratedRouter />
+        <HydratedRouter onError={handleRouteError} />
       </StrictMode>
     );
   });
@@ -50,7 +61,7 @@ async function loadTranslationsAndHydrate() {
     clientGlobals.systemTranslationMap = systemTranslationMap;
     clientGlobals.itemTranslationMap = itemTranslationMap;
   } catch (error) {
-    console.error("[InventorySimulator] Failed to load translations:", error);
+    logError("[InventorySimulator] Failed to load translations.", { error });
   }
   hydrate();
 }

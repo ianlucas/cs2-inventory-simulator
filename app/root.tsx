@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { useEffect } from "react";
 import type {
   LinksFunction,
   LoaderFunctionArgs,
@@ -17,7 +18,6 @@ import {
   ScrollRestoration,
   useLoaderData
 } from "react-router";
-
 import { findRequestUser } from "./auth.server";
 import { AppProvider } from "./components/app-context";
 import { Background } from "./components/background";
@@ -36,6 +36,8 @@ import { viewerServerAvailability } from "./data/viewer.server";
 import {
   ASSETS_BASE_URL,
   CLOUDFLARE_ANALYTICS_TOKEN,
+  SENTRY_CLIENT_DSN,
+  SENTRY_ENVIRONMENT,
   SOURCE_COMMIT,
   VIEWER_ASSETS_BASE_URL,
   VIEWER_EMBED_URL
@@ -44,6 +46,7 @@ import { middleware } from "./middleware.server";
 import { getClientRules } from "./models/rule";
 import { steamCallbackUrl, viewerKey } from "./models/rule.server";
 import { loadOrCreateUserInventory } from "./models/user.server";
+import { setMonitoringUser } from "./monitoring.client";
 import { getBackground } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
 import { getToggleable } from "./preferences/toggleable.server";
@@ -94,6 +97,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
       viewerEmbedUrl: nonEmptyString(VIEWER_EMBED_URL),
       viewerAssetsBaseUrl: nonEmptyString(VIEWER_ASSETS_BASE_URL),
       cloudflareAnalyticsToken: CLOUDFLARE_ANALYTICS_TOKEN,
+      sentryClientDsn: nonEmptyString(SENTRY_CLIENT_DSN),
+      sentryEnvironment: SENTRY_ENVIRONMENT,
       sourceCommit: SOURCE_COMMIT,
       viewerKey: await viewerKey.get(),
       viewer: viewerServerAvailability.getStatus(clientRules.viewerEnabled),
@@ -126,12 +131,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function App() {
   const appProps = useLoaderData<typeof loader>();
   const { footer, header, inventory } = useRootLayout();
+  const userId = appProps.user?.id;
+
+  useEffect(() => {
+    setMonitoringUser(userId);
+  }, [userId]);
 
   return (
     <AppProvider {...appProps}>
       <html
         className="scrollbar-gutter-stable"
         data-language={appProps.preferences.language}
+        data-sentry-dsn={appProps.rules.sentryClientDsn}
+        data-sentry-environment={appProps.rules.sentryEnvironment}
         lang={appProps.preferences.lang}
         onContextMenu={(event) => event.preventDefault()}
       >

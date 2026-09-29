@@ -5,6 +5,7 @@
 
 import { assert } from "@ianlucas/cs2-lib";
 import dotenv from "dotenv";
+import { nonEmptyString } from "./utils/misc";
 
 dotenv.config({
   quiet: true
@@ -20,6 +21,8 @@ export const {
   ASSETS_BASE_URL,
   CLOUDFLARE_ANALYTICS_TOKEN,
   CS2_CSGO_PATH,
+  SENTRY_CLIENT_DSN,
+  SENTRY_DSN,
   SOURCE_COMMIT,
   STEAM_API_KEY,
   STEAM_CALLBACK_URL,
@@ -27,3 +30,6 @@ export const {
   VIEWER_EMBED_URL,
   VIEWER_KEY
 } = process.env;
+
+export const SENTRY_ENVIRONMENT =
+  nonEmptyString(process.env.SENTRY_ENVIRONMENT) ?? "production";

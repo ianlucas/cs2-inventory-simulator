@@ -5,6 +5,7 @@
 
 import { serverGlobals } from "./globals";
 import { appLogoUrl } from "./models/rule.server";
+import { logError } from "./utils/monitoring";
 
 export async function setupLogo() {
   try {
@@ -17,7 +18,7 @@ export async function setupLogo() {
     const mimeType = response.headers.get("content-type");
     const base64Url = `data:${mimeType};base64,${string}`;
     serverGlobals.appLogoBase64Url = base64Url;
-  } catch {
-    console.error("Unable to fetch application logo.");
+  } catch (error) {
+    logError("Unable to fetch application logo.", { error });
   }
 }

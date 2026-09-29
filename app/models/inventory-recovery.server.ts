@@ -5,6 +5,7 @@
 
 import { CS2InventoryLoadChanges } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
+import { logError } from "~/utils/monitoring";
 
 export async function recordInventoryWipe(
   userId: string,
@@ -19,7 +20,10 @@ export async function recordInventoryWipe(
       }
     });
   } catch (error) {
-    console.error(`Failed to record inventory wipe for user ${userId}.`, error);
+    logError("Failed to record an inventory wipe.", {
+      error,
+      extra: { userId }
+    });
   }
 }
 
@@ -38,10 +42,10 @@ export async function recordInventoryLoadChanges(
       }
     });
   } catch (error) {
-    console.error(
-      `Failed to record inventory load changes for user ${userId}.`,
-      error
-    );
+    logError("Failed to record inventory load changes.", {
+      error,
+      extra: { userId }
+    });
   }
 }
 

@@ -10,6 +10,7 @@ import {
   viewerKey
 } from "~/models/rule.server";
 import { singleton } from "~/singleton.server";
+import { logError } from "~/utils/monitoring";
 import {
   DEFAULT_VIEWER_EMBED_URL,
   ViewerCatalog,
@@ -164,9 +165,9 @@ export class ViewerServerAvailability {
     try {
       return await viewerEnabled.isTrueForAnyone();
     } catch (error) {
-      console.warn(
-        `3D viewer: unable to read the viewerEnabled rule. ${describeError(error)}`
-      );
+      logError("3D viewer: unable to read the viewerEnabled rule.", {
+        error
+      });
       // Keep the loops (and their last answers) through a database hiccup.
       return true;
     }
@@ -197,7 +198,7 @@ export class ViewerServerAvailability {
       return VIEWER_CATALOG_REFRESH_MS;
     }
     if (this.catalog.status !== "failed") {
-      console.warn(`3D viewer: catalog fetch failed (${failure}).`);
+      logError("3D viewer: catalog fetch failed.", { extra: { failure } });
     }
     this.catalog = { status: "failed" };
     return VIEWER_CATALOG_RETRY_MS;
@@ -280,10 +281,10 @@ export class ViewerServerAvailability {
     detail?: string
   ) {
     if (this.rateLimit.status !== status) {
-      console.warn(
-        `3D viewer: ${status}${detail !== undefined ? ` (${detail})` : ""}, ` +
-          `checking again in ${Math.round(wait / 1000)}s.`
-      );
+      // `status` is a fixed set, so it can stay in the message.
+      logError(`3D viewer: paused (${status}).`, {
+        extra: { detail, retryInSeconds: Math.round(wait / 1000) }
+      });
     }
     this.rateLimit = { status, retryAt: Date.now() + wait };
     return wait;

@@ -41,12 +41,13 @@ import {
   isIconTileVisible,
   subscribeIconTileVisibility
 } from "./item-icon-visibility";
-import { VIEWER_CAPTURE_TIMEOUT_MS } from "./viewer-api";
+import { logError, logWarning } from "./monitoring";
 import type {
   ViewerApi,
   ViewerCaptureError,
   ViewerCaptured
 } from "./viewer-api";
+import { VIEWER_CAPTURE_TIMEOUT_MS } from "./viewer-api";
 
 export const ICON_CAPTURE_TIMEOUT_MS = VIEWER_CAPTURE_TIMEOUT_MS;
 export const ICON_IDLE_TEARDOWN_MS = 30_000;
@@ -324,8 +325,9 @@ async function rejectItem(
   entry: Pending,
   error: ViewerCaptureError
 ): Promise<void> {
-  console.warn(
-    `[InventorySimulator] The 3D viewer could not render an item's icon (${error}): ${entry.key}`
+  logWarning(
+    `[InventorySimulator] The 3D viewer could not render an item's icon (${error}).`,
+    { extra: { key: entry.key } }
   );
   await writeIconFailure(entry.key, error, Date.now() + ITEM_RETRY_AFTER_MS);
   await countWrite();
@@ -372,8 +374,8 @@ async function run(generator: ViewerApi, entry: Pending): Promise<void> {
       return;
     }
     if (error !== undefined && SESSION_ERRORS.has(error)) {
-      console.error(
-        `[InventorySimulator] 3D inventory icons disabled: the viewer refused to capture (${error}). `
+      logError(
+        `[InventorySimulator] 3D inventory icons disabled: the viewer refused to capture (${error}).`
       );
       disableIconGeneration();
       return;
