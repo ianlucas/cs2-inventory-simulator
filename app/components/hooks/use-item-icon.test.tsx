@@ -54,11 +54,9 @@ vi.mock("~/item-icon-queue.client", () => ({
   }
 }));
 
-vi.mock("~/item-icon-registry", () => ({
+vi.mock("~/item-icon-registry.client", () => ({
   getIconUrl: (key: string) => queue.urls.get(key),
-  getIconUrlServer: () => undefined,
   isIconUnavailable: (key: string) => queue.unavailable.has(key),
-  isIconUnavailableServer: () => false,
   subscribeIcon: (key: string, listener: () => void) => {
     const entry = queue.listeners.get(key) ?? new Set<() => void>();
     entry.add(listener);

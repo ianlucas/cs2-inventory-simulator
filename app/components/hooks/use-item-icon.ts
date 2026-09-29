@@ -14,17 +14,23 @@ import {
 import { usePreferences, useRules } from "~/components/app-context";
 import { getViewerCatalog, ViewerItemInput } from "~/viewer";
 import { getItemIconKey, isIconRedundant, isIconRenderable } from "~/item-icon";
-import { pauseIconGeneration } from "~/item-icon-generator-role";
+import { pauseIconGeneration } from "~/item-icon-generator-role.client";
 import { discardIcon, forgetIcon, requestIcon } from "~/item-icon-queue.client";
 import {
   getIconUrl,
-  getIconUrlServer,
   isIconUnavailable,
-  isIconUnavailableServer,
   subscribeIcon
-} from "~/item-icon-registry";
+} from "~/item-icon-registry.client";
 import { observeIconTile } from "~/item-icon-visibility.client";
 import { isOurHostname, noop } from "~/shared/misc";
+
+function getIconUrlServer(): undefined {
+  return undefined;
+}
+
+function isIconUnavailableServer(): boolean {
+  return false;
+}
 
 function getItemEditedAt(item: ViewerItemInput): number | undefined {
   if (item instanceof CS2InventoryItem) {

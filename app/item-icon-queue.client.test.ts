@@ -46,16 +46,16 @@ const tabLock = vi.hoisted(() => ({
   promote: undefined as (() => void) | undefined
 }));
 
-vi.mock("./tab-leader.client", () => ({
-  claimTabLock: async (_name: string, options?: { onGranted?: () => void }) => {
+vi.mock("./web-lock.client", () => ({
+  holdWebLock: async (_name: string, options?: { onGranted?: () => void }) => {
     tabLock.promote = options?.onGranted;
     return tabLock.granted;
   }
 }));
 
 type Queue = typeof import("./item-icon-queue.client") &
-  typeof import("./item-icon-generator-role") &
-  typeof import("./item-icon-registry") &
+  typeof import("./item-icon-generator-role.client") &
+  typeof import("./item-icon-registry.client") &
   typeof import("./item-icon-visibility.client");
 
 interface FakeApi {
@@ -157,8 +157,8 @@ async function load(): Promise<Queue> {
   vi.resetModules();
   const [queue, generator, registry, visibility] = await Promise.all([
     import("./item-icon-queue.client"),
-    import("./item-icon-generator-role"),
-    import("./item-icon-registry"),
+    import("./item-icon-generator-role.client"),
+    import("./item-icon-registry.client"),
     import("./item-icon-visibility.client")
   ]);
   return { ...queue, ...generator, ...registry, ...visibility };

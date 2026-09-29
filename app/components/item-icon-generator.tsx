@@ -8,11 +8,9 @@ import { useRules } from "~/components/app-context";
 import { ICON_HEIGHT, ICON_WIDTH } from "~/item-icon";
 import {
   getIconGeneratorGeneration,
-  getIconGeneratorGenerationServer,
   isIconGeneratorWanted,
-  isIconGeneratorWantedServer,
   subscribeIconGeneratorWanted
-} from "~/item-icon-generator-role";
+} from "~/item-icon-generator-role.client";
 import {
   getIconGeneratorSeed,
   setIconGeneratorApi
@@ -30,6 +28,14 @@ const PAINTED_BUT_INVISIBLE_STYLE: CSSProperties = {
   right: 0,
   width: ICON_WIDTH
 };
+
+function isIconGeneratorWantedServer(): boolean {
+  return false;
+}
+
+function getIconGeneratorGenerationServer(): number {
+  return 0;
+}
 
 export function ItemIconGenerator() {
   const { viewerAssetsBaseUrl, viewerEmbedUrl, viewerKey } = useRules();

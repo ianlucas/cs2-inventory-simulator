@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { claimTabLock } from "./tab-leader.client";
+import { holdWebLock } from "./web-lock.client";
 
 type RequestArgs =
   | [string, LockOptions, LockGrantedCallback<unknown>]
@@ -47,11 +47,11 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("tab lock", () => {
+describe("web lock", () => {
   it("claims the lock when no other tab holds it", async () => {
     const { calls } = grant(true);
 
-    await expect(claimTabLock("icons")).resolves.toBe(true);
+    await expect(holdWebLock("icons")).resolves.toBe(true);
     expect(argsOf(calls[0]).name).toBe("icons");
     expect(argsOf(calls[0]).options).toEqual({ ifAvailable: true });
   });
@@ -59,13 +59,13 @@ describe("tab lock", () => {
   it("declines rather than waiting when another tab holds it", async () => {
     grant(false);
 
-    await expect(claimTabLock("icons")).resolves.toBe(false);
+    await expect(holdWebLock("icons")).resolves.toBe(false);
   });
 
   it("never releases a lock it claimed", async () => {
     const { holding } = grant(true);
 
-    await claimTabLock("icons");
+    await holdWebLock("icons");
     await Promise.resolve();
 
     expect(holding.settled).toBe(false);
@@ -74,7 +74,7 @@ describe("tab lock", () => {
   it("releases a lock it was not granted", async () => {
     const { holding } = grant(false);
 
-    await claimTabLock("icons");
+    await holdWebLock("icons");
     await Promise.resolve();
 
     expect(holding.settled).toBe(true);
@@ -83,7 +83,7 @@ describe("tab lock", () => {
   it("declines where the Web Locks API is unavailable, rather than letting every tab claim", async () => {
     vi.stubGlobal("navigator", {});
 
-    await expect(claimTabLock("icons")).resolves.toBe(false);
+    await expect(holdWebLock("icons")).resolves.toBe(false);
   });
 
   it("declines when the lock request is refused outright", async () => {
@@ -91,7 +91,7 @@ describe("tab lock", () => {
       throw new Error("SecurityError");
     });
 
-    await expect(claimTabLock("icons")).resolves.toBe(false);
+    await expect(holdWebLock("icons")).resolves.toBe(false);
   });
 
   it("waits for the holder to go away, then promotes this tab", async () => {
@@ -109,7 +109,7 @@ describe("tab lock", () => {
     });
     const onGranted = vi.fn();
 
-    await expect(claimTabLock("icons", { onGranted })).resolves.toBe(false);
+    await expect(holdWebLock("icons", { onGranted })).resolves.toBe(false);
     await Promise.resolve();
 
     expect(calls).toHaveLength(2);
@@ -126,7 +126,7 @@ describe("tab lock", () => {
   it("does not wait for the holder when the caller has nothing to promote", async () => {
     const { calls } = grant(false);
 
-    await claimTabLock("icons");
+    await holdWebLock("icons");
     await Promise.resolve();
 
     expect(calls).toHaveLength(1);
