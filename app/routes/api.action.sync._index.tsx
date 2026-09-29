@@ -68,9 +68,9 @@ import {
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
-import { isAttachmentCountAllowed } from "~/shared/attachments";
 import { editInventoryItem } from "~/shared/inventory";
 import { hasKeys } from "~/shared/misc";
+import { isCountAllowed } from "~/shared/number";
 import {
   clientInventoryItemShape,
   itemEditorAttributesShape,
@@ -244,14 +244,14 @@ async function enforceMaxAttachments(
   target?: CS2InventoryItem
 ) {
   assert(
-    isAttachmentCountAllowed({
+    isCountAllowed({
       current: target?.getPatchesCount() ?? 0,
       max: await inventoryItemMaxPatches.for(userId).get(),
       next: patches !== undefined ? Object.keys(patches).length : 0
     })
   );
   assert(
-    isAttachmentCountAllowed({
+    isCountAllowed({
       current: target?.getStickersCount() ?? 0,
       max: await inventoryItemMaxStickers.for(userId).get(),
       next: stickers !== undefined ? Object.keys(stickers).length : 0
@@ -518,7 +518,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             await inventoryItemAllowApplyPatch.for(userId).truthy();
             const count = inventory.get(action.targetUid).getPatchesCount();
             assert(
-              isAttachmentCountAllowed({
+              isCountAllowed({
                 current: count,
                 max: await inventoryItemMaxPatches.for(userId).get(),
                 next: count + 1
@@ -542,7 +542,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             await inventoryItemAllowApplySticker.for(userId).truthy();
             const count = inventory.get(action.targetUid).getStickersCount();
             assert(
-              isAttachmentCountAllowed({
+              isCountAllowed({
                 current: count,
                 max: await inventoryItemMaxStickers.for(userId).get(),
                 next: count + 1
@@ -631,7 +631,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
           case SyncAction.AddWithSticker:
             await enforceItemHideRules(action.itemId, userId, craftHideRules);
             assert(
-              isAttachmentCountAllowed({
+              isCountAllowed({
                 current: 0,
                 max: await inventoryItemMaxStickers.for(userId).get(),
                 next: 1

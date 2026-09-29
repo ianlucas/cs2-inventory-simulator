@@ -23,3 +23,19 @@ export function format(n: number) {
     return n.toString();
   }
 }
+
+export function resolveLimit(value: number, hardMax: number) {
+  return value < 0 ? hardMax : Math.min(value, hardMax);
+}
+
+export function isCountAllowed({
+  current,
+  max,
+  next
+}: {
+  current: number;
+  max: number;
+  next: number;
+}) {
+  return next <= Math.max(max, current);
+}

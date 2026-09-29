@@ -12,8 +12,8 @@ import {
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { STEAM_API_KEY, STEAM_CALLBACK_URL, VIEWER_KEY } from "~/env.server";
-import { resolveMaxAttachments } from "~/shared/attachments";
 import { noop } from "~/shared/misc";
+import { resolveLimit } from "~/shared/number";
 
 class RuleFor<RuleValue> {
   constructor(private value: Promise<RuleValue>) {}
@@ -385,14 +385,14 @@ export const inventoryItemMaxPatches = new Rule({
   name: "inventoryItemMaxPatches",
   type: "number",
   defaultValue: -1,
-  transform: (value) => resolveMaxAttachments(value, CS2_MAX_PATCHES)
+  transform: (value) => resolveLimit(value, CS2_MAX_PATCHES)
 });
 
 export const inventoryItemMaxStickers = new Rule({
   name: "inventoryItemMaxStickers",
   type: "number",
   defaultValue: -1,
-  transform: (value) => resolveMaxAttachments(value, CS2_MAX_STICKERS)
+  transform: (value) => resolveLimit(value, CS2_MAX_STICKERS)
 });
 
 export const inventoryItemAllowShare = new Rule({
