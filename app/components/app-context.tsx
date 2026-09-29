@@ -40,7 +40,7 @@ import {
 import { SerializeFrom } from "~/shared/misc";
 import { pushToSync, sync } from "~/sync";
 import { cacheAuthenticatedUserId } from "~/user-cached-data";
-import { viewerClientAvailability } from "~/viewer-availability";
+import { viewerClientAvailability } from "~/viewer-client-availability";
 
 const AppContext = createContext<
   | ({

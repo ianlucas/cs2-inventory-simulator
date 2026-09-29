@@ -11,7 +11,7 @@ import {
   VIEWER_BACKOFF_RESET_MS,
   ViewerClientAvailability,
   viewerClientAvailability
-} from "./viewer-availability";
+} from "./viewer-client-availability";
 
 CS2Economy.load({
   items: [

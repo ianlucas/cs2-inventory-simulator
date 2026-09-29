@@ -75,3 +75,7 @@ export function tryOrDefault<T, R = undefined>(
     return defaultValue;
   }
 }
+
+export function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
+}

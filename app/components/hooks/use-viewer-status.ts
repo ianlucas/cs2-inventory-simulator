@@ -6,7 +6,7 @@
 import { useEffect, useState } from "react";
 import { noop } from "~/shared/misc";
 import { ViewerApi } from "~/viewer-api.client";
-import { viewerClientAvailability } from "~/viewer-availability";
+import { viewerClientAvailability } from "~/viewer-client-availability";
 
 const VIEWER_READY_TIMEOUT_MS = 6_000;
 

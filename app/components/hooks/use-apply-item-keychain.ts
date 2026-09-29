@@ -11,7 +11,7 @@ import {
   useRules
 } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
-import { viewerClientAvailability } from "~/viewer-availability";
+import { viewerClientAvailability } from "~/viewer-client-availability";
 
 export function useApplyItemKeychain() {
   const items = useInventoryItems();

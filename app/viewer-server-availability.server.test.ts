@@ -28,7 +28,7 @@ import {
   VIEWER_RATE_LIMIT_REFRESH_MS,
   VIEWER_RATE_LIMIT_RETRY_MS,
   ViewerServerAvailability
-} from "./viewer.server";
+} from "./viewer-server-availability.server";
 
 const CATALOG = { maxId: 10, holes: [[2, 3]] };
 

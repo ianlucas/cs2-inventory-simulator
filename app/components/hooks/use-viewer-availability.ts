@@ -6,7 +6,7 @@
 import { useCallback, useSyncExternalStore } from "react";
 import { usePreferences, useRules } from "~/components/app-context";
 import { ViewerItemInput, ViewerItemKind } from "~/viewer";
-import { viewerClientAvailability } from "~/viewer-availability";
+import { viewerClientAvailability } from "~/viewer-client-availability";
 
 export function useViewerAvailability(
   item?: ViewerItemInput,
