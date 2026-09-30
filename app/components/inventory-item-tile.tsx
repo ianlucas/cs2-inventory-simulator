@@ -12,7 +12,7 @@ import {
   getTimestamp
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useItemIcon } from "~/components/hooks/use-item-icon";
+import { useViewerIcon } from "~/components/hooks/use-viewer-icon";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { has } from "~/shared/misc";
 import { useTranslate } from "./app-context";
@@ -33,7 +33,9 @@ export function InventoryItemTile({
 }) {
   const translate = useTranslate();
   const nameItem = useNameItem();
-  const { iconRef, iconUrl } = useItemIcon(item, preview === true);
+  const { ref: iconRef, url: iconUrl } = useViewerIcon(item, {
+    enabled: preview === true
+  });
   const inventoryItem = item instanceof CS2InventoryItem ? item : undefined;
   const [model, name] = nameItem(item, "inventory-name");
 

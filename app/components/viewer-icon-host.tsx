@@ -3,18 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CSSProperties, useSyncExternalStore } from "react";
+import {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useSyncExternalStore
+} from "react";
 import { useRules } from "~/components/app-context";
-import { ICON_HEIGHT, ICON_WIDTH } from "~/item-icon";
-import {
-  getIconGeneratorGeneration,
-  isIconGeneratorWanted,
-  subscribeIconGeneratorWanted
-} from "~/item-icon-generator-role.client";
-import {
-  getIconGeneratorSeed,
-  setIconGeneratorApi
-} from "~/item-icon-queue.client";
+import type { ViewerApi } from "~/viewer-api.client";
+import { ICON_HEIGHT, ICON_WIDTH } from "~/viewer-icon";
+import { viewerIcons } from "~/viewer-icon.client";
 import { Viewer } from "./viewer";
 
 const PAINTED_BUT_INVISIBLE_STYLE: CSSProperties = {
@@ -29,27 +27,38 @@ const PAINTED_BUT_INVISIBLE_STYLE: CSSProperties = {
   width: ICON_WIDTH
 };
 
-function isIconGeneratorWantedServer(): boolean {
-  return false;
+function subscribe(listener: () => void) {
+  return viewerIcons.subscribeGenerator(listener);
 }
 
-function getIconGeneratorGenerationServer(): number {
-  return 0;
+function getGeneration() {
+  return viewerIcons.getMountedGeneration();
 }
 
-export function ItemIconGenerator() {
+function getGenerationServer(): undefined {
+  return undefined;
+}
+
+export function ViewerIconHost() {
   const { viewerAssetsBaseUrl, viewerEmbedUrl, viewerKey } = useRules();
-  const wanted = useSyncExternalStore(
-    subscribeIconGeneratorWanted,
-    isIconGeneratorWanted,
-    isIconGeneratorWantedServer
-  );
   const generation = useSyncExternalStore(
-    subscribeIconGeneratorWanted,
-    getIconGeneratorGeneration,
-    getIconGeneratorGenerationServer
+    subscribe,
+    getGeneration,
+    getGenerationServer
   );
-  if (!wanted) {
+
+  useEffect(() => viewerIcons.attachHost(), []);
+
+  const onApi = useCallback(
+    (api: ViewerApi | undefined) => {
+      if (generation !== undefined) {
+        viewerIcons.setApi(generation, api);
+      }
+    },
+    [generation]
+  );
+
+  if (generation === undefined) {
     return null;
   }
   return (
@@ -60,9 +69,9 @@ export function ItemIconGenerator() {
       cdn={viewerAssetsBaseUrl || undefined}
       embedUrl={viewerEmbedUrl || undefined}
       icon
-      item={getIconGeneratorSeed()}
+      item={viewerIcons.getSeed()}
       key={generation}
-      onApi={setIconGeneratorApi}
+      onApi={onApi}
       style={PAINTED_BUT_INVISIBLE_STYLE}
       tabIndex={-1}
       title="CS2 3D viewer (inventory icons)"
