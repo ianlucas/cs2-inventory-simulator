@@ -9,7 +9,7 @@ import {
   CS2_STICKER_WEAR_FACTOR
 } from "@ianlucas/cs2-lib";
 import { useEffect, useRef } from "react";
-import { getTypedFromLocalStorage } from "~/localstorage";
+import { getAppVolume } from "~/user-storage";
 
 const SCRATCH_THROTTLE_MS = 500;
 
@@ -48,7 +48,7 @@ export function ScrapeLevelSlider({
     const scratch = (scratchRef.current ??= new Audio(
       "/sounds/sticker_scratch1.wav"
     ));
-    scratch.volume = getTypedFromLocalStorage("appVolume", 1);
+    scratch.volume = getAppVolume();
     scratch.currentTime = 0;
     void scratch.play().catch(() => {});
   }, [value]);

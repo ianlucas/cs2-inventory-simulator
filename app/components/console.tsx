@@ -14,7 +14,8 @@ import {
   useRef,
   useState
 } from "react";
-import { colorText, safeParseJson } from "~/shared/misc";
+import { getTypedFromLocalStorage, setToLocalStorage } from "~/local-storage";
+import { colorText } from "~/shared/misc";
 import { useStorageState } from "./hooks/use-storage-state";
 
 type Command = (params: {
@@ -28,12 +29,11 @@ const commands: Record<string, Command> = {};
 const convars = new Map<string, ConVar>();
 const CONVARS_STORAGE_KEY = "convars";
 
-function readConVarValues(): Record<string, string> {
-  if (typeof window === "undefined") {
-    return {};
-  }
-  const item = window.localStorage.getItem(CONVARS_STORAGE_KEY);
-  return item !== null ? (safeParseJson(item) ?? {}) : {};
+function readConVarValues() {
+  return getTypedFromLocalStorage<Record<string, string>>(
+    CONVARS_STORAGE_KEY,
+    {}
+  );
 }
 
 export class ConVar {
@@ -49,7 +49,7 @@ export class ConVar {
   }
 
   set value(value: string) {
-    window.localStorage.setItem(
+    setToLocalStorage(
       CONVARS_STORAGE_KEY,
       JSON.stringify({ ...readConVarValues(), [this.name]: value })
     );
