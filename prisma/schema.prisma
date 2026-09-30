@@ -175,6 +175,9 @@ model InventoryProjectionState {
   cs2LibVersion            String?
   economyProjectionVersion Int       @default(1)
   id                       Int       @id @default(1)
+  /// The live projection covers users whose User.syncedAt is at or after this,
+  /// and only moves it past users projected, or marked failed, at that syncedAt.
+  liveCursor               DateTime?
   updatedAt                DateTime  @updatedAt
 }
 

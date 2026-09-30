@@ -11,7 +11,8 @@ const mocks = vi.hoisted(() => {
   };
   return {
     projection,
-    upsert: vi.fn(async () => ({ lastSucceededSourceDate: null })),
+    createMany: vi.fn(async () => ({ count: 1 })),
+    findUniqueOrThrow: vi.fn(async () => ({ lastSucceededSourceDate: null })),
     isCurrentAfterRun: vi.fn(
       () => new Promise<boolean>((resolve) => (projection.finish = resolve))
     )
@@ -19,7 +20,12 @@ const mocks = vi.hoisted(() => {
 });
 
 vi.mock("~/db.server", () => ({
-  prisma: { economyPriceSyncState: { upsert: mocks.upsert } }
+  prisma: {
+    economyPriceSyncState: {
+      createMany: mocks.createMany,
+      findUniqueOrThrow: mocks.findUniqueOrThrow
+    }
+  }
 }));
 vi.mock("~/shared/monitoring", () => ({ logError: vi.fn() }));
 vi.mock("./economy-projector", () => ({
@@ -31,8 +37,8 @@ import { economyPriceSync } from "./economy-price-sync";
 it("waits for the economy projection before reading its state, and skips when it isn't current", async () => {
   economyPriceSync.start();
   await vi.waitFor(() => expect(mocks.isCurrentAfterRun).toHaveBeenCalled());
-  expect(mocks.upsert).not.toHaveBeenCalled();
+  expect(mocks.createMany).not.toHaveBeenCalled();
   mocks.projection.finish(false);
   await new Promise((resolve) => setTimeout(resolve, 0));
-  expect(mocks.upsert).not.toHaveBeenCalled();
+  expect(mocks.createMany).not.toHaveBeenCalled();
 });

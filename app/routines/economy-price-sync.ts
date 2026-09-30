@@ -30,9 +30,13 @@ async function fetchEconomyPrices(sourceDate: Date) {
 }
 
 async function createMeta() {
-  return await prisma.economyPriceSyncState.upsert({
-    create: { id: META_ID },
-    update: {},
+  // Prisma runs an upsert with an empty update as read-then-insert, which races
+  // between processes overlapping on a deploy; skipDuplicates uses ON CONFLICT.
+  await prisma.economyPriceSyncState.createMany({
+    data: { id: META_ID },
+    skipDuplicates: true
+  });
+  return await prisma.economyPriceSyncState.findUniqueOrThrow({
     where: { id: META_ID }
   });
 }

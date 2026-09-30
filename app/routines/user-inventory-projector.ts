@@ -21,7 +21,11 @@ import { singleton } from "~/singleton.server";
 const BACKFILL_BATCH_SIZE = 200;
 const BACKFILL_INTERVAL_MS = 10 * 60_000;
 const LIVE_BATCH_SIZE = 100;
+// Syncs stamp syncedAt before they commit, and hosts' clocks drift, so the live
+// cursor never moves past users who synced this recently.
+const LIVE_CURSOR_LAG_MS = 60_000;
 const LIVE_INTERVAL_MS = 60_000;
+const REPORTED_FAILED_USER_IDS = 10;
 
 type ProjectedInventory = ReturnType<typeof projectInventory>;
 
@@ -158,7 +162,7 @@ function projectInventory(rawInventory: string | null) {
   return { items, stickers, patches, keychains };
 }
 
-type ProjectionResult = "failed" | "projected" | "skipped";
+type ProjectionResult = "projected" | "skipped";
 
 async function markProjectionFailed(userId: string) {
   const user = await prisma.user.findUnique({
@@ -176,91 +180,107 @@ async function markProjectionFailed(userId: string) {
 }
 
 async function projectUserInventory(userId: string): Promise<ProjectionResult> {
-  try {
-    await prisma.userInventoryProjection.upsert({
-      create: { userId },
-      update: {},
+  // Prisma runs an upsert with an empty update as read-then-insert, which races
+  // when both jobs pick up the same user; skipDuplicates uses ON CONFLICT.
+  await prisma.userInventoryProjection.createMany({
+    data: { userId },
+    skipDuplicates: true
+  });
+  return await prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`
+      SELECT "userId"
+      FROM "UserInventoryProjection"
+      WHERE "userId" = ${userId}
+      FOR UPDATE
+    `;
+    const user = await tx.user.findUnique({
+      select: { rawInventory: true, syncedAt: true },
+      where: { id: userId }
+    });
+    const projection = await tx.userInventoryProjection.findUniqueOrThrow({
       where: { userId }
     });
-    return await prisma.$transaction(async (tx) => {
-      await tx.$queryRaw`
-        SELECT "userId"
-        FROM "UserInventoryProjection"
-        WHERE "userId" = ${userId}
-        FOR UPDATE
-      `;
-      const user = await tx.user.findUnique({
-        select: { rawInventory: true, syncedAt: true },
-        where: { id: userId }
-      });
-      const projection = await tx.userInventoryProjection.findUniqueOrThrow({
-        where: { userId }
-      });
-      if (user === null) {
-        return "skipped";
-      }
-      const syncedAt = user.syncedAt.getTime();
-      if (
-        projection.projectedUserSyncedAt?.getTime() === syncedAt ||
-        projection.failedUserSyncedAt?.getTime() === syncedAt
-      ) {
-        return "skipped";
-      }
-      const inventory = projectInventory(user.rawInventory);
-      await tx.userInventoryItem.deleteMany({ where: { userId } });
-      if (inventory.items.length > 0) {
-        await tx.userInventoryItem.createMany({
-          data: inventory.items.map((item) => ({ ...item, userId }))
-        });
-      }
-      if (inventory.stickers.length > 0) {
-        await tx.userInventoryItemSticker.createMany({
-          data: inventory.stickers
-        });
-      }
-      if (inventory.patches.length > 0) {
-        await tx.userInventoryItemPatch.createMany({ data: inventory.patches });
-      }
-      if (inventory.keychains.length > 0) {
-        await tx.userInventoryItemKeychain.createMany({
-          data: inventory.keychains
-        });
-      }
-      await tx.userInventoryProjection.update({
-        data: {
-          failedUserSyncedAt: null,
-          projectedAt: new Date(),
-          projectedUserSyncedAt: user.syncedAt
-        },
-        where: { userId }
-      });
-      return "projected";
-    });
-  } catch {
-    try {
-      await markProjectionFailed(userId);
-    } catch {
-      // The aggregate job result still exposes a failed projection without polluting stdout.
+    if (user === null) {
+      return "skipped";
     }
-    return "failed";
-  }
+    const syncedAt = user.syncedAt.getTime();
+    if (
+      projection.projectedUserSyncedAt?.getTime() === syncedAt ||
+      projection.failedUserSyncedAt?.getTime() === syncedAt
+    ) {
+      return "skipped";
+    }
+    const inventory = projectInventory(user.rawInventory);
+    await tx.userInventoryItem.deleteMany({ where: { userId } });
+    if (inventory.items.length > 0) {
+      await tx.userInventoryItem.createMany({
+        data: inventory.items.map((item) => ({ ...item, userId }))
+      });
+    }
+    if (inventory.stickers.length > 0) {
+      await tx.userInventoryItemSticker.createMany({
+        data: inventory.stickers
+      });
+    }
+    if (inventory.patches.length > 0) {
+      await tx.userInventoryItemPatch.createMany({ data: inventory.patches });
+    }
+    if (inventory.keychains.length > 0) {
+      await tx.userInventoryItemKeychain.createMany({
+        data: inventory.keychains
+      });
+    }
+    await tx.userInventoryProjection.update({
+      data: {
+        failedUserSyncedAt: null,
+        projectedAt: new Date(),
+        projectedUserSyncedAt: user.syncedAt
+      },
+      where: { userId }
+    });
+    return "projected";
+  });
 }
 
-async function projectUsers(userIds: string[]) {
+/**
+ * Projects each user in turn. A failed user is marked so neither job retries
+ * them before their next sync, and the batch reports its first error.
+ */
+async function projectUsers(jobName: string, userIds: string[]) {
   const counts = { failed: 0, projected: 0, skipped: 0 };
+  const failures: Array<{ error: unknown; userId: string }> = [];
   for (const userId of userIds) {
-    counts[await projectUserInventory(userId)] += 1;
+    try {
+      counts[await projectUserInventory(userId)] += 1;
+    } catch (error) {
+      counts.failed += 1;
+      failures.push({ error, userId });
+      try {
+        await markProjectionFailed(userId);
+      } catch {
+        // The batch report below already covers this user.
+      }
+    }
   }
-  return counts;
+  if (failures.length > 0) {
+    logError(`${jobName}: some users failed to project.`, {
+      error: failures[0].error,
+      extra: {
+        ...counts,
+        failedUserIds: failures
+          .slice(0, REPORTED_FAILED_USER_IDS)
+          .map(({ userId }) => userId)
+      }
+    });
+  }
 }
 
 /**
  * Keeps the per-user inventory tables in sync with `User.rawInventory`: a live
- * job projects users who synced since boot, and a backfill job walks every
- * user once.
+ * job projects users as they sync, resuming from a stored cursor, and a
+ * backfill job walks every user once.
  */
 class UserInventoryProjector {
-  private readonly liveSince = new Date(Date.now() - LIVE_INTERVAL_MS);
   private readonly liveJob = new Job(
     "User inventory live projection",
     LIVE_INTERVAL_MS,
@@ -278,12 +298,14 @@ class UserInventoryProjector {
   }
 
   private async projectLive() {
-    const users = await prisma.$queryRaw<Array<{ id: string }>>`
-      SELECT "User"."id"
+    const state = await ensureInventoryProjectionState();
+    const settledBefore = new Date(Date.now() - LIVE_CURSOR_LAG_MS);
+    const users = await prisma.$queryRaw<Array<{ id: string; syncedAt: Date }>>`
+      SELECT "User"."id", "User"."syncedAt"
       FROM "User"
       LEFT JOIN "UserInventoryProjection"
         ON "UserInventoryProjection"."userId" = "User"."id"
-      WHERE "User"."syncedAt" >= ${this.liveSince}
+      WHERE "User"."syncedAt" >= ${state.liveCursor ?? settledBefore}
         AND (
           "UserInventoryProjection"."userId" IS NULL
           OR (
@@ -294,13 +316,19 @@ class UserInventoryProjector {
       ORDER BY "User"."syncedAt", "User"."id"
       LIMIT ${LIVE_BATCH_SIZE}
     `;
-    const counts = await projectUsers(users.map((user) => user.id));
-    if (counts.failed > 0) {
-      logError(
-        "User inventory live projection: some users failed to project.",
-        { extra: counts }
-      );
-    }
+    await projectUsers(
+      this.liveJob.name,
+      users.map((user) => user.id)
+    );
+    // Everyone who synced before the oldest pending user was already handled.
+    const oldestPending = users.at(0)?.syncedAt ?? settledBefore;
+    await prisma.inventoryProjectionState.update({
+      data: {
+        liveCursor:
+          oldestPending < settledBefore ? oldestPending : settledBefore
+      },
+      where: { id: INVENTORY_PROJECTION_STATE_ID }
+    });
   }
 
   private async backfill() {
@@ -317,7 +345,10 @@ class UserInventoryProjector {
           ? undefined
           : { id: { gt: state.backfillCursor } }
     });
-    const counts = await projectUsers(users.map((user) => user.id));
+    await projectUsers(
+      this.backfillJob.name,
+      users.map((user) => user.id)
+    );
     const lastUser = users.at(-1);
     await prisma.inventoryProjectionState.update({
       data:
@@ -329,11 +360,6 @@ class UserInventoryProjector {
           : { backfillCursor: lastUser?.id },
       where: { id: INVENTORY_PROJECTION_STATE_ID }
     });
-    if (counts.failed > 0) {
-      logError("User inventory backfill: some users failed to project.", {
-        extra: counts
-      });
-    }
   }
 }
 
