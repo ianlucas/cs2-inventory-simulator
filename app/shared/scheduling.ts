@@ -7,7 +7,8 @@ import { logError } from "./monitoring";
 
 /**
  * A self-rescheduling task: `tick` returns the delay until its next run, or
- * `undefined` to stop. `start` is idempotent.
+ * `undefined` to stop. A `tick` that throws is logged and also stops the loop.
+ * `start` is idempotent.
  */
 export class Loop {
   private running = false;
@@ -23,7 +24,12 @@ export class Loop {
   }
 
   private async run() {
-    const delay = await this.tick();
+    let delay: number | undefined;
+    try {
+      delay = await this.tick();
+    } catch (error) {
+      logError("Loop: tick failed, stopping.", { error });
+    }
     if (delay === undefined) {
       this.running = false;
       return;

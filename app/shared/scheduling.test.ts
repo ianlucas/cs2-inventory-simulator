@@ -37,6 +37,24 @@ describe("Loop", () => {
     await vi.advanceTimersByTimeAsync(0);
     expect(tick).toHaveBeenCalledTimes(3);
   });
+
+  it("logs a tick that throws, stops, and can be started again", async () => {
+    const error = new Error("boom");
+    const tick = vi.fn(async () => {
+      throw error;
+    });
+    const loop = new Loop(tick);
+    loop.start();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(logError).toHaveBeenCalledWith("Loop: tick failed, stopping.", {
+      error
+    });
+    await vi.advanceTimersByTimeAsync(10_000);
+    expect(tick).toHaveBeenCalledTimes(1);
+    loop.start();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(tick).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe("Job", () => {
