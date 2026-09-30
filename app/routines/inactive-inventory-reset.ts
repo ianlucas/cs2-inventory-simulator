@@ -10,6 +10,7 @@ import { getUserInventory, updateUserInventory } from "~/models/user.server";
 import { DAY_IN_MS, isInactive } from "~/shared/inactivity";
 import { safeLoadInventory } from "~/shared/inventory";
 import { logError } from "~/shared/monitoring";
+import { Job } from "~/shared/scheduling";
 import { singleton } from "~/singleton.server";
 
 function isInventoryEmpty(rawInventory: string | null) {
@@ -20,7 +21,7 @@ function isInventoryEmpty(rawInventory: string | null) {
   return inventory === undefined || inventory.size() === 0;
 }
 
-export async function resetInactiveInventories() {
+async function resetInactiveInventories() {
   const days = await inventoryInactivityResetDays.get();
   if (days <= 0) {
     return;
@@ -48,17 +49,18 @@ export async function resetInactiveInventories() {
       }
       await updateUserInventory(id, new CS2Inventory().stringify());
     } catch (error) {
-      logError("Failed to reset an inactive inventory.", {
-        error,
-        extra: { userId: id }
-      });
+      logError(
+        "Inactive inventory reset: failed to reset a user's inventory.",
+        {
+          error,
+          extra: { userId: id }
+        }
+      );
     }
   }
 }
 
-export function scheduleInactivityReset() {
-  singleton("inactivityReset", () => {
-    void resetInactiveInventories();
-    return setInterval(() => void resetInactiveInventories(), DAY_IN_MS);
-  });
-}
+export const inactiveInventoryReset = singleton(
+  "inactiveInventoryReset",
+  () => new Job("Inactive inventory reset", DAY_IN_MS, resetInactiveInventories)
+);

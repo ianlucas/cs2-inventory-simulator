@@ -4,44 +4,26 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS2Economy,
   CS2_INVENTORY_TIMESTAMP,
   type CS2InventoryItem
 } from "@ianlucas/cs2-lib";
 import { randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { setTimeout as sleep } from "node:timers/promises";
-import { fileURLToPath } from "node:url";
 import { prisma } from "~/db.server";
+import {
+  ensureInventoryProjectionState,
+  INVENTORY_PROJECTION_STATE_ID
+} from "~/models/inventory-projection-state.server";
 import { safeLoadInventory } from "~/shared/inventory";
 import { logError } from "~/shared/monitoring";
+import { Job } from "~/shared/scheduling";
 import { singleton } from "~/singleton.server";
 
 const BACKFILL_BATCH_SIZE = 200;
 const BACKFILL_INTERVAL_MS = 10 * 60_000;
-const ECONOMY_PROJECTION_INTERVAL_MS = 60 * 60_000;
-const ECONOMY_PROJECTION_POLL_MS = 2_000;
-const ECONOMY_PROJECTION_WAIT_MS = 5 * 60_000;
-const ECONOMY_PROJECTION_VERSION = 1;
 const LIVE_BATCH_SIZE = 100;
 const LIVE_INTERVAL_MS = 60_000;
-const META_ID = 1;
 
 type ProjectedInventory = ReturnType<typeof projectInventory>;
-
-let cs2LibVersion: string | undefined;
-function getCs2LibVersion() {
-  if (cs2LibVersion === undefined) {
-    const entry = fileURLToPath(import.meta.resolve("@ianlucas/cs2-lib"));
-    const packageJson = readFileSync(
-      join(dirname(entry), "..", "package.json"),
-      "utf8"
-    );
-    cs2LibVersion = (JSON.parse(packageJson) as { version: string }).version;
-  }
-  return cs2LibVersion;
-}
 
 function toDate(timestamp: number | undefined) {
   return timestamp === undefined
@@ -124,7 +106,7 @@ function projectInventoryItem(
   }
 }
 
-export function projectInventory(rawInventory: string | null) {
+function projectInventory(rawInventory: string | null) {
   const items: Array<{
     charges?: number;
     containerUid?: number;
@@ -174,87 +156,6 @@ export function projectInventory(rawInventory: string | null) {
     projectInventoryItem(item, undefined, items, stickers, patches, keychains);
   }
   return { items, stickers, patches, keychains };
-}
-
-export function projectEconomyItems() {
-  return CS2Economy.itemsAsArray.map((item) => ({
-    altName: item.alternateName,
-    base: item.isBase ?? false,
-    baseItemId: item.parentId,
-    category: item.categoryName,
-    collectionKey: item.collectionKey,
-    def: item.definitionIndex,
-    free: item.isDefault ?? false,
-    id: item.id,
-    modelKey: item.modelKey,
-    name: item.name,
-    rarityColor: item.rarityColor,
-    type: item.type
-  }));
-}
-
-async function createMeta() {
-  return await prisma.inventoryProjectionState.upsert({
-    create: { id: META_ID },
-    update: {},
-    where: { id: META_ID }
-  });
-}
-
-export async function isEconomyProjectionCurrent() {
-  const meta = await prisma.inventoryProjectionState.findUnique({
-    where: { id: META_ID }
-  });
-  return (
-    meta !== null &&
-    meta.cs2LibVersion === getCs2LibVersion() &&
-    meta.economyProjectionVersion === ECONOMY_PROJECTION_VERSION
-  );
-}
-
-export async function waitForEconomyProjection(
-  timeoutMs = ECONOMY_PROJECTION_WAIT_MS
-) {
-  const deadline = Date.now() + timeoutMs;
-  while (!(await isEconomyProjectionCurrent())) {
-    if (Date.now() >= deadline) {
-      throw new Error("Economy items were not projected in time.");
-    }
-    await sleep(ECONOMY_PROJECTION_POLL_MS);
-  }
-}
-
-export async function syncEconomyProjection() {
-  const version = getCs2LibVersion();
-  const meta = await createMeta();
-  if (
-    meta.cs2LibVersion === version &&
-    meta.economyProjectionVersion === ECONOMY_PROJECTION_VERSION
-  ) {
-    return;
-  }
-  const items = projectEconomyItems();
-  await prisma.$transaction(
-    async (tx) => {
-      await tx.economyItem.deleteMany();
-      for (let index = 0; index < items.length; index += 1_000) {
-        await tx.economyItem.createMany({
-          data: items.slice(index, index + 1_000)
-        });
-      }
-      await tx.inventoryProjectionState.update({
-        data: {
-          cs2LibVersion: version,
-          economyProjectionVersion: ECONOMY_PROJECTION_VERSION
-        },
-        where: { id: META_ID }
-      });
-      await tx.economyPriceSyncState.updateMany({
-        data: { lastSucceededSourceDate: null }
-      });
-    },
-    { maxWait: 30_000, timeout: 180_000 }
-  );
 }
 
 type ProjectionResult = "failed" | "projected" | "skipped";
@@ -353,98 +254,90 @@ async function projectUsers(userIds: string[]) {
   return counts;
 }
 
-export async function runLiveInventoryProjection(liveSince: Date) {
-  const users = await prisma.$queryRaw<Array<{ id: string }>>`
-    SELECT "User"."id"
-    FROM "User"
-    LEFT JOIN "UserInventoryProjection"
-      ON "UserInventoryProjection"."userId" = "User"."id"
-    WHERE "User"."syncedAt" >= ${liveSince}
-      AND (
-        "UserInventoryProjection"."userId" IS NULL
-        OR (
-          "UserInventoryProjection"."projectedUserSyncedAt" IS DISTINCT FROM "User"."syncedAt"
-          AND "UserInventoryProjection"."failedUserSyncedAt" IS DISTINCT FROM "User"."syncedAt"
+/**
+ * Keeps the per-user inventory tables in sync with `User.rawInventory`: a live
+ * job projects users who synced since boot, and a backfill job walks every
+ * user once.
+ */
+class UserInventoryProjector {
+  private readonly liveSince = new Date(Date.now() - LIVE_INTERVAL_MS);
+  private readonly liveJob = new Job(
+    "User inventory live projection",
+    LIVE_INTERVAL_MS,
+    () => this.projectLive()
+  );
+  private readonly backfillJob = new Job(
+    "User inventory backfill",
+    BACKFILL_INTERVAL_MS,
+    () => this.backfill()
+  );
+
+  start() {
+    this.liveJob.start();
+    this.backfillJob.start();
+  }
+
+  private async projectLive() {
+    const users = await prisma.$queryRaw<Array<{ id: string }>>`
+      SELECT "User"."id"
+      FROM "User"
+      LEFT JOIN "UserInventoryProjection"
+        ON "UserInventoryProjection"."userId" = "User"."id"
+      WHERE "User"."syncedAt" >= ${this.liveSince}
+        AND (
+          "UserInventoryProjection"."userId" IS NULL
+          OR (
+            "UserInventoryProjection"."projectedUserSyncedAt" IS DISTINCT FROM "User"."syncedAt"
+            AND "UserInventoryProjection"."failedUserSyncedAt" IS DISTINCT FROM "User"."syncedAt"
+          )
         )
-      )
-    ORDER BY "User"."syncedAt", "User"."id"
-    LIMIT ${LIVE_BATCH_SIZE}
-  `;
-  const counts = await projectUsers(users.map((user) => user.id));
-  if (counts.failed > 0) {
-    logError("Inventory live projection: some users failed to project.", {
-      extra: counts
-    });
+      ORDER BY "User"."syncedAt", "User"."id"
+      LIMIT ${LIVE_BATCH_SIZE}
+    `;
+    const counts = await projectUsers(users.map((user) => user.id));
+    if (counts.failed > 0) {
+      logError(
+        "User inventory live projection: some users failed to project.",
+        { extra: counts }
+      );
+    }
   }
-}
 
-export async function runInventoryBackfill() {
-  const meta = await createMeta();
-  if (meta.backfillCompletedAt !== null) {
-    return;
-  }
-  const users = await prisma.user.findMany({
-    orderBy: { id: "asc" },
-    select: { id: true },
-    take: BACKFILL_BATCH_SIZE,
-    where:
-      meta.backfillCursor === null
-        ? undefined
-        : { id: { gt: meta.backfillCursor } }
-  });
-  const counts = await projectUsers(users.map((user) => user.id));
-  const lastUser = users.at(-1);
-  await prisma.inventoryProjectionState.update({
-    data:
-      users.length < BACKFILL_BATCH_SIZE
-        ? {
-            backfillCompletedAt: new Date(),
-            backfillCursor: lastUser?.id ?? meta.backfillCursor
-          }
-        : { backfillCursor: lastUser?.id },
-    where: { id: META_ID }
-  });
-  if (counts.failed > 0) {
-    logError("Inventory backfill: some users failed to project.", {
-      extra: counts
-    });
-  }
-}
-
-function schedule(name: string, intervalMs: number, run: () => Promise<void>) {
-  let running = false;
-  const invoke = async () => {
-    if (running) {
+  private async backfill() {
+    const state = await ensureInventoryProjectionState();
+    if (state.backfillCompletedAt !== null) {
       return;
     }
-    running = true;
-    try {
-      await run();
-    } catch (error) {
-      logError("Inventory projection: job failed.", {
-        error,
-        extra: { job: name }
+    const users = await prisma.user.findMany({
+      orderBy: { id: "asc" },
+      select: { id: true },
+      take: BACKFILL_BATCH_SIZE,
+      where:
+        state.backfillCursor === null
+          ? undefined
+          : { id: { gt: state.backfillCursor } }
+    });
+    const counts = await projectUsers(users.map((user) => user.id));
+    const lastUser = users.at(-1);
+    await prisma.inventoryProjectionState.update({
+      data:
+        users.length < BACKFILL_BATCH_SIZE
+          ? {
+              backfillCompletedAt: new Date(),
+              backfillCursor: lastUser?.id ?? state.backfillCursor
+            }
+          : { backfillCursor: lastUser?.id },
+      where: { id: INVENTORY_PROJECTION_STATE_ID }
+    });
+    if (counts.failed > 0) {
+      logError("User inventory backfill: some users failed to project.", {
+        extra: counts
       });
-    } finally {
-      running = false;
     }
-  };
-  void invoke();
-  return setInterval(() => void invoke(), intervalMs);
+  }
 }
 
-export function scheduleInventoryProjection() {
-  singleton("inventoryProjection", () => {
-    schedule(
-      "Inventory economy projection",
-      ECONOMY_PROJECTION_INTERVAL_MS,
-      syncEconomyProjection
-    );
-    const liveSince = new Date(Date.now() - LIVE_INTERVAL_MS);
-    schedule("Inventory live projection", LIVE_INTERVAL_MS, () =>
-      runLiveInventoryProjection(liveSince)
-    );
-    schedule("Inventory backfill", BACKFILL_INTERVAL_MS, runInventoryBackfill);
-    return true;
-  });
-}
+export const userInventoryProjector = singleton(
+  "userInventoryProjector",
+  () => new UserInventoryProjector()
+);
