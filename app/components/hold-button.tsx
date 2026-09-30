@@ -5,7 +5,7 @@
 
 import clsx from "clsx";
 import { ComponentProps, PointerEvent, useRef, useState } from "react";
-import { getTypedFromLocalStorage } from "~/localstorage";
+import { getAppVolume } from "~/user-storage";
 import { ModalButton } from "./modal-button";
 import { TooltipBubble, useTooltip } from "./tooltip";
 
@@ -47,7 +47,7 @@ export function HoldButton({
       "/sounds/laptop_button_fill_loop_01.wav"
     ));
     loop.loop = true;
-    loop.volume = getTypedFromLocalStorage("appVolume", 1);
+    loop.volume = getAppVolume();
     loop.currentTime = 0;
     void loop.play().catch(() => {});
   }

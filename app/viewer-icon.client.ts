@@ -5,7 +5,7 @@
 
 import { CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { clientGlobals } from "~/globals";
-import { getTypedFromLocalStorage, setToLocalStorage } from "~/localstorage";
+import { getTypedFromLocalStorage, setToLocalStorage } from "~/local-storage";
 import { logError } from "~/shared/monitoring";
 import type { ViewerItemInput } from "~/viewer";
 import type {

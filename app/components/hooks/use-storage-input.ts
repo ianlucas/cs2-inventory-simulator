@@ -4,17 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useEffect } from "react";
+import { getFromLocalStorage, setToLocalStorage } from "~/local-storage";
 import { useInput } from "./use-input";
 
 export function useStorageInput(key: string, defaultValue: string) {
-  const [state, setState] = useInput(
-    typeof window === "undefined"
-      ? defaultValue
-      : window.localStorage.getItem(key) || defaultValue
-  );
+  const [state, setState] = useInput(getFromLocalStorage(key) || defaultValue);
 
   useEffect(() => {
-    window.localStorage.setItem(key, state);
+    setToLocalStorage(key, state);
   }, [state]);
 
   return [state, setState] as const;

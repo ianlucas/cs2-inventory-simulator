@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { getTypedFromLocalStorage } from "./localstorage";
 import { range } from "./shared/number";
+import { getAppVolume } from "./user-storage";
 
 let sounds: HTMLAudioElement[] = [];
 let index = 0;
@@ -39,7 +39,7 @@ export function playSound(
   }
   sounds[index].pause();
   sounds[index] = new Audio(`/sounds/${src}.wav`);
-  sounds[index].volume = getTypedFromLocalStorage("appVolume", 1);
+  sounds[index].volume = getAppVolume();
   sounds[index].play();
   index += 1;
   if (!sounds[index]) {

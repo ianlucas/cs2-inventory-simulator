@@ -10,7 +10,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations";
 import { beforeEach, expect, test } from "vitest";
-import { getCachedInventoryData } from "./inventory-cached-data";
+import { getCachedInventoryData } from "./inventory-storage";
 
 CS2Economy.load({
   items: CS2_ITEMS,

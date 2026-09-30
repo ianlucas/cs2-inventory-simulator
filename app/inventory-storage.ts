@@ -7,7 +7,7 @@ import {
   getFromLocalStorage,
   removeFromLocalStorage,
   setToLocalStorage
-} from "./localstorage";
+} from "./local-storage";
 import { safeLoadInventory } from "./shared/inventory";
 
 export function cacheInventoryData(value: string) {

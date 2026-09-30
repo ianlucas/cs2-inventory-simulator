@@ -29,6 +29,7 @@ import { languages } from "~/data/languages";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/middleware.server";
 import { getMetaTitle } from "~/root-meta";
+import { APP_VOLUME_STORAGE_KEY, DEFAULT_APP_VOLUME } from "~/user-storage";
 import type { Route } from "./+types/settings._index";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
 
@@ -65,7 +66,10 @@ export default function Settings() {
     selectedPrefer2dStickerEditor
   );
   const [statsForNerds, setStatsForNerds] = useCheckbox(selectedStatsForNerds);
-  const [volume, setVolume] = useStorageState("appVolume", 1);
+  const [volume, setVolume] = useStorageState(
+    APP_VOLUME_STORAGE_KEY,
+    DEFAULT_APP_VOLUME
+  );
 
   const submit = useSubmit();
   const navigate = useNavigate();

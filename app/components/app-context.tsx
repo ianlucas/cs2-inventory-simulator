@@ -25,7 +25,7 @@ import {
   cacheInventoryData,
   getCachedInventoryData,
   getSanitizedCachedInventoryData
-} from "~/inventory-cached-data";
+} from "~/inventory-storage";
 import type { loader } from "~/root";
 import { updateEconomyLanguage } from "~/shared/economy";
 import {
@@ -39,7 +39,7 @@ import {
 } from "~/shared/inventory-transform";
 import { SerializeFrom } from "~/shared/misc";
 import { pushToSync, sync } from "~/sync";
-import { cacheAuthenticatedUserId } from "~/user-cached-data";
+import { cacheAuthenticatedUserId } from "~/user-storage";
 import { viewerClientAvailability } from "~/viewer-client-availability";
 
 const AppContext = createContext<
