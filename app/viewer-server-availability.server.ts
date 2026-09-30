@@ -9,7 +9,7 @@ import {
   viewerEnabled,
   viewerKey
 } from "~/models/rule.server";
-import { Loop } from "~/shared/loop";
+import { Loop } from "~/shared/scheduling";
 import { getErrorMessage } from "~/shared/misc";
 import { logError } from "~/shared/monitoring";
 import { singleton } from "~/singleton.server";

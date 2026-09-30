@@ -15,10 +15,11 @@ import { isRouteErrorResponse, ServerRouter } from "react-router";
 import { viewerServerAvailability } from "./viewer-server-availability.server";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule";
-import { scheduleEconomyPrices } from "./routines/economy-price";
-import { scheduleInventoryProjection } from "./routines/inventory-projection";
-import { scheduleInactivityReset } from "./routines/reset-inactive-inventory";
+import { economyPriceSync } from "./routines/economy-price-sync";
+import { economyProjector } from "./routines/economy-projector";
+import { inactiveInventoryReset } from "./routines/inactive-inventory-reset";
 import { setupPurge } from "./routines/setup-purge";
+import { userInventoryProjector } from "./routines/user-inventory-projector";
 import { logError } from "./shared/monitoring";
 import { setupTranslation } from "./translation.server";
 
@@ -27,9 +28,10 @@ const ABORT_DELAY = 5_000;
 CS2Economy.load({ items: CS2_ITEMS, language: english });
 setupTranslation();
 void setupPurge();
-scheduleInactivityReset();
-scheduleEconomyPrices();
-scheduleInventoryProjection();
+inactiveInventoryReset.start();
+economyProjector.start();
+economyPriceSync.start();
+userInventoryProjector.start();
 void setupRules().then(() => {
   void setupLogo();
   viewerServerAvailability.start();

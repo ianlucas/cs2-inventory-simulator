@@ -6,6 +6,7 @@
 import { prisma } from "~/db.server";
 import { getErrorMessage } from "~/shared/misc";
 import { logError } from "~/shared/monitoring";
+import { Job } from "~/shared/scheduling";
 import { singleton } from "~/singleton.server";
 import {
   getEconomyPriceSourceDate,
@@ -13,7 +14,7 @@ import {
   mapEconomyPrices,
   priceSourceDateString
 } from "./economy-price-data";
-import { waitForEconomyProjection } from "./inventory-projection";
+import { economyProjector } from "./economy-projector";
 
 const ECONOMY_PRICE_INTERVAL_MS = 60 * 60_000;
 const META_ID = 1;
@@ -29,14 +30,23 @@ async function fetchEconomyPrices(sourceDate: Date) {
 }
 
 async function createMeta() {
-  return await prisma.economyPriceSyncState.upsert({
-    create: { id: META_ID },
-    update: {},
+  // Prisma runs an upsert with an empty update as read-then-insert, which races
+  // between processes overlapping on a deploy; skipDuplicates uses ON CONFLICT.
+  await prisma.economyPriceSyncState.createMany({
+    data: { id: META_ID },
+    skipDuplicates: true
+  });
+  return await prisma.economyPriceSyncState.findUniqueOrThrow({
     where: { id: META_ID }
   });
 }
 
-export async function syncEconomyPrices() {
+async function syncEconomyPrices() {
+  // A projection run clears lastSucceededSourceDate to mirror today's prices
+  // for new items, so wait for it before deciding whether they're in.
+  if (!(await economyProjector.isCurrentAfterRun())) {
+    return;
+  }
   const sourceDate = getEconomyPriceSourceDate();
   const meta = await createMeta();
   if (meta.lastSucceededSourceDate?.getTime() === sourceDate.getTime()) {
@@ -47,7 +57,6 @@ export async function syncEconomyPrices() {
     where: { id: META_ID }
   });
   try {
-    await waitForEconomyProjection();
     const { prices, unmatchedNames } = await fetchEconomyPrices(sourceDate);
     await prisma.$transaction(
       async (tx) => {
@@ -102,34 +111,15 @@ export async function syncEconomyPrices() {
       },
       where: { id: META_ID }
     });
-    logError("Economy prices: failed to mirror.", {
+    logError("Economy price sync: failed to mirror.", {
       error,
       extra: { sourceDate: priceSourceDateString(sourceDate) }
     });
   }
 }
 
-function schedule(intervalMs: number, run: () => Promise<void>) {
-  let running = false;
-  const invoke = async () => {
-    if (running) {
-      return;
-    }
-    running = true;
-    try {
-      await run();
-    } catch (error) {
-      logError("Economy prices: job failed.", { error });
-    } finally {
-      running = false;
-    }
-  };
-  void invoke();
-  return setInterval(() => void invoke(), intervalMs);
-}
-
-export function scheduleEconomyPrices() {
-  singleton("economyPrices", () => {
-    return schedule(ECONOMY_PRICE_INTERVAL_MS, syncEconomyPrices);
-  });
-}
+export const economyPriceSync = singleton(
+  "economyPriceSync",
+  () =>
+    new Job("Economy price sync", ECONOMY_PRICE_INTERVAL_MS, syncEconomyPrices)
+);

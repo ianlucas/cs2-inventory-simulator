@@ -16,8 +16,20 @@ export const loader = api(
     await isValidApiRequest(request, [API_SCOPE]);
     return Response.json(
       await prisma.user.findUnique({
-        include: {
-          groups: true
+        select: {
+          avatar: true,
+          createdAt: true,
+          groups: {
+            select: {
+              groupId: true,
+              userId: true
+            }
+          },
+          id: true,
+          name: true,
+          rawInventory: true,
+          syncedAt: true,
+          updatedAt: true
         },
         where: {
           id: userId
