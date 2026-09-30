@@ -9,10 +9,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { randomUUID } from "node:crypto";
 import { prisma } from "~/db.server";
-import {
-  ensureInventoryProjectionState,
-  INVENTORY_PROJECTION_STATE_ID
-} from "~/models/inventory-projection-state.server";
+import type { Prisma } from "~/generated/prisma/client";
 import { safeLoadInventory } from "~/shared/inventory";
 import { logError } from "~/shared/monitoring";
 import { Job } from "~/shared/scheduling";
@@ -26,8 +23,14 @@ const LIVE_BATCH_SIZE = 100;
 const LIVE_CURSOR_LAG_MS = 60_000;
 const LIVE_INTERVAL_MS = 60_000;
 const REPORTED_FAILED_USER_IDS = 10;
+const STATE_ID = 1;
 
-type ProjectedInventory = ReturnType<typeof projectInventory>;
+type ProjectedInventory = {
+  items: Omit<Prisma.UserInventoryItemCreateManyInput, "userId">[];
+  keychains: Prisma.UserInventoryItemKeychainCreateManyInput[];
+  patches: Prisma.UserInventoryItemPatchCreateManyInput[];
+  stickers: Prisma.UserInventoryItemStickerCreateManyInput[];
+};
 
 function toDate(timestamp: number | undefined) {
   return timestamp === undefined
@@ -38,11 +41,9 @@ function toDate(timestamp: number | undefined) {
 function projectInventoryItem(
   item: CS2InventoryItem,
   containerUid: number | undefined,
-  items: ProjectedInventory["items"],
-  stickers: ProjectedInventory["stickers"],
-  patches: ProjectedInventory["patches"],
-  keychains: ProjectedInventory["keychains"]
+  projected: ProjectedInventory
 ) {
+  const { items, keychains, patches, stickers } = projected;
   const id = randomUUID();
   const inventoryKey =
     containerUid === undefined
@@ -99,70 +100,37 @@ function projectInventoryItem(
     });
   }
   for (const storedItem of item.storage?.values() ?? []) {
-    projectInventoryItem(
-      storedItem,
-      item.uid,
-      items,
-      stickers,
-      patches,
-      keychains
-    );
+    projectInventoryItem(storedItem, item.uid, projected);
   }
 }
 
 function projectInventory(rawInventory: string | null) {
-  const items: Array<{
-    charges?: number;
-    containerUid?: number;
-    equipped: boolean;
-    equippedCT: boolean;
-    equippedT: boolean;
-    id: string;
-    inventoryKey: string;
-    itemId: number;
-    itemUpdatedAt?: Date;
-    nameTag?: string;
-    seed?: number;
-    sourceContainerId?: number;
-    statTrak?: number;
-    uid: number;
-    wear?: number;
-  }> = [];
-  const stickers: Array<{
-    id: string;
-    itemId: number;
-    rotation?: number;
-    schema?: number;
-    slot: number;
-    userInventoryItemId: string;
-    wear?: number;
-    x?: number;
-    y?: number;
-  }> = [];
-  const patches: Array<{
-    id: string;
-    itemId: number;
-    slot: number;
-    userInventoryItemId: string;
-  }> = [];
-  const keychains: Array<{
-    id: string;
-    itemId: number;
-    seed?: number;
-    slot: number;
-    userInventoryItemId: string;
-    x?: number;
-    y?: number;
-    z?: number;
-  }> = [];
+  const projected: ProjectedInventory = {
+    items: [],
+    keychains: [],
+    patches: [],
+    stickers: []
+  };
   const inventory = safeLoadInventory(rawInventory);
   for (const item of inventory?.getAll() ?? []) {
-    projectInventoryItem(item, undefined, items, stickers, patches, keychains);
+    projectInventoryItem(item, undefined, projected);
   }
-  return { items, stickers, patches, keychains };
+  return projected;
 }
 
 type ProjectionResult = "projected" | "skipped";
+
+async function ensureState() {
+  // Prisma runs an upsert with an empty update as read-then-insert, which races
+  // between jobs on first boot; skipDuplicates uses INSERT ... ON CONFLICT.
+  await prisma.userInventoryProjectionState.createMany({
+    data: { id: STATE_ID },
+    skipDuplicates: true
+  });
+  return await prisma.userInventoryProjectionState.findUniqueOrThrow({
+    where: { id: STATE_ID }
+  });
+}
 
 async function markProjectionFailed(userId: string) {
   const user = await prisma.user.findUnique({
@@ -298,7 +266,7 @@ class UserInventoryProjector {
   }
 
   private async projectLive() {
-    const state = await ensureInventoryProjectionState();
+    const state = await ensureState();
     const settledBefore = new Date(Date.now() - LIVE_CURSOR_LAG_MS);
     const users = await prisma.$queryRaw<Array<{ id: string; syncedAt: Date }>>`
       SELECT "User"."id", "User"."syncedAt"
@@ -322,17 +290,17 @@ class UserInventoryProjector {
     );
     // Everyone who synced before the oldest pending user was already handled.
     const oldestPending = users.at(0)?.syncedAt ?? settledBefore;
-    await prisma.inventoryProjectionState.update({
+    await prisma.userInventoryProjectionState.update({
       data: {
         liveCursor:
           oldestPending < settledBefore ? oldestPending : settledBefore
       },
-      where: { id: INVENTORY_PROJECTION_STATE_ID }
+      where: { id: STATE_ID }
     });
   }
 
   private async backfill() {
-    const state = await ensureInventoryProjectionState();
+    const state = await ensureState();
     if (state.backfillCompletedAt !== null) {
       return;
     }
@@ -350,7 +318,7 @@ class UserInventoryProjector {
       users.map((user) => user.id)
     );
     const lastUser = users.at(-1);
-    await prisma.inventoryProjectionState.update({
+    await prisma.userInventoryProjectionState.update({
       data:
         users.length < BACKFILL_BATCH_SIZE
           ? {
@@ -358,7 +326,7 @@ class UserInventoryProjector {
               backfillCursor: lastUser?.id ?? state.backfillCursor
             }
           : { backfillCursor: lastUser?.id },
-      where: { id: INVENTORY_PROJECTION_STATE_ID }
+      where: { id: STATE_ID }
     });
   }
 }

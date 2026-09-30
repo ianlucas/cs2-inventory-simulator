@@ -350,6 +350,40 @@ type PostAddContainerResponse = {
 };
 ```
 
+## Get user
+
+```http
+GET https://inventory.cstrike.app/api/user/{steamID64}
+```
+
+### Request
+
+> [!IMPORTANT]  
+> API key must have `api` scope and is sent in the `Authorization: Bearer {apiKey}` header.
+
+### Response
+
+- Returns `400` when the `Authorization` header is missing.
+- Returns `401` when using an invalid API key.
+- Returns `200` (`application/json`) with `null` when the user does not exist.
+- Returns `200` (`application/json`) with the user otherwise.
+
+```typescript
+type GetUserResponse = {
+  avatar: string;
+  createdAt: string;
+  groups: {
+    groupId: string;
+    userId: string;
+  }[];
+  id: string;
+  name: string;
+  rawInventory: string | null;
+  syncedAt: string;
+  updatedAt: string;
+} | null;
+```
+
 ## Sign-in user
 
 This is intended to be used in other first-party apps to authenticate users to Inventory Simulator. First, a POST request must be sent to `/api/sign-in` to get the user's authentication `token`, then the user must be immediately redirected to `/api/sign-in/callback?token={token}`.

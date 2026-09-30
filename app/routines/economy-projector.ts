@@ -9,14 +9,11 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { prisma } from "~/db.server";
 import type { EconomyItem } from "~/generated/prisma/client";
-import {
-  ensureInventoryProjectionState,
-  INVENTORY_PROJECTION_STATE_ID
-} from "~/models/inventory-projection-state.server";
 import { logError } from "~/shared/monitoring";
 import { singleton } from "~/singleton.server";
 
 const ECONOMY_PROJECTION_VERSION = 1;
+const STATE_ID = 1;
 
 let cs2LibVersion: string | undefined;
 function getCs2LibVersion() {
@@ -29,6 +26,18 @@ function getCs2LibVersion() {
     cs2LibVersion = (JSON.parse(packageJson) as { version: string }).version;
   }
   return cs2LibVersion;
+}
+
+async function ensureState() {
+  // Prisma runs an upsert with an empty update as read-then-insert, which races
+  // between processes overlapping on a deploy; skipDuplicates uses ON CONFLICT.
+  await prisma.economyProjectionState.createMany({
+    data: { id: STATE_ID },
+    skipDuplicates: true
+  });
+  return await prisma.economyProjectionState.findUniqueOrThrow({
+    where: { id: STATE_ID }
+  });
 }
 
 function projectEconomyItems() {
@@ -92,7 +101,7 @@ export class EconomyProjector {
 
   private async project() {
     const version = getCs2LibVersion();
-    const state = await ensureInventoryProjectionState();
+    const state = await ensureState();
     if (
       state.cs2LibVersion === version &&
       state.economyProjectionVersion === ECONOMY_PROJECTION_VERSION
@@ -131,12 +140,12 @@ export class EconomyProjector {
             }
           }
         });
-        await tx.inventoryProjectionState.update({
+        await tx.economyProjectionState.update({
           data: {
             cs2LibVersion: version,
             economyProjectionVersion: ECONOMY_PROJECTION_VERSION
           },
-          where: { id: INVENTORY_PROJECTION_STATE_ID }
+          where: { id: STATE_ID }
         });
         // Mirror the current source date again to pick up prices for new items.
         await tx.economyPriceSyncState.updateMany({

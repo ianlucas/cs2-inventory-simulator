@@ -44,7 +44,7 @@ const db = vi.hoisted(() => {
       }
     },
     economyPriceSyncState: { updateMany: async () => {} },
-    inventoryProjectionState: {
+    economyProjectionState: {
       update: async ({ data }: { data: Partial<typeof state> }) =>
         Object.assign(state, data)
     }
@@ -57,7 +57,7 @@ const db = vi.hoisted(() => {
     transaction,
     tx,
     prisma: {
-      inventoryProjectionState: {
+      economyProjectionState: {
         createMany: async () => {},
         findUniqueOrThrow: async () => ({ ...state })
       },
