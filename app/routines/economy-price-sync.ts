@@ -42,8 +42,8 @@ async function createMeta() {
 }
 
 async function syncEconomyPrices() {
-  // A projection run clears lastSucceededSourceDate (its cascade deletes the
-  // prices), so wait for it before deciding whether today's prices are in.
+  // A projection run clears lastSucceededSourceDate to mirror today's prices
+  // for new items, so wait for it before deciding whether they're in.
   if (!(await economyProjector.isCurrentAfterRun())) {
     return;
   }

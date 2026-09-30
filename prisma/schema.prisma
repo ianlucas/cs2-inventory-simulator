@@ -54,13 +54,14 @@ model EconomyItem {
   modelKey      String?
   name          String
   rarityColor   String?
+  removed       Boolean        @default(false)
   type          String
   prices        EconomyPrice[]
 }
 
 model EconomyPrice {
   currency       String           @default("USD")
-  economyItem    EconomyItem      @relation(fields: [economyItemId], references: [id], onDelete: Cascade)
+  economyItem    EconomyItem      @relation(fields: [economyItemId], references: [id], onDelete: Restrict)
   economyItemId  Int
   exterior       CS2ItemExterior?
   avgPrice24h    Decimal?         @db.Decimal(14, 6)
