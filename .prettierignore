@@ -1,3 +1,4 @@
 .cache
+app/data/economy-prices-*.json
 build
 node_modules

@@ -147,10 +147,6 @@ export class EconomyProjector {
           },
           where: { id: STATE_ID }
         });
-        // Mirror the current source date again to pick up prices for new items.
-        await tx.economyPriceSyncState.updateMany({
-          data: { lastSucceededSourceDate: null }
-        });
       },
       { maxWait: 30_000, timeout: 180_000 }
     );
