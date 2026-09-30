@@ -77,19 +77,6 @@ model EconomyPrice {
   @@index([economyItemId, sourceDate])
 }
 
-model EconomyPriceSyncState {
-  id                      Int       @id @default(1)
-  lastAttemptedAt         DateTime?
-  lastAttemptedSourceDate DateTime? @db.Date
-  lastFailureAt           DateTime?
-  lastFailureMessage      String?
-  lastSucceededAt         DateTime?
-  lastSucceededSourceDate DateTime? @db.Date
-  lastUnmatchedCount      Int?
-  lastUnmatchedNames      String?
-  updatedAt               DateTime  @updatedAt
-}
-
 model UserInventoryItem {
   charges           Int?
   containerUid      Int?

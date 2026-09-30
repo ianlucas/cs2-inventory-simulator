@@ -15,7 +15,7 @@ import { isRouteErrorResponse, ServerRouter } from "react-router";
 import { viewerServerAvailability } from "./viewer-server-availability.server";
 import { setupLogo } from "./logo.server";
 import { setupRules } from "./models/rule";
-import { economyPriceSync } from "./routines/economy-price-sync";
+import { economyPriceLoader } from "./routines/economy-price-loader";
 import { economyProjector } from "./routines/economy-projector";
 import { inactiveInventoryReset } from "./routines/inactive-inventory-reset";
 import { setupPurge } from "./routines/setup-purge";
@@ -30,7 +30,7 @@ setupTranslation();
 void setupPurge();
 inactiveInventoryReset.start();
 economyProjector.start();
-economyPriceSync.start();
+economyPriceLoader.start();
 userInventoryProjector.start();
 void setupRules().then(() => {
   void setupLogo();

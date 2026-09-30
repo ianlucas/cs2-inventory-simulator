@@ -43,7 +43,6 @@ const db = vi.hoisted(() => {
         }
       }
     },
-    economyPriceSyncState: { updateMany: async () => {} },
     economyProjectionState: {
       update: async ({ data }: { data: Partial<typeof state> }) =>
         Object.assign(state, data)
