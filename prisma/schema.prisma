@@ -54,13 +54,14 @@ model EconomyItem {
   modelKey      String?
   name          String
   rarityColor   String?
+  removed       Boolean        @default(false)
   type          String
   prices        EconomyPrice[]
 }
 
 model EconomyPrice {
   currency       String           @default("USD")
-  economyItem    EconomyItem      @relation(fields: [economyItemId], references: [id], onDelete: Cascade)
+  economyItem    EconomyItem      @relation(fields: [economyItemId], references: [id], onDelete: Restrict)
   economyItemId  Int
   exterior       CS2ItemExterior?
   avgPrice24h    Decimal?         @db.Decimal(14, 6)
@@ -169,13 +170,21 @@ model UserInventoryProjection {
   userId                String    @id
 }
 
-model InventoryProjectionState {
-  backfillCompletedAt      DateTime?
-  backfillCursor           String?
+model EconomyProjectionState {
   cs2LibVersion            String?
-  economyProjectionVersion Int       @default(1)
-  id                       Int       @id @default(1)
-  updatedAt                DateTime  @updatedAt
+  economyProjectionVersion Int      @default(1)
+  id                       Int      @id @default(1)
+  updatedAt                DateTime @updatedAt
+}
+
+model UserInventoryProjectionState {
+  backfillCompletedAt DateTime?
+  backfillCursor      String?
+  id                  Int       @id @default(1)
+  /// The live projection covers users whose User.syncedAt is at or after this,
+  /// and only moves it past users projected, or marked failed, at that syncedAt.
+  liveCursor          DateTime?
+  updatedAt           DateTime  @updatedAt
 }
 
 model UserInventoryRecovery {

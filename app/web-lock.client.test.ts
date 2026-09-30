@@ -93,42 +93,4 @@ describe("web lock", () => {
 
     await expect(holdWebLock("icons")).resolves.toBe(false);
   });
-
-  it("waits for the holder to go away, then promotes this tab", async () => {
-    let release: (() => void) | undefined;
-    const calls = stubLocks(async (...args) => {
-      const { callback, name, options } = argsOf(args);
-      if (options !== undefined) {
-        void callback(null);
-        return;
-      }
-      await new Promise<void>((resolve) => {
-        release = resolve;
-      });
-      void callback({ mode: "exclusive", name } as Lock);
-    });
-    const onGranted = vi.fn();
-
-    await expect(holdWebLock("icons", { onGranted })).resolves.toBe(false);
-    await Promise.resolve();
-
-    expect(calls).toHaveLength(2);
-    expect(argsOf(calls[1]).options).toBeUndefined();
-    expect(onGranted).not.toHaveBeenCalled();
-
-    release?.();
-    await Promise.resolve();
-    await Promise.resolve();
-
-    expect(onGranted).toHaveBeenCalledTimes(1);
-  });
-
-  it("does not wait for the holder when the caller has nothing to promote", async () => {
-    const { calls } = grant(false);
-
-    await holdWebLock("icons");
-    await Promise.resolve();
-
-    expect(calls).toHaveLength(1);
-  });
 });

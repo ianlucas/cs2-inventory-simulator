@@ -7,7 +7,11 @@ import { CS2_ITEMS, CS2Economy, CS2ItemType, ensure } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations";
 import { describe, expect, it } from "vitest";
 import { ViewerCatalogLike } from "~/viewer";
-import { getItemIconKey, isIconRedundant, isIconRenderable } from "./item-icon";
+import {
+  getItemIconKey,
+  isIconRedundant,
+  isIconRenderable
+} from "./viewer-icon";
 
 CS2Economy.load({ items: CS2_ITEMS, language: english });
 
