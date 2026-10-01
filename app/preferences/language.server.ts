@@ -29,6 +29,9 @@ export async function getLanguage(session: Session, ipCountry: string | null) {
     (session.get("language") as string | null | undefined) ||
     getLanguageFromCountry(country);
   return {
+    // `null` means item names follow the interface language.
+    itemLanguage:
+      (session.get("itemLanguage") as string | null | undefined) || null,
     lang: getLangFromLanguage(language),
     language
   };

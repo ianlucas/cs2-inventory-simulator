@@ -5,10 +5,19 @@
 
 import { useEffect, useState } from "react";
 import { clientGlobals, isServerContext, serverGlobals } from "~/globals";
-import { fetchTranslation } from "~/translation-api.client";
+import {
+  fetchItemTranslationMap,
+  fetchSystemTranslationMap
+} from "~/translation-api.client";
 import type { SystemTranslationTokens } from "~/translation.server";
 
-export function useTranslation({ language }: { language: string }) {
+export function useTranslation({
+  itemLanguage,
+  language
+}: {
+  itemLanguage: string;
+  language: string;
+}) {
   function getSystemTranslationMap() {
     return (
       (isServerContext
@@ -26,8 +35,22 @@ export function useTranslation({ language }: { language: string }) {
     );
   }
 
-  const [systemMap, setSystemMap] = useState(getSystemTranslationMap());
-  const [itemMap, setItemMap] = useState(getItemTranslationMap());
+  const systemMap = useTranslationMap(
+    language,
+    getSystemTranslationMap,
+    fetchSystemTranslationMap,
+    (map) => {
+      clientGlobals.systemTranslationMap = map;
+    }
+  );
+  const itemMap = useTranslationMap(
+    itemLanguage,
+    getItemTranslationMap,
+    fetchItemTranslationMap,
+    (map) => {
+      clientGlobals.itemTranslationMap = map;
+    }
+  );
 
   function translate(token: SystemTranslationTokens, ...values: string[]) {
     return (
@@ -38,17 +61,26 @@ export function useTranslation({ language }: { language: string }) {
     );
   }
 
+  return { system: systemMap, items: itemMap, translate };
+}
+
+function useTranslationMap<T>(
+  language: string,
+  getInitialMap: () => T,
+  fetchMap: (language: string) => Promise<T>,
+  onFetch: (map: T) => void
+) {
+  const [map, setMap] = useState(getInitialMap);
+
   useEffect(() => {
     let cancelled = false;
-    fetchTranslation(language)
-      .then(({ systemTranslationMap, itemTranslationMap }) => {
+    fetchMap(language)
+      .then((map) => {
         if (cancelled) {
           return;
         }
-        clientGlobals.systemTranslationMap = systemTranslationMap;
-        clientGlobals.itemTranslationMap = itemTranslationMap;
-        setSystemMap(systemTranslationMap);
-        setItemMap(itemTranslationMap);
+        onFetch(map);
+        setMap(map);
       })
       .catch(() => {});
     return () => {
@@ -56,5 +88,5 @@ export function useTranslation({ language }: { language: string }) {
     };
   }, [language]);
 
-  return { system: systemMap, items: itemMap, translate };
+  return map;
 }

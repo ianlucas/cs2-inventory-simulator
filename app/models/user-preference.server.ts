@@ -10,6 +10,7 @@ type UserPreferenceKeys =
   | "hideFilters"
   | "hideFreeItems"
   | "hideNewItemLabel"
+  | "itemLanguage"
   | "language"
   | "prefer2dStickerEditor"
   | "statsForNerds";

@@ -8,6 +8,7 @@ import {
   type SettingsDraft,
   type SettingsGroupField
 } from "./hooks/use-settings-groups";
+import { Marquee } from "./marquee";
 import { Select } from "./select";
 import { SettingsLabel } from "./settings-label";
 
@@ -38,6 +39,7 @@ export function SettingsField({
       return (
         <SettingsLabel label={field.label}>
           <Select
+            className="w-55"
             value={draft[field.key]}
             onChange={(value) => onChange(field.key, value)}
             options={field.options}
@@ -52,7 +54,7 @@ export function SettingsField({
                     draggable={false}
                   />
                 )}
-                {label}
+                <Marquee className="text-sm">{label}</Marquee>
               </>
             )}
           />

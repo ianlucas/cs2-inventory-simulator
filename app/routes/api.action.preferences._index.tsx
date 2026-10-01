@@ -37,6 +37,7 @@ export const loader = api(async ({ request }: Route.LoaderArgs) => {
       "hideFilters",
       "hideFreeItems",
       "hideNewItemLabel",
+      "itemLanguage",
       "language",
       "prefer2dStickerEditor",
       "statsForNerds"
@@ -61,6 +62,10 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
         .string()
         .refine(isValidBackground)
         .transform(transformBackground),
+      itemLanguage: z
+        .literal("")
+        .or(z.string().refine(isValidLanguage))
+        .transform((itemLanguage) => itemLanguage || null),
       language: z.string().refine(isValidLanguage),
       statsForNerds: z.literal("true").or(z.literal("false")),
       hideFreeItems: z.literal("true").or(z.literal("false")),

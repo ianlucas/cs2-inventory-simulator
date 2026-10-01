@@ -141,6 +141,9 @@ export default function App() {
     <AppProvider {...appProps}>
       <html
         className="scrollbar-gutter-stable"
+        data-item-language={
+          appProps.preferences.itemLanguage ?? appProps.preferences.language
+        }
         data-language={appProps.preferences.language}
         data-sentry-dsn={appProps.rules.sentryClientDsn}
         data-sentry-environment={appProps.rules.sentryEnvironment}

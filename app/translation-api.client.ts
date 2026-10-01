@@ -9,20 +9,20 @@ import {
   type TranslationKind
 } from "~/translation-files";
 
-export async function fetchTranslation(language: string) {
-  const [systemTranslationMap, itemTranslationMap] = await Promise.all([
-    fetchTranslationFile<Record<string, string>>(
-      "ui",
-      language,
-      __UI_TRANSLATION_HASH__
-    ),
-    fetchTranslationFile<CS2ItemTranslationByLanguage[string]>(
-      "item",
-      language,
-      __ITEM_TRANSLATION_HASH__
-    )
-  ]);
-  return { systemTranslationMap, itemTranslationMap };
+export function fetchSystemTranslationMap(language: string) {
+  return fetchTranslationFile<Record<string, string>>(
+    "ui",
+    language,
+    __UI_TRANSLATION_HASH__
+  );
+}
+
+export function fetchItemTranslationMap(language: string) {
+  return fetchTranslationFile<CS2ItemTranslationByLanguage[string]>(
+    "item",
+    language,
+    __ITEM_TRANSLATION_HASH__
+  );
 }
 
 async function fetchTranslationFile<T>(

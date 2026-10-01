@@ -204,6 +204,7 @@ model UserPreference {
   hideFilters           String?
   hideFreeItems         String?
   hideNewItemLabel      String?
+  itemLanguage          String?
   language              String?
   prefer2dStickerEditor String?
   statsForNerds         String?

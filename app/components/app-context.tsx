@@ -112,6 +112,7 @@ export function AppProvider({
   );
   const inventoryFilter = useInventoryFilterState();
   const translation = useTranslation({
+    itemLanguage: preferences.itemLanguage ?? preferences.language,
     language: preferences.language
   });
 
