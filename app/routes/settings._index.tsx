@@ -3,33 +3,23 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import clsx from "clsx";
 import { useState } from "react";
 import { useNavigate, useSubmit } from "react-router";
+import { usePreferences, useTranslate } from "~/components/app-context";
+import { ChipMenuItem } from "~/components/chip-menu-item";
+import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import {
-  useInventory,
-  usePreferences,
-  useRules,
-  useTranslate
-} from "~/components/app-context";
-import { EditorRange } from "~/components/editor-range";
-import { EditorToggle } from "~/components/editor-toggle";
-import { useCheckbox } from "~/components/hooks/use-checkbox";
-import { useStorageState } from "~/components/hooks/use-storage-state";
-import { useSync } from "~/components/hooks/use-sync";
-import { LanguageSelect } from "~/components/language-select";
+  type SettingsDraft,
+  useSettingsGroups
+} from "~/components/hooks/use-settings-groups";
 import { Modal, ModalHeader } from "~/components/modal";
 import { ModalButton } from "~/components/modal-button";
-import { confirm } from "~/components/modal-generic";
-import { Select } from "~/components/select";
-import { SettingsLabel } from "~/components/settings-label";
-import { backgrounds } from "~/data/backgrounds";
-import { languages } from "~/data/languages";
-import { SyncAction } from "~/data/sync";
+import { SettingsField } from "~/components/settings-field";
+import { SideMenuItem } from "~/components/side-menu-item";
 import { middleware } from "~/middleware.server";
 import { getMetaTitle } from "~/root-meta";
-import { APP_VOLUME_STORAGE_KEY, DEFAULT_APP_VOLUME } from "~/user-storage";
 import type { Route } from "./+types/settings._index";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
 
@@ -41,151 +31,107 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function Settings() {
-  const {
-    background: selectedBackground,
-    hideFilters: selectedHideFilters,
-    hideFreeItems: selectedHideFreeItems,
-    hideNewItemLabel: selectedHideNewItemLabel,
-    language: selectedLanguage,
-    prefer2dStickerEditor: selectedPrefer2dStickerEditor,
-    statsForNerds: selectedStatsForNerds
-  } = usePreferences();
-  const { viewerEnabled } = useRules();
-  const [inventory, setInventory] = useInventory();
+  const preferences = usePreferences();
   const translate = useTranslate();
-  const sync = useSync();
-
-  const [background, setBackground] = useState(selectedBackground ?? "");
-  const [hideFilters, setHideFilters] = useCheckbox(selectedHideFilters);
-  const [hideFreeItems, setHideFreeItems] = useCheckbox(selectedHideFreeItems);
-  const [hideNewItemLabel, setHideNewItemLabel] = useCheckbox(
-    selectedHideNewItemLabel
-  );
-  const [language, setLanguage] = useState(selectedLanguage);
-  const [prefer2dStickerEditor, setPrefer2dStickerEditor] = useCheckbox(
-    selectedPrefer2dStickerEditor
-  );
-  const [statsForNerds, setStatsForNerds] = useCheckbox(selectedStatsForNerds);
-  const [volume, setVolume] = useStorageState(
-    APP_VOLUME_STORAGE_KEY,
-    DEFAULT_APP_VOLUME
-  );
-
+  const isDesktop = useIsDesktop();
+  const groups = useSettingsGroups();
   const submit = useSubmit();
   const navigate = useNavigate();
 
-  function handleSubmit() {
-    submit(
-      {
-        background,
-        hideFilters,
-        hideFreeItems,
-        hideNewItemLabel,
-        language,
-        prefer2dStickerEditor,
-        statsForNerds
-      },
-      {
-        action: ApiActionPreferencesUrl,
-        method: "POST"
-      }
-    );
+  const [draft, setDraft] = useState<SettingsDraft>({
+    background: preferences.background ?? "",
+    hideFilters: preferences.hideFilters,
+    hideFreeItems: preferences.hideFreeItems,
+    hideNewItemLabel: preferences.hideNewItemLabel,
+    language: preferences.language,
+    prefer2dStickerEditor: preferences.prefer2dStickerEditor,
+    statsForNerds: preferences.statsForNerds
+  });
+  const [selectedGroupId, setSelectedGroupId] = useState(groups[0].id);
+  const selectedGroup =
+    groups.find((group) => group.id === selectedGroupId) ?? groups[0];
+
+  function handleChange<K extends keyof SettingsDraft>(
+    key: K,
+    value: SettingsDraft[K]
+  ) {
+    setDraft((current) => ({ ...current, [key]: value }));
   }
 
-  async function handleRemoveAllItems() {
-    if (
-      await confirm({
-        titleText: translate("SettingsRemoveAllItems"),
-        bodyText: translate("SettingsConfirmRemoveAllItems"),
-        cancelText: translate("EditorCancel"),
-        confirmText: translate("GenericOK")
-      })
-    ) {
-      inventory.removeAll();
-      setInventory(inventory);
-      sync({ type: SyncAction.RemoveAllItems });
-      return navigate("/");
-    }
+  function handleSubmit() {
+    submit(draft, {
+      action: ApiActionPreferencesUrl,
+      method: "POST"
+    });
+  }
+
+  function handleCancel() {
+    return navigate("/", { preventScrollReset: true });
   }
 
   return (
-    <Modal className="w-135">
+    <Modal
+      className={clsx("flex h-133 flex-col", isDesktop ? "w-160" : "w-135")}
+    >
       <ModalHeader title={translate("SettingsHeader")} closeTo="/" />
-      <div className="mt-2 space-y-2 px-2">
-        <SettingsLabel label={translate("SettingsMasterVolume")}>
-          <EditorRange
-            format={(value) => (value * 100).toFixed(0).toString()}
-            max={1}
-            min={0}
-            onChange={setVolume}
-            step={0.01}
-            value={volume}
-            valueStyles="w-5 text-right"
-          />
-        </SettingsLabel>
-        <SettingsLabel label={translate("SettingsLanguage")}>
-          <LanguageSelect
-            languages={languages.map(({ name, countries }) => ({
-              name,
-              country: countries[0]
-            }))}
-            value={language}
-            onChange={setLanguage}
-          />
-        </SettingsLabel>
-        <SettingsLabel label={translate("SettingsBackground")}>
-          <Select
-            value={background ?? ""}
-            onChange={setBackground}
-            options={[
-              {
-                label: translate("SettingsBackgroundRandom"),
-                value: ""
-              },
-              ...backgrounds
-            ]}
-            children={({ label }) => label}
-          />
-        </SettingsLabel>
-        <SettingsLabel label={translate("SettingsStatsForNerds")}>
-          <EditorToggle checked={statsForNerds} onChange={setStatsForNerds} />
-        </SettingsLabel>
-        <SettingsLabel label={translate("SettingsHideFreeItems")}>
-          <EditorToggle checked={hideFreeItems} onChange={setHideFreeItems} />
-        </SettingsLabel>
-        <SettingsLabel label={translate("SettingsHideFilters")}>
-          <EditorToggle checked={hideFilters} onChange={setHideFilters} />
-        </SettingsLabel>
-        <SettingsLabel label={translate("SettingsHideNewLabel")}>
-          <EditorToggle
-            checked={hideNewItemLabel}
-            onChange={setHideNewItemLabel}
-          />
-        </SettingsLabel>
-        {viewerEnabled && (
-          <SettingsLabel label={translate("SettingsPrefer2dStickerEditor")}>
-            <EditorToggle
-              checked={prefer2dStickerEditor}
-              onChange={setPrefer2dStickerEditor}
-            />
-          </SettingsLabel>
+      <div
+        className={clsx(
+          "mt-2 flex min-h-0 flex-1",
+          !isDesktop && "flex-col gap-2"
         )}
-        {inventory.size() > 0 && (
-          <button
-            className="font-display flex h-12 w-full cursor-default items-center gap-3 rounded-sm border border-neutral-500/20 bg-neutral-800/50 px-3 py-1 text-red-500 transition-all hover:ring-2 hover:ring-red-500"
-            onClick={handleRemoveAllItems}
+      >
+        {isDesktop ? (
+          <div className="mb-2 w-55 shrink-0 rounded-r bg-black/10">
+            {groups.map((group) => (
+              <SideMenuItem
+                icon={<FontAwesomeIcon icon={group.icon} className="h-4" />}
+                isActive={group.id === selectedGroup.id}
+                key={group.id}
+                label={group.label}
+                onClick={() => setSelectedGroupId(group.id)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-1 px-2">
+            {groups.map((group) => (
+              <ChipMenuItem
+                isActive={group.id === selectedGroup.id}
+                key={group.id}
+                label={group.label}
+                onClick={() => setSelectedGroupId(group.id)}
+              />
+            ))}
+          </div>
+        )}
+        <div className="relative min-h-0 min-w-0 flex-1">
+          {/* Bottom padding matches the button area so the last field can scroll clear of it. */}
+          <div
+            className="h-full space-y-2 overflow-y-auto px-2 pb-21"
+            key={selectedGroup.id}
           >
-            <FontAwesomeIcon icon={faTrashCan} className="h-4" />
-            {translate("SettingsRemoveAllItems")}
-          </button>
-        )}
-      </div>
-      <div className="my-6 flex justify-center gap-2 px-4">
-        <ModalButton
-          children={translate("SettingsSave")}
-          onClick={handleSubmit}
-          variant="primary"
-        />
+            {selectedGroup.fields.map((field, index) => (
+              <SettingsField
+                draft={draft}
+                field={field}
+                key={index}
+                onChange={handleChange}
+              />
+            ))}
+          </div>
+          <div className="pointer-events-none absolute bottom-6 left-0 flex w-full justify-center gap-2">
+            <ModalButton
+              children={translate("GenericCancel")}
+              onClick={handleCancel}
+              variant="secondary"
+            />
+            <ModalButton
+              children={translate("SettingsSave")}
+              onClick={handleSubmit}
+              variant="primary"
+            />
+          </div>
+        </div>
       </div>
     </Modal>
   );
