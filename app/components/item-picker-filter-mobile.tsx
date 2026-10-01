@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import clsx from "clsx";
 import { EconomyItemFilter } from "~/shared/economy-filters";
 import { useTranslate } from "./app-context";
+import { ChipMenuItem } from "./chip-menu-item";
 
 export function ItemPickerFilterMobile({
   categories,
@@ -27,22 +27,15 @@ export function ItemPickerFilterMobile({
   return (
     <div className="flex flex-wrap gap-1 px-2">
       {categories.map((filter, index) => (
-        <button
-          key={index}
-          className={clsx(
-            "font-display rounded-sm px-2 font-bold transition-all hover:text-neutral-200",
-            !(
-              filter.loadoutCategory === value.loadoutCategory &&
-              filter.type === value.type
-            ) && "text-neutral-400",
+        <ChipMenuItem
+          isActive={
             filter.loadoutCategory === value.loadoutCategory &&
-              filter.type === value.type &&
-              "bg-black/50 text-neutral-200"
-          )}
+            filter.type === value.type
+          }
+          key={index}
+          label={translate(`Category${filter.label}`)}
           onClick={handleClick(filter)}
-        >
-          {translate(`Category${filter.label}`)}
-        </button>
+        />
       ))}
     </div>
   );

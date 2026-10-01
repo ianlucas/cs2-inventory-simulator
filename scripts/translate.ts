@@ -310,6 +310,8 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   SealStickerDesc: { token: "CSGO_Tool_WrapStickerInDisplayCase_Desc", transform: (value) => value.replace(/<br\s*\/?>/g, '\n') },
   SealStickerHint: { token: "popup_can_wrap_sticker_button_tooltip", transform: (value) => value.replace(/<\/?b>/g, '') },
   SealStickerTitle: "CSGO_Tool_WrapStickerInDisplayCase_Title",
+  SettingsAudio: "settings_audio",
+  SettingsInventory: "SFUI_InvPanel_Inventory_Title",
   SettingsMasterVolume: "SFUI_Settings_Master_Volume",
   StickerPickerRemove: "Button_Remove",
   StickerScrapeLevel: "popup_scrape_sticker_level",

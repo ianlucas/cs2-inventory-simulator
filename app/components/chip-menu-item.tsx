@@ -3,18 +3,26 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ComponentProps } from "react";
+import clsx from "clsx";
 
-export function SettingsLabel({
+export function ChipMenuItem({
+  isActive,
   label,
-  ...props
-}: ComponentProps<"div"> & {
+  onClick
+}: {
+  isActive: boolean;
   label: string;
+  onClick: () => void;
 }) {
   return (
-    <div className="flex min-h-12 items-center justify-between gap-4 rounded-sm bg-neutral-800/50 px-3 py-1.5">
-      <label className="font-display font-bold text-neutral-400">{label}</label>
-      <div {...props} />
-    </div>
+    <button
+      className={clsx(
+        "font-display rounded-sm px-2 font-bold transition-all hover:text-neutral-200",
+        isActive ? "bg-black/50 text-neutral-200" : "text-neutral-400"
+      )}
+      onClick={onClick}
+    >
+      {label}
+    </button>
   );
 }
