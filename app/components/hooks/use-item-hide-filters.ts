@@ -7,18 +7,33 @@ import { useMemo } from "react";
 import { useRules } from "~/components/app-context";
 import { createItemHideFilter } from "~/shared/economy";
 
-export function useCraftItemFilter() {
-  const { craftHideCategory, craftHideType, craftHideModel, craftHideId } =
-    useRules();
+export function useCraftItemFilter({
+  attachment = false
+}: { attachment?: boolean } = {}) {
+  const {
+    craftHideCategory,
+    craftHideType,
+    craftHideFilterType,
+    craftHideModel,
+    craftHideId
+  } = useRules();
   return useMemo(
     () =>
       createItemHideFilter({
         hideCategory: craftHideCategory,
         hideType: craftHideType,
+        hideFilterType: attachment ? undefined : craftHideFilterType,
         hideModel: craftHideModel,
         hideId: craftHideId
       }),
-    [craftHideCategory, craftHideType, craftHideModel, craftHideId]
+    [
+      craftHideCategory,
+      craftHideType,
+      craftHideFilterType,
+      craftHideModel,
+      craftHideId,
+      attachment
+    ]
   );
 }
 

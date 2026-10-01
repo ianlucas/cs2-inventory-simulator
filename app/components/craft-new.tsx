@@ -47,7 +47,8 @@ export function CraftNew({
 
   const [inventory] = useInventory();
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
-  const filterStickerOrPatch = useCraftItemFilter();
+  const filterStickerOrPatch = useCraftItemFilter({ attachment: true });
+  const isItemCraftable = useCraftItemFilter();
 
   const inventoryMaxQuantity = inventoryMaxItems - inventory.size();
   const maxQuantity = Math.min(
@@ -123,6 +124,7 @@ export function CraftNew({
         />
         <ModalButton
           children={translate("EditorCraft")}
+          disabled={!isItemCraftable(item)}
           onClick={handleSubmit}
           variant="primary"
         />
