@@ -249,7 +249,7 @@ Hides a type from crafting. Example: `agent;case`.
 - **Type:** `string-array`
 - **Default:** _empty_
 
-Hides type from crafting prompt. Example: `sticker`.
+Hides a type from crafting, but still allows it as an attachment. Example: `sticker`.
 
 ### `craftHideModel`
 

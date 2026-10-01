@@ -6,8 +6,6 @@
 import {
   assert,
   CS2BaseInventoryItem,
-  CS2Economy,
-  CS2EconomyItem,
   CS2InventoryItem,
   CS2ItemType,
   RecordValue
@@ -18,6 +16,12 @@ import { requireUser } from "~/auth.server";
 import { ItemEditorAttributes } from "~/components/item-editor";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/middleware.server";
+import {
+  craftHideRules,
+  editHideRules,
+  enforceCraftItemHideRules,
+  enforceItemHideRules
+} from "~/models/item-hide-rules.server";
 import {
   craftAllowKeychains,
   craftAllowKeychainSeed,
@@ -34,9 +38,6 @@ import {
   craftAllowStickerX,
   craftAllowStickerY,
   craftAllowWear,
-  craftHideCategory,
-  craftHideId,
-  craftHideModel,
   craftHideType,
   editAllowKeychains,
   editAllowKeychainSeed,
@@ -53,9 +54,6 @@ import {
   editAllowStickerX,
   editAllowStickerY,
   editAllowWear,
-  editHideCategory,
-  editHideId,
-  editHideModel,
   editHideType,
   inventoryItemAllowApplyPatch,
   inventoryItemAllowApplySticker,
@@ -259,44 +257,6 @@ async function enforceMaxAttachments(
   );
 }
 
-const craftHideRules = {
-  hideId: craftHideId,
-  hideCategory: craftHideCategory,
-  hideType: craftHideType,
-  hideModel: craftHideModel
-};
-
-const editHideRules = {
-  hideId: editHideId,
-  hideCategory: editHideCategory,
-  hideType: editHideType,
-  hideModel: editHideModel
-};
-
-async function enforceItemHideRules(
-  idOrItem: number | CS2EconomyItem,
-  userId: string,
-  {
-    hideId,
-    hideCategory,
-    hideType,
-    hideModel
-  }: typeof craftHideRules | typeof editHideRules
-) {
-  const item = CS2Economy.get(idOrItem);
-  const { type, modelKey, id, loadoutCategory } = item;
-  await hideId.for(userId).notContains(id);
-  if (loadoutCategory !== undefined) {
-    await hideCategory.for(userId).notContains(loadoutCategory);
-  }
-  if (type !== undefined) {
-    await hideType.for(userId).notContains(type);
-  }
-  if (modelKey !== undefined) {
-    await hideModel.for(userId).notContains(modelKey);
-  }
-}
-
 async function enforceCraftRulesForStickerAttributes(
   {
     wear,
@@ -490,7 +450,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       for (const action of actions) {
         switch (action.type) {
           case SyncAction.Add:
-            await enforceItemHideRules(action.item.id, userId, craftHideRules);
+            await enforceCraftItemHideRules(action.item.id, userId);
             await enforceCraftRulesForInventoryItem(action.item, userId);
             inventory.add(action.item);
             break;
@@ -498,7 +458,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             if (rawInventory === null && !addedFromCache) {
               for (const item of Object.values(action.data.items)) {
                 try {
-                  await enforceItemHideRules(item.id, userId, craftHideRules);
+                  await enforceCraftItemHideRules(item.id, userId);
                   await enforceCraftRulesForInventoryItem(item, userId);
                   inventory.add(item);
                 } catch {}
@@ -507,7 +467,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             }
             break;
           case SyncAction.AddWithNametag:
-            await enforceItemHideRules(action.itemId, userId, craftHideRules);
+            await enforceCraftItemHideRules(action.itemId, userId);
             inventory.addWithNameTag(
               action.toolUid,
               action.itemId,
@@ -621,7 +581,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             editInventoryItem(inventory, action.uid, action.attributes);
             break;
           case SyncAction.AddWithKeychain:
-            await enforceItemHideRules(action.itemId, userId, craftHideRules);
+            await enforceCraftItemHideRules(action.itemId, userId);
             inventory.addWithKeychain(action.keychainUid, action.itemId, {
               x: action.x,
               y: action.y,
@@ -629,7 +589,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             });
             break;
           case SyncAction.AddWithSticker:
-            await enforceItemHideRules(action.itemId, userId, craftHideRules);
+            await enforceCraftItemHideRules(action.itemId, userId);
             assert(
               isCountAllowed({
                 current: 0,

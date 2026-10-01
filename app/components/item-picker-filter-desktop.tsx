@@ -43,9 +43,8 @@ export function ItemPickerFilterDesktop({
   }
 
   return (
-    <div className="w-55 min-w-42">
+    <div className="w-55 min-w-42 rounded-r bg-black/10">
       <GridList
-        className="rounded-r bg-black/10"
         itemHeight={SIDE_MENU_ITEM_HEIGHT}
         items={categories}
         maxItemsIntoView={Math.min(categories.length, MAX_FILTERS_INTO_VIEW)}

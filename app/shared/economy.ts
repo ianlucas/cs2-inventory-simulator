@@ -51,11 +51,13 @@ export const RarityLabel = {
 export function createItemHideFilter({
   hideCategory,
   hideType,
+  hideFilterType = [],
   hideModel,
   hideId
 }: {
   hideCategory: string[];
   hideType: string[];
+  hideFilterType?: string[];
   hideModel: string[];
   hideId: number[];
 }) {
@@ -71,7 +73,7 @@ export function createItemHideFilter({
     ) {
       return false;
     }
-    if (hideType.includes(type)) {
+    if (hideType.includes(type) || hideFilterType.includes(type)) {
       return false;
     }
     if (modelKey !== undefined && hideModel.includes(modelKey)) {
