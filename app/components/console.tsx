@@ -21,10 +21,18 @@ import { useStorageState } from "./hooks/use-storage-state";
 type Command = (params: {
   args: string[];
   println: (message: string) => void;
+  printUsage: () => void;
   clear: () => void;
 }) => Promise<void>;
 
-const commands: Record<string, Command> = {};
+interface CommandEntry {
+  name: string;
+  description: string;
+  handler: Command;
+  usage?: string;
+}
+
+const commands = new Map<string, CommandEntry>();
 
 const convars = new Map<string, ConVar>();
 const CONVARS_STORAGE_KEY = "convars";
@@ -39,7 +47,8 @@ function readConVarValues() {
 export class ConVar {
   constructor(
     readonly name: string,
-    readonly defaultValue: string
+    readonly defaultValue: string,
+    readonly description: string
   ) {
     convars.set(this.name, this);
   }
@@ -60,27 +69,92 @@ export class ConVar {
   }
 }
 
-export function addCommand(name: string, handler: Command) {
-  commands[name] = handler;
+export function addCommand(
+  name: string,
+  description: string,
+  handler: Command,
+  usage?: string
+) {
+  commands.set(name, { name, description, handler, usage });
 }
 
-addCommand("version", async ({ println }) => {
+function formatUsage({ name, usage }: Pick<CommandEntry, "name" | "usage">) {
+  return usage !== undefined ? `${name} ${usage}` : name;
+}
+
+function sortByName<T extends { name: string }>(entries: T[]) {
+  return [...entries].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export function formatHelp(
+  commands: Pick<CommandEntry, "name" | "description" | "usage">[],
+  convars: Pick<ConVar, "name" | "description" | "defaultValue">[]
+) {
+  const sections = [
+    {
+      title: "Commands",
+      rows: sortByName(commands).map((command) => ({
+        label: formatUsage(command),
+        description: command.description
+      }))
+    },
+    {
+      title: "ConVars",
+      rows: sortByName(convars).map(({ name, description, defaultValue }) => ({
+        label: name,
+        description: `${description} (default: "${defaultValue}")`
+      }))
+    }
+  ];
+  const width = Math.max(
+    0,
+    ...sections.flatMap(({ rows }) => rows.map(({ label }) => label.length))
+  );
+  return sections
+    .filter(({ rows }) => rows.length > 0)
+    .flatMap(({ title, rows }) => [
+      `{green}${title}:`,
+      ...rows.map(
+        ({ label, description }) => `  ${label.padEnd(width)}   ${description}`
+      )
+    ]);
+}
+
+addCommand("version", "Prints the console version.", async ({ println }) => {
   println("{green}Inventory Simulator's Console Version 1.0");
 });
 
-addCommand("iam", async ({ args, println }) => {
-  if (args.length < 2) {
-    return println("{red}Usage: iam [name]");
-  }
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      println(`Hello, ${args.slice(1).join(" ")}.`);
-      resolve();
-    }, 2000);
-  });
-});
+addCommand(
+  "iam",
+  "Greets you by name.",
+  async ({ args, println, printUsage }) => {
+    if (args.length < 2) {
+      return printUsage();
+    }
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        println(`Hello, ${args.slice(1).join(" ")}.`);
+        resolve();
+      }, 2000);
+    });
+  },
+  "<name>"
+);
 
-addCommand("clear", async ({ clear }) => clear());
+addCommand("clear", "Clears the console output.", async ({ clear }) => clear());
+
+addCommand(
+  "help",
+  "Lists available commands and ConVars.",
+  async ({ println }) => {
+    for (const line of formatHelp(
+      [...commands.values()],
+      [...convars.values()]
+    )) {
+      println(line);
+    }
+  }
+);
 
 export function Console() {
   const [isVisible, toggleIsVisible] = useToggle(false);
@@ -117,12 +191,13 @@ export function Console() {
     const command = args[0];
     if (command !== undefined) {
       println(`{gray}] ${input}`);
-      const handler = commands[command];
+      const entry = commands.get(command);
       const convar = convars.get(command);
-      if (handler !== undefined) {
-        await handler({
+      if (entry !== undefined) {
+        await entry.handler({
           args,
           println,
+          printUsage: () => println(`{red}Usage: ${formatUsage(entry)}`),
           clear: () => setBuffer([])
         });
       } else if (convar !== undefined) {
@@ -134,7 +209,9 @@ export function Console() {
           );
         }
       } else if (command !== "") {
-        println(`{red}Command "${command}" not found.`);
+        println(
+          `{red}Command "${command}" not found. Type "help" for a list of commands.`
+        );
       }
     } else {
       println("{red}Type a command.");
@@ -242,7 +319,7 @@ export function Console() {
           autoFocus
           className="w-full bg-black px-1 font-mono text-sm text-white outline-hidden placeholder:text-neutral-600"
           onChange={handleChange}
-          placeholder="Type a command..."
+          placeholder='Type "help" for a list of commands...'
           value={input}
         />
       </form>
