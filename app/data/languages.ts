@@ -37,3 +37,7 @@ export const languages = [
 
 export const languageNames = languages.map(({ name }) => name);
 export type LanguageName = (typeof languageNames)[number];
+
+export function isValidLanguage(language: unknown): language is LanguageName {
+  return languageNames.includes(language as LanguageName);
+}

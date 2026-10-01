@@ -6,7 +6,7 @@
 import { PassThrough } from "node:stream";
 
 import { CS2_ITEMS, CS2Economy } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations";
+import { english } from "@ianlucas/cs2-lib/translations/english";
 import { createReadableStreamFromReadable } from "@react-router/node";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";

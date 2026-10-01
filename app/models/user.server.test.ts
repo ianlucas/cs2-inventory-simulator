@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2_ITEMS, CS2Economy } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations";
+import { english } from "@ianlucas/cs2-lib/translations/english";
 import { beforeEach, expect, test, vi } from "vitest";
 import { loadOrCreateUserInventory } from "./user.server";
 

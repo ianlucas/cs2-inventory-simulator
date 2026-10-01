@@ -18,11 +18,11 @@ export function useTranslation({ language }: { language: string }) {
     );
   }
 
+  // The server keeps no item translations; the map is only used on the client,
+  // to load the economy.
   function getItemTranslationMap() {
     return (
-      (isServerContext
-        ? serverGlobals.itemTranslationByLanguage[language]
-        : clientGlobals.itemTranslationMap) ?? {}
+      (isServerContext ? undefined : clientGlobals.itemTranslationMap) ?? {}
     );
   }
 

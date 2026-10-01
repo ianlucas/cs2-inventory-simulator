@@ -4,12 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { Session } from "react-router";
-import { LanguageName, languageNames, languages } from "~/data/languages";
+import { languages } from "~/data/languages";
 import { appCountry } from "~/models/rule.server";
-
-export function isValidLanguage(language: unknown): language is LanguageName {
-  return languageNames.includes(language as LanguageName);
-}
 
 function getLanguageFromCountry(countryCode: string) {
   return (

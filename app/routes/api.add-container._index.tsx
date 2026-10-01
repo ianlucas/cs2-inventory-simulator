@@ -6,7 +6,7 @@
 import { CS2Economy, ensure } from "@ianlucas/cs2-lib";
 import { z } from "zod";
 import { api } from "~/api.server";
-import { serverGlobals } from "~/globals";
+import { getItemTranslation } from "~/item-translation.server";
 import { middleware } from "~/middleware.server";
 import {
   API_SCOPE,
@@ -64,6 +64,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
         )
       )
     );
+    const translation = await getItemTranslation(item, language);
     await manipulateUserInventory({
       userId,
       manipulate(inventory) {
@@ -72,12 +73,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
         });
       }
     });
-    return Response.json({
-      ...item.item,
-      ...(language !== undefined
-        ? serverGlobals.itemTranslationByLanguage[language][item.id]
-        : item.language)
-    });
+    return Response.json({ ...item.item, ...translation });
   } catch {
     return badRequest;
   }

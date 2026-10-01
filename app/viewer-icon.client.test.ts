@@ -9,7 +9,7 @@ import {
   CS2InventoryItem,
   CS2_ITEMS
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations";
+import { english } from "@ianlucas/cs2-lib/translations/english";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ViewerItemInput } from "./viewer";
 import type { ViewerApi, ViewerCaptured } from "./viewer-api.client";
