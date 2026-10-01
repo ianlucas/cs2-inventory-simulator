@@ -5,7 +5,7 @@
 
 import clsx from "clsx";
 import { ReactNode } from "react";
-import { TextSlider } from "./text-slider";
+import { Marquee } from "./marquee";
 
 export const SIDE_MENU_ITEM_HEIGHT = 32;
 
@@ -43,7 +43,7 @@ export function SideMenuItem({
         {icon}
       </div>
       <div className="font-display min-w-0 flex-1 font-bold whitespace-nowrap drop-shadow-sm">
-        <TextSlider text={label} />
+        <Marquee>{label}</Marquee>
       </div>
       {right}
     </button>

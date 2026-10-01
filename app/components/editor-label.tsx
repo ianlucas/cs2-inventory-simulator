@@ -5,7 +5,7 @@
 
 import clsx from "clsx";
 import { ComponentProps } from "react";
-import { TextSlider } from "./text-slider";
+import { Marquee } from "./marquee";
 
 export function EditorLabel({
   block,
@@ -35,7 +35,7 @@ export function EditorLabel({
           "font-display items-center font-bold whitespace-nowrap text-neutral-400 select-none"
         )}
       >
-        <TextSlider text={label} />
+        <Marquee>{label}</Marquee>
       </label>
       {children}
     </div>
