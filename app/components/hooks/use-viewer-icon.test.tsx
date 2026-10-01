@@ -11,7 +11,7 @@ import {
   CS2_ITEMS,
   ensure
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations";
+import { english } from "@ianlucas/cs2-lib/translations/english";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

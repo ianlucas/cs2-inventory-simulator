@@ -10,7 +10,10 @@ import type { Route } from "./+types/$";
 export async function loader({ request }: Route.LoaderArgs) {
   await middleware(request);
   const url = new URL(request.url);
-  if (url.pathname.startsWith("/assets")) {
+  if (
+    url.pathname.startsWith("/assets") ||
+    url.pathname.startsWith("/translations/")
+  ) {
     return new Response(null, {
       status: 404,
       headers: {

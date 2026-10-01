@@ -9,7 +9,7 @@ import {
   CS2Economy,
   CS2Inventory
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations";
+import { english } from "@ianlucas/cs2-lib/translations/english";
 import { expect, test } from "vitest";
 import {
   CHARM_DETACHMENTS_DISPLAY_UID,

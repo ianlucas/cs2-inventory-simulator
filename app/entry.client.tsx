@@ -12,7 +12,10 @@ import { HydratedRouter } from "react-router/dom";
 import { clientGlobals } from "./globals";
 import { initClientMonitoring } from "./monitoring.client";
 import { logError } from "./shared/monitoring";
-import { fetchTranslation } from "./translation-api.client";
+import {
+  fetchItemTranslationMap,
+  fetchSystemTranslationMap
+} from "./translation-api.client";
 
 initClientMonitoring();
 
@@ -54,10 +57,13 @@ function hydrate() {
 }
 
 async function loadTranslationsAndHydrate() {
-  const language = document.documentElement.dataset.language ?? "english";
+  const { itemLanguage = "english", language = "english" } =
+    document.documentElement.dataset;
   try {
-    const { systemTranslationMap, itemTranslationMap } =
-      await fetchTranslation(language);
+    const [systemTranslationMap, itemTranslationMap] = await Promise.all([
+      fetchSystemTranslationMap(language),
+      fetchItemTranslationMap(itemLanguage)
+    ]);
     clientGlobals.systemTranslationMap = systemTranslationMap;
     clientGlobals.itemTranslationMap = itemTranslationMap;
   } catch (error) {

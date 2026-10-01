@@ -281,6 +281,8 @@ type PostAddContainerRequest = {
 };
 ```
 
+`language` is a CS2 language name (e.g. `brazilian`) for the container's name and descriptions in the response. English is used when it's omitted or unsupported.
+
 ### Response
 
 - Returns `401` when using an invalid API key.

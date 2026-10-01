@@ -10,7 +10,6 @@ import { type ViewerIconStatus } from "~/viewer-icon.client";
 
 interface ServerGlobals {
   appLogoBase64Url: string | undefined;
-  itemTranslationByLanguage: CS2ItemTranslationByLanguage;
   systemTranslationByLanguage: SystemTranslationByLanguage;
 }
 

@@ -9,7 +9,7 @@ import { useNameItem } from "~/components/hooks/use-name-item";
 import { isNewItem } from "~/shared/economy";
 import { usePreferences, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
-import { TextSlider } from "./text-slider";
+import { Marquee } from "./marquee";
 
 export function ItemButton({
   bigger,
@@ -77,19 +77,18 @@ export function ItemButton({
         >
           {model !== "" && (
             <div className="text-xs/3 text-neutral-400">
-              <TextSlider text={model} />
+              <Marquee>{model}</Marquee>
             </div>
           )}
           <div
             style={{ color: ignoreRarityColor ? undefined : item.rarityColor }}
           >
-            <TextSlider text={name} />
+            <Marquee>{name}</Marquee>
           </div>
           {showAltname && item.alternateName !== undefined && (
-            <TextSlider
-              className="text-sm/3 text-neutral-200"
-              text={item.alternateName}
-            />
+            <Marquee className="text-sm/3 text-neutral-200">
+              {item.alternateName}
+            </Marquee>
           )}
         </div>
         {!hideNewItemLabel && isNewItem(item) && (

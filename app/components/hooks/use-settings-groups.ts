@@ -23,12 +23,13 @@ import { backgrounds } from "~/data/backgrounds";
 import { languages } from "~/data/languages";
 
 // Preferences as submitted by the settings form, where an empty background
-// means random.
+// means random and an empty item language follows the interface language.
 export type SettingsDraft = Omit<
   ReturnType<typeof usePreferences>,
-  "background" | "lang"
+  "background" | "itemLanguage" | "lang"
 > & {
   background: string;
+  itemLanguage: string;
 };
 
 type SettingsDraftKey<T> = {
@@ -63,6 +64,11 @@ export function useSettingsGroups(): SettingsGroup[] {
   const translate = useTranslate();
   const { viewerEnabled } = useRules();
   const [inventory] = useInventory();
+  const languageOptions = languages.map(({ countries, name }) => ({
+    image: `/images/flags/${countries[0].toUpperCase()}.svg`,
+    label: translate(`Language$${name}`),
+    value: name
+  }));
 
   const groups: (Omit<SettingsGroup, "fields"> & {
     fields: (SettingsGroupField | false)[];
@@ -76,11 +82,19 @@ export function useSettingsGroups(): SettingsGroup[] {
           type: "select",
           key: "language",
           label: translate("SettingsLanguage"),
-          options: languages.map(({ countries, name }) => ({
-            image: `/images/flags/${countries[0].toUpperCase()}.svg`,
-            label: translate(`Language$${name}`),
-            value: name
-          }))
+          options: languageOptions
+        },
+        {
+          type: "select",
+          key: "itemLanguage",
+          label: translate("SettingsItemLanguage"),
+          options: [
+            {
+              label: translate("SettingsItemLanguageSameAsInterface"),
+              value: ""
+            },
+            ...languageOptions
+          ]
         },
         {
           type: "select",

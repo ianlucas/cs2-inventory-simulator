@@ -7,6 +7,7 @@ import { redirect } from "react-router";
 import { z } from "zod";
 import { api } from "~/api.server";
 import { getUserIdFromRequest } from "~/auth.server";
+import { isValidLanguage } from "~/data/languages";
 import { middleware } from "~/middleware.server";
 import {
   getUserPreferences,
@@ -16,7 +17,6 @@ import {
   isValidBackground,
   transformBackground
 } from "~/preferences/background.server";
-import { isValidLanguage } from "~/preferences/language.server";
 import { methodNotAllowed } from "~/responses.server";
 import { assignToSession, commitSession, getSession } from "~/session.server";
 import type { Route } from "./+types/api.action.preferences._index";
@@ -37,6 +37,7 @@ export const loader = api(async ({ request }: Route.LoaderArgs) => {
       "hideFilters",
       "hideFreeItems",
       "hideNewItemLabel",
+      "itemLanguage",
       "language",
       "prefer2dStickerEditor",
       "statsForNerds"
@@ -61,6 +62,10 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
         .string()
         .refine(isValidBackground)
         .transform(transformBackground),
+      itemLanguage: z
+        .literal("")
+        .or(z.string().refine(isValidLanguage))
+        .transform((itemLanguage) => itemLanguage || null),
       language: z.string().refine(isValidLanguage),
       statsForNerds: z.literal("true").or(z.literal("false")),
       hideFreeItems: z.literal("true").or(z.literal("false")),

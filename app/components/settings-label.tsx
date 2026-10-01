@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ComponentProps } from "react";
+import { Marquee } from "./marquee";
 
 export function SettingsLabel({
   label,
@@ -13,7 +14,9 @@ export function SettingsLabel({
 }) {
   return (
     <div className="flex min-h-12 items-center justify-between gap-4 rounded-sm bg-neutral-800/50 px-3 py-1.5">
-      <label className="font-display font-bold text-neutral-400">{label}</label>
+      <label className="font-display min-w-0 flex-1 font-bold text-neutral-400">
+        <Marquee>{label}</Marquee>
+      </label>
       <div {...props} />
     </div>
   );

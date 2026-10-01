@@ -4,12 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { Session } from "react-router";
-import { LanguageName, languageNames, languages } from "~/data/languages";
+import { languages } from "~/data/languages";
 import { appCountry } from "~/models/rule.server";
-
-export function isValidLanguage(language: unknown): language is LanguageName {
-  return languageNames.includes(language as LanguageName);
-}
 
 function getLanguageFromCountry(countryCode: string) {
   return (
@@ -33,6 +29,9 @@ export async function getLanguage(session: Session, ipCountry: string | null) {
     (session.get("language") as string | null | undefined) ||
     getLanguageFromCountry(country);
   return {
+    // `null` means item names follow the interface language.
+    itemLanguage:
+      (session.get("itemLanguage") as string | null | undefined) || null,
     lang: getLangFromLanguage(language),
     language
   };

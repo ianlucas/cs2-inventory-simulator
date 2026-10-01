@@ -157,6 +157,53 @@
   }
 }
 
+@property --marquee-opacity {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+/*
+  Slides a line that overflows its `@container`, then fades it out and back to
+  the start. `Marquee` sets the duration and the timing of each phase.
+*/
+@utility marquee {
+  animation:
+    marquee-slide infinite,
+    marquee-fade infinite;
+  /* Starts past the fade in, which only belongs to later loops. */
+  animation-delay: -200ms;
+  /*
+    The first layer keeps a line that fits fully visible, and collapses once
+    the line overflows, leaving only the fading layer.
+  */
+  mask-image:
+    linear-gradient(#000, #000),
+    linear-gradient(
+      rgb(0 0 0 / var(--marquee-opacity)),
+      rgb(0 0 0 / var(--marquee-opacity))
+    );
+  mask-repeat: no-repeat;
+  mask-size:
+    max(0px, (100cqw - 100% + 1px) * 9999) 100%,
+    100% 100%;
+}
+
+@keyframes marquee-slide {
+  to {
+    transform: translateX(min(0px, calc(100cqw - 100%)));
+  }
+}
+
+@keyframes marquee-fade {
+  from {
+    --marquee-opacity: 0;
+  }
+  to {
+    --marquee-opacity: 1;
+  }
+}
+
 @keyframes overlay-open {
   0% {
     opacity: 0;
