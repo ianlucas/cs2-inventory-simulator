@@ -31,7 +31,11 @@ import { Presence } from "./presence";
 import { UnlockCaseContainer } from "./unlock-case-container";
 import { UseItemHeader } from "./use-item-header";
 
-const fakeOdds = new ConVar("fake_odds", "0");
+const fakeOdds = new ConVar(
+  "fake_odds",
+  "0",
+  "Shows a fake container unlock result rolled with equal rarity odds."
+);
 
 async function unlockCase(caseUid: number, keyUid?: number) {
   const { unlockedItem, syncedAt } =

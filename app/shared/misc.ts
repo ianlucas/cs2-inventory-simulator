@@ -32,8 +32,20 @@ export function isOurHostname() {
   );
 }
 
+const HTML_ESCAPES: Record<string, string> = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+};
+
+function escapeHtml(input: string) {
+  return input.replace(/[&<>"']/g, (character) => HTML_ESCAPES[character]);
+}
+
 export function colorText(input: string) {
-  return input.replace(/{(\w+)}([^{}]*)/g, (_, color, text) => {
+  return escapeHtml(input).replace(/{(\w+)}([^{}]*)/g, (_, color, text) => {
     return `<span style="color: ${color};">${text}</span>`;
   });
 }
