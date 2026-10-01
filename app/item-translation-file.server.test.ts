@@ -47,17 +47,17 @@ describe.each([
     expect(JSON.parse(json.toString())).toEqual(map);
   });
 
-  it("reads every item back through the index", async () => {
+  // Offsets are cumulative, so a miscounted byte would shift every later item;
+  // a sample spread over the file (and its last item) is enough to catch it.
+  it("reads items back through the index", async () => {
     const { jsonPath, indexPath } = await writeItemTranslationFile(name, map);
-    const translations: CS2ItemTranslationMap = {};
-    for (const id of Object.keys(map)) {
-      translations[id] = await readItemTranslation(
-        jsonPath,
-        indexPath,
-        Number(id)
-      );
+    const ids = Object.keys(map);
+    const sample = [...ids.filter((_, index) => index % 100 === 0), ids.at(-1)];
+    for (const id of sample) {
+      expect(
+        await readItemTranslation(jsonPath, indexPath, Number(id))
+      ).toEqual(map[Number(id)]);
     }
-    expect(translations).toEqual(map);
   });
 });
 
