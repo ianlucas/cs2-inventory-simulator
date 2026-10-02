@@ -255,6 +255,20 @@ function Keychain3dEditorOverlay({
     api?.setItem(buildItem(next));
   }
 
+  // The game reads an unset axis as zero, not as the default the fields display.
+  function handlePositionEdit(axis: "x" | "y" | "z", value: number) {
+    const current = keychainRef.current;
+    if (current === undefined) {
+      return;
+    }
+    handleEdit({
+      x: current.x ?? keychainDefault?.x,
+      y: current.y ?? keychainDefault?.y,
+      z: current.z ?? keychainDefault?.z,
+      [axis]: value
+    });
+  }
+
   function handleRerollPosition() {
     api?.rerollKeychainPosition({ index: 0 });
   }
@@ -407,7 +421,7 @@ function Keychain3dEditorOverlay({
                       bounds.max
                     )}
                     min={bounds.min}
-                    onChange={(value) => handleEdit({ [axis]: value })}
+                    onChange={(value) => handlePositionEdit(axis, value)}
                     step={CS2_KEYCHAIN_POSITION_FACTOR}
                     stepRangeStyles="flex-1"
                     transform={keychainPositionToString}
