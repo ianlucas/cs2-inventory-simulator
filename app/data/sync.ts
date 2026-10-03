@@ -24,6 +24,7 @@ export const SyncAction = {
   RemoveItemPatch: "remove-item-patch",
   RemoveItemSticker: "remove-item-sticker",
   RenameItem: "rename-item",
+  RenamePet: "rename-pet",
   RenameStorageUnit: "rename-storage-unit",
   RetrieveFromStorageUnit: "retrieve-from-storage-unit",
   ScrapeItemSticker: "scrape-item-sticker",

@@ -286,6 +286,20 @@ Can the user define Name tag when crafting?
 
 Can the user define Seed when crafting?
 
+### `craftAllowStyle`
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Can the user define a pet's Style when crafting?
+
+### `craftAllowUpgradeLevel`
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Can the user define a pet's Stage (upgrade level) when crafting?
+
 ### `craftAllowStatTrak`
 
 - **Type:** `boolean`
@@ -434,6 +448,20 @@ Can the user define Name tag when editing?
 - **Default:** `true`
 
 Can the user define Seed when editing?
+
+### `editAllowStyle`
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Can the user define a pet's Style when editing?
+
+### `editAllowUpgradeLevel`
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Can the user define a pet's Stage (upgrade level) when editing?
 
 ### `editAllowStatTrak`
 

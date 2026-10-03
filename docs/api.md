@@ -46,7 +46,9 @@ type InventoryItem = {
     }
   >;
   storage?: Record<number, InventoryItem>;
+  style?: number;
   updatedAt?: number;
+  upgradeLevel?: number;
   wear?: number;
 };
 type GetUserInventoryResponse = {
@@ -134,6 +136,17 @@ interface GraffitiEconItem {
   tint: number;
   uid: number;
 }
+interface PetEconItem {
+  def: number;
+  hash: string;
+  model: string;
+  nametag: string;
+  petId: number;
+  seed: number;
+  style?: number;
+  uid: number;
+  upgradeLevel: number;
+}
 type GetUserEquippedItemsResponse = {
   agents?: Record<number, AgentEconItem>;
   collectible?: CollectibleEconItem;
@@ -142,6 +155,7 @@ type GetUserEquippedItemsResponse = {
   graffiti?: GraffitiEconItem;
   knives?: Record<number, MeleeEconItem>;
   musicKit?: MusicKitEconItem;
+  pet?: PetEconItem;
   tWeapons?: Record<number, WeaponEconItem>;
 };
 ```
@@ -246,6 +260,8 @@ type PostAddItemRequest = {
           }
         >
       | undefined;
+    style?: number | undefined;
+    upgradeLevel?: number | undefined;
     wear?: number | undefined;
   };
 };

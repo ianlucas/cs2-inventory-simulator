@@ -50,6 +50,8 @@ export const baseInventoryItemProps = {
       })
     )
     .optional(),
+  style: positiveInt.optional(),
+  upgradeLevel: nonNegativeInt.optional(),
   wear: nonNegativeFloat.optional()
 };
 
@@ -93,6 +95,8 @@ export const itemEditorAttributesShape = z
     patches: true,
     seed: true,
     stickers: true,
+    style: true,
+    upgradeLevel: true,
     wear: true
   })
   .extend({

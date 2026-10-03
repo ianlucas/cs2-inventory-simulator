@@ -37,6 +37,8 @@ export function CraftNew({
     craftAllowStickerWear,
     craftAllowStickerX,
     craftAllowStickerY,
+    craftAllowStyle,
+    craftAllowUpgradeLevel,
     craftAllowWear,
     craftHideType,
     craftMaxQuantity,
@@ -60,6 +62,8 @@ export function CraftNew({
   const isHideSeed = !craftAllowSeed;
   const isHideStatTrak = !craftAllowStatTrak;
   const isHideWear = !craftAllowWear;
+  const isHideStyle = !craftAllowStyle;
+  const isHideUpgradeLevel = !craftAllowUpgradeLevel;
   const isHideStickerRotation = !craftAllowStickerRotation;
   const isHideStickerSchema = !craftAllowStickerSchema;
   const isHideStickerWear = !craftAllowStickerWear;
@@ -108,6 +112,8 @@ export function CraftNew({
         isHideStickerWear={isHideStickerWear}
         isHideStickerX={isHideStickerX}
         isHideStickerY={isHideStickerY}
+        isHideStyle={isHideStyle}
+        isHideUpgradeLevel={isHideUpgradeLevel}
         isHideWear={isHideWear}
         item={item}
         keychainFilter={filterStickerOrPatch}

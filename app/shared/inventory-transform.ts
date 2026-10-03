@@ -15,17 +15,18 @@ const INVENTORY_ITEM_TYPE_ORDER = {
   [CS2ItemType.Melee]: 1,
   [CS2ItemType.Gloves]: 2,
   [CS2ItemType.Agent]: 3,
-  [CS2ItemType.Patch]: 4,
-  [CS2ItemType.Collectible]: 5,
-  [CS2ItemType.MusicKit]: 6,
-  [CS2ItemType.Graffiti]: 7,
-  [CS2ItemType.Sticker]: 8,
-  [CS2ItemType.Keychain]: 9,
-  [CS2ItemType.Container]: 10,
-  [CS2ItemType.Key]: 11,
-  [CS2ItemType.Tool]: 12,
-  [CS2ItemType.Utility]: 13,
-  [CS2ItemType.Stub]: 14
+  [CS2ItemType.Pet]: 4,
+  [CS2ItemType.Patch]: 5,
+  [CS2ItemType.Collectible]: 6,
+  [CS2ItemType.MusicKit]: 7,
+  [CS2ItemType.Graffiti]: 8,
+  [CS2ItemType.Sticker]: 9,
+  [CS2ItemType.Keychain]: 10,
+  [CS2ItemType.Container]: 11,
+  [CS2ItemType.Key]: 12,
+  [CS2ItemType.Tool]: 13,
+  [CS2ItemType.Utility]: 14,
+  [CS2ItemType.Stub]: 15
 } as const;
 
 export function transform(

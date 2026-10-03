@@ -30,6 +30,8 @@ export type ViewerItem = Pick<
   | "statTrak"
   | "nameTag"
   | "patches"
+  | "style"
+  | "upgradeLevel"
 >;
 
 /**

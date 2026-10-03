@@ -23,7 +23,9 @@ export type ViewerItemKind =
   | "sticker"
   | "stickerSlab"
   | "keychain"
-  | "agent";
+  | "agent"
+  | "pet"
+  | "petTool";
 
 const VIEWER_RENDERABLE_KINDS: ReadonlySet<ViewerItemKind> = new Set([
   "weapon",
@@ -31,13 +33,16 @@ const VIEWER_RENDERABLE_KINDS: ReadonlySet<ViewerItemKind> = new Set([
   "gloves",
   "sticker",
   "stickerSlab",
-  "keychain"
+  "keychain",
+  "pet"
 ]);
 
-// Agents render only where their patches are previewed, not in every 3D editor.
+// Agents render only where their patches are previewed, not in every 3D editor,
+// and the pet tools have nothing to edit.
 export const VIEWER_INSPECT_KINDS: ReadonlySet<ViewerItemKind> = new Set([
   ...VIEWER_RENDERABLE_KINDS,
-  "agent"
+  "agent",
+  "petTool"
 ]);
 
 // The viewer's `/api/catalog` manifest: supported(id) = id <= maxId && id not
@@ -147,6 +152,9 @@ export function getViewerItemKind(
   if (economyItem.isSticker()) return "sticker";
   if (economyItem.isKeychain()) return "keychain";
   if (economyItem.isAgent()) return "agent";
+  if (economyItem.isPet()) return "pet";
+  if (economyItem.isChickenEgg() || economyItem.isChickenFeed())
+    return "petTool";
   return undefined;
 }
 
@@ -178,6 +186,9 @@ export function toViewerItem(item: ViewerItemInput): ViewerItem {
   if (item.statTrak !== undefined) viewerItem.statTrak = item.statTrak;
   if (item.nameTag !== undefined) viewerItem.nameTag = item.nameTag;
   if (item.patches !== undefined) viewerItem.patches = item.patches;
+  if (item.style !== undefined) viewerItem.style = item.style;
+  if (item.upgradeLevel !== undefined)
+    viewerItem.upgradeLevel = item.upgradeLevel;
   return viewerItem;
 }
 

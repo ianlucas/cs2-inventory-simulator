@@ -16,7 +16,7 @@ export function EditorSelect({
   ...rest
 }: Omit<ComponentProps<"select">, "onChange"> & {
   onChange: (value: string) => void;
-  options: string[];
+  options: (string | { label: string; value: string })[];
   placeholder?: string;
   styleless?: boolean;
   value: string;
@@ -41,15 +41,21 @@ export function EditorSelect({
           {placeholder}
         </option>
       )}
-      {options.map((option) => (
-        <option
-          className="bg-black py-1 text-white"
-          key={option}
-          value={option}
-        >
-          {option}
-        </option>
-      ))}
+      {options.map((option) => {
+        const { label, value } =
+          typeof option === "string"
+            ? { label: option, value: option }
+            : option;
+        return (
+          <option
+            className="bg-black py-1 text-white"
+            key={value}
+            value={value}
+          >
+            {label}
+          </option>
+        );
+      })}
     </select>
   );
 }

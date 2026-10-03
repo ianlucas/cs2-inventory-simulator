@@ -19,7 +19,8 @@ export function useRenameItem() {
     return setItemSelector({
       uid,
       items: items.filter(
-        ({ item }) => item.hasNameTag() && !item.isStorageUnit()
+        ({ item }) =>
+          item.hasNameTag() && !item.isStorageUnit() && !item.isPet()
       ),
       type: "rename-item"
     });

@@ -437,6 +437,18 @@ export const craftAllowSeed = new Rule({
   defaultValue: true
 });
 
+export const craftAllowStyle = new Rule({
+  name: "craftAllowStyle",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const craftAllowUpgradeLevel = new Rule({
+  name: "craftAllowUpgradeLevel",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const craftAllowWear = new Rule({
   name: "craftAllowWear",
   type: "boolean",
@@ -535,6 +547,18 @@ export const editAllowNametag = new Rule({
 
 export const editAllowSeed = new Rule({
   name: "editAllowSeed",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowStyle = new Rule({
+  name: "editAllowStyle",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowUpgradeLevel = new Rule({
+  name: "editAllowUpgradeLevel",
   type: "boolean",
   defaultValue: true
 });

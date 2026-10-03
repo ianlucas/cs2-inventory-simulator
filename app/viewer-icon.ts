@@ -26,7 +26,8 @@ const ICON_RENDERABLE_KINDS: ReadonlySet<ViewerItemKind> = new Set([
   "weapon",
   "melee",
   "gloves",
-  "keychain"
+  "keychain",
+  "pet"
 ]);
 
 export function isIconRenderable(

@@ -22,7 +22,8 @@ export const INVENTORY_SECONDARY_FILTERS = {
     "Misc",
     "Agents",
     "Gloves",
-    "MusicKits"
+    "MusicKits",
+    "Pets"
   ],
   GraphicArt: ["AllGraphicArt", "Patches", "Stickers", "Graffiti", "Charms"],
   Containers: [

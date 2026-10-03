@@ -3,7 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_ITEMS, CS2Economy, CS2ItemType, ensure } from "@ianlucas/cs2-lib";
+import {
+  CS2_CHICKEN_EGG_TOOL_DEFINITION_INDEX,
+  CS2_ITEMS,
+  CS2Economy,
+  CS2ItemType,
+  ensure
+} from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations/english";
 import { describe, expect, it } from "vitest";
 import { ViewerCatalogLike } from "~/viewer";
@@ -34,6 +40,18 @@ const PAINTED_WEAPON_ID = ensure(
       item.type === CS2ItemType.Weapon &&
       item.isDefault !== true &&
       item.isBase !== true
+  )
+).id;
+const PET_ID = ensure(
+  CS2_ITEMS.find(
+    (item) => item.type === CS2ItemType.Pet && item.styleCount !== undefined
+  )
+).id;
+const CHICKEN_EGG_ID = ensure(
+  CS2_ITEMS.find(
+    (item) =>
+      item.definitionIndex === CS2_CHICKEN_EGG_TOOL_DEFINITION_INDEX &&
+      item.type === CS2ItemType.Tool
   )
 ).id;
 const CATALOG: ViewerCatalogLike = { maxId: 100000, holes: [] };
@@ -91,6 +109,14 @@ describe("isIconRenderable", () => {
   it("draws the kinds whose flat art cannot show what the user owns", () => {
     expect(isIconRenderable(CATALOG, { id: AK47_ID })).toBe(true);
     expect(isIconRenderable(CATALOG, { id: KARAMBIT_ID })).toBe(true);
+  });
+
+  it("draws a pet, whose styles and stages all share one flat image", () => {
+    expect(isIconRenderable(CATALOG, { id: PET_ID })).toBe(true);
+  });
+
+  it("leaves a pet tool on its flat art, which has nothing to customize", () => {
+    expect(isIconRenderable(CATALOG, { id: CHICKEN_EGG_ID })).toBe(false);
   });
 
   it("leaves a sticker on its flat art, which already is its picture", () => {
