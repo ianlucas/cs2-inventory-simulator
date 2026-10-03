@@ -24,6 +24,8 @@ interface EditorItemDisplayProps {
   seed?: number;
   statTrak?: number;
   stickers?: CS2BaseInventoryItem["stickers"];
+  style?: number;
+  upgradeLevel?: number;
   wear?: number;
 }
 
@@ -47,6 +49,8 @@ function EditorItem3dPreview({
   seed,
   statTrak,
   stickers,
+  style,
+  upgradeLevel,
   wear
 }: EditorItemDisplayProps) {
   const [initialItem] = useState<CS2BaseInventoryItem>(() => ({
@@ -56,6 +60,8 @@ function EditorItem3dPreview({
     seed,
     statTrak,
     stickers,
+    style,
+    upgradeLevel,
     wear
   }));
   const { api, viewerProps } = useViewer({ item: initialItem });
@@ -82,9 +88,22 @@ function EditorItem3dPreview({
       seed,
       statTrak,
       stickers,
+      style,
+      upgradeLevel,
       wear
     });
-  }, [api, item.id, keychains, nameTag, seed, statTrak, stickers, wear]);
+  }, [
+    api,
+    item.id,
+    keychains,
+    nameTag,
+    seed,
+    statTrak,
+    stickers,
+    style,
+    upgradeLevel,
+    wear
+  ]);
 
   if (viewerStatus.isUnavailable) {
     return <EditorItem2dPreview item={item} wear={wear} />;
@@ -126,6 +145,8 @@ export function EditorItemDisplay({
   seed,
   statTrak,
   stickers,
+  style,
+  upgradeLevel,
   wear
 }: EditorItemDisplayProps) {
   const { canUse3d } = useViewerAvailability({
@@ -144,6 +165,8 @@ export function EditorItemDisplay({
           seed={seed}
           statTrak={statTrak}
           stickers={stickers}
+          style={style}
+          upgradeLevel={upgradeLevel}
           wear={wear}
         />
       ) : (

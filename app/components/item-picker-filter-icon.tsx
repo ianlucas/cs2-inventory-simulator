@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faRss } from "@fortawesome/free-solid-svg-icons";
+import { faEgg, faRss } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ComponentProps } from "react";
 
@@ -264,6 +264,9 @@ export function ItemPickerFilterIcon({
 
     case "new":
       return <FontAwesomeIcon {...(props as object)} icon={faRss} />;
+
+    case "pet":
+      return <FontAwesomeIcon {...(props as object)} icon={faEgg} />;
 
     default:
       return null;

@@ -9,6 +9,7 @@ import {
   CS2ItemType,
   CS2Team,
   CS2_MIN_KEYCHAIN_SEED,
+  CS2_MIN_PET_SEED,
   CS2_MIN_SEED,
   CS2_MIN_STICKER_WEAR,
   assert
@@ -19,9 +20,11 @@ interface EconItem {
   charges?: number;
   def?: number;
   hash?: string;
+  model?: string;
   musicId?: number;
   nametag?: string;
   paint?: number;
+  petId?: number;
   seed?: number;
   stattrak?: number;
   stickers?: {
@@ -41,8 +44,10 @@ interface EconItem {
     y?: number;
     z?: number;
   }[];
+  style?: number;
   tint?: number;
   uid?: number;
+  upgradeLevel?: number;
   wear?: number;
 }
 
@@ -67,6 +72,7 @@ export async function generate(
   let collectible: EconItem | undefined;
   let graffiti: EconItem | undefined;
   let musicKit: EconItem | undefined;
+  let pet: EconItem | undefined;
 
   for (const item of inventory.getAll()) {
     const data = item;
@@ -171,6 +177,18 @@ export async function generate(
             }))
           });
           break;
+        case CS2ItemType.Pet:
+          pet = hash({
+            def: data.definitionIndex,
+            model: data.modelKey,
+            nametag: item.nameTag ?? "",
+            petId: data.variantIndex,
+            seed: item.seed ?? CS2_MIN_PET_SEED,
+            style: item.style,
+            uid: item.uid,
+            upgradeLevel: item.getUpgradeLevel()
+          });
+          break;
         case CS2ItemType.Graffiti:
           assert(data.variantIndex);
           graffiti = {
@@ -192,6 +210,7 @@ export async function generate(
     graffiti,
     knives,
     musicKit,
+    pet,
     tWeapons
   };
 }

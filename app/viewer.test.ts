@@ -4,7 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
+  CS2_CHICKEN_EGG_TOOL_DEFINITION_INDEX,
+  CS2_CHICKEN_FEED_TOOL_DEFINITION_INDEX,
   CS2_ITEMS,
+  CS2_NAMETAG_TOOL_DEFINITION_INDEX,
   CS2Economy,
   CS2ItemType,
   CS2RarityColor,
@@ -61,7 +64,32 @@ CS2Economy.load({
     { id: 200, type: CS2ItemType.Sticker, rarityColor: CS2RarityColor.Common },
     { id: 80, type: CS2ItemType.Agent, rarityColor: CS2RarityColor.Common },
     { id: 81, type: CS2ItemType.Patch, rarityColor: CS2RarityColor.Common },
-    { id: 12, type: CS2ItemType.Patch, rarityColor: CS2RarityColor.Common }
+    { id: 12, type: CS2ItemType.Patch, rarityColor: CS2RarityColor.Common },
+    {
+      id: 90,
+      type: CS2ItemType.Pet,
+      rarityColor: CS2RarityColor.Rare,
+      variantIndex: 3,
+      styleCount: 13
+    },
+    {
+      id: 91,
+      type: CS2ItemType.Tool,
+      rarityColor: CS2RarityColor.Common,
+      definitionIndex: CS2_CHICKEN_EGG_TOOL_DEFINITION_INDEX
+    },
+    {
+      id: 92,
+      type: CS2ItemType.Tool,
+      rarityColor: CS2RarityColor.Common,
+      definitionIndex: CS2_CHICKEN_FEED_TOOL_DEFINITION_INDEX
+    },
+    {
+      id: 93,
+      type: CS2ItemType.Tool,
+      rarityColor: CS2RarityColor.Common,
+      definitionIndex: CS2_NAMETAG_TOOL_DEFINITION_INDEX
+    }
   ]
 });
 
@@ -134,6 +162,14 @@ describe("toViewerItem", () => {
     });
   });
 
+  it("passes a pet's style and upgrade level through to the viewer payload", () => {
+    expect(toViewerItem({ id: 90, style: 5, upgradeLevel: 2 })).toEqual({
+      id: 90,
+      style: 5,
+      upgradeLevel: 2
+    });
+  });
+
   it("drops statTrak and nameTag when undefined so the viewer keeps its defaults", () => {
     const viewerItem = toViewerItem({ id: 7 });
     expect(viewerItem).toEqual({ id: 7 });
@@ -162,6 +198,25 @@ describe("isViewerItemSupported", () => {
     expect(isViewerItemSupported(catalog, { id: 64 })).toBe(true);
     expect(isViewerItemSupported(catalog, { id: 60 })).toBe(false);
     expect(isViewerItemSupported(catalog, { id: 61 })).toBe(false);
+  });
+
+  it("offers pets wherever the viewer renders", () => {
+    expect(isViewerItemSupported(catalog, { id: 90 })).toBe(true);
+    expect(
+      isViewerItemSupported(catalog, { id: 90 }, VIEWER_INSPECT_KINDS)
+    ).toBe(true);
+  });
+
+  it("offers the pet tools only when asked for the inspect kinds", () => {
+    for (const id of [91, 92]) {
+      expect(isViewerItemSupported(catalog, { id })).toBe(false);
+      expect(isViewerItemSupported(catalog, { id }, VIEWER_INSPECT_KINDS)).toBe(
+        true
+      );
+    }
+    expect(
+      isViewerItemSupported(catalog, { id: 93 }, VIEWER_INSPECT_KINDS)
+    ).toBe(false);
   });
 
   it("offers agents only when asked for the inspect kinds", () => {

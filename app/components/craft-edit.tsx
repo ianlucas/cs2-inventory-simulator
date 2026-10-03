@@ -40,6 +40,8 @@ export function CraftEdit({
     editAllowStickerWear,
     editAllowStickerX,
     editAllowStickerY,
+    editAllowStyle,
+    editAllowUpgradeLevel,
     editAllowWear,
     editHideType,
     inventoryItemMaxPatches,
@@ -53,6 +55,8 @@ export function CraftEdit({
   const isHideSeed = !editAllowSeed;
   const isHideStatTrak = !editAllowStatTrak;
   const isHideWear = !editAllowWear;
+  const isHideStyle = !editAllowStyle;
+  const isHideUpgradeLevel = !editAllowUpgradeLevel;
   const isHideStickerRotation = !editAllowStickerRotation;
   const isHideStickerSchema = !editAllowStickerSchema;
   const isHideStickerWear = !editAllowStickerWear;
@@ -101,6 +105,8 @@ export function CraftEdit({
         isHideStickerWear={isHideStickerWear}
         isHideStickerX={isHideStickerX}
         isHideStickerY={isHideStickerY}
+        isHideStyle={isHideStyle}
+        isHideUpgradeLevel={isHideUpgradeLevel}
         isHideWear={isHideWear}
         item={item}
         keychainFilter={filterStickerOrPatch}

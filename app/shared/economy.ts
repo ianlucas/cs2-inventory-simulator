@@ -12,6 +12,8 @@ import {
   CS2_MAX_STICKERS,
   CS2_MIN_KEYCHAIN_SEED,
   CS2_MIN_STICKER_ROTATION,
+  CS2_PET_HEN_UPGRADE_LEVEL,
+  CS2_PET_PULLET_UPGRADE_LEVEL,
   CS2_STICKER_OFFSET_FACTOR,
   CS2_STICKER_WEAR_FACTOR,
   CS2_WEAR_FACTOR,
@@ -47,6 +49,11 @@ export const RarityLabel = {
   [CS2RarityColor.Ancient]: "Ancient",
   [CS2RarityColor.Immortal]: "Immortal"
 } as const;
+
+export const PetStageLabel: Record<number, "Pullet" | "Hen"> = {
+  [CS2_PET_PULLET_UPGRADE_LEVEL]: "Pullet",
+  [CS2_PET_HEN_UPGRADE_LEVEL]: "Hen"
+};
 
 export function createItemHideFilter({
   hideCategory,
@@ -228,6 +235,8 @@ export function getRarityItemName(item: CS2EconomyItem) {
       return "Container";
     case CS2ItemType.Key:
       return "Key";
+    case CS2ItemType.Pet:
+      return "Pet";
   }
   fail();
 }

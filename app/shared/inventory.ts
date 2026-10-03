@@ -26,6 +26,7 @@ export const EDITABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Keychain,
   CS2ItemType.Melee,
   CS2ItemType.MusicKit,
+  CS2ItemType.Pet,
   CS2ItemType.Weapon
 ];
 
@@ -38,6 +39,7 @@ export const INSPECTABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Melee,
   CS2ItemType.MusicKit,
   CS2ItemType.Patch,
+  CS2ItemType.Pet,
   CS2ItemType.Sticker,
   CS2ItemType.Weapon
 ];
@@ -162,6 +164,8 @@ export function editInventoryItem(
     patches: attributes.patches,
     keychains: attributes.keychains,
     seed: attributes.seed,
+    style: attributes.style,
+    upgradeLevel: attributes.upgradeLevel,
     wear: attributes.wear
   });
 }

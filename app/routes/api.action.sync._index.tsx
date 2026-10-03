@@ -37,6 +37,8 @@ import {
   craftAllowStickerWear,
   craftAllowStickerX,
   craftAllowStickerY,
+  craftAllowStyle,
+  craftAllowUpgradeLevel,
   craftAllowWear,
   craftHideType,
   editAllowKeychains,
@@ -53,6 +55,8 @@ import {
   editAllowStickerWear,
   editAllowStickerX,
   editAllowStickerY,
+  editAllowStyle,
+  editAllowUpgradeLevel,
   editAllowWear,
   editHideType,
   inventoryItemAllowApplyPatch,
@@ -179,6 +183,11 @@ const actionShape = z.discriminatedUnion("type", [
   }),
   z.object({
     type: z.literal(SyncAction.RenameStorageUnit),
+    uid: nonNegativeInt,
+    nameTag: z.string()
+  }),
+  z.object({
+    type: z.literal(SyncAction.RenamePet),
     uid: nonNegativeInt,
     nameTag: z.string()
   }),
@@ -311,7 +320,16 @@ async function enforceCraftRulesForInventoryItem(
   item: Partial<CS2BaseInventoryItem>,
   userId: string
 ) {
-  const { keychains, stickers, statTrak, wear, seed, nameTag } = item;
+  const {
+    keychains,
+    stickers,
+    statTrak,
+    wear,
+    seed,
+    style,
+    upgradeLevel,
+    nameTag
+  } = item;
   await enforceMaxAttachments(item, userId);
   if (keychains !== undefined && hasKeys(keychains)) {
     await craftAllowKeychains.for(userId).truthy();
@@ -337,6 +355,12 @@ async function enforceCraftRulesForInventoryItem(
   }
   if (seed !== undefined) {
     await craftAllowSeed.for(userId).truthy();
+  }
+  if (style !== undefined) {
+    await craftAllowStyle.for(userId).truthy();
+  }
+  if (upgradeLevel !== undefined) {
+    await craftAllowUpgradeLevel.for(userId).truthy();
   }
   if (nameTag !== undefined) {
     await craftAllowNametag.for(userId).truthy();
@@ -371,7 +395,16 @@ async function enforceEditRulesForInventoryItem(
   userId: string,
   target: CS2InventoryItem
 ) {
-  const { keychains, stickers, statTrak, wear, seed, nameTag } = attributes;
+  const {
+    keychains,
+    stickers,
+    statTrak,
+    wear,
+    seed,
+    style,
+    upgradeLevel,
+    nameTag
+  } = attributes;
   await enforceMaxAttachments(attributes, userId, target);
   if (keychains !== undefined && hasKeys(keychains)) {
     await editAllowKeychains.for(userId).truthy();
@@ -397,6 +430,12 @@ async function enforceEditRulesForInventoryItem(
   }
   if (seed !== undefined) {
     await editAllowSeed.for(userId).truthy();
+  }
+  if (style !== undefined) {
+    await editAllowStyle.for(userId).truthy();
+  }
+  if (upgradeLevel !== undefined) {
+    await editAllowUpgradeLevel.for(userId).truthy();
   }
   if (nameTag !== undefined) {
     await editAllowNametag.for(userId).truthy();
@@ -564,6 +603,9 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.RenameStorageUnit:
             inventory.renameStorageUnit(action.uid, action.nameTag);
+            break;
+          case SyncAction.RenamePet:
+            inventory.renamePet(action.uid, action.nameTag);
             break;
           case SyncAction.DepositToStorageUnit:
             inventory.depositToStorageUnit(action.uid, action.depositUids);

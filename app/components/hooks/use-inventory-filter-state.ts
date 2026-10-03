@@ -110,6 +110,8 @@ export function useInventoryFilterState() {
             return item.isGloves();
           case "MusicKits":
             return item.isMusicKit();
+          case "Pets":
+            return item.isPet();
         }
         break;
       case "GraphicArt":

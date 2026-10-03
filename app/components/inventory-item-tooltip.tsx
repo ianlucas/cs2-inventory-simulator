@@ -19,7 +19,9 @@ import { InventoryItemTooltipExterior } from "./inventory-item-tooltip-exterior"
 import { InventoryItemTooltipName } from "./inventory-item-tooltip-name";
 import { InventoryItemTooltipRarity } from "./inventory-item-tooltip-rarity";
 import { InventoryItemTooltipSeed } from "./inventory-item-tooltip-seed";
+import { InventoryItemTooltipStage } from "./inventory-item-tooltip-stage";
 import { InventoryItemTooltipStatTrak } from "./inventory-item-tooltip-stattrak";
+import { InventoryItemTooltipStyle } from "./inventory-item-tooltip-style";
 import { InventoryItemTooltipTeams } from "./inventory-item-tooltip-teams";
 import { InventoryItemTooltipWear } from "./inventory-item-wear";
 
@@ -43,6 +45,9 @@ export function InventoryItemTooltip({
   const hasSeed = !item.isDefault && item.hasSeed();
   const hasAttributes = hasWear || hasSeed;
   const hasStatTrak = item.statTrak !== undefined;
+  const hasStyle = item.hasStyle();
+  const upgradeLevel = item.getUpgradeLevel();
+  const hasStage = item.getUpgradeLevels().length > 1;
   const isUnsealedGraffiti =
     item.isGraffiti() && item.hasCharges() && !item.isSealed();
   const isCharmDetachment = item.isCharmDetachment();
@@ -69,6 +74,10 @@ export function InventoryItemTooltip({
       <div className="mt-2.5 grid grid-cols-[auto_1fr] items-center gap-1 border-y border-neutral-700/70 p-2">
         <InventoryItemTooltipRarity item={item} />
         {hasWear && <InventoryItemTooltipExterior wear={wear} />}
+        {hasStyle && <InventoryItemTooltipStyle style={item.style} />}
+        {hasStage && upgradeLevel !== undefined && (
+          <InventoryItemTooltipStage upgradeLevel={upgradeLevel} />
+        )}
         {hasTeams && <InventoryItemTooltipTeams teams={teams} />}
       </div>
       {has(item.tournamentDescription) && (

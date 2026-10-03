@@ -20,6 +20,7 @@ import { useCallback, useEffect, useState } from "react";
 import { VIEWER_INSPECT_KINDS } from "~/viewer";
 import {
   isItemCountable,
+  PetStageLabel,
   wearStringMaxLen,
   wearToString
 } from "~/shared/economy";
@@ -29,6 +30,7 @@ import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorInput } from "./editor-input";
 import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
+import { EditorSelect } from "./editor-select";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { EditorToggle } from "./editor-toggle";
 import { useIsDesktop } from "./hooks/use-is-desktop";
@@ -50,6 +52,8 @@ export interface ItemEditorAttributes {
   seed?: number;
   statTrak?: boolean;
   stickers?: CS2BaseInventoryItem["stickers"];
+  style?: number;
+  upgradeLevel?: number;
   wear?: number;
 }
 
@@ -72,6 +76,8 @@ export function ItemEditor({
   isHideStickerWear,
   isHideStickerX,
   isHideStickerY,
+  isHideStyle,
+  isHideUpgradeLevel,
   isHideWear,
   item,
   keychainFilter,
@@ -100,6 +106,8 @@ export function ItemEditor({
   isHideStickerWear?: boolean;
   isHideStickerX?: boolean;
   isHideStickerY?: boolean;
+  isHideStyle?: boolean;
+  isHideUpgradeLevel?: boolean;
   isHideWear?: boolean;
   keychainFilter?: (item: CS2EconomyItem) => boolean;
   onChange?: (data: ItemEditorAttributes) => void;
@@ -118,6 +126,10 @@ export function ItemEditor({
   const hasSeed = !isHideSeed && item.hasSeed();
   const hasWear = !isHideWear && item.hasWear();
   const hasStatTrak = !isHideStatTrak && item.hasStatTrak();
+  const hasStyle = !isHideStyle && item.hasStyle();
+  const hasUpgradeLevel =
+    !isHideUpgradeLevel && item.getUpgradeLevels().length > 1;
+  const defaultUpgradeLevel = item.getDefaultUpgradeLevel();
   const minimumSeed = item.getMinimumSeed();
   const minimumWear = item.getMinimumWear();
 
@@ -185,6 +197,8 @@ export function ItemEditor({
     seed: defaults?.seed ?? minimumSeed,
     statTrak: defaults?.statTrak !== undefined,
     stickers: defaults?.stickers ?? {},
+    style: defaults?.style,
+    upgradeLevel: defaults?.upgradeLevel ?? defaultUpgradeLevel,
     wear: defaults?.wear ?? minimumWear
   });
 
@@ -230,6 +244,11 @@ export function ItemEditor({
         hasStickers && hasKeys(attributes.value.stickers)
           ? attributes.value.stickers
           : undefined,
+      style: hasStyle ? attributes.value.style : undefined,
+      upgradeLevel:
+        hasUpgradeLevel && attributes.value.upgradeLevel !== defaultUpgradeLevel
+          ? attributes.value.upgradeLevel
+          : undefined,
       wear: hasWear
         ? attributes.value.wear !== CS2_MIN_WEAR
           ? attributes.value.wear
@@ -248,6 +267,8 @@ export function ItemEditor({
         attributes.value.statTrak ? (defaults?.statTrak ?? 0) : undefined
       }
       stickers={attributes.value.stickers}
+      style={attributes.value.style}
+      upgradeLevel={attributes.value.upgradeLevel}
       wear={attributes.value.wear}
     />
   );
@@ -384,6 +405,44 @@ export function ItemEditor({
             type="int"
             validate={(value) => CS2Economy.safeValidateSeed(value, item)}
             value={attributes.value.seed}
+          />
+        </EditorLabel>
+      )}
+      {hasStyle && (
+        <EditorLabel isDisabled={isDisabled} label={translate("EditorStyle")}>
+          <EditorSelect
+            className="h-6 flex-1 bg-neutral-950/40 px-1 outline-hidden focus:ring-2 focus:ring-blue-500/50 disabled:bg-transparent disabled:text-right"
+            disabled={isDisabled}
+            onChange={(value) =>
+              attributes.update("style")(
+                value === "" ? undefined : Number(value)
+              )
+            }
+            options={[
+              { label: translate("PetStyleDefault"), value: "" },
+              ...Array.from({ length: item.getStyleCount() }, (_, index) =>
+                String(index + 1)
+              )
+            ]}
+            styleless
+            value={String(attributes.value.style ?? "")}
+          />
+        </EditorLabel>
+      )}
+      {hasUpgradeLevel && (
+        <EditorLabel isDisabled={isDisabled} label={translate("EditorStage")}>
+          <EditorSelect
+            className="h-6 flex-1 bg-neutral-950/40 px-1 outline-hidden focus:ring-2 focus:ring-blue-500/50 disabled:bg-transparent disabled:text-right"
+            disabled={isDisabled}
+            onChange={(value) =>
+              attributes.update("upgradeLevel")(Number(value))
+            }
+            options={item.getUpgradeLevels().map((upgradeLevel) => ({
+              label: translate(`PetStage${PetStageLabel[upgradeLevel]}`),
+              value: String(upgradeLevel)
+            }))}
+            styleless
+            value={String(attributes.value.upgradeLevel)}
           />
         </EditorLabel>
       )}

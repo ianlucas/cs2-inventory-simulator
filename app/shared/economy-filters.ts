@@ -88,6 +88,12 @@ export const ECONOMY_ITEM_FILTERS = [
   },
   {
     hasModel: false,
+    icon: "pet",
+    label: "Pet" as const,
+    type: CS2ItemType.Pet
+  },
+  {
+    hasModel: false,
     icon: "patch",
     label: "Patch" as const,
     type: CS2ItemType.Patch
