@@ -51,7 +51,6 @@ test("an equipped pet carries what the game plugin reads", async () => {
   expect(pet).toEqual({
     def: catalana.definitionIndex,
     hash: expect.any(String),
-    model: catalana.modelKey,
     nametag: "Nugget",
     petId: catalana.variantIndex,
     seed: 1234,
