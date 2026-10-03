@@ -381,9 +381,6 @@ export function Inventory() {
       {isRenamingItem(renameItem) && (
         <RenameItem {...renameItem} onClose={closeRenameItem} />
       )}
-      {isRenamingPet(renamePet) && (
-        <RenamePet {...renamePet} onClose={closeRenamePet} />
-      )}
       {isRenamingStorageUnit(renameStorageUnit) && (
         <RenameStorageUnit
           {...renameStorageUnit}
@@ -471,6 +468,11 @@ export function Inventory() {
             onClose={closeUnpackItem}
             onUnpacked={handleInspectItem}
           />
+        ) : null}
+      </Presence>
+      <Presence present={isRenamingPet(renamePet)}>
+        {isRenamingPet(renamePet) ? (
+          <RenamePet {...renamePet} onClose={closeRenamePet} />
         ) : null}
       </Presence>
       <Presence present={isUnsealingGraffiti(unsealGraffiti)}>
