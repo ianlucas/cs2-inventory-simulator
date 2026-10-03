@@ -410,29 +410,30 @@ export function ItemEditor({
       )}
       {hasStyle && (
         <EditorLabel isDisabled={isDisabled} label={translate("EditorStyle")}>
-          <EditorSelect
-            className="h-6 flex-1 bg-neutral-950/40 px-1 outline-hidden focus:ring-2 focus:ring-blue-500/50 disabled:bg-transparent disabled:text-right"
+          <EditorStepRangeWithInput
             disabled={isDisabled}
+            disabledInputStyles="flex-1 text-right"
+            emptyValue={0}
+            inputStyles="w-24 min-w-0"
+            max={item.getStyleCount()}
+            maxLength={String(item.getStyleCount()).length}
+            min={0}
             onChange={(value) =>
-              attributes.update("style")(
-                value === "" ? undefined : Number(value)
-              )
+              attributes.update("style")(value === 0 ? undefined : value)
             }
-            options={[
-              { label: translate("PetStyleDefault"), value: "" },
-              ...Array.from({ length: item.getStyleCount() }, (_, index) =>
-                String(index + 1)
-              )
-            ]}
-            styleless
-            value={String(attributes.value.style ?? "")}
+            placeholder={translate("PetStyleDefault")}
+            step={1}
+            stepRangeStyles="flex-1"
+            type="int"
+            validate={(value) => CS2Economy.safeValidateStyle(value, item)}
+            value={attributes.value.style ?? 0}
           />
         </EditorLabel>
       )}
       {hasUpgradeLevel && (
         <EditorLabel isDisabled={isDisabled} label={translate("EditorStage")}>
           <EditorSelect
-            className="h-6 flex-1 bg-neutral-950/40 px-1 outline-hidden focus:ring-2 focus:ring-blue-500/50 disabled:bg-transparent disabled:text-right"
+            className="h-7 flex-1 bg-neutral-950/40 px-1 outline-hidden focus:ring-2 focus:ring-blue-500/50 disabled:bg-transparent disabled:text-right"
             disabled={isDisabled}
             onChange={(value) =>
               attributes.update("upgradeLevel")(Number(value))

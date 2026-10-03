@@ -20,7 +20,6 @@ interface EconItem {
   charges?: number;
   def?: number;
   hash?: string;
-  model?: string;
   musicId?: number;
   nametag?: string;
   paint?: number;
@@ -180,7 +179,6 @@ export async function generate(
         case CS2ItemType.Pet:
           pet = hash({
             def: data.definitionIndex,
-            model: data.modelKey,
             nametag: item.nameTag ?? "",
             petId: data.variantIndex,
             seed: item.seed ?? CS2_MIN_PET_SEED,
