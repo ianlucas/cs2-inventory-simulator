@@ -7,7 +7,6 @@ import { redirect } from "react-router";
 import { DEFAULT_APP_NAME } from "~/app-defaults";
 import { Background } from "~/components/background";
 import { ProfileInventory } from "~/components/profile-inventory";
-import { ProfileUser } from "~/components/profile-user";
 import { prisma } from "~/db.server";
 import { middleware } from "~/middleware.server";
 import { getRules } from "~/models/rule";
@@ -73,12 +72,11 @@ export async function loader({
 }
 
 export default function Profile({
-  loaderData: { background, inventory, rules, user }
+  loaderData: { background, inventory, rules }
 }: Route.ComponentProps) {
   return (
     <>
       <Background background={background} />
-      <ProfileUser avatar={user.avatar} name={user.name} />
       <ProfileInventory inventory={inventory} rules={rules} />
     </>
   );

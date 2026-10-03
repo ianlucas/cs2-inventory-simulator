@@ -32,13 +32,14 @@ import { InventoryFilter } from "./inventory-filter";
 import { InventoryShare } from "./inventory-share";
 import { useItemSelector } from "./item-selector-context";
 import { Logo } from "./logo";
+import { ProfileUser } from "./profile-user";
 
 export function Header({
-  showInventoryFilter,
-  solid
+  profile,
+  showInventoryFilter
 }: {
+  profile?: { avatar: string; name: string };
   showInventoryFilter?: boolean;
-  solid?: boolean;
 }) {
   const user = useUser();
   const [inventory] = useInventory();
@@ -65,11 +66,11 @@ export function Header({
   return (
     <div
       className={clsx(
-        "font-display sticky top-0 left-0 z-20 w-full",
-        solid
-          ? "bg-stone-800"
+        "font-display sticky top-0 left-0 z-20 w-full backdrop-blur-sm",
+        profile !== undefined
+          ? "bg-linear-to-b from-stone-800 to-transparent"
           : [
-              "backdrop-blur-sm transition-all before:absolute before:inset-0 before:-z-10 before:bg-linear-to-b before:from-neutral-800/60 before:to-transparent before:transition-all before:content-['']",
+              "transition-all before:absolute before:inset-0 before:-z-10 before:bg-linear-to-b before:from-neutral-800/60 before:to-transparent before:transition-all before:content-['']",
               isOnTop ? "before:opacity-0" : "before:opacity-1"
             ]
       )}
@@ -101,19 +102,21 @@ export function Header({
                 label={translate("HeaderInventoryLabel")}
                 onClick={closeMenu}
               />
-              <HeaderLink
-                disabled={isCraftDisabled}
-                disabledText={
-                  isInventoryFull
-                    ? translate("HeaderCraftInventoryFull")
-                    : translate("HeaderCraftCannotCraft")
-                }
-                to="/craft"
-                icon={faHammer}
-                label={translate("HeaderCraftLabel")}
-                onClick={closeMenu}
-                preventScrollReset
-              />
+              {profile === undefined && (
+                <HeaderLink
+                  disabled={isCraftDisabled}
+                  disabledText={
+                    isInventoryFull
+                      ? translate("HeaderCraftInventoryFull")
+                      : translate("HeaderCraftCannotCraft")
+                  }
+                  to="/craft"
+                  icon={faHammer}
+                  label={translate("HeaderCraftLabel")}
+                  onClick={closeMenu}
+                  preventScrollReset
+                />
+              )}
               {user === undefined ? (
                 <>
                   {!appHideAuth && (
@@ -166,6 +169,9 @@ export function Header({
           </div>
         )}
       </div>
+      {profile !== undefined && (
+        <ProfileUser avatar={profile.avatar} name={profile.name} />
+      )}
       {showInventoryFilter &&
         !isSelectingAnItem &&
         (hideFilters ? <InventoryShare /> : <InventoryFilter />)}

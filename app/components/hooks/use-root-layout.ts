@@ -3,24 +3,27 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useLocation } from "react-router";
+import { useRouteLoaderData } from "react-router";
+import type { loader as profileLoader } from "~/routes/profiles.$userId._index";
 
 export function useRootLayout(): {
   background?: boolean;
   footer?: boolean;
   header?: boolean;
   inventory?: boolean;
-  solidHeader?: boolean;
+  profile?: { avatar: string; name: string };
 } {
-  const { pathname } = useLocation();
+  const profile = useRouteLoaderData<typeof profileLoader>(
+    "routes/profiles.$userId._index"
+  )?.user;
   // Profiles render the owner's background and inventory instead.
-  const isProfile = pathname.startsWith("/profiles/");
+  const isProfile = profile !== undefined;
 
   return {
     background: !isProfile,
     footer: true,
     header: true,
     inventory: !isProfile,
-    solidHeader: isProfile
+    profile
   };
 }

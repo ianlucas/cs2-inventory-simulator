@@ -50,7 +50,7 @@ export function ProfileInventory({
 
   return (
     <>
-      <div className="m-auto grid w-full grid-cols-[repeat(auto-fit,minmax(154px,1fr))] px-2 select-none [grid-gap:1em] lg:mb-8 lg:w-5xl lg:px-0">
+      <div className="m-auto grid w-full grid-cols-[repeat(auto-fit,minmax(154px,1fr))] px-2 select-none [grid-gap:1em] lg:my-8 lg:w-5xl lg:px-0">
         {items.map((item) => (
           <div key={item.uid} className="flex items-start justify-center">
             <InventoryItem {...item} disableContextMenu />

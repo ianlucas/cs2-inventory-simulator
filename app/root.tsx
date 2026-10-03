@@ -131,8 +131,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function App() {
   const appProps = useLoaderData<typeof loader>();
-  const { background, footer, header, inventory, solidHeader } =
-    useRootLayout();
+  const { background, footer, header, inventory, profile } = useRootLayout();
   const seoOverrides = getSeoOverrides(useMatches());
   const userId = appProps.user?.id;
 
@@ -180,7 +179,7 @@ export default function App() {
           {(header || inventory) && (
             <ItemSelectorProvider>
               {header && (
-                <Header showInventoryFilter={inventory} solid={solidHeader} />
+                <Header profile={profile} showInventoryFilter={inventory} />
               )}
               {inventory && <Inventory />}
             </ItemSelectorProvider>
