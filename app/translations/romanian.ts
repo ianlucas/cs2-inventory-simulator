@@ -238,6 +238,8 @@ export const romanian = {
   InventorySelectInspectContents: /* csgo_romanian.txt */"Inspectezi conținutul pentru:",
   InventorySelectItemToDeposit: /* csgo_romanian.txt */"Selecteză obiectele pe care să le depozitezi",
   InventorySelectItemToRetrieve: /* csgo_romanian.txt */"Selectează obiectele pe care să le preiei",
+  InventoryShare: "Partajează",
+  InventoryShareCopied: "Link de partajare copiat",
   ItemGraffitiChargesRemaining: /* csgo_romanian.txt */"Aplicări rămase: {1}",
   ItemRarityAncient: /* csgo_romanian.txt */"Extraordinar(ă)",
   ItemRarityCommon: /* csgo_romanian.txt */"Calitate de bază",

@@ -238,6 +238,8 @@ export const dutch = {
   InventorySelectInspectContents: /* csgo_dutch.txt */"Inhoud controleren van",
   InventorySelectItemToDeposit: /* csgo_dutch.txt */"Kies de voorwerpen die je wilt verplaatsen in",
   InventorySelectItemToRetrieve: /* csgo_dutch.txt */"Kies de voorwerpen die je wilt ophalen van",
+  InventoryShare: "Delen",
+  InventoryShareCopied: "Link gekopieerd!",
   ItemGraffitiChargesRemaining: /* csgo_dutch.txt */"Resterende ladingen: {1}",
   ItemRarityAncient: /* csgo_dutch.txt */"Bijzonder",
   ItemRarityCommon: /* csgo_dutch.txt */"Standaard",

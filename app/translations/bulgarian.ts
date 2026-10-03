@@ -239,6 +239,8 @@ export const bulgarian = {
   InventorySelectInspectContents: /* csgo_bulgarian.txt */"Оглед на съдържанието",
   InventorySelectItemToDeposit: /* csgo_bulgarian.txt */"Избиране на артикули, които да преместите",
   InventorySelectItemToRetrieve: /* csgo_bulgarian.txt */"Избиране на артикули за набавяне от",
+  InventoryShare: "Споделяне",
+  InventoryShareCopied: "Линкът е копиран!",
   ItemGraffitiChargesRemaining: /* csgo_bulgarian.txt */"Оставащи заряди: {1}",
   ItemRarityAncient: /* csgo_bulgarian.txt */"Необикновен тип",
   ItemRarityCommon: /* csgo_bulgarian.txt */"Базов клас",

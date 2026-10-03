@@ -15,7 +15,9 @@ import {
   INVENTORY_SORTERS
 } from "~/shared/inventory-filters";
 import { useInventoryFilter, useTranslate } from "./app-context";
+import { useProfilePath } from "./hooks/use-profile-path";
 import { InventoryFilterButton } from "./inventory-filter-button";
+import { InventoryShareButton } from "./inventory-share-button";
 import { Select } from "./select";
 
 export function InventoryFilter() {
@@ -30,6 +32,7 @@ export function InventoryFilter() {
     setSorter,
     sorter
   } = useInventoryFilter();
+  const profilePath = useProfilePath();
 
   const secondaryFilters =
     INVENTORY_SECONDARY_FILTERS[INVENTORY_PRIMARY_FILTERS[primaryIndex]];
@@ -66,7 +69,7 @@ export function InventoryFilter() {
           />
         ))}
       </div>
-      <div className="m-auto flex w-5xl items-center py-1.5">
+      <div className="m-auto flex w-5xl items-center gap-4 py-1.5">
         <div className="flex-1">
           <div className="group flex w-[320px] items-center gap-4">
             <FontAwesomeIcon
@@ -85,6 +88,9 @@ export function InventoryFilter() {
             />
           </div>
         </div>
+        {profilePath !== undefined && (
+          <InventoryShareButton path={profilePath} />
+        )}
         <div className="font-display flex items-center gap-3">
           <FontAwesomeIcon
             className="h-4 text-white"

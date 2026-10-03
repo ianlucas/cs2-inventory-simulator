@@ -16,7 +16,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData
+  useLoaderData,
+  useMatches
 } from "react-router";
 import { findRequestUser } from "./auth.server";
 import { AppProvider } from "./components/app-context";
@@ -50,7 +51,7 @@ import { setMonitoringUser } from "./monitoring.client";
 import { getBackground } from "./preferences/background.server";
 import { getLanguage } from "./preferences/language.server";
 import { getToggleable } from "./preferences/toggleable.server";
-import { getSeoLinks, getSeoMeta } from "./root-seo";
+import { getSeoLinks, getSeoMeta, getSeoOverrides } from "./root-seo";
 import { getSession } from "./session.server";
 import { nonEmptyString } from "./shared/misc";
 import styles from "./tailwind.css?url";
@@ -130,7 +131,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function App() {
   const appProps = useLoaderData<typeof loader>();
-  const { footer, header, inventory } = useRootLayout();
+  const { background, footer, header, inventory, solidHeader } =
+    useRootLayout();
+  const seoOverrides = getSeoOverrides(useMatches());
   const userId = appProps.user?.id;
 
   useEffect(() => {
@@ -163,18 +166,22 @@ export default function App() {
           {getSeoLinks(appProps.rules).map((attributes, index) => (
             <link key={index} {...attributes} />
           ))}
-          {getSeoMeta(appProps.rules).map((attributes, index) => (
+          {getSeoMeta(appProps.rules, seoOverrides).map((attributes, index) => (
             <meta key={index} {...attributes} />
           ))}
         </head>
         <body className="overflow-y-scroll bg-stone-800">
           <Splash />
-          <Background />
+          {background && (
+            <Background background={appProps.preferences.background} />
+          )}
           <Console />
           <SyncWarn />
           {(header || inventory) && (
             <ItemSelectorProvider>
-              {header && <Header showInventoryFilter={inventory} />}
+              {header && (
+                <Header showInventoryFilter={inventory} solid={solidHeader} />
+              )}
               {inventory && <Inventory />}
             </ItemSelectorProvider>
           )}

@@ -239,6 +239,8 @@ export const schinese = {
   InventorySelectInspectContents: /* csgo_schinese.txt */"检视内容",
   InventorySelectItemToDeposit: /* csgo_schinese.txt */"选择物品以存入",
   InventorySelectItemToRetrieve: /* csgo_schinese.txt */"选择要取回的物品",
+  InventoryShare: "分享",
+  InventoryShareCopied: "分享链接已复制",
   ItemGraffitiChargesRemaining: /* csgo_schinese.txt */"剩余次数：{1}",
   ItemRarityAncient: /* csgo_schinese.txt */"非凡",
   ItemRarityCommon: /* csgo_schinese.txt */"普通级",

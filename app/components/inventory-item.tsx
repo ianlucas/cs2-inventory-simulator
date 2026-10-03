@@ -568,16 +568,19 @@ export function InventoryItem({
             </div>
           </FloatingFocusManager>
         )}
-      {!isFreeInventoryItem && !disableHover && isHoverOpen && !isClickOpen && (
-        <FloatingFocusManager context={hoverContext} modal={false}>
-          <InventoryItemTooltip
-            forwardRef={hoverRefs.setFloating}
-            style={hoverStyles}
-            {...getHoverFloatingProps()}
-            item={item}
-          />
-        </FloatingFocusManager>
-      )}
+      {!isFreeInventoryItem &&
+        !disableHover &&
+        isHoverOpen &&
+        (disableContextMenu || !isClickOpen) && (
+          <FloatingFocusManager context={hoverContext} modal={false}>
+            <InventoryItemTooltip
+              forwardRef={hoverRefs.setFloating}
+              style={hoverStyles}
+              {...getHoverFloatingProps()}
+              item={item}
+            />
+          </FloatingFocusManager>
+        )}
     </>
   );
 }

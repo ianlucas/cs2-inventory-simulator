@@ -238,6 +238,8 @@ export const german = {
   InventorySelectInspectContents: /* csgo_german.txt */"Inhalte von:",
   InventorySelectItemToDeposit: /* csgo_german.txt */"Gegenstände zum Verschieben auswählen:",
   InventorySelectItemToRetrieve: /* csgo_german.txt */"Gegenstände zum Abrufen auswählen:",
+  InventoryShare: "Teilen",
+  InventoryShareCopied: "Link kopiert!",
   ItemGraffitiChargesRemaining: /* csgo_german.txt */"Verbleibende Sprays: {1}",
   ItemRarityAncient: /* csgo_german.txt */"Außerordentlich",
   ItemRarityCommon: /* csgo_german.txt */"Standardqualität",

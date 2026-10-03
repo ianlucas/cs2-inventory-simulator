@@ -239,6 +239,8 @@ export const spanish = {
   InventorySelectInspectContents: /* csgo_spanish.txt */"Viendo el contenido de",
   InventorySelectItemToDeposit: /* csgo_spanish.txt */"Selecciona los artículos que deseas transferir a",
   InventorySelectItemToRetrieve: /* csgo_spanish.txt */"Selecciona los artículos que deseas recuperar de",
+  InventoryShare: "Compartir",
+  InventoryShareCopied: "Enlace compartido copiado",
   ItemGraffitiChargesRemaining: /* csgo_spanish.txt */"Cargas restantes: {1}",
   ItemRarityAncient: /* csgo_spanish.txt */"de aspecto extraordinario",
   ItemRarityCommon: /* csgo_spanish.txt */"de grado básico",

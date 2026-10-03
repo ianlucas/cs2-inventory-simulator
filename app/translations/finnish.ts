@@ -238,6 +238,8 @@ export const finnish = {
   InventorySelectInspectContents: /* csgo_finnish.txt */"Tarkastellaan sisältöä kohteelle:",
   InventorySelectItemToDeposit: /* csgo_finnish.txt */"Valitse siirrettävät esineet",
   InventorySelectItemToRetrieve: /* csgo_finnish.txt */"Valitse siirrettävät esineet",
+  InventoryShare: "Jaa",
+  InventoryShareCopied: "Linkki kopioitu!",
   ItemGraffitiChargesRemaining: /* csgo_finnish.txt */"Käyttökertoja jäljellä: {1}",
   ItemRarityAncient: /* csgo_finnish.txt */"Merkittävä",
   ItemRarityCommon: /* csgo_finnish.txt */"Perustason",

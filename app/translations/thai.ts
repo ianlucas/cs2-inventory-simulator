@@ -239,6 +239,8 @@ export const thai = {
   InventorySelectInspectContents: /* csgo_thai.txt */"ตรวจสอบเนื้อหาของ",
   InventorySelectItemToDeposit: /* csgo_thai.txt */"เลือกไอเท็มเพื่อย้ายไปยัง",
   InventorySelectItemToRetrieve: /* csgo_thai.txt */"เลือกไอเท็มเพื่อเอาคืนจาก",
+  InventoryShare: "แชร์",
+  InventoryShareCopied: "คัดลอกลิงก์แชร์แล้ว",
   ItemGraffitiChargesRemaining: /* csgo_thai.txt */"ชาร์จคงเหลือ: {1}",
   ItemRarityAncient: /* csgo_thai.txt */"Extraordinary",
   ItemRarityCommon: /* csgo_thai.txt */"เกรดพื้นฐาน",

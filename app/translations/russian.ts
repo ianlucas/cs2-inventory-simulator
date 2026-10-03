@@ -238,6 +238,8 @@ export const russian = {
   InventorySelectInspectContents: /* csgo_russian.txt */"Просмотр содержимого:",
   InventorySelectItemToDeposit: /* csgo_russian.txt */"Убрать в хранилище:",
   InventorySelectItemToRetrieve: /* csgo_russian.txt */"Извлечь предметы:",
+  InventoryShare: "Поделиться",
+  InventoryShareCopied: "Ссылка скопирована",
   ItemGraffitiChargesRemaining: /* csgo_russian.txt */"Зарядов: {1}",
   ItemRarityAncient: /* csgo_russian.txt */"экстраординарного типа",
   ItemRarityCommon: /* csgo_russian.txt */"базового класса",

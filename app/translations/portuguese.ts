@@ -238,6 +238,8 @@ export const portuguese = {
   InventorySelectInspectContents: /* csgo_portuguese.txt */"A ver conteúdo de",
   InventorySelectItemToDeposit: /* csgo_portuguese.txt */"Seleciona quais itens guardar em",
   InventorySelectItemToRetrieve: /* csgo_portuguese.txt */"Seleciona quais itens retirar de",
+  InventoryShare: "Partilhar",
+  InventoryShareCopied: "Link copiado!",
   ItemGraffitiChargesRemaining: /* csgo_portuguese.txt */"Utilizações restantes: {1}",
   ItemRarityAncient: /* csgo_portuguese.txt */"Extraordinário",
   ItemRarityCommon: /* csgo_portuguese.txt */"Qualidade Básica",

@@ -237,6 +237,8 @@ export const french = {
   InventorySelectInspectContents: /* csgo_french.txt */"Examen du contenu de",
   InventorySelectItemToDeposit: /* csgo_french.txt */"Sélectionnez les objets à déplacer",
   InventorySelectItemToRetrieve: /* csgo_french.txt */"Sélectionner les objets à récupérer",
+  InventoryShare: "Partager",
+  InventoryShareCopied: "Lien copié !",
   ItemGraffitiChargesRemaining: /* csgo_french.txt */"Charges restantes : {1}",
   ItemRarityAncient: /* csgo_french.txt */"Extraordinaire",
   ItemRarityCommon: /* csgo_french.txt */"Qualité de base",

@@ -238,6 +238,8 @@ export const swedish = {
   InventorySelectInspectContents: /* csgo_swedish.txt */"Inspekterar innehåll i",
   InventorySelectItemToDeposit: /* csgo_swedish.txt */"Välj föremål att lagra i",
   InventorySelectItemToRetrieve: /* csgo_swedish.txt */"Välj föremål att hämta från",
+  InventoryShare: "Dela",
+  InventoryShareCopied: "Delningslänk kopierad",
   ItemGraffitiChargesRemaining: /* csgo_swedish.txt */"Återstående laddningar: {1}",
   ItemRarityAncient: /* csgo_swedish.txt */"extraordinär",
   ItemRarityCommon: /* csgo_swedish.txt */"basklass",

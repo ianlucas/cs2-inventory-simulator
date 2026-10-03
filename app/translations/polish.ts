@@ -238,6 +238,8 @@ export const polish = {
   InventorySelectInspectContents: /* csgo_polish.txt */"Sprawdzanie zawartości:",
   InventorySelectItemToDeposit: /* csgo_polish.txt */"Wybierz przedmioty do zdeponowania",
   InventorySelectItemToRetrieve: /* csgo_polish.txt */"Wybierz przedmioty do odzyskania",
+  InventoryShare: "Udostępnij",
+  InventoryShareCopied: "Link skopiowany!",
   ItemGraffitiChargesRemaining: /* csgo_polish.txt */"Możliwe użycia: {1}",
   ItemRarityAncient: /* csgo_polish.txt */"wyjątkowej jakości",
   ItemRarityCommon: /* csgo_polish.txt */"standardowej jakości",

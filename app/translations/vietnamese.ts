@@ -239,6 +239,8 @@ export const vietnamese = {
   InventorySelectInspectContents: /* csgo_vietnamese.txt */"Xem vật phẩm bên trong",
   InventorySelectItemToDeposit: /* csgo_vietnamese.txt */"Chọn các món để chuyển vào",
   InventorySelectItemToRetrieve: /* csgo_vietnamese.txt */"Chọn các món để lấy ra",
+  InventoryShare: "Chia sẻ",
+  InventoryShareCopied: "Đã sao chép liên kết chia sẻ",
   ItemGraffitiChargesRemaining: /* csgo_vietnamese.txt */"Lần dùng còn lại: {1}",
   ItemRarityAncient: /* csgo_vietnamese.txt */"Phi thường",
   ItemRarityCommon: /* csgo_vietnamese.txt */"Hạng cơ bản",

@@ -239,6 +239,8 @@ export const turkish = {
   InventorySelectInspectContents: /* csgo_turkish.txt */"Şunun içeriği inceleniyor:",
   InventorySelectItemToDeposit: /* csgo_turkish.txt */"Şuraya kaldırılacak eşyaları seç:",
   InventorySelectItemToRetrieve: /* csgo_turkish.txt */"Alınacak eşyaları seç",
+  InventoryShare: "Paylaş",
+  InventoryShareCopied: "Paylaşım bağlantısı kopyalandı",
   ItemGraffitiChargesRemaining: /* csgo_turkish.txt */"Kalan Kullanım: {1}",
   ItemRarityAncient: /* csgo_turkish.txt */"Olağandışı",
   ItemRarityCommon: /* csgo_turkish.txt */"Temel Sınıf",

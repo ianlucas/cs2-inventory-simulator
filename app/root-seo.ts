@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import type { UIMatch } from "react-router";
 import {
   DEFAULT_APP_DESCRIPTION,
   DEFAULT_APP_IMAGE,
@@ -14,21 +15,46 @@ const linkImages = [
   144, 152, 167, 180, 192, 256, 512, 1024
 ];
 
-export function getSeoMeta({
-  appSeoDescription,
-  appSeoImageUrl,
-  appSeoTitle,
-  meta: { appUrl, appSiteName }
-}: {
-  appName: string;
-  appSeoDescription: string;
-  appSeoImageUrl: string;
-  appSeoTitle: string;
-  meta: { appUrl: string; appSiteName: string };
-}) {
+export interface SeoOverrides {
+  image?: string;
+  path?: string;
+  title?: string;
+}
+
+/** Route `handle` that overrides the root SEO meta using the route's data. */
+export interface SeoHandle<LoaderData> {
+  seo: (loaderData: LoaderData) => SeoOverrides;
+}
+
+export function getSeoOverrides(matches: UIMatch[]) {
+  return matches.reduce<SeoOverrides>((overrides, { handle, loaderData }) => {
+    const seo = (handle as Partial<SeoHandle<unknown>> | undefined)?.seo;
+    return seo !== undefined && loaderData !== undefined
+      ? { ...overrides, ...seo(loaderData) }
+      : overrides;
+  }, {});
+}
+
+export function getSeoMeta(
+  {
+    appSeoDescription,
+    appSeoImageUrl,
+    appSeoTitle,
+    meta: { appUrl, appSiteName }
+  }: {
+    appName: string;
+    appSeoDescription: string;
+    appSeoImageUrl: string;
+    appSeoTitle: string;
+    meta: { appUrl: string; appSiteName: string };
+  },
+  overrides: SeoOverrides = {}
+) {
   const appDescription = appSeoDescription || DEFAULT_APP_DESCRIPTION;
-  const appTitle = appSeoTitle || DEFAULT_APP_TITLE;
-  const appImage = appSeoImageUrl || `${appUrl}${DEFAULT_APP_IMAGE}`;
+  const appTitle = overrides.title ?? (appSeoTitle || DEFAULT_APP_TITLE);
+  const appImage =
+    overrides.image ?? (appSeoImageUrl || `${appUrl}${DEFAULT_APP_IMAGE}`);
+  const url = `${appUrl}${overrides.path ?? ""}`;
 
   return [
     {
@@ -53,7 +79,7 @@ export function getSeoMeta({
     },
     {
       property: "og:url",
-      content: appUrl
+      content: url
     },
     {
       property: "og:type",

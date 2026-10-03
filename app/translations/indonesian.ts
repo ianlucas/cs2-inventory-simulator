@@ -235,6 +235,8 @@ export const indonesian = {
   InventorySelectInspectContents: /* csgo_indonesian.txt */"Memeriksa isi dari",
   InventorySelectItemToDeposit: /* csgo_indonesian.txt */"Pilih item untuk dipindahkan",
   InventorySelectItemToRetrieve: /* csgo_indonesian.txt */"Pilih item untuk diambil",
+  InventoryShare: "Bagikan",
+  InventoryShareCopied: "Link disalin!",
   ItemGraffitiChargesRemaining: /* csgo_indonesian.txt */"Sisa: {1}",
   ItemRarityAncient: /* csgo_indonesian.txt */"Fantastis",
   ItemRarityCommon: /* csgo_indonesian.txt */"Kualitas Biasa",

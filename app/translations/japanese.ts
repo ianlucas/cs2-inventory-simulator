@@ -238,6 +238,8 @@ export const japanese = {
   InventorySelectInspectContents: /* csgo_japanese.txt */"中身を確認中",
   InventorySelectItemToDeposit: /* csgo_japanese.txt */"移動させるアイテムを選択",
   InventorySelectItemToRetrieve: /* csgo_japanese.txt */"取り出すアイテムを選択",
+  InventoryShare: "共有",
+  InventoryShareCopied: "リンクをコピーしました！",
   ItemGraffitiChargesRemaining: /* csgo_japanese.txt */"チャージ残量: {1}",
   ItemRarityAncient: /* csgo_japanese.txt */"レア",
   ItemRarityCommon: /* csgo_japanese.txt */"ベースグレード",

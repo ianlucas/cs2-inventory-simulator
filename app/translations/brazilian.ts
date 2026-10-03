@@ -238,6 +238,8 @@ export const brazilian = {
   InventorySelectInspectContents: /* csgo_brazilian.txt */"Inspecionando o conteúdo de",
   InventorySelectItemToDeposit: /* csgo_brazilian.txt */"Selecione quais itens guardar",
   InventorySelectItemToRetrieve: /* csgo_brazilian.txt */"Selecione quais itens retirar",
+  InventoryShare: "Compartilhar",
+  InventoryShareCopied: "Link copiado!",
   ItemGraffitiChargesRemaining: /* csgo_brazilian.txt */"Cargas restantes: {1}",
   ItemRarityAncient: /* csgo_brazilian.txt */"Extraordinário",
   ItemRarityCommon: /* csgo_brazilian.txt */"Nível Básico",
