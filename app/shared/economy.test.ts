@@ -9,7 +9,8 @@ import { expect, test } from "vitest";
 import {
   createItemHideFilter,
   getEconomyPriceQuery,
-  pickEconomyPrice
+  pickEconomyPrice,
+  selectEconomyPrice
 } from "./economy";
 import { createFakeInventoryItemFromBase } from "./inventory";
 
@@ -55,7 +56,7 @@ test("createItemHideFilter hides a type in hideType", () => {
   expect(filter(CS2Economy.get(AK47_ID))).toBe(true);
 });
 
-test("getEconomyPriceQuery prices a skin by its exterior and StatTrak", () => {
+test("getEconomyPriceQuery prices an item by its id and StatTrak", () => {
   expect(
     getEconomyPriceQuery(
       createFakeInventoryItemFromBase({
@@ -64,25 +65,73 @@ test("getEconomyPriceQuery prices a skin by its exterior and StatTrak", () => {
         wear: 0.2
       })
     )
-  ).toEqual({ exterior: "FT", id: AK47_ASIIMOV_ID, statTrak: true });
-  expect(
-    getEconomyPriceQuery(
-      createFakeInventoryItemFromBase({ id: AK47_ASIIMOV_ID, wear: 0.06 })
-    )
-  ).toEqual({ exterior: "FN", id: AK47_ASIIMOV_ID, statTrak: false });
-});
-
-test("getEconomyPriceQuery prices an item without wear without an exterior", () => {
-  expect(
-    getEconomyPriceQuery(
-      createFakeInventoryItemFromBase({ id: KARAMBIT_VANILLA_ID, statTrak: 0 })
-    )
-  ).toEqual({ exterior: undefined, id: KARAMBIT_VANILLA_ID, statTrak: true });
+  ).toEqual({ id: AK47_ASIIMOV_ID, statTrak: true });
   expect(
     getEconomyPriceQuery(
       createFakeInventoryItemFromBase({ id: KILOWATT_CASE_ID })
     )
-  ).toEqual({ exterior: undefined, id: KILOWATT_CASE_ID, statTrak: false });
+  ).toEqual({ id: KILOWATT_CASE_ID, statTrak: false });
+});
+
+const asiimov = (wear: number) =>
+  createFakeInventoryItemFromBase({ id: AK47_ASIIMOV_ID, wear });
+
+test("selectEconomyPrice picks the price of the item's exterior", () => {
+  const listings = [
+    { exterior: "FN" as const, price: 10 },
+    { exterior: "FT" as const, price: 3 }
+  ];
+  expect(selectEconomyPrice(listings, asiimov(0.06))).toEqual({
+    isApproximate: false,
+    price: 10
+  });
+  expect(selectEconomyPrice(listings, asiimov(0.2))).toEqual({
+    isApproximate: false,
+    price: 3
+  });
+});
+
+test("selectEconomyPrice approximates with the exterior nearest the wear", () => {
+  const listings = [
+    { exterior: "FN" as const, price: 10 },
+    { exterior: "FT" as const, price: 3 }
+  ];
+  expect(selectEconomyPrice(listings, asiimov(0.08))).toEqual({
+    isApproximate: true,
+    price: 10
+  });
+  expect(selectEconomyPrice(listings, asiimov(0.149))).toEqual({
+    isApproximate: true,
+    price: 3
+  });
+  expect(
+    selectEconomyPrice([{ exterior: "BS", price: 1 }], asiimov(0.06))
+  ).toEqual({ isApproximate: true, price: 1 });
+});
+
+test("selectEconomyPrice picks the listing without exterior for an item without wear", () => {
+  expect(
+    selectEconomyPrice(
+      [{ exterior: null, price: 1.25 }],
+      createFakeInventoryItemFromBase({ id: KARAMBIT_VANILLA_ID })
+    )
+  ).toEqual({ isApproximate: false, price: 1.25 });
+});
+
+test("selectEconomyPrice is null without a matching listing", () => {
+  expect(selectEconomyPrice([], asiimov(0.06))).toEqual({
+    isApproximate: false,
+    price: null
+  });
+  expect(
+    selectEconomyPrice([{ exterior: null, price: 1 }], asiimov(0.06))
+  ).toEqual({ isApproximate: false, price: null });
+  expect(
+    selectEconomyPrice(
+      [{ exterior: "FN", price: 1 }],
+      createFakeInventoryItemFromBase({ id: KILOWATT_CASE_ID })
+    )
+  ).toEqual({ isApproximate: false, price: null });
 });
 
 test("pickEconomyPrice falls back from the shortest window to the longest", () => {

@@ -5,31 +5,38 @@
 
 import { prisma } from "~/db.server";
 import type { CS2ItemExterior } from "~/generated/prisma/enums";
-import { pickEconomyPrice } from "~/shared/economy";
+import { EconomyListingPrice, pickEconomyPrice } from "~/shared/economy";
 
-export async function findEconomyPrice({
-  exterior,
+export async function findEconomyPrices({
   id,
   statTrak
 }: {
-  exterior?: CS2ItemExterior;
   id: number;
   statTrak: boolean;
 }) {
-  const row = await prisma.economyPrice.findFirst({
+  const rows = await prisma.economyPrice.findMany({
     orderBy: { sourceDate: "desc" },
     select: {
       avgPrice24h: true,
       avgPrice7d: true,
       avgPrice30d: true,
-      avgPrice90d: true
+      avgPrice90d: true,
+      exterior: true
     },
-    where: {
-      economyItemId: id,
-      exterior: exterior ?? null,
-      souvenir: false,
-      statTrak
-    }
+    where: { economyItemId: id, souvenir: false, statTrak }
   });
-  return row !== null ? (pickEconomyPrice(row)?.toNumber() ?? null) : null;
+  const seen = new Set<CS2ItemExterior | null>();
+  const listings: EconomyListingPrice[] = [];
+  for (const row of rows) {
+    // Rows are newest first, so only each exterior's latest listing counts.
+    if (seen.has(row.exterior)) {
+      continue;
+    }
+    seen.add(row.exterior);
+    const price = pickEconomyPrice(row);
+    if (price !== null) {
+      listings.push({ exterior: row.exterior, price: price.toNumber() });
+    }
+  }
+  return listings;
 }

@@ -7,11 +7,21 @@ import {
   countDecimals,
   CS2_ITEMS,
   CS2_KEYCHAIN_POSITION_FACTOR,
+  CS2_MAX_BATTLE_SCARRED_WEAR,
+  CS2_MAX_FACTORY_NEW_WEAR,
+  CS2_MAX_FIELD_TESTED_WEAR,
   CS2_MAX_KEYCHAIN_SEED,
+  CS2_MAX_MINIMAL_WEAR_WEAR,
   CS2_MAX_SEED,
   CS2_MAX_STICKERS,
+  CS2_MAX_WELL_WORN_WEAR,
+  CS2_MIN_BATTLE_SCARRED_WEAR,
+  CS2_MIN_FACTORY_NEW_WEAR,
+  CS2_MIN_FIELD_TESTED_WEAR,
   CS2_MIN_KEYCHAIN_SEED,
+  CS2_MIN_MINIMAL_WEAR_WEAR,
   CS2_MIN_STICKER_ROTATION,
+  CS2_MIN_WELL_WORN_WEAR,
   CS2_PET_HEN_UPGRADE_LEVEL,
   CS2_PET_PULLET_UPGRADE_LEVEL,
   CS2_STICKER_OFFSET_FACTOR,
@@ -22,6 +32,7 @@ import {
   CS2InventoryItem,
   CS2ItemTranslationByLanguage,
   CS2ItemType,
+  CS2ItemWear,
   CS2RarityColor,
   fail
 } from "@ianlucas/cs2-lib";
@@ -274,22 +285,67 @@ export function isValidInspectLink(link: string) {
 }
 
 /**
- * Identifies the market listing an inventory item prices as. Attachments and
- * souvenir origin are ignored, as the app doesn't treat unlocked items from
- * souvenir packages as souvenirs.
+ * Identifies the market listings an inventory item prices from, one per
+ * exterior. Attachments and souvenir origin are ignored, as the app doesn't
+ * treat unlocked items from souvenir packages as souvenirs.
  */
 export function getEconomyPriceQuery(item: CS2InventoryItem) {
-  return {
-    exterior:
-      !item.isDefault && item.hasWear()
-        ? CS2Economy.getWearFromValue(item.getWear())
-        : undefined,
-    id: item.id,
-    statTrak: item.statTrak !== undefined
-  };
+  return { id: item.id, statTrak: item.statTrak !== undefined };
 }
 
 export type EconomyPriceQuery = ReturnType<typeof getEconomyPriceQuery>;
+
+export interface EconomyListingPrice {
+  exterior: CS2ItemWear | null;
+  price: number;
+}
+
+const EXTERIOR_WEAR_RANGES: Record<CS2ItemWear, [number, number]> = {
+  FN: [CS2_MIN_FACTORY_NEW_WEAR, CS2_MAX_FACTORY_NEW_WEAR],
+  MW: [CS2_MIN_MINIMAL_WEAR_WEAR, CS2_MAX_MINIMAL_WEAR_WEAR],
+  FT: [CS2_MIN_FIELD_TESTED_WEAR, CS2_MAX_FIELD_TESTED_WEAR],
+  WW: [CS2_MIN_WELL_WORN_WEAR, CS2_MAX_WELL_WORN_WEAR],
+  BS: [CS2_MIN_BATTLE_SCARRED_WEAR, CS2_MAX_BATTLE_SCARRED_WEAR]
+};
+
+function getExteriorWearDistance(exterior: CS2ItemWear, wear: number) {
+  const [min, max] = EXTERIOR_WEAR_RANGES[exterior];
+  return Math.max(min - wear, 0, wear - max);
+}
+
+/**
+ * Picks the price of the item's exterior, or else approximates it with the
+ * exterior whose wear range is nearest the item's wear.
+ */
+export function selectEconomyPrice(
+  listings: EconomyListingPrice[],
+  item: CS2InventoryItem
+) {
+  if (item.isDefault || !item.hasWear()) {
+    const listing = listings.find(({ exterior }) => exterior === null);
+    return { isApproximate: false, price: listing?.price ?? null };
+  }
+  const wear = item.getWear();
+  const exterior = CS2Economy.getWearFromValue(wear);
+  const exact = listings.find((listing) => listing.exterior === exterior);
+  if (exact !== undefined) {
+    return { isApproximate: false, price: exact.price };
+  }
+  let nearest: { distance: number; price: number } | undefined;
+  for (const listing of listings) {
+    if (listing.exterior === null) {
+      continue;
+    }
+    const distance = getExteriorWearDistance(listing.exterior, wear);
+    if (nearest === undefined || distance < nearest.distance) {
+      nearest = { distance, price: listing.price };
+    }
+  }
+  return {
+    isApproximate: nearest !== undefined,
+    price: nearest?.price ?? null
+  };
+}
 
 export function pickEconomyPrice<T>({
   avgPrice24h,

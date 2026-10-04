@@ -46,7 +46,6 @@ export function InventoryItemTooltip({
   const hasContents = containerItem.isContainer();
   const hasWear = !item.isDefault && item.hasWear();
   const hasSeed = !item.isDefault && item.hasSeed();
-  const hasAttributes = hasWear || hasSeed;
   const hasStatTrak = item.statTrak !== undefined;
   const hasStyle = item.hasStyle();
   const upgradeLevel = item.getUpgradeLevel();
@@ -82,6 +81,17 @@ export function InventoryItemTooltip({
           <InventoryItemTooltipStage upgradeLevel={upgradeLevel} />
         )}
         {hasTeams && <InventoryItemTooltipTeams teams={teams} />}
+        {economyPrice.isEnabled && (
+          <InventoryItemTooltipPrice
+            isApproximate={economyPrice.isApproximate}
+            isLoading={economyPrice.isLoading}
+            price={economyPrice.price}
+          />
+        )}
+        {statsForNerds && hasSeed && (
+          <InventoryItemTooltipSeed seed={item.seed} />
+        )}
+        {statsForNerds && hasWear && <InventoryItemTooltipWear wear={wear} />}
       </div>
       {has(item.tournamentDescription) && (
         <p className="mt-4 text-yellow-300">{item.tournamentDescription}</p>
@@ -108,18 +118,6 @@ export function InventoryItemTooltip({
           containerItem={containerItem}
           unlockedItem={!isContainer ? item : undefined}
         />
-      )}
-      {statsForNerds && (hasAttributes || economyPrice.isEnabled) && (
-        <div className="mt-2 flex flex-col gap-2">
-          {hasWear && <InventoryItemTooltipWear wear={wear} />}
-          {hasSeed && <InventoryItemTooltipSeed seed={item.seed} />}
-          {economyPrice.isEnabled && (
-            <InventoryItemTooltipPrice
-              isLoading={economyPrice.isLoading}
-              price={economyPrice.price}
-            />
-          )}
-        </div>
       )}
     </div>
   );

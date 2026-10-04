@@ -5,66 +5,75 @@
 
 import { Decimal } from "@prisma/client/runtime/client";
 import { beforeEach, expect, test, vi } from "vitest";
-import { findEconomyPrice } from "./economy-price.server";
+import type { CS2ItemExterior } from "~/generated/prisma/enums";
+import { findEconomyPrices } from "./economy-price.server";
 
-type Prices = Record<
+type Row = Record<
   "avgPrice24h" | "avgPrice7d" | "avgPrice30d" | "avgPrice90d",
   Decimal | null
->;
+> & { exterior: CS2ItemExterior | null };
 
-const { findFirst } = vi.hoisted(() => ({
-  findFirst: vi.fn(async (): Promise<Prices | null> => null)
+const { findMany } = vi.hoisted(() => ({
+  findMany: vi.fn(async (): Promise<Row[]> => [])
 }));
 
 vi.mock("~/db.server", () => ({
-  prisma: { economyPrice: { findFirst } }
+  prisma: { economyPrice: { findMany } }
 }));
 
-beforeEach(() => {
-  findFirst.mockClear();
-});
-
-test("findEconomyPrice looks up the latest non-souvenir listing", async () => {
-  await findEconomyPrice({ exterior: "FT", id: 244, statTrak: true });
-  expect(findFirst).toHaveBeenCalledWith(
-    expect.objectContaining({
-      orderBy: { sourceDate: "desc" },
-      where: {
-        economyItemId: 244,
-        exterior: "FT",
-        souvenir: false,
-        statTrak: true
-      }
-    })
-  );
-});
-
-test("findEconomyPrice looks up an item without wear by a null exterior", async () => {
-  await findEconomyPrice({ id: 11422, statTrak: false });
-  expect(findFirst).toHaveBeenCalledWith(
-    expect.objectContaining({
-      where: expect.objectContaining({ exterior: null })
-    })
-  );
-});
-
-test("findEconomyPrice returns the first available price as a number", async () => {
-  findFirst.mockResolvedValueOnce({
-    avgPrice24h: null,
-    avgPrice7d: new Decimal("12.345678"),
-    avgPrice30d: new Decimal("20"),
-    avgPrice90d: null
-  });
-  expect(await findEconomyPrice({ id: 244, statTrak: false })).toBe(12.345678);
-});
-
-test("findEconomyPrice is null without a listing or any price", async () => {
-  expect(await findEconomyPrice({ id: 244, statTrak: false })).toBeNull();
-  findFirst.mockResolvedValueOnce({
+function row(exterior: CS2ItemExterior | null, prices: Partial<Row> = {}) {
+  return {
     avgPrice24h: null,
     avgPrice7d: null,
     avgPrice30d: null,
-    avgPrice90d: null
-  });
-  expect(await findEconomyPrice({ id: 244, statTrak: false })).toBeNull();
+    avgPrice90d: null,
+    exterior,
+    ...prices
+  };
+}
+
+beforeEach(() => {
+  findMany.mockClear();
+});
+
+test("findEconomyPrices looks up the item's non-souvenir listings, newest first", async () => {
+  await findEconomyPrices({ id: 244, statTrak: true });
+  expect(findMany).toHaveBeenCalledWith(
+    expect.objectContaining({
+      orderBy: { sourceDate: "desc" },
+      where: { economyItemId: 244, souvenir: false, statTrak: true }
+    })
+  );
+});
+
+test("findEconomyPrices returns each exterior's first available price as a number", async () => {
+  findMany.mockResolvedValueOnce([
+    row("FN", { avgPrice7d: new Decimal("12.345678") }),
+    row("FT", { avgPrice24h: new Decimal("3"), avgPrice7d: new Decimal("4") })
+  ]);
+  expect(await findEconomyPrices({ id: 244, statTrak: false })).toEqual([
+    { exterior: "FN", price: 12.345678 },
+    { exterior: "FT", price: 3 }
+  ]);
+});
+
+test("findEconomyPrices keeps only each exterior's latest listing", async () => {
+  findMany.mockResolvedValueOnce([
+    row("FN", { avgPrice24h: new Decimal("2") }),
+    row("MW"),
+    row("FN", { avgPrice24h: new Decimal("1") }),
+    row("MW", { avgPrice24h: new Decimal("1") })
+  ]);
+  expect(await findEconomyPrices({ id: 244, statTrak: false })).toEqual([
+    { exterior: "FN", price: 2 }
+  ]);
+});
+
+test("findEconomyPrices returns an item without wear's listing without exterior", async () => {
+  findMany.mockResolvedValueOnce([
+    row(null, { avgPrice90d: new Decimal("0.5") })
+  ]);
+  expect(await findEconomyPrices({ id: 11422, statTrak: false })).toEqual([
+    { exterior: null, price: 0.5 }
+  ]);
 });
