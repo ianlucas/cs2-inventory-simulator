@@ -42,7 +42,6 @@ import { InfoIcon } from "./info-icon";
 import { InspectInventoryItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
 import { InventorySelectedItem } from "./inventory-selected-item";
-import { ViewerIconHost } from "./viewer-icon-host";
 import { useItemSelector } from "./item-selector-context";
 import { Presence } from "./presence";
 import { RemoveItemPatch } from "./remove-item-patch";
@@ -309,7 +308,6 @@ export function Inventory() {
 
   return (
     <>
-      <ViewerIconHost />
       {isSelectingAnItem && (
         <InventorySelectedItem
           {...itemSelector}

@@ -71,7 +71,7 @@ export function InventoryItem({
 }: TransformedInventoryItem & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
-  /** Only offers the inspect actions, e.g. for other people's items. */
+  /** For other people's items: only offers the inspect actions. */
   inspectOnly?: boolean;
   onApplyPatch?: (uid: number) => void;
   onApplySticker?: (uid: number) => void;
@@ -280,6 +280,7 @@ export function InventoryItem({
       >
         <InventoryItemTile
           equipped={equipped}
+          foreign={inspectOnly}
           item={item}
           preview
           onClick={

@@ -41,8 +41,15 @@ export function getItemIconKey(item: ViewerItemInput): string {
   return stringifyViewerItem(item);
 }
 
-export function getViewerIconSlot(item: ViewerItemInput): string {
-  return item instanceof CS2InventoryItem
+/**
+ * Someone else's items are slotted by look, as their uids would clash with the
+ * user's own.
+ */
+export function getViewerIconSlot(
+  item: ViewerItemInput,
+  { foreign = false }: { foreign?: boolean } = {}
+): string {
+  return item instanceof CS2InventoryItem && !foreign
     ? `uid:${item.uid}`
     : getItemIconKey(item);
 }

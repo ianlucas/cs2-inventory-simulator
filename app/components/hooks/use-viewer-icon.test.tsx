@@ -30,6 +30,7 @@ CS2Economy.load({
 const icons = vi.hoisted(() => ({
   listeners: new Map<string, Set<() => void>>(),
   requests: [] as string[],
+  slots: [] as string[],
   urls: new Map<string, string>()
 }));
 
@@ -40,8 +41,9 @@ vi.mock("~/viewer-icon.client", async () => {
       getUrl: (slot: string) => icons.urls.get(slot),
       observe: () => () => {},
       pause: () => () => {},
-      request: (item: CS2InventoryItem) => {
+      request: (item: CS2InventoryItem, slot: string) => {
         icons.requests.push(getItemIconKey(item));
+        icons.slots.push(slot);
       },
       subscribe: (slot: string, listener: () => void) => {
         const entry = icons.listeners.get(slot) ?? new Set<() => void>();
@@ -64,12 +66,14 @@ vi.mock("~/components/app-context", () => ({
 
 function ViewerIconProbe({
   enabled,
+  foreign,
   item
 }: {
   enabled: boolean;
+  foreign?: boolean;
   item: CS2InventoryItem;
 }) {
-  const { url } = useViewerIcon(item, { enabled });
+  const { url } = useViewerIcon(item, { enabled, foreign });
   return <div>{url ?? "none"}</div>;
 }
 
@@ -83,6 +87,7 @@ describe("useViewerIcon", () => {
     vi.useFakeTimers();
     icons.listeners.clear();
     icons.requests.length = 0;
+    icons.slots.length = 0;
     icons.urls.clear();
     container = document.createElement("div");
     document.body.appendChild(container);
@@ -116,6 +121,7 @@ describe("useViewerIcon", () => {
     render();
 
     expect(icons.requests).toEqual([getItemIconKey(item)]);
+    expect(icons.slots).toEqual([getViewerIconSlot(item)]);
     expect(container.textContent).toBe("none");
   });
 
@@ -153,6 +159,13 @@ describe("useViewerIcon", () => {
 
     expect(icons.requests).toEqual([]);
     expect(container.textContent).toBe("none");
+  });
+
+  it("slots someone else's item by its look, as its uid would clash with the user's", () => {
+    act(() => root.render(<ViewerIconProbe enabled foreign item={item} />));
+
+    expect(icons.requests).toEqual([getItemIconKey(item)]);
+    expect(icons.slots).toEqual([getItemIconKey(item)]);
   });
 
   it("stays idle for a tile that does not want an icon", () => {

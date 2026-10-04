@@ -33,6 +33,7 @@ import { ItemSelectorProvider } from "./components/item-selector-context";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
+import { ViewerIconHost } from "./components/viewer-icon-host";
 import { viewerServerAvailability } from "./viewer-server-availability.server";
 import {
   ASSETS_BASE_URL,
@@ -187,6 +188,7 @@ export default function App() {
           <Outlet />
           {footer && <Footer />}
           <SyncIndicator />
+          <ViewerIconHost />
           <ScrollRestoration />
 
           <CloudflareAnalyticsScript

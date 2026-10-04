@@ -3,22 +3,28 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-function holdForever(): Promise<never> {
-  return new Promise<never>(() => {});
-}
-
-export function holdWebLock(name: string): Promise<boolean> {
+/**
+ * Waits in line for the lock and resolves with its release, or with
+ * `undefined` when aborted first or when the browser cannot lock at all.
+ */
+export function requestWebLock(
+  name: string,
+  signal: AbortSignal
+): Promise<(() => void) | undefined> {
   const locks = typeof navigator === "undefined" ? undefined : navigator.locks;
   if (locks === undefined) {
-    return Promise.resolve(false);
+    return Promise.resolve(undefined);
   }
-  return new Promise<boolean>((resolve) => {
+  return new Promise<(() => void) | undefined>((resolve) => {
     void locks
-      .request(name, { ifAvailable: true }, (lock) => {
-        const granted = lock !== null;
-        resolve(granted);
-        return granted ? holdForever() : undefined;
-      })
-      .catch(() => resolve(false));
+      .request(
+        name,
+        { signal },
+        () =>
+          new Promise<void>((release) => {
+            resolve(() => release());
+          })
+      )
+      .catch(() => resolve(undefined));
   });
 }
