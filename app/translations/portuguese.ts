@@ -173,6 +173,7 @@ export const portuguese = {
   InventoryFilterType: /* csgo_portuguese.txt */"Tipo",
   InventoryFilterWeaponCases: /* csgo_portuguese.txt */"Caixas de armas",
   InventoryItemContainsOne: /* csgo_portuguese.txt */"Contém um dos seguintes itens:",
+  InventoryItemCopyInspectLink: "Copiar link de exame",
   InventoryItemDelete: /* csgo_portuguese.txt */"Eliminar",
   InventoryItemDeleteConfirm: /* csgo_portuguese.txt */"Eliminar item",
   InventoryItemDeleteConfirmDesc: /* csgo_portuguese.txt */"Tens a certeza de que queres eliminar este item?",

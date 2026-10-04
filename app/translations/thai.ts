@@ -174,6 +174,7 @@ export const thai = {
   InventoryFilterType: /* csgo_thai.txt */"ประเภท",
   InventoryFilterWeaponCases: /* csgo_thai.txt */"กล่องอาวุธ",
   InventoryItemContainsOne: /* csgo_thai.txt */"บรรจุหนึ่งในไอเท็มต่อไปนี้:",
+  InventoryItemCopyInspectLink: "คัดลอก URL ตรวจสอบ",
   InventoryItemDelete: /* csgo_thai.txt */"ลบ",
   InventoryItemDeleteConfirm: /* csgo_thai.txt */"ลบไอเท็ม",
   InventoryItemDeleteConfirmDesc: /* csgo_thai.txt */"คุณแน่ใจหรือไม่ว่าคุณต้องการลบไอเท็มนี้?",

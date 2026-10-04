@@ -174,6 +174,7 @@ export const greek = {
   InventoryFilterType: /* csgo_greek.txt */"Τύπος",
   InventoryFilterWeaponCases: /* csgo_greek.txt */"Θήκες όπλων",
   InventoryItemContainsOne: /* csgo_greek.txt */"Περιέχει ένα από τα παρακάτω αντικείμενα:",
+  InventoryItemCopyInspectLink: "Αντιγραφή συνδέσμου επιθεώρησης",
   InventoryItemDelete: /* csgo_greek.txt */"Διαγραφή",
   InventoryItemDeleteConfirm: /* csgo_greek.txt */"Διαγραφή αντικειμένου",
   InventoryItemDeleteConfirmDesc: /* csgo_greek.txt */"Θέλετε σίγουρα να διαγράψετε αυτό το αντικείμενο;",

@@ -173,6 +173,7 @@ export const japanese = {
   InventoryFilterType: /* csgo_japanese.txt */"タイプ",
   InventoryFilterWeaponCases: /* csgo_japanese.txt */"武器ケース",
   InventoryItemContainsOne: /* csgo_japanese.txt */"次のいずれかが一つ入っています：",
+  InventoryItemCopyInspectLink: "調べるリンクをコピー",
   InventoryItemDelete: /* csgo_japanese.txt */"削除",
   InventoryItemDeleteConfirm: /* csgo_japanese.txt */"アイテムを削除",
   InventoryItemDeleteConfirmDesc: /* csgo_japanese.txt */"本当にこのアイテムを削除しますか？",

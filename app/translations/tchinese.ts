@@ -174,6 +174,7 @@ export const tchinese = {
   InventoryFilterType: /* csgo_tchinese.txt */"類型",
   InventoryFilterWeaponCases: /* csgo_tchinese.txt */"武器箱",
   InventoryItemContainsOne: /* csgo_tchinese.txt */"含有下列其中一項物品：",
+  InventoryItemCopyInspectLink: "複製檢視網址",
   InventoryItemDelete: /* csgo_tchinese.txt */"刪除",
   InventoryItemDeleteConfirm: /* csgo_tchinese.txt */"刪除物品",
   InventoryItemDeleteConfirmDesc: /* csgo_tchinese.txt */"您確定要刪除這項物品嗎？",

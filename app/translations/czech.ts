@@ -173,6 +173,7 @@ export const czech = {
   InventoryFilterType: /* csgo_czech.txt */"Dle typu",
   InventoryFilterWeaponCases: /* csgo_czech.txt */"Bedny se zbraněmi",
   InventoryItemContainsOne: /* csgo_czech.txt */"Obsahuje jeden z následujících předmětů:",
+  InventoryItemCopyInspectLink: "Kopírovat odkaz pro prohlédnutí",
   InventoryItemDelete: /* csgo_czech.txt */"Odstranit",
   InventoryItemDeleteConfirm: /* csgo_czech.txt */"Odstranit předmět",
   InventoryItemDeleteConfirmDesc: /* csgo_czech.txt */"Opravdu chceš odstranit tento předmět?",

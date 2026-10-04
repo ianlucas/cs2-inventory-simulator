@@ -172,6 +172,7 @@ export const norwegian = {
   InventoryFilterType: /* csgo_norwegian.txt */"Type",
   InventoryFilterWeaponCases: /* csgo_norwegian.txt */"Våpenkasser",
   InventoryItemContainsOne: /* csgo_norwegian.txt */"Inneholder én av de følgende:",
+  InventoryItemCopyInspectLink: "Kopier inspeksjonslenke",
   InventoryItemDelete: /* csgo_norwegian.txt */"Slett",
   InventoryItemDeleteConfirm: /* csgo_norwegian.txt */"Slett gjenstand",
   InventoryItemDeleteConfirmDesc: /* csgo_norwegian.txt */"Er du sikker på at du vil slette denne gjenstanden?",

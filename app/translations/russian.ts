@@ -173,6 +173,7 @@ export const russian = {
   InventoryFilterType: /* csgo_russian.txt */"По типу",
   InventoryFilterWeaponCases: /* csgo_russian.txt */"Оружейные кейсы",
   InventoryItemContainsOne: /* csgo_russian.txt */"Внутри находится один из следующих предметов:",
+  InventoryItemCopyInspectLink: "Копировать URL для осмотра",
   InventoryItemDelete: /* csgo_russian.txt */"Удалить",
   InventoryItemDeleteConfirm: /* csgo_russian.txt */"Удалить предмет",
   InventoryItemDeleteConfirmDesc: /* csgo_russian.txt */"Вы уверены, что хотите удалить этот предмет?",

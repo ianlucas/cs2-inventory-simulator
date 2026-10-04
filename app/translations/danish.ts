@@ -173,6 +173,7 @@ export const danish = {
   InventoryFilterType: /* csgo_danish.txt */"Type",
   InventoryFilterWeaponCases: /* csgo_danish.txt */"Våbenkasser",
   InventoryItemContainsOne: /* csgo_danish.txt */"Indeholder én af følgende:",
+  InventoryItemCopyInspectLink: "Kopiér inspiceringslink",
   InventoryItemDelete: /* csgo_danish.txt */"Slet",
   InventoryItemDeleteConfirm: /* csgo_danish.txt */"Slet genstand",
   InventoryItemDeleteConfirmDesc: /* csgo_danish.txt */"Er du sikker på, at du vil slette denne genstand?",

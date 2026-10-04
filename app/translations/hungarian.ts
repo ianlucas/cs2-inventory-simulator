@@ -173,6 +173,7 @@ export const hungarian = {
   InventoryFilterType: /* csgo_hungarian.txt */"Típus",
   InventoryFilterWeaponCases: /* csgo_hungarian.txt */"Fegyverládák",
   InventoryItemContainsOne: /* csgo_hungarian.txt */"A következők egyikét tartalmazza:",
+  InventoryItemCopyInspectLink: "Megvizsgálási link másolása",
   InventoryItemDelete: /* csgo_hungarian.txt */"Törlés",
   InventoryItemDeleteConfirm: /* csgo_hungarian.txt */"Tárgy törlése",
   InventoryItemDeleteConfirmDesc: /* csgo_hungarian.txt */"Biztosan törölni szeretnéd ezt az elemet?",

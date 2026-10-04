@@ -174,6 +174,7 @@ export const ukrainian = {
   InventoryFilterType: /* csgo_ukrainian.txt */"Тип",
   InventoryFilterWeaponCases: /* csgo_ukrainian.txt */"Футляри зброї",
   InventoryItemContainsOne: /* csgo_ukrainian.txt */"Містить одне з перелічених:",
+  InventoryItemCopyInspectLink: "Копіювати URL для огляду",
   InventoryItemDelete: /* csgo_ukrainian.txt */"Видалити",
   InventoryItemDeleteConfirm: /* csgo_ukrainian.txt */"Знищити предмет",
   InventoryItemDeleteConfirmDesc: /* csgo_ukrainian.txt */"Ви дійсно бажаєте видалити цей предмет?",

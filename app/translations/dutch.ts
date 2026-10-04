@@ -173,6 +173,7 @@ export const dutch = {
   InventoryFilterType: /* csgo_dutch.txt */"Type",
   InventoryFilterWeaponCases: /* csgo_dutch.txt */"Wapenkisten",
   InventoryItemContainsOne: /* csgo_dutch.txt */"Bevat één van de volgende:",
+  InventoryItemCopyInspectLink: "Bekijklink kopiëren",
   InventoryItemDelete: /* csgo_dutch.txt */"Verwijderen",
   InventoryItemDeleteConfirm: /* csgo_dutch.txt */"Voorwerp verwijderen",
   InventoryItemDeleteConfirmDesc: /* csgo_dutch.txt */"Weet je zeker dat je dit voorwerp wilt verwijderen?",

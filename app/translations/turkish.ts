@@ -174,6 +174,7 @@ export const turkish = {
   InventoryFilterType: /* csgo_turkish.txt */"Tür",
   InventoryFilterWeaponCases: /* csgo_turkish.txt */"Silah Kasaları",
   InventoryItemContainsOne: /* csgo_turkish.txt */"Aşağıdaki eşyalardan birini içerir:",
+  InventoryItemCopyInspectLink: "İnceleme URL'sini kopyala",
   InventoryItemDelete: /* csgo_turkish.txt */"Sil",
   InventoryItemDeleteConfirm: /* csgo_turkish.txt */"Eşyayı Sil",
   InventoryItemDeleteConfirmDesc: /* csgo_turkish.txt */"Bu eşyayı silmek istediğinize emin misiniz?",

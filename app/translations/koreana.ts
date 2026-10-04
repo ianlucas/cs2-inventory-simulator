@@ -174,6 +174,7 @@ export const koreana = {
   InventoryFilterType: /* csgo_koreana.txt */"유형",
   InventoryFilterWeaponCases: /* csgo_koreana.txt */"무기 상자",
   InventoryItemContainsOne: /* csgo_koreana.txt */"다음 중 하나가 들어 있습니다.",
+  InventoryItemCopyInspectLink: "관찰 링크 복사",
   InventoryItemDelete: /* csgo_koreana.txt */"삭제",
   InventoryItemDeleteConfirm: /* csgo_koreana.txt */"아이템 버리기",
   InventoryItemDeleteConfirmDesc: /* csgo_koreana.txt */"아이템을 삭제할까요?",

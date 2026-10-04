@@ -72,12 +72,12 @@ export async function loader({
 }
 
 export default function Profile({
-  loaderData: { background, inventory, rules }
+  loaderData: { background, inventory, rules, user }
 }: Route.ComponentProps) {
   return (
     <>
       <Background background={background} />
-      <ProfileInventory inventory={inventory} rules={rules} />
+      <ProfileInventory inventory={inventory} ownerId={user.id} rules={rules} />
     </>
   );
 }

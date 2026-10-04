@@ -12,6 +12,7 @@ import {
 } from "@ianlucas/cs2-lib-inspect";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
+import { ComponentProps } from "react";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
 import { useEditItemFilter } from "~/components/hooks/use-item-hide-filters";
 import { useViewerAvailability } from "~/components/hooks/use-viewer-availability";
@@ -24,7 +25,10 @@ import {
 import { TransformedInventoryItem } from "~/shared/inventory-transform";
 import { format } from "~/shared/number";
 import { useInventory, useRules, useTranslate, useUser } from "./app-context";
-import { InventoryItemContextMenu } from "./inventory-item-context-menu";
+import {
+  InventoryItemContextButton,
+  InventoryItemContextMenu
+} from "./inventory-item-context-menu";
 import { InventoryItemTile } from "./inventory-item-tile";
 import { InventoryItemTooltip } from "./inventory-item-tooltip";
 import { alert, confirm } from "./modal-generic";
@@ -33,6 +37,7 @@ export function InventoryItem({
   disableContextMenu,
   disableHover,
   equipped,
+  inspectOnly,
   item,
   onApplyPatch,
   onApplySticker,
@@ -66,6 +71,8 @@ export function InventoryItem({
 }: TransformedInventoryItem & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
+  /** Only offers the inspect actions, e.g. for other people's items. */
+  inspectOnly?: boolean;
   onApplyPatch?: (uid: number) => void;
   onApplySticker?: (uid: number) => void;
   onAttachCharm?: (uid: number) => void;
@@ -217,6 +224,50 @@ export function InventoryItem({
     };
   }
 
+  function copyInspectLink(setClickLabel: (value: string) => void) {
+    const inspectLink = generateInspectLink(item);
+    copyToClipboard(inspectLink);
+    setClickLabel(
+      isCommandInspect(inspectLink)
+        ? translate("InventoryItemInspectCopied")
+        : translate("InventoryItemInspectURLCopied")
+    );
+    return inspectLink;
+  }
+
+  const inspectInGameMenu: ComponentProps<typeof InventoryItemContextButton>[] =
+    [
+      {
+        condition: canInspectInGame,
+        label: translate("InventoryItemInspectInGame"),
+        onClick: ({ setClickLabel }) => {
+          const inspectLink = copyInspectLink(setClickLabel);
+          if (!isCommandInspect(inspectLink)) {
+            window.location.assign(inspectLink);
+          }
+        }
+      },
+      {
+        condition: canInspectInGame,
+        label: translate("InventoryItemCopyInspectLink"),
+        onClick: ({ setClickLabel }) => copyInspectLink(setClickLabel)
+      }
+    ];
+
+  const inspectOnlyMenu = [
+    {
+      condition: canInspect || isCharmDetachments || isStickerSlab,
+      label: translate("InventoryItemInspect"),
+      onClick: close(() => onInspectItem?.(uid))
+    },
+    ...inspectInGameMenu
+  ];
+
+  const hasContextMenu =
+    (!isFreeInventoryItem || isCharmDetachments) &&
+    !disableContextMenu &&
+    (!inspectOnly || inspectOnlyMenu.some(({ condition }) => condition));
+
   return (
     <>
       <div
@@ -236,20 +287,20 @@ export function InventoryItem({
           }
         />
       </div>
-      {(!isFreeInventoryItem || isCharmDetachments) &&
-        !disableContextMenu &&
-        isClickOpen && (
-          <FloatingFocusManager context={clickContext} modal={false}>
-            <div
-              role="menu"
-              className="font-display z-20 w-48 rounded-sm bg-neutral-800 py-2 text-sm text-white outline-hidden"
-              ref={clickRefs.setFloating}
-              style={clickStyles}
-              {...getClickFloatingProps()}
-            >
-              <InventoryItemContextMenu
-                menu={
-                  isCharmDetachments
+      {hasContextMenu && isClickOpen && (
+        <FloatingFocusManager context={clickContext} modal={false}>
+          <div
+            role="menu"
+            className="font-display z-20 w-48 rounded-sm bg-neutral-800 py-2 text-sm text-white outline-hidden"
+            ref={clickRefs.setFloating}
+            style={clickStyles}
+            {...getClickFloatingProps()}
+          >
+            <InventoryItemContextMenu
+              menu={
+                inspectOnly
+                  ? [inspectOnlyMenu]
+                  : isCharmDetachments
                     ? [
                         [
                           {
@@ -318,26 +369,7 @@ export function InventoryItem({
                                 label: translate("InventoryItemInspect"),
                                 onClick: close(() => onInspectItem?.(uid))
                               },
-                              {
-                                condition: canInspectInGame,
-                                label: translate("InventoryItemInspectInGame"),
-                                onClick: ({ setClickLabel }) => {
-                                  const inspectLink = generateInspectLink(item);
-                                  const isCommand =
-                                    isCommandInspect(inspectLink);
-                                  copyToClipboard(inspectLink);
-                                  if (!isCommand) {
-                                    window.location.assign(inspectLink);
-                                  }
-                                  return setClickLabel(
-                                    isCommand
-                                      ? translate("InventoryItemInspectCopied")
-                                      : translate(
-                                          "InventoryItemInspectURLCopied"
-                                        )
-                                  );
-                                }
-                              }
+                              ...inspectInGameMenu
                             ],
                             [
                               {
@@ -563,15 +595,15 @@ export function InventoryItem({
                               }
                             ]
                           ]
-                }
-              />
-            </div>
-          </FloatingFocusManager>
-        )}
+              }
+            />
+          </div>
+        </FloatingFocusManager>
+      )}
       {!isFreeInventoryItem &&
         !disableHover &&
         isHoverOpen &&
-        (disableContextMenu || !isClickOpen) && (
+        (!hasContextMenu || !isClickOpen) && (
           <FloatingFocusManager context={hoverContext} modal={false}>
             <InventoryItemTooltip
               forwardRef={hoverRefs.setFloating}

@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
-import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useTranslate } from "./app-context";
 import { attachmentName } from "./attachment-3d-drawer";
 import { InGameOverlay } from "./in-game-overlay";
@@ -15,14 +15,13 @@ import { ModalButton } from "./modal-button";
 import { UseItemFooter } from "./use-item-footer";
 
 export function InspectCharmDetachments({
-  onClose,
-  uid
+  item,
+  onClose
 }: {
+  item: CS2InventoryItem;
   onClose: () => void;
-  uid: number;
 }) {
   const translate = useTranslate();
-  const item = useInventoryItem(uid);
 
   return (
     <ClientOnly

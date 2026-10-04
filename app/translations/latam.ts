@@ -174,6 +174,7 @@ export const latam = {
   InventoryFilterType: /* csgo_latam.txt */"Tipo",
   InventoryFilterWeaponCases: /* csgo_latam.txt */"Cajas de armas",
   InventoryItemContainsOne: /* csgo_latam.txt */"Contiene uno de los siguientes artículos:",
+  InventoryItemCopyInspectLink: "Copiar enlace de inspección",
   InventoryItemDelete: /* csgo_latam.txt */"Borrar",
   InventoryItemDeleteConfirm: /* csgo_latam.txt */"Eliminar objeto",
   InventoryItemDeleteConfirmDesc: /* csgo_latam.txt */"¿Seguro que quieres eliminar este objeto?",

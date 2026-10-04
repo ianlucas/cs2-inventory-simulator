@@ -173,6 +173,7 @@ export const finnish = {
   InventoryFilterType: /* csgo_finnish.txt */"Tyyppi",
   InventoryFilterWeaponCases: /* csgo_finnish.txt */"Aselaatikot",
   InventoryItemContainsOne: /* csgo_finnish.txt */"Sisältää yhden seuraavista:",
+  InventoryItemCopyInspectLink: "Kopioi tarkastelulinkki",
   InventoryItemDelete: /* csgo_finnish.txt */"Poista",
   InventoryItemDeleteConfirm: /* csgo_finnish.txt */"Poista esine",
   InventoryItemDeleteConfirmDesc: /* csgo_finnish.txt */"Haluatko varmasti poistaa tämän esineen?",

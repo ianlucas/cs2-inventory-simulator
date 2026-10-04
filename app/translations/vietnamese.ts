@@ -174,6 +174,7 @@ export const vietnamese = {
   InventoryFilterType: /* csgo_vietnamese.txt */"Loại",
   InventoryFilterWeaponCases: /* csgo_vietnamese.txt */"Hòm vũ khí",
   InventoryItemContainsOne: /* csgo_vietnamese.txt */"Chứa một trong những vật phẩm sau:",
+  InventoryItemCopyInspectLink: "Sao chép URL quan sát",
   InventoryItemDelete: /* csgo_vietnamese.txt */"Xóa",
   InventoryItemDeleteConfirm: /* csgo_vietnamese.txt */"Xóa vật phẩm",
   InventoryItemDeleteConfirmDesc: /* csgo_vietnamese.txt */"Bạn có chắc muốn xóa vật phẩm này không?",

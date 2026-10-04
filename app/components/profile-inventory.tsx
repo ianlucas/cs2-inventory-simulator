@@ -5,17 +5,22 @@
 
 import { CS2Inventory, CS2InventoryData } from "@ianlucas/cs2-lib";
 import { useMemo } from "react";
+import { useInspectItem } from "~/components/hooks/use-inspect-item";
 import { sortItemsByEquipped, transform } from "~/shared/inventory-transform";
 import { useInventory, useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
+import { InspectItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
 import { InventoryItem } from "./inventory-item";
+import { Presence } from "./presence";
 
 export function ProfileInventory({
   inventory: data,
+  ownerId,
   rules
 }: {
   inventory: CS2InventoryData | null;
+  ownerId: string;
   rules: {
     inventoryItemEquipHideModel: string[];
     inventoryItemEquipHideType: string[];
@@ -48,12 +53,19 @@ export function ProfileInventory({
     [data, rules, userInventory]
   );
 
+  const { closeInspectItem, handleInspectItem, inspectItem } = useInspectItem();
+  const inspectedItem = items.find(({ uid }) => uid === inspectItem?.uid)?.item;
+
   return (
     <>
       <div className="m-auto grid w-full grid-cols-[repeat(auto-fit,minmax(154px,1fr))] px-2 select-none [grid-gap:1em] lg:my-8 lg:w-5xl lg:px-0">
         {items.map((item) => (
           <div key={item.uid} className="flex items-start justify-center">
-            <InventoryItem {...item} disableContextMenu />
+            <InventoryItem
+              {...item}
+              inspectOnly
+              onInspectItem={handleInspectItem}
+            />
           </div>
         ))}
         <InventoryGridPlaceholder />
@@ -66,6 +78,15 @@ export function ProfileInventory({
           </div>
         </div>
       )}
+      <Presence present={inspectedItem !== undefined}>
+        {inspectedItem !== undefined ? (
+          <InspectItem
+            item={inspectedItem}
+            onClose={closeInspectItem}
+            ownerId={ownerId}
+          />
+        ) : null}
+      </Presence>
     </>
   );
 }

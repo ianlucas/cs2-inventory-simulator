@@ -173,6 +173,7 @@ export const brazilian = {
   InventoryFilterType: /* csgo_brazilian.txt */"Tipo",
   InventoryFilterWeaponCases: /* csgo_brazilian.txt */"Caixas de Armas",
   InventoryItemContainsOne: /* csgo_brazilian.txt */"Contém um dos seguintes itens:",
+  InventoryItemCopyInspectLink: "Copiar link de inspeção",
   InventoryItemDelete: /* csgo_brazilian.txt */"Excluir",
   InventoryItemDeleteConfirm: /* csgo_brazilian.txt */"Excluir item",
   InventoryItemDeleteConfirmDesc: /* csgo_brazilian.txt */"Tem certeza de que deseja excluir este item?",

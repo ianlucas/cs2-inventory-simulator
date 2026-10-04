@@ -174,6 +174,7 @@ export const schinese = {
   InventoryFilterType: /* csgo_schinese.txt */"类型",
   InventoryFilterWeaponCases: /* csgo_schinese.txt */"武器箱",
   InventoryItemContainsOne: /* csgo_schinese.txt */"包含下列物品之一：",
+  InventoryItemCopyInspectLink: "复制检视网址",
   InventoryItemDelete: /* csgo_schinese.txt */"删除",
   InventoryItemDeleteConfirm: /* csgo_schinese.txt */"删除物品",
   InventoryItemDeleteConfirmDesc: /* csgo_schinese.txt */"您确定要删除这件物品？",

@@ -39,7 +39,7 @@ import { useRemoveItemPatch } from "./hooks/use-remove-item-patch";
 import { useSealItemSticker } from "./hooks/use-seal-item-sticker";
 import { useUnsealGraffiti } from "./hooks/use-unseal-graffiti";
 import { InfoIcon } from "./info-icon";
-import { InspectItem } from "./inspect-item";
+import { InspectInventoryItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { ViewerIconHost } from "./viewer-icon-host";
@@ -449,7 +449,7 @@ export function Inventory() {
       )}
       <Presence present={isInspectingItem(inspectItem)}>
         {isInspectingItem(inspectItem) ? (
-          <InspectItem
+          <InspectInventoryItem
             {...inspectItem}
             onClose={closeInspectItem}
             onUnsealGraffiti={handleUnsealGraffiti}

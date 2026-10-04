@@ -173,6 +173,7 @@ export const romanian = {
   InventoryFilterType: /* csgo_romanian.txt */"Tip",
   InventoryFilterWeaponCases: /* csgo_romanian.txt */"Cutii cu armă",
   InventoryItemContainsOne: /* csgo_romanian.txt */"Conține unul din obiectele următoarele:",
+  InventoryItemCopyInspectLink: "Copiază URL-ul de inspectare",
   InventoryItemDelete: /* csgo_romanian.txt */"Șterge",
   InventoryItemDeleteConfirm: /* csgo_romanian.txt */"Șterge obiectul",
   InventoryItemDeleteConfirmDesc: /* csgo_romanian.txt */"Sigur vrei să ștergi acest obiect?",

@@ -174,6 +174,7 @@ export const bulgarian = {
   InventoryFilterType: /* csgo_bulgarian.txt */"Тип",
   InventoryFilterWeaponCases: /* csgo_bulgarian.txt */"Оръжейни сандъци",
   InventoryItemContainsOne: /* csgo_bulgarian.txt */"Съдържа един от следните артикули:",
+  InventoryItemCopyInspectLink: "Копиране на линка за оглед",
   InventoryItemDelete: /* csgo_bulgarian.txt */"Изтриване",
   InventoryItemDeleteConfirm: /* csgo_bulgarian.txt */"Изтриване на артикула",
   InventoryItemDeleteConfirmDesc: /* csgo_bulgarian.txt */"Сигурни ли сте, че искате да изтриете този артикул?",

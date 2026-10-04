@@ -173,6 +173,7 @@ export const swedish = {
   InventoryFilterType: /* csgo_swedish.txt */"Typ",
   InventoryFilterWeaponCases: /* csgo_swedish.txt */"Vapenlådor",
   InventoryItemContainsOne: /* csgo_swedish.txt */"Innehåller ett av följande:",
+  InventoryItemCopyInspectLink: "Kopiera inspekterings-URL",
   InventoryItemDelete: /* csgo_swedish.txt */"Radera",
   InventoryItemDeleteConfirm: /* csgo_swedish.txt */"Ta bort föremål",
   InventoryItemDeleteConfirmDesc: /* csgo_swedish.txt */"Är du säker på att du vill ta bort detta föremål?",
