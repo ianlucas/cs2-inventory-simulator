@@ -24,6 +24,17 @@ export function format(n: number) {
   }
 }
 
+export function formatUsd(n: number) {
+  try {
+    return new Intl.NumberFormat(undefined, {
+      currency: "USD",
+      style: "currency"
+    }).format(n);
+  } catch {
+    return n.toString();
+  }
+}
+
 export function resolveLimit(value: number, hardMax: number) {
   return value < 0 ? hardMax : Math.min(value, hardMax);
 }

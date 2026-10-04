@@ -196,6 +196,8 @@ export const thai = {
   InventoryItemMVPStatTrakCount: /* csgo_thai.txt */"จำนวน MVP แมตช์แข่งขันอย่างเป็นทางการของ StatTrak™:",
   InventoryItemNamePet: /* csgo_thai.txt */"Name your pet",
   InventoryItemNew: /* csgo_thai.txt */"ใหม่!",
+  InventoryItemPrice: "ราคา:",
+  InventoryItemPriceNA: "ไม่มีให้ใช้งาน",
   InventoryItemRareItem: /* csgo_thai.txt */"หรือไอเท็มพิเศษหายากมาก!",
   InventoryItemRarity: /* csgo_thai.txt */"ความหายาก:",
   InventoryItemRemovePatch: /* csgo_thai.txt */"ถอดแพตช์ปัก",

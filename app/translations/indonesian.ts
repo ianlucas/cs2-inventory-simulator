@@ -192,6 +192,8 @@ export const indonesian = {
   InventoryItemMVPStatTrakCount: /* csgo_indonesian.txt */"MVP Kompetitif Resmi StatTrak™:",
   InventoryItemNamePet: /* csgo_indonesian.txt */"Name your pet",
   InventoryItemNew: /* csgo_indonesian.txt */"Baru!",
+  InventoryItemPrice: "Harga:",
+  InventoryItemPriceNA: "T/A",
   InventoryItemRareItem: /* csgo_indonesian.txt */"atau Item Spesial yang Sangat Langka!",
   InventoryItemRarity: /* csgo_indonesian.txt */"Kelangkaan:",
   InventoryItemRemovePatch: /* csgo_indonesian.txt */"Lepas Patch",

@@ -194,6 +194,8 @@ export const norwegian = {
   InventoryItemMVPStatTrakCount: /* csgo_norwegian.txt */"StatTrak™ offisielle MVP-er i konkurransespilling:",
   InventoryItemNamePet: /* csgo_norwegian.txt */"Gi kjæledyret et navn",
   InventoryItemNew: /* csgo_norwegian.txt */"Ny!",
+  InventoryItemPrice: "Pris:",
+  InventoryItemPriceNA: "I/T",
   InventoryItemRareItem: /* csgo_norwegian.txt */"eller en ytterst sjelden spesialgjenstand!",
   InventoryItemRarity: /* csgo_norwegian.txt */"Sjeldenhet:",
   InventoryItemRemovePatch: /* csgo_norwegian.txt */"Fjern lapp",

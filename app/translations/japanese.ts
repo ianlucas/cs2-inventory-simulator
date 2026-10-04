@@ -195,6 +195,8 @@ export const japanese = {
   InventoryItemMVPStatTrakCount: /* csgo_japanese.txt */"StatTrak™ 公式コンペティティブ MVP数:",
   InventoryItemNamePet: /* csgo_japanese.txt */"ペットに名前を付ける",
   InventoryItemNew: /* csgo_japanese.txt */"NEW",
+  InventoryItemPrice: "価格:",
+  InventoryItemPriceNA: "なし",
   InventoryItemRareItem: /* csgo_japanese.txt */"あるいは、非常にレアなスペシャルアイテムが入っている可能性も！",
   InventoryItemRarity: /* csgo_japanese.txt */"希少性:",
   InventoryItemRemovePatch: /* csgo_japanese.txt */"パッチを剥がす",

@@ -195,6 +195,8 @@ export const romanian = {
   InventoryItemMVPStatTrakCount: /* csgo_romanian.txt */"MVP-uri competitive oficiale StatTrak™:",
   InventoryItemNamePet: /* csgo_romanian.txt */"Name your pet",
   InventoryItemNew: /* csgo_romanian.txt */"Nou!",
+  InventoryItemPrice: "Preț:",
+  InventoryItemPriceNA: "Nu este disponibil",
   InventoryItemRareItem: /* csgo_romanian.txt */"sau un obiect extrem de rar și special!",
   InventoryItemRarity: /* csgo_romanian.txt */"Raritate:",
   InventoryItemRemovePatch: /* csgo_romanian.txt */"Înlătură ecusonul brodat",

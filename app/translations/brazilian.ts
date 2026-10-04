@@ -195,6 +195,8 @@ export const brazilian = {
   InventoryItemMVPStatTrakCount: /* csgo_brazilian.txt */"★ em partidas competitivas oficiais via StatTrak™:",
   InventoryItemNamePet: /* csgo_brazilian.txt */"Nomear o seu bichinho",
   InventoryItemNew: /* csgo_brazilian.txt */"Novo!",
+  InventoryItemPrice: "Preço:",
+  InventoryItemPriceNA: "N/D",
   InventoryItemRareItem: /* csgo_brazilian.txt */"ou um item especial e excessivamente raro!",
   InventoryItemRarity: /* csgo_brazilian.txt */"Raridade:",
   InventoryItemRemovePatch: /* csgo_brazilian.txt */"Remover emblema",

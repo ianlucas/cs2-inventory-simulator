@@ -196,6 +196,8 @@ export const vietnamese = {
   InventoryItemMVPStatTrakCount: /* csgo_vietnamese.txt */"Lần MVP khi tranh đấu chính thức qua StatTrak™:",
   InventoryItemNamePet: /* csgo_vietnamese.txt */"Name your pet",
   InventoryItemNew: /* csgo_vietnamese.txt */"Mới!",
+  InventoryItemPrice: "Giá:",
+  InventoryItemPriceNA: "Không có sẵn",
   InventoryItemRareItem: /* csgo_vietnamese.txt */"hoặc vật phẩm đặc biệt cực kỳ hiếm!",
   InventoryItemRarity: /* csgo_vietnamese.txt */"Độ hiếm:",
   InventoryItemRemovePatch: /* csgo_vietnamese.txt */"Gỡ phù hiệu",

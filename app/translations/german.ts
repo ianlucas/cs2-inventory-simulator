@@ -195,6 +195,8 @@ export const german = {
   InventoryItemMVPStatTrakCount: /* csgo_german.txt */"StatTrak™-Auszeichnungen als „Bester Spieler“ im offiziellen Wettkampf:",
   InventoryItemNamePet: /* csgo_german.txt */"Name your pet",
   InventoryItemNew: /* csgo_german.txt */"Neu!",
+  InventoryItemPrice: "Preis:",
+  InventoryItemPriceNA: "N/V",
   InventoryItemRareItem: /* csgo_german.txt */"oder einen außerordentlich seltenen Bonus-Gegenstand!",
   InventoryItemRarity: /* csgo_german.txt */"Seltenheit:",
   InventoryItemRemovePatch: /* csgo_german.txt */"Aufnäher entfernen",

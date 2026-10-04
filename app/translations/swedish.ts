@@ -195,6 +195,8 @@ export const swedish = {
   InventoryItemMVPStatTrakCount: /* csgo_swedish.txt */"StatTrak™ Officiella tävlingsinriktade MVPs:",
   InventoryItemNamePet: /* csgo_swedish.txt */"Name your pet",
   InventoryItemNew: /* csgo_swedish.txt */"Ny!",
+  InventoryItemPrice: "Pris:",
+  InventoryItemPriceNA: "Inte tillgänglig",
   InventoryItemRareItem: /* csgo_swedish.txt */"eller ett ytterst ovanligt specialföremål!",
   InventoryItemRarity: /* csgo_swedish.txt */"Raritetsnivå:",
   InventoryItemRemovePatch: /* csgo_swedish.txt */"Ta bort tygmärke",

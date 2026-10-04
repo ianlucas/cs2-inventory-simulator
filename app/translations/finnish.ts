@@ -195,6 +195,8 @@ export const finnish = {
   InventoryItemMVPStatTrakCount: /* csgo_finnish.txt */"StatTrak™ Viralliset kilpailutilan Tähtipelaaja-merkinnät:",
   InventoryItemNamePet: /* csgo_finnish.txt */"Name your pet",
   InventoryItemNew: /* csgo_finnish.txt */"Uusi!",
+  InventoryItemPrice: "Hinta:",
+  InventoryItemPriceNA: "Ei saatavilla",
   InventoryItemRareItem: /* csgo_finnish.txt */"tai erittäin harvinaisen erikoisesineen!",
   InventoryItemRarity: /* csgo_finnish.txt */"Harvinaisuus:",
   InventoryItemRemovePatch: /* csgo_finnish.txt */"Poista kangasmerkki",

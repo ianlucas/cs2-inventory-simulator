@@ -195,6 +195,8 @@ export const polish = {
   InventoryItemMVPStatTrakCount: /* csgo_polish.txt */"Turniejowe MVP (StatTrak™):",
   InventoryItemNamePet: /* csgo_polish.txt */"Name your pet",
   InventoryItemNew: /* csgo_polish.txt */"Nowe!",
+  InventoryItemPrice: "Cena:",
+  InventoryItemPriceNA: "Nd.",
   InventoryItemRareItem: /* csgo_polish.txt */"lub niezwykle rzadki przedmiot specjalny!",
   InventoryItemRarity: /* csgo_polish.txt */"Rzadkość:",
   InventoryItemRemovePatch: /* csgo_polish.txt */"Usuń naszywkę",

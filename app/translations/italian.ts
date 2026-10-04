@@ -195,6 +195,8 @@ export const italian = {
   InventoryItemMVPStatTrakCount: /* csgo_italian.txt */"MVP nelle partite Competitive StatTrak™:",
   InventoryItemNamePet: /* csgo_italian.txt */"Dai un nome al tuo animale",
   InventoryItemNew: /* csgo_italian.txt */"Novità!",
+  InventoryItemPrice: "Prezzo:",
+  InventoryItemPriceNA: "N/D",
   InventoryItemRareItem: /* csgo_italian.txt */"o un oggetto speciale eccezionalmente raro!",
   InventoryItemRarity: /* csgo_italian.txt */"Rarità:",
   InventoryItemRemovePatch: /* csgo_italian.txt */"Rimuovi toppa",

@@ -195,6 +195,8 @@ export const russian = {
   InventoryItemMVPStatTrakCount: /* csgo_russian.txt */"Награды СЦИ в соревновательных играх, записанные StatTrak™:",
   InventoryItemNamePet: /* csgo_russian.txt */"Name your pet",
   InventoryItemNew: /* csgo_russian.txt */"Новое!",
+  InventoryItemPrice: "Цена:",
+  InventoryItemPriceNA: "Недоступно",
   InventoryItemRareItem: /* csgo_russian.txt */"или крайне редкий особый предмет!",
   InventoryItemRarity: /* csgo_russian.txt */"Редкость:",
   InventoryItemRemovePatch: /* csgo_russian.txt */"Снять нашивку",
