@@ -40,9 +40,11 @@ import { UseItemFooter } from "./use-item-footer";
 import { ViewerOverlay } from "./viewer-overlay";
 
 interface InspectItemProps {
+  item: CS2InventoryItem;
   onClose: () => void;
   onUnsealGraffiti?: (uid: number) => void;
-  uid: number;
+  /** Credited in the share URL instead of the signed-in user. */
+  ownerId?: string;
 }
 
 export function InspectItemHeader({
@@ -149,7 +151,13 @@ function useInspectInfo(item: CS2InventoryItem): {
   };
 }
 
-function InspectItemShareButton({ item }: { item: CS2InventoryItem }) {
+function InspectItemShareButton({
+  item,
+  ownerId
+}: {
+  item: CS2InventoryItem;
+  ownerId?: string;
+}) {
   const [, copyToClipboard] = useCopyToClipboard();
   const user = useUser();
   const [clickedShare, triggerClickedShare] = useTimedState();
@@ -158,7 +166,7 @@ function InspectItemShareButton({ item }: { item: CS2InventoryItem }) {
   }
   function handleClickShare() {
     triggerClickedShare();
-    copyToClipboard(getInventoryItemShareUrl(item, user?.id));
+    copyToClipboard(getInventoryItemShareUrl(item, ownerId ?? user?.id));
   }
   return (
     <ModalButton variant="secondary" onClick={handleClickShare}>
@@ -225,9 +233,13 @@ function InspectItemUnsealButton({
   );
 }
 
-function InspectItem3d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
+function InspectItem3d({
+  item,
+  onClose,
+  onUnsealGraffiti,
+  ownerId
+}: InspectItemProps) {
   const translate = useTranslate();
-  const item = useInventoryItem(uid);
   const { api, viewerProps } = useViewer({ item });
   const viewerStatus = useViewerStatus(api);
   const { infoButton, infoTooltip } = useInspectInfo(item);
@@ -235,9 +247,10 @@ function InspectItem3d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
   if (viewerStatus.isUnavailable) {
     return (
       <InspectItem2d
+        item={item}
         onClose={onClose}
         onUnsealGraffiti={onUnsealGraffiti}
-        uid={uid}
+        ownerId={ownerId}
       />
     );
   }
@@ -253,7 +266,7 @@ function InspectItem3d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
           left={
             <>
               {infoButton}
-              <InspectItemShareButton item={item} />
+              <InspectItemShareButton item={item} ownerId={ownerId} />
             </>
           }
           right={
@@ -264,7 +277,7 @@ function InspectItem3d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
                   onUnsealGraffiti !== undefined
                     ? () => {
                         onClose();
-                        onUnsealGraffiti(uid);
+                        onUnsealGraffiti(item.uid);
                       }
                     : undefined
                 }
@@ -283,9 +296,13 @@ function InspectItem3d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
   );
 }
 
-function InspectItem2d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
+function InspectItem2d({
+  item,
+  onClose,
+  onUnsealGraffiti,
+  ownerId
+}: InspectItemProps) {
   const translate = useTranslate();
-  const item = useInventoryItem(uid);
   const { statsForNerds } = usePreferences();
   const { infoButton, infoTooltip } = useInspectInfo(item);
 
@@ -338,7 +355,7 @@ function InspectItem2d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
                 left={
                   <>
                     {infoButton}
-                    <InspectItemShareButton item={item} />
+                    <InspectItemShareButton item={item} ownerId={ownerId} />
                   </>
                 }
                 right={
@@ -349,7 +366,7 @@ function InspectItem2d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
                         onUnsealGraffiti !== undefined
                           ? () => {
                               onClose();
-                              onUnsealGraffiti(uid);
+                              onUnsealGraffiti(item.uid);
                             }
                           : undefined
                       }
@@ -372,12 +389,20 @@ function InspectItem2d({ onClose, onUnsealGraffiti, uid }: InspectItemProps) {
   );
 }
 
+export function InspectInventoryItem({
+  uid,
+  ...props
+}: Omit<InspectItemProps, "item"> & { uid: number }) {
+  const item = useInventoryItem(uid);
+  return <InspectItem {...props} item={item} />;
+}
+
 export function InspectItem({
+  item,
   onClose,
   onUnsealGraffiti,
-  uid
+  ownerId
 }: InspectItemProps) {
-  const item = useInventoryItem(uid);
   const { canUse3d } = useViewerAvailability(item, {
     kinds: VIEWER_INSPECT_KINDS
   });
@@ -392,19 +417,21 @@ export function InspectItem({
   }, []);
 
   if (item.isCharmDetachment()) {
-    return <InspectCharmDetachments onClose={onClose} uid={uid} />;
+    return <InspectCharmDetachments item={item} onClose={onClose} />;
   }
   return canUse3d ? (
     <InspectItem3d
+      item={item}
       onClose={onClose}
       onUnsealGraffiti={onUnsealGraffiti}
-      uid={uid}
+      ownerId={ownerId}
     />
   ) : (
     <InspectItem2d
+      item={item}
       onClose={onClose}
       onUnsealGraffiti={onUnsealGraffiti}
-      uid={uid}
+      ownerId={ownerId}
     />
   );
 }

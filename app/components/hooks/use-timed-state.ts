@@ -5,15 +5,15 @@
 
 import { useEffect, useState } from "react";
 
-export function useTimedState() {
+export function useTimedState(duration = 1000) {
   const [active, setActive] = useState<number>();
   useEffect(() => {
     if (active !== undefined) {
       const timeout = setTimeout(() => {
         setActive(undefined);
-      }, 1000);
+      }, duration);
       return () => clearTimeout(timeout);
     }
-  }, [active]);
+  }, [active, duration]);
   return [active !== undefined, () => setActive(Date.now())] as const;
 }

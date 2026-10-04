@@ -20,12 +20,14 @@ import { ItemImage } from "./item-image";
 
 export function InventoryItemTile({
   equipped,
+  foreign,
   item,
   onClick,
   preview,
   small
 }: {
   equipped?: (string | false | undefined)[];
+  foreign?: boolean;
   item: CS2EconomyItem | CS2InventoryItem;
   onClick?: () => void;
   preview?: boolean;
@@ -34,7 +36,8 @@ export function InventoryItemTile({
   const translate = useTranslate();
   const nameItem = useNameItem();
   const { ref: iconRef, url: iconUrl } = useViewerIcon(item, {
-    enabled: preview === true
+    enabled: preview === true,
+    foreign
   });
   const inventoryItem = item instanceof CS2InventoryItem ? item : undefined;
   const [model, name] = nameItem(item, "inventory-name");

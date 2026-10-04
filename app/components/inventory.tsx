@@ -39,10 +39,9 @@ import { useRemoveItemPatch } from "./hooks/use-remove-item-patch";
 import { useSealItemSticker } from "./hooks/use-seal-item-sticker";
 import { useUnsealGraffiti } from "./hooks/use-unseal-graffiti";
 import { InfoIcon } from "./info-icon";
-import { InspectItem } from "./inspect-item";
+import { InspectInventoryItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
 import { InventorySelectedItem } from "./inventory-selected-item";
-import { ViewerIconHost } from "./viewer-icon-host";
 import { useItemSelector } from "./item-selector-context";
 import { Presence } from "./presence";
 import { RemoveItemPatch } from "./remove-item-patch";
@@ -309,7 +308,6 @@ export function Inventory() {
 
   return (
     <>
-      <ViewerIconHost />
       {isSelectingAnItem && (
         <InventorySelectedItem
           {...itemSelector}
@@ -449,7 +447,7 @@ export function Inventory() {
       )}
       <Presence present={isInspectingItem(inspectItem)}>
         {isInspectingItem(inspectItem) ? (
-          <InspectItem
+          <InspectInventoryItem
             {...inspectItem}
             onClose={closeInspectItem}
             onUnsealGraffiti={handleUnsealGraffiti}

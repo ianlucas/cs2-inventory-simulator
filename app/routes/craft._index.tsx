@@ -29,6 +29,7 @@ import { ItemPicker } from "~/components/item-picker";
 import { Modal, ModalHeader } from "~/components/modal";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/middleware.server";
+import { inventoryAllowProfile } from "~/models/rule.server";
 import { getUserBasicData } from "~/models/user.server";
 import { getMetaTitle } from "~/root-meta";
 import { isItemCountable } from "~/shared/economy";
@@ -75,7 +76,10 @@ export async function loader({ request }: Route.LoaderArgs) {
             user:
               shared.u !== undefined
                 ? await getUserBasicData(shared.u)
-                : undefined
+                : undefined,
+            userHasProfile:
+              shared.u !== undefined &&
+              (await inventoryAllowProfile.for(shared.u).get())
           }
         : undefined,
     uid: z
@@ -210,7 +214,12 @@ export default function Craft() {
             )}
             onClose={handleClose}
           />
-          {shared?.user !== undefined && <CraftShareUser user={shared.user} />}
+          {shared?.user !== undefined && (
+            <CraftShareUser
+              user={shared.user}
+              hasProfile={shared.userHasProfile}
+            />
+          )}
           <CraftComponent {...editorProps} />
         </Modal>
       )}

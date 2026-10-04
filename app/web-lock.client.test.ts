@@ -4,17 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { holdWebLock } from "./web-lock.client";
+import { requestWebLock } from "./web-lock.client";
 
-type RequestArgs =
-  | [string, LockOptions, LockGrantedCallback<unknown>]
-  | [string, LockGrantedCallback<unknown>];
-
-function argsOf(args: RequestArgs) {
-  return args.length === 3
-    ? { callback: args[2], name: args[0], options: args[1] }
-    : { callback: args[1], name: args[0], options: undefined };
-}
+type RequestArgs = [string, LockOptions, LockGrantedCallback<unknown>];
 
 function stubLocks(request: (...args: RequestArgs) => Promise<unknown>) {
   const calls: RequestArgs[] = [];
@@ -29,16 +21,11 @@ function stubLocks(request: (...args: RequestArgs) => Promise<unknown>) {
   return calls;
 }
 
-function grant(available: boolean) {
+function grant() {
   const holding = { settled: false };
-  const calls = stubLocks(async (...args) => {
-    const { callback, name } = argsOf(args);
-    const held = callback(
-      available ? ({ mode: "exclusive", name } as Lock) : null
-    );
-    void Promise.resolve(held).then(() => {
-      holding.settled = true;
-    });
+  const calls = stubLocks(async (name, _options, callback) => {
+    await callback({ mode: "exclusive", name } as Lock);
+    holding.settled = true;
   });
   return { calls, holding };
 }
@@ -48,42 +35,52 @@ afterEach(() => {
 });
 
 describe("web lock", () => {
-  it("claims the lock when no other tab holds it", async () => {
-    const { calls } = grant(true);
+  it("waits in line for the lock, rather than declining when another tab holds it", async () => {
+    const { calls } = grant();
+    const signal = new AbortController().signal;
 
-    await expect(holdWebLock("icons")).resolves.toBe(true);
-    expect(argsOf(calls[0]).name).toBe("icons");
-    expect(argsOf(calls[0]).options).toEqual({ ifAvailable: true });
+    await expect(requestWebLock("icons", signal)).resolves.toBeTypeOf(
+      "function"
+    );
+    expect(calls[0][0]).toBe("icons");
+    expect(calls[0][1]).toEqual({ signal });
   });
 
-  it("declines rather than waiting when another tab holds it", async () => {
-    grant(false);
+  it("holds the lock until released", async () => {
+    const { holding } = grant();
 
-    await expect(holdWebLock("icons")).resolves.toBe(false);
-  });
-
-  it("never releases a lock it claimed", async () => {
-    const { holding } = grant(true);
-
-    await holdWebLock("icons");
+    const release = await requestWebLock("icons", new AbortController().signal);
     await Promise.resolve();
-
     expect(holding.settled).toBe(false);
+
+    release?.();
+    await Promise.resolve();
+    expect(holding.settled).toBe(true);
   });
 
-  it("releases a lock it was not granted", async () => {
-    const { holding } = grant(false);
+  it("gives up its place in line when aborted", async () => {
+    stubLocks(
+      (_name, { signal }) =>
+        new Promise((_resolve, reject) =>
+          signal?.addEventListener("abort", () =>
+            reject(new DOMException("Aborted", "AbortError"))
+          )
+        )
+    );
+    const controller = new AbortController();
 
-    await holdWebLock("icons");
-    await Promise.resolve();
+    const request = requestWebLock("icons", controller.signal);
+    controller.abort();
 
-    expect(holding.settled).toBe(true);
+    await expect(request).resolves.toBeUndefined();
   });
 
   it("declines where the Web Locks API is unavailable, rather than letting every tab claim", async () => {
     vi.stubGlobal("navigator", {});
 
-    await expect(holdWebLock("icons")).resolves.toBe(false);
+    await expect(
+      requestWebLock("icons", new AbortController().signal)
+    ).resolves.toBeUndefined();
   });
 
   it("declines when the lock request is refused outright", async () => {
@@ -91,6 +88,8 @@ describe("web lock", () => {
       throw new Error("SecurityError");
     });
 
-    await expect(holdWebLock("icons")).resolves.toBe(false);
+    await expect(
+      requestWebLock("icons", new AbortController().signal)
+    ).resolves.toBeUndefined();
   });
 });

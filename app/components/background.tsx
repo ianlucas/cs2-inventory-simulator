@@ -6,11 +6,12 @@
 import { useMemo } from "react";
 import { backgrounds } from "~/data/backgrounds";
 import { random } from "~/shared/misc";
-import { usePreferences } from "./app-context";
 
-export function Background() {
-  const { background: current } = usePreferences();
-
+export function Background({
+  background: current
+}: {
+  background: string | null;
+}) {
   const background = useMemo(() => {
     return current ?? random(backgrounds).value;
   }, [current]);

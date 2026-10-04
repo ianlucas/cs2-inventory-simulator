@@ -29,12 +29,16 @@ import {
 import { DonateHeaderLink } from "./donate-header-link";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
+import { InventoryShare } from "./inventory-share";
 import { useItemSelector } from "./item-selector-context";
 import { Logo } from "./logo";
+import { ProfileUser } from "./profile-user";
 
 export function Header({
+  profile,
   showInventoryFilter
 }: {
+  profile?: { avatar: string; name: string };
   showInventoryFilter?: boolean;
 }) {
   const user = useUser();
@@ -62,8 +66,13 @@ export function Header({
   return (
     <div
       className={clsx(
-        "font-display sticky top-0 left-0 z-20 w-full backdrop-blur-sm transition-all before:absolute before:inset-0 before:-z-10 before:bg-linear-to-b before:from-neutral-800/60 before:to-transparent before:transition-all before:content-['']",
-        isOnTop ? "before:opacity-0" : "before:opacity-1"
+        "font-display sticky top-0 left-0 z-20 w-full backdrop-blur-sm",
+        profile !== undefined
+          ? "bg-linear-to-b from-stone-800 to-transparent"
+          : [
+              "transition-all before:absolute before:inset-0 before:-z-10 before:bg-linear-to-b before:from-neutral-800/60 before:to-transparent before:transition-all before:content-['']",
+              isOnTop ? "before:opacity-0" : "before:opacity-1"
+            ]
       )}
     >
       <div className="m-auto p-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] lg:flex lg:w-5xl lg:items-center lg:gap-8 lg:px-0">
@@ -93,19 +102,21 @@ export function Header({
                 label={translate("HeaderInventoryLabel")}
                 onClick={closeMenu}
               />
-              <HeaderLink
-                disabled={isCraftDisabled}
-                disabledText={
-                  isInventoryFull
-                    ? translate("HeaderCraftInventoryFull")
-                    : translate("HeaderCraftCannotCraft")
-                }
-                to="/craft"
-                icon={faHammer}
-                label={translate("HeaderCraftLabel")}
-                onClick={closeMenu}
-                preventScrollReset
-              />
+              {profile === undefined && (
+                <HeaderLink
+                  disabled={isCraftDisabled}
+                  disabledText={
+                    isInventoryFull
+                      ? translate("HeaderCraftInventoryFull")
+                      : translate("HeaderCraftCannotCraft")
+                  }
+                  to="/craft"
+                  icon={faHammer}
+                  label={translate("HeaderCraftLabel")}
+                  onClick={closeMenu}
+                  preventScrollReset
+                />
+              )}
               {user === undefined ? (
                 <>
                   {!appHideAuth && (
@@ -158,9 +169,12 @@ export function Header({
           </div>
         )}
       </div>
-      {showInventoryFilter && !hideFilters && !isSelectingAnItem && (
-        <InventoryFilter />
+      {profile !== undefined && (
+        <ProfileUser avatar={profile.avatar} name={profile.name} />
       )}
+      {showInventoryFilter &&
+        !isSelectingAnItem &&
+        (hideFilters ? <InventoryShare /> : <InventoryFilter />)}
     </div>
   );
 }

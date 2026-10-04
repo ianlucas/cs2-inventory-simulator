@@ -19,7 +19,7 @@ import {
   getItemIconKey,
   getViewerIconSlot
 } from "~/viewer-icon";
-import { holdWebLock } from "~/web-lock.client";
+import { requestWebLock } from "~/web-lock.client";
 
 export const VIEWER_ICON_API_CALLS_PER_MINUTE = 30;
 export const VIEWER_ICON_API_CALL_BURST = 30;
@@ -50,8 +50,7 @@ export type ViewerIconError = ViewerCaptureError | "crashed";
 export type ViewerIconOutcome =
   "ok" | "interrupted" | "startup-timeout" | ViewerIconError;
 
-export type ViewerIconRole =
-  "unclaimed" | "claiming" | "generator" | "bystander";
+export type ViewerIconRole = "idle" | "waiting" | "generator" | "unsupported";
 
 export type ViewerIconDisableReason = "webgl" | "untrusted" | "disabled";
 
@@ -60,7 +59,7 @@ export type ViewerIconCooldownReason = "rate-limit" | "network";
 export interface ViewerIconStatus {
   role: ViewerIconRole;
   disabled?: { reason: ViewerIconDisableReason; until?: number };
-  paused: { hidden: boolean; viewers: number };
+  paused: { unfocused: boolean; viewers: number };
   generator: {
     host: boolean;
     mounted: boolean;
@@ -219,6 +218,14 @@ class ViewerIconStore implements ViewerIconStoreLike {
     });
     return this.database;
   }
+}
+
+function isFailedRecently(stored: ViewerIconEntry | undefined) {
+  return (
+    stored?.error !== undefined &&
+    stored.retryAfter !== undefined &&
+    Date.now() < stored.retryAfter
+  );
 }
 
 const BUDGET_STORAGE_KEY = "inventoryItemIconBudget";
@@ -434,13 +441,28 @@ class ViewerIconVisibility {
 }
 
 interface GeneratorEvents {
+  onAcquire(): void;
   onChange(): void;
   onStartupTimeout(): void;
   attach(api: ViewerApi): () => void;
 }
 
+export type ViewerIconLock = (
+  name: string,
+  signal: AbortSignal
+) => Promise<(() => void) | undefined>;
+
+// Only the tab the user is on generates, not every tab visible on screen.
+function isFocused() {
+  return (
+    typeof document !== "undefined" &&
+    document.visibilityState !== "hidden" &&
+    document.hasFocus()
+  );
+}
+
 class ViewerIconGenerator {
-  private role: ViewerIconRole = "unclaimed";
+  private role: ViewerIconRole = "idle";
   private mounted = false;
   private generation = 0;
   private seed: ViewerItemInput | undefined;
@@ -450,12 +472,14 @@ class ViewerIconGenerator {
   private startupTimer: ReturnType<typeof setTimeout> | undefined;
   private hosts = 0;
   private pauses = 0;
-  private hidden = false;
+  private watching = false;
+  private waiting: AbortController | undefined;
+  private releaseLock: (() => void) | undefined;
   private readonly listeners = new Set<() => void>();
 
   constructor(
     private readonly events: GeneratorEvents,
-    private readonly lock: (name: string) => Promise<boolean>
+    private readonly lock: ViewerIconLock
   ) {}
 
   subscribe = (listener: () => void) => {
@@ -484,12 +508,12 @@ class ViewerIconGenerator {
   }
 
   canRun() {
-    return this.hosts > 0 && this.pauses === 0 && !this.hidden;
+    return this.hosts > 0 && this.pauses === 0 && isFocused();
   }
 
   getStatus() {
     return {
-      paused: { hidden: this.hidden, viewers: this.pauses },
+      paused: { unfocused: !isFocused(), viewers: this.pauses },
       generator: {
         host: this.hosts > 0,
         mounted: this.mounted,
@@ -499,18 +523,54 @@ class ViewerIconGenerator {
     };
   }
 
-  claim() {
-    if (this.role !== "unclaimed") {
+  /** Whether this tab holds the lock, getting in line for it otherwise. */
+  acquire() {
+    if (this.role !== "idle") {
+      return this.role === "generator";
+    }
+    const waiting = new AbortController();
+    this.role = "waiting";
+    this.waiting = waiting;
+    void this.lock(VIEWER_ICON_GENERATOR_LOCK, waiting.signal).then(
+      (release) => {
+        if (waiting.signal.aborted) {
+          release?.();
+          return;
+        }
+        this.waiting = undefined;
+        this.releaseLock = release;
+        if (release === undefined) {
+          this.role = "unsupported";
+          this.events.onChange();
+          return;
+        }
+        this.role = "generator";
+        this.events.onAcquire();
+      }
+    );
+    return false;
+  }
+
+  release() {
+    if (this.role !== "waiting" && this.role !== "generator") {
       return;
     }
-    this.role = "claiming";
-    void this.lock(VIEWER_ICON_GENERATOR_LOCK).then((granted) => {
-      this.role = granted ? "generator" : "bystander";
-      if (granted) {
-        this.watchVisibility();
-      }
-      this.events.onChange();
-    });
+    this.waiting?.abort();
+    this.waiting = undefined;
+    this.releaseLock?.();
+    this.releaseLock = undefined;
+    this.role = "idle";
+  }
+
+  watchFocus() {
+    if (this.watching || typeof document === "undefined") {
+      return;
+    }
+    this.watching = true;
+    const onChange = () => this.events.onChange();
+    window.addEventListener("focus", onChange);
+    window.addEventListener("blur", onChange);
+    document.addEventListener("visibilitychange", onChange);
   }
 
   mount(seed: ViewerItemInput) {
@@ -589,21 +649,6 @@ class ViewerIconGenerator {
     };
   }
 
-  private watchVisibility() {
-    if (typeof document === "undefined") {
-      return;
-    }
-    const sync = () => {
-      const hidden = document.visibilityState === "hidden";
-      if (hidden !== this.hidden) {
-        this.hidden = hidden;
-        this.events.onChange();
-      }
-    };
-    document.addEventListener("visibilitychange", sync);
-    this.hidden = document.visibilityState === "hidden";
-  }
-
   private startStartupTimer() {
     this.startupTimer ??= setTimeout(() => {
       this.startupTimer = undefined;
@@ -652,7 +697,7 @@ interface Inflight {
 export interface ViewerIconsOptions {
   store?: ViewerIconStoreLike;
   budget?: ViewerIconBudget;
-  lock?: (name: string) => Promise<boolean>;
+  lock?: ViewerIconLock;
 }
 
 export class ViewerIcons {
@@ -669,6 +714,7 @@ export class ViewerIcons {
   private readonly recent: ViewerIconStatus["recent"] = [];
   private disabledForSession: "untrusted" | "disabled" | undefined;
   private inflight: Inflight | undefined;
+  private takingOver = 0;
   private pumpTimer: ReturnType<typeof setTimeout> | undefined;
   private teardownTimer: ReturnType<typeof setTimeout> | undefined;
   private writes = 0;
@@ -676,7 +722,7 @@ export class ViewerIcons {
   constructor({
     store = new ViewerIconStore(),
     budget = new ViewerIconBudget(),
-    lock = holdWebLock
+    lock = requestWebLock
   }: ViewerIconsOptions = {}) {
     this.store = store;
     this.budget = budget;
@@ -684,6 +730,7 @@ export class ViewerIcons {
     this.generator = new ViewerIconGenerator(
       {
         attach: (api) => this.attach(api),
+        onAcquire: () => void this.takeOver(),
         onChange: () => this.pump(),
         onStartupTimeout: () => this.onStartupTimeout()
       },
@@ -723,9 +770,8 @@ export class ViewerIcons {
     return this.visibility.observe(slot, element);
   }
 
-  request(item: ViewerItemInput) {
+  request(item: ViewerItemInput, slotId = getViewerIconSlot(item)) {
     const key = getItemIconKey(item);
-    const slotId = getViewerIconSlot(item);
     const slot = this.slots.get(slotId);
     const edited = slot !== undefined && slot.key !== key;
     if (slot === undefined) {
@@ -817,19 +863,15 @@ export class ViewerIcons {
       this.publish(key, stored.image);
       return;
     }
-    const failedRecently =
-      stored?.error !== undefined &&
-      stored.retryAfter !== undefined &&
-      Date.now() < stored.retryAfter;
     if (
-      failedRecently ||
+      isFailedRecently(stored) ||
       this.isDisabled() ||
-      this.generator.getRole() === "bystander"
+      this.generator.getRole() === "unsupported"
     ) {
       this.fail(key);
       return;
     }
-    this.generator.claim();
+    this.generator.watchFocus();
     this.pending.set(key, {
       attempts: 0,
       item,
@@ -843,25 +885,30 @@ export class ViewerIcons {
   private pump() {
     clearTimeout(this.pumpTimer);
     this.pumpTimer = undefined;
-    const role = this.generator.getRole();
-    if (role === "bystander" || this.isDisabled()) {
+    const disabled =
+      this.generator.getRole() === "unsupported" || this.isDisabled();
+    if (disabled || !this.generator.canRun()) {
       this.stop();
-      this.abandonPending();
+      if (disabled) {
+        this.abandonPending();
+      }
+      // Holds on until the capture in flight settles, so the tab taking over
+      // finds whatever it stores.
+      if (this.inflight === undefined) {
+        this.generator.release();
+      }
       return;
     }
-    if (role !== "generator") {
-      return;
-    }
-    if (!this.generator.canRun()) {
-      this.stop();
-      return;
-    }
-    if (this.inflight !== undefined) {
+    if (this.inflight !== undefined || this.takingOver > 0) {
       return;
     }
     const next = this.pickNext();
     if (next === undefined) {
+      this.generator.release();
       this.scheduleTeardown();
+      return;
+    }
+    if (!this.generator.acquire()) {
       return;
     }
     const wait = this.budget.getWaitMs();
@@ -942,6 +989,29 @@ export class ViewerIcons {
       this.inflight = undefined;
       this.pump();
     }
+  }
+
+  // Another tab may have drawn, or given up on, what this one waited on. Tabs
+  // only store icons while holding the lock, so checking once is enough.
+  private async takeOver() {
+    this.takingOver++;
+    await Promise.all(
+      Array.from(this.pending.values(), async (entry) => {
+        const stored = await this.store.read(entry.key);
+        if (this.pending.get(entry.key) !== entry) {
+          return;
+        }
+        if (stored?.image !== undefined) {
+          this.pending.delete(entry.key);
+          this.publish(entry.key, stored.image);
+        } else if (isFailedRecently(stored)) {
+          this.pending.delete(entry.key);
+          this.fail(entry.key);
+        }
+      })
+    );
+    this.takingOver--;
+    this.pump();
   }
 
   private async settle(

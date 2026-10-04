@@ -44,7 +44,14 @@ export function useViewerIconPausedWhile(active: boolean): void {
 
 export function useViewerIcon(
   item: ViewerItemInput,
-  { enabled }: { enabled: boolean }
+  {
+    enabled,
+    foreign
+  }: {
+    enabled: boolean;
+    /** Not from the user's inventory, e.g. on someone's profile. */
+    foreign?: boolean;
+  }
 ) {
   const { viewer } = useRules();
   const allowed = useViewerIconEnabled();
@@ -59,13 +66,14 @@ export function useViewerIcon(
         : undefined,
     [enabled, allowed, viewer, item, editedAt]
   );
-  const slot = key === undefined ? undefined : getViewerIconSlot(item);
+  const slot =
+    key === undefined ? undefined : getViewerIconSlot(item, { foreign });
 
   useEffect(() => {
-    if (key !== undefined) {
-      viewerIcons.request(item);
+    if (slot !== undefined) {
+      viewerIcons.request(item, slot);
     }
-  }, [key]);
+  }, [key, slot]);
 
   const url = useSyncExternalStore(
     useCallback(

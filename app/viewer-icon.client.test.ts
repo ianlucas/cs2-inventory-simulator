@@ -24,6 +24,7 @@ import {
   VIEWER_ICON_WEBGL_DISABLE_MS,
   ViewerIconBudget,
   ViewerIconEntry,
+  ViewerIconLock,
   ViewerIcons
 } from "./viewer-icon.client";
 
@@ -101,22 +102,53 @@ function memoryStore() {
   };
 }
 
+function fakeLock({ elsewhere = false }: { elsewhere?: boolean } = {}) {
+  const state = { elsewhere, here: false, waiting: false };
+  let grant: (() => void) | undefined;
+  const lock: ViewerIconLock = (_name, signal) =>
+    new Promise((resolve) => {
+      grant = () => {
+        grant = undefined;
+        state.waiting = false;
+        state.here = true;
+        resolve(() => {
+          state.here = false;
+        });
+      };
+      signal.addEventListener("abort", () => {
+        grant = undefined;
+        state.waiting = false;
+        resolve(undefined);
+      });
+      if (state.elsewhere) {
+        state.waiting = true;
+      } else {
+        grant();
+      }
+    });
+  return {
+    lock,
+    releaseElsewhere: () => {
+      state.elsewhere = false;
+      grant?.();
+    },
+    state
+  };
+}
+
 function setup({
-  granted = true,
   host = true,
+  lock = fakeLock().lock,
   next = () => fakeApi(),
   strict = false
 }: {
-  granted?: boolean;
   host?: boolean;
+  lock?: ViewerIconLock;
   next?: () => FakeApi | undefined;
   strict?: boolean;
 } = {}) {
   const memory = memoryStore();
-  const icons = new ViewerIcons({
-    store: memory.store,
-    lock: async () => granted
-  });
+  const icons = new ViewerIcons({ store: memory.store, lock });
   const mounts: FakeApi[] = [];
   const seeds: (ViewerItemInput | undefined)[] = [];
   let mounted: { generation: number; viewer?: FakeApi } | undefined;
@@ -178,6 +210,14 @@ function stubVisibility(initial: DocumentVisibilityState) {
   };
 }
 
+function stubFocus(initial: boolean) {
+  const hasFocus = vi.spyOn(document, "hasFocus").mockReturnValue(initial);
+  return (focused: boolean) => {
+    hasFocus.mockReturnValue(focused);
+    window.dispatchEvent(new Event(focused ? "focus" : "blur"));
+  };
+}
+
 function stubIntersectionObserver() {
   let notify: (
     entries: { isIntersecting: boolean; target: Element }[]
@@ -220,6 +260,7 @@ beforeEach(() => {
     revoked.push(url);
   };
   consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+  stubFocus(true);
 });
 
 afterEach(() => {
@@ -772,20 +813,128 @@ describe("ViewerIcons", () => {
     expect(isMounted()).toBe(false);
   });
 
-  it("leaves the work to the tab already holding the lock", async () => {
-    const { icons, isMounted, mounts, urlOf } = setup({ granted: false });
+  it("only generates on the tab the user is on, not one merely visible beside it", async () => {
+    const setFocus = stubFocus(false);
+    const viewer = fakeApi();
+    const lock = fakeLock();
+    const { icons, isMounted } = setup({ lock: lock.lock, next: () => viewer });
 
     icons.request(A);
     await flush();
-
-    expect(mounts).toHaveLength(0);
     expect(isMounted()).toBe(false);
-    expect(urlOf(A)).toBeUndefined();
-    expect(icons.getStatus().role).toBe("bystander");
+    expect(lock.state.here).toBe(false);
+
+    setFocus(true);
+    await flush();
+    expect(viewer.captured).toEqual([4]);
+    expect(lock.state.here).toBe(true);
+  });
+
+  it("drops the capture in flight and hands the lock over once the user leaves the tab", async () => {
+    const setFocus = stubFocus(true);
+    const viewer = fakeApi();
+    const lock = fakeLock();
+    const { icons, isMounted, urlOf } = setup({
+      lock: lock.lock,
+      next: () => viewer
+    });
+
+    icons.request(A);
+    await flush();
+    setFocus(false);
+    await flush();
+    expect(isMounted()).toBe(false);
+    expect(lock.state.here).toBe(false);
+    expect(icons.getStatus().role).toBe("idle");
+
+    setFocus(true);
+    await flush();
+    expect(viewer.captured).toEqual([4, 4]);
+    viewer.reply({ image: new Blob(["x"]) });
+    await flush();
+    expect(urlOf(A)).toBeDefined();
+  });
+
+  it("hands the lock over once its queue drains", async () => {
+    const viewer = fakeApi();
+    const lock = fakeLock();
+    const { icons } = setup({ lock: lock.lock, next: () => viewer });
+
+    icons.request(A);
+    await flush();
+    expect(lock.state.here).toBe(true);
+
+    viewer.reply({ image: new Blob(["x"]) });
+    await flush();
+    expect(lock.state.here).toBe(false);
+
+    icons.request(B);
+    await flush();
+    expect(lock.state.here).toBe(true);
+    expect(viewer.captured).toEqual([4, 5]);
+  });
+
+  it("keeps the lock until what it drew is stored, so the next tab finds it", async () => {
+    const setFocus = stubFocus(true);
+    const viewer = fakeApi();
+    const lock = fakeLock();
+    const { icons, store } = setup({ lock: lock.lock, next: () => viewer });
+    let stored = () => {};
+    store.writeImage = () =>
+      new Promise<void>((resolve) => {
+        stored = resolve;
+      });
+
+    icons.request(A);
+    await flush();
+    viewer.reply({ image: new Blob(["x"]) });
+    await flush();
+    setFocus(false);
+    await flush();
+    expect(lock.state.here).toBe(true);
+
+    stored();
+    await flush();
+    expect(lock.state.here).toBe(false);
+  });
+
+  it("waits its turn while another tab generates, rather than giving up on its items", async () => {
+    const viewer = fakeApi();
+    const lock = fakeLock({ elsewhere: true });
+    const { icons, isMounted } = setup({ lock: lock.lock, next: () => viewer });
+
+    icons.request(A);
+    await flush();
+    expect(isMounted()).toBe(false);
+    expect(icons.getStatus().role).toBe("waiting");
+
+    lock.releaseElsewhere();
+    await flush();
+    expect(viewer.captured).toEqual([4]);
+  });
+
+  it("leaves the line for the lock once the user leaves the tab", async () => {
+    const setFocus = stubFocus(true);
+    const lock = fakeLock({ elsewhere: true });
+    const { icons, isMounted } = setup({ lock: lock.lock });
+
+    icons.request(A);
+    await flush();
+    expect(lock.state.waiting).toBe(true);
+
+    setFocus(false);
+    await flush();
+    expect(lock.state.waiting).toBe(false);
+
+    lock.releaseElsewhere();
+    await flush();
+    expect(lock.state.here).toBe(false);
+    expect(isMounted()).toBe(false);
   });
 
   it("serves an already generated icon while another tab holds the lock", async () => {
-    const { entries, icons, mounts, urlOf } = setup({ granted: false });
+    const lock = fakeLock({ elsewhere: true });
+    const { entries, icons, mounts, urlOf } = setup({ lock: lock.lock });
     entries.set(getItemIconKey(A), { image: new Blob(["x"]) });
 
     icons.request(A);
@@ -793,6 +942,52 @@ describe("ViewerIcons", () => {
 
     expect(mounts).toHaveLength(0);
     expect(urlOf(A)).toBeDefined();
+  });
+
+  it("shows what another tab drew while it waited, rather than drawing it again", async () => {
+    const lock = fakeLock({ elsewhere: true });
+    const { entries, icons, isMounted, urlOf } = setup({ lock: lock.lock });
+
+    icons.request(A);
+    await flush();
+    entries.set(getItemIconKey(A), { image: new Blob(["x"]) });
+    lock.releaseElsewhere();
+    await flush();
+
+    expect(isMounted()).toBe(false);
+    expect(urlOf(A)).toBe("blob:1");
+    expect(lock.state.here).toBe(false);
+  });
+
+  it("gives up on what another tab gave up on while it waited", async () => {
+    const lock = fakeLock({ elsewhere: true });
+    const { entries, icons, isMounted } = setup({ lock: lock.lock });
+
+    icons.request(A);
+    await flush();
+    entries.set(getItemIconKey(A), {
+      error: "weapon",
+      retryAfter: Date.now() + 60_000
+    });
+    lock.releaseElsewhere();
+    await flush();
+
+    expect(isMounted()).toBe(false);
+    expect(icons.getStatus().queue).toEqual([]);
+  });
+
+  it("renders nothing where the browser cannot lock, rather than letting every tab generate", async () => {
+    const { icons, isMounted, mounts, urlOf } = setup({
+      lock: async () => undefined
+    });
+
+    icons.request(A);
+    await flush();
+
+    expect(mounts).toHaveLength(0);
+    expect(isMounted()).toBe(false);
+    expect(urlOf(A)).toBeUndefined();
+    expect(icons.getStatus().role).toBe("unsupported");
   });
 
   it("backs off the CDN rather than asking it again straight away", async () => {
