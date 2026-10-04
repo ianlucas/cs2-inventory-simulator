@@ -12,6 +12,7 @@ import { inventoryItemAllowUnlockContainer } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { badRequest, methodNotAllowed } from "~/responses.server";
 import { nonNegativeInt, positiveInt } from "~/shared/shapes";
+import { announceUnlockedItem } from "~/unlock-feed.server";
 import type { Route } from "./+types/api.action.unlock-case._index";
 
 export const ApiActionUnlockCaseUrl = "/api/action/unlock-case";
@@ -26,8 +27,8 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (request.method !== "POST") {
     throw methodNotAllowed;
   }
-  const { id: userId } = await requireUser(request);
-  await inventoryItemAllowUnlockContainer.for(userId).truthy();
+  const user = await requireUser(request);
+  await inventoryItemAllowUnlockContainer.for(user.id).truthy();
   const { caseUid, keyUid, syncedAt } = z
     .object({
       syncedAt: positiveInt,
@@ -38,7 +39,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   let unlockedItem: CS2UnlockedItem | undefined;
   const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
     syncedAt,
-    userId,
+    userId: user.id,
     manipulate(inventory) {
       unlockedItem = inventory.get(caseUid).unlockContainer();
       inventory.unlockContainer(unlockedItem, caseUid, keyUid);
@@ -47,6 +48,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
   if (unlockedItem === undefined) {
     throw badRequest;
   }
+  void announceUnlockedItem(user, unlockedItem);
 
   return Response.json({
     unlockedItem,

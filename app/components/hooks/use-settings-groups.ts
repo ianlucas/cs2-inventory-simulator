@@ -15,7 +15,8 @@ import {
   useInventory,
   usePreferences,
   useRules,
-  useTranslate
+  useTranslate,
+  useUser
 } from "~/components/app-context";
 import { SettingsMasterVolume } from "~/components/settings-master-volume";
 import { SettingsResetInventory } from "~/components/settings-reset-inventory";
@@ -62,7 +63,8 @@ export type SettingsGroup = {
 
 export function useSettingsGroups(): SettingsGroup[] {
   const translate = useTranslate();
-  const { viewerEnabled } = useRules();
+  const { appShowUnlockFeed, viewerEnabled } = useRules();
+  const user = useUser();
   const [inventory] = useInventory();
   const languageOptions = languages.map(({ countries, name }) => ({
     image: `/images/flags/${countries[0].toUpperCase()}.svg`,
@@ -114,7 +116,13 @@ export function useSettingsGroups(): SettingsGroup[] {
           type: "toggle",
           key: "prefer2dStickerEditor",
           label: translate("SettingsPrefer2dStickerEditor")
-        }
+        },
+        user !== undefined &&
+          appShowUnlockFeed && {
+            type: "toggle",
+            key: "hideUnlockFeed",
+            label: translate("SettingsHideUnlockFeed")
+          }
       ]
     },
     {

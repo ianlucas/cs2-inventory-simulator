@@ -91,6 +91,13 @@ Hide the logo in the app.
 
 Hide authentication controls in the app.
 
+### `appShowUnlockFeed`
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Show signed-in users a chat over their inventory announcing Ancient and Immortal items unlocked from containers. Users with `inventoryAllowProfile` off are never announced.
+
 ## Steam
 
 > [!CAUTION]  

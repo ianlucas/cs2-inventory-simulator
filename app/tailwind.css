@@ -23,6 +23,9 @@
   --animate-overlay-open: overlay-open 467ms ease-out both;
   --animate-overlay-close: overlay-close 517ms ease-in both;
   --animate-wiggle: wiggle 600ms ease-in-out infinite;
+  /* Leave duration matches UNLOCK_FEED_LINE_FADE_OUT_MS. */
+  --animate-unlock-feed-line-enter: unlock-feed-line-enter 200ms ease-out both;
+  --animate-unlock-feed-line-leave: unlock-feed-line-leave 500ms ease-in both;
 }
 
 /*
@@ -242,6 +245,24 @@
     -webkit-backdrop-filter: blur(0);
     backdrop-filter: blur(0);
     background-color: rgb(0 0 0 / 0.5);
+  }
+}
+
+/* Growing the row pushes older lines up while the line slides in from below. */
+@keyframes unlock-feed-line-enter {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+  to {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+@keyframes unlock-feed-line-leave {
+  to {
+    opacity: 0;
   }
 }
 
