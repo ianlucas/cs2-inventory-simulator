@@ -306,6 +306,7 @@ export const polish = {
   PetStageHen: /* csgo_polish.txt */"Hen",
   PetStagePullet: /* csgo_polish.txt */"Pullet",
   PetStyleDefault: "Domyślny",
+  ProfileInventoryTitle: "Ekwipunek gracza {1}",
   RemovePatchClose: /* csgo_polish.txt */"Zamknij",
   RemovePatchRemove: /* csgo_polish.txt */"Usuń naszywkę",
   RemovePatchRemoveHint: /* csgo_polish.txt */"Wciśnij i przytrzymaj, by usunąć zaznaczoną naszywkę z twojego agenta.\nUsunięta naszywka zostanie zniszczona.",

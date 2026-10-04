@@ -307,6 +307,7 @@ export const turkish = {
   PetStageHen: /* csgo_turkish.txt */"Hen",
   PetStagePullet: /* csgo_turkish.txt */"Pullet",
   PetStyleDefault: "Varsayılan",
+  ProfileInventoryTitle: "{1} adlı oyuncunun envanteri",
   RemovePatchClose: /* csgo_turkish.txt */"Kapat",
   RemovePatchRemove: /* csgo_turkish.txt */"Yamayı Sök",
   RemovePatchRemoveHint: /* csgo_turkish.txt */"Seçili yamayı ajandan sökmek için basılı tut.\nSökülen yama yok olur.",

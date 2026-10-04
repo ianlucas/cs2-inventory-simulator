@@ -306,6 +306,7 @@ export const swedish = {
   PetStageHen: /* csgo_swedish.txt */"Hen",
   PetStagePullet: /* csgo_swedish.txt */"Pullet",
   PetStyleDefault: "Standard",
+  ProfileInventoryTitle: "Förråd tillhörande {1}",
   RemovePatchClose: /* csgo_swedish.txt */"Stäng",
   RemovePatchRemove: /* csgo_swedish.txt */"Ta bort tygmärke",
   RemovePatchRemoveHint: /* csgo_swedish.txt */"Tryck och håll för att ta bort valt tygmärke från agenten.\nDet borttagna tygmärket kommer att förstöras.",

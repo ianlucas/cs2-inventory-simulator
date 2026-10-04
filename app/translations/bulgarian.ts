@@ -307,6 +307,7 @@ export const bulgarian = {
   PetStageHen: /* csgo_bulgarian.txt */"Hen",
   PetStagePullet: /* csgo_bulgarian.txt */"Pullet",
   PetStyleDefault: "По подразбиране",
+  ProfileInventoryTitle: "Инвентар на {1}",
   RemovePatchClose: /* csgo_bulgarian.txt */"Затваряне",
   RemovePatchRemove: /* csgo_bulgarian.txt */"Премахване на нашивка",
   RemovePatchRemoveHint: /* csgo_bulgarian.txt */"Натиснете и задръжте, за да премахнете избраната нашивка от агента Ви.\nПремахнатата нашивка ще бъде унищожена.",

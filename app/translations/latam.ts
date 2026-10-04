@@ -307,6 +307,7 @@ export const latam = {
   PetStageHen: /* csgo_latam.txt */"Hen",
   PetStagePullet: /* csgo_latam.txt */"Pullet",
   PetStyleDefault: "Predeterminado",
+  ProfileInventoryTitle: "Inventario de {1}",
   RemovePatchClose: /* csgo_latam.txt */"Cerrar",
   RemovePatchRemove: /* csgo_latam.txt */"Quitar parche",
   RemovePatchRemoveHint: /* csgo_latam.txt */"Presiona y mantén presionado para quitar el parche seleccionado del artículo.\nEl parche que se quite se destruirá.",

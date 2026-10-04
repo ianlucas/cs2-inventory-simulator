@@ -306,6 +306,7 @@ export const czech = {
   PetStageHen: /* csgo_czech.txt */"Slepice",
   PetStagePullet: /* csgo_czech.txt */"Slepička",
   PetStyleDefault: "Výchozí",
+  ProfileInventoryTitle: "Inventář hráče {1}",
   RemovePatchClose: /* csgo_czech.txt */"Zavřít",
   RemovePatchRemove: /* csgo_czech.txt */"Odebrat nášivku",
   RemovePatchRemoveHint: /* csgo_czech.txt */"Stiskni a podrž pro odebrání vybrané nášivky z agenta.\nOdebraná nášivka bude zničena.",

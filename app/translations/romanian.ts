@@ -306,6 +306,7 @@ export const romanian = {
   PetStageHen: /* csgo_romanian.txt */"Hen",
   PetStagePullet: /* csgo_romanian.txt */"Pullet",
   PetStyleDefault: "Implicit",
+  ProfileInventoryTitle: "Inventarul lui {1}",
   RemovePatchClose: /* csgo_romanian.txt */"Închide",
   RemovePatchRemove: /* csgo_romanian.txt */"Înlătură ecusonul brodat",
   RemovePatchRemoveHint: /* csgo_romanian.txt */"Apasă și menține apăsat pentru a înlătura ecusonul brodat de pe agentul tău.\nEcusonul brodat va fi distrus după înlăturare.",

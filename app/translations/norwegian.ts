@@ -305,6 +305,7 @@ export const norwegian = {
   PetStageHen: /* csgo_norwegian.txt */"Høne",
   PetStagePullet: /* csgo_norwegian.txt */"Unghøne",
   PetStyleDefault: "Standard",
+  ProfileInventoryTitle: "Lageret til {1}",
   RemovePatchClose: /* csgo_norwegian.txt */"Lukk",
   RemovePatchRemove: /* csgo_norwegian.txt */"Fjern lapp",
   RemovePatchRemoveHint: /* csgo_norwegian.txt */"Trykk og hold for å fjerne valgt lapp fra agenten.\nLappen ødelegges.",

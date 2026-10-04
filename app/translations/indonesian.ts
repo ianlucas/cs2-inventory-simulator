@@ -302,6 +302,7 @@ export const indonesian = {
   PatchPickerSearchPlaceholder: "Cari patch...",
   PetStageHen: /* csgo_indonesian.txt */"Hen",
   PetStagePullet: /* csgo_indonesian.txt */"Pullet",
+  ProfileInventoryTitle: "Inventaris {1}",
   RemovePatchClose: /* csgo_indonesian.txt */"Tutup",
   RemovePatchRemove: /* csgo_indonesian.txt */"Lepas Patch",
   RemovePatchRemoveHint: /* csgo_indonesian.txt */"Tekan dan tahan untuk melepas patch yang dipilih dari item.\nPatch yang dilepas akan dihancurkan.",

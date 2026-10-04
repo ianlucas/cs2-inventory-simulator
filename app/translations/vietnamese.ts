@@ -307,6 +307,7 @@ export const vietnamese = {
   PetStageHen: /* csgo_vietnamese.txt */"Hen",
   PetStagePullet: /* csgo_vietnamese.txt */"Pullet",
   PetStyleDefault: "Mặc định",
+  ProfileInventoryTitle: "Kho đồ của {1}",
   RemovePatchClose: /* csgo_vietnamese.txt */"Đóng",
   RemovePatchRemove: /* csgo_vietnamese.txt */"Gỡ phù hiệu",
   RemovePatchRemoveHint: /* csgo_vietnamese.txt */"Ấn và giữ để gỡ phù hiệu được chọn khỏi đặc vụ.\nSau khi gỡ, phù hiệu sẽ bị tiêu hủy.",

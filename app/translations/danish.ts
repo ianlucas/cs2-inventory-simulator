@@ -306,6 +306,7 @@ export const danish = {
   PetStageHen: /* csgo_danish.txt */"Hen",
   PetStagePullet: /* csgo_danish.txt */"Pullet",
   PetStyleDefault: "Standard",
+  ProfileInventoryTitle: "Inventar tilhørende {1}",
   RemovePatchClose: /* csgo_danish.txt */"Luk",
   RemovePatchRemove: /* csgo_danish.txt */"Fjern lap",
   RemovePatchRemoveHint: /* csgo_danish.txt */"Tryk og hold for at fjerne den valgte lap fra agenten.\nDen fjernede lap ødelægges.",

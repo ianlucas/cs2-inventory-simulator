@@ -307,6 +307,7 @@ export const schinese = {
   PetStageHen: /* csgo_schinese.txt */"母鸡",
   PetStagePullet: /* csgo_schinese.txt */"小母鸡",
   PetStyleDefault: "默认",
+  ProfileInventoryTitle: "{1}的库存",
   RemovePatchClose: /* csgo_schinese.txt */"关闭",
   RemovePatchRemove: /* csgo_schinese.txt */"移除布章",
   RemovePatchRemoveHint: /* csgo_schinese.txt */"长按从探员身上移除选定布章。\n被移除的布章将被销毁。",

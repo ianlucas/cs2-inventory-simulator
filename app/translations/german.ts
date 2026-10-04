@@ -306,6 +306,7 @@ export const german = {
   PetStageHen: /* csgo_german.txt */"Hen",
   PetStagePullet: /* csgo_german.txt */"Pullet",
   PetStyleDefault: "Standard",
+  ProfileInventoryTitle: "Inventar von {1}",
   RemovePatchClose: /* csgo_german.txt */"Schließen",
   RemovePatchRemove: /* csgo_german.txt */"Aufnäher entfernen",
   RemovePatchRemoveHint: /* csgo_german.txt */"Drücken und halten, um den ausgewählten Aufnäher vom Agenten zu entfernen.\nDer entfernte Aufnäher wird zerstört.",

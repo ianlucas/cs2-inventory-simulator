@@ -305,6 +305,7 @@ export const french = {
   PetStageHen: /* csgo_french.txt */"Hen",
   PetStagePullet: /* csgo_french.txt */"Pullet",
   PetStyleDefault: "Par défaut",
+  ProfileInventoryTitle: "Inventaire de {1}",
   RemovePatchClose: /* csgo_french.txt */"Fermer",
   RemovePatchRemove: /* csgo_french.txt */"Retirer l'écusson",
   RemovePatchRemoveHint: /* csgo_french.txt */"Appuyez longuement sur l'écusson sélectionné pour le retirer de l'agent.\nL'écusson supprimé sera détruit.",

@@ -307,6 +307,7 @@ export const spanish = {
   PetStageHen: /* csgo_spanish.txt */"Hen",
   PetStagePullet: /* csgo_spanish.txt */"Pullet",
   PetStyleDefault: "Predeterminado",
+  ProfileInventoryTitle: "Inventario de {1}",
   RemovePatchClose: /* csgo_spanish.txt */"Cerrar",
   RemovePatchRemove: /* csgo_spanish.txt */"Eliminar parche",
   RemovePatchRemoveHint: /* csgo_spanish.txt */"Pulsa y mantén pulsado para quitar el parche seleccionado de tu agente.\nEl parche que se quite se destruirá.",

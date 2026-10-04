@@ -307,6 +307,7 @@ export const brazilian = {
   PetStageHen: /* csgo_brazilian.txt */"Galinha",
   PetStagePullet: /* csgo_brazilian.txt */"Franga",
   PetStyleDefault: "Padrão",
+  ProfileInventoryTitle: "Inventário de {1}",
   RemovePatchClose: /* csgo_brazilian.txt */"Fechar",
   RemovePatchRemove: /* csgo_brazilian.txt */"Remover emblema",
   RemovePatchRemoveHint: /* csgo_brazilian.txt */"Pressione e segure para remover o emblema selecionado do agente.\nO emblema removido será destruído.",

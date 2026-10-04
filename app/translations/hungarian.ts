@@ -304,6 +304,7 @@ export const hungarian = {
   PetStageHen: /* csgo_hungarian.txt */"Tyúk",
   PetStagePullet: /* csgo_hungarian.txt */"Jérce",
   PetStyleDefault: "Alapértelmezett",
+  ProfileInventoryTitle: "{1} felszerelése",
   RemovePatchClose: /* csgo_hungarian.txt */"Bezár",
   RemovePatchRemove: /* csgo_hungarian.txt */"Felvarró eltávolítása",
   RemovePatchRemoveHint: /* csgo_hungarian.txt */"Tartsd nyomva a kiválasztott felvarró eltávolítására az ügynöködről.\nAz eltávolított felvarró megsemmisül.",

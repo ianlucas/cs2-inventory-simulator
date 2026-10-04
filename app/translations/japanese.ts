@@ -306,6 +306,7 @@ export const japanese = {
   PetStageHen: /* csgo_japanese.txt */"メンドリ",
   PetStagePullet: /* csgo_japanese.txt */"若鶏",
   PetStyleDefault: "デフォルト",
+  ProfileInventoryTitle: "{1}のインベントリ",
   RemovePatchClose: /* csgo_japanese.txt */"閉じる",
   RemovePatchRemove: /* csgo_japanese.txt */"パッチを剥がす",
   RemovePatchRemoveHint: /* csgo_japanese.txt */"長押しで選択したパッチをエージェントから剥がします。\n剥がしたパッチは廃棄されます。",

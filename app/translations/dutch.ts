@@ -306,6 +306,7 @@ export const dutch = {
   PetStageHen: /* csgo_dutch.txt */"Hen",
   PetStagePullet: /* csgo_dutch.txt */"Pullet",
   PetStyleDefault: "Standaard",
+  ProfileInventoryTitle: "Inventaris van {1}",
   RemovePatchClose: /* csgo_dutch.txt */"Sluiten",
   RemovePatchRemove: /* csgo_dutch.txt */"Embleem verwijderen",
   RemovePatchRemoveHint: /* csgo_dutch.txt */"Blijf indrukken om de geselecteerde patch van je agent te verwijderen.\nDe verwijderde patch wordt weggegooid.",

@@ -307,6 +307,7 @@ export const tchinese = {
   PetStageHen: /* csgo_tchinese.txt */"Hen",
   PetStagePullet: /* csgo_tchinese.txt */"Pullet",
   PetStyleDefault: "預設",
+  ProfileInventoryTitle: "{1}的物品庫",
   RemovePatchClose: /* csgo_tchinese.txt */"關閉",
   RemovePatchRemove: /* csgo_tchinese.txt */"移除布章",
   RemovePatchRemoveHint: /* csgo_tchinese.txt */"長按以從幹員身上移除布章。被移除的布章將會被摧毀。",

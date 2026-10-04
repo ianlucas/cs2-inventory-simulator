@@ -307,6 +307,7 @@ export const thai = {
   PetStageHen: /* csgo_thai.txt */"Hen",
   PetStagePullet: /* csgo_thai.txt */"Pullet",
   PetStyleDefault: "ค่าเริ่มต้น",
+  ProfileInventoryTitle: "คลังของ {1}",
   RemovePatchClose: /* csgo_thai.txt */"ปิด",
   RemovePatchRemove: /* csgo_thai.txt */"ถอดแพตช์ปัก",
   RemovePatchRemoveHint: /* csgo_thai.txt */"กดค้างไว้เพื่อลบแพตช์ปักที่เลือกจากเจ้าหน้าที่\nแพตช์ปักที่ถูกลบจะถูกทำลายทิ้ง",

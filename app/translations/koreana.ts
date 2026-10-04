@@ -307,6 +307,7 @@ export const koreana = {
   PetStageHen: /* csgo_koreana.txt */"Hen",
   PetStagePullet: /* csgo_koreana.txt */"Pullet",
   PetStyleDefault: "기본",
+  ProfileInventoryTitle: "{1}의 보관함",
   RemovePatchClose: /* csgo_koreana.txt */"닫기",
   RemovePatchRemove: /* csgo_koreana.txt */"패치 제거",
   RemovePatchRemoveHint: /* csgo_koreana.txt */"길게 눌러 선택한 패치를 요원에게서 제거하세요.\n한 번 제거한 패치는 복구할 수 없습니다.",

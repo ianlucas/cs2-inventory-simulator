@@ -307,6 +307,7 @@ export const ukrainian = {
   PetStageHen: /* csgo_ukrainian.txt */"Hen",
   PetStagePullet: /* csgo_ukrainian.txt */"Pullet",
   PetStyleDefault: "Типово",
+  ProfileInventoryTitle: "Інвентар гравця {1}",
   RemovePatchClose: /* csgo_ukrainian.txt */"Закрити",
   RemovePatchRemove: /* csgo_ukrainian.txt */"Вилучити нашивку",
   RemovePatchRemoveHint: /* csgo_ukrainian.txt */"Натисніть і утримуйте, щоби вилучити вибрану нашивку з агента.\nВилучена нашивка буде знищена.",

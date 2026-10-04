@@ -339,6 +339,7 @@ export const english = {
   PetStageHen: /* csgo_english.txt */"Hen",
   PetStagePullet: /* csgo_english.txt */"Pullet",
   PetStyleDefault: "Default",
+  ProfileInventoryTitle: "{1}'s Inventory",
   RemovePatchClose: /* csgo_english.txt */"Close",
   RemovePatchRemove: /* csgo_english.txt */"Remove Patch",
   RemovePatchRemoveHint: /* csgo_english.txt */"Press and hold to remove selected patch from your agent.\nThe removed patch will be destroyed.",

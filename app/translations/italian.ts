@@ -306,6 +306,7 @@ export const italian = {
   PetStageHen: /* csgo_italian.txt */"Pollo",
   PetStagePullet: /* csgo_italian.txt */"Pollastro",
   PetStyleDefault: "Predefinito",
+  ProfileInventoryTitle: "Inventario di {1}",
   RemovePatchClose: /* csgo_italian.txt */"Chiudi",
   RemovePatchRemove: /* csgo_italian.txt */"Rimuovi toppa",
   RemovePatchRemoveHint: /* csgo_italian.txt */"Premi e tieni premuto per rimuovere la toppa selezionata dal tuo agente.\nLa toppa rimossa verrà distrutta.",

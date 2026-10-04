@@ -306,6 +306,7 @@ export const finnish = {
   PetStageHen: /* csgo_finnish.txt */"Hen",
   PetStagePullet: /* csgo_finnish.txt */"Pullet",
   PetStyleDefault: "Oletus",
+  ProfileInventoryTitle: "Pelaajan {1} varusteluettelo",
   RemovePatchClose: /* csgo_finnish.txt */"Sulje",
   RemovePatchRemove: /* csgo_finnish.txt */"Poista kangasmerkki",
   RemovePatchRemoveHint: /* csgo_finnish.txt */"Paina ja pidä painettuna, jos haluat poistaa valitun kangasmerkin agentista.\nPoistettu kangasmerkki tuhoutuu.",

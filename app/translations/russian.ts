@@ -306,6 +306,7 @@ export const russian = {
   PetStageHen: /* csgo_russian.txt */"Hen",
   PetStagePullet: /* csgo_russian.txt */"Pullet",
   PetStyleDefault: "По умолчанию",
+  ProfileInventoryTitle: "Инвентарь игрока {1}",
   RemovePatchClose: /* csgo_russian.txt */"Закрыть",
   RemovePatchRemove: /* csgo_russian.txt */"Удалить нашивку",
   RemovePatchRemoveHint: /* csgo_russian.txt */"Нажмите и удерживайте, чтобы снять выбранную нашивку с агента.\nСнятая нашивка будет уничтожена.",

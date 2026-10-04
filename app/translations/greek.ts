@@ -307,6 +307,7 @@ export const greek = {
   PetStageHen: /* csgo_greek.txt */"Hen",
   PetStagePullet: /* csgo_greek.txt */"Pullet",
   PetStyleDefault: "Προεπιλογή",
+  ProfileInventoryTitle: "Αντικείμενα του παίκτη {1}",
   RemovePatchClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
   RemovePatchRemove: /* csgo_greek.txt */"Αφαίρεση διακριτικού",
   RemovePatchRemoveHint: /* csgo_greek.txt */"Πατήστε και κρατήστε το πατημένο, για να αφαιρέσετε το επιλεγμένο διακριτικό από το αντικείμενο.\nΤο διακριτικό που αφαιρέθηκε θα καταστραφεί.",
