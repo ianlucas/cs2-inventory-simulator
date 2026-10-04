@@ -195,6 +195,8 @@ export const danish = {
   InventoryItemMVPStatTrakCount: /* csgo_danish.txt */"StatTrak™ officielle Competitive-MVP'er:",
   InventoryItemNamePet: /* csgo_danish.txt */"Name your pet",
   InventoryItemNew: /* csgo_danish.txt */"Ny!",
+  InventoryItemPrice: "Pris:",
+  InventoryItemPriceNA: "Ikke tilgængelig",
   InventoryItemRareItem: /* csgo_danish.txt */"eller en yderst sjælden specialgenstand!",
   InventoryItemRarity: /* csgo_danish.txt */"Sjældenhed:",
   InventoryItemRemovePatch: /* csgo_danish.txt */"Fjern lap",

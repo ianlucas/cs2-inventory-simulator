@@ -196,6 +196,8 @@ export const koreana = {
   InventoryItemMVPStatTrakCount: /* csgo_koreana.txt */"StatTrak™ 공식 경쟁 매치 MVP 횟수:",
   InventoryItemNamePet: /* csgo_koreana.txt */"Name your pet",
   InventoryItemNew: /* csgo_koreana.txt */"신규!",
+  InventoryItemPrice: "가격:",
+  InventoryItemPriceNA: "해당 없음",
   InventoryItemRareItem: /* csgo_koreana.txt */"또는 극도로 희귀한 아이템!",
   InventoryItemRarity: /* csgo_koreana.txt */"희귀도:",
   InventoryItemRemovePatch: /* csgo_koreana.txt */"패치 제거",

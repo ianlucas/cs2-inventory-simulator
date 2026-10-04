@@ -13,10 +13,12 @@ import clsx from "clsx";
 import { ComponentProps } from "react";
 import { has } from "~/shared/misc";
 import { usePreferences, useTranslate } from "./app-context";
+import { useEconomyPrice } from "./hooks/use-economy-price";
 import { InventoryItemTooltipContents } from "./inventory-item-tooltip-contents";
 import { ItemDescription } from "./item-description";
 import { InventoryItemTooltipExterior } from "./inventory-item-tooltip-exterior";
 import { InventoryItemTooltipName } from "./inventory-item-tooltip-name";
+import { InventoryItemTooltipPrice } from "./inventory-item-tooltip-price";
 import { InventoryItemTooltipRarity } from "./inventory-item-tooltip-rarity";
 import { InventoryItemTooltipSeed } from "./inventory-item-tooltip-seed";
 import { InventoryItemTooltipStage } from "./inventory-item-tooltip-stage";
@@ -35,6 +37,7 @@ export function InventoryItemTooltip({
 }) {
   const translate = useTranslate();
   const { statsForNerds } = usePreferences();
+  const economyPrice = useEconomyPrice(item);
   const isContainer = item.isContainer();
   const containerItem =
     item.containerId !== undefined
@@ -106,10 +109,16 @@ export function InventoryItemTooltip({
           unlockedItem={!isContainer ? item : undefined}
         />
       )}
-      {statsForNerds && hasAttributes && (
+      {statsForNerds && (hasAttributes || economyPrice.isEnabled) && (
         <div className="mt-2 flex flex-col gap-2">
           {hasWear && <InventoryItemTooltipWear wear={wear} />}
           {hasSeed && <InventoryItemTooltipSeed seed={item.seed} />}
+          {economyPrice.isEnabled && (
+            <InventoryItemTooltipPrice
+              isLoading={economyPrice.isLoading}
+              price={economyPrice.price}
+            />
+          )}
         </div>
       )}
     </div>

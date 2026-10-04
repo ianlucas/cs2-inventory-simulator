@@ -196,6 +196,8 @@ export const greek = {
   InventoryItemMVPStatTrakCount: /* csgo_greek.txt */"Επίσημοι ανταγωνιστικοί StatTrak™ MVP:",
   InventoryItemNamePet: /* csgo_greek.txt */"Name your pet",
   InventoryItemNew: /* csgo_greek.txt */"Νέο!",
+  InventoryItemPrice: "Τιμή:",
+  InventoryItemPriceNA: "Δ/Υ",
   InventoryItemRareItem: /* csgo_greek.txt */"ή ένα υπερβολικά σπάνιο αντικείμενο!",
   InventoryItemRarity: /* csgo_greek.txt */"Σπανιότητα:",
   InventoryItemRemovePatch: /* csgo_greek.txt */"Αφαίρεση διακριτικού",

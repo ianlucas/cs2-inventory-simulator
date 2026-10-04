@@ -196,6 +196,8 @@ export const latam = {
   InventoryItemMVPStatTrakCount: /* csgo_latam.txt */"Premios al MJ en Competitivo oficial StatTrak™:",
   InventoryItemNamePet: /* csgo_latam.txt */"Name your pet",
   InventoryItemNew: /* csgo_latam.txt */"¡Nuevo!",
+  InventoryItemPrice: "Precio:",
+  InventoryItemPriceNA: "N/D",
   InventoryItemRareItem: /* csgo_latam.txt */"¡o un objeto especial extraordinariamente raro!",
   InventoryItemRarity: /* csgo_latam.txt */"Rareza:",
   InventoryItemRemovePatch: /* csgo_latam.txt */"Quitar parche",

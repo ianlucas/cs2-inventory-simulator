@@ -195,6 +195,8 @@ export const hungarian = {
   InventoryItemMVPStatTrakCount: /* csgo_hungarian.txt */"StatTrak™ hivatalos versengő MVP-k:",
   InventoryItemNamePet: /* csgo_hungarian.txt */"Kisállatod elnevezése.",
   InventoryItemNew: /* csgo_hungarian.txt */"Új!",
+  InventoryItemPrice: "Ár:",
+  InventoryItemPriceNA: "Nem elérhető",
   InventoryItemRareItem: /* csgo_hungarian.txt */"vagy egy rendkívül ritka különleges tárgy!",
   InventoryItemRarity: /* csgo_hungarian.txt */"Ritkaság:",
   InventoryItemRemovePatch: /* csgo_hungarian.txt */"Felvarró eltávolítása",

@@ -198,6 +198,8 @@ export const english = {
   InventoryItemMVPStatTrakCount: /* csgo_english.txt */"StatTrak™ Official Competitive MVPs:",
   InventoryItemNamePet: /* csgo_english.txt */"Name your pet",
   InventoryItemNew: /* csgo_english.txt */"New!",
+  InventoryItemPrice: "Price:",
+  InventoryItemPriceNA: "N/A",
   InventoryItemRareItem: /* csgo_english.txt */"or an Exceedingly Rare Special Item!",
   InventoryItemRarity: /* csgo_english.txt */"Rarity:",
   InventoryItemRemovePatch: /* csgo_english.txt */"Remove Patch",

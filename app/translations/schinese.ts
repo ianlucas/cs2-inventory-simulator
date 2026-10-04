@@ -196,6 +196,8 @@ export const schinese = {
   InventoryItemMVPStatTrakCount: /* csgo_schinese.txt */"StatTrak™ 官方竞技 MVP 次数:",
   InventoryItemNamePet: /* csgo_schinese.txt */"为你的宠物命名",
   InventoryItemNew: /* csgo_schinese.txt */"最新！",
+  InventoryItemPrice: "价格:",
+  InventoryItemPriceNA: "不可用",
   InventoryItemRareItem: /* csgo_schinese.txt */"或一件极其罕见的特殊物品！",
   InventoryItemRarity: /* csgo_schinese.txt */"稀有度：",
   InventoryItemRemovePatch: /* csgo_schinese.txt */"移除布章",

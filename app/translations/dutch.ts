@@ -195,6 +195,8 @@ export const dutch = {
   InventoryItemMVPStatTrakCount: /* csgo_dutch.txt */"StatTrak™ officiële competitieve MVPs:",
   InventoryItemNamePet: /* csgo_dutch.txt */"Name your pet",
   InventoryItemNew: /* csgo_dutch.txt */"Nieuw!",
+  InventoryItemPrice: "Prijs:",
+  InventoryItemPriceNA: "N.v.t.",
   InventoryItemRareItem: /* csgo_dutch.txt */"of een extreem zeldzaam speciaal voorwerp!",
   InventoryItemRarity: /* csgo_dutch.txt */"Zeldzaamheid:",
   InventoryItemRemovePatch: /* csgo_dutch.txt */"Embleem verwijderen",

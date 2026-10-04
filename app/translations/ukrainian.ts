@@ -196,6 +196,8 @@ export const ukrainian = {
   InventoryItemMVPStatTrakCount: /* csgo_ukrainian.txt */"Зірок найкращого гравця в змагальному режимі (за даними СтатТрек™):",
   InventoryItemNamePet: /* csgo_ukrainian.txt */"Name your pet",
   InventoryItemNew: /* csgo_ukrainian.txt */"Нове!",
+  InventoryItemPrice: "Ціна:",
+  InventoryItemPriceNA: "Недоступно",
   InventoryItemRareItem: /* csgo_ukrainian.txt */"або неймовірно рідкісний особливий предмет!",
   InventoryItemRarity: /* csgo_ukrainian.txt */"Рідкість:",
   InventoryItemRemovePatch: /* csgo_ukrainian.txt */"Вилучити нашивку",

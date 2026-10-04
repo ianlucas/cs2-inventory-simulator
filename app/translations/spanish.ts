@@ -196,6 +196,8 @@ export const spanish = {
   InventoryItemMVPStatTrakCount: /* csgo_spanish.txt */"Veces JMV en competitivo oficial de StatTrak™:",
   InventoryItemNamePet: /* csgo_spanish.txt */"Name your pet",
   InventoryItemNew: /* csgo_spanish.txt */"¡Nuevo!",
+  InventoryItemPrice: "Precio:",
+  InventoryItemPriceNA: "No disponible",
   InventoryItemRareItem: /* csgo_spanish.txt */"¡o un artículo especial extraordinariamente raro!",
   InventoryItemRarity: /* csgo_spanish.txt */"Rareza:",
   InventoryItemRemovePatch: /* csgo_spanish.txt */"Eliminar parche",

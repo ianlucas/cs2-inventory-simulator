@@ -196,6 +196,8 @@ export const tchinese = {
   InventoryItemMVPStatTrakCount: /* csgo_tchinese.txt */"StatTrak™ 官方競技 MVP 次數:",
   InventoryItemNamePet: /* csgo_tchinese.txt */"Name your pet",
   InventoryItemNew: /* csgo_tchinese.txt */"新！",
+  InventoryItemPrice: "價格:",
+  InventoryItemPriceNA: "不可用",
   InventoryItemRareItem: /* csgo_tchinese.txt */"或極度稀有的特殊物品！",
   InventoryItemRarity: /* csgo_tchinese.txt */"稀有度：",
   InventoryItemRemovePatch: /* csgo_tchinese.txt */"移除布章",

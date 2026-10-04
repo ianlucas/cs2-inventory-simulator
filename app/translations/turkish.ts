@@ -196,6 +196,8 @@ export const turkish = {
   InventoryItemMVPStatTrakCount: /* csgo_turkish.txt */"StatTrak™ Resmî Rekabetçi EDO'lar:",
   InventoryItemNamePet: /* csgo_turkish.txt */"Name your pet",
   InventoryItemNew: /* csgo_turkish.txt */"Yeni!",
+  InventoryItemPrice: "Fiyat:",
+  InventoryItemPriceNA: "Mevcut değil",
   InventoryItemRareItem: /* csgo_turkish.txt */"ya da Son Derece Nadir Özel Bir Eşya!",
   InventoryItemRarity: /* csgo_turkish.txt */"Nadirlik:",
   InventoryItemRemovePatch: /* csgo_turkish.txt */"Yamayı Sök",

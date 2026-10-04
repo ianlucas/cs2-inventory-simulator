@@ -19,6 +19,7 @@ import {
   CS2_WEAR_FACTOR,
   CS2Economy,
   CS2EconomyItem,
+  CS2InventoryItem,
   CS2ItemTranslationByLanguage,
   CS2ItemType,
   CS2RarityColor,
@@ -270,4 +271,34 @@ export function isValidInspectLink(link: string) {
     isSteamInspectLink(link) ||
     link.startsWith(CS2_PREVIEW_URL)
   );
+}
+
+/**
+ * Identifies the market listing an inventory item prices as. Attachments and
+ * souvenir origin are ignored, as the app doesn't treat unlocked items from
+ * souvenir packages as souvenirs.
+ */
+export function getEconomyPriceQuery(item: CS2InventoryItem) {
+  return {
+    exterior:
+      !item.isDefault && item.hasWear()
+        ? CS2Economy.getWearFromValue(item.getWear())
+        : undefined,
+    id: item.id,
+    statTrak: item.statTrak !== undefined
+  };
+}
+
+export type EconomyPriceQuery = ReturnType<typeof getEconomyPriceQuery>;
+
+export function pickEconomyPrice<T>({
+  avgPrice24h,
+  avgPrice7d,
+  avgPrice30d,
+  avgPrice90d
+}: Record<
+  "avgPrice24h" | "avgPrice7d" | "avgPrice30d" | "avgPrice90d",
+  T | null
+>) {
+  return avgPrice24h ?? avgPrice7d ?? avgPrice30d ?? avgPrice90d;
 }

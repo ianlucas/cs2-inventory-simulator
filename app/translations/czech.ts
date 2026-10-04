@@ -195,6 +195,8 @@ export const czech = {
   InventoryItemMVPStatTrakCount: /* csgo_czech.txt */"Nejlepší hráč v kompetitivních zápasech:",
   InventoryItemNamePet: /* csgo_czech.txt */"Pojmenovat slepici",
   InventoryItemNew: /* csgo_czech.txt */"Nový!",
+  InventoryItemPrice: "Cena:",
+  InventoryItemPriceNA: "Není k dispozici",
   InventoryItemRareItem: /* csgo_czech.txt */"nebo speciální, extrémně vzácný předmět!",
   InventoryItemRarity: /* csgo_czech.txt */"Vzácnost:",
   InventoryItemRemovePatch: /* csgo_czech.txt */"Odebrat nášivku",

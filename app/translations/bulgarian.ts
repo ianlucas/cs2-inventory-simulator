@@ -196,6 +196,8 @@ export const bulgarian = {
   InventoryItemMVPStatTrakCount: /* csgo_bulgarian.txt */"Официални съревнователни НЦИ от StatTrak™:",
   InventoryItemNamePet: /* csgo_bulgarian.txt */"Name your pet",
   InventoryItemNew: /* csgo_bulgarian.txt */"Ново!",
+  InventoryItemPrice: "Цена:",
+  InventoryItemPriceNA: "Няма",
   InventoryItemRareItem: /* csgo_bulgarian.txt */"или изключително рядък специален артикул!",
   InventoryItemRarity: /* csgo_bulgarian.txt */"Рядкост:",
   InventoryItemRemovePatch: /* csgo_bulgarian.txt */"Премахване на нашивка",
