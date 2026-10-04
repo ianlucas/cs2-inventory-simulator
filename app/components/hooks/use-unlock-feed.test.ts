@@ -3,8 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import type { UnlockFeedEvent } from "~/unlock-feed";
+
+vi.mock("~/routes/api.unlock-feed._index", () => ({
+  ApiUnlockFeedUrl: "/api/unlock-feed"
+}));
+
 import {
   UNLOCK_FEED_MAX_LINES,
   UnlockFeedLine,
