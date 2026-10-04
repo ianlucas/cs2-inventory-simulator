@@ -33,6 +33,7 @@ import { ItemSelectorProvider } from "./components/item-selector-context";
 import { Splash } from "./components/splash";
 import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
+import { UnlockFeed } from "./components/unlock-feed";
 import { ViewerIconHost } from "./components/viewer-icon-host";
 import { viewerServerAvailability } from "./viewer-server-availability.server";
 import {
@@ -185,6 +186,7 @@ export default function App() {
               {inventory && <Inventory />}
             </ItemSelectorProvider>
           )}
+          {inventory && <UnlockFeed />}
           <Outlet />
           {footer && <Footer />}
           <SyncIndicator />

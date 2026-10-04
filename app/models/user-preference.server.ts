@@ -10,6 +10,7 @@ type UserPreferenceKeys =
   | "hideFilters"
   | "hideFreeItems"
   | "hideNewItemLabel"
+  | "hideUnlockFeed"
   | "itemLanguage"
   | "language"
   | "prefer2dStickerEditor"

@@ -43,6 +43,7 @@ export default function Settings() {
     hideFilters: preferences.hideFilters,
     hideFreeItems: preferences.hideFreeItems,
     hideNewItemLabel: preferences.hideNewItemLabel,
+    hideUnlockFeed: preferences.hideUnlockFeed,
     itemLanguage: preferences.itemLanguage ?? "",
     language: preferences.language,
     prefer2dStickerEditor: preferences.prefer2dStickerEditor,

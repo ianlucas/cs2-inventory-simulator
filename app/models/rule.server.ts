@@ -671,6 +671,12 @@ export const appHideAuth = new Rule({
   defaultValue: false
 });
 
+export const appShowUnlockFeed = new Rule({
+  name: "appShowUnlockFeed",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const viewerEnabled = new Rule({
   name: "viewerEnabled",
   type: "boolean",

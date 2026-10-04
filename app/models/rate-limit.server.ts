@@ -20,6 +20,11 @@ export const SPRAY_CONSUME_RATE_LIMIT: RateLimit = {
   refillIntervalSeconds: 30
 };
 
+export const UNLOCK_FEED_RATE_LIMIT: RateLimit = {
+  capacity: 3,
+  refillIntervalSeconds: 60
+};
+
 export function refillAndConsume(
   tokens: number,
   elapsedSeconds: number,

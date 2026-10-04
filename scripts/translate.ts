@@ -324,6 +324,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   SettingsMasterVolume: "SFUI_Settings_Master_Volume",
   StickerPickerRemove: "Button_Remove",
   StickerScrapeLevel: "popup_scrape_sticker_level",
+  UnlockFeedFoundInCrate: { token: "Item_FoundInCrate", transform: (value) => replace(replace(value.replace(/\p{Cc}/gu, ''), '%s1', '{1}'), '%s2', '{2}') },
   UnpackAddCharges: { token: "popup_useitem_button_getkeychaincharges:f", transform: (value) => replace(reducePluralToOther(value.replace(/<\/?b>/g, '')), '{d:item_count}', '{1}') },
   UnpackClose: "GameUI_Close",
   UnpackDesc: "popup_useitem_desc_getkeychaincharges",

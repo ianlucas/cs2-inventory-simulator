@@ -37,6 +37,7 @@ export const loader = api(async ({ request }: Route.LoaderArgs) => {
       "hideFilters",
       "hideFreeItems",
       "hideNewItemLabel",
+      "hideUnlockFeed",
       "itemLanguage",
       "language",
       "prefer2dStickerEditor",
@@ -71,6 +72,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       hideFreeItems: z.literal("true").or(z.literal("false")),
       hideFilters: z.literal("true").or(z.literal("false")),
       hideNewItemLabel: z.literal("true").or(z.literal("false")),
+      hideUnlockFeed: z.literal("true").or(z.literal("false")),
       prefer2dStickerEditor: z.literal("true").or(z.literal("false"))
     })
     .parse(Object.fromEntries(await request.formData()));
