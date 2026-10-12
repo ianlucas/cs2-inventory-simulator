@@ -11,6 +11,7 @@ import {
   inventoryItemEquipHideType
 } from "~/models/rule.server";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
+import { getActiveUserLoadout } from "~/models/user-loadout.server";
 import { generate } from "~/shared/inventory-equipped-v5";
 import type { Route } from "./+types/api.equipped.v5.$userId[.]json._index";
 
@@ -32,11 +33,15 @@ export const loader = api(
     ].join(";");
     return await handleUserCachedResponse({
       args,
-      generate(inventory) {
-        return generate(inventory, {
-          models: rules.inventoryItemEquipHideModel,
-          types: rules.inventoryItemEquipHideType
-        });
+      async generate(inventory) {
+        return generate(
+          inventory,
+          {
+            models: rules.inventoryItemEquipHideModel,
+            types: rules.inventoryItemEquipHideType
+          },
+          await getActiveUserLoadout(userId, inventory)
+        );
       },
       throwBody: {},
       url: ApiEquippedV5UserIdJsonUrl,

@@ -6,7 +6,7 @@
 import { CS2Inventory, assert } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import type { Prisma } from "~/generated/prisma/client";
-import { Loadout, getInventoryItemIds } from "~/shared/loadout";
+import { Loadout, detachItems, getInventoryItemIds } from "~/shared/loadout";
 import {
   LoadoutAction,
   UserLoadouts,
@@ -50,6 +50,23 @@ export async function getUserLoadouts(
       name
     }))
   };
+}
+
+export async function getActiveUserLoadout(
+  userId: string,
+  inventory: CS2Inventory
+) {
+  const { activeLoadout } = await prisma.user.findUniqueOrThrow({
+    select: { activeLoadout: { select: { data: true } } },
+    where: { id: userId }
+  });
+  return activeLoadout !== null
+    ? detachItems(
+        parseLoadout(activeLoadout.data),
+        getInventoryItemIds(inventory),
+        new Map()
+      )
+    : undefined;
 }
 
 async function saveUserLoadouts(

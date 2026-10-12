@@ -91,6 +91,13 @@ const COLUMN_KEYS = {
   rifle: "rifle"
 } as const;
 
+// loadout_slot_t of each column's first slot.
+const COLUMN_SLOT_IDS = {
+  secondary: 2,
+  smg: 8,
+  rifle: 14
+} as const;
+
 const TEAM_SIDE_KEYS = {
   customplayer: "agent",
   clothing_hands: "gloves",
@@ -120,6 +127,13 @@ function parseGridSlot(slot: LoadoutSlot) {
   const match = slot.match(/^(secondary|smg|rifle)(\d)$/);
   return match !== null
     ? { column: match[1] as LoadoutColumn, index: Number(match[2]) }
+    : undefined;
+}
+
+export function getGridSlotId(slot: LoadoutSlot) {
+  const grid = parseGridSlot(slot);
+  return grid !== undefined
+    ? COLUMN_SLOT_IDS[grid.column] + grid.index
     : undefined;
 }
 
@@ -452,12 +466,18 @@ function getTeamSlots(team: LoadoutTeam) {
   return [...getSideSlots(team), ...LOADOUT_COLUMNS.flatMap(getGridSlots)];
 }
 
-function getInventoryRefs(loadout: Loadout) {
+export function getLoadoutEntries(loadout: Loadout) {
   return [CS2Team.CT, CS2Team.T].flatMap((team) =>
     getTeamSlots(team).flatMap((slot) => {
       const item = getLoadoutItem(loadout, team, slot);
-      return item?.type === "inventory" ? [{ slot, team, uid: item.uid }] : [];
+      return item !== undefined ? [{ item, slot, team }] : [];
     })
+  );
+}
+
+function getInventoryRefs(loadout: Loadout) {
+  return getLoadoutEntries(loadout).flatMap(({ item, slot, team }) =>
+    item.type === "inventory" ? [{ slot, team, uid: item.uid }] : []
   );
 }
 

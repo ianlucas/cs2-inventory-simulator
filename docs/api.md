@@ -154,11 +154,14 @@ type GetUserEquippedItemsResponse = {
   gloves?: Record<number, GlovesEconItem>;
   graffiti?: GraffitiEconItem;
   knives?: Record<number, MeleeEconItem>;
+  loadout?: Record<number, Record<number, number>>;
   musicKit?: MusicKitEconItem;
   pet?: PetEconItem;
   tWeapons?: Record<number, WeaponEconItem>;
 };
 ```
+
+- `loadout` is only present while the user has a loadout equipped, and maps each team to the weapon definition index of every `loadout_slot_t` in its weapon grid. The other fields already include the loadout's items.
 
 ## Increment item StatTrak
 
