@@ -28,11 +28,12 @@ import {
   getLoadoutItem,
   getSideSlots,
   getSlotGroup,
+  resolveLoadoutItem,
   resolveSideSlot
 } from "~/shared/loadout";
 import { LOADOUT_GROUP_LABELS } from "~/shared/loadout-labels";
 import { range } from "~/shared/number";
-import { useTranslate } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import type { LoadoutDropTarget } from "./hooks/use-loadout-drag";
 import { LoadoutAgent } from "./loadout-agent";
 import type { LoadoutFilter } from "./loadout-items-filter";
@@ -95,9 +96,10 @@ export function LoadoutTeamPanel({
   team: LoadoutTeam;
 }) {
   const translate = useTranslate();
+  const [inventory] = useInventory();
   const styles = TEAM_STYLES[team];
   const isCT = team === CS2Team.CT;
-  const agent = getLoadoutItem(loadout, team, "customplayer");
+  const agent = getSlotItem("customplayer");
   const isAreaValidTarget =
     isSelected &&
     activeItem !== undefined &&
@@ -117,13 +119,22 @@ export function LoadoutTeamPanel({
     return CS2Economy.findItem({ type: CS2ItemType.Utility, modelKey }).name;
   }
 
-  function isFiltered(slot: LoadoutSlot) {
+  function getSlotItem(slot: LoadoutSlot) {
     const item = getLoadoutItem(loadout, team, slot);
+    return item !== undefined ? resolveLoadoutItem(inventory, item) : undefined;
+  }
+
+  function getSlotModelKey(slot: LoadoutSlot) {
+    const item = getLoadoutItem(loadout, team, slot);
+    return item !== undefined
+      ? getEconomyItem(inventory, item).modelKey
+      : undefined;
+  }
+
+  function isFiltered(slot: LoadoutSlot) {
     return (
       filter.group === getSlotGroup(slot) &&
-      (filter.modelKey === "all" ||
-        (item !== undefined &&
-          getEconomyItem(item).modelKey === filter.modelKey))
+      (filter.modelKey === "all" || getSlotModelKey(slot) === filter.modelKey)
     );
   }
 
@@ -134,9 +145,7 @@ export function LoadoutTeamPanel({
   }
 
   function renderGridSlot(slot: LoadoutSlot) {
-    const item = getLoadoutItem(loadout, team, slot);
-    const modelKey =
-      item !== undefined ? getEconomyItem(item).modelKey : undefined;
+    const modelKey = getSlotModelKey(slot);
     return (
       <LoadoutSlotTile
         caption={
@@ -157,7 +166,7 @@ export function LoadoutTeamPanel({
         isValidTarget={
           activeItem !== undefined && canPlace(team, slot, activeItem)
         }
-        item={item}
+        item={getSlotItem(slot)}
         key={slot}
         menu={getSlotMenu(slot)}
         onClick={() => onClickSlot(slot)}
@@ -234,7 +243,7 @@ export function LoadoutTeamPanel({
             emptyIcon={EMPTY_SLOT_ICONS[slot]}
             imageClassName="py-1.5"
             isFiltered={isSelected && filter.group === slot}
-            item={getLoadoutItem(loadout, team, slot)}
+            item={getSlotItem(slot)}
             key={slot}
             menu={isSelected ? getSlotMenu(slot) : []}
             onClick={(event) => {

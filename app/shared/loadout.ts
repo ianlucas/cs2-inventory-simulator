@@ -7,6 +7,8 @@ import {
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
+  CS2Inventory,
+  CS2InventoryItem,
   CS2Team,
   ensure
 } from "@ianlucas/cs2-lib";
@@ -22,10 +24,9 @@ import {
 
 export type { LoadoutTeam };
 
-export interface LoadoutItem {
-  type: "snapshot";
-  item: CS2BaseInventoryItem;
-}
+export type LoadoutItem =
+  | { type: "inventory"; uid: number }
+  | { type: "snapshot"; item: { id: number } };
 
 export interface TeamLoadout {
   agent: LoadoutItem;
@@ -62,6 +63,11 @@ const LOADOUT_SIDE_SLOTS = [
 ] as const;
 export type LoadoutSideSlot = (typeof LOADOUT_SIDE_SLOTS)[number];
 export type LoadoutSlot = LoadoutSideSlot | LoadoutGridSlot;
+
+export const LOADOUT_SLOTS: LoadoutSlot[] = [
+  ...LOADOUT_SIDE_SLOTS,
+  ...LOADOUT_COLUMNS.flatMap(getGridSlots)
+];
 
 export const LOADOUT_GROUPS = [
   "secondary0",
@@ -192,7 +198,9 @@ export function canPlace(
   item: CS2EconomyItem
 ) {
   return (
-    getItemGroup(item) === getSlotGroup(slot) && isUsableByTeam(item, team)
+    getItemGroup(item) === getSlotGroup(slot) &&
+    isUsableByTeam(item, team) &&
+    !(item instanceof CS2InventoryItem && item.isSealed())
   );
 }
 
@@ -238,57 +246,37 @@ function setLoadoutItem(
   return { ...loadout, [teamKey]: teamLoadout };
 }
 
-export function createSnapshot({
-  charges,
-  id,
-  keychains,
-  nameTag,
-  patches,
-  seed,
-  statTrak,
-  stickers,
-  style,
-  upgradeLevel,
-  wear
-}: CS2BaseInventoryItem): LoadoutItem {
-  const item: CS2BaseInventoryItem = {
-    charges,
-    id,
-    keychains,
-    nameTag,
-    patches,
-    seed,
-    statTrak,
-    stickers,
-    style,
-    upgradeLevel,
-    wear
-  };
-  return {
-    type: "snapshot",
-    item: Object.fromEntries(
-      Object.entries(item).filter(([, value]) => value !== undefined)
-    ) as CS2BaseInventoryItem
-  };
+export function createSnapshot(id: number): LoadoutItem {
+  return { type: "snapshot", item: { id } };
 }
 
-export function getEconomyItem({ item }: LoadoutItem) {
-  return CS2Economy.getById(item.id);
+export function createLoadoutItem(item: CS2InventoryItem): LoadoutItem {
+  return item.uid >= 0
+    ? { type: "inventory", uid: item.uid }
+    : createSnapshot(item.id);
 }
 
-function hasAttributes({ item }: LoadoutItem) {
-  return Object.keys(item).length > 1;
+export function resolveLoadoutItem(
+  inventory: CS2Inventory,
+  loadoutItem: LoadoutItem
+): CS2InventoryItem | CS2BaseInventoryItem {
+  return loadoutItem.type === "inventory"
+    ? inventory.get(loadoutItem.uid)
+    : loadoutItem.item;
 }
 
-function isStock(loadoutItem: LoadoutItem) {
-  return (
-    getEconomyItem(loadoutItem).isDefault === true &&
-    !hasAttributes(loadoutItem)
-  );
+export function getEconomyItem(
+  inventory: CS2Inventory,
+  loadoutItem: LoadoutItem
+): CS2EconomyItem {
+  return loadoutItem.type === "inventory"
+    ? inventory.get(loadoutItem.uid)
+    : CS2Economy.getById(loadoutItem.item.id);
 }
 
 function findWeaponSlot(
   loadout: Loadout,
+  inventory: CS2Inventory,
   team: LoadoutTeam,
   item: CS2EconomyItem
 ) {
@@ -298,35 +286,39 @@ function findWeaponSlot(
     return (
       getSlotGroup(slot) === group &&
       current !== undefined &&
-      getEconomyItem(current).modelKey === item.modelKey
+      getEconomyItem(inventory, current).modelKey === item.modelKey
     );
   });
 }
 
 export function place(
   loadout: Loadout,
+  inventory: CS2Inventory,
   team: LoadoutTeam,
   slot: LoadoutSlot,
-  item: CS2BaseInventoryItem
+  loadoutItem: LoadoutItem
 ): { loadout: Loadout; swappedSlot?: LoadoutSlot } | undefined {
-  if (!canPlace(team, slot, CS2Economy.getById(item.id))) {
+  const item = getEconomyItem(inventory, loadoutItem);
+  if (
+    !canPlace(team, slot, item) ||
+    (loadoutItem.type === "snapshot" && item.isDefault !== true)
+  ) {
     return undefined;
   }
-  const snapshot = createSnapshot(item);
   const current = getLoadoutItem(loadout, team, slot);
   const weaponSlot = isGridSlot(slot)
-    ? findWeaponSlot(loadout, team, CS2Economy.getById(item.id))
+    ? findWeaponSlot(loadout, inventory, team, item)
     : undefined;
   if (
     weaponSlot === undefined ||
     weaponSlot === slot ||
     current === undefined
   ) {
-    return { loadout: setLoadoutItem(loadout, team, slot, snapshot) };
+    return { loadout: setLoadoutItem(loadout, team, slot, loadoutItem) };
   }
   return {
     loadout: setLoadoutItem(
-      setLoadoutItem(loadout, team, slot, snapshot),
+      setLoadoutItem(loadout, team, slot, loadoutItem),
       team,
       weaponSlot,
       current
@@ -362,7 +354,7 @@ function getDefaultItem(
 
 function createTeamLoadout(team: LoadoutTeam): TeamLoadout {
   function createDefaultSnapshot(slot: LoadoutSlot) {
-    return createSnapshot({ id: ensure(getDefaultItem(team, slot)).id });
+    return createSnapshot(ensure(getDefaultItem(team, slot)).id);
   }
   return {
     agent: createDefaultSnapshot("customplayer"),
@@ -385,6 +377,7 @@ export function createDefaultLoadout(): Loadout {
 
 export function canResetSlot(
   loadout: Loadout,
+  inventory: CS2Inventory,
   team: LoadoutTeam,
   slot: LoadoutSlot
 ) {
@@ -394,18 +387,23 @@ export function canResetSlot(
     return false;
   }
   return isGridSlot(slot)
-    ? getEconomyItem(current).modelKey !== defaultItem.modelKey
-    : current.item.id !== defaultItem.id || hasAttributes(current);
+    ? getEconomyItem(inventory, current).modelKey !== defaultItem.modelKey
+    : current.type === "inventory" || current.item.id !== defaultItem.id;
 }
 
 export function resetSlot(
   loadout: Loadout,
+  inventory: CS2Inventory,
   team: LoadoutTeam,
   slot: LoadoutSlot
 ) {
-  return place(loadout, team, slot, {
-    id: ensure(getDefaultItem(team, slot)).id
-  });
+  return place(
+    loadout,
+    inventory,
+    team,
+    slot,
+    createSnapshot(ensure(getDefaultItem(team, slot)).id)
+  );
 }
 
 export function canResetSlotFinish(
@@ -414,17 +412,24 @@ export function canResetSlotFinish(
   slot: LoadoutSlot
 ) {
   const current = getLoadoutItem(loadout, team, slot);
-  return isGridSlot(slot) && current !== undefined && !isStock(current);
+  return isGridSlot(slot) && current?.type === "inventory";
 }
 
 export function resetSlotFinish(
   loadout: Loadout,
+  inventory: CS2Inventory,
   team: LoadoutTeam,
   slot: LoadoutSlot
 ) {
   const current = ensure(getLoadoutItem(loadout, team, slot));
-  const modelKey = ensure(getEconomyItem(current).modelKey);
-  return place(loadout, team, slot, { id: getDefaultWeapon(modelKey).id });
+  const modelKey = ensure(getEconomyItem(inventory, current).modelKey);
+  return place(
+    loadout,
+    inventory,
+    team,
+    slot,
+    createSnapshot(getDefaultWeapon(modelKey).id)
+  );
 }
 
 export function canRemoveSlot(
@@ -441,4 +446,64 @@ export function removeSlot(loadout: Loadout, slot: LoadoutSlot): Loadout {
   return isSharedSlot(slot)
     ? { ...loadout, [SHARED_SIDE_KEYS[slot]]: undefined }
     : loadout;
+}
+
+function getTeamSlots(team: LoadoutTeam) {
+  return [...getSideSlots(team), ...LOADOUT_COLUMNS.flatMap(getGridSlots)];
+}
+
+function getInventoryRefs(loadout: Loadout) {
+  return [CS2Team.CT, CS2Team.T].flatMap((team) =>
+    getTeamSlots(team).flatMap((slot) => {
+      const item = getLoadoutItem(loadout, team, slot);
+      return item?.type === "inventory" ? [{ slot, team, uid: item.uid }] : [];
+    })
+  );
+}
+
+export function getInventoryItemIds(inventory: CS2Inventory) {
+  return new Map(inventory.getAll().map(({ id, uid }) => [uid, id]));
+}
+
+export function getLoadoutItemEquipped(loadout: Loadout, uid: number) {
+  const refs = getInventoryRefs(loadout).filter((ref) => ref.uid === uid);
+  function isEquippedBy(team: LoadoutTeam) {
+    return refs.some((ref) => ref.team === team && !isSharedSlot(ref.slot));
+  }
+  return {
+    equipped: refs.some(({ slot }) => isSharedSlot(slot)),
+    equippedCT: isEquippedBy(CS2Team.CT),
+    equippedT: isEquippedBy(CS2Team.T)
+  };
+}
+
+// An inventory item is gone once its uid is missing or now holds another item,
+// since uids are reused. Its slot falls back like the game does when a skin is
+// traded away: grid weapons keep their stock finish, other slots their default.
+export function detachItems(
+  loadout: Loadout,
+  itemIds: Map<number, number>,
+  previousItemIds: Map<number, number>
+) {
+  return getInventoryRefs(loadout).reduce((current, { slot, team, uid }) => {
+    const previousId = previousItemIds.get(uid);
+    if (
+      itemIds.has(uid) &&
+      (previousId === undefined || previousId === itemIds.get(uid))
+    ) {
+      return current;
+    }
+    if (isSharedSlot(slot)) {
+      return removeSlot(current, slot);
+    }
+    const modelKey =
+      previousId !== undefined
+        ? CS2Economy.getById(previousId).modelKey
+        : undefined;
+    const fallback =
+      isGridSlot(slot) && modelKey !== undefined
+        ? getDefaultWeapon(modelKey)
+        : ensure(getDefaultItem(team, slot));
+    return setLoadoutItem(current, team, slot, createSnapshot(fallback.id));
+  }, loadout);
 }

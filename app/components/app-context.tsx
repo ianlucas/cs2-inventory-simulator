@@ -11,11 +11,15 @@ import {
 } from "@ianlucas/cs2-lib";
 import {
   ContextType,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   createContext,
   useContext,
   useEffect,
-  useMemo
+  useMemo,
+  useRef,
+  useState
 } from "react";
 import { useInventoryFilterState } from "~/components/hooks/use-inventory-filter-state";
 import { useInventoryState } from "~/components/hooks/use-inventory-state";
@@ -37,7 +41,13 @@ import {
   sortItemsByEquipped,
   transform
 } from "~/shared/inventory-transform";
+import { getInventoryItemIds } from "~/shared/loadout";
 import { SerializeFrom } from "~/shared/misc";
+import {
+  UserLoadouts,
+  detachMissingItems,
+  detachRemovedItems
+} from "~/shared/user-loadouts";
 import { pushToSync, sync } from "~/sync";
 import { cacheAuthenticatedUserId } from "~/user-storage";
 import { viewerClientAvailability } from "~/viewer-client-availability";
@@ -47,7 +57,9 @@ const AppContext = createContext<
       inventory: CS2Inventory;
       inventoryFilter: ReturnType<typeof useInventoryFilterState>;
       items: TransformedInventoryItems;
+      loadouts: UserLoadouts | undefined;
       setInventory: (value: CS2Inventory) => void;
+      setLoadouts: Dispatch<SetStateAction<UserLoadouts | undefined>>;
       translation: ReturnType<typeof useTranslation>;
     } & SerializeFrom<typeof loader>)
   | null
@@ -96,7 +108,13 @@ export function AppProvider({
   user
 }: Omit<
   NonNullable<ContextType<typeof AppContext>>,
-  "inventory" | "inventoryFilter" | "items" | "translation" | "setInventory"
+  | "inventory"
+  | "inventoryFilter"
+  | "items"
+  | "loadouts"
+  | "setInventory"
+  | "setLoadouts"
+  | "translation"
 > & {
   children: ReactNode;
 }) {
@@ -107,14 +125,33 @@ export function AppProvider({
     maxItems: rules.inventoryMaxItems,
     storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
   } satisfies Partial<CS2InventorySpec>;
-  const [inventory, setInventory, reactSetInventory] = useInventoryState(
+  const [inventory, setInventoryState, reactSetInventory] = useInventoryState(
     () => new CS2Inventory(inventorySpec)
   );
+  const [loadouts, setLoadouts] = useState(() =>
+    user?.loadouts !== undefined
+      ? detachMissingItems(user.loadouts, inventory)
+      : undefined
+  );
+  const itemIdsRef = useRef<Map<number, number>>(null);
+  itemIdsRef.current ??= getInventoryItemIds(inventory);
   const inventoryFilter = useInventoryFilterState();
   const translation = useTranslation({
     itemLanguage: preferences.itemLanguage ?? preferences.language,
     language: preferences.language
   });
+
+  // Inventory changes mutate the instance in place, so the item ids from the
+  // previous change are what tells removed items apart.
+  function setInventory(value: CS2Inventory) {
+    const previousItemIds = ensure(itemIdsRef.current);
+    const itemIds = getInventoryItemIds(value);
+    itemIdsRef.current = itemIds;
+    setInventoryState(value);
+    setLoadouts(
+      (state) => state && detachRemovedItems(state, itemIds, previousItemIds)
+    );
+  }
 
   useEffect(() => {
     CS2Economy.baseUrl = rules.assetsBaseUrl ?? CS2Economy.baseUrl;
@@ -200,10 +237,12 @@ export function AppProvider({
         inventory,
         inventoryFilter,
         items,
+        loadouts,
         translation: translation,
         preferences,
         rules,
         setInventory,
+        setLoadouts,
         user
       }}
     >

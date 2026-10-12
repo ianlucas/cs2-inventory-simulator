@@ -15,6 +15,7 @@ import clsx from "clsx";
 import { ComponentProps } from "react";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
 import { useEditItemFilter } from "~/components/hooks/use-item-hide-filters";
+import { useLoadoutItemWarning } from "~/components/hooks/use-loadouts";
 import { useViewerAvailability } from "~/components/hooks/use-viewer-availability";
 import { getInventoryItemShareUrl } from "~/inventory.client";
 import {
@@ -23,6 +24,7 @@ import {
   UNLOCKABLE_ITEM_TYPE
 } from "~/shared/inventory";
 import { TransformedInventoryItem } from "~/shared/inventory-transform";
+import { has } from "~/shared/misc";
 import { format } from "~/shared/number";
 import { useInventory, useRules, useTranslate, useUser } from "./app-context";
 import {
@@ -108,6 +110,7 @@ export function InventoryItem({
 }) {
   const [, copyToClipboard] = useCopyToClipboard();
   const translate = useTranslate();
+  const getLoadoutItemWarning = useLoadoutItemWarning();
   const {
     inventoryItemAllowApplyPatch,
     inventoryItemAllowApplySticker,
@@ -346,9 +349,14 @@ export function InventoryItem({
                                 if (
                                   await confirm({
                                     titleText: item.name,
-                                    bodyText: translate(
-                                      "InventoryItemDeleteConfirmDesc"
-                                    ),
+                                    bodyText: [
+                                      translate(
+                                        "InventoryItemDeleteConfirmDesc"
+                                      ),
+                                      getLoadoutItemWarning(uid)
+                                    ]
+                                      .filter(has)
+                                      .join("\n"),
                                     cancelText: translate("GenericCancel"),
                                     confirmText: translate(
                                       "InventoryItemDeleteConfirm"
@@ -589,9 +597,14 @@ export function InventoryItem({
                                   if (
                                     await confirm({
                                       titleText: item.name,
-                                      bodyText: translate(
-                                        "InventoryItemDeleteConfirmDesc"
-                                      ),
+                                      bodyText: [
+                                        translate(
+                                          "InventoryItemDeleteConfirmDesc"
+                                        ),
+                                        getLoadoutItemWarning(uid)
+                                      ]
+                                        .filter(has)
+                                        .join("\n"),
                                       cancelText: translate("GenericCancel"),
                                       confirmText: translate(
                                         "InventoryItemDeleteConfirm"

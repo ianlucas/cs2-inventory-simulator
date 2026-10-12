@@ -15,10 +15,11 @@ import {
   useInteractions,
   useMergeRefs
 } from "@floating-ui/react";
+import { CS2BaseInventoryItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { MouseEvent, ReactNode, useState } from "react";
-import { createFakeInventoryItemFromBase } from "~/shared/inventory";
-import { LoadoutItem, LoadoutSlot, LoadoutTeam } from "~/shared/loadout";
+import { toInventoryItem } from "~/shared/inventory";
+import { LoadoutSlot, LoadoutTeam } from "~/shared/loadout";
 import { ContextButton } from "./context-button";
 import { useNameItemString } from "./hooks/use-name-item";
 import { LoadoutIcon } from "./loadout-icon";
@@ -57,7 +58,7 @@ export function LoadoutSlotTile({
   isDropHover?: boolean;
   isFiltered?: boolean;
   isValidTarget?: boolean;
-  item?: LoadoutItem;
+  item?: CS2InventoryItem | CS2BaseInventoryItem;
   menu: LoadoutSlotMenuEntry[];
   onClick?: (event: MouseEvent) => void;
   slot?: LoadoutSlot;
@@ -82,8 +83,7 @@ export function LoadoutSlotTile({
   const { getFloatingProps, getReferenceProps: getMenuReferenceProps } =
     useInteractions([dismiss]);
   const ref = useMergeRefs([setReference, refs.setReference]);
-  const inventoryItem =
-    item !== undefined ? createFakeInventoryItemFromBase(item.item) : undefined;
+  const inventoryItem = item !== undefined ? toInventoryItem(item) : undefined;
   const isDropping = isDropHover && isValidTarget;
 
   return (
@@ -119,7 +119,7 @@ export function LoadoutSlotTile({
               isDropping && "opacity-30",
               imageClassName
             )}
-            item={item.item}
+            item={item}
             key={dropKey}
           />
         ) : (

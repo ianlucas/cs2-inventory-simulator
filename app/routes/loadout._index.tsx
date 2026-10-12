@@ -6,7 +6,7 @@
 import { LoadoutEditor } from "~/components/loadout-editor";
 import { middleware } from "~/middleware.server";
 import { getMetaTitle } from "~/root-meta";
-import type { Route } from "./+types/loadouts._index";
+import type { Route } from "./+types/loadout._index";
 
 export const meta = getMetaTitle("HeaderLoadoutLabel");
 

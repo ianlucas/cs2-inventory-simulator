@@ -109,6 +109,12 @@ export function createFakeInventoryItemFromBase(item: CS2BaseInventoryItem) {
   );
 }
 
+export function toInventoryItem(item: CS2InventoryItem | CS2BaseInventoryItem) {
+  return item instanceof CS2InventoryItem
+    ? item
+    : createFakeInventoryItemFromBase(item);
+}
+
 export function getFreeItemsToDisplay(hideFreeItems = false) {
   if (hideFreeItems) {
     return [];

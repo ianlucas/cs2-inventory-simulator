@@ -22,6 +22,8 @@ enum CS2ItemExterior {
 }
 
 model User {
+  activeLoadout       UserLoadout?             @relation("ActiveLoadout", fields: [activeLoadoutId], references: [id], onDelete: SetNull)
+  activeLoadoutId     String?                  @unique
   apiResponseCaches   UserApiResponseCache[]
   authTokens          ApiAuthToken[]
   avatar              String
@@ -32,6 +34,7 @@ model User {
   inventoryProjection UserInventoryProjection?
   inventoryRecoveries UserInventoryRecovery[]
   lastSeenAt          DateTime                 @default(now())
+  loadouts            UserLoadout[]            @relation("UserLoadouts")
   name                String
   rawInventory        String?
   overrides           UserRule[]
@@ -172,6 +175,19 @@ model UserInventoryProjectionState {
   /// and only moves it past users projected, or marked failed, at that syncedAt.
   liveCursor          DateTime?
   updatedAt           DateTime  @updatedAt
+}
+
+model UserLoadout {
+  activeFor User?    @relation("ActiveLoadout")
+  createdAt DateTime @default(now())
+  data      String
+  id        String   @id
+  name      String
+  updatedAt DateTime @updatedAt
+  user      User     @relation("UserLoadouts", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@index([userId])
 }
 
 model UserInventoryRecovery {

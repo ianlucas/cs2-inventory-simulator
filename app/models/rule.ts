@@ -78,6 +78,7 @@ import {
   inventoryItemMaxPatches,
   inventoryItemMaxStickers,
   inventoryMaxItems,
+  inventoryMaxLoadouts,
   inventoryStorageUnitMaxItems,
   viewerAttachmentsOnly,
   viewerEnabled,
@@ -183,6 +184,7 @@ export async function getClientRules(userId?: string) {
       inventoryItemMaxPatches,
       inventoryItemMaxStickers,
       inventoryMaxItems,
+      inventoryMaxLoadouts,
       inventoryStorageUnitMaxItems,
       viewerAttachmentsOnly,
       viewerEnabled

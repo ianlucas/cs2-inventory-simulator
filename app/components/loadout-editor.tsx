@@ -4,7 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2InventoryItem, CS2Team, ensure } from "@ianlucas/cs2-lib";
+import clsx from "clsx";
 import { useState } from "react";
+import { useSearchParams } from "react-router";
 import {
   LoadoutGroup,
   LoadoutSideSlot,
@@ -13,6 +15,8 @@ import {
   canRemoveSlot,
   canResetSlot,
   canResetSlotFinish,
+  createDefaultLoadout,
+  createLoadoutItem,
   getEconomyItem,
   getLoadoutItem,
   getSlotGroup,
@@ -20,23 +24,34 @@ import {
   resolveSideSlot
 } from "~/shared/loadout";
 import { playSound } from "~/sound.client";
-import { useTranslate } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import { useScrollToTopOnChange } from "./hooks/use-inventory-filter-state";
 import { useKeyRelease } from "./hooks/use-key-release";
-import { useLoadout } from "./hooks/use-loadout";
 import { LoadoutDropTarget, useLoadoutDrag } from "./hooks/use-loadout-drag";
+import { useLoadouts } from "./hooks/use-loadouts";
 import { LoadoutItemImage } from "./loadout-item-image";
 import { LoadoutItems } from "./loadout-items";
 import { LoadoutFilter, LoadoutItemsFilter } from "./loadout-items-filter";
 import { LoadoutSlotMenuEntry } from "./loadout-slot-tile";
 import { LoadoutTeamPanel } from "./loadout-team-panel";
+import { LoadoutToolbar } from "./loadout-toolbar";
 
 const ALL_ITEMS: LoadoutFilter = { group: "all", modelKey: "all" };
 
+const NONE = "none";
+
 export function LoadoutEditor() {
   const translate = useTranslate();
-  const { loadout, place, removeSlot, resetSlot, resetSlotFinish } =
-    useLoadout();
+  const [inventory] = useInventory();
+  const {
+    loadouts: userLoadouts,
+    place,
+    removeSlot,
+    resetSlot,
+    resetSlotFinish
+  } = useLoadouts();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [defaultLoadout] = useState(createDefaultLoadout);
   const [team, setTeam] = useState<LoadoutTeam>(CS2Team.CT);
   const [filter, setFilter] = useState(ALL_ITEMS);
   const [sorter, setSorter] = useState("newest");
@@ -48,9 +63,28 @@ export function LoadoutEditor() {
   }>();
   const { drag, getDragSourceProps, setGhost } = useLoadoutDrag(handleDrop);
   const activeItem = drag?.item ?? selected;
+  const selectedLoadout = findLoadout(searchParams.get("id"));
+  const loadout = selectedLoadout?.loadout ?? defaultLoadout;
+  const isReadOnly = selectedLoadout === undefined;
 
   useKeyRelease("Escape", () => setSelected(undefined));
   useScrollToTopOnChange(filter);
+
+  function findLoadout(id: string | null) {
+    const loadouts = userLoadouts?.loadouts ?? [];
+    return (
+      loadouts.find((loadout) => loadout.id === id) ??
+      (id !== NONE
+        ? loadouts.find(
+            (loadout) => loadout.id === userLoadouts?.activeLoadoutId
+          )
+        : undefined)
+    );
+  }
+
+  function selectLoadout(id?: string) {
+    setSearchParams({ id: id ?? NONE }, { preventScrollReset: true });
+  }
 
   function commit(slot: LoadoutSlot, placement: ReturnType<typeof place>) {
     if (placement !== undefined) {
@@ -69,8 +103,12 @@ export function LoadoutEditor() {
   function placeItem(item: CS2InventoryItem, slot?: LoadoutSlot) {
     playSound("inventory_item_putdown");
     if (
+      selectedLoadout !== undefined &&
       slot !== undefined &&
-      commit(slot, place(team, slot, item.asBase())) !== undefined
+      commit(
+        slot,
+        place(selectedLoadout, team, slot, createLoadoutItem(item))
+      ) !== undefined
     ) {
       setSelected(undefined);
     }
@@ -129,7 +167,8 @@ export function LoadoutEditor() {
     }
     const group = getSlotGroup(slot);
     const modelKey = ensure(
-      getEconomyItem(ensure(getLoadoutItem(loadout, team, slot))).modelKey
+      getEconomyItem(inventory, ensure(getLoadoutItem(loadout, team, slot)))
+        .modelKey
     );
     changeFilter(
       filter.group === group && filter.modelKey === modelKey
@@ -139,34 +178,44 @@ export function LoadoutEditor() {
   }
 
   function getSlotMenu(slot: LoadoutSlot): LoadoutSlotMenuEntry[] {
+    if (selectedLoadout === undefined) {
+      return [];
+    }
     return [
       {
-        condition: canResetSlot(loadout, team, slot),
+        condition: canResetSlot(loadout, inventory, team, slot),
         label: translate(
           isGridSlot(slot)
             ? "LoadoutResetToDefaultWeapon"
             : "LoadoutResetToDefault"
         ),
-        onClick: () => commit(slot, resetSlot(team, slot))
+        onClick: () => commit(slot, resetSlot(selectedLoadout, team, slot))
       },
       {
         condition: canResetSlotFinish(loadout, team, slot),
         label: translate("LoadoutResetToDefaultFinish"),
-        onClick: () => commit(slot, resetSlotFinish(team, slot))
+        onClick: () =>
+          commit(slot, resetSlotFinish(selectedLoadout, team, slot))
       },
       {
         condition: canRemoveSlot(loadout, team, slot),
         label: translate("LoadoutUnequip"),
-        onClick: () => removeSlot(slot)
+        onClick: () => removeSlot(selectedLoadout, slot)
       }
     ].filter(({ condition }) => condition);
   }
 
   return (
     <div className="select-none">
+      <LoadoutToolbar onSelect={selectLoadout} selected={selectedLoadout} />
       <div className="sticky top-(--header-height) z-10 border-b border-white/10 backdrop-blur-md">
         <div className="border-b border-white/10 bg-linear-to-b from-transparent to-black/25">
-          <div className="relative m-auto h-107 w-5xl">
+          <div
+            className={clsx(
+              "relative m-auto h-107 w-5xl transition-opacity",
+              isReadOnly && "pointer-events-none opacity-50"
+            )}
+          >
             {[CS2Team.CT, CS2Team.T].map((value) => (
               <LoadoutTeamPanel
                 activeItem={activeItem}
@@ -201,6 +250,8 @@ export function LoadoutEditor() {
         <LoadoutItems
           filter={filter}
           getDragSourceProps={getDragSourceProps}
+          isReadOnly={isReadOnly}
+          loadout={selectedLoadout?.loadout}
           onSelect={(item) =>
             setSelected(selected?.uid === item.uid ? undefined : item)
           }

@@ -21,7 +21,8 @@ export function ErrorBoundary() {
     if (
       await confirm({
         titleText: "Reset your inventory",
-        bodyText: "Are you sure you want to reset your inventory?",
+        bodyText:
+          "Are you sure you want to reset your inventory?\nYour loadouts will also lose their inventory items.",
         cancelText: "Cancel",
         confirmText: "OK"
       })

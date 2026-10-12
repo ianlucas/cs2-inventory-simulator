@@ -19,7 +19,7 @@ export function useRootLayout(): {
   // Profiles render the owner's background and inventory instead.
   const isProfile = profile !== undefined;
   const isLoadouts = useMatches().some(
-    ({ id }) => id === "routes/loadouts._index"
+    ({ id }) => id === "routes/loadout._index"
   );
 
   return {

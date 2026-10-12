@@ -219,6 +219,12 @@ export const inventoryStorageUnitMaxItems = new Rule({
   defaultValue: 32
 });
 
+export const inventoryMaxLoadouts = new Rule({
+  name: "inventoryMaxLoadouts",
+  type: "number",
+  defaultValue: 10
+});
+
 export const inventoryInactivityResetDays = new Rule({
   name: "inventoryInactivityResetDays",
   type: "number",

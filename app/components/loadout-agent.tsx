@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { CS2BaseInventoryItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { createFakeInventoryItemFromBase } from "~/shared/inventory";
-import { LoadoutItem } from "~/shared/loadout";
+import { toInventoryItem } from "~/shared/inventory";
 import { ItemImage } from "./item-image";
 
 export function LoadoutAgent({
@@ -13,14 +13,11 @@ export function LoadoutAgent({
   item
 }: {
   className?: string;
-  item: LoadoutItem;
+  item: CS2InventoryItem | CS2BaseInventoryItem;
 }) {
   return (
     <div className={clsx("flex items-center justify-center", className)}>
-      <ItemImage
-        className="w-full"
-        item={createFakeInventoryItemFromBase(item.item)}
-      />
+      <ItemImage className="w-full" item={toInventoryItem(item)} />
     </div>
   );
 }

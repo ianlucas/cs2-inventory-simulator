@@ -6,8 +6,14 @@
 import { CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { useMemo } from "react";
 import { getFreeItemsToDisplay } from "~/shared/inventory";
-import { sortItems } from "~/shared/inventory-transform";
-import { LoadoutTeam, getItemGroup, isUsableByTeam } from "~/shared/loadout";
+import { getEquippedColors, sortItems } from "~/shared/inventory-transform";
+import {
+  Loadout,
+  LoadoutTeam,
+  getItemGroup,
+  getLoadoutItemEquipped,
+  isUsableByTeam
+} from "~/shared/loadout";
 import { useInventory } from "./app-context";
 import { useEquipItemFilter } from "./hooks/use-item-hide-filters";
 import { useLoadoutDrag } from "./hooks/use-loadout-drag";
@@ -17,6 +23,8 @@ import type { LoadoutFilter } from "./loadout-items-filter";
 export function LoadoutItems({
   filter,
   getDragSourceProps,
+  isReadOnly,
+  loadout,
   onSelect,
   selectedUid,
   sorter,
@@ -24,6 +32,8 @@ export function LoadoutItems({
 }: {
   filter: LoadoutFilter;
   getDragSourceProps: ReturnType<typeof useLoadoutDrag>["getDragSourceProps"];
+  isReadOnly: boolean;
+  loadout?: Loadout;
   onSelect: (item: CS2InventoryItem) => void;
   selectedUid?: number;
   sorter: string;
@@ -49,10 +59,17 @@ export function LoadoutItems({
       inventory
         .getAll()
         .filter(isListed)
-        .map((item) => ({ equipped: [], item, uid: item.uid })),
+        .map((item) => ({
+          equipped:
+            loadout !== undefined
+              ? getEquippedColors(getLoadoutItemEquipped(loadout, item.uid))
+              : [],
+          item,
+          uid: item.uid
+        })),
       getFreeItemsToDisplay().filter(({ item }) => isListed(item))
     );
-  }, [filter, inventory, isEquippable, sorter, team]);
+  }, [filter, inventory, isEquippable, loadout, sorter, team]);
 
   return (
     <div className="grid grid-cols-6 gap-x-5 gap-y-4 py-4">
@@ -60,14 +77,14 @@ export function LoadoutItems({
         <div
           className="flex justify-center"
           key={uid}
-          {...getDragSourceProps(item)}
+          {...(isReadOnly ? {} : getDragSourceProps(item))}
         >
           <InventoryItem
             disableContextMenu
-            draggable
+            draggable={!isReadOnly}
             equipped={equipped}
             item={item}
-            onClick={() => onSelect(item)}
+            onClick={isReadOnly ? undefined : () => onSelect(item)}
             selected={selectedUid === uid}
             uid={uid}
           />

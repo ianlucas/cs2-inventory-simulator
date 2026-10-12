@@ -69,7 +69,7 @@ export function Header({
   return (
     <div
       className={clsx(
-        "font-display sticky top-0 left-0 z-20 w-full backdrop-blur-sm",
+        "font-display sticky top-0 left-0 z-20 w-full border-b border-white/10 backdrop-blur-sm",
         profile !== undefined
           ? "bg-linear-to-b from-stone-800 to-transparent"
           : [
@@ -123,7 +123,7 @@ export function Header({
               )}
               {profile === undefined && (
                 <HeaderLink
-                  to="/loadouts"
+                  to="/loadout"
                   icon={faPersonRifle}
                   label={translate("HeaderLoadoutLabel")}
                   onClick={closeMenu}

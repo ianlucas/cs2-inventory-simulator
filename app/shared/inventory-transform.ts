@@ -29,6 +29,18 @@ const INVENTORY_ITEM_TYPE_ORDER = {
   [CS2ItemType.Stub]: 15
 } as const;
 
+export function getEquippedColors({
+  equipped,
+  equippedCT,
+  equippedT
+}: Pick<CS2InventoryItem, "equipped" | "equippedCT" | "equippedT">) {
+  return [
+    equipped && "text-white",
+    equippedCT && "text-sky-300",
+    equippedT && "text-yellow-400"
+  ];
+}
+
 export function transform(
   item: CS2InventoryItem,
   nonEquippable = {
@@ -48,11 +60,7 @@ export function transform(
   }
 
   return {
-    equipped: [
-      item.equipped && "text-white",
-      item.equippedCT && "text-sky-300",
-      item.equippedT && "text-yellow-400"
-    ],
+    equipped: getEquippedColors(item),
     item,
     uid: item.uid
   };

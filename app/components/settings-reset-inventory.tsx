@@ -7,12 +7,13 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router";
 import { SyncAction } from "~/data/sync";
-import { useInventory, useTranslate } from "./app-context";
+import { useAppContext, useInventory, useTranslate } from "./app-context";
 import { useSync } from "./hooks/use-sync";
 import { confirm } from "./modal-generic";
 
 export function SettingsResetInventory() {
   const [inventory, setInventory] = useInventory();
+  const { loadouts } = useAppContext();
   const translate = useTranslate();
   const sync = useSync();
   const navigate = useNavigate();
@@ -21,7 +22,12 @@ export function SettingsResetInventory() {
     if (
       await confirm({
         titleText: translate("SettingsRemoveAllItems"),
-        bodyText: translate("SettingsConfirmRemoveAllItems"),
+        bodyText: [
+          translate("SettingsConfirmRemoveAllItems"),
+          ...(loadouts !== undefined && loadouts.loadouts.length > 0
+            ? [translate("LoadoutResetInventoryDesc")]
+            : [])
+        ].join("\n"),
         cancelText: translate("EditorCancel"),
         confirmText: translate("GenericOK")
       })
