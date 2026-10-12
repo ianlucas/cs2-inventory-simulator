@@ -31,6 +31,7 @@ const HAND_WRAPS_STOCK_ITEM = CS2Economy.getById(62);
 const HAND_WRAPS_SLAUGHTER_ITEM = CS2Economy.getById(1741);
 const STICKER_ENCE_RIO_2022_ITEM = CS2Economy.getById(7241);
 const SPECIAL_AGENT_AVA_FBI_ITEM = CS2Economy.getById(8632);
+const DEFAULT_CT_AGENT_ITEM = CS2Economy.getById(28169);
 const PATCH_DRAGON_ITEM = CS2Economy.getById(8561);
 const MUSIC_KIT_DESERT_FIRE_ITEM = CS2Economy.getById(1786);
 const GRAFFITI_EZ_ITEM = CS2Economy.getById(9549);
@@ -308,6 +309,20 @@ describe("test useNameItem hook", () => {
     ]);
     expect(nameItem(nameTag(TOOL_STORAGE_UNIT_ITEM), "inventory-name")).toEqual(
       ["Storage Unit", '"CustomName"']
+    );
+  });
+
+  test("default agents keep their whole name", () => {
+    expect(nameItem(DEFAULT_CT_AGENT_ITEM)).toEqual(["Default CT Agent", ""]);
+    expect(nameItem(DEFAULT_CT_AGENT_ITEM, "inventory-name")).toEqual([
+      "Default CT Agent",
+      ""
+    ]);
+    expect(nameItemString(DEFAULT_CT_AGENT_ITEM, "editor-name")).toBe(
+      "Default CT Agent"
+    );
+    expect(nameItemString(DEFAULT_CT_AGENT_ITEM, "craft-name")).toBe(
+      "Default CT Agent"
     );
   });
 });

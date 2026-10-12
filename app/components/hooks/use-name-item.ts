@@ -52,7 +52,7 @@ export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
     ) {
       model = translate("ItemSealedGraffiti");
     }
-    if (item.isAgent()) {
+    if (item.isAgent() && has(name)) {
       [model, name] = name.split(" | ");
     } else if (ITEM_TYPES_WITHOUT_NAME.includes(item.type)) {
       model = name;

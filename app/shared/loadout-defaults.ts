@@ -3,12 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS2Economy,
-  CS2EconomyItem,
-  CS2ItemType,
-  CS2Team
-} from "@ianlucas/cs2-lib";
+import { CS2Economy, CS2ItemType, CS2Team } from "@ianlucas/cs2-lib";
 
 // Mirrors items_game.txt's flexible_loadout_* keys until cs2-lib exposes them.
 
@@ -110,9 +105,12 @@ export function getDefaultGloves(team: LoadoutTeam) {
   });
 }
 
-// TODO: Use the map-based default agents once cs2-lib ships them.
-export function getDefaultAgent(team: LoadoutTeam): CS2EconomyItem {
-  return CS2Economy.findItem({ type: CS2ItemType.Agent, usableByTeam: team });
+export function getDefaultAgent(team: LoadoutTeam) {
+  return CS2Economy.findItem({
+    isDefault: true,
+    type: CS2ItemType.Agent,
+    usableByTeam: team
+  });
 }
 
 export const LOADOUT_USAGE_MODEL_KEYS = [

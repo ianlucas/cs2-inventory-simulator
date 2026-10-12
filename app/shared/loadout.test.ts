@@ -47,6 +47,8 @@ const NOVA_SKIN_ID = 914;
 const KARAMBIT_SKIN_ID = 1325;
 const GRAFFITI_ID = 9543;
 const COIN_ID = 8683;
+const DEFAULT_CT_AGENT_ID = 28169;
+const DEFAULT_T_AGENT_ID = 28168;
 
 function modelKeyAt(
   loadout: ReturnType<typeof createDefaultLoadout>,
@@ -64,6 +66,13 @@ test("createDefaultLoadout follows the game's factory slots", () => {
   expect(modelKeyAt(loadout, CS2Team.CT, "smg4")).toBe("mp9");
   expect(modelKeyAt(loadout, CS2Team.T, "rifle1")).toBe("ak47");
   expect(modelKeyAt(loadout, CS2Team.T, "melee")).toBe("knife_t");
+  expect(getLoadoutItem(loadout, CS2Team.CT, "customplayer")?.item.id).toBe(
+    DEFAULT_CT_AGENT_ID
+  );
+  expect(getLoadoutItem(loadout, CS2Team.T, "customplayer")?.item.id).toBe(
+    DEFAULT_T_AGENT_ID
+  );
+  expect(canResetSlot(loadout, CS2Team.CT, "customplayer")).toBe(false);
   expect(loadout.ct.c4).toBeUndefined();
   expect(loadout.t.c4).toBeDefined();
   expect(loadout.musicKit).toBeUndefined();
