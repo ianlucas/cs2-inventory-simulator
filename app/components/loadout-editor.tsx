@@ -21,11 +21,13 @@ import {
 } from "~/shared/loadout";
 import { playSound } from "~/sound.client";
 import { useTranslate } from "./app-context";
+import { useScrollToTopOnChange } from "./hooks/use-inventory-filter-state";
 import { useKeyRelease } from "./hooks/use-key-release";
 import { useLoadout } from "./hooks/use-loadout";
 import { LoadoutDropTarget, useLoadoutDrag } from "./hooks/use-loadout-drag";
 import { ItemImage } from "./item-image";
-import { LoadoutFilter, LoadoutItems } from "./loadout-items";
+import { LoadoutItems } from "./loadout-items";
+import { LoadoutFilter, LoadoutItemsFilter } from "./loadout-items-filter";
 import { LoadoutSlotMenuEntry } from "./loadout-slot-tile";
 import { LoadoutTeamPanel } from "./loadout-team-panel";
 
@@ -48,6 +50,7 @@ export function LoadoutEditor() {
   const activeItem = drag?.item ?? selected;
 
   useKeyRelease("Escape", () => setSelected(undefined));
+  useScrollToTopOnChange(filter);
 
   function commit(slot: LoadoutSlot, placement: ReturnType<typeof place>) {
     if (placement !== undefined) {
@@ -160,39 +163,52 @@ export function LoadoutEditor() {
   }
 
   return (
-    <div className="m-auto w-5xl select-none">
-      <div className="relative mb-2 h-107 border-b border-white/10 bg-black/25">
-        {[CS2Team.CT, CS2Team.T].map((value) => (
-          <LoadoutTeamPanel
-            activeItem={activeItem}
-            dragTarget={drag?.target}
-            dropped={dropped}
+    <div className="select-none">
+      <div className="sticky top-(--header-height) z-10 backdrop-blur-md">
+        <div className="mb-2 border-b border-white/10 bg-black/25">
+          <div className="relative m-auto h-107 w-5xl">
+            {[CS2Team.CT, CS2Team.T].map((value) => (
+              <LoadoutTeamPanel
+                activeItem={activeItem}
+                dragTarget={drag?.target}
+                dropped={dropped}
+                filter={filter}
+                getSlotMenu={getSlotMenu}
+                isDragging={drag !== undefined}
+                isSelected={value === team}
+                key={value}
+                loadout={loadout}
+                onClickArea={() => handleClickArea(value)}
+                onClickSideSlot={(slot) => handleClickSideSlot(value, slot)}
+                onClickSlot={handleClickSlot}
+                onClickTitle={handleClickTitle}
+                team={value}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="m-auto w-5xl">
+          <LoadoutItemsFilter
             filter={filter}
-            getSlotMenu={getSlotMenu}
-            isDragging={drag !== undefined}
-            isSelected={value === team}
-            key={value}
-            loadout={loadout}
-            onClickArea={() => handleClickArea(value)}
-            onClickSideSlot={(slot) => handleClickSideSlot(value, slot)}
-            onClickSlot={handleClickSlot}
-            onClickTitle={handleClickTitle}
-            team={value}
+            onChangeFilter={changeFilter}
+            onChangeSorter={setSorter}
+            sorter={sorter}
+            team={team}
           />
-        ))}
+        </div>
       </div>
-      <LoadoutItems
-        filter={filter}
-        getDragSourceProps={getDragSourceProps}
-        onChangeFilter={changeFilter}
-        onChangeSorter={setSorter}
-        onSelect={(item) =>
-          setSelected(selected?.uid === item.uid ? undefined : item)
-        }
-        selectedUid={selected?.uid}
-        sorter={sorter}
-        team={team}
-      />
+      <div className="m-auto w-5xl">
+        <LoadoutItems
+          filter={filter}
+          getDragSourceProps={getDragSourceProps}
+          onSelect={(item) =>
+            setSelected(selected?.uid === item.uid ? undefined : item)
+          }
+          selectedUid={selected?.uid}
+          sorter={sorter}
+          team={team}
+        />
+      </div>
       {drag !== undefined && (
         <div
           className="pointer-events-none fixed top-0 left-0 z-50"

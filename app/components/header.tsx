@@ -17,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useToggle } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useCraftFilterRules } from "~/components/hooks/use-craft-filter-rules";
+import { useCssHeightVariable } from "~/components/hooks/use-css-height-variable";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useIsOnTop } from "~/components/hooks/use-is-on-top";
 import { ECONOMY_ITEM_FILTERS } from "~/shared/economy-filters";
@@ -52,6 +53,7 @@ export function Header({
   const isDesktop = useIsDesktop();
   const isOnTop = useIsOnTop();
   const { appHideLogo, appHideAuth } = useRules();
+  const ref = useCssHeightVariable<HTMLDivElement>("--header-height");
 
   function closeMenu() {
     toggleIsMenuOpen(false);
@@ -75,6 +77,7 @@ export function Header({
               isOnTop ? "before:opacity-0" : "before:opacity-1"
             ]
       )}
+      ref={ref}
     >
       <div className="m-auto p-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] lg:flex lg:w-5xl lg:items-center lg:gap-8 lg:px-0">
         <div

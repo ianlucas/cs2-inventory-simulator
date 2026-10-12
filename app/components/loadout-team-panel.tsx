@@ -35,7 +35,7 @@ import { range } from "~/shared/number";
 import { useTranslate } from "./app-context";
 import type { LoadoutDropTarget } from "./hooks/use-loadout-drag";
 import { LoadoutAgent } from "./loadout-agent";
-import type { LoadoutFilter } from "./loadout-items";
+import type { LoadoutFilter } from "./loadout-items-filter";
 import { LoadoutIcon } from "./loadout-icon";
 import { LoadoutSlotMenuEntry, LoadoutSlotTile } from "./loadout-slot-tile";
 import { LoadoutUtilityTile } from "./loadout-utility-tile";
