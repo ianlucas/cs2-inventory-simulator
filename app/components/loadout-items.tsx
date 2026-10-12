@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2InventoryItem } from "@ianlucas/cs2-lib";
-import clsx from "clsx";
 import { useMemo } from "react";
 import { getFreeItemsToDisplay } from "~/shared/inventory";
 import { sortItems } from "~/shared/inventory-transform";
@@ -59,10 +58,7 @@ export function LoadoutItems({
     <div className="grid grid-cols-6 gap-x-5 gap-y-4 py-4">
       {items.map(({ equipped, item, uid }) => (
         <div
-          className={clsx(
-            "flex justify-center",
-            selectedUid === uid && "outline-2 outline-offset-2 outline-white"
-          )}
+          className="flex justify-center"
           key={uid}
           {...getDragSourceProps(item)}
         >
@@ -72,6 +68,7 @@ export function LoadoutItems({
             equipped={equipped}
             item={item}
             onClick={() => onSelect(item)}
+            selected={selectedUid === uid}
             uid={uid}
           />
         </div>

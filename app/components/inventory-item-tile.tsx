@@ -25,6 +25,7 @@ export function InventoryItemTile({
   item,
   onClick,
   preview,
+  selected,
   small
 }: {
   draggable?: boolean;
@@ -33,6 +34,7 @@ export function InventoryItemTile({
   item: CS2EconomyItem | CS2InventoryItem;
   onClick?: () => void;
   preview?: boolean;
+  selected?: boolean;
   small?: boolean;
 }) {
   const translate = useTranslate();
@@ -45,8 +47,12 @@ export function InventoryItemTile({
   const [model, name] = nameItem(item, "inventory-name");
   const imageClassName = clsx(
     small ? "w-30" : "w-38.5",
-    draggable &&
-      "transition-all duration-150 ease-in-out group-hover/tile:-translate-y-1 group-hover/tile:drop-shadow-[-3px_6px_6px_rgb(0_0_0/0.2)]"
+    draggable && [
+      "transition-all duration-150 ease-in-out",
+      selected
+        ? "-translate-y-1 drop-shadow-[-3px_6px_6px_rgb(0_0_0/0.2)]"
+        : "group-hover/tile:-translate-y-1 group-hover/tile:drop-shadow-[-3px_6px_6px_rgb(0_0_0/0.2)]"
+    ]
   );
 
   const currDate = getTimestamp();
@@ -131,7 +137,12 @@ export function InventoryItemTile({
         )}
         {onClick !== undefined && (
           <button
-            className="absolute top-0 left-0 size-full border-4 border-transparent transition-all hover:border-white"
+            className={clsx(
+              "absolute top-0 left-0 size-full",
+              draggable
+                ? "outline-hidden"
+                : "border-4 border-transparent transition-all hover:border-white"
+            )}
             onClick={onClick}
           />
         )}

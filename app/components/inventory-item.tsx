@@ -68,6 +68,7 @@ export function InventoryItem({
   ownApplicableKeychains,
   ownApplicablePatches,
   ownApplicableStickers,
+  selected,
   uid
 }: TransformedInventoryItem & {
   disableContextMenu?: boolean;
@@ -103,6 +104,7 @@ export function InventoryItem({
   ownApplicableKeychains?: boolean;
   ownApplicablePatches?: boolean;
   ownApplicableStickers?: boolean;
+  selected?: boolean;
 }) {
   const [, copyToClipboard] = useCopyToClipboard();
   const translate = useTranslate();
@@ -275,7 +277,9 @@ export function InventoryItem({
       <div
         className={clsx(
           "relative w-38.5 transition-all",
-          onClick === undefined && "hover:drop-shadow-[0_0_5px_rgba(0,0,0,1)]"
+          (onClick === undefined || draggable) &&
+            "hover:drop-shadow-[0_0_5px_rgba(0,0,0,1)]",
+          selected && "drop-shadow-[0_0_5px_rgba(0,0,0,1)]"
         )}
         ref={ref}
         {...getHoverReferenceProps(getClickReferenceProps())}
@@ -286,6 +290,7 @@ export function InventoryItem({
           foreign={inspectOnly}
           item={item}
           preview
+          selected={selected}
           onClick={
             onClick !== undefined ? close(() => onClick(uid)) : undefined
           }
