@@ -51,6 +51,14 @@ export function LoadoutEditor() {
     resetSlotFinish
   } = useLoadouts();
   const [searchParams, setSearchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const [fallback, setFallback] = useState({
+    id,
+    loadoutId: userLoadouts?.activeLoadoutId
+  });
+  if (fallback.id !== id) {
+    setFallback({ id, loadoutId: userLoadouts?.activeLoadoutId });
+  }
   const [defaultLoadout] = useState(createDefaultLoadout);
   const [team, setTeam] = useState<LoadoutTeam>(CS2Team.CT);
   const [filter, setFilter] = useState(ALL_ITEMS);
@@ -63,21 +71,19 @@ export function LoadoutEditor() {
   }>();
   const { drag, getDragSourceProps, setGhost } = useLoadoutDrag(handleDrop);
   const activeItem = drag?.item ?? selected;
-  const selectedLoadout = findLoadout(searchParams.get("id"));
+  const selectedLoadout = findLoadout();
   const loadout = selectedLoadout?.loadout ?? defaultLoadout;
   const isReadOnly = selectedLoadout === undefined;
 
   useKeyRelease("Escape", () => setSelected(undefined));
   useScrollToTopOnChange(filter);
 
-  function findLoadout(id: string | null) {
+  function findLoadout() {
     const loadouts = userLoadouts?.loadouts ?? [];
     return (
       loadouts.find((loadout) => loadout.id === id) ??
       (id !== NONE
-        ? loadouts.find(
-            (loadout) => loadout.id === userLoadouts?.activeLoadoutId
-          )
+        ? loadouts.find((loadout) => loadout.id === fallback.loadoutId)
         : undefined)
     );
   }
