@@ -25,7 +25,7 @@ import {
 } from "@ianlucas/cs2-lib-inspect";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   stickerOffsetStringMaxLen,
   stickerOffsetToString,
@@ -60,7 +60,8 @@ export function AppliedStickerEditor({
   onChange,
   slot,
   stickers,
-  value
+  value,
+  valueRevision
 }: {
   className?: string;
   forItem?: CS2EconomyItem;
@@ -98,6 +99,7 @@ export function AppliedStickerEditor({
     x: number;
     y: number;
   };
+  valueRevision?: number;
 }) {
   const translate = useTranslate();
   const [, copyToClipboard] = useCopyToClipboard();
@@ -158,6 +160,15 @@ export function AppliedStickerEditor({
   useEffect(() => {
     onChange?.(attributes.value);
   }, [attributes.value]);
+
+  const shownRevisionRef = useRef(valueRevision);
+  useEffect(() => {
+    if (valueRevision === shownRevisionRef.current) {
+      return;
+    }
+    shownRevisionRef.current = valueRevision;
+    attributes.setValue(value);
+  }, [valueRevision]);
 
   return (
     <div className={clsx("m-auto text-sm select-none", className)}>

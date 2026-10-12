@@ -21,7 +21,7 @@ import {
   CS2InventoryItem
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   keychainPositionStringMaxLen,
   keychainPositionToString,
@@ -227,6 +227,16 @@ function Keychain3dEditorOverlay({
     setSelected(true);
     api?.setSelection({ selection: { kind: "keychain", index: 0 } });
   }
+
+  const handleSelectRef = useRef(handleSelect);
+  useEffect(() => {
+    handleSelectRef.current = handleSelect;
+  });
+  const handleSelectKeychain = useCallback(
+    (item: CS2EconomyItem) => handleSelectRef.current(item),
+    []
+  );
+  const handleSelectClose = useCallback(() => setSelecting(false), []);
 
   function handleRemove() {
     stageKeychain(undefined);
@@ -475,8 +485,8 @@ function Keychain3dEditorOverlay({
       <SelectKeychainModal
         hidden={!selecting}
         keychainFilter={keychainFilter}
-        onClose={() => setSelecting(false)}
-        onSelect={handleSelect}
+        onClose={handleSelectClose}
+        onSelect={handleSelectKeychain}
       />
     </ViewerOverlay>
   );

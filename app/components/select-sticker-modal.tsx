@@ -6,7 +6,7 @@
 import { faMagnifyingGlass, faTag } from "@fortawesome/free-solid-svg-icons";
 import { CS2Economy, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { useInput } from "~/components/hooks/use-input";
 import { sortByName } from "~/shared/economy";
 import { useTranslate } from "./app-context";
@@ -15,7 +15,7 @@ import { IconSelect } from "./icon-select";
 import { ItemBrowser } from "./item-browser";
 import { Modal, ModalHeader, ModalNav } from "./modal";
 
-export function SelectStickerModal({
+export const SelectStickerModal = memo(function SelectStickerModal({
   hidden,
   onClose,
   onSelect,
@@ -84,4 +84,4 @@ export function SelectStickerModal({
       <ItemBrowser items={filtered} onClick={onSelect} />
     </Modal>
   );
-}
+});

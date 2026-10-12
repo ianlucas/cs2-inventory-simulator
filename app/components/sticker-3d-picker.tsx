@@ -15,6 +15,7 @@ import {
 import clsx from "clsx";
 import {
   type PointerEvent,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -241,6 +242,16 @@ function Sticker3dEditorOverlay({
       api?.setItem(buildItem(next));
     }
   }
+
+  const handleSelectRef = useRef(handleSelect);
+  useEffect(() => {
+    handleSelectRef.current = handleSelect;
+  });
+  const handleSelectSticker = useCallback(
+    (item: CS2EconomyItem) => handleSelectRef.current(item),
+    []
+  );
+  const handleSelectClose = useCallback(() => setSelecting(undefined), []);
 
   function handleRemove(index: number) {
     const next = stickers.filter((_, i) => i !== index);
@@ -505,7 +516,7 @@ function Sticker3dEditorOverlay({
               isHidePreview
               isResetPlacementOnSchema
               item={CS2Economy.getById(selectedSticker.id)}
-              key={`${selected}-${formVersion}`}
+              key={selected}
               onChange={handleEdit(selected)}
               slot={selected}
               stickers={toRecord(stickers)}
@@ -516,6 +527,7 @@ function Sticker3dEditorOverlay({
                 x: selectedSticker.x ?? 0,
                 y: selectedSticker.y ?? 0
               }}
+              valueRevision={formVersion}
             />
           </div>
         </AttachmentEditorDrawer>
@@ -541,8 +553,8 @@ function Sticker3dEditorOverlay({
       </div>
       <SelectStickerModal
         hidden={selecting === undefined}
-        onClose={() => setSelecting(undefined)}
-        onSelect={handleSelect}
+        onClose={handleSelectClose}
+        onSelect={handleSelectSticker}
         stickerFilter={stickerFilter}
       />
     </ViewerOverlay>

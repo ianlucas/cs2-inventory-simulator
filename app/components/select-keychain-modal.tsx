@@ -5,7 +5,7 @@
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { CS2Economy, CS2EconomyItem } from "@ianlucas/cs2-lib";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { useInput } from "~/components/hooks/use-input";
 import { sortByName } from "~/shared/economy";
 import { useTranslate } from "./app-context";
@@ -13,7 +13,7 @@ import { IconInput } from "./icon-input";
 import { ItemBrowser } from "./item-browser";
 import { Modal, ModalHeader, ModalNav } from "./modal";
 
-export function SelectKeychainModal({
+export const SelectKeychainModal = memo(function SelectKeychainModal({
   hidden,
   keychainFilter,
   onClose,
@@ -72,4 +72,4 @@ export function SelectKeychainModal({
       <ItemBrowser items={filtered} onClick={onSelect} />
     </Modal>
   );
-}
+});
