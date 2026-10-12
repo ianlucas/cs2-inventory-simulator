@@ -164,8 +164,8 @@ export function LoadoutEditor() {
 
   return (
     <div className="select-none">
-      <div className="sticky top-(--header-height) z-10 backdrop-blur-md">
-        <div className="border-b border-white/10 bg-black/25">
+      <div className="sticky top-(--header-height) z-10 border-b border-white/10 backdrop-blur-md">
+        <div className="border-b border-white/10 bg-linear-to-b from-transparent to-black/25">
           <div className="relative m-auto h-107 w-5xl">
             {[CS2Team.CT, CS2Team.T].map((value) => (
               <LoadoutTeamPanel
