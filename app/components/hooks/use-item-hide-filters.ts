@@ -51,3 +51,18 @@ export function useEditItemFilter() {
     [editHideCategory, editHideType, editHideModel, editHideId]
   );
 }
+
+export function useEquipItemFilter() {
+  const { inventoryItemEquipHideModel, inventoryItemEquipHideType } =
+    useRules();
+  return useMemo(
+    () =>
+      createItemHideFilter({
+        hideCategory: [],
+        hideType: inventoryItemEquipHideType,
+        hideModel: inventoryItemEquipHideModel,
+        hideId: []
+      }),
+    [inventoryItemEquipHideModel, inventoryItemEquipHideType]
+  );
+}

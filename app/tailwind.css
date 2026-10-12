@@ -26,6 +26,11 @@
   /* Leave duration matches UNLOCK_FEED_LINE_FADE_OUT_MS. */
   --animate-unlock-feed-line-enter: unlock-feed-line-enter 200ms ease-out both;
   --animate-unlock-feed-line-leave: unlock-feed-line-leave 500ms ease-in both;
+  --animate-loadout-drag-start: loadout-drag-start 150ms ease-out both;
+  --animate-loadout-drop: loadout-drop 200ms ease-out;
+
+  --color-ct: rgb(150 200 250);
+  --color-t: #eabe54;
 }
 
 /*
@@ -263,6 +268,19 @@
 @keyframes unlock-feed-line-leave {
   to {
     opacity: 0;
+  }
+}
+
+@keyframes loadout-drag-start {
+  from {
+    scale: 0.7;
+  }
+}
+
+@keyframes loadout-drop {
+  from {
+    filter: brightness(5);
+    scale: 1.2;
   }
 }
 

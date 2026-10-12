@@ -9,6 +9,7 @@ import {
   faBoxesStacked,
   faCog,
   faHammer,
+  faPersonRifle,
   faRightFromBracket,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
@@ -115,6 +116,14 @@ export function Header({
                   label={translate("HeaderCraftLabel")}
                   onClick={closeMenu}
                   preventScrollReset
+                />
+              )}
+              {profile === undefined && (
+                <HeaderLink
+                  to="/loadouts"
+                  icon={faPersonRifle}
+                  label={translate("HeaderLoadoutLabel")}
+                  onClick={closeMenu}
                 />
               )}
               {user === undefined ? (

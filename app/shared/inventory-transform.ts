@@ -128,3 +128,31 @@ export function sortItemsByEquipped(
     ...free.sort(sortByName).sort(sortByType).sort(sortByEquipped)
   ];
 }
+
+export function sortItems(
+  sorter: string,
+  inventory: TransformedInventoryItems,
+  free: TransformedInventoryItems
+) {
+  switch (sorter) {
+    case "equipped":
+      return sortItemsByEquipped(inventory, free);
+    case "newest":
+      return [
+        ...inventory.sort(sortByNewest),
+        ...free.sort(sortByName).sort(sortByType).sort(sortByEquipped)
+      ];
+    case "quality":
+      return [...inventory, ...free]
+        .sort(sortByName)
+        .sort(sortByType)
+        .sort(sortByQuality);
+    case "alphabetical":
+      return [...inventory, ...free].sort(sortByName);
+    case "type":
+      return [...inventory, ...free].sort(sortByType);
+    case "collection":
+      return [...inventory.sort(sortByType).sort(sortByCollection), ...free];
+  }
+  return [];
+}

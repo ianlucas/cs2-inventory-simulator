@@ -36,6 +36,7 @@ import { alert, confirm } from "./modal-generic";
 export function InventoryItem({
   disableContextMenu,
   disableHover,
+  draggable,
   equipped,
   inspectOnly,
   item,
@@ -71,6 +72,7 @@ export function InventoryItem({
 }: TransformedInventoryItem & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
+  draggable?: boolean;
   /** For other people's items: only offers the inspect actions. */
   inspectOnly?: boolean;
   onApplyPatch?: (uid: number) => void;
@@ -279,6 +281,7 @@ export function InventoryItem({
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
         <InventoryItemTile
+          draggable={draggable}
           equipped={equipped}
           foreign={inspectOnly}
           item={item}
