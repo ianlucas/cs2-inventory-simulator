@@ -323,6 +323,7 @@ export const indonesian = {
   LoadoutGroupStartingPistol: /* csgo_indonesian.txt */"Pistol Awal",
   LoadoutGroupZeus: /* csgo_indonesian.txt */"Zeus",
   LoadoutKevlar: /* csgo_indonesian.txt */"Rompi Kevlar",
+  LoadoutPrice: /* csgo_indonesian.txt */"${1}",
   LoadoutResetToDefault: /* csgo_indonesian.txt */"Reset ke Awal",
   LoadoutResetToDefaultFinish: /* csgo_indonesian.txt */"Reset ke Skin Awal",
   LoadoutResetToDefaultWeapon: /* csgo_indonesian.txt */"Reset ke Senjata Awal",

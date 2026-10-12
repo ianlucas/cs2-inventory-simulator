@@ -326,6 +326,7 @@ export const czech = {
   LoadoutGroupStartingPistol: /* csgo_czech.txt */"Startovní pistole",
   LoadoutGroupZeus: /* csgo_czech.txt */"Zeus",
   LoadoutKevlar: /* csgo_czech.txt */"Kevlarová vesta",
+  LoadoutPrice: /* csgo_czech.txt */"{1} $",
   LoadoutResetToDefault: /* csgo_czech.txt */"Resetovat na výchozí",
   LoadoutResetToDefaultFinish: /* csgo_czech.txt */"Resetovat na výchozí vzhled",
   LoadoutResetToDefaultWeapon: /* csgo_czech.txt */"Resetovat na výchozí zbraň",

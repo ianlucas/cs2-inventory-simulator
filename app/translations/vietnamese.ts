@@ -327,6 +327,7 @@ export const vietnamese = {
   LoadoutGroupStartingPistol: /* csgo_vietnamese.txt */"Súng lục khởi đầu",
   LoadoutGroupZeus: /* csgo_vietnamese.txt */"Zeus",
   LoadoutKevlar: /* csgo_vietnamese.txt */"Giáp Kevlar",
+  LoadoutPrice: /* csgo_vietnamese.txt */"${1}",
   LoadoutResetToDefault: /* csgo_vietnamese.txt */"Đặt về mặc định",
   LoadoutResetToDefaultFinish: /* csgo_vietnamese.txt */"Đặt về lớp sơn mặc địch",
   LoadoutResetToDefaultWeapon: /* csgo_vietnamese.txt */"Đặt về vũ khí mặc định",

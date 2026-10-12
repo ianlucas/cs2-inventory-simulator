@@ -327,6 +327,7 @@ export const latam = {
   LoadoutGroupStartingPistol: /* csgo_latam.txt */"Pistola inicial",
   LoadoutGroupZeus: /* csgo_latam.txt */"Zeus",
   LoadoutKevlar: /* csgo_latam.txt */"Chaleco Kevlar",
+  LoadoutPrice: /* csgo_latam.txt */"{1} $",
   LoadoutResetToDefault: /* csgo_latam.txt */"Restablecer a predeterminado",
   LoadoutResetToDefaultFinish: /* csgo_latam.txt */"Restablecer a acabado predeterminado",
   LoadoutResetToDefaultWeapon: /* csgo_latam.txt */"Restablecer a arma predeterminada",

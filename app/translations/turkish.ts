@@ -327,6 +327,7 @@ export const turkish = {
   LoadoutGroupStartingPistol: /* csgo_turkish.txt */"Başlangıç ​​Tabancası",
   LoadoutGroupZeus: /* csgo_turkish.txt */"Zeus",
   LoadoutKevlar: /* csgo_turkish.txt */"Çelik Yelek",
+  LoadoutPrice: /* csgo_turkish.txt */"${1}",
   LoadoutResetToDefault: /* csgo_turkish.txt */"Varsayılana Sıfırla",
   LoadoutResetToDefaultFinish: /* csgo_turkish.txt */"Varsayılan Kaplamaya Sıfırla",
   LoadoutResetToDefaultWeapon: /* csgo_turkish.txt */"Varsayılan Silaha Sıfırla",

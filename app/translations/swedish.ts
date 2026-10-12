@@ -326,6 +326,7 @@ export const swedish = {
   LoadoutGroupStartingPistol: /* csgo_swedish.txt */"Startpistol",
   LoadoutGroupZeus: /* csgo_swedish.txt */"Zeus",
   LoadoutKevlar: /* csgo_swedish.txt */"Kevlarväst",
+  LoadoutPrice: /* csgo_swedish.txt */"${1}",
   LoadoutResetToDefault: /* csgo_swedish.txt */"Återställ till standard",
   LoadoutResetToDefaultFinish: /* csgo_swedish.txt */"Återställ till standardlackering",
   LoadoutResetToDefaultWeapon: /* csgo_swedish.txt */"Återställ till standardvapen",

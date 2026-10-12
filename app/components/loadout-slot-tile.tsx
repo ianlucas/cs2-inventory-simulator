@@ -17,7 +17,7 @@ import {
 } from "@floating-ui/react";
 import { CS2BaseInventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, ReactNode, useState } from "react";
 import { createFakeInventoryItemFromBase } from "~/shared/inventory";
 import { LoadoutItem, LoadoutSlot, LoadoutTeam } from "~/shared/loadout";
 import { ContextButton } from "./context-button";
@@ -59,6 +59,7 @@ function LoadoutSlotTileImage({
 }
 
 export function LoadoutSlotTile({
+  caption,
   className,
   disableTooltip,
   dropKey,
@@ -74,6 +75,7 @@ export function LoadoutSlotTile({
   team,
   tooltipPlacement
 }: {
+  caption?: ReactNode;
   className?: string;
   disableTooltip?: boolean;
   dropKey?: number;
@@ -154,6 +156,7 @@ export function LoadoutSlotTile({
             </div>
           )
         )}
+        {caption}
         {isFiltered && (
           <LoadoutIcon
             className="absolute top-1 left-1 size-3 opacity-80"

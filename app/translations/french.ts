@@ -325,6 +325,7 @@ export const french = {
   LoadoutGroupStartingPistol: /* csgo_french.txt */"Pistolet de départ",
   LoadoutGroupZeus: /* csgo_french.txt */"Zeus",
   LoadoutKevlar: /* csgo_french.txt */"Gilet en Kevlar",
+  LoadoutPrice: /* csgo_french.txt */"{1} $",
   LoadoutResetToDefault: /* csgo_french.txt */"Rétablir l'emplacement par défaut",
   LoadoutResetToDefaultFinish: /* csgo_french.txt */"Rétablir la finition par défaut",
   LoadoutResetToDefaultWeapon: /* csgo_french.txt */"Rétablir l'arme par défaut",

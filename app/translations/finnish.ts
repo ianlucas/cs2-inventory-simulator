@@ -326,6 +326,7 @@ export const finnish = {
   LoadoutGroupStartingPistol: /* csgo_finnish.txt */"Aloituspistooli",
   LoadoutGroupZeus: /* csgo_finnish.txt */"Zeus",
   LoadoutKevlar: /* csgo_finnish.txt */"Kevlar-liivi",
+  LoadoutPrice: /* csgo_finnish.txt */"{1} $",
   LoadoutResetToDefault: /* csgo_finnish.txt */"Palauta oletustilaan",
   LoadoutResetToDefaultFinish: /* csgo_finnish.txt */"Palauta oletusskiniin",
   LoadoutResetToDefaultWeapon: /* csgo_finnish.txt */"Palauta oletusaseeseen",

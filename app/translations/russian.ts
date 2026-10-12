@@ -326,6 +326,7 @@ export const russian = {
   LoadoutGroupStartingPistol: /* csgo_russian.txt */"Стартовый пистолет",
   LoadoutGroupZeus: /* csgo_russian.txt */"Zeus x27",
   LoadoutKevlar: /* csgo_russian.txt */"Бронежилет",
+  LoadoutPrice: /* csgo_russian.txt */"${1}",
   LoadoutResetToDefault: /* csgo_russian.txt */"Вернуть стандартный предмет",
   LoadoutResetToDefaultFinish: /* csgo_russian.txt */"Вернуть стандартную раскраску",
   LoadoutResetToDefaultWeapon: /* csgo_russian.txt */"Вернуть стандартное оружие",

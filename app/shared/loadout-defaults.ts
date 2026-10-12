@@ -32,6 +32,44 @@ export const LOADOUT_DEFAULT_WEAPONS: Record<
   }
 };
 
+// weapons.vdata's m_nPrice.
+export const LOADOUT_PRICES: Record<string, number> = {
+  ak47: 2700,
+  aug: 3300,
+  awp: 4750,
+  bizon: 1300,
+  cz75a: 500,
+  deagle: 700,
+  elite: 300,
+  famas: 1950,
+  fiveseven: 500,
+  g3sg1: 5000,
+  galilar: 1800,
+  glock: 200,
+  hkp2000: 200,
+  m249: 5200,
+  m4a1: 2900,
+  m4a1_silencer: 2900,
+  mac10: 1050,
+  mag7: 1300,
+  mp5sd: 1400,
+  mp7: 1400,
+  mp9: 1250,
+  negev: 1700,
+  nova: 1050,
+  p250: 300,
+  p90: 2350,
+  revolver: 600,
+  sawedoff: 1100,
+  scar20: 5000,
+  sg556: 3000,
+  ssg08: 1700,
+  tec9: 500,
+  ump45: 1200,
+  usp_silencer: 200,
+  xm1014: 2000
+};
+
 export const LOADOUT_EQUIPMENT: Record<LoadoutTeam, string[]> = {
   [CS2Team.CT]: ["kevlar", "assaultsuit", "taser", "defuser"],
   [CS2Team.T]: ["kevlar", "assaultsuit", "taser"]

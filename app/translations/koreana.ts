@@ -327,6 +327,7 @@ export const koreana = {
   LoadoutGroupStartingPistol: /* csgo_koreana.txt */"시작 권총",
   LoadoutGroupZeus: /* csgo_koreana.txt */"제우스",
   LoadoutKevlar: /* csgo_koreana.txt */"케블라 방탄복",
+  LoadoutPrice: /* csgo_koreana.txt */"${1}",
   LoadoutResetToDefault: /* csgo_koreana.txt */"초기화",
   LoadoutResetToDefaultFinish: /* csgo_koreana.txt */"기본 스킨으로 초기화",
   LoadoutResetToDefaultWeapon: /* csgo_koreana.txt */"기본 무기로 초기화",

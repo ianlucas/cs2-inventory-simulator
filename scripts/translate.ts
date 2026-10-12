@@ -312,6 +312,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   LoadoutGroupStartingPistol: "LoadoutSlot_Default_Secondary",
   LoadoutGroupZeus: "LoadoutSlot_Taser",
   LoadoutKevlar: "SFUI_WPNHUD_KEVLAR",
+  LoadoutPrice: { token: "buymenu_money", transform: (value) => replace(value, '{d:r:money}', '{1}') },
   LoadoutResetToDefault: "inv_context_loadout_slot_reset_ct",
   LoadoutResetToDefaultFinish: "inv_context_loadout_slot_reset_finish_ct",
   LoadoutResetToDefaultWeapon: "inv_context_loadout_slot_reset_weapon_ct",

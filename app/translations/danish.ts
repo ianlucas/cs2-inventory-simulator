@@ -326,6 +326,7 @@ export const danish = {
   LoadoutGroupStartingPistol: /* csgo_danish.txt */"Startpistol",
   LoadoutGroupZeus: /* csgo_danish.txt */"Zeus",
   LoadoutKevlar: /* csgo_danish.txt */"Kevlarvest",
+  LoadoutPrice: /* csgo_danish.txt */"{1} $",
   LoadoutResetToDefault: /* csgo_danish.txt */"Nulstil til standard",
   LoadoutResetToDefaultFinish: /* csgo_danish.txt */"Nulstil til standardlakering",
   LoadoutResetToDefaultWeapon: /* csgo_danish.txt */"Nulstil til standardvåben",

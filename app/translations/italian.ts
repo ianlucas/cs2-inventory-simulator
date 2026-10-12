@@ -326,6 +326,7 @@ export const italian = {
   LoadoutGroupStartingPistol: /* csgo_italian.txt */"Pistola iniziale",
   LoadoutGroupZeus: /* csgo_italian.txt */"Zeus",
   LoadoutKevlar: /* csgo_italian.txt */"Giubbotto antiproiettile",
+  LoadoutPrice: /* csgo_italian.txt */"{1} $",
   LoadoutResetToDefault: /* csgo_italian.txt */"Impostazioni predefinite",
   LoadoutResetToDefaultFinish: /* csgo_italian.txt */"Ripristina rifinitura predefinita",
   LoadoutResetToDefaultWeapon: /* csgo_italian.txt */"Ripristina arma predefinita",

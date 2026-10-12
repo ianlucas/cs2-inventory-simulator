@@ -326,6 +326,7 @@ export const dutch = {
   LoadoutGroupStartingPistol: /* csgo_dutch.txt */"Beginpistool",
   LoadoutGroupZeus: /* csgo_dutch.txt */"Zeus",
   LoadoutKevlar: /* csgo_dutch.txt */"Kevlarvest",
+  LoadoutPrice: /* csgo_dutch.txt */"$ {1}",
   LoadoutResetToDefault: /* csgo_dutch.txt */"Terug naar standaard",
   LoadoutResetToDefaultFinish: /* csgo_dutch.txt */"Terug naar standaardafwerking",
   LoadoutResetToDefaultWeapon: /* csgo_dutch.txt */"Terug naar standaardwapen",

@@ -326,6 +326,7 @@ export const japanese = {
   LoadoutGroupStartingPistol: /* csgo_japanese.txt */"初期装備ピストル",
   LoadoutGroupZeus: /* csgo_japanese.txt */"Zeus",
   LoadoutKevlar: /* csgo_japanese.txt */"ケブラーベスト",
+  LoadoutPrice: /* csgo_japanese.txt */"${1}",
   LoadoutResetToDefault: /* csgo_japanese.txt */"デフォルトに戻す",
   LoadoutResetToDefaultFinish: /* csgo_japanese.txt */"デフォルトスキンに戻す",
   LoadoutResetToDefaultWeapon: /* csgo_japanese.txt */"デフォルト武器に戻す",

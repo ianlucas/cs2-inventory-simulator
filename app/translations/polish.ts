@@ -326,6 +326,7 @@ export const polish = {
   LoadoutGroupStartingPistol: /* csgo_polish.txt */"Pistolet startowy",
   LoadoutGroupZeus: /* csgo_polish.txt */"Zeus x27",
   LoadoutKevlar: /* csgo_polish.txt */"Kamizelka kuloodporna",
+  LoadoutPrice: /* csgo_polish.txt */"{1}$",
   LoadoutResetToDefault: /* csgo_polish.txt */"Przywróć domyślne",
   LoadoutResetToDefaultFinish: /* csgo_polish.txt */"Przywróć domyślne wykończenie",
   LoadoutResetToDefaultWeapon: /* csgo_polish.txt */"Przywróć domyślną broń",

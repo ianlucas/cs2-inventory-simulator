@@ -327,6 +327,7 @@ export const tchinese = {
   LoadoutGroupStartingPistol: /* csgo_tchinese.txt */"開局手槍",
   LoadoutGroupZeus: /* csgo_tchinese.txt */"Zeus",
   LoadoutKevlar: /* csgo_tchinese.txt */"克維拉防彈背心",
+  LoadoutPrice: /* csgo_tchinese.txt */"${1}",
   LoadoutResetToDefault: /* csgo_tchinese.txt */"重設為預設選項",
   LoadoutResetToDefaultFinish: /* csgo_tchinese.txt */"重設為預設外觀",
   LoadoutResetToDefaultWeapon: /* csgo_tchinese.txt */"重設為預設武器",

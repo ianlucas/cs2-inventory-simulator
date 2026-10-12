@@ -325,6 +325,7 @@ export const norwegian = {
   LoadoutGroupStartingPistol: /* csgo_norwegian.txt */"Startpistol",
   LoadoutGroupZeus: /* csgo_norwegian.txt */"Zeus",
   LoadoutKevlar: /* csgo_norwegian.txt */"Vernevest",
+  LoadoutPrice: /* csgo_norwegian.txt */"${1}",
   LoadoutResetToDefault: /* csgo_norwegian.txt */"Tilbakestill til standard",
   LoadoutResetToDefaultFinish: /* csgo_norwegian.txt */"Tilbakestill til standardlakkering",
   LoadoutResetToDefaultWeapon: /* csgo_norwegian.txt */"Tilbakestill til standardvåpen",

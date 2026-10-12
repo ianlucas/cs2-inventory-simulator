@@ -326,6 +326,7 @@ export const romanian = {
   LoadoutGroupStartingPistol: /* csgo_romanian.txt */"Pistolul de început",
   LoadoutGroupZeus: /* csgo_romanian.txt */"Zeus",
   LoadoutKevlar: /* csgo_romanian.txt */"Vestă kevlar",
+  LoadoutPrice: /* csgo_romanian.txt */"{1}$",
   LoadoutResetToDefault: /* csgo_romanian.txt */"Resetează la opțiunea implicită",
   LoadoutResetToDefaultFinish: /* csgo_romanian.txt */"Reechipează finisajul implicit",
   LoadoutResetToDefaultWeapon: /* csgo_romanian.txt */"Reechipează arma implicită",

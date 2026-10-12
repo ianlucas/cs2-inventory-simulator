@@ -327,6 +327,7 @@ export const thai = {
   LoadoutGroupStartingPistol: /* csgo_thai.txt */"ปืนพกเริ่มต้น",
   LoadoutGroupZeus: /* csgo_thai.txt */"Zeus",
   LoadoutKevlar: /* csgo_thai.txt */"เสื้อเกราะกันกระสุน",
+  LoadoutPrice: /* csgo_thai.txt */"${1}",
   LoadoutResetToDefault: /* csgo_thai.txt */"รีเซ็ตเป็นค่าเริ่มต้น",
   LoadoutResetToDefaultFinish: /* csgo_thai.txt */"รีเซ็ตเป็นลายเริ่มต้น",
   LoadoutResetToDefaultWeapon: /* csgo_thai.txt */"รีเซ็ตเป็นอาวุธเริ่มต้น",

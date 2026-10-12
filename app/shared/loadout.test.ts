@@ -3,7 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_ITEMS, CS2Economy, CS2Team, ensure } from "@ianlucas/cs2-lib";
+import {
+  CS2_ITEMS,
+  CS2Economy,
+  CS2ItemType,
+  CS2Team,
+  ensure
+} from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations/english";
 import { expect, test } from "vitest";
 import {
@@ -14,6 +20,7 @@ import {
   createDefaultLoadout,
   createSnapshot,
   getEconomyItem,
+  getItemGroup,
   getLoadoutItem,
   getSideSlots,
   place,
@@ -22,6 +29,7 @@ import {
   resetSlotFinish,
   resolveSideSlot
 } from "./loadout";
+import { LOADOUT_PRICES } from "./loadout-defaults";
 
 CS2Economy.load({
   items: CS2_ITEMS,
@@ -197,4 +205,20 @@ test("shared slots are the same for both teams and can be removed", () => {
   expect(canRemoveSlot(loadout, CS2Team.T, "spray0")).toBe(true);
   expect(canRemoveSlot(loadout, CS2Team.T, "melee")).toBe(false);
   expect(removeSlot(loadout, "spray0").graffiti).toBeUndefined();
+});
+
+test("every weapon that fits the grid has a price", () => {
+  const modelKeys = CS2Economy.filterItems({
+    isDefault: true,
+    type: CS2ItemType.Weapon
+  })
+    .filter((item) =>
+      ["secondary0", "secondary", "smg", "rifle"].includes(
+        getItemGroup(item) ?? ""
+      )
+    )
+    .map((item) => ensure(item.modelKey));
+  expect(modelKeys.filter((key) => LOADOUT_PRICES[key] === undefined)).toEqual(
+    []
+  );
 });

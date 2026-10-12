@@ -359,6 +359,7 @@ export const english = {
   LoadoutGroupStartingPistol: /* csgo_english.txt */"Starting Pistol",
   LoadoutGroupZeus: /* csgo_english.txt */"Zeus",
   LoadoutKevlar: /* csgo_english.txt */"Kevlar Vest",
+  LoadoutPrice: /* csgo_english.txt */"${1}",
   LoadoutResetToDefault: /* csgo_english.txt */"Reset to Default",
   LoadoutResetToDefaultFinish: /* csgo_english.txt */"Reset to Default Finish",
   LoadoutResetToDefaultWeapon: /* csgo_english.txt */"Reset to Default Weapon",

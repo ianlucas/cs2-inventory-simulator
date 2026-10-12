@@ -327,6 +327,7 @@ export const portuguese = {
   LoadoutGroupStartingPistol: /* csgo_portuguese.txt */"Pistola inicial",
   LoadoutGroupZeus: /* csgo_portuguese.txt */"Zeus",
   LoadoutKevlar: /* csgo_portuguese.txt */"Colete em Kevlar",
+  LoadoutPrice: /* csgo_portuguese.txt */"{1}$",
   LoadoutResetToDefault: /* csgo_portuguese.txt */"Usar predefinições",
   LoadoutResetToDefaultFinish: /* csgo_portuguese.txt */"Usar skin predefinida",
   LoadoutResetToDefaultWeapon: /* csgo_portuguese.txt */"Usar arma predefinida",

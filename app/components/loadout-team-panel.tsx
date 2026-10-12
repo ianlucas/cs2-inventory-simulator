@@ -13,6 +13,7 @@ import clsx from "clsx";
 import {
   LOADOUT_EQUIPMENT,
   LOADOUT_GRENADES,
+  LOADOUT_PRICES,
   getDefaultWeapon
 } from "~/shared/loadout-defaults";
 import {
@@ -133,8 +134,21 @@ export function LoadoutTeamPanel({
   }
 
   function renderGridSlot(slot: LoadoutSlot) {
+    const item = getLoadoutItem(loadout, team, slot);
+    const modelKey =
+      item !== undefined ? getEconomyItem(item).modelKey : undefined;
     return (
       <LoadoutSlotTile
+        caption={
+          modelKey !== undefined && (
+            <div className="pointer-events-none absolute inset-x-1 bottom-1 flex justify-between text-[10px] opacity-0 transition-opacity duration-150 group-hover/column:opacity-70">
+              <span className="text-white">
+                {translate("LoadoutPrice", String(LOADOUT_PRICES[modelKey]))}
+              </span>
+              <span>{getDefaultWeapon(modelKey).name}</span>
+            </div>
+          )
+        }
         className="flex-1"
         disableTooltip={isDragging}
         dropKey={getDropKey(slot)}
@@ -143,7 +157,7 @@ export function LoadoutTeamPanel({
         isValidTarget={
           activeItem !== undefined && canPlace(team, slot, activeItem)
         }
-        item={getLoadoutItem(loadout, team, slot)}
+        item={item}
         key={slot}
         menu={getSlotMenu(slot)}
         onClick={() => onClickSlot(slot)}
@@ -264,17 +278,17 @@ export function LoadoutTeamPanel({
       )}
     >
       {renderUtilityColumn(LOADOUT_EQUIPMENT[team], 4)}
-      <div className="flex w-30 flex-col gap-1">
+      <div className="group/column flex w-30 flex-col gap-1">
         {renderTitle("secondary0")}
         {renderGridSlot("secondary0")}
         {renderTitle("secondary")}
         {getGridSlots("secondary").slice(1).map(renderGridSlot)}
       </div>
-      <div className="ml-1.5 flex w-30 flex-col gap-1">
+      <div className="group/column ml-1.5 flex w-30 flex-col gap-1">
         {renderTitle("smg")}
         {getGridSlots("smg").map(renderGridSlot)}
       </div>
-      <div className="ml-1.5 flex w-30 flex-col gap-1">
+      <div className="group/column ml-1.5 flex w-30 flex-col gap-1">
         {renderTitle("rifle")}
         {getGridSlots("rifle").map(renderGridSlot)}
       </div>

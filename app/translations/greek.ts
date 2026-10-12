@@ -327,6 +327,7 @@ export const greek = {
   LoadoutGroupStartingPistol: /* csgo_greek.txt */"ΑΡΧΙΚΟ ΠΙΣΤΟΛΙ",
   LoadoutGroupZeus: /* csgo_greek.txt */"Zeus",
   LoadoutKevlar: /* csgo_greek.txt */"Αλεξίσφαιρο γιλέκο",
+  LoadoutPrice: /* csgo_greek.txt */"${1}",
   LoadoutResetToDefault: /* csgo_greek.txt */"Επαναφορά προεπιλογών",
   LoadoutResetToDefaultFinish: /* csgo_greek.txt */"Επαναφορά προεπιλεγμένου φινιρίσματος",
   LoadoutResetToDefaultWeapon: /* csgo_greek.txt */"Επαναφορά προεπιλεγμένου όπλου",

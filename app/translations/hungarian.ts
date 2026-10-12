@@ -325,6 +325,7 @@ export const hungarian = {
   LoadoutGroupStartingPistol: /* csgo_hungarian.txt */"Kezdő pisztolyok",
   LoadoutGroupZeus: /* csgo_hungarian.txt */"Zeus",
   LoadoutKevlar: /* csgo_hungarian.txt */"Golyóálló mellény",
+  LoadoutPrice: /* csgo_hungarian.txt */"{1}$",
   LoadoutResetToDefault: /* csgo_hungarian.txt */"Alapértékekre",
   LoadoutResetToDefaultFinish: /* csgo_hungarian.txt */"Alapértelmezett festésre",
   LoadoutResetToDefaultWeapon: /* csgo_hungarian.txt */"Alapértelmezett fegyverre",

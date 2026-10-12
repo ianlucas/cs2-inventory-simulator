@@ -327,6 +327,7 @@ export const brazilian = {
   LoadoutGroupStartingPistol: /* csgo_brazilian.txt */"Pistola inicial",
   LoadoutGroupZeus: /* csgo_brazilian.txt */"Zeus",
   LoadoutKevlar: /* csgo_brazilian.txt */"Colete de Kevlar",
+  LoadoutPrice: /* csgo_brazilian.txt */"${1}",
   LoadoutResetToDefault: /* csgo_brazilian.txt */"Redefinir para o padrão",
   LoadoutResetToDefaultFinish: /* csgo_brazilian.txt */"Redefinir para o revestimento padrão",
   LoadoutResetToDefaultWeapon: /* csgo_brazilian.txt */"Redefinir para a arma padrão",

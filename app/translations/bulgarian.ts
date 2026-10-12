@@ -327,6 +327,7 @@ export const bulgarian = {
   LoadoutGroupStartingPistol: /* csgo_bulgarian.txt */"Стартов пистолет",
   LoadoutGroupZeus: /* csgo_bulgarian.txt */"Zeus x27",
   LoadoutKevlar: /* csgo_bulgarian.txt */"Бронежилетка",
+  LoadoutPrice: /* csgo_bulgarian.txt */"{1} $",
   LoadoutResetToDefault: /* csgo_bulgarian.txt */"Нулиране по подразбиране",
   LoadoutResetToDefaultFinish: /* csgo_bulgarian.txt */"Нулиране към окраската по подразбиране",
   LoadoutResetToDefaultWeapon: /* csgo_bulgarian.txt */"Нулиране към оръжието по подразбиране",

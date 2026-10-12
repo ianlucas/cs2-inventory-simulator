@@ -327,6 +327,7 @@ export const ukrainian = {
   LoadoutGroupStartingPistol: /* csgo_ukrainian.txt */"Початковий пістолет",
   LoadoutGroupZeus: /* csgo_ukrainian.txt */"Зевс",
   LoadoutKevlar: /* csgo_ukrainian.txt */"Бронежилет",
+  LoadoutPrice: /* csgo_ukrainian.txt */"{1} $",
   LoadoutResetToDefault: /* csgo_ukrainian.txt */"Скинути до стандартних",
   LoadoutResetToDefaultFinish: /* csgo_ukrainian.txt */"Скинути до стандартного оздоблення",
   LoadoutResetToDefaultWeapon: /* csgo_ukrainian.txt */"Скинути до стандартної зброї",

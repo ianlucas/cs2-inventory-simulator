@@ -327,6 +327,7 @@ export const schinese = {
   LoadoutGroupStartingPistol: /* csgo_schinese.txt */"起始手枪",
   LoadoutGroupZeus: /* csgo_schinese.txt */"电击枪",
   LoadoutKevlar: /* csgo_schinese.txt */"防弹背心",
+  LoadoutPrice: /* csgo_schinese.txt */"${1}",
   LoadoutResetToDefault: /* csgo_schinese.txt */"重置为默认",
   LoadoutResetToDefaultFinish: /* csgo_schinese.txt */"重置为默认武器皮肤",
   LoadoutResetToDefaultWeapon: /* csgo_schinese.txt */"重置为默认武器",
