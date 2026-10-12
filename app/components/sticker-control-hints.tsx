@@ -3,10 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { memo } from "react";
 import { useTranslate } from "./app-context";
 import { IconWithTooltip } from "./icon-with-tooltip";
 
-export function StickerControlHints() {
+export const StickerControlHints = memo(function StickerControlHints() {
   const translate = useTranslate();
   return (
     <div className="mt-4 flex justify-center">
@@ -35,4 +36,4 @@ export function StickerControlHints() {
       </div>
     </div>
   );
-}
+});
