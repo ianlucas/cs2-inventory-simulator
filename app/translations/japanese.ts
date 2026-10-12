@@ -135,7 +135,6 @@ export const japanese = {
   HeaderSettingsLabel: "設定",
   HeaderSignInLabel: "同期するにはサインイン",
   HeaderSignOutLabel: "サインアウト",
-  HeaderSignedInAsLabel: "サインイン中",
   InspectClose: /* csgo_japanese.txt */"閉じる",
   InventoryApplyPatch: /* csgo_japanese.txt */"パッチを適用",
   InventoryApplySticker: /* csgo_japanese.txt */"ステッカーを適用",

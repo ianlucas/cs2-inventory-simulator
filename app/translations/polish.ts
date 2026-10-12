@@ -135,7 +135,6 @@ export const polish = {
   HeaderSettingsLabel: "Ustawienia",
   HeaderSignInLabel: "Zaloguj się, aby synchronizować",
   HeaderSignOutLabel: "Wyloguj",
-  HeaderSignedInAsLabel: "Zalogowany jako",
   InspectClose: /* csgo_polish.txt */"Zamknij",
   InventoryApplyPatch: /* csgo_polish.txt */"Użyj naszywki",
   InventoryApplySticker: /* csgo_polish.txt */"Nalep naklejkę",

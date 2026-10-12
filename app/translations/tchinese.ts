@@ -136,7 +136,6 @@ export const tchinese = {
   HeaderSettingsLabel: "設定",
   HeaderSignInLabel: "登入",
   HeaderSignOutLabel: "登出",
-  HeaderSignedInAsLabel: "已登入為",
   InspectClose: /* csgo_tchinese.txt */"關閉",
   InventoryApplyPatch: /* csgo_tchinese.txt */"套用布章",
   InventoryApplySticker: /* csgo_tchinese.txt */"套用貼紙",

@@ -135,7 +135,6 @@ export const romanian = {
   HeaderSettingsLabel: "Setări",
   HeaderSignInLabel: "Autentifică-te",
   HeaderSignOutLabel: "Deconectare",
-  HeaderSignedInAsLabel: "Autentificat ca",
   InspectClose: /* csgo_romanian.txt */"Închide",
   InventoryApplyPatch: /* csgo_romanian.txt */"Aplică ecusonul brodat",
   InventoryApplySticker: /* csgo_romanian.txt */"Lipește abțibildul",

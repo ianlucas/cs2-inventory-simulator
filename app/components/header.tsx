@@ -99,8 +99,9 @@ export function Header({
         </div>
         {(isDesktop || isMenuOpen) && (
           <div className="absolute left-0 mt-2 w-full flex-1 px-4 lg:static lg:mt-0 lg:w-auto lg:p-0">
-            <nav className="rounded-sm bg-stone-800 p-2 text-sm lg:flex lg:items-center lg:gap-4 lg:bg-transparent lg:p-0">
+            <nav className="rounded-sm bg-stone-800 p-2 text-sm lg:flex lg:items-center lg:gap-2 lg:bg-transparent lg:p-0">
               <HeaderLink
+                className="max-w-30"
                 to="/"
                 icon={faBoxesStacked}
                 label={translate("HeaderInventoryLabel")}
@@ -108,6 +109,7 @@ export function Header({
               />
               {profile === undefined && (
                 <HeaderLink
+                  className="max-w-30"
                   disabled={isCraftDisabled}
                   disabledText={
                     isInventoryFull
@@ -123,6 +125,7 @@ export function Header({
               )}
               {profile === undefined && (
                 <HeaderLink
+                  className="max-w-30"
                   to="/loadout"
                   icon={faPersonRifle}
                   label={translate("HeaderLoadoutLabel")}
@@ -138,7 +141,7 @@ export function Header({
                       label={translate("HeaderSignInLabel")}
                     />
                   )}
-                  <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
+                  <div className="gap-2 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
                     <HeaderLink
                       to="/settings"
@@ -152,18 +155,16 @@ export function Header({
                 <>
                   {!appHideAuth && (
                     <HeaderLink
+                      collapsed={isDesktop}
                       icon={faRightFromBracket}
                       label={translate("HeaderSignOutLabel")}
                       onClick={closeMenu}
                       to="/sign-out"
                     />
                   )}
-                  <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
+                  <div className="gap-2 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
                     <HeaderLink to="/settings" onClick={closeMenu}>
-                      <span className="text-neutral-400">
-                        {translate("HeaderSignedInAsLabel")}
-                      </span>
                       <span className="max-w-[256px] truncate">
                         {user.name}
                       </span>

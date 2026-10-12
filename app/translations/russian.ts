@@ -135,7 +135,6 @@ export const russian = {
   HeaderSettingsLabel: "Настройки",
   HeaderSignInLabel: "Войти",
   HeaderSignOutLabel: "Выйти",
-  HeaderSignedInAsLabel: "Вы вошли как",
   InspectClose: /* csgo_russian.txt */"Закрыть",
   InventoryApplyPatch: /* csgo_russian.txt */"Нанести нашивку",
   InventoryApplySticker: /* csgo_russian.txt */"Нанести наклейку",

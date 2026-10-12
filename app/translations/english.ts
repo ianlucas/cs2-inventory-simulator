@@ -138,7 +138,6 @@ export const english = {
   HeaderSettingsLabel: "Settings",
   HeaderSignInLabel: "Sign-in to sync",
   HeaderSignOutLabel: "Sign out",
-  HeaderSignedInAsLabel: "Signed in as",
   InspectClose: /* csgo_english.txt */"Close",
   InventoryApplyPatch: /* csgo_english.txt */"Apply Patch",
   InventoryApplySticker: /* csgo_english.txt */"Apply Sticker",

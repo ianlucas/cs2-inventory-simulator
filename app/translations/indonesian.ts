@@ -132,7 +132,6 @@ export const indonesian = {
   HeaderSettingsLabel: "Pengaturan",
   HeaderSignInLabel: "Masuk untuk sinkronisasi",
   HeaderSignOutLabel: "Keluar",
-  HeaderSignedInAsLabel: "Masuk sebagai",
   InspectClose: /* csgo_indonesian.txt */"Tutup",
   InventoryApplyPatch: /* csgo_indonesian.txt */"Tempel Patch",
   InventoryApplySticker: /* csgo_indonesian.txt */"Tempel Stiker",

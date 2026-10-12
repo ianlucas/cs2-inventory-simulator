@@ -136,7 +136,6 @@ export const latam = {
   HeaderSettingsLabel: "Configuración",
   HeaderSignInLabel: "Iniciar sesión para sincronizar",
   HeaderSignOutLabel: "Cerrar sesión",
-  HeaderSignedInAsLabel: "Sesión iniciada como",
   InspectClose: /* csgo_latam.txt */"Cerrar",
   InventoryApplyPatch: /* csgo_latam.txt */"Aplicar parche",
   InventoryApplySticker: /* csgo_latam.txt */"Aplicar calcomanía",

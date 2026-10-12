@@ -136,7 +136,6 @@ export const thai = {
   HeaderSettingsLabel: "การตั้งค่า",
   HeaderSignInLabel: "เข้าสู่ระบบ",
   HeaderSignOutLabel: "ออกจากระบบ",
-  HeaderSignedInAsLabel: "เข้าสู่ระบบในนาม",
   InspectClose: /* csgo_thai.txt */"ปิด",
   InventoryApplyPatch: /* csgo_thai.txt */"ใช้งานแพตช์ปัก",
   InventoryApplySticker: /* csgo_thai.txt */"ใช้งานสติกเกอร์",

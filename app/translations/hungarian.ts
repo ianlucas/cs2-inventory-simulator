@@ -135,7 +135,6 @@ export const hungarian = {
   HeaderSettingsLabel: "Beállítások",
   HeaderSignInLabel: "Bejelentkezés szinkronizáláshoz",
   HeaderSignOutLabel: "Kijelentkezés",
-  HeaderSignedInAsLabel: "Bejelentkezve mint",
   InspectClose: /* csgo_hungarian.txt */"Bezár",
   InventoryApplyPatch: /* csgo_hungarian.txt */"Felvarró elhelyezése",
   InventoryApplySticker: /* csgo_hungarian.txt */"Matrica felragasztása",

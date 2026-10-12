@@ -136,7 +136,6 @@ export const koreana = {
   HeaderSettingsLabel: "설정",
   HeaderSignInLabel: "동기화를 위해 로그인",
   HeaderSignOutLabel: "로그아웃",
-  HeaderSignedInAsLabel: "로그인 중",
   InspectClose: /* csgo_koreana.txt */"닫기",
   InventoryApplyPatch: /* csgo_koreana.txt */"패치 부착",
   InventoryApplySticker: /* csgo_koreana.txt */"스티커 붙이기",

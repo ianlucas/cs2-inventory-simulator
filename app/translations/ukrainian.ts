@@ -136,7 +136,6 @@ export const ukrainian = {
   HeaderSettingsLabel: "Налаштування",
   HeaderSignInLabel: "Увійти",
   HeaderSignOutLabel: "Вийти",
-  HeaderSignedInAsLabel: "Ви увійшли як",
   InspectClose: /* csgo_ukrainian.txt */"Закрити",
   InventoryApplyPatch: /* csgo_ukrainian.txt */"Застосувати нашивку",
   InventoryApplySticker: /* csgo_ukrainian.txt */"Додати наліпку",

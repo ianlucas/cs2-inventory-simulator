@@ -134,7 +134,6 @@ export const french = {
   HeaderSettingsLabel: "Paramètres",
   HeaderSignInLabel: "Se connecter pour synchroniser",
   HeaderSignOutLabel: "Se déconnecter",
-  HeaderSignedInAsLabel: "Connecté en tant que",
   InspectClose: /* csgo_french.txt */"Fermer",
   InventoryApplyPatch: /* csgo_french.txt */"Appliquer l'écusson",
   InventoryApplySticker: /* csgo_french.txt */"Appliquer le sticker",

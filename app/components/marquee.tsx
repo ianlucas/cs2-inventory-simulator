@@ -66,3 +66,22 @@ export function Marquee({
     </span>
   );
 }
+
+// Takes the width of its text, up to the max width it is given, while
+// `Marquee` takes no room of its own and fills what its parent gives it.
+export function FitMarquee({
+  children,
+  className
+}: {
+  children: string;
+  className?: string;
+}) {
+  return (
+    <span className={clsx("grid", className)}>
+      <span className="invisible col-start-1 row-start-1 truncate">
+        {children}
+      </span>
+      <Marquee className="col-start-1 row-start-1">{children}</Marquee>
+    </span>
+  );
+}

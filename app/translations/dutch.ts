@@ -135,7 +135,6 @@ export const dutch = {
   HeaderSettingsLabel: "Instellingen",
   HeaderSignInLabel: "Inloggen om te synchroniseren",
   HeaderSignOutLabel: "Uitloggen",
-  HeaderSignedInAsLabel: "Ingelogd als",
   InspectClose: /* csgo_dutch.txt */"Sluiten",
   InventoryApplyPatch: /* csgo_dutch.txt */"Embleem aanbrengen",
   InventoryApplySticker: /* csgo_dutch.txt */"Sticker toepassen",

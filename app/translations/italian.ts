@@ -135,7 +135,6 @@ export const italian = {
   HeaderSettingsLabel: "Impostazioni",
   HeaderSignInLabel: "Accedi per sincronizzare",
   HeaderSignOutLabel: "Esci",
-  HeaderSignedInAsLabel: "Connesso come",
   InspectClose: /* csgo_italian.txt */"Chiudi",
   InventoryApplyPatch: /* csgo_italian.txt */"Applica toppa",
   InventoryApplySticker: /* csgo_italian.txt */"Applica adesivo",

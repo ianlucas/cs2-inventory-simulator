@@ -40,6 +40,7 @@ import type { LoadoutFilter } from "./loadout-items-filter";
 import { LoadoutIcon } from "./loadout-icon";
 import { LoadoutSlotMenuEntry, LoadoutSlotTile } from "./loadout-slot-tile";
 import { LoadoutUtilityTile } from "./loadout-utility-tile";
+import { FitMarquee, Marquee } from "./marquee";
 
 const TEAM_STYLES = {
   [CS2Team.CT]: {
@@ -195,7 +196,7 @@ export function LoadoutTeamPanel({
               : "/images/vectors/filter_line.svg"
           }
         />
-        {translate(LOADOUT_GROUP_LABELS[group])}
+        <Marquee>{translate(LOADOUT_GROUP_LABELS[group])}</Marquee>
       </button>
     );
   }
@@ -267,13 +268,13 @@ export function LoadoutTeamPanel({
         )}
         <div
           className={clsx(
-            "absolute top-3 left-1/2 -translate-x-1/2 rounded-[3px] border px-1.5 py-0.5 text-[15px] font-bold whitespace-nowrap italic transition-all duration-250",
+            "absolute top-3 left-1/2 w-max max-w-39 -translate-x-1/2 rounded-[3px] border px-1.5 py-0.5 text-[15px] font-bold whitespace-nowrap italic transition-all duration-250",
             isSelected
               ? [styles.highlight, "border-transparent text-black"]
               : [styles.unselectedTitle, "group-hover/area:opacity-60"]
           )}
         >
-          {translate(styles.title)}
+          <FitMarquee>{translate(styles.title)}</FitMarquee>
         </div>
       </div>
     </div>

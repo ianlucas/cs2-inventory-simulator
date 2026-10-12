@@ -136,7 +136,6 @@ export const greek = {
   HeaderSettingsLabel: "Ρυθμίσεις",
   HeaderSignInLabel: "Σύνδεση για συγχρονισμό",
   HeaderSignOutLabel: "Αποσύνδεση",
-  HeaderSignedInAsLabel: "Συνδεδεμένος ως",
   InspectClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
   InventoryApplyPatch: /* csgo_greek.txt */"Εφαρμογή διακριτικού",
   InventoryApplySticker: /* csgo_greek.txt */"Εφαρμογή αυτοκόλλητου",

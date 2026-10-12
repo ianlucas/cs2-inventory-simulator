@@ -136,7 +136,6 @@ export const bulgarian = {
   HeaderSettingsLabel: "Настройки",
   HeaderSignInLabel: "Влезте за синхронизация",
   HeaderSignOutLabel: "Изход",
-  HeaderSignedInAsLabel: "Влезли сте като",
   InspectClose: /* csgo_bulgarian.txt */"Затваряне",
   InventoryApplyPatch: /* csgo_bulgarian.txt */"Прилагане на нашивка",
   InventoryApplySticker: /* csgo_bulgarian.txt */"Прилагане на стикер",

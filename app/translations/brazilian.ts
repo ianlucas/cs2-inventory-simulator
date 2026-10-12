@@ -135,7 +135,6 @@ export const brazilian = {
   HeaderSettingsLabel: "Configurações",
   HeaderSignInLabel: "Entrar e sincronizar",
   HeaderSignOutLabel: "Sair",
-  HeaderSignedInAsLabel: "Entrou como",
   InspectClose: /* csgo_brazilian.txt */"Fechar",
   InventoryApplyPatch: /* csgo_brazilian.txt */"Aplicar emblema",
   InventoryApplySticker: /* csgo_brazilian.txt */"Aplicar adesivo",

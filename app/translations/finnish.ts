@@ -135,7 +135,6 @@ export const finnish = {
   HeaderSettingsLabel: "Asetukset",
   HeaderSignInLabel: "Kirjaudu synkronoidaksesi",
   HeaderSignOutLabel: "Kirjaudu ulos",
-  HeaderSignedInAsLabel: "Kirjautuneena nimellä",
   InspectClose: /* csgo_finnish.txt */"Sulje",
   InventoryApplyPatch: /* csgo_finnish.txt */"Käytä kangasmerkki",
   InventoryApplySticker: /* csgo_finnish.txt */"Käytä tarra",

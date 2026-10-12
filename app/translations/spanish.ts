@@ -136,7 +136,6 @@ export const spanish = {
   HeaderSettingsLabel: "Ajustes",
   HeaderSignInLabel: "Iniciar sesión",
   HeaderSignOutLabel: "Cerrar sesión",
-  HeaderSignedInAsLabel: "Sesión iniciada como",
   InspectClose: /* csgo_spanish.txt */"Cerrar",
   InventoryApplyPatch: /* csgo_spanish.txt */"Aplicar parche",
   InventoryApplySticker: /* csgo_spanish.txt */"Aplicar pegatina",

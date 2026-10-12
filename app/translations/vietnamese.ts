@@ -136,7 +136,6 @@ export const vietnamese = {
   HeaderSettingsLabel: "Cài đặt",
   HeaderSignInLabel: "Đăng nhập",
   HeaderSignOutLabel: "Đăng xuất",
-  HeaderSignedInAsLabel: "Đã đăng nhập với tư cách",
   InspectClose: /* csgo_vietnamese.txt */"Đóng",
   InventoryApplyPatch: /* csgo_vietnamese.txt */"Dùng phù hiệu",
   InventoryApplySticker: /* csgo_vietnamese.txt */"Dùng hình dán",

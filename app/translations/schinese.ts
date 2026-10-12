@@ -136,7 +136,6 @@ export const schinese = {
   HeaderSettingsLabel: "设置",
   HeaderSignInLabel: "登录",
   HeaderSignOutLabel: "登出",
-  HeaderSignedInAsLabel: "已登录为",
   InspectClose: /* csgo_schinese.txt */"关闭",
   InventoryApplyPatch: /* csgo_schinese.txt */"应用布章",
   InventoryApplySticker: /* csgo_schinese.txt */"应用印花",

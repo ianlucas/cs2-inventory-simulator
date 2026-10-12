@@ -134,7 +134,6 @@ export const norwegian = {
   HeaderSettingsLabel: "Innstillinger",
   HeaderSignInLabel: "Logg på for å synkronisere",
   HeaderSignOutLabel: "Logg ut",
-  HeaderSignedInAsLabel: "Pålogget som",
   InspectClose: /* csgo_norwegian.txt */"Lukk",
   InventoryApplyPatch: /* csgo_norwegian.txt */"Påfør lapp",
   InventoryApplySticker: /* csgo_norwegian.txt */"Påfør klistremerke",

@@ -135,7 +135,6 @@ export const swedish = {
   HeaderSettingsLabel: "Inställningar",
   HeaderSignInLabel: "Logga in",
   HeaderSignOutLabel: "Logga ut",
-  HeaderSignedInAsLabel: "Inloggad som",
   InspectClose: /* csgo_swedish.txt */"Stäng",
   InventoryApplyPatch: /* csgo_swedish.txt */"Fäst tygmärke",
   InventoryApplySticker: /* csgo_swedish.txt */"Applicera klistermärke",

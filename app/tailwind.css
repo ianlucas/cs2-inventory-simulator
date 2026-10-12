@@ -212,6 +212,18 @@
   }
 }
 
+/*
+  Hides an element behind a gradient three times its width, so moving the mask
+  to `mask-left` fades it in from left to right, and back to `mask-right` fades
+  it out the same way.
+*/
+@utility mask-reveal {
+  mask-image: linear-gradient(to right, #000 33.333%, transparent 66.667%);
+  mask-position: right;
+  mask-size: 300% 100%;
+  transition: mask-position 200ms ease-out;
+}
+
 @keyframes overlay-open {
   0% {
     opacity: 0;

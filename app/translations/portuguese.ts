@@ -135,7 +135,6 @@ export const portuguese = {
   HeaderSettingsLabel: "Configurações",
   HeaderSignInLabel: "Entrar e sincronizar",
   HeaderSignOutLabel: "Sair",
-  HeaderSignedInAsLabel: "Entrou como",
   InspectClose: /* csgo_portuguese.txt */"Fechar",
   InventoryApplyPatch: /* csgo_portuguese.txt */"Aplicar emblema",
   InventoryApplySticker: /* csgo_portuguese.txt */"Aplicar autocolante",

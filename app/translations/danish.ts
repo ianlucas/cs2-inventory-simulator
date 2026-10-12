@@ -135,7 +135,6 @@ export const danish = {
   HeaderSettingsLabel: "Indstillinger",
   HeaderSignInLabel: "Log ind for at synkronisere",
   HeaderSignOutLabel: "Log ud",
-  HeaderSignedInAsLabel: "Logget ind som",
   InspectClose: /* csgo_danish.txt */"Luk",
   InventoryApplyPatch: /* csgo_danish.txt */"Påfør lap",
   InventoryApplySticker: /* csgo_danish.txt */"Påfør klistermærke",

@@ -135,7 +135,6 @@ export const german = {
   HeaderSettingsLabel: "Einstellungen",
   HeaderSignInLabel: "Anmelden zum Synchronisieren",
   HeaderSignOutLabel: "Abmelden",
-  HeaderSignedInAsLabel: "Angemeldet als",
   InspectClose: /* csgo_german.txt */"Schließen",
   InventoryApplyPatch: /* csgo_german.txt */"Aufnäher anbringen",
   InventoryApplySticker: /* csgo_german.txt */"Aufkleber anbringen",

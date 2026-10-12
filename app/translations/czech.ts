@@ -135,7 +135,6 @@ export const czech = {
   HeaderSettingsLabel: "Nastavení",
   HeaderSignInLabel: "Přihlásit se k synchronizaci",
   HeaderSignOutLabel: "Odhlásit se",
-  HeaderSignedInAsLabel: "Přihlášen jako",
   InspectClose: /* csgo_czech.txt */"Zavřít",
   InventoryApplyPatch: /* csgo_czech.txt */"Použít nášivku",
   InventoryApplySticker: /* csgo_czech.txt */"Použít samolepku",
