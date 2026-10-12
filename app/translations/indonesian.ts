@@ -327,6 +327,8 @@ export const indonesian = {
   LoadoutGroupRifles: /* csgo_indonesian.txt */"Rifle",
   LoadoutGroupStartingPistol: /* csgo_indonesian.txt */"Pistol Awal",
   LoadoutGroupZeus: /* csgo_indonesian.txt */"Zeus",
+  LoadoutImportEquipped: "Impor yang terpasang",
+  LoadoutImportEquippedDesc: "Item di perlengkapan ini akan diganti dengan item yang terpasang di inventaris Anda. Slot tanpa item terpasang akan diatur ulang ke awal.",
   LoadoutInUse: "{1} (digunakan)",
   LoadoutItemInUse: "Digunakan di perlengkapan: {1}. Slot tersebut akan diatur ulang.",
   LoadoutKevlar: /* csgo_indonesian.txt */"Rompi Kevlar",

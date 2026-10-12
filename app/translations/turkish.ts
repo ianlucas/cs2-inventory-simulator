@@ -331,6 +331,8 @@ export const turkish = {
   LoadoutGroupRifles: /* csgo_turkish.txt */"Tüfekler",
   LoadoutGroupStartingPistol: /* csgo_turkish.txt */"Başlangıç ​​Tabancası",
   LoadoutGroupZeus: /* csgo_turkish.txt */"Zeus",
+  LoadoutImportEquipped: "Kuşanılmışları içe aktar",
+  LoadoutImportEquippedDesc: "Bu ekipmandaki eşyalar envanterinde kuşanılmış olanlarla değiştirilecek. Kuşanılmış bir şey olmayan yuvalar varsayılana sıfırlanacak.",
   LoadoutInUse: "{1} (kullanımda)",
   LoadoutItemInUse: "Şu ekipmanlarda kullanılıyor: {1}. Bu yuvalar sıfırlanacak.",
   LoadoutKevlar: /* csgo_turkish.txt */"Çelik Yelek",

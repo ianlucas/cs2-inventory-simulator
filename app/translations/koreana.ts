@@ -331,6 +331,8 @@ export const koreana = {
   LoadoutGroupRifles: /* csgo_koreana.txt */"소총",
   LoadoutGroupStartingPistol: /* csgo_koreana.txt */"시작 권총",
   LoadoutGroupZeus: /* csgo_koreana.txt */"제우스",
+  LoadoutImportEquipped: "장착 아이템 가져오기",
+  LoadoutImportEquippedDesc: "이 로드아웃의 아이템이 보관함에 장착된 아이템으로 교체됩니다. 장착된 아이템이 없는 슬롯은 초기화됩니다.",
   LoadoutInUse: "{1} (사용 중)",
   LoadoutItemInUse: "다음 로드아웃에서 사용 중: {1}. 해당 슬롯이 초기화됩니다.",
   LoadoutKevlar: /* csgo_koreana.txt */"케블라 방탄복",

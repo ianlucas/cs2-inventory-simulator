@@ -363,6 +363,8 @@ export const english = {
   LoadoutGroupRifles: /* csgo_english.txt */"Rifles",
   LoadoutGroupStartingPistol: /* csgo_english.txt */"Starting Pistol",
   LoadoutGroupZeus: /* csgo_english.txt */"Zeus",
+  LoadoutImportEquipped: "Import equipped",
+  LoadoutImportEquippedDesc: "This loadout's items will be replaced with the ones equipped in your inventory. Slots with nothing equipped will be reset to stock.",
   LoadoutInUse: "{1} (In use)",
   LoadoutItemInUse: "Used in loadouts: {1}. Those slots will be reset.",
   LoadoutKevlar: /* csgo_english.txt */"Kevlar Vest",

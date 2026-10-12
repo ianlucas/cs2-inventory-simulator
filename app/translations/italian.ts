@@ -330,6 +330,8 @@ export const italian = {
   LoadoutGroupRifles: /* csgo_italian.txt */"Fucili",
   LoadoutGroupStartingPistol: /* csgo_italian.txt */"Pistola iniziale",
   LoadoutGroupZeus: /* csgo_italian.txt */"Zeus",
+  LoadoutImportEquipped: "Importa equipaggiati",
+  LoadoutImportEquippedDesc: "Gli oggetti di questo assetto verranno sostituiti con quelli equipaggiati nel tuo inventario. Gli slot senza nulla di equipaggiato verranno ripristinati a quelli predefiniti.",
   LoadoutInUse: "{1} (in uso)",
   LoadoutItemInUse: "Usato negli assetti: {1}. Quegli slot verranno ripristinati.",
   LoadoutKevlar: /* csgo_italian.txt */"Giubbotto antiproiettile",

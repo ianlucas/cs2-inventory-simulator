@@ -330,6 +330,8 @@ export const czech = {
   LoadoutGroupRifles: /* csgo_czech.txt */"Pušky",
   LoadoutGroupStartingPistol: /* csgo_czech.txt */"Startovní pistole",
   LoadoutGroupZeus: /* csgo_czech.txt */"Zeus",
+  LoadoutImportEquipped: "Importovat vybavené",
+  LoadoutImportEquippedDesc: "Předměty v tomto vybavení budou nahrazeny předměty vybavenými ve vašem inventáři. Pozice, ve kterých nic vybaveno není, budou obnoveny na výchozí.",
   LoadoutInUse: "{1} (používá se)",
   LoadoutItemInUse: "Použito ve vybaveních: {1}. Tyto pozice budou obnoveny.",
   LoadoutKevlar: /* csgo_czech.txt */"Kevlarová vesta",

@@ -329,6 +329,8 @@ export const hungarian = {
   LoadoutGroupRifles: /* csgo_hungarian.txt */"Puskák",
   LoadoutGroupStartingPistol: /* csgo_hungarian.txt */"Kezdő pisztolyok",
   LoadoutGroupZeus: /* csgo_hungarian.txt */"Zeus",
+  LoadoutImportEquipped: "Felszereltek importálása",
+  LoadoutImportEquippedDesc: "Az összeállítás tárgyait a raktárad felszerelt tárgyai váltják fel. Azok a helyek, ahol nincs semmi felszerelve, visszaállnak alapértékre.",
   LoadoutInUse: "{1} (használatban)",
   LoadoutItemInUse: "Használatban ezekben az összeállításokban: {1}. Ezek a helyek visszaállnak.",
   LoadoutKevlar: /* csgo_hungarian.txt */"Golyóálló mellény",

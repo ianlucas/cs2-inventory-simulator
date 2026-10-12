@@ -331,6 +331,8 @@ export const bulgarian = {
   LoadoutGroupRifles: /* csgo_bulgarian.txt */"Винтовки",
   LoadoutGroupStartingPistol: /* csgo_bulgarian.txt */"Стартов пистолет",
   LoadoutGroupZeus: /* csgo_bulgarian.txt */"Zeus x27",
+  LoadoutImportEquipped: "Импортиране на екипираните",
+  LoadoutImportEquippedDesc: "Предметите в това снаряжение ще бъдат заменени с екипираните в инвентара ви. Местата без екипиран предмет ще бъдат нулирани по подразбиране.",
   LoadoutInUse: "{1} (използва се)",
   LoadoutItemInUse: "Използва се в снаряжения: {1}. Тези места ще бъдат нулирани.",
   LoadoutKevlar: /* csgo_bulgarian.txt */"Бронежилетка",

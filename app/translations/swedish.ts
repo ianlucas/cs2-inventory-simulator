@@ -330,6 +330,8 @@ export const swedish = {
   LoadoutGroupRifles: /* csgo_swedish.txt */"Gevär",
   LoadoutGroupStartingPistol: /* csgo_swedish.txt */"Startpistol",
   LoadoutGroupZeus: /* csgo_swedish.txt */"Zeus",
+  LoadoutImportEquipped: "Importera utrustade",
+  LoadoutImportEquippedDesc: "Föremålen i den här utrustningen ersätts med de som är utrustade i ditt förråd. Platser utan något utrustat återställs till standard.",
   LoadoutInUse: "{1} (används)",
   LoadoutItemInUse: "Används i utrustningar: {1}. De platserna återställs.",
   LoadoutKevlar: /* csgo_swedish.txt */"Kevlarväst",

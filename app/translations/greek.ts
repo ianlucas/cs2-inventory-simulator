@@ -331,6 +331,8 @@ export const greek = {
   LoadoutGroupRifles: /* csgo_greek.txt */"ΤΟΥΦΕΚΙΑ",
   LoadoutGroupStartingPistol: /* csgo_greek.txt */"ΑΡΧΙΚΟ ΠΙΣΤΟΛΙ",
   LoadoutGroupZeus: /* csgo_greek.txt */"Zeus",
+  LoadoutImportEquipped: "Εισαγωγή εξοπλισμένων",
+  LoadoutImportEquippedDesc: "Τα αντικείμενα αυτής της εξόπλισης θα αντικατασταθούν με τα εξοπλισμένα του αποθέματός σας. Οι θέσεις χωρίς εξοπλισμένο αντικείμενο θα επανέλθουν στις προεπιλογές.",
   LoadoutInUse: "{1} (σε χρήση)",
   LoadoutItemInUse: "Χρησιμοποιείται στις εξοπλίσεις: {1}. Αυτές οι θέσεις θα επαναφερθούν.",
   LoadoutKevlar: /* csgo_greek.txt */"Αλεξίσφαιρο γιλέκο",

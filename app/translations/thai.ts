@@ -331,6 +331,8 @@ export const thai = {
   LoadoutGroupRifles: /* csgo_thai.txt */"ปืนไรเฟิล",
   LoadoutGroupStartingPistol: /* csgo_thai.txt */"ปืนพกเริ่มต้น",
   LoadoutGroupZeus: /* csgo_thai.txt */"Zeus",
+  LoadoutImportEquipped: "นำเข้าไอเท็มที่สวมใส่",
+  LoadoutImportEquippedDesc: "ไอเท็มในชุดอุปกรณ์นี้จะถูกแทนที่ด้วยไอเท็มที่สวมใส่ในคลังของคุณ ช่องที่ไม่ได้สวมใส่อะไรจะถูกรีเซ็ตเป็นค่าเริ่มต้น",
   LoadoutInUse: "{1} (กำลังใช้)",
   LoadoutItemInUse: "ใช้ในชุดอุปกรณ์: {1} ช่องเหล่านั้นจะถูกรีเซ็ต",
   LoadoutKevlar: /* csgo_thai.txt */"เสื้อเกราะกันกระสุน",

@@ -330,6 +330,8 @@ export const danish = {
   LoadoutGroupRifles: /* csgo_danish.txt */"Rifler",
   LoadoutGroupStartingPistol: /* csgo_danish.txt */"Startpistol",
   LoadoutGroupZeus: /* csgo_danish.txt */"Zeus",
+  LoadoutImportEquipped: "Importér udrustede",
+  LoadoutImportEquippedDesc: "Genstandene i dette udstyrssæt bliver erstattet med dem, der er udrustet i dit inventar. Pladser uden noget udrustet bliver nulstillet til standard.",
   LoadoutInUse: "{1} (i brug)",
   LoadoutItemInUse: "Bruges i udstyrssæt: {1}. De pladser bliver nulstillet.",
   LoadoutKevlar: /* csgo_danish.txt */"Kevlarvest",

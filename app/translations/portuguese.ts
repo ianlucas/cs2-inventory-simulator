@@ -331,6 +331,8 @@ export const portuguese = {
   LoadoutGroupRifles: /* csgo_portuguese.txt */"Espingardas",
   LoadoutGroupStartingPistol: /* csgo_portuguese.txt */"Pistola inicial",
   LoadoutGroupZeus: /* csgo_portuguese.txt */"Zeus",
+  LoadoutImportEquipped: "Importar equipados",
+  LoadoutImportEquippedDesc: "Os itens deste equipamento serão substituídos pelos equipados no teu inventário. As posições sem nada equipado serão repostas para as predefinições.",
   LoadoutInUse: "{1} (em uso)",
   LoadoutItemInUse: "Usado nos equipamentos: {1}. Essas posições serão repostas.",
   LoadoutKevlar: /* csgo_portuguese.txt */"Colete em Kevlar",

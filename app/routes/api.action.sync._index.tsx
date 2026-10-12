@@ -273,6 +273,10 @@ const actionShape = z.discriminatedUnion("type", [
     ...loadoutShape
   }),
   z.object({
+    type: z.literal(SyncAction.LoadoutImportEquipped),
+    ...loadoutShape
+  }),
+  z.object({
     type: z.literal(SyncAction.LoadoutUse),
     id: loadoutShape.id.nullable()
   }),
@@ -722,6 +726,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
             break;
           case SyncAction.LoadoutCreate:
           case SyncAction.LoadoutDelete:
+          case SyncAction.LoadoutImportEquipped:
           case SyncAction.LoadoutPlace:
           case SyncAction.LoadoutRemoveSlot:
           case SyncAction.LoadoutRename:

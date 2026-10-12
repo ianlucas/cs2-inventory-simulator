@@ -14,6 +14,7 @@ import {
   detachItems,
   getInventoryItemIds,
   getLoadoutItemEquipped,
+  importEquipped,
   place,
   removeSlot,
   resetSlot,
@@ -43,6 +44,7 @@ export type LoadoutAction =
   | { type: typeof SyncAction.LoadoutCreate; id: string; name: string }
   | { type: typeof SyncAction.LoadoutRename; id: string; name: string }
   | { type: typeof SyncAction.LoadoutDelete; id: string }
+  | { type: typeof SyncAction.LoadoutImportEquipped; id: string }
   | { type: typeof SyncAction.LoadoutUse; id: string | null }
   | ({
       type: typeof SyncAction.LoadoutPlace;
@@ -107,6 +109,11 @@ export function applyLoadoutAction(
         findLoadout(state, action.id);
       }
       return { ...state, activeLoadoutId: action.id };
+    case SyncAction.LoadoutImportEquipped:
+      return updateLoadout(state, action.id, (current) => ({
+        ...current,
+        loadout: importEquipped(current.loadout, inventory)
+      }));
   }
   const { slot } = action;
   return updateLoadout(state, action.id, (current) => {

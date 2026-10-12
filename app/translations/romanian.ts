@@ -330,6 +330,8 @@ export const romanian = {
   LoadoutGroupRifles: /* csgo_romanian.txt */"Puști ghintuite",
   LoadoutGroupStartingPistol: /* csgo_romanian.txt */"Pistolul de început",
   LoadoutGroupZeus: /* csgo_romanian.txt */"Zeus",
+  LoadoutImportEquipped: "Importă obiectele echipate",
+  LoadoutImportEquippedDesc: "Obiectele din acest echipament vor fi înlocuite cu cele echipate în inventarul tău. Pozițiile fără nimic echipat vor fi resetate la opțiunea implicită.",
   LoadoutInUse: "{1} (în uz)",
   LoadoutItemInUse: "Folosit în echipamente: {1}. Acele poziții vor fi resetate.",
   LoadoutKevlar: /* csgo_romanian.txt */"Vestă kevlar",

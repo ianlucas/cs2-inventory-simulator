@@ -98,6 +98,22 @@ test("loadout actions reject invalid placements", () => {
   ).toThrow();
 });
 
+test("importing equipped items only changes that loadout", () => {
+  const inventory = new CS2Inventory()
+    .add({ id: NOVA_SKIN_ID })
+    .equip(0, CS2Team.T);
+  const other = { ...create, id: crypto.randomUUID() };
+  const state = apply(
+    [create, other, { type: SyncAction.LoadoutImportEquipped, id: LOADOUT_ID }],
+    { inventory }
+  );
+  expect(getLoadoutItem(state.loadouts[0].loadout, CS2Team.T, "smg0")).toEqual({
+    type: "inventory",
+    uid: 0
+  });
+  expect(state.loadouts[1]).toEqual(apply([other]).loadouts[0]);
+});
+
 test("detachRemovedItems only touches loadouts using removed items", () => {
   const inventory = new CS2Inventory().add({ id: NOVA_SKIN_ID });
   const state = apply(

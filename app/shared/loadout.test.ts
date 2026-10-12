@@ -28,9 +28,11 @@ import {
   getEconomyItem,
   getInventoryItemIds,
   getItemGroup,
+  getLoadoutEntries,
   getLoadoutItem,
   getLoadoutItemEquipped,
   getSideSlots,
+  importEquipped,
   place,
   removeSlot,
   resetSlot,
@@ -52,6 +54,7 @@ const NOVA_ID = 25;
 const M4A4_ID = 11;
 const T_KNIFE_ID = 36;
 const NOVA_SKIN_ID = 914;
+const M4A4_SKIN_ID = 450;
 const KARAMBIT_SKIN_ID = 1325;
 const GRAFFITI_ID = 9543;
 const COIN_ID = 8683;
@@ -350,6 +353,64 @@ test("detachItems resets slots pointing to unknown items", () => {
   const loadout = placed(createInventory(NOVA_SKIN_ID), CS2Team.T, "smg3", 0);
   const detached = detachItems(loadout, new Map(), new Map());
   expect(itemAt(detached, CS2Team.T, "smg3")?.modelKey).toBe("p90");
+});
+
+test("importEquipped takes the items equipped in the inventory", () => {
+  const inventory = createInventory(
+    NOVA_SKIN_ID,
+    KARAMBIT_SKIN_ID,
+    GRAFFITI_ID,
+    COIN_ID
+  )
+    .unsealItem(2)
+    .equip(0, CS2Team.T)
+    .equip(1, CS2Team.CT)
+    .equip(2);
+  const imported = importEquipped(
+    placed(inventory, CS2Team.CT, "flair0", 3),
+    inventory
+  );
+  expect(getLoadoutItem(imported, CS2Team.T, "smg0")).toEqual({
+    type: "inventory",
+    uid: 0
+  });
+  expect(getLoadoutItem(imported, CS2Team.CT, "smg0")).toEqual(
+    createSnapshot(NOVA_ID)
+  );
+  expect(getLoadoutItem(imported, CS2Team.CT, "melee")).toEqual({
+    type: "inventory",
+    uid: 1
+  });
+  expect(itemAt(imported, CS2Team.T, "melee")?.id).toBe(T_KNIFE_ID);
+  expect(imported.graffiti).toEqual({ type: "inventory", uid: 2 });
+  expect(imported.collectible).toBeUndefined();
+});
+
+test("importEquipped keeps the grid's weapons and resets the rest to stock", () => {
+  const inventory = createInventory(
+    NOVA_SKIN_ID,
+    KARAMBIT_SKIN_ID,
+    M4A4_SKIN_ID
+  );
+  inventory.equip(2, CS2Team.CT);
+  const imported = importEquipped(
+    placed(
+      inventory,
+      CS2Team.T,
+      "melee",
+      1,
+      placed(inventory, CS2Team.T, "smg2", 0)
+    ),
+    inventory
+  );
+  expect(getLoadoutItem(imported, CS2Team.T, "smg2")).toEqual(
+    createSnapshot(NOVA_ID)
+  );
+  expect(itemAt(imported, CS2Team.T, "smg0")?.modelKey).toBe("mp5sd");
+  expect(itemAt(imported, CS2Team.T, "melee")?.id).toBe(T_KNIFE_ID);
+  expect(
+    getLoadoutEntries(imported).some(({ item }) => item.type === "inventory")
+  ).toBe(false);
 });
 
 test("every weapon that fits the grid has a price", () => {

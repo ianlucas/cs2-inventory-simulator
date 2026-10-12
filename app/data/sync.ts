@@ -20,6 +20,7 @@ export const SyncAction = {
   ExtractItemSticker: "extract-item-sticker",
   LoadoutCreate: "loadout-create",
   LoadoutDelete: "loadout-delete",
+  LoadoutImportEquipped: "loadout-import-equipped",
   LoadoutPlace: "loadout-place",
   LoadoutRemoveSlot: "loadout-remove-slot",
   LoadoutRename: "loadout-rename",

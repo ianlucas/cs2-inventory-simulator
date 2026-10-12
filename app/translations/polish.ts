@@ -330,6 +330,8 @@ export const polish = {
   LoadoutGroupRifles: /* csgo_polish.txt */"Karabiny",
   LoadoutGroupStartingPistol: /* csgo_polish.txt */"Pistolet startowy",
   LoadoutGroupZeus: /* csgo_polish.txt */"Zeus x27",
+  LoadoutImportEquipped: "Importuj wyposażone",
+  LoadoutImportEquippedDesc: "Przedmioty w tym wyposażeniu zostaną zastąpione wyposażonymi przedmiotami z twojego ekwipunku. Miejsca bez wyposażonego przedmiotu zostaną przywrócone do domyślnych.",
   LoadoutInUse: "{1} (w użyciu)",
   LoadoutItemInUse: "Używane w wyposażeniach: {1}. Te miejsca zostaną zresetowane.",
   LoadoutKevlar: /* csgo_polish.txt */"Kamizelka kuloodporna",

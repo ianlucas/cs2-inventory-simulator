@@ -527,3 +527,53 @@ export function detachItems(
     return setLoadoutItem(current, team, slot, createSnapshot(fallback.id));
   }, loadout);
 }
+
+function findEquippedItem(
+  inventory: CS2Inventory,
+  team: LoadoutTeam,
+  slot: LoadoutSlot,
+  modelKey?: string
+) {
+  return inventory
+    .getAll()
+    .find(
+      (item) =>
+        (isSharedSlot(slot)
+          ? item.equipped
+          : team === CS2Team.CT
+            ? item.equippedCT
+            : item.equippedT) === true &&
+        canPlace(team, slot, item) &&
+        (modelKey === undefined || item.modelKey === modelKey)
+    );
+}
+
+// Grid slots keep their weapon and take the finish equipped for it, falling
+// back to stock like `detachItems` when nothing is equipped.
+export function importEquipped(
+  loadout: Loadout,
+  inventory: CS2Inventory
+): Loadout {
+  return [CS2Team.CT, CS2Team.T].reduce(
+    (current, team) =>
+      getTeamSlots(team).reduce((next, slot) => {
+        const modelKey = isGridSlot(slot)
+          ? getEconomyItem(inventory, ensure(getLoadoutItem(next, team, slot)))
+              .modelKey
+          : undefined;
+        const equipped = findEquippedItem(inventory, team, slot, modelKey);
+        if (equipped !== undefined) {
+          return setLoadoutItem(next, team, slot, createLoadoutItem(equipped));
+        }
+        if (isSharedSlot(slot)) {
+          return removeSlot(next, slot);
+        }
+        const fallback =
+          modelKey !== undefined
+            ? getDefaultWeapon(modelKey)
+            : ensure(getDefaultItem(team, slot));
+        return setLoadoutItem(next, team, slot, createSnapshot(fallback.id));
+      }, current),
+    loadout
+  );
+}

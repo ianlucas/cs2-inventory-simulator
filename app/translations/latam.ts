@@ -331,6 +331,8 @@ export const latam = {
   LoadoutGroupRifles: /* csgo_latam.txt */"Rifles",
   LoadoutGroupStartingPistol: /* csgo_latam.txt */"Pistola inicial",
   LoadoutGroupZeus: /* csgo_latam.txt */"Zeus",
+  LoadoutImportEquipped: "Importar equipados",
+  LoadoutImportEquippedDesc: "Los artículos de este equipamiento se reemplazarán con los equipados en tu inventario. Las ranuras sin nada equipado se restablecerán al predeterminado.",
   LoadoutInUse: "{1} (en uso)",
   LoadoutItemInUse: "Se usa en los equipamientos: {1}. Esas ranuras se restablecerán.",
   LoadoutKevlar: /* csgo_latam.txt */"Chaleco Kevlar",

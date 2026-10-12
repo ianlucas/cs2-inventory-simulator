@@ -331,6 +331,8 @@ export const ukrainian = {
   LoadoutGroupRifles: /* csgo_ukrainian.txt */"Гвинтівки",
   LoadoutGroupStartingPistol: /* csgo_ukrainian.txt */"Початковий пістолет",
   LoadoutGroupZeus: /* csgo_ukrainian.txt */"Зевс",
+  LoadoutImportEquipped: "Імпортувати споряджене",
+  LoadoutImportEquippedDesc: "Предмети цього набору буде замінено спорядженими предметами з вашого інвентарю. Слоти, у яких нічого не споряджено, буде скинуто до стандартних.",
   LoadoutInUse: "{1} (використовується)",
   LoadoutItemInUse: "Використовується в наборах: {1}. Ці слоти буде скинуто.",
   LoadoutKevlar: /* csgo_ukrainian.txt */"Бронежилет",

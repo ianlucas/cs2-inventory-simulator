@@ -330,6 +330,8 @@ export const japanese = {
   LoadoutGroupRifles: /* csgo_japanese.txt */"ライフル",
   LoadoutGroupStartingPistol: /* csgo_japanese.txt */"初期装備ピストル",
   LoadoutGroupZeus: /* csgo_japanese.txt */"Zeus",
+  LoadoutImportEquipped: "装備中から取り込む",
+  LoadoutImportEquippedDesc: "この装備セットのアイテムが、インベントリで装備中のアイテムに置き換えられます。何も装備していないスロットはデフォルトに戻ります。",
   LoadoutInUse: "{1}（使用中）",
   LoadoutItemInUse: "装備セットで使用中: {1}。それらのスロットはリセットされます。",
   LoadoutKevlar: /* csgo_japanese.txt */"ケブラーベスト",

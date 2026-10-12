@@ -6,6 +6,7 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import {
   faCheck,
+  faFileImport,
   faPen,
   faPlus,
   faTrashCan,
@@ -60,6 +61,7 @@ export function LoadoutToolbar({
   const {
     create,
     delete: deleteLoadout,
+    importEquipped,
     loadouts: userLoadouts,
     rename,
     use
@@ -103,6 +105,19 @@ export function LoadoutToolbar({
     const newName = await promptName(translate("LoadoutRenameTitle"), name);
     if (newName !== undefined) {
       rename(id, newName);
+    }
+  }
+
+  async function handleImportEquipped({ id, name }: UserLoadout) {
+    if (
+      await confirm({
+        bodyText: translate("LoadoutImportEquippedDesc"),
+        cancelText: translate("GenericCancel"),
+        confirmText: translate("LoadoutImportEquipped"),
+        titleText: name
+      })
+    ) {
+      importEquipped(id);
     }
   }
 
@@ -181,6 +196,12 @@ export function LoadoutToolbar({
               {translate("LoadoutUnequipLoadout")}
             </LoadoutToolbarButton>
           )}
+          <LoadoutToolbarButton
+            icon={faFileImport}
+            onClick={() => handleImportEquipped(selected)}
+          >
+            {translate("LoadoutImportEquipped")}
+          </LoadoutToolbarButton>
           <LoadoutToolbarButton
             icon={faPen}
             onClick={() => handleRename(selected)}

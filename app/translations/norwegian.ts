@@ -329,6 +329,8 @@ export const norwegian = {
   LoadoutGroupRifles: /* csgo_norwegian.txt */"Rifler",
   LoadoutGroupStartingPistol: /* csgo_norwegian.txt */"Startpistol",
   LoadoutGroupZeus: /* csgo_norwegian.txt */"Zeus",
+  LoadoutImportEquipped: "Importer utstyrte",
+  LoadoutImportEquippedDesc: "Gjenstandene i denne oppakningen blir erstattet med de som er utstyrt på lageret ditt. Plasser uten noe utstyrt blir tilbakestilt til standard.",
   LoadoutInUse: "{1} (i bruk)",
   LoadoutItemInUse: "Brukes i oppakninger: {1}. Disse plassene blir tilbakestilt.",
   LoadoutKevlar: /* csgo_norwegian.txt */"Vernevest",

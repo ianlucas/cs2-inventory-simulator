@@ -331,6 +331,8 @@ export const schinese = {
   LoadoutGroupRifles: /* csgo_schinese.txt */"步枪",
   LoadoutGroupStartingPistol: /* csgo_schinese.txt */"起始手枪",
   LoadoutGroupZeus: /* csgo_schinese.txt */"电击枪",
+  LoadoutImportEquipped: "导入已装备",
+  LoadoutImportEquippedDesc: "此方案中的物品将被替换为库存中已装备的物品。未装备物品的栏位将重置为默认。",
   LoadoutInUse: "{1}（使用中）",
   LoadoutItemInUse: "以下装备方案正在使用此物品：{1}。这些栏位将被重置。",
   LoadoutKevlar: /* csgo_schinese.txt */"防弹背心",

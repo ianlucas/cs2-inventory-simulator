@@ -330,6 +330,8 @@ export const german = {
   LoadoutGroupRifles: /* csgo_german.txt */"Gewehre",
   LoadoutGroupStartingPistol: /* csgo_german.txt */"Start-Pistole",
   LoadoutGroupZeus: /* csgo_german.txt */"Zeus",
+  LoadoutImportEquipped: "Ausgerüstetes importieren",
+  LoadoutImportEquippedDesc: "Die Gegenstände dieser Ausrüstung werden durch die in Ihrem Inventar ausgerüsteten ersetzt. Plätze ohne ausgerüsteten Gegenstand werden auf Standard zurückgesetzt.",
   LoadoutInUse: "{1} (angelegt)",
   LoadoutItemInUse: "Wird in Ausrüstungen verwendet: {1}. Diese Plätze werden zurückgesetzt.",
   LoadoutKevlar: /* csgo_german.txt */"Kevlarweste",

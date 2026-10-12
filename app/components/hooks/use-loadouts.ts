@@ -56,6 +56,8 @@ export function useLoadouts() {
     rename: (id: string, name: string) =>
       dispatch({ type: SyncAction.LoadoutRename, id, name }),
     use: (id: string | null) => dispatch({ type: SyncAction.LoadoutUse, id }),
+    importEquipped: (id: string) =>
+      dispatch({ type: SyncAction.LoadoutImportEquipped, id }),
     place: (
       { id, loadout }: UserLoadout,
       team: LoadoutTeam,

@@ -330,6 +330,8 @@ export const dutch = {
   LoadoutGroupRifles: /* csgo_dutch.txt */"Geweren",
   LoadoutGroupStartingPistol: /* csgo_dutch.txt */"Beginpistool",
   LoadoutGroupZeus: /* csgo_dutch.txt */"Zeus",
+  LoadoutImportEquipped: "Uitgeruste importeren",
+  LoadoutImportEquippedDesc: "De voorwerpen in deze uitrusting worden vervangen door de uitgeruste voorwerpen uit je inventaris. Plekken waar niets is uitgerust, worden teruggezet naar standaard.",
   LoadoutInUse: "{1} (in gebruik)",
   LoadoutItemInUse: "Gebruikt in uitrustingen: {1}. Die plekken worden teruggezet.",
   LoadoutKevlar: /* csgo_dutch.txt */"Kevlarvest",

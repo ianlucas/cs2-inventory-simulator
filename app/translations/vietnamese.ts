@@ -331,6 +331,8 @@ export const vietnamese = {
   LoadoutGroupRifles: /* csgo_vietnamese.txt */"Súng trường",
   LoadoutGroupStartingPistol: /* csgo_vietnamese.txt */"Súng lục khởi đầu",
   LoadoutGroupZeus: /* csgo_vietnamese.txt */"Zeus",
+  LoadoutImportEquipped: "Nhập đồ đang trang bị",
+  LoadoutImportEquippedDesc: "Các vật phẩm trong hành trang này sẽ được thay bằng các vật phẩm đang trang bị trong kho đồ của bạn. Các ô không trang bị gì sẽ được đặt về mặc định.",
   LoadoutInUse: "{1} (đang dùng)",
   LoadoutItemInUse: "Đang dùng trong hành trang: {1}. Các ô đó sẽ được đặt lại.",
   LoadoutKevlar: /* csgo_vietnamese.txt */"Giáp Kevlar",

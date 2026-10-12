@@ -330,6 +330,8 @@ export const finnish = {
   LoadoutGroupRifles: /* csgo_finnish.txt */"Kiväärit",
   LoadoutGroupStartingPistol: /* csgo_finnish.txt */"Aloituspistooli",
   LoadoutGroupZeus: /* csgo_finnish.txt */"Zeus",
+  LoadoutImportEquipped: "Tuo varustetut",
+  LoadoutImportEquippedDesc: "Tämän varustuksen esineet korvataan tavaraluettelosi varustetuilla esineillä. Paikat, joihin ei ole varustettu mitään, palautetaan oletustilaan.",
   LoadoutInUse: "{1} (käytössä)",
   LoadoutItemInUse: "Käytössä varustuksissa: {1}. Nämä paikat palautetaan.",
   LoadoutKevlar: /* csgo_finnish.txt */"Kevlar-liivi",

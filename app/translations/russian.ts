@@ -330,6 +330,8 @@ export const russian = {
   LoadoutGroupRifles: /* csgo_russian.txt */"Винтовки",
   LoadoutGroupStartingPistol: /* csgo_russian.txt */"Стартовый пистолет",
   LoadoutGroupZeus: /* csgo_russian.txt */"Zeus x27",
+  LoadoutImportEquipped: "Импортировать надетое",
+  LoadoutImportEquippedDesc: "Предметы этого снаряжения будут заменены надетыми предметами из вашего инвентаря. Ячейки, где ничего не надето, будут сброшены до стандартных.",
   LoadoutInUse: "{1} (используется)",
   LoadoutItemInUse: "Используется в снаряжениях: {1}. Эти ячейки будут сброшены.",
   LoadoutKevlar: /* csgo_russian.txt */"Бронежилет",

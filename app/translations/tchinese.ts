@@ -331,6 +331,8 @@ export const tchinese = {
   LoadoutGroupRifles: /* csgo_tchinese.txt */"步槍",
   LoadoutGroupStartingPistol: /* csgo_tchinese.txt */"開局手槍",
   LoadoutGroupZeus: /* csgo_tchinese.txt */"Zeus",
+  LoadoutImportEquipped: "匯入已裝備",
+  LoadoutImportEquippedDesc: "此方案中的物品將替換為物品庫中已裝備的物品。未裝備物品的欄位將重設為預設選項。",
   LoadoutInUse: "{1}（使用中）",
   LoadoutItemInUse: "以下裝備方案正在使用此物品：{1}。這些欄位將會重設。",
   LoadoutKevlar: /* csgo_tchinese.txt */"克維拉防彈背心",

@@ -331,6 +331,8 @@ export const brazilian = {
   LoadoutGroupRifles: /* csgo_brazilian.txt */"Rifles",
   LoadoutGroupStartingPistol: /* csgo_brazilian.txt */"Pistola inicial",
   LoadoutGroupZeus: /* csgo_brazilian.txt */"Zeus",
+  LoadoutImportEquipped: "Importar equipados",
+  LoadoutImportEquippedDesc: "Os itens deste equipamento serão substituídos pelos equipados no seu inventário. Espaços sem nada equipado serão redefinidos para o padrão.",
   LoadoutInUse: "{1} (em uso)",
   LoadoutItemInUse: "Usado nos equipamentos: {1}. Esses espaços serão redefinidos.",
   LoadoutKevlar: /* csgo_brazilian.txt */"Colete de Kevlar",
