@@ -19,18 +19,22 @@ import { useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 
 export function InventoryItemTile({
+  draggable,
   equipped,
   foreign,
   item,
   onClick,
   preview,
+  selected,
   small
 }: {
+  draggable?: boolean;
   equipped?: (string | false | undefined)[];
   foreign?: boolean;
   item: CS2EconomyItem | CS2InventoryItem;
   onClick?: () => void;
   preview?: boolean;
+  selected?: boolean;
   small?: boolean;
 }) {
   const translate = useTranslate();
@@ -41,6 +45,15 @@ export function InventoryItemTile({
   });
   const inventoryItem = item instanceof CS2InventoryItem ? item : undefined;
   const [model, name] = nameItem(item, "inventory-name");
+  const imageClassName = clsx(
+    small ? "w-30" : "w-38.5",
+    draggable && [
+      "transition-all duration-150 ease-in-out",
+      selected
+        ? "-translate-y-1 drop-shadow-[-3px_6px_6px_rgb(0_0_0/0.2)]"
+        : "group-hover/tile:-translate-y-1 group-hover/tile:drop-shadow-[-3px_6px_6px_rgb(0_0_0/0.2)]"
+    ]
+  );
 
   const currDate = getTimestamp();
   const isNew =
@@ -49,7 +62,7 @@ export function InventoryItemTile({
     !item.isCharmDetachment();
 
   return (
-    <div className={small ? "w-30" : "w-38.5"}>
+    <div className={clsx("group/tile", small ? "w-30" : "w-38.5")}>
       <div className="group relative bg-linear-to-b from-neutral-600 to-neutral-400 p-px">
         <div
           className="bg-linear-to-b from-neutral-500 to-neutral-300 px-1"
@@ -58,12 +71,12 @@ export function InventoryItemTile({
           {iconUrl !== undefined ? (
             <img
               alt={item.name}
-              className={clsx("aspect-256/192", small ? "w-30" : "w-38.5")}
+              className={clsx("aspect-256/192", imageClassName)}
               draggable={false}
               src={iconUrl}
             />
           ) : (
-            <ItemImage className={small ? "w-30" : "w-38.5"} item={item} />
+            <ItemImage className={imageClassName} item={item} />
           )}
         </div>
         {isNew && (
@@ -124,7 +137,12 @@ export function InventoryItemTile({
         )}
         {onClick !== undefined && (
           <button
-            className="absolute top-0 left-0 size-full border-4 border-transparent transition-all hover:border-white"
+            className={clsx(
+              "absolute top-0 left-0 size-full",
+              draggable
+                ? "outline-hidden"
+                : "border-4 border-transparent transition-all hover:border-white"
+            )}
             onClick={onClick}
           />
         )}

@@ -12,8 +12,14 @@ import {
 } from "~/routes/api.action.resync._index";
 import { getJson } from "~/shared/fetch";
 import { loadOrCreateInventory } from "~/shared/inventory";
+import { detachMissingItems } from "~/shared/user-loadouts";
 import { sync } from "~/sync";
-import { useInventory, useRules, useTranslate } from "./app-context";
+import {
+  useAppContext,
+  useInventory,
+  useRules,
+  useTranslate
+} from "./app-context";
 import { FillSpinner } from "./fill-spinner";
 import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
@@ -22,6 +28,7 @@ export function SyncIndicator() {
   const translate = useTranslate();
   const { inventoryMaxItems, inventoryStorageUnitMaxItems } = useRules();
   const [, setInventory] = useInventory();
+  const { setLoadouts } = useAppContext();
   const [opacity, setOpacity] = useState(0);
   const [showSyncErrorModal, setShowSyncErrorModal] = useState(false);
   const [disableContinueButton, setDisableContinueButton] = useState(false);
@@ -40,14 +47,14 @@ export function SyncIndicator() {
     async function handleSyncError() {
       setDisableContinueButton(true);
       setShowSyncErrorModal(true);
-      const { syncedAt, inventory } =
+      const { syncedAt, inventory, loadouts } =
         await getJson<ApiActionResyncData>(ApiActionResyncUrl);
-      setInventory(
-        loadOrCreateInventory(inventory, {
-          maxItems: inventoryMaxItems,
-          storageUnitMaxItems: inventoryStorageUnitMaxItems
-        })
-      );
+      const resyncedInventory = loadOrCreateInventory(inventory, {
+        maxItems: inventoryMaxItems,
+        storageUnitMaxItems: inventoryStorageUnitMaxItems
+      });
+      setInventory(resyncedInventory);
+      setLoadouts(detachMissingItems(loadouts, resyncedInventory));
       sync.syncedAt = syncedAt;
       setDisableContinueButton(false);
     }

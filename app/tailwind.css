@@ -26,6 +26,11 @@
   /* Leave duration matches UNLOCK_FEED_LINE_FADE_OUT_MS. */
   --animate-unlock-feed-line-enter: unlock-feed-line-enter 200ms ease-out both;
   --animate-unlock-feed-line-leave: unlock-feed-line-leave 500ms ease-in both;
+  --animate-loadout-drag-start: loadout-drag-start 150ms ease-out both;
+  --animate-loadout-drop: loadout-drop 200ms ease-out;
+
+  --color-ct: rgb(150 200 250);
+  --color-t: #eabe54;
 }
 
 /*
@@ -207,6 +212,18 @@
   }
 }
 
+/*
+  Hides an element behind a gradient three times its width, so moving the mask
+  to `mask-left` fades it in from left to right, and back to `mask-right` fades
+  it out the same way.
+*/
+@utility mask-reveal {
+  mask-image: linear-gradient(to right, #000 33.333%, transparent 66.667%);
+  mask-position: right;
+  mask-size: 300% 100%;
+  transition: mask-position 200ms ease-out;
+}
+
 @keyframes overlay-open {
   0% {
     opacity: 0;
@@ -263,6 +280,19 @@
 @keyframes unlock-feed-line-leave {
   to {
     opacity: 0;
+  }
+}
+
+@keyframes loadout-drag-start {
+  from {
+    scale: 0.7;
+  }
+}
+
+@keyframes loadout-drop {
+  from {
+    filter: brightness(5);
+    scale: 1.2;
   }
 }
 

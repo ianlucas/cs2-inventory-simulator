@@ -5,12 +5,14 @@
 
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, useLocation } from "react-router";
 import clsx from "clsx";
 import { ComponentProps } from "react";
+import { Link, useLocation } from "react-router";
+import { FitMarquee } from "./marquee";
 
 export function HeaderLink({
   className,
+  collapsed,
   disabled,
   disabledText,
   icon,
@@ -18,6 +20,7 @@ export function HeaderLink({
   label,
   ...props
 }: ComponentProps<typeof Link> & {
+  collapsed?: boolean;
   disabled?: boolean;
   disabledText?: string;
   icon?: IconProp;
@@ -25,24 +28,55 @@ export function HeaderLink({
   label?: string;
 }) {
   const location = useLocation();
-  const isActive = location.pathname === props.to;
-  const baseStyles =
-    "flex items-center gap-2 px-2 py-1 text-base lg:px-1.5 lg:py-1 lg:[font-size:inherit] transition-all";
+  const isActive = !disabled && location.pathname === props.to;
+  const baseStyles = clsx(
+    "relative flex items-center gap-2 px-2 py-1 text-base lg:py-1 lg:[font-size:inherit] transition-all",
+    collapsed ? "group box-content h-lh" : "lg:px-1.5"
+  );
+  const iconElement = icon !== undefined && (
+    <FontAwesomeIcon
+      className={clsx("shrink-0", iconStyles ?? "h-4")}
+      icon={icon}
+    />
+  );
   const content =
     props.children !== undefined ? (
       props.children
+    ) : collapsed ? (
+      <>
+        {iconElement}
+        <span className="mask-reveal pointer-events-none absolute inset-y-0 left-0 z-10 flex whitespace-nowrap group-hover:mask-left">
+          {/* Over an active link's background, 57% adds up to the label's 70%. */}
+          <span
+            className={clsx(
+              "flex items-center px-2",
+              isActive ? "bg-black/57" : "bg-black/70"
+            )}
+          >
+            {iconElement}
+          </span>
+          <span className="flex items-center bg-black/70 pr-2 font-bold">
+            {label}
+          </span>
+        </span>
+      </>
     ) : (
       <>
-        {icon !== undefined && (
-          <FontAwesomeIcon className={clsx(iconStyles ?? "h-4")} icon={icon} />
+        {iconElement}
+        {label !== undefined && (
+          <FitMarquee className="lg:max-w-40">{label}</FitMarquee>
         )}
-        {label}
       </>
     );
   if (disabled) {
     return (
       <span className={clsx("group relative select-none")}>
-        <span className={clsx(baseStyles, "opacity-50 group-hover:opacity-70")}>
+        <span
+          className={clsx(
+            baseStyles,
+            "text-white/50 group-hover:text-white/70"
+          )}
+        >
           {content}
         </span>
         {disabledText && (
@@ -58,7 +92,7 @@ export function HeaderLink({
       {...props}
       className={clsx(
         baseStyles,
-        "hover:bg-black/30 active:bg-black/70",
+        !collapsed && "hover:bg-black/30 active:bg-black/70",
         isActive && "bg-black/30",
         className
       )}

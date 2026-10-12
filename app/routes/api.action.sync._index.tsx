@@ -8,6 +8,7 @@ import {
   CS2BaseInventoryItem,
   CS2InventoryItem,
   CS2ItemType,
+  CS2Team,
   RecordValue
 } from "@ianlucas/cs2-lib";
 import { z } from "zod";
@@ -66,11 +67,13 @@ import {
   inventoryItemAllowRemoveSticker,
   inventoryItemAllowScrapeSticker,
   inventoryItemMaxPatches,
-  inventoryItemMaxStickers
+  inventoryItemMaxStickers,
+  inventoryMaxLoadouts
 } from "~/models/rule.server";
 import { manipulateUserInventory } from "~/models/user.server";
 import { methodNotAllowed } from "~/responses.server";
 import { editInventoryItem } from "~/shared/inventory";
+import { LOADOUT_SLOTS } from "~/shared/loadout";
 import { hasKeys } from "~/shared/misc";
 import { isCountAllowed } from "~/shared/number";
 import {
@@ -81,6 +84,7 @@ import {
   syncInventoryShape,
   teamShape
 } from "~/shared/shapes";
+import { LOADOUT_NAME_MAX_LENGTH } from "~/shared/user-loadouts";
 import type { Route } from "./+types/api.action.sync._index";
 
 const keychainPlacementShape = {
@@ -96,6 +100,26 @@ const stickerPlacementShape = {
   rotation: optionalNumber,
   wear: optionalNumber
 };
+
+const loadoutShape = {
+  id: z.uuid()
+};
+
+const loadoutNameShape = z.string().trim().min(1).max(LOADOUT_NAME_MAX_LENGTH);
+
+const loadoutSlotShape = {
+  ...loadoutShape,
+  slot: z.enum(LOADOUT_SLOTS),
+  team: z.literal(CS2Team.CT).or(z.literal(CS2Team.T))
+};
+
+const loadoutItemShape = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("inventory"), uid: nonNegativeInt }),
+  z.object({
+    type: z.literal("snapshot"),
+    item: z.object({ id: nonNegativeInt })
+  })
+]);
 
 const actionShape = z.discriminatedUnion("type", [
   z.object({
@@ -233,6 +257,46 @@ const actionShape = z.discriminatedUnion("type", [
     type: z.literal(SyncAction.RemoveItemKeychain),
     targetUid: nonNegativeInt,
     slot: nonNegativeInt
+  }),
+  z.object({
+    type: z.literal(SyncAction.LoadoutCreate),
+    ...loadoutShape,
+    name: loadoutNameShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.LoadoutRename),
+    ...loadoutShape,
+    name: loadoutNameShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.LoadoutDelete),
+    ...loadoutShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.LoadoutImportEquipped),
+    ...loadoutShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.LoadoutUse),
+    id: loadoutShape.id.nullable()
+  }),
+  z.object({
+    type: z.literal(SyncAction.LoadoutPlace),
+    ...loadoutSlotShape,
+    item: loadoutItemShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.LoadoutResetSlot),
+    ...loadoutSlotShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.LoadoutResetSlotFinish),
+    ...loadoutSlotShape
+  }),
+  z.object({
+    type: z.literal(SyncAction.LoadoutRemoveSlot),
+    ...loadoutShape,
+    slot: loadoutSlotShape.slot
   })
 ]);
 
@@ -482,10 +546,11 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     })
     .parse(await request.json());
   let addedFromCache = false;
+  let maxLoadouts: number | undefined;
   const { syncedAt: responseSyncedAt } = await manipulateUserInventory({
     syncedAt,
     userId,
-    async manipulate(inventory) {
+    async manipulate(inventory, loadouts) {
       for (const action of actions) {
         switch (action.type) {
           case SyncAction.Add:
@@ -659,7 +724,20 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
           case SyncAction.RemoveItemKeychain:
             inventory.removeItemKeychain(action.targetUid, action.slot);
             break;
+          case SyncAction.LoadoutCreate:
+          case SyncAction.LoadoutDelete:
+          case SyncAction.LoadoutImportEquipped:
+          case SyncAction.LoadoutPlace:
+          case SyncAction.LoadoutRemoveSlot:
+          case SyncAction.LoadoutRename:
+          case SyncAction.LoadoutResetSlot:
+          case SyncAction.LoadoutResetSlotFinish:
+          case SyncAction.LoadoutUse:
+            maxLoadouts ??= await inventoryMaxLoadouts.for(userId).get();
+            await loadouts.apply(action, maxLoadouts);
+            break;
         }
+        await loadouts.detachRemovedItems();
       }
     }
   });

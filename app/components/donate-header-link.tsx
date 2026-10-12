@@ -16,7 +16,7 @@ export function DonateHeaderLink() {
     typeof window !== "undefined" &&
     isOurHostname() && (
       <HeaderLink
-        className="group rounded-sm font-bold text-amber-300 ring-1 ring-amber-300/40 hover:text-amber-200 hover:ring-amber-300/80 active:bg-amber-300/20"
+        className="group max-w-34 rounded-sm font-bold text-amber-300 ring-1 ring-amber-300/40 hover:text-amber-200 hover:ring-amber-300/80 active:bg-amber-300/20"
         icon={faMugHot}
         iconStyles="h-4 origin-bottom group-hover:animate-wiggle"
         label={translate("HeaderDonate")}

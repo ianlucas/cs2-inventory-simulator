@@ -8,6 +8,10 @@ import { fail } from "assert";
 import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 import { CS2_CSGO_PATH } from "~/env.server";
+import {
+  LOADOUT_USAGE_MODEL_KEYS,
+  getLoadoutUsageToken
+} from "~/shared/loadout-defaults";
 import { SystemTranslationByLanguage } from "~/translation.server";
 
 function replace(
@@ -144,6 +148,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   GenericNo: "GameUI_No",
   GenericOK: "GameUI_OK",
   GenericYes: "GameUI_Yes",
+  HeaderLoadoutLabel: "SFUI_InvPanel_Loadout_Title",
   InspectClose: "GameUI_Close",
   InventoryApplyPatch: "SFUI_InvContextMenu_can_patch",
   InventoryApplySticker: "SFUI_InvContextMenu_can_sticker",
@@ -282,6 +287,37 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   ItemWearFT: "SFUI_InvTooltip_Wear_Amount_2",
   ItemWearMW: "SFUI_InvTooltip_Wear_Amount_1",
   ItemWearWW: "SFUI_InvTooltip_Wear_Amount_3",
+  LoadoutAllMidTier: "inv_filter_all_smg",
+  LoadoutAllOtherPistols: "inv_filter_all_secondary",
+  LoadoutAllRifles: "inv_filter_all_rifle",
+  LoadoutAllStartingPistols: "inv_filter_all_secondary0",
+  LoadoutAssaultSuit: "SFUI_WPNHUD_ASSAULTSUIT",
+  LoadoutClearFilters: "loadout_clear_filters",
+  LoadoutCurrentlyEquipped: "SFUI_spray_equipped",
+  LoadoutDefuser: "SFUI_WPNHUD_DEFUSER",
+  LoadoutEquipCT: "loadout_equip_ct",
+  LoadoutEquipT: "loadout_equip_t",
+  LoadoutGroupAgents: "LoadoutSlot_customplayer",
+  LoadoutGroupAll: "LoadoutSlot_All",
+  LoadoutGroupC4: "LoadoutSlot_C4",
+  LoadoutGroupDisplay: "LoadoutSlot_Flair",
+  LoadoutGroupEquipment: "LoadoutSlot_Equipment",
+  LoadoutGroupGloves: "LoadoutSlot_clothing",
+  LoadoutGroupGraffiti: "LoadoutSlot_Spray",
+  LoadoutGroupGrenades: "LoadoutSlot_Grenade",
+  LoadoutGroupMelee: "LoadoutSlot_Melee",
+  LoadoutGroupMidTier: "LoadoutSlot_SMG",
+  LoadoutGroupMusicKit: "LoadoutSlot_MusicKit",
+  LoadoutGroupOtherPistols: "LoadoutSlot_Other_Secondary",
+  LoadoutGroupRifles: "LoadoutSlot_Rifle",
+  LoadoutGroupStartingPistol: "LoadoutSlot_Default_Secondary",
+  LoadoutGroupZeus: "LoadoutSlot_Taser",
+  LoadoutKevlar: "SFUI_WPNHUD_KEVLAR",
+  LoadoutPrice: { token: "buymenu_money", transform: (value) => replace(value, '{d:r:money}', '{1}') },
+  LoadoutResetToDefault: "inv_context_loadout_slot_reset_ct",
+  LoadoutResetToDefaultFinish: "inv_context_loadout_slot_reset_finish_ct",
+  LoadoutResetToDefaultWeapon: "inv_context_loadout_slot_reset_weapon_ct",
+  LoadoutUnequip: "inv_context_unequip",
   PetStageHen: "pet_growth_adult",
   PetStagePullet: "pet_growth_adolescent",
   RemovePatchClose: "GameUI_Close",
@@ -335,6 +371,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   UnsealGraffitiTitle: "popup_totool_decodeable_header_graffiti",
   UnsealGraffitiUse: "popup_decodeable_button_graffiti",
   UnsealGraffitiWarn: "popup_decodeable_warning_graffiti",
+  ...Object.fromEntries(LOADOUT_USAGE_MODEL_KEYS.map((modelKey) => [getLoadoutUsageToken(modelKey), `csgo_item_usage_desc_${modelKey}`]))
 };
 
 assert(CS2_CSGO_PATH, "CS2_CSGO_PATH must be set.");

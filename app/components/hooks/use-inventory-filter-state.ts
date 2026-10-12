@@ -11,13 +11,7 @@ import {
 import {
   TransformedInventoryItem,
   TransformedInventoryItems,
-  sortByCollection,
-  sortByEquipped,
-  sortByName,
-  sortByNewest,
-  sortByQuality,
-  sortByType,
-  sortItemsByEquipped
+  sortItems as sortInventoryItems
 } from "~/shared/inventory-transform";
 import { useStorageInput } from "./use-storage-input";
 import { useStorageState } from "./use-storage-state";
@@ -162,27 +156,7 @@ export function useInventoryFilterState() {
     inventory: TransformedInventoryItems,
     free: TransformedInventoryItems
   ) {
-    switch (sorter) {
-      case "equipped":
-        return sortItemsByEquipped(inventory, free);
-      case "newest":
-        return [
-          ...inventory.sort(sortByNewest),
-          ...free.sort(sortByName).sort(sortByType).sort(sortByEquipped)
-        ];
-      case "quality":
-        return [...inventory, ...free]
-          .sort(sortByName)
-          .sort(sortByType)
-          .sort(sortByQuality);
-      case "alphabetical":
-        return [...inventory, ...free].sort(sortByName);
-      case "type":
-        return [...inventory, ...free].sort(sortByType);
-      case "collection":
-        return [...inventory.sort(sortByType).sort(sortByCollection), ...free];
-    }
-    return [];
+    return sortInventoryItems(sorter, inventory, free);
   }
 
   return {

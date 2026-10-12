@@ -3,10 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Inventory } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
 import { inventoryInactivityResetDays } from "~/models/rule.server";
-import { getUserInventory, updateUserInventory } from "~/models/user.server";
+import { getUserInventory, resetUserInventory } from "~/models/user.server";
 import { DAY_IN_MS, isInactive } from "~/shared/inactivity";
 import { safeLoadInventory } from "~/shared/inventory";
 import { logError } from "~/shared/monitoring";
@@ -47,7 +46,7 @@ async function resetInactiveInventories() {
       if (isInventoryEmpty(await getUserInventory(id))) {
         continue;
       }
-      await updateUserInventory(id, new CS2Inventory().stringify());
+      await resetUserInventory(id);
     } catch (error) {
       logError(
         "Inactive inventory reset: failed to reset a user's inventory.",

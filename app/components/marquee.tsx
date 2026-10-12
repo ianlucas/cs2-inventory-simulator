@@ -45,10 +45,12 @@ function getAnimation(length: number) {
 
 export function Marquee({
   children,
-  className
+  className,
+  textClassName
 }: {
   children: string;
   className?: string;
+  textClassName?: string;
 }) {
   return (
     <span
@@ -58,11 +60,42 @@ export function Marquee({
       )}
     >
       <span
-        className="marquee inline-block"
+        className={clsx("marquee inline-block", textClassName)}
         style={getAnimation(children.length)}
       >
         {children}
       </span>
+    </span>
+  );
+}
+
+// Takes the width of its text, up to the max width it is given, while
+// `Marquee` takes no room of its own and fills what its parent gives it.
+export function FitMarquee({
+  children,
+  className,
+  textClassName
+}: {
+  children: string;
+  className?: string;
+  textClassName?: string;
+}) {
+  return (
+    <span className={clsx("grid", className)}>
+      <span
+        className={clsx(
+          "invisible col-start-1 row-start-1 truncate",
+          textClassName
+        )}
+      >
+        {children}
+      </span>
+      <Marquee
+        className="col-start-1 row-start-1"
+        textClassName={textClassName}
+      >
+        {children}
+      </Marquee>
     </span>
   );
 }

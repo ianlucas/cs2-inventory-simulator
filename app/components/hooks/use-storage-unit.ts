@@ -5,14 +5,22 @@
 
 import { assert } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { useInventory, useInventoryItems } from "~/components/app-context";
+import {
+  useInventory,
+  useInventoryItems,
+  useTranslate
+} from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
+import { confirm } from "~/components/modal-generic";
 import { SyncAction } from "~/data/sync";
 import { transform } from "~/shared/inventory-transform";
+import { useLoadoutItemWarning } from "./use-loadouts";
 import { useSync } from "./use-sync";
 
 export function useStorageUnit() {
+  const translate = useTranslate();
   const sync = useSync();
+  const getLoadoutItemWarning = useLoadoutItemWarning();
   const [itemSelector, setItemSelector] = useItemSelector();
   const items = useInventoryItems();
   const [inventory, setInventory] = useInventory();
@@ -48,8 +56,20 @@ export function useStorageUnit() {
     });
   }
 
-  function handleDepositToStorageUnitSelect(uid: number) {
+  async function handleDepositToStorageUnitSelect(uid: number) {
     assert(itemSelector !== undefined);
+    const warning = getLoadoutItemWarning(uid);
+    if (
+      warning !== undefined &&
+      !(await confirm({
+        bodyText: warning,
+        cancelText: translate("GenericCancel"),
+        confirmText: translate("GenericOK"),
+        titleText: inventory.get(uid).name
+      }))
+    ) {
+      return;
+    }
     const depositUids = [uid];
     sync({
       type: SyncAction.DepositToStorageUnit,

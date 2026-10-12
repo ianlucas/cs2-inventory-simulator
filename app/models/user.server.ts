@@ -17,6 +17,10 @@ import {
   recordInventoryWipe
 } from "./inventory-recovery.server";
 import { inventoryMaxItems, inventoryStorageUnitMaxItems } from "./rule.server";
+import {
+  UserLoadoutsDraft,
+  createUserLoadoutsDraft
+} from "./user-loadout.server";
 
 export async function getUserInventoryOptions(userId: string) {
   return {
@@ -105,22 +109,10 @@ export async function existsUser(userId: string) {
   );
 }
 
-export async function updateUserInventory(
-  userId: string,
-  rawInventory: string
-) {
-  const syncedAt = new Date();
-  return await prisma.user.update({
-    select: {
-      syncedAt: true
-    },
-    data: {
-      rawInventory,
-      syncedAt
-    },
-    where: {
-      id: userId
-    }
+export async function resetUserInventory(userId: string) {
+  return await manipulateUserInventory({
+    manipulate: (inventory) => void inventory.removeAll(),
+    userId
   });
 }
 
@@ -149,8 +141,8 @@ export async function manipulateUserInventory({
   userId
 }: {
   manipulate:
-    | ((inventory: CS2Inventory) => void)
-    | ((inventory: CS2Inventory) => Promise<void>);
+    | ((inventory: CS2Inventory, loadouts: UserLoadoutsDraft) => void)
+    | ((inventory: CS2Inventory, loadouts: UserLoadoutsDraft) => Promise<void>);
   syncedAt?: number;
   userId: string;
 }) {
@@ -169,14 +161,20 @@ export async function manipulateUserInventory({
           ? rawInventory
           : undefined;
       const inventory = loadedInventory ?? new CS2Inventory(options);
+      const loadouts = createUserLoadoutsDraft(tx, userId, inventory);
       try {
-        await manipulate(inventory);
+        await manipulate(inventory, loadouts);
       } catch {
         throw badRequest;
       }
       if (syncedAt !== undefined && syncedAt !== currentSyncedAt.getTime()) {
         throw conflict;
       }
+      await loadouts.detachRemovedItems(
+        wipedInventory !== undefined ||
+          hasInventoryLoadChanges(inventory.loadChanges)
+      );
+      await loadouts.save();
       if (wipedInventory !== undefined) {
         await recordInventoryWipe(userId, wipedInventory);
       } else if (

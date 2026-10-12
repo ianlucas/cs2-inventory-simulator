@@ -9,6 +9,7 @@ import {
   faBoxesStacked,
   faCog,
   faHammer,
+  faPersonRifle,
   faRightFromBracket,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
@@ -16,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useToggle } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useCraftFilterRules } from "~/components/hooks/use-craft-filter-rules";
+import { useCssHeightVariable } from "~/components/hooks/use-css-height-variable";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useIsOnTop } from "~/components/hooks/use-is-on-top";
 import { ECONOMY_ITEM_FILTERS } from "~/shared/economy-filters";
@@ -51,6 +53,7 @@ export function Header({
   const isDesktop = useIsDesktop();
   const isOnTop = useIsOnTop();
   const { appHideLogo, appHideAuth } = useRules();
+  const ref = useCssHeightVariable<HTMLDivElement>("--header-height");
 
   function closeMenu() {
     toggleIsMenuOpen(false);
@@ -66,7 +69,7 @@ export function Header({
   return (
     <div
       className={clsx(
-        "font-display sticky top-0 left-0 z-20 w-full backdrop-blur-sm",
+        "font-display sticky top-0 left-0 z-20 w-full border-b border-white/10 backdrop-blur-sm",
         profile !== undefined
           ? "bg-linear-to-b from-stone-800 to-transparent"
           : [
@@ -74,6 +77,7 @@ export function Header({
               isOnTop ? "before:opacity-0" : "before:opacity-1"
             ]
       )}
+      ref={ref}
     >
       <div className="m-auto p-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)] lg:flex lg:w-5xl lg:items-center lg:gap-8 lg:px-0">
         <div
@@ -95,8 +99,9 @@ export function Header({
         </div>
         {(isDesktop || isMenuOpen) && (
           <div className="absolute left-0 mt-2 w-full flex-1 px-4 lg:static lg:mt-0 lg:w-auto lg:p-0">
-            <nav className="rounded-sm bg-stone-800 p-2 text-sm lg:flex lg:items-center lg:gap-4 lg:bg-transparent lg:p-0">
+            <nav className="rounded-sm bg-stone-800 p-2 text-sm lg:flex lg:items-center lg:gap-2 lg:bg-transparent lg:p-0">
               <HeaderLink
+                className="max-w-30"
                 to="/"
                 icon={faBoxesStacked}
                 label={translate("HeaderInventoryLabel")}
@@ -104,6 +109,7 @@ export function Header({
               />
               {profile === undefined && (
                 <HeaderLink
+                  className="max-w-30"
                   disabled={isCraftDisabled}
                   disabledText={
                     isInventoryFull
@@ -117,6 +123,15 @@ export function Header({
                   preventScrollReset
                 />
               )}
+              {profile === undefined && (
+                <HeaderLink
+                  className="max-w-30"
+                  to="/loadout"
+                  icon={faPersonRifle}
+                  label={translate("HeaderLoadoutLabel")}
+                  onClick={closeMenu}
+                />
+              )}
               {user === undefined ? (
                 <>
                   {!appHideAuth && (
@@ -126,7 +141,7 @@ export function Header({
                       label={translate("HeaderSignInLabel")}
                     />
                   )}
-                  <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
+                  <div className="gap-2 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
                     <HeaderLink
                       to="/settings"
@@ -140,18 +155,16 @@ export function Header({
                 <>
                   {!appHideAuth && (
                     <HeaderLink
+                      collapsed={isDesktop}
                       icon={faRightFromBracket}
                       label={translate("HeaderSignOutLabel")}
                       onClick={closeMenu}
                       to="/sign-out"
                     />
                   )}
-                  <div className="gap-4 lg:flex lg:flex-1 lg:justify-end">
+                  <div className="gap-2 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
                     <HeaderLink to="/settings" onClick={closeMenu}>
-                      <span className="text-neutral-400">
-                        {translate("HeaderSignedInAsLabel")}
-                      </span>
                       <span className="max-w-[256px] truncate">
                         {user.name}
                       </span>

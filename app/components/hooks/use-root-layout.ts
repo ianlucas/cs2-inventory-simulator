@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useRouteLoaderData } from "react-router";
+import { useMatches, useRouteLoaderData } from "react-router";
 import type { loader as profileLoader } from "~/routes/profiles.$userId._index";
 
 export function useRootLayout(): {
@@ -18,12 +18,15 @@ export function useRootLayout(): {
   )?.user;
   // Profiles render the owner's background and inventory instead.
   const isProfile = profile !== undefined;
+  const isLoadouts = useMatches().some(
+    ({ id }) => id === "routes/loadout._index"
+  );
 
   return {
     background: !isProfile,
     footer: true,
     header: true,
-    inventory: !isProfile,
+    inventory: !isProfile && !isLoadouts,
     profile
   };
 }

@@ -133,6 +133,13 @@ Max number of items a user can add to inventory.
 
 Max items a storage unit can store.
 
+### `inventoryMaxLoadouts`
+
+- **Type:** `number`
+- **Default:** `10`
+
+Max number of loadouts a user can create.
+
 ### `inventoryInactivityResetDays`
 
 - **Type:** `number`

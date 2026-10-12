@@ -48,6 +48,7 @@ import {
 import { middleware } from "./middleware.server";
 import { getClientRules } from "./models/rule";
 import { steamCallbackUrl, viewerKey } from "./models/rule.server";
+import { getUserLoadouts } from "./models/user-loadout.server";
 import { loadOrCreateUserInventory } from "./models/user.server";
 import { setMonitoringUser } from "./monitoring.client";
 import { getBackground } from "./preferences/background.server";
@@ -77,8 +78,14 @@ export const links: LinksFunction = () => [
   { rel: "manifest", href: "/app.webmanifest" }
 ];
 
-export function shouldRevalidate({ currentUrl }: ShouldRevalidateFunctionArgs) {
+export function shouldRevalidate({
+  currentUrl,
+  nextUrl
+}: ShouldRevalidateFunctionArgs) {
   if (currentUrl.pathname === "/craft") {
+    return false;
+  }
+  if (currentUrl.pathname === "/loadout" && nextUrl.pathname === "/loadout") {
     return false;
   }
   return true;
@@ -126,7 +133,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
                         clientRules.inventoryStorageUnitMaxItems
                     })
                   ).getData()
-                : null
+                : null,
+            loadouts: await getUserLoadouts(user.id)
           }
   });
 }

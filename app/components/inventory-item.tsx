@@ -15,6 +15,7 @@ import clsx from "clsx";
 import { ComponentProps } from "react";
 import { useInventoryItemFloating } from "~/components/hooks/use-inventory-item-floating";
 import { useEditItemFilter } from "~/components/hooks/use-item-hide-filters";
+import { useLoadoutItemWarning } from "~/components/hooks/use-loadouts";
 import { useViewerAvailability } from "~/components/hooks/use-viewer-availability";
 import { getInventoryItemShareUrl } from "~/inventory.client";
 import {
@@ -23,6 +24,7 @@ import {
   UNLOCKABLE_ITEM_TYPE
 } from "~/shared/inventory";
 import { TransformedInventoryItem } from "~/shared/inventory-transform";
+import { has } from "~/shared/misc";
 import { format } from "~/shared/number";
 import { useInventory, useRules, useTranslate, useUser } from "./app-context";
 import {
@@ -36,6 +38,7 @@ import { alert, confirm } from "./modal-generic";
 export function InventoryItem({
   disableContextMenu,
   disableHover,
+  draggable,
   equipped,
   inspectOnly,
   item,
@@ -67,10 +70,12 @@ export function InventoryItem({
   ownApplicableKeychains,
   ownApplicablePatches,
   ownApplicableStickers,
+  selected,
   uid
 }: TransformedInventoryItem & {
   disableContextMenu?: boolean;
   disableHover?: boolean;
+  draggable?: boolean;
   /** For other people's items: only offers the inspect actions. */
   inspectOnly?: boolean;
   onApplyPatch?: (uid: number) => void;
@@ -101,9 +106,11 @@ export function InventoryItem({
   ownApplicableKeychains?: boolean;
   ownApplicablePatches?: boolean;
   ownApplicableStickers?: boolean;
+  selected?: boolean;
 }) {
   const [, copyToClipboard] = useCopyToClipboard();
   const translate = useTranslate();
+  const getLoadoutItemWarning = useLoadoutItemWarning();
   const {
     inventoryItemAllowApplyPatch,
     inventoryItemAllowApplySticker,
@@ -273,16 +280,20 @@ export function InventoryItem({
       <div
         className={clsx(
           "relative w-38.5 transition-all",
-          onClick === undefined && "hover:drop-shadow-[0_0_5px_rgba(0,0,0,1)]"
+          (onClick === undefined || draggable) &&
+            "hover:drop-shadow-[0_0_5px_rgba(0,0,0,1)]",
+          selected && "drop-shadow-[0_0_5px_rgba(0,0,0,1)]"
         )}
         ref={ref}
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
         <InventoryItemTile
+          draggable={draggable}
           equipped={equipped}
           foreign={inspectOnly}
           item={item}
           preview
+          selected={selected}
           onClick={
             onClick !== undefined ? close(() => onClick(uid)) : undefined
           }
@@ -338,9 +349,14 @@ export function InventoryItem({
                                 if (
                                   await confirm({
                                     titleText: item.name,
-                                    bodyText: translate(
-                                      "InventoryItemDeleteConfirmDesc"
-                                    ),
+                                    bodyText: [
+                                      translate(
+                                        "InventoryItemDeleteConfirmDesc"
+                                      ),
+                                      getLoadoutItemWarning(uid)
+                                    ]
+                                      .filter(has)
+                                      .join("\n"),
                                     cancelText: translate("GenericCancel"),
                                     confirmText: translate(
                                       "InventoryItemDeleteConfirm"
@@ -581,9 +597,14 @@ export function InventoryItem({
                                   if (
                                     await confirm({
                                       titleText: item.name,
-                                      bodyText: translate(
-                                        "InventoryItemDeleteConfirmDesc"
-                                      ),
+                                      bodyText: [
+                                        translate(
+                                          "InventoryItemDeleteConfirmDesc"
+                                        ),
+                                        getLoadoutItemWarning(uid)
+                                      ]
+                                        .filter(has)
+                                        .join("\n"),
                                       cancelText: translate("GenericCancel"),
                                       confirmText: translate(
                                         "InventoryItemDeleteConfirm"
