@@ -307,6 +307,7 @@ export const french = {
   LoadoutClearFilters: /* csgo_french.txt */"Effacer les filtres",
   LoadoutCreate: "Créer",
   LoadoutCreateTitle: "Créer un équipement",
+  LoadoutCurrentlyEquipped: /* csgo_french.txt */"Actuellement équipé",
   LoadoutDefuser: /* csgo_french.txt */"Kit de désamorçage",
   LoadoutDelete: "Supprimer",
   LoadoutDeleteDesc: "Cet équipement sera définitivement supprimé.",

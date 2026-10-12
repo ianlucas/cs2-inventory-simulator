@@ -308,6 +308,7 @@ export const russian = {
   LoadoutClearFilters: /* csgo_russian.txt */"Сбросить фильтры",
   LoadoutCreate: "Создать",
   LoadoutCreateTitle: "Создать снаряжение",
+  LoadoutCurrentlyEquipped: /* csgo_russian.txt */"Используется",
   LoadoutDefuser: /* csgo_russian.txt */"Набор сапёра",
   LoadoutDelete: "Удалить",
   LoadoutDeleteDesc: "Это снаряжение будет удалено навсегда.",

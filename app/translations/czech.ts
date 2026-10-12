@@ -308,6 +308,7 @@ export const czech = {
   LoadoutClearFilters: /* csgo_czech.txt */"Vymazat filtry",
   LoadoutCreate: "Vytvořit",
   LoadoutCreateTitle: "Vytvořit vybavení",
+  LoadoutCurrentlyEquipped: /* csgo_czech.txt */"Momentálně vybaveno",
   LoadoutDefuser: /* csgo_czech.txt */"Souprava pro zneškodňování bomb",
   LoadoutDelete: "Smazat",
   LoadoutDeleteDesc: "Toto vybavení bude trvale smazáno.",

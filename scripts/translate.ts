@@ -293,6 +293,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   LoadoutAllStartingPistols: "inv_filter_all_secondary0",
   LoadoutAssaultSuit: "SFUI_WPNHUD_ASSAULTSUIT",
   LoadoutClearFilters: "loadout_clear_filters",
+  LoadoutCurrentlyEquipped: "SFUI_spray_equipped",
   LoadoutDefuser: "SFUI_WPNHUD_DEFUSER",
   LoadoutEquipCT: "loadout_equip_ct",
   LoadoutEquipT: "loadout_equip_t",

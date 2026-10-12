@@ -308,6 +308,7 @@ export const danish = {
   LoadoutClearFilters: /* csgo_danish.txt */"Ryd filtre",
   LoadoutCreate: "Opret",
   LoadoutCreateTitle: "Opret udstyrssæt",
+  LoadoutCurrentlyEquipped: /* csgo_danish.txt */"Aktuelt udstyret",
   LoadoutDefuser: /* csgo_danish.txt */"Demonteringssæt",
   LoadoutDelete: "Slet",
   LoadoutDeleteDesc: "Dette udstyrssæt bliver slettet permanent.",

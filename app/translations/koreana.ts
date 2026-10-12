@@ -309,6 +309,7 @@ export const koreana = {
   LoadoutClearFilters: /* csgo_koreana.txt */"필터 초기화",
   LoadoutCreate: "만들기",
   LoadoutCreateTitle: "로드아웃 만들기",
+  LoadoutCurrentlyEquipped: /* csgo_koreana.txt */"현재 장착됨",
   LoadoutDefuser: /* csgo_koreana.txt */"폭탄 해체 키트",
   LoadoutDelete: "삭제",
   LoadoutDeleteDesc: "이 로드아웃이 영구적으로 삭제됩니다.",

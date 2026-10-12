@@ -307,6 +307,7 @@ export const hungarian = {
   LoadoutClearFilters: /* csgo_hungarian.txt */"Szűrők törlése",
   LoadoutCreate: "Létrehozás",
   LoadoutCreateTitle: "Összeállítás létrehozása",
+  LoadoutCurrentlyEquipped: /* csgo_hungarian.txt */"Jelenleg felszerelve",
   LoadoutDefuser: /* csgo_hungarian.txt */"Hatástalanító készlet",
   LoadoutDelete: "Törlés",
   LoadoutDeleteDesc: "Ez az összeállítás véglegesen törlődik.",

@@ -308,6 +308,7 @@ export const german = {
   LoadoutClearFilters: /* csgo_german.txt */"Filter löschen",
   LoadoutCreate: "Erstellen",
   LoadoutCreateTitle: "Ausrüstung erstellen",
+  LoadoutCurrentlyEquipped: /* csgo_german.txt */"Momentan ausgerüstet",
   LoadoutDefuser: /* csgo_german.txt */"Entschärfungskit",
   LoadoutDelete: "Löschen",
   LoadoutDeleteDesc: "Diese Ausrüstung wird dauerhaft gelöscht.",

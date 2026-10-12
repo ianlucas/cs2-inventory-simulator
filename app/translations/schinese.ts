@@ -309,6 +309,7 @@ export const schinese = {
   LoadoutClearFilters: /* csgo_schinese.txt */"清除过滤器",
   LoadoutCreate: "创建",
   LoadoutCreateTitle: "创建装备方案",
+  LoadoutCurrentlyEquipped: /* csgo_schinese.txt */"当前已装备",
   LoadoutDefuser: /* csgo_schinese.txt */"拆弹器",
   LoadoutDelete: "删除",
   LoadoutDeleteDesc: "此装备方案将被永久删除。",

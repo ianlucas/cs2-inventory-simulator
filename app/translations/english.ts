@@ -341,6 +341,7 @@ export const english = {
   LoadoutClearFilters: /* csgo_english.txt */"Clear filters",
   LoadoutCreate: "Create",
   LoadoutCreateTitle: "Create Loadout",
+  LoadoutCurrentlyEquipped: /* csgo_english.txt */"Currently Equipped",
   LoadoutDefuser: /* csgo_english.txt */"Defuse Kit",
   LoadoutDelete: "Delete",
   LoadoutDeleteDesc: "This loadout will be permanently deleted.",

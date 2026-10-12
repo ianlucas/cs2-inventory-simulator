@@ -309,6 +309,7 @@ export const portuguese = {
   LoadoutClearFilters: /* csgo_portuguese.txt */"Limpar filtros",
   LoadoutCreate: "Criar",
   LoadoutCreateTitle: "Criar equipamento",
+  LoadoutCurrentlyEquipped: /* csgo_portuguese.txt */"Atualmente equipado",
   LoadoutDefuser: /* csgo_portuguese.txt */"Kit de Desativação",
   LoadoutDelete: "Eliminar",
   LoadoutDeleteDesc: "Este equipamento será eliminado permanentemente.",

@@ -308,6 +308,7 @@ export const romanian = {
   LoadoutClearFilters: /* csgo_romanian.txt */"Șterge filtrele",
   LoadoutCreate: "Creează",
   LoadoutCreateTitle: "Creează echipament",
+  LoadoutCurrentlyEquipped: /* csgo_romanian.txt */"Echipat în prezent",
   LoadoutDefuser: /* csgo_romanian.txt */"Trusă de dezamorsare",
   LoadoutDelete: "Șterge",
   LoadoutDeleteDesc: "Acest echipament va fi șters definitiv.",

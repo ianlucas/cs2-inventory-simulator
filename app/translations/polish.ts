@@ -308,6 +308,7 @@ export const polish = {
   LoadoutClearFilters: /* csgo_polish.txt */"Wyczyść filtry",
   LoadoutCreate: "Utwórz",
   LoadoutCreateTitle: "Utwórz wyposażenie",
+  LoadoutCurrentlyEquipped: /* csgo_polish.txt */"Obecnie używane",
   LoadoutDefuser: /* csgo_polish.txt */"Zestaw do rozbrajania",
   LoadoutDelete: "Usuń",
   LoadoutDeleteDesc: "To wyposażenie zostanie trwale usunięte.",

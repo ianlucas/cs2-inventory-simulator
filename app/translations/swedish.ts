@@ -308,6 +308,7 @@ export const swedish = {
   LoadoutClearFilters: /* csgo_swedish.txt */"Rensa filter",
   LoadoutCreate: "Skapa",
   LoadoutCreateTitle: "Skapa utrustning",
+  LoadoutCurrentlyEquipped: /* csgo_swedish.txt */"Utrustad nu",
   LoadoutDefuser: /* csgo_swedish.txt */"Desarmeringskit",
   LoadoutDelete: "Radera",
   LoadoutDeleteDesc: "Den här utrustningen raderas permanent.",

@@ -309,6 +309,7 @@ export const turkish = {
   LoadoutClearFilters: /* csgo_turkish.txt */"Filtreleri temizle",
   LoadoutCreate: "Oluştur",
   LoadoutCreateTitle: "Ekipman Oluştur",
+  LoadoutCurrentlyEquipped: /* csgo_turkish.txt */"Hâlihazırda Kuşanılan",
   LoadoutDefuser: /* csgo_turkish.txt */"İmha Teçhizatı",
   LoadoutDelete: "Sil",
   LoadoutDeleteDesc: "Bu ekipman kalıcı olarak silinecek.",

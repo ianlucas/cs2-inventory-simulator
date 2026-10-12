@@ -309,6 +309,7 @@ export const ukrainian = {
   LoadoutClearFilters: /* csgo_ukrainian.txt */"Очистити фільтри",
   LoadoutCreate: "Створити",
   LoadoutCreateTitle: "Створити набір",
+  LoadoutCurrentlyEquipped: /* csgo_ukrainian.txt */"Зараз споряджено",
   LoadoutDefuser: /* csgo_ukrainian.txt */"Саперний набір",
   LoadoutDelete: "Видалити",
   LoadoutDeleteDesc: "Цей набір буде видалено назавжди.",

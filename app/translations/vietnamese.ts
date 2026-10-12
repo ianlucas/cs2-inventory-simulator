@@ -309,6 +309,7 @@ export const vietnamese = {
   LoadoutClearFilters: /* csgo_vietnamese.txt */"Xóa bộ lọc",
   LoadoutCreate: "Tạo",
   LoadoutCreateTitle: "Tạo hành trang",
+  LoadoutCurrentlyEquipped: /* csgo_vietnamese.txt */"Đang trang bị",
   LoadoutDefuser: /* csgo_vietnamese.txt */"Bộ gỡ bom",
   LoadoutDelete: "Xóa",
   LoadoutDeleteDesc: "Hành trang này sẽ bị xóa vĩnh viễn.",

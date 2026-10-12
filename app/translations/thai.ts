@@ -309,6 +309,7 @@ export const thai = {
   LoadoutClearFilters: /* csgo_thai.txt */"ล้างตัวกรอง",
   LoadoutCreate: "สร้าง",
   LoadoutCreateTitle: "สร้างชุดอุปกรณ์",
+  LoadoutCurrentlyEquipped: /* csgo_thai.txt */"สวมใส่อยู่ในขณะนี้",
   LoadoutDefuser: /* csgo_thai.txt */"อุปกรณ์ปลดชนวนระเบิด",
   LoadoutDelete: "ลบ",
   LoadoutDeleteDesc: "ชุดอุปกรณ์นี้จะถูกลบอย่างถาวร",

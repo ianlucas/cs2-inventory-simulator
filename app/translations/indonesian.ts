@@ -305,6 +305,7 @@ export const indonesian = {
   LoadoutClearFilters: /* csgo_indonesian.txt */"Hapus filter",
   LoadoutCreate: "Buat",
   LoadoutCreateTitle: "Buat Perlengkapan",
+  LoadoutCurrentlyEquipped: /* csgo_indonesian.txt */"Dipasang Saat Ini",
   LoadoutDefuser: /* csgo_indonesian.txt */"Alat Penjinak",
   LoadoutDelete: "Hapus",
   LoadoutDeleteDesc: "Perlengkapan ini akan dihapus secara permanen.",

@@ -308,6 +308,7 @@ export const japanese = {
   LoadoutClearFilters: /* csgo_japanese.txt */"フィルターをクリア",
   LoadoutCreate: "作成",
   LoadoutCreateTitle: "装備セットを作成",
+  LoadoutCurrentlyEquipped: /* csgo_japanese.txt */"現在装備中",
   LoadoutDefuser: /* csgo_japanese.txt */"爆弾解除キット",
   LoadoutDelete: "削除",
   LoadoutDeleteDesc: "この装備セットは完全に削除されます。",

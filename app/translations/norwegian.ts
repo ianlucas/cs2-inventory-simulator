@@ -307,6 +307,7 @@ export const norwegian = {
   LoadoutClearFilters: /* csgo_norwegian.txt */"Tilbakestill filtre",
   LoadoutCreate: "Opprett",
   LoadoutCreateTitle: "Opprett oppakning",
+  LoadoutCurrentlyEquipped: /* csgo_norwegian.txt */"Allerede utstyrt",
   LoadoutDefuser: /* csgo_norwegian.txt */"Desarmeringssett",
   LoadoutDelete: "Slett",
   LoadoutDeleteDesc: "Denne oppakningen blir slettet permanent.",

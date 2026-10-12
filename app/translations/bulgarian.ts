@@ -309,6 +309,7 @@ export const bulgarian = {
   LoadoutClearFilters: /* csgo_bulgarian.txt */"Изчистване на филтрите",
   LoadoutCreate: "Създаване",
   LoadoutCreateTitle: "Създаване на снаряжение",
+  LoadoutCurrentlyEquipped: /* csgo_bulgarian.txt */"Текущо екипирани",
   LoadoutDefuser: /* csgo_bulgarian.txt */"Сапьорски клещи",
   LoadoutDelete: "Изтриване",
   LoadoutDeleteDesc: "Това снаряжение ще бъде изтрито завинаги.",

@@ -308,6 +308,7 @@ export const finnish = {
   LoadoutClearFilters: /* csgo_finnish.txt */"Tyhjennä suodattimet",
   LoadoutCreate: "Luo",
   LoadoutCreateTitle: "Luo varustus",
+  LoadoutCurrentlyEquipped: /* csgo_finnish.txt */"Varustettu",
   LoadoutDefuser: /* csgo_finnish.txt */"Pomminpurkupakkaus",
   LoadoutDelete: "Poista",
   LoadoutDeleteDesc: "Tämä varustus poistetaan pysyvästi.",

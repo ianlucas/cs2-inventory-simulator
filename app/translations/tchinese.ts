@@ -309,6 +309,7 @@ export const tchinese = {
   LoadoutClearFilters: /* csgo_tchinese.txt */"清除篩選條件",
   LoadoutCreate: "建立",
   LoadoutCreateTitle: "建立裝備方案",
+  LoadoutCurrentlyEquipped: /* csgo_tchinese.txt */"目前已裝備",
   LoadoutDefuser: /* csgo_tchinese.txt */"拆彈包",
   LoadoutDelete: "刪除",
   LoadoutDeleteDesc: "此裝備方案將被永久刪除。",

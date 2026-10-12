@@ -309,6 +309,7 @@ export const greek = {
   LoadoutClearFilters: /* csgo_greek.txt */"Εκκαθάριση φίλτρων",
   LoadoutCreate: "Δημιουργία",
   LoadoutCreateTitle: "Δημιουργία εξόπλισης",
+  LoadoutCurrentlyEquipped: /* csgo_greek.txt */"Εξοπλισμένο",
   LoadoutDefuser: /* csgo_greek.txt */"Σύνεργα αφοπλισμού",
   LoadoutDelete: "Διαγραφή",
   LoadoutDeleteDesc: "Αυτή η εξόπλιση θα διαγραφεί οριστικά.",

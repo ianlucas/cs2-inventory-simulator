@@ -274,7 +274,10 @@ export function LoadoutTeamPanel({
               : [styles.unselectedTitle, "group-hover/area:opacity-60"]
           )}
         >
-          <FitMarquee>{translate(styles.title)}</FitMarquee>
+          {/* Room for the last italic letter, which leans past the text. */}
+          <FitMarquee className="-mr-1" textClassName="pr-1">
+            {translate(styles.title)}
+          </FitMarquee>
         </div>
       </div>
     </div>

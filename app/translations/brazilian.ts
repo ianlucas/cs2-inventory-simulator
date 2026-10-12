@@ -309,6 +309,7 @@ export const brazilian = {
   LoadoutClearFilters: /* csgo_brazilian.txt */"Limpar filtros",
   LoadoutCreate: "Criar",
   LoadoutCreateTitle: "Criar equipamento",
+  LoadoutCurrentlyEquipped: /* csgo_brazilian.txt */"Equipado",
   LoadoutDefuser: /* csgo_brazilian.txt */"Kit de Desarme",
   LoadoutDelete: "Excluir",
   LoadoutDeleteDesc: "Este equipamento será excluído permanentemente.",

@@ -308,6 +308,7 @@ export const dutch = {
   LoadoutClearFilters: /* csgo_dutch.txt */"Filters verwijderen",
   LoadoutCreate: "Aanmaken",
   LoadoutCreateTitle: "Uitrusting aanmaken",
+  LoadoutCurrentlyEquipped: /* csgo_dutch.txt */"Momenteel uitgerust",
   LoadoutDefuser: /* csgo_dutch.txt */"Ontmantelkit",
   LoadoutDelete: "Verwijderen",
   LoadoutDeleteDesc: "Deze uitrusting wordt permanent verwijderd.",

@@ -308,6 +308,7 @@ export const italian = {
   LoadoutClearFilters: /* csgo_italian.txt */"Annulla filtri",
   LoadoutCreate: "Crea",
   LoadoutCreateTitle: "Crea assetto",
+  LoadoutCurrentlyEquipped: /* csgo_italian.txt */"Attualmente equipaggiato",
   LoadoutDefuser: /* csgo_italian.txt */"Kit di disinnesco",
   LoadoutDelete: "Elimina",
   LoadoutDeleteDesc: "Questo assetto verrà eliminato definitivamente.",

@@ -309,6 +309,7 @@ export const latam = {
   LoadoutClearFilters: /* csgo_latam.txt */"Borrar filtros",
   LoadoutCreate: "Crear",
   LoadoutCreateTitle: "Crear equipamiento",
+  LoadoutCurrentlyEquipped: /* csgo_latam.txt */"Equipado",
   LoadoutDefuser: /* csgo_latam.txt */"Kit de desactivación",
   LoadoutDelete: "Eliminar",
   LoadoutDeleteDesc: "Este equipamiento se eliminará permanentemente.",
