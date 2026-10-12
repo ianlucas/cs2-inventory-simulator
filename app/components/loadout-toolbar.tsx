@@ -3,6 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import {
+  faCheck,
+  faPen,
+  faPlus,
+  faTrashCan,
+  faXmark
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ComponentProps, ReactNode } from "react";
 import { Link } from "react-router";
 import { LOADOUT_NAME_MAX_LENGTH, UserLoadout } from "~/shared/user-loadouts";
@@ -13,12 +22,19 @@ import { Select } from "./select";
 
 const NONE = "none";
 
-function LoadoutToolbarButton(props: ComponentProps<"button">) {
+function LoadoutToolbarButton({
+  children,
+  icon,
+  ...props
+}: ComponentProps<"button"> & { icon: IconProp }) {
   return (
     <button
-      className="rounded-sm bg-black/20 px-3 py-1 hover:bg-black/40 disabled:bg-black/10 disabled:text-white/40"
+      className="flex items-center gap-2 rounded-sm bg-black/20 px-3 py-1 hover:bg-black/40 disabled:bg-black/10 disabled:text-white/40"
       {...props}
-    />
+    >
+      <FontAwesomeIcon className="h-3.5" icon={icon} />
+      {children}
+    </button>
   );
 }
 
@@ -137,7 +153,11 @@ export function LoadoutToolbar({
                 : undefined
             }
           >
-            <LoadoutToolbarButton disabled={isFull} onClick={handleCreate}>
+            <LoadoutToolbarButton
+              disabled={isFull}
+              icon={faPlus}
+              onClick={handleCreate}
+            >
               {translate("LoadoutCreate")}
             </LoadoutToolbarButton>
           </span>
@@ -149,21 +169,28 @@ export function LoadoutToolbar({
         </>
       ) : (
         <>
+          {selected.id !== activeLoadoutId ? (
+            <LoadoutToolbarButton
+              icon={faCheck}
+              onClick={() => use(selected.id)}
+            >
+              {translate("LoadoutEquipLoadout")}
+            </LoadoutToolbarButton>
+          ) : (
+            <LoadoutToolbarButton icon={faXmark} onClick={() => use(null)}>
+              {translate("LoadoutUnequipLoadout")}
+            </LoadoutToolbarButton>
+          )}
           <LoadoutToolbarButton
-            onClick={() =>
-              use(selected.id !== activeLoadoutId ? selected.id : null)
-            }
+            icon={faPen}
+            onClick={() => handleRename(selected)}
           >
-            {translate(
-              selected.id !== activeLoadoutId
-                ? "LoadoutEquipLoadout"
-                : "LoadoutUnequipLoadout"
-            )}
-          </LoadoutToolbarButton>
-          <LoadoutToolbarButton onClick={() => handleRename(selected)}>
             {translate("LoadoutRename")}
           </LoadoutToolbarButton>
-          <LoadoutToolbarButton onClick={() => handleDelete(selected)}>
+          <LoadoutToolbarButton
+            icon={faTrashCan}
+            onClick={() => handleDelete(selected)}
+          >
             {translate("LoadoutDelete")}
           </LoadoutToolbarButton>
         </>
