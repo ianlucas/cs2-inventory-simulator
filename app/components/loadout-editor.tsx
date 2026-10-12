@@ -25,7 +25,7 @@ import { useScrollToTopOnChange } from "./hooks/use-inventory-filter-state";
 import { useKeyRelease } from "./hooks/use-key-release";
 import { useLoadout } from "./hooks/use-loadout";
 import { LoadoutDropTarget, useLoadoutDrag } from "./hooks/use-loadout-drag";
-import { ItemImage } from "./item-image";
+import { LoadoutItemImage } from "./loadout-item-image";
 import { LoadoutItems } from "./loadout-items";
 import { LoadoutFilter, LoadoutItemsFilter } from "./loadout-items-filter";
 import { LoadoutSlotMenuEntry } from "./loadout-slot-tile";
@@ -214,8 +214,8 @@ export function LoadoutEditor() {
           className="pointer-events-none fixed top-0 left-0 z-50"
           ref={setGhost}
         >
-          <ItemImage
-            className="animate-loadout-drag-start w-31 -translate-x-1/2 -translate-y-1/4"
+          <LoadoutItemImage
+            className="animate-loadout-drag-start aspect-256/192 w-31 -translate-x-1/2 -translate-y-1/4"
             item={drag.item}
           />
         </div>

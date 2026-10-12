@@ -15,47 +15,20 @@ import {
   useInteractions,
   useMergeRefs
 } from "@floating-ui/react";
-import { CS2BaseInventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { MouseEvent, ReactNode, useState } from "react";
 import { createFakeInventoryItemFromBase } from "~/shared/inventory";
 import { LoadoutItem, LoadoutSlot, LoadoutTeam } from "~/shared/loadout";
 import { ContextButton } from "./context-button";
 import { useNameItemString } from "./hooks/use-name-item";
-import { useViewerIcon } from "./hooks/use-viewer-icon";
-import { ItemImage } from "./item-image";
 import { LoadoutIcon } from "./loadout-icon";
+import { LoadoutItemImage } from "./loadout-item-image";
 import { LoadoutTooltip } from "./loadout-tooltip";
 import { TooltipBubble, useTooltip } from "./tooltip";
 
 export interface LoadoutSlotMenuEntry {
   label: string;
   onClick: () => void;
-}
-
-function LoadoutSlotTileImage({
-  className,
-  item
-}: {
-  className?: string;
-  item: CS2BaseInventoryItem;
-}) {
-  const { ref, url } = useViewerIcon(item, { enabled: true });
-  const inventoryItem = createFakeInventoryItemFromBase(item);
-  return (
-    <div className={clsx("flex justify-center", className)} ref={ref}>
-      {url !== undefined ? (
-        <img
-          alt={inventoryItem.name}
-          className="aspect-256/192 h-full"
-          draggable={false}
-          src={url}
-        />
-      ) : (
-        <ItemImage className="h-full" item={inventoryItem} />
-      )}
-    </div>
-  );
 }
 
 export function LoadoutSlotTile({
@@ -139,7 +112,7 @@ export function LoadoutSlotTile({
         )}
       >
         {item !== undefined ? (
-          <LoadoutSlotTileImage
+          <LoadoutItemImage
             className={clsx(
               "absolute inset-0 transition-all duration-150 group-hover/slot:-translate-y-1 group-hover/slot:brightness-160 group-hover/slot:drop-shadow-[-3px_6px_6px_rgb(0_0_0/0.2)]",
               dropKey !== undefined && "animate-loadout-drop",
