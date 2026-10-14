@@ -87,15 +87,21 @@ export function HoldButton({
           onPointerLeave: cancel,
           onPointerUp: cancel
         })}
-        className={clsx("overflow-hidden", props.className)}
+        className={clsx(
+          // `.PopupButtonTimer.Negative` and `.Positive`
+          "overflow-hidden border font-medium uppercase transition-[background-color,filter] duration-250 ease-in-out enabled:hover:brightness-160 disabled:border-transparent",
+          variant === "danger"
+            ? "border-[#DB4437] bg-[rgb(92,27,27)]"
+            : "border-[#0F9D58] bg-[#074E2CB9]",
+          props.className
+        )}
         forwardRef={setReference}
-        variant={variant}
       >
         <span
           aria-hidden
           className={clsx(
             "absolute inset-y-0 left-0",
-            variant === "danger" ? "bg-red-400" : "bg-green-400"
+            variant === "danger" ? "bg-[rgb(136,41,41)]" : "bg-[#0F854CB9]"
           )}
           style={{
             transitionDuration: `${holding ? durationMs : REWIND_MS}ms`,
@@ -104,7 +110,14 @@ export function HoldButton({
             width: holding ? "100%" : "0%"
           }}
         />
-        <span className="relative">{children}</span>
+        <span
+          className={clsx(
+            "relative mix-blend-plus-lighter",
+            variant === "danger" ? "text-[#DB4437]" : "text-[#0F9D58]"
+          )}
+        >
+          {children}
+        </span>
       </ModalButton>
       <TooltipBubble {...bubble} multiline>
         {tooltip}

@@ -183,15 +183,13 @@ export function ApplyItemKeychain({
           <ItemImage className="h-25" item={keychainItem} />
           <div className="flex items-center gap-2">
             <ModalButton
-              uppercaseless
               children={translate("ApplyStickerConfirmPosition")}
               disabled={!confirmEnabled || confirmed}
               onClick={handleConfirm}
-              variant="primary"
+              variant="apply"
             />
             {confirmed ? (
               <ModalButton
-                uppercaseless
                 className="gap-2"
                 onClick={handleCancelConfirm}
                 variant="tertiary"
@@ -209,7 +207,6 @@ export function ApplyItemKeychain({
                 className="gap-2"
                 onClick={handleNextPreset}
                 variant="tertiary"
-                uppercaseless
               >
                 {translate("ApplyStickerNextPreset")}
                 <img
@@ -229,6 +226,7 @@ export function ApplyItemKeychain({
               <ModalButton
                 children={translate("ApplyKeychainUse")}
                 disabled={!confirmed}
+                pulseOnToggle
                 onClick={() =>
                   applyKeychain({
                     x: placementRef.current.x,

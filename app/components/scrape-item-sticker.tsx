@@ -217,6 +217,7 @@ function ScrapeStickerControls({
               <HoldButton
                 durationMs={REMOVE_STICKER_HOLD_MS}
                 disabled={!hasSelection}
+                pulseOnToggle
                 onHold={onRemove}
                 tooltip={translate("ScrapeStickerRemoveHint")}
               >
@@ -226,6 +227,7 @@ function ScrapeStickerControls({
             <ModalButton
               children={translate("ScrapeStickerUse")}
               disabled={!canScrape}
+              pulseOnToggle
               onClick={onScrape}
               variant="primary"
             />

@@ -128,15 +128,13 @@ function ApplyItemPatch3d({
           <ItemImage className="h-25" item={patchItem} />
           <div className="flex items-center gap-2">
             <ModalButton
-              uppercaseless
               children={translate("ApplyStickerConfirmPosition")}
               disabled={confirmed}
               onClick={() => setConfirmed(true)}
-              variant="primary"
+              variant="apply"
             />
             {confirmed ? (
               <ModalButton
-                uppercaseless
                 className="gap-2"
                 onClick={() => setConfirmed(false)}
                 variant="tertiary"
@@ -155,7 +153,6 @@ function ApplyItemPatch3d({
                   className="gap-2"
                   onClick={handleNextPreset}
                   variant="tertiary"
-                  uppercaseless
                 >
                   {translate("ApplyStickerNextPreset")}
                   <img
@@ -176,6 +173,7 @@ function ApplyItemPatch3d({
               <ModalButton
                 children={translate("ApplyPatchUse")}
                 disabled={!confirmed}
+                pulseOnToggle
                 onClick={() => applyPatch(slot)}
                 variant="primary"
               />
@@ -254,6 +252,7 @@ function ApplyItemPatch2d({
                   <ModalButton
                     children={translate("ApplyPatchUse")}
                     disabled={slot === undefined}
+                    pulseOnToggle
                     onClick={handleApplyPatch}
                     variant="primary"
                   />

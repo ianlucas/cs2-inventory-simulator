@@ -112,6 +112,7 @@ export function RenameStorageUnit({
                 <>
                   <ModalButton
                     disabled={nameTag === "" || isInvalid || !isConfirmed}
+                    pulseOnToggle
                     variant="primary"
                     onClick={handleRename}
                     children={translate("RenameStorageUnitRename")}
