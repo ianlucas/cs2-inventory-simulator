@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { Placement } from "@floating-ui/react";
+import { getSoundProps } from "~/interface-sounds";
 import { LoadoutIcon } from "./loadout-icon";
 import { LoadoutTooltip } from "./loadout-tooltip";
 import { TooltipBubble, useTooltip } from "./tooltip";
@@ -29,6 +30,7 @@ export function LoadoutUtilityTile({
         className="flex flex-1 items-center justify-center bg-black/15"
         ref={setReference}
         {...getReferenceProps()}
+        {...getSoundProps({ hover: "inventory_item_rollover" })}
       >
         <LoadoutIcon
           className="size-7 text-black/95 opacity-60"

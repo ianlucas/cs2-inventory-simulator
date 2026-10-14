@@ -4,11 +4,16 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ComponentProps } from "react";
+import { getSoundProps } from "~/interface-sounds";
 
 export function ContextButton(props: ComponentProps<"button">) {
   return (
     <button
       className="block w-full cursor-default px-4 py-1.5 text-left outline-hidden transition hover:bg-black/20 active:bg-black/50"
+      {...getSoundProps({
+        hover: "submenu_rollover",
+        press: "inventory_item_popupSelect"
+      })}
       {...props}
     />
   );

@@ -127,7 +127,7 @@ export function getFreeItemsToDisplay(hideFreeItems = false) {
         item.type !== CS2ItemType.Utility && item.type !== CS2ItemType.Keychain
     )
     .map((item, index) => ({
-      equipped: [],
+      equipped: {},
       item: createFakeInventoryItem(item, {
         uid: -1 * (index + 1)
       }),
@@ -149,7 +149,7 @@ export function getCharmDetachmentsToDisplay(
   }
   return [
     {
-      equipped: [],
+      equipped: {},
       item: createFakeInventoryItem(CS2Economy.getCharmDetachment(), {
         uid: CHARM_DETACHMENTS_DISPLAY_UID
       }),

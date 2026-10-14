@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { FloatingFocusManager } from "@floating-ui/react";
-import { CS2_INVENTORY_EQUIPPABLE_ITEMS, CS2Team } from "@ianlucas/cs2-lib";
 import {
   CS2_PREVIEW_INSPECTABLE_ITEMS,
   generateInspectLink,
@@ -24,22 +23,33 @@ import {
   UNLOCKABLE_ITEM_TYPE
 } from "~/shared/inventory";
 import { TransformedInventoryItem } from "~/shared/inventory-transform";
+import type { LoadoutTeam } from "~/shared/loadout";
 import { has } from "~/shared/misc";
 import { format } from "~/shared/number";
-import { useInventory, useRules, useTranslate, useUser } from "./app-context";
+import { SoundName } from "~/sound-events";
+import {
+  useEquippedInventory,
+  useInventory,
+  useRules,
+  useTranslate,
+  useUser
+} from "./app-context";
 import {
   InventoryItemContextButton,
   InventoryItemContextMenu
 } from "./inventory-item-context-menu";
+import { getEquipMenu } from "./inventory-item-equip-menu";
 import { InventoryItemTile } from "./inventory-item-tile";
 import { InventoryItemTooltip } from "./inventory-item-tooltip";
 import { alert, confirm } from "./modal-generic";
 
 export function InventoryItem({
+  clickSound,
   disableContextMenu,
   disableHover,
   draggable,
   equipped,
+  foreign,
   inspectOnly,
   item,
   onApplyPatch,
@@ -67,16 +77,21 @@ export function InventoryItem({
   onUnlockContainer,
   onUnsealGraffiti,
   onUseItem,
+  onViewInLoadout,
   ownApplicableKeychains,
   ownApplicablePatches,
   ownApplicableStickers,
+  rightClickContextMenu,
   selected,
   uid
 }: TransformedInventoryItem & {
+  clickSound?: SoundName;
   disableContextMenu?: boolean;
   disableHover?: boolean;
   draggable?: boolean;
-  /** For other people's items: only offers the inspect actions. */
+  /** Not from the user's inventory, e.g. on someone's profile. */
+  foreign?: boolean;
+  /** Only offers the inspect actions. */
   inspectOnly?: boolean;
   onApplyPatch?: (uid: number) => void;
   onApplySticker?: (uid: number) => void;
@@ -86,7 +101,7 @@ export function InventoryItem({
   onDetachCharm?: (uid: number) => void;
   onDetachCharmWithTool?: (uid: number) => void;
   onEdit?: (uid: number) => void;
-  onEquip?: (uid: number, team?: CS2Team) => void;
+  onEquip?: (uid: number, team?: LoadoutTeam) => void;
   onExtractSticker?: (uid: number) => void;
   onInspectItem?: (uid: number) => void;
   onInspectStorageUnit?: (uid: number) => void;
@@ -99,13 +114,16 @@ export function InventoryItem({
   onScrapeSticker?: (uid: number) => void;
   onSealSticker?: (uid: number) => void;
   onSwapItemsStatTrak?: (uid: number) => void;
-  onUnequip?: (uid: number, team?: CS2Team) => void;
+  onUnequip?: (uid: number, team?: LoadoutTeam) => void;
   onUnlockContainer?: (uid: number) => void;
   onUnsealGraffiti?: (uid: number) => void;
   onUseItem?: (uid: number) => void;
+  onViewInLoadout?: (team?: LoadoutTeam) => void;
   ownApplicableKeychains?: boolean;
   ownApplicablePatches?: boolean;
   ownApplicableStickers?: boolean;
+  /** Opens the context menu on right-click, leaving left-click to `onClick`. */
+  rightClickContextMenu?: boolean;
   selected?: boolean;
 }) {
   const [, copyToClipboard] = useCopyToClipboard();
@@ -127,6 +145,7 @@ export function InventoryItem({
     inventoryStorageUnitMaxItems
   } = useRules();
   const [inventory] = useInventory();
+  const equippedInventory = useEquippedInventory();
   const user = useUser();
   const isItemEditable = useEditItemFilter();
   const { canUse3d: canUse3dAttach } = useViewerAvailability(item, {
@@ -149,7 +168,7 @@ export function InventoryItem({
     ref,
     setIsClickOpen,
     setIsHoverOpen
-  } = useInventoryItemFloating();
+  } = useInventoryItemFloating({ rightClick: rightClickContextMenu });
 
   const isFreeInventoryItem = uid < 0;
 
@@ -158,18 +177,6 @@ export function InventoryItem({
       !inventoryItemEquipHideModel.includes(item.modelKey)) &&
     !inventoryItemEquipHideType.includes(item.type) &&
     !item.isSealed();
-  const canEquip =
-    isEquippable &&
-    item.teams === undefined &&
-    !item.equipped &&
-    CS2_INVENTORY_EQUIPPABLE_ITEMS.includes(item.type);
-  const canEquipT =
-    isEquippable && item.teams?.includes(CS2Team.T) && !item.equippedT;
-  const canEquipCT =
-    isEquippable && item.teams?.includes(CS2Team.CT) && !item.equippedCT;
-  const canUnequip = isEquippable && item.equipped === true;
-  const canUnequipT = isEquippable && item.equippedT === true;
-  const canUnequipCT = isEquippable && item.equippedCT === true;
 
   const canSwapStatTrak = item.isStatTrakSwapTool();
   const canRename = item.isNameTag();
@@ -288,9 +295,10 @@ export function InventoryItem({
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
         <InventoryItemTile
+          clickSound={clickSound}
           draggable={draggable}
           equipped={equipped}
-          foreign={inspectOnly}
+          foreign={foreign}
           item={item}
           preview
           selected={selected}
@@ -388,52 +396,22 @@ export function InventoryItem({
                               },
                               ...inspectInGameMenu
                             ],
-                            [
+                            ...getEquipMenu(
+                              isEquippable
+                                ? equippedInventory.getEquipOptions(item)
+                                : [],
                               {
-                                condition: canEquip,
-                                label: translate("InventoryItemEquip"),
-                                onClick: close(() => onEquip?.(uid))
-                              },
-                              {
-                                condition: canEquipT,
-                                label: translate("InventoryItemEquipT"),
-                                onClick: close(() => onEquip?.(uid, CS2Team.T))
-                              },
-                              {
-                                condition: canEquipCT,
-                                label: translate("InventoryItemEquipCT"),
-                                onClick: close(() => onEquip?.(uid, CS2Team.CT))
-                              },
-                              {
-                                condition: canEquipCT && canEquipT,
-                                label: translate("InventoryItemEquipBothTeams"),
-                                onClick: close(() => {
-                                  onEquip?.(uid, CS2Team.CT);
-                                  onEquip?.(uid, CS2Team.T);
-                                })
+                                equip: (team) => onEquip?.(uid, team),
+                                unequip: (team) => onUnequip?.(uid, team),
+                                viewInLoadout: (team) => onViewInLoadout?.(team)
                               }
-                            ],
-                            [
-                              {
-                                condition: canUnequip,
-                                label: translate("InventoryItemUnequip"),
-                                onClick: close(() => onUnequip?.(uid))
-                              },
-                              {
-                                condition: canUnequipT,
-                                label: translate("InventoryItemUnequipT"),
-                                onClick: close(() =>
-                                  onUnequip?.(uid, CS2Team.T)
-                                )
-                              },
-                              {
-                                condition: canUnequipCT,
-                                label: translate("InventoryItemUnequipCT"),
-                                onClick: close(() =>
-                                  onUnequip?.(uid, CS2Team.CT)
-                                )
-                              }
-                            ],
+                            ).map((group) =>
+                              group.map(({ label, onClick }) => ({
+                                condition: true,
+                                label: translate(label),
+                                onClick: close(onClick)
+                              }))
+                            ),
                             [
                               {
                                 condition: canUnlockContainer,

@@ -35,6 +35,7 @@ import { SyncIndicator } from "./components/sync-indicator";
 import { SyncWarn } from "./components/sync-warn";
 import { UnlockFeed } from "./components/unlock-feed";
 import { ViewerIconHost } from "./components/viewer-icon-host";
+import { installInterfaceSounds } from "./interface-sounds";
 import { viewerServerAvailability } from "./viewer-server-availability.server";
 import {
   ASSETS_BASE_URL,
@@ -148,6 +149,8 @@ export default function App() {
   useEffect(() => {
     setMonitoringUser(userId);
   }, [userId]);
+
+  useEffect(() => installInterfaceSounds(), []);
 
   return (
     <AppProvider {...appProps}>

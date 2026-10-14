@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2ItemType, CS2Team } from "@ianlucas/cs2-lib";
 import { useNavigate } from "react-router";
 import { useApplyItemSticker } from "~/components/hooks/use-apply-item-sticker";
+import { useEquipItem } from "~/components/hooks/use-equip-item";
 import { useInspectItem } from "~/components/hooks/use-inspect-item";
 import { useRenameItem } from "~/components/hooks/use-rename-item";
 import { useRenamePet } from "~/components/hooks/use-rename-pet";
@@ -41,6 +41,7 @@ import { useUnsealGraffiti } from "./hooks/use-unseal-graffiti";
 import { InfoIcon } from "./info-icon";
 import { InspectInventoryItem } from "./inspect-item";
 import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
+import { InventoryLoadoutNotice } from "./inventory-loadout-notice";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelector } from "./item-selector-context";
 import { Presence } from "./presence";
@@ -192,21 +193,7 @@ export function Inventory() {
     isDetachingCharm
   } = useDetachCharm();
 
-  function handleEquip(uid: number, team?: CS2Team) {
-    playSound(
-      inventory.get(uid).type === CS2ItemType.MusicKit
-        ? "music_equip"
-        : "inventory_item_pickup"
-    );
-    setInventory(inventory.equip(uid, team));
-    sync({ type: SyncAction.Equip, uid: uid, team });
-  }
-
-  function handleUnequip(uid: number, team?: CS2Team) {
-    playSound("inventory_item_close");
-    setInventory(inventory.unequip(uid, team));
-    sync({ type: SyncAction.Unequip, uid: uid, team });
-  }
+  const { equip, unequip, viewInLoadout } = useEquipItem();
 
   function handleRemove(uid: number) {
     playSound("inventory_item_close");
@@ -308,11 +295,13 @@ export function Inventory() {
 
   return (
     <>
-      {isSelectingAnItem && (
+      {isSelectingAnItem ? (
         <InventorySelectedItem
           {...itemSelector}
           onDismiss={dismissSelectItem}
         />
+      ) : (
+        <InventoryLoadoutNotice />
       )}
       <div className="m-auto grid w-full grid-cols-[repeat(auto-fit,minmax(154px,1fr))] px-2 select-none [grid-gap:1em] lg:my-8 lg:w-5xl lg:px-0">
         {displayedItems.map((item) => (
@@ -321,6 +310,7 @@ export function Inventory() {
               {...item}
               {...(isSelectingAnItem
                 ? {
+                    clickSound: "inventory_item_select" as const,
                     disableContextMenu: true,
                     onClick: itemSelector?.readOnly
                       ? undefined
@@ -334,7 +324,7 @@ export function Inventory() {
                     onDetachCharm: handleDetachCharm,
                     onDetachCharmWithTool: handleDetachCharmWithTool,
                     onEdit: handleEdit,
-                    onEquip: handleEquip,
+                    onEquip: equip,
                     onExtractSticker: handleExtractItemSticker,
                     onInspectItem: handleInspectItem,
                     onInspectStorageUnit: handleInspectStorageUnit,
@@ -347,10 +337,11 @@ export function Inventory() {
                     onScrapeSticker: handleScrapeItemSticker,
                     onSealSticker: handleSealItemSticker,
                     onSwapItemsStatTrak: handleSwapItemsStatTrak,
-                    onUnequip: handleUnequip,
+                    onUnequip: unequip,
                     onUnlockContainer: handleUnlockCase,
                     onUnsealGraffiti: handleUnsealGraffiti,
                     onUseItem: handleUnpackItem,
+                    onViewInLoadout: viewInLoadout,
                     ownApplicableKeychains,
                     ownApplicablePatches,
                     ownApplicableStickers

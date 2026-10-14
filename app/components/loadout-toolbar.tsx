@@ -16,7 +16,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { ComponentProps, ReactNode, useState } from "react";
 import { Link } from "react-router";
-import { LOADOUT_NAME_MAX_LENGTH, UserLoadout } from "~/shared/user-loadouts";
+import {
+  LOADOUT_NAME_MAX_LENGTH,
+  UserLoadout,
+  getActiveLoadout
+} from "~/shared/user-loadouts";
 import { useRules, useTranslate } from "./app-context";
 import { useLoadouts } from "./hooks/use-loadouts";
 import { FitMarquee } from "./marquee";
@@ -155,7 +159,7 @@ export function LoadoutToolbar({
   }
 
   const { activeLoadoutId, loadouts } = userLoadouts;
-  const active = loadouts.find(({ id }) => id === activeLoadoutId);
+  const active = getActiveLoadout(userLoadouts);
   const isFull = loadouts.length >= inventoryMaxLoadouts;
 
   function promptName(titleText: string, defaultValue?: string) {

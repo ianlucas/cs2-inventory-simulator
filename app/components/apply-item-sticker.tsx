@@ -19,6 +19,7 @@ import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
+import { getSoundProps } from "~/interface-sounds";
 import { range } from "~/shared/number";
 import { playSound } from "~/sound.client";
 import { useInventory, useTranslate } from "./app-context";
@@ -402,6 +403,7 @@ function ApplyItemSticker2d({
                       setSchema(position);
                       playSound("sticker_apply");
                     }}
+                    {...getSoundProps({ press: "none" })}
                   >
                     <div className="rounded-md border-2 border-white/20 p-4 px-6 transition group-hover:border-white/80">
                       <FontAwesomeIcon className="h-4" icon={faPlus} />

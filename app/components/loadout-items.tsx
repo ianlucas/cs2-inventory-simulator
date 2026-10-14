@@ -6,7 +6,7 @@
 import { CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { useMemo } from "react";
 import { getFreeItemsToDisplay } from "~/shared/inventory";
-import { getEquippedColors, sortItems } from "~/shared/inventory-transform";
+import { sortItems } from "~/shared/inventory-transform";
 import {
   Loadout,
   LoadoutTeam,
@@ -25,6 +25,7 @@ export function LoadoutItems({
   getDragSourceProps,
   isReadOnly,
   loadout,
+  onInspect,
   onSelect,
   selectedUid,
   sorter,
@@ -34,6 +35,7 @@ export function LoadoutItems({
   getDragSourceProps: ReturnType<typeof useLoadoutDrag>["getDragSourceProps"];
   isReadOnly: boolean;
   loadout?: Loadout;
+  onInspect: (uid: number) => void;
   onSelect: (item: CS2InventoryItem) => void;
   selectedUid?: number;
   sorter: string;
@@ -62,8 +64,8 @@ export function LoadoutItems({
         .map((item) => ({
           equipped:
             loadout !== undefined
-              ? getEquippedColors(getLoadoutItemEquipped(loadout, item.uid))
-              : [],
+              ? getLoadoutItemEquipped(loadout, item.uid)
+              : {},
           item,
           uid: item.uid
         })),
@@ -80,11 +82,13 @@ export function LoadoutItems({
           {...(isReadOnly ? {} : getDragSourceProps(item))}
         >
           <InventoryItem
-            disableContextMenu
             draggable={!isReadOnly}
             equipped={equipped}
+            inspectOnly
             item={item}
             onClick={isReadOnly ? undefined : () => onSelect(item)}
+            onInspectItem={onInspect}
+            rightClickContextMenu
             selected={selectedUid === uid}
             uid={uid}
           />

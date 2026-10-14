@@ -166,6 +166,10 @@ export function detachMissingItems(
   return detachRemovedItems(state, getInventoryItemIds(inventory), new Map());
 }
 
+export function getActiveLoadout({ activeLoadoutId, loadouts }: UserLoadouts) {
+  return loadouts.find(({ id }) => id === activeLoadoutId);
+}
+
 export function getLoadoutsUsingItem({ loadouts }: UserLoadouts, uid: number) {
   return loadouts.filter(({ loadout }) =>
     Object.values(getLoadoutItemEquipped(loadout, uid)).some(Boolean)

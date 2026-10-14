@@ -6,7 +6,9 @@
 import { CS2Inventory, CS2InventoryData } from "@ianlucas/cs2-lib";
 import { useMemo } from "react";
 import { useInspectItem } from "~/components/hooks/use-inspect-item";
+import { createEquippedInventory } from "~/shared/inventory-equipped";
 import { sortItemsByEquipped, transform } from "~/shared/inventory-transform";
+import type { Loadout } from "~/shared/loadout";
 import { useInventory, useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
@@ -16,10 +18,13 @@ import { Presence } from "./presence";
 
 export function ProfileInventory({
   inventory: data,
+  loadout,
   ownerId,
   rules
 }: {
   inventory: CS2InventoryData | null;
+  /** The owner's active loadout, which decides what shows as equipped. */
+  loadout: Loadout | null;
   ownerId: string;
   rules: {
     inventoryItemEquipHideModel: string[];
@@ -33,25 +38,23 @@ export function ProfileInventory({
   // so rebuilding along with it keeps item names in the current language.
   const [userInventory] = useInventory();
 
-  const items = useMemo(
-    () =>
-      sortItemsByEquipped(
-        new CS2Inventory({
-          data: data ?? undefined,
-          maxItems: rules.inventoryMaxItems,
-          storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
-        })
-          .getAll()
-          .map((item) =>
-            transform(item, {
-              models: rules.inventoryItemEquipHideModel,
-              types: rules.inventoryItemEquipHideType
-            })
-          ),
-        []
-      ),
-    [data, rules, userInventory]
-  );
+  const items = useMemo(() => {
+    const inventory = new CS2Inventory({
+      data: data ?? undefined,
+      maxItems: rules.inventoryMaxItems,
+      storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
+    });
+    const equipped = createEquippedInventory(inventory, loadout ?? undefined, {
+      models: rules.inventoryItemEquipHideModel,
+      types: rules.inventoryItemEquipHideType
+    });
+    return sortItemsByEquipped(
+      inventory
+        .getAll()
+        .map((item) => transform(item, equipped.getFlags(item.uid))),
+      []
+    );
+  }, [data, loadout, rules, userInventory]);
 
   const { closeInspectItem, handleInspectItem, inspectItem } = useInspectItem();
   const inspectedItem = items.find(({ uid }) => uid === inspectItem?.uid)?.item;
@@ -63,6 +66,7 @@ export function ProfileInventory({
           <div key={item.uid} className="flex items-start justify-center">
             <InventoryItem
               {...item}
+              foreign
               inspectOnly
               onInspectItem={handleInspectItem}
             />

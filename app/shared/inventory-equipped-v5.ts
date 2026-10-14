@@ -18,6 +18,11 @@ import {
 } from "@ianlucas/cs2-lib";
 import hashObject from "hash-object";
 import {
+  NonEquippable,
+  getEquippedFlags,
+  isEquippedFor
+} from "./inventory-equipped";
+import {
   Loadout,
   LoadoutTeam,
   getEconomyItem,
@@ -66,10 +71,7 @@ function hash<T>(obj: T & { hash?: string }) {
 
 export async function generate(
   inventory: CS2Inventory,
-  nonEquippable = {
-    models: [] as string[],
-    types: [] as string[]
-  },
+  nonEquippable?: NonEquippable,
   loadout?: Loadout
 ) {
   const knives: Record<number, EconItem> = {};
@@ -83,14 +85,6 @@ export async function generate(
   let musicKit: EconItem | undefined;
   let pet: EconItem | undefined;
   let loadoutSlots: Record<number, Record<number, number>> | undefined;
-
-  function isEquippable(item: CS2InventoryItem) {
-    return (
-      (item.modelKey === undefined ||
-        !nonEquippable.models.includes(item.modelKey)) &&
-      !nonEquippable.types.includes(item.type)
-    );
-  }
 
   function equip(item: CS2InventoryItem, team?: LoadoutTeam) {
     switch (item.type) {
@@ -197,50 +191,24 @@ export async function generate(
     }
   }
 
+  const equipped = getEquippedFlags(inventory, loadout, nonEquippable);
   for (const item of inventory.getAll()) {
-    if (!isEquippable(item)) {
-      continue;
-    }
+    const flags = equipped.get(item.uid) ?? {};
     for (const team of teams) {
-      if (team === undefined && !item.equipped) {
-        continue;
+      if (isEquippedFor(flags, team)) {
+        equip(item, team);
       }
-      if (team === CS2Team.CT && !item.equippedCT) {
-        continue;
-      }
-      if (team === CS2Team.T && !item.equippedT) {
-        continue;
-      }
-      equip(item, team);
     }
   }
 
-  // The active loadout replaces whatever it covers, and a stock or default
-  // item in it is the same as having nothing equipped.
   if (loadout !== undefined) {
-    collectible = graffiti = musicKit = undefined;
     loadoutSlots = { [CS2Team.CT]: {}, [CS2Team.T]: {} };
-    for (const team of [CS2Team.CT, CS2Team.T]) {
-      delete agents[team];
-      delete gloves[team];
-      delete knives[team];
-    }
     for (const { item, slot, team } of getLoadoutEntries(loadout)) {
-      const { definitionIndex, type } = getEconomyItem(inventory, item);
       const slotId = getGridSlotId(slot);
       if (slotId !== undefined) {
-        loadoutSlots[team][slotId] = ensure(definitionIndex);
-      }
-      if (type === CS2ItemType.Weapon) {
-        delete (team === CS2Team.CT ? ctWeapons : tWeapons)[
-          ensure(definitionIndex)
-        ];
-      }
-      if (item.type === "inventory") {
-        const inventoryItem = inventory.get(item.uid);
-        if (isEquippable(inventoryItem)) {
-          equip(inventoryItem, team);
-        }
+        loadoutSlots[team][slotId] = ensure(
+          getEconomyItem(inventory, item).definitionIndex
+        );
       }
     }
   }

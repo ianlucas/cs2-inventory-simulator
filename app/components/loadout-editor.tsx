@@ -7,6 +7,7 @@ import { CS2InventoryItem, CS2Team, ensure } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useState } from "react";
 import { useSearchParams } from "react-router";
+import { getLoadoutUrlTeam } from "~/loadout-url";
 import {
   LoadoutGroup,
   LoadoutSideSlot,
@@ -25,16 +26,19 @@ import {
 } from "~/shared/loadout";
 import { playSound } from "~/sound.client";
 import { useInventory, useTranslate } from "./app-context";
+import { useInspectItem } from "./hooks/use-inspect-item";
 import { useScrollToTopOnChange } from "./hooks/use-inventory-filter-state";
 import { useKeyRelease } from "./hooks/use-key-release";
 import { LoadoutDropTarget, useLoadoutDrag } from "./hooks/use-loadout-drag";
 import { useLoadouts } from "./hooks/use-loadouts";
+import { InspectInventoryItem } from "./inspect-item";
 import { LoadoutItemImage } from "./loadout-item-image";
 import { LoadoutItems } from "./loadout-items";
 import { LoadoutFilter, LoadoutItemsFilter } from "./loadout-items-filter";
 import { LoadoutSlotMenuEntry } from "./loadout-slot-tile";
 import { LoadoutTeamPanel } from "./loadout-team-panel";
 import { LoadoutToolbar } from "./loadout-toolbar";
+import { Presence } from "./presence";
 
 const ALL_ITEMS: LoadoutFilter = { group: "all", modelKey: "all" };
 
@@ -60,7 +64,7 @@ export function LoadoutEditor() {
     setFallback({ id, loadoutId: userLoadouts?.activeLoadoutId });
   }
   const [defaultLoadout] = useState(createDefaultLoadout);
-  const [team, setTeam] = useState<LoadoutTeam>(CS2Team.CT);
+  const [team, setTeam] = useState(() => getLoadoutUrlTeam(searchParams));
   const [filter, setFilter] = useState(ALL_ITEMS);
   const [sorter, setSorter] = useState("newest");
   const [selected, setSelected] = useState<CS2InventoryItem>();
@@ -70,12 +74,19 @@ export function LoadoutEditor() {
     team: LoadoutTeam;
   }>();
   const { drag, getDragSourceProps, setGhost } = useLoadoutDrag(handleDrop);
+  const { closeInspectItem, handleInspectItem, inspectItem, isInspectingItem } =
+    useInspectItem();
   const activeItem = drag?.item ?? selected;
   const selectedLoadout = findLoadout();
   const loadout = selectedLoadout?.loadout ?? defaultLoadout;
   const isReadOnly = selectedLoadout === undefined;
 
-  useKeyRelease("Escape", () => setSelected(undefined));
+  useKeyRelease("Escape", () => {
+    // Escape closes the inspect modal instead, keeping the selection.
+    if (inspectItem === undefined) {
+      setSelected(undefined);
+    }
+  });
   useScrollToTopOnChange(filter);
 
   function findLoadout() {
@@ -258,6 +269,7 @@ export function LoadoutEditor() {
           getDragSourceProps={getDragSourceProps}
           isReadOnly={isReadOnly}
           loadout={selectedLoadout?.loadout}
+          onInspect={handleInspectItem}
           onSelect={(item) =>
             setSelected(selected?.uid === item.uid ? undefined : item)
           }
@@ -277,6 +289,11 @@ export function LoadoutEditor() {
           />
         </div>
       )}
+      <Presence present={isInspectingItem(inspectItem)}>
+        {isInspectingItem(inspectItem) ? (
+          <InspectInventoryItem {...inspectItem} onClose={closeInspectItem} />
+        ) : null}
+      </Presence>
     </div>
   );
 }

@@ -69,13 +69,8 @@ export function Header({
   return (
     <div
       className={clsx(
-        "font-display sticky top-0 left-0 z-20 w-full border-b border-white/10 backdrop-blur-sm",
-        profile !== undefined
-          ? "bg-linear-to-b from-stone-800 to-transparent"
-          : [
-              "transition-all before:absolute before:inset-0 before:-z-10 before:bg-linear-to-b before:from-neutral-800/60 before:to-transparent before:transition-all before:content-['']",
-              isOnTop ? "before:opacity-0" : "before:opacity-1"
-            ]
+        "font-display sticky top-0 left-0 z-20 w-full border-b border-white/10 backdrop-blur-sm transition-all before:absolute before:inset-0 before:-z-10 before:bg-linear-to-b before:from-neutral-800/60 before:to-transparent before:transition-all before:content-['']",
+        isOnTop ? "before:opacity-0" : "before:opacity-1"
       )}
       ref={ref}
     >
@@ -106,6 +101,7 @@ export function Header({
                 icon={faBoxesStacked}
                 label={translate("HeaderInventoryLabel")}
                 onClick={closeMenu}
+                tabSound="tab_mainmenu_inventory"
               />
               {profile === undefined && (
                 <HeaderLink
@@ -121,6 +117,7 @@ export function Header({
                   label={translate("HeaderCraftLabel")}
                   onClick={closeMenu}
                   preventScrollReset
+                  tabSound="tab_mainmenu_shop"
                 />
               )}
               {profile === undefined && (
@@ -130,6 +127,7 @@ export function Header({
                   icon={faPersonRifle}
                   label={translate("HeaderLoadoutLabel")}
                   onClick={closeMenu}
+                  tabSound="tab_mainmenu_loadout"
                 />
               )}
               {user === undefined ? (
@@ -148,6 +146,7 @@ export function Header({
                       icon={faCog}
                       onClick={closeMenu}
                       label={translate("HeaderSettingsLabel")}
+                      tabSound="tab_settings_settings"
                     />
                   </div>
                 </>
@@ -164,7 +163,11 @@ export function Header({
                   )}
                   <div className="gap-2 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
-                    <HeaderLink to="/settings" onClick={closeMenu}>
+                    <HeaderLink
+                      to="/settings"
+                      onClick={closeMenu}
+                      tabSound="tab_settings_settings"
+                    >
                       <span className="max-w-[256px] truncate">
                         {user.name}
                       </span>

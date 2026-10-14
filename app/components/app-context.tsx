@@ -37,6 +37,10 @@ import {
   getFreeItemsToDisplay
 } from "~/shared/inventory";
 import {
+  EquippedInventory,
+  createEquippedInventory
+} from "~/shared/inventory-equipped";
+import {
   TransformedInventoryItems,
   sortItemsByEquipped,
   transform
@@ -44,9 +48,11 @@ import {
 import { getInventoryItemIds } from "~/shared/loadout";
 import { SerializeFrom } from "~/shared/misc";
 import {
+  UserLoadout,
   UserLoadouts,
   detachMissingItems,
-  detachRemovedItems
+  detachRemovedItems,
+  getActiveLoadout
 } from "~/shared/user-loadouts";
 import { pushToSync, sync } from "~/sync";
 import { cacheAuthenticatedUserId } from "~/user-storage";
@@ -54,6 +60,8 @@ import { viewerClientAvailability } from "~/viewer-client-availability";
 
 const AppContext = createContext<
   | ({
+      activeLoadout: UserLoadout | undefined;
+      equipped: EquippedInventory;
       inventory: CS2Inventory;
       inventoryFilter: ReturnType<typeof useInventoryFilterState>;
       items: TransformedInventoryItems;
@@ -101,6 +109,15 @@ export function useInventoryFilter() {
   return useAppContext().inventoryFilter;
 }
 
+export function useActiveLoadout() {
+  return useAppContext().activeLoadout;
+}
+
+/** What the game equips, with the active loadout taking over the inventory. */
+export function useEquippedInventory() {
+  return useAppContext().equipped;
+}
+
 export function AppProvider({
   children,
   preferences,
@@ -108,6 +125,8 @@ export function AppProvider({
   user
 }: Omit<
   NonNullable<ContextType<typeof AppContext>>,
+  | "activeLoadout"
+  | "equipped"
   | "inventory"
   | "inventoryFilter"
   | "items"
@@ -198,6 +217,23 @@ export function AppProvider({
     );
   }, [translation.items]);
 
+  const activeLoadout =
+    loadouts !== undefined ? getActiveLoadout(loadouts) : undefined;
+
+  const equipped = useMemo(
+    () =>
+      createEquippedInventory(inventory, activeLoadout?.loadout, {
+        models: rules.inventoryItemEquipHideModel,
+        types: rules.inventoryItemEquipHideType
+      }),
+    [
+      inventory,
+      activeLoadout?.loadout,
+      rules.inventoryItemEquipHideModel,
+      rules.inventoryItemEquipHideType
+    ]
+  );
+
   const items = useMemo(
     () =>
       (preferences.hideFilters
@@ -209,12 +245,7 @@ export function AppProvider({
           .filter(
             (item) => !preferences.hideFreeItems || !item.isCharmDetachment()
           )
-          .map((item) =>
-            transform(item, {
-              models: rules.inventoryItemEquipHideModel,
-              types: rules.inventoryItemEquipHideType
-            })
-          ),
+          .map((item) => transform(item, equipped.getFlags(item.uid))),
         // Default Game Items
         [
           ...getFreeItemsToDisplay(preferences.hideFreeItems),
@@ -222,11 +253,10 @@ export function AppProvider({
         ]
       ),
     [
+      equipped,
       inventory,
       preferences.hideFreeItems,
       preferences.hideFilters,
-      rules.inventoryItemEquipHideModel,
-      rules.inventoryItemEquipHideType,
       inventoryFilter.sortItems
     ]
   );
@@ -234,6 +264,8 @@ export function AppProvider({
   return (
     <AppContext.Provider
       value={{
+        activeLoadout,
+        equipped,
         inventory,
         inventoryFilter,
         items,

@@ -5,6 +5,7 @@
 
 import clsx from "clsx";
 import { ComponentProps, ElementRef, MouseEvent, useRef } from "react";
+import { getSoundProps } from "~/interface-sounds";
 
 export function EditorToggle({
   className,
@@ -32,6 +33,9 @@ export function EditorToggle({
       className="group flex h-8 flex-1 items-center justify-end gap-2"
       onClick={handleClick}
       ref={wrapperRef}
+      {...getSoundProps({
+        press: props.disabled ? "none" : "checkbox_toggle"
+      })}
     >
       {label !== undefined && <span>{label}</span>}
       <label className={clsx("relative inline-flex items-center", className)}>

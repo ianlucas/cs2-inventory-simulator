@@ -6,6 +6,7 @@
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useNameItem } from "~/components/hooks/use-name-item";
+import { getSoundProps } from "~/interface-sounds";
 import { isNewItem } from "~/shared/economy";
 import { usePreferences, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
@@ -51,6 +52,11 @@ export function ItemButton({
           "relative cursor-default overflow-hidden hover:bg-black/25 active:bg-black/30",
         !bigger && "block h-16 w-full pr-4 pl-0.5",
         bigger && "flex size-full items-center justify-center"
+      )}
+      {...getSoundProps(
+        clickable
+          ? { hover: "inventory_item_rollover", press: "inventory_item_select" }
+          : { hover: "none", press: "none" }
       )}
     >
       <div
