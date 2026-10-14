@@ -6,7 +6,7 @@
 import { CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { useMemo } from "react";
 import { getFreeItemsToDisplay } from "~/shared/inventory";
-import { getEquippedColors, sortItems } from "~/shared/inventory-transform";
+import { sortItems } from "~/shared/inventory-transform";
 import {
   Loadout,
   LoadoutTeam,
@@ -64,8 +64,8 @@ export function LoadoutItems({
         .map((item) => ({
           equipped:
             loadout !== undefined
-              ? getEquippedColors(getLoadoutItemEquipped(loadout, item.uid))
-              : [],
+              ? getLoadoutItemEquipped(loadout, item.uid)
+              : {},
           item,
           uid: item.uid
         })),

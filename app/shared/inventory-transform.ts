@@ -9,6 +9,7 @@ import {
   CS2RarityColorName,
   CS2_RARITY_ORDER
 } from "@ianlucas/cs2-lib";
+import { EquippedFlags, isEquippedForAny } from "./inventory-equipped";
 
 const INVENTORY_ITEM_TYPE_ORDER = {
   [CS2ItemType.Weapon]: 0,
@@ -33,7 +34,7 @@ export function getEquippedColors({
   equipped,
   equippedCT,
   equippedT
-}: Pick<CS2InventoryItem, "equipped" | "equippedCT" | "equippedT">) {
+}: EquippedFlags) {
   return [
     equipped && "text-white",
     equippedCT && "text-sky-300",
@@ -43,27 +44,9 @@ export function getEquippedColors({
 
 export function transform(
   item: CS2InventoryItem,
-  nonEquippable = {
-    models: [] as string[],
-    types: [] as string[]
-  }
+  equipped: EquippedFlags = {}
 ) {
-  const isEquippable =
-    (item.modelKey === undefined ||
-      !nonEquippable.models.includes(item.modelKey)) &&
-    !nonEquippable.types.includes(item.type);
-
-  if (!isEquippable) {
-    item.equipped = undefined;
-    item.equippedCT = undefined;
-    item.equippedT = undefined;
-  }
-
-  return {
-    equipped: getEquippedColors(item),
-    item,
-    uid: item.uid
-  };
+  return { equipped, item, uid: item.uid };
 }
 
 export type TransformedInventoryItem = ReturnType<typeof transform>;
@@ -90,8 +73,8 @@ export function sortByEquipped(
   a: TransformedInventoryItem,
   b: TransformedInventoryItem
 ) {
-  const equippedA = a.item.equipped || a.item.equippedCT || a.item.equippedT;
-  const equippedB = b.item.equipped || b.item.equippedCT || b.item.equippedT;
+  const equippedA = isEquippedForAny(a.equipped);
+  const equippedB = isEquippedForAny(b.equipped);
   if (equippedA && !equippedB) {
     return -1;
   } else if (!equippedA && equippedB) {

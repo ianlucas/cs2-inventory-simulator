@@ -15,6 +15,8 @@ import clsx from "clsx";
 import { useViewerIcon } from "~/components/hooks/use-viewer-icon";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { getSoundProps } from "~/interface-sounds";
+import { EquippedFlags } from "~/shared/inventory-equipped";
+import { getEquippedColors } from "~/shared/inventory-transform";
 import { has } from "~/shared/misc";
 import { SoundName } from "~/sound-events";
 import { useTranslate } from "./app-context";
@@ -33,7 +35,7 @@ export function InventoryItemTile({
 }: {
   clickSound?: SoundName;
   draggable?: boolean;
-  equipped?: (string | false | undefined)[];
+  equipped?: EquippedFlags;
   foreign?: boolean;
   item: CS2EconomyItem | CS2InventoryItem;
   onClick?: () => void;
@@ -131,7 +133,7 @@ export function InventoryItemTile({
         )}
         {equipped !== undefined && (
           <div className="absolute top-0 right-0 flex items-center gap-1 p-2">
-            {equipped.map((color, colorIndex) =>
+            {getEquippedColors(equipped).map((color, colorIndex) =>
               typeof color === "string" ? (
                 <FontAwesomeIcon
                   key={colorIndex}
