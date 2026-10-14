@@ -25,6 +25,7 @@ export function LoadoutItems({
   getDragSourceProps,
   isReadOnly,
   loadout,
+  onInspect,
   onSelect,
   selectedUid,
   sorter,
@@ -34,6 +35,7 @@ export function LoadoutItems({
   getDragSourceProps: ReturnType<typeof useLoadoutDrag>["getDragSourceProps"];
   isReadOnly: boolean;
   loadout?: Loadout;
+  onInspect: (uid: number) => void;
   onSelect: (item: CS2InventoryItem) => void;
   selectedUid?: number;
   sorter: string;
@@ -80,11 +82,13 @@ export function LoadoutItems({
           {...(isReadOnly ? {} : getDragSourceProps(item))}
         >
           <InventoryItem
-            disableContextMenu
             draggable={!isReadOnly}
             equipped={equipped}
+            inspectOnly
             item={item}
             onClick={isReadOnly ? undefined : () => onSelect(item)}
+            onInspectItem={onInspect}
+            rightClickContextMenu
             selected={selectedUid === uid}
             uid={uid}
           />

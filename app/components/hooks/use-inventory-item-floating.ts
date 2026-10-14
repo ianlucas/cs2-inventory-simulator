@@ -5,6 +5,7 @@
 
 import {
   autoUpdate,
+  ElementProps,
   flip,
   offset,
   shift,
@@ -15,10 +16,15 @@ import {
   useMergeRefs,
   useRole
 } from "@floating-ui/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useFloatingClick } from "./use-floating-click";
 
-export function useInventoryItemFloating() {
+export function useInventoryItemFloating({
+  rightClick = false
+}: {
+  /** Opens the click menu on right-click only, leaving left-click free. */
+  rightClick?: boolean;
+} = {}) {
   const [isClickOpen, setIsClickOpen] = useState(false);
   const [isHoverOpen, setIsHoverOpen] = useState(false);
 
@@ -47,6 +53,22 @@ export function useInventoryItemFloating() {
   });
 
   const click = useFloatingClick(clickContext);
+  const contextMenu = useMemo<ElementProps>(
+    () => ({
+      reference: {
+        onContextMenu(event) {
+          event.preventDefault();
+          clickContext.onOpenChange(true, event.nativeEvent);
+        },
+        onPointerDown(event) {
+          if (event.button === 0) {
+            clickContext.onOpenChange(false, event.nativeEvent);
+          }
+        }
+      }
+    }),
+    [clickContext.onOpenChange]
+  );
   const dismiss = useDismiss(clickContext);
   const role = useRole(clickContext);
   const hover = useHover(hoverContext);
@@ -54,7 +76,7 @@ export function useInventoryItemFloating() {
   const {
     getReferenceProps: getClickReferenceProps,
     getFloatingProps: getClickFloatingProps
-  } = useInteractions([click, dismiss, role]);
+  } = useInteractions([rightClick ? contextMenu : click, dismiss, role]);
 
   const {
     getReferenceProps: getHoverReferenceProps,

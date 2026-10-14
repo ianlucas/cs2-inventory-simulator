@@ -63,6 +63,7 @@ export function ProfileInventory({
           <div key={item.uid} className="flex items-start justify-center">
             <InventoryItem
               {...item}
+              foreign
               inspectOnly
               onInspectItem={handleInspectItem}
             />
