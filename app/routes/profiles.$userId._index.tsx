@@ -17,6 +17,7 @@ import {
   inventoryMaxItems,
   inventoryStorageUnitMaxItems
 } from "~/models/rule.server";
+import { getActiveUserLoadout } from "~/models/user-loadout.server";
 import { getUserPreference } from "~/models/user-preference.server";
 import type { SeoHandle } from "~/root-seo";
 import { safeLoadInventory } from "~/shared/inventory";
@@ -59,25 +60,34 @@ export async function loader({
     },
     userId
   );
+  const inventory = safeLoadInventory(user.rawInventory, {
+    maxItems: rules.inventoryMaxItems,
+    storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
+  });
   return {
     background: (await getUserPreference(userId, "background")) ?? null,
-    inventory:
-      safeLoadInventory(user.rawInventory, {
-        maxItems: rules.inventoryMaxItems,
-        storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
-      })?.getData() ?? null,
+    inventory: inventory?.getData() ?? null,
+    loadout:
+      inventory !== undefined
+        ? ((await getActiveUserLoadout(userId, inventory)) ?? null)
+        : null,
     rules,
     user: { avatar: user.avatar, id: user.id, name: user.name }
   };
 }
 
 export default function Profile({
-  loaderData: { background, inventory, rules, user }
+  loaderData: { background, inventory, loadout, rules, user }
 }: Route.ComponentProps) {
   return (
     <>
       <Background background={background} />
-      <ProfileInventory inventory={inventory} ownerId={user.id} rules={rules} />
+      <ProfileInventory
+        inventory={inventory}
+        loadout={loadout}
+        ownerId={user.id}
+        rules={rules}
+      />
     </>
   );
 }

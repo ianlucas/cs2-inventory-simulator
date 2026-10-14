@@ -7,6 +7,7 @@ import { CS2InventoryItem, CS2Team, ensure } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { useState } from "react";
 import { useSearchParams } from "react-router";
+import { getLoadoutUrlTeam } from "~/loadout-url";
 import {
   LoadoutGroup,
   LoadoutSideSlot,
@@ -63,7 +64,7 @@ export function LoadoutEditor() {
     setFallback({ id, loadoutId: userLoadouts?.activeLoadoutId });
   }
   const [defaultLoadout] = useState(createDefaultLoadout);
-  const [team, setTeam] = useState<LoadoutTeam>(CS2Team.CT);
+  const [team, setTeam] = useState(() => getLoadoutUrlTeam(searchParams));
   const [filter, setFilter] = useState(ALL_ITEMS);
   const [sorter, setSorter] = useState("newest");
   const [selected, setSelected] = useState<CS2InventoryItem>();

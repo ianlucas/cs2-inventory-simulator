@@ -115,7 +115,7 @@ const SHARED_SIDE_KEYS = {
 type SharedSideSlot = keyof typeof SHARED_SIDE_KEYS;
 type TeamSideSlot = keyof typeof TEAM_SIDE_KEYS;
 
-function isSharedSlot(slot: LoadoutSlot): slot is SharedSideSlot {
+export function isSharedSlot(slot: LoadoutSlot): slot is SharedSideSlot {
   return slot in SHARED_SIDE_KEYS;
 }
 
@@ -303,6 +303,27 @@ function findWeaponSlot(
       getEconomyItem(inventory, current).modelKey === item.modelKey
     );
   });
+}
+
+// The slot the loadout fills for an item and team, overriding what the inventory
+// has equipped there: the item's side slot, or the grid slot holding its weapon.
+// Items equipped for no team only have the shared slots.
+export function findItemSlot(
+  loadout: Loadout,
+  inventory: CS2Inventory,
+  team: LoadoutTeam | undefined,
+  item: CS2EconomyItem
+): LoadoutSlot | undefined {
+  const group = getItemGroup(item);
+  if (team === undefined) {
+    return LOADOUT_SIDE_SLOTS.filter(isSharedSlot).find(
+      (slot) => slot === group
+    );
+  }
+  return (
+    getSideSlots(team).find((slot) => slot === group) ??
+    findWeaponSlot(loadout, inventory, team, item)
+  );
 }
 
 export function place(
