@@ -26,6 +26,7 @@ import {
 import { TransformedInventoryItem } from "~/shared/inventory-transform";
 import { has } from "~/shared/misc";
 import { format } from "~/shared/number";
+import { SoundName } from "~/sound-events";
 import { useInventory, useRules, useTranslate, useUser } from "./app-context";
 import {
   InventoryItemContextButton,
@@ -36,6 +37,7 @@ import { InventoryItemTooltip } from "./inventory-item-tooltip";
 import { alert, confirm } from "./modal-generic";
 
 export function InventoryItem({
+  clickSound,
   disableContextMenu,
   disableHover,
   draggable,
@@ -75,6 +77,7 @@ export function InventoryItem({
   selected,
   uid
 }: TransformedInventoryItem & {
+  clickSound?: SoundName;
   disableContextMenu?: boolean;
   disableHover?: boolean;
   draggable?: boolean;
@@ -294,6 +297,7 @@ export function InventoryItem({
         {...getHoverReferenceProps(getClickReferenceProps())}
       >
         <InventoryItemTile
+          clickSound={clickSound}
           draggable={draggable}
           equipped={equipped}
           foreign={foreign}

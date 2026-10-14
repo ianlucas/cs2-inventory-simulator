@@ -239,10 +239,7 @@ function ApplyItemPatch2d({
                   <button
                     key={xslot}
                     className="group flex h-31.5 w-42 items-center justify-center"
-                    onClick={() => {
-                      setSlot(xslot);
-                      playSound("buttonclick");
-                    }}
+                    onClick={() => setSlot(xslot)}
                   >
                     <div className="rounded-md border-2 border-white/20 p-4 px-6 transition group-hover:border-white/80">
                       <FontAwesomeIcon className="h-4" icon={faPlus} />

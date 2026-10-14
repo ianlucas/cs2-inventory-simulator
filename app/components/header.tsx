@@ -101,6 +101,7 @@ export function Header({
                 icon={faBoxesStacked}
                 label={translate("HeaderInventoryLabel")}
                 onClick={closeMenu}
+                tabSound="tab_mainmenu_inventory"
               />
               {profile === undefined && (
                 <HeaderLink
@@ -116,6 +117,7 @@ export function Header({
                   label={translate("HeaderCraftLabel")}
                   onClick={closeMenu}
                   preventScrollReset
+                  tabSound="tab_mainmenu_shop"
                 />
               )}
               {profile === undefined && (
@@ -125,6 +127,7 @@ export function Header({
                   icon={faPersonRifle}
                   label={translate("HeaderLoadoutLabel")}
                   onClick={closeMenu}
+                  tabSound="tab_mainmenu_loadout"
                 />
               )}
               {user === undefined ? (
@@ -143,6 +146,7 @@ export function Header({
                       icon={faCog}
                       onClick={closeMenu}
                       label={translate("HeaderSettingsLabel")}
+                      tabSound="tab_settings_settings"
                     />
                   </div>
                 </>
@@ -159,7 +163,11 @@ export function Header({
                   )}
                   <div className="gap-2 lg:flex lg:flex-1 lg:justify-end">
                     <DonateHeaderLink />
-                    <HeaderLink to="/settings" onClick={closeMenu}>
+                    <HeaderLink
+                      to="/settings"
+                      onClick={closeMenu}
+                      tabSound="tab_settings_settings"
+                    >
                       <span className="max-w-[256px] truncate">
                         {user.name}
                       </span>

@@ -9,7 +9,7 @@ import {
   CS2_STICKER_WEAR_FACTOR
 } from "@ianlucas/cs2-lib";
 import { useEffect, useRef } from "react";
-import { getAppVolume } from "~/user-storage";
+import { playSound, SoundHandle } from "~/sound.client";
 
 const SCRATCH_THROTTLE_MS = 500;
 
@@ -26,7 +26,7 @@ export function ScrapeLevelSlider({
   onChange: (wear: number) => void;
   value: number;
 }) {
-  const scratchRef = useRef<HTMLAudioElement | undefined>(undefined);
+  const scratchRef = useRef<SoundHandle | undefined>(undefined);
   const draggingRef = useRef(false);
   const prevValueRef = useRef(value);
   const lastScratchRef = useRef(0);
@@ -42,30 +42,20 @@ export function ScrapeLevelSlider({
       return;
     }
     lastScratchRef.current = now;
-    if (typeof Audio === "undefined") {
-      return;
-    }
-    const scratch = (scratchRef.current ??= new Audio(
-      "/sounds/sticker_scratch1.wav"
-    ));
-    scratch.volume = getAppVolume();
-    scratch.currentTime = 0;
-    void scratch.play().catch(() => {});
+    scratchRef.current?.stop();
+    scratchRef.current = playSound("sticker_scratch1");
   }, [value]);
 
   function stopScratching() {
     draggingRef.current = false;
     lastScratchRef.current = 0;
-    const scratch = scratchRef.current;
-    if (scratch !== undefined) {
-      scratch.pause();
-      scratch.currentTime = 0;
-    }
+    scratchRef.current?.stop();
+    scratchRef.current = undefined;
   }
 
   useEffect(() => {
     return () => {
-      scratchRef.current?.pause();
+      scratchRef.current?.stop();
     };
   }, []);
 

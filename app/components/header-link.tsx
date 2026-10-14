@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { ComponentProps } from "react";
 import { Link, useLocation } from "react-router";
+import { getSoundProps } from "~/interface-sounds";
+import { SoundName } from "~/sound-events";
 import { FitMarquee } from "./marquee";
 
 export function HeaderLink({
@@ -18,6 +20,7 @@ export function HeaderLink({
   icon,
   iconStyles,
   label,
+  tabSound,
   ...props
 }: ComponentProps<typeof Link> & {
   collapsed?: boolean;
@@ -26,6 +29,8 @@ export function HeaderLink({
   icon?: IconProp;
   iconStyles?: string;
   label?: string;
+  /** Like the game's main menu tabs, plays only when switching to it. */
+  tabSound?: SoundName;
 }) {
   const location = useLocation();
   const isActive = !disabled && location.pathname === props.to;
@@ -97,6 +102,10 @@ export function HeaderLink({
         className
       )}
       children={content}
+      {...getSoundProps({
+        hover: "mainmenu_rollover",
+        press: tabSound !== undefined && isActive ? "none" : tabSound
+      })}
     />
   );
 }

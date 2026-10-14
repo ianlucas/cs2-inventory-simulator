@@ -18,6 +18,7 @@ import {
 import { CS2BaseInventoryItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { MouseEvent, ReactNode, useState } from "react";
+import { getSoundProps } from "~/interface-sounds";
 import { toInventoryItem } from "~/shared/inventory";
 import { LoadoutSlot, LoadoutTeam } from "~/shared/loadout";
 import { ContextButton } from "./context-button";
@@ -101,6 +102,7 @@ export function LoadoutSlotTile({
         data-loadout-slot={slot}
         data-loadout-team={slot !== undefined ? team : undefined}
         ref={ref}
+        {...getSoundProps({ hover: "inventory_item_rollover" })}
         {...getReferenceProps(
           getMenuReferenceProps({
             onClick,

@@ -14,11 +14,14 @@ import {
 import clsx from "clsx";
 import { useViewerIcon } from "~/components/hooks/use-viewer-icon";
 import { useNameItem } from "~/components/hooks/use-name-item";
+import { getSoundProps } from "~/interface-sounds";
 import { has } from "~/shared/misc";
+import { SoundName } from "~/sound-events";
 import { useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 
 export function InventoryItemTile({
+  clickSound,
   draggable,
   equipped,
   foreign,
@@ -28,6 +31,7 @@ export function InventoryItemTile({
   selected,
   small
 }: {
+  clickSound?: SoundName;
   draggable?: boolean;
   equipped?: (string | false | undefined)[];
   foreign?: boolean;
@@ -62,7 +66,10 @@ export function InventoryItemTile({
     !item.isCharmDetachment();
 
   return (
-    <div className={clsx("group/tile", small ? "w-30" : "w-38.5")}>
+    <div
+      className={clsx("group/tile", small ? "w-30" : "w-38.5")}
+      {...getSoundProps({ hover: "inventory_item_rollover" })}
+    >
       <div className="group relative bg-linear-to-b from-neutral-600 to-neutral-400 p-px">
         <div
           className="bg-linear-to-b from-neutral-500 to-neutral-300 px-1"
@@ -144,6 +151,7 @@ export function InventoryItemTile({
                 : "border-4 border-transparent transition-all hover:border-white"
             )}
             onClick={onClick}
+            {...getSoundProps({ hover: "none", press: clickSound ?? "none" })}
           />
         )}
       </div>

@@ -5,6 +5,7 @@
 
 import clsx from "clsx";
 import { ReactNode } from "react";
+import { getSoundProps } from "~/interface-sounds";
 import { Marquee } from "./marquee";
 
 export const SIDE_MENU_ITEM_HEIGHT = 32;
@@ -33,6 +34,10 @@ export function SideMenuItem({
       )}
       onClick={onClick}
       style={{ height: SIDE_MENU_ITEM_HEIGHT }}
+      {...getSoundProps({
+        hover: "sidemenu_rollover",
+        press: "sidemenu_select"
+      })}
     >
       <div
         className={clsx(
