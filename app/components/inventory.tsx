@@ -321,6 +321,7 @@ export function Inventory() {
               {...item}
               {...(isSelectingAnItem
                 ? {
+                    clickSound: "inventory_item_select" as const,
                     disableContextMenu: true,
                     onClick: itemSelector?.readOnly
                       ? undefined

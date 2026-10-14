@@ -9,6 +9,7 @@ import { ensure } from "@ianlucas/cs2-lib";
 import { useClickAway } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { ReactNode, useEffect, useState } from "react";
+import { getSoundProps } from "~/interface-sounds";
 
 export function Select<T extends { value: string }>({
   children,
@@ -61,6 +62,7 @@ export function Select<T extends { value: string }>({
           className ?? "min-w-63.25"
         )}
         onClick={() => setIsOpen(true)}
+        {...getSoundProps({ press: "submenu_dropdown_select" })}
       >
         <div className="flex flex-1 items-center gap-2">
           {children(selected)}
@@ -101,6 +103,10 @@ export function Select<T extends { value: string }>({
                   onChange(option.value);
                   setIsOpen(false);
                 }}
+                {...getSoundProps({
+                  hover: "submenu_dropdown_option_rollover",
+                  press: "submenu_dropdown_option_select"
+                })}
               >
                 {children !== undefined && children(option)}
               </button>

@@ -5,6 +5,7 @@
 
 import clsx from "clsx";
 import { ComponentProps } from "react";
+import { getSoundProps } from "~/interface-sounds";
 
 export function ModalButton({
   children,
@@ -33,6 +34,7 @@ export function ModalButton({
         variant === "danger" &&
           "bg-red-800/80 text-neutral-200 hover:bg-red-700 disabled:bg-red-950 disabled:text-red-700"
       ])}
+      {...getSoundProps({ press: "submenu_select" })}
       {...props}
       ref={forwardRef}
     >

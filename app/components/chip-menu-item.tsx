@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import clsx from "clsx";
+import { getSoundProps } from "~/interface-sounds";
 
 export function ChipMenuItem({
   isActive,
@@ -21,6 +22,10 @@ export function ChipMenuItem({
         isActive ? "bg-black/50 text-neutral-200" : "text-neutral-400"
       )}
       onClick={onClick}
+      {...getSoundProps({
+        hover: "sidemenu_rollover",
+        press: "sidemenu_select"
+      })}
     >
       {label}
     </button>
