@@ -69,13 +69,8 @@ export function Header({
   return (
     <div
       className={clsx(
-        "font-display sticky top-0 left-0 z-20 w-full border-b border-white/10 backdrop-blur-sm",
-        profile !== undefined
-          ? "bg-linear-to-b from-stone-800 to-transparent"
-          : [
-              "transition-all before:absolute before:inset-0 before:-z-10 before:bg-linear-to-b before:from-neutral-800/60 before:to-transparent before:transition-all before:content-['']",
-              isOnTop ? "before:opacity-0" : "before:opacity-1"
-            ]
+        "font-display sticky top-0 left-0 z-20 w-full border-b border-white/10 backdrop-blur-sm transition-all before:absolute before:inset-0 before:-z-10 before:bg-linear-to-b before:from-neutral-800/60 before:to-transparent before:transition-all before:content-['']",
+        isOnTop ? "before:opacity-0" : "before:opacity-1"
       )}
       ref={ref}
     >
