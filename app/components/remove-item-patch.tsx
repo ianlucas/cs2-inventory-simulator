@@ -119,6 +119,7 @@ function RemovePatchControls({
             <HoldButton
               durationMs={REMOVE_PATCH_HOLD_MS}
               disabled={selectedSlot === undefined}
+              pulseOnToggle
               onHold={onRemove}
               tooltip={translate("RemovePatchRemoveHint")}
             >

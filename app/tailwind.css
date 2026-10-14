@@ -28,6 +28,7 @@
   --animate-unlock-feed-line-leave: unlock-feed-line-leave 500ms ease-in both;
   --animate-loadout-drag-start: loadout-drag-start 150ms ease-out both;
   --animate-loadout-drop: loadout-drop 200ms ease-out;
+  --animate-modal-button-slide-in: modal-button-slide-in 250ms ease-in-out;
 
   --color-ct: rgb(150 200 250);
   --color-t: #eabe54;
@@ -293,6 +294,54 @@
   from {
     filter: brightness(5);
     scale: 1.2;
+  }
+}
+
+@keyframes modal-button-slide-in {
+  from {
+    opacity: 0;
+    translate: -30px 0;
+  }
+}
+
+@property --modal-button-hover {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+/*
+  Panorama's `.PopupButton` hover. Interpolating its gradient background into
+  the solid hover color leaves a hard-edged band on the left that grows to a
+  quarter of the width and shrinks back. Panorama blends in linear light, so
+  its `white/5` is fitted to these alphas over a dark backdrop, with the rest
+  of the button held back so the band stands out like in game.
+*/
+@utility modal-button-hover {
+  --modal-button-hover-edge: calc(
+    var(--modal-button-hover) * (1 - var(--modal-button-hover)) * 100%
+  );
+  background-image: linear-gradient(
+    to right,
+    rgb(
+        255 255 255 /
+          calc(0.2 * var(--modal-button-hover) * var(--modal-button-hover))
+      )
+      var(--modal-button-hover-edge),
+    rgb(
+        255 255 255 /
+          calc(
+            0.2 * var(--modal-button-hover) * var(--modal-button-hover) *
+              var(--modal-button-hover) * var(--modal-button-hover)
+          )
+      )
+      var(--modal-button-hover-edge)
+  );
+  transition: --modal-button-hover 100ms ease-in-out;
+
+  &:enabled:hover {
+    --modal-button-hover: 1;
+    transition-duration: 200ms;
   }
 }
 

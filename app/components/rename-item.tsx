@@ -126,6 +126,7 @@ export function RenameItem({
                       (nameTag === "" && inventoryItem.isDefault) ||
                       !isConfirmed
                     }
+                    pulseOnToggle
                     variant="primary"
                     onClick={handleRename}
                     children={translate("RenameRename")}

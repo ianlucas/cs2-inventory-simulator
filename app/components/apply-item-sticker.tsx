@@ -278,15 +278,13 @@ function ApplyItemSticker3d({
           </div>
           <div className="flex items-center gap-2">
             <ModalButton
-              uppercaseless
               children={translate("ApplyStickerConfirmPosition")}
               disabled={!confirmEnabled || confirmed}
               onClick={handleConfirm}
-              variant="primary"
+              variant="apply"
             />
             {confirmed ? (
               <ModalButton
-                uppercaseless
                 className="gap-2"
                 onClick={handleCancelConfirm}
                 variant="tertiary"
@@ -305,7 +303,6 @@ function ApplyItemSticker3d({
                   className="gap-2"
                   onClick={handleNextPreset}
                   variant="tertiary"
-                  uppercaseless
                 >
                   {translate("ApplyStickerNextPreset")}
                   <img
@@ -326,6 +323,7 @@ function ApplyItemSticker3d({
               <ModalButton
                 children={translate("ApplyStickerUse")}
                 disabled={!confirmed}
+                pulseOnToggle
                 onClick={() =>
                   applySticker({
                     schema,
@@ -418,6 +416,7 @@ function ApplyItemSticker2d({
                   <ModalButton
                     children={translate("ApplyStickerUse")}
                     disabled={schema === undefined}
+                    pulseOnToggle
                     onClick={() =>
                       schema !== undefined && applySticker({ schema })
                     }
