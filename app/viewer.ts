@@ -254,7 +254,6 @@ export function buildViewerSrc(
   }
 ): string {
   const url = new URL(options?.embedUrl ?? DEFAULT_VIEWER_EMBED_URL);
-  url.searchParams.set("halfRotation", "1");
   if (item !== undefined) {
     const still = options?.icon === true || options?.capture === true;
     url.searchParams.set(
