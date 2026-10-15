@@ -14,9 +14,14 @@ import {
   CS2EconomyItem,
   CS2InventoryItem
 } from "@ianlucas/cs2-lib";
-import { useMeasure } from "@uidotdev/usehooks";
 import clsx from "clsx";
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState
+} from "react";
 import { VIEWER_INSPECT_KINDS } from "~/viewer";
 import {
   isItemCountable,
@@ -181,13 +186,24 @@ export function ItemEditor({
     [isIdSupported, patchFilter]
   );
 
-  const [attributesRef, { height: attributesHeight }] = useMeasure();
+  const attributesRef = useRef<HTMLDivElement>(null);
   const [isTallEditor, setIsTallEditor] = useState(false);
-  useEffect(() => {
-    if ((attributesHeight ?? 0) > 250) {
-      setIsTallEditor(true);
+  // Measures before the first paint so the editor opens in its final layout.
+  useLayoutEffect(() => {
+    const element = attributesRef.current;
+    if (element === null) {
+      return;
     }
-  }, [attributesHeight]);
+    const update = () => {
+      if (element.offsetHeight > 250) {
+        setIsTallEditor(true);
+      }
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
   const isTwoColumn = isDesktop && isTallEditor;
 
   const attributes = useKeyValues({

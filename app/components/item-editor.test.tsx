@@ -6,6 +6,7 @@
 import { CS2Economy, CS2Inventory, CS2_ITEMS, ensure } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations/english";
 import { act } from "react";
+import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { ItemEditor, type ItemEditorAttributes } from "./item-editor";
@@ -25,6 +26,10 @@ vi.mock("./app-context", () => ({
 
 vi.mock("./editor-item-display", () => ({
   EditorItemDisplay: () => null
+}));
+
+vi.mock("./hooks/use-is-desktop", () => ({
+  useIsDesktop: () => true
 }));
 
 vi.mock("./hooks/use-viewer-availability", () => ({
@@ -134,5 +139,40 @@ describe("ItemEditor", () => {
     expect(lastAttributes()).toBeUndefined();
     blur(seed);
     expect(lastAttributes()?.seed).toBe(42);
+  });
+});
+
+describe("ItemEditor layout", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test.each([
+    [250, "w-105"],
+    [251, "w-160"]
+  ])("opens with fields %ipx tall in the %s layout", (height, layoutClass) => {
+    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(
+      height
+    );
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+    act(() => {
+      flushSync(() =>
+        root.render(
+          <ItemEditor
+            isHideKeychains
+            isHidePatches
+            isHideStatTrak
+            isHideStickers
+            item={item}
+          />
+        )
+      );
+      // Checked before act flushes the rest, i.e. on the first commit.
+      expect(container.firstElementChild?.classList).toContain(layoutClass);
+    });
+    act(() => root.unmount());
+    container.remove();
   });
 });
