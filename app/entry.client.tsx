@@ -11,6 +11,7 @@ import { type ClientOnErrorFunction, isRouteErrorResponse } from "react-router";
 import { HydratedRouter } from "react-router/dom";
 import { clientGlobals } from "./globals";
 import { initClientMonitoring } from "./monitoring.client";
+import { isNetworkError } from "./shared/fetch";
 import { logError } from "./shared/monitoring";
 import {
   fetchItemTranslationMap,
@@ -20,28 +21,15 @@ import {
 initClientMonitoring();
 
 const handleRouteError: ClientOnErrorFunction = (error, { pattern }) => {
-  if (!isRouteErrorResponse(error)) {
+  if (!isRouteErrorResponse(error) && !isNetworkError(error)) {
     logError("Route failed.", { error, extra: { pattern } });
   }
 };
 
 function hydrate() {
-  const { itemTranslationMap } = clientGlobals;
-  if (
-    typeof itemTranslationMap !== "object" ||
-    itemTranslationMap === null ||
-    Object.keys(itemTranslationMap).length === 0
-  ) {
-    logError(
-      "[InventorySimulator] Item translation map is missing or empty. " +
-        "This usually happens when your browser cached a stale translation " +
-        "file during a deployment. Please clear your browser cache and reload."
-    );
-  }
-
   CS2Economy.load({
     items: CS2_ITEMS,
-    language: itemTranslationMap
+    language: clientGlobals.itemTranslationMap
   });
 
   fontAwesomeConfig.replacementClass = "";
@@ -67,7 +55,9 @@ async function loadTranslationsAndHydrate() {
     clientGlobals.systemTranslationMap = systemTranslationMap;
     clientGlobals.itemTranslationMap = itemTranslationMap;
   } catch (error) {
-    logError("[InventorySimulator] Failed to load translations.", { error });
+    if (!isNetworkError(error)) {
+      logError("[InventorySimulator] Failed to load translations.", { error });
+    }
   }
   hydrate();
 }
