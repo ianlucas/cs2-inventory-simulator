@@ -5,7 +5,7 @@
 
 import { CS2InventoryItem, CS2Team, ensure } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import { getLoadoutUrlTeam } from "~/loadout-url";
 import {
@@ -46,6 +46,8 @@ const ALL_ITEMS: LoadoutFilter = { group: "all", modelKey: "all" };
 
 const NONE = "none";
 
+let lastViewed: { id: string; team: LoadoutTeam } | undefined;
+
 export function LoadoutEditor() {
   const translate = useTranslate();
   const [inventory] = useInventory();
@@ -58,15 +60,14 @@ export function LoadoutEditor() {
   } = useLoadouts();
   const [searchParams, setSearchParams] = useSearchParams();
   const id = searchParams.get("id");
-  const [fallback, setFallback] = useState({
-    id,
-    loadoutId: userLoadouts?.activeLoadoutId
-  });
+  const [fallback, setFallback] = useState(getFallback);
   if (fallback.id !== id) {
-    setFallback({ id, loadoutId: userLoadouts?.activeLoadoutId });
+    setFallback(getFallback());
   }
   const [defaultLoadout] = useState(createDefaultLoadout);
-  const [team, setTeam] = useState(() => getLoadoutUrlTeam(searchParams));
+  const [team, setTeam] = useState(
+    () => fallback.team ?? getLoadoutUrlTeam(searchParams)
+  );
   const [filter, setFilter] = useState(ALL_ITEMS);
   const [sorter, setSorter] = useState("newest");
   const [selected, setSelected] = useState<CS2InventoryItem>();
@@ -90,6 +91,26 @@ export function LoadoutEditor() {
     }
   });
   useScrollToTopOnChange(filter);
+
+  useEffect(() => {
+    lastViewed =
+      selectedLoadout !== undefined
+        ? { id: selectedLoadout.id, team }
+        : undefined;
+  }, [selectedLoadout, team]);
+
+  function getFallback() {
+    const remembered =
+      id === null &&
+      userLoadouts?.loadouts.some((loadout) => loadout.id === lastViewed?.id)
+        ? lastViewed
+        : undefined;
+    return {
+      id,
+      loadoutId: remembered?.id ?? userLoadouts?.activeLoadoutId,
+      team: remembered?.team
+    };
+  }
 
   function findLoadout() {
     const loadouts = userLoadouts?.loadouts ?? [];
