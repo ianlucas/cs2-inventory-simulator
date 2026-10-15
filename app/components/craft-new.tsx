@@ -130,7 +130,7 @@ export function CraftNew({
         />
         <ModalButton
           children={translate("EditorCraft")}
-          disabled={!isItemCraftable(item)}
+          disabled={attributes === undefined || !isItemCraftable(item)}
           onClick={handleSubmit}
           variant="primary"
         />

@@ -152,6 +152,7 @@ function SealItemStickerAddSlab({
             />
             <ModalButton
               children={translate("EditorCraft")}
+              disabled={attributes === undefined}
               onClick={handleCraft}
               variant="primary"
             />

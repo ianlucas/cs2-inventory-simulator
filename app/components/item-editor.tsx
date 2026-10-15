@@ -110,7 +110,8 @@ export function ItemEditor({
   isHideUpgradeLevel?: boolean;
   isHideWear?: boolean;
   keychainFilter?: (item: CS2EconomyItem) => boolean;
-  onChange?: (data: ItemEditorAttributes) => void;
+  // Receives `undefined` while any field is invalid.
+  onChange?: (data: ItemEditorAttributes | undefined) => void;
   stickerFilter?: (item: CS2EconomyItem) => boolean;
   patchFilter?: (item: CS2EconomyItem) => boolean;
 }) {
@@ -202,6 +203,19 @@ export function ItemEditor({
     wear: defaults?.wear ?? minimumWear
   });
 
+  const inputValidity = useKeyValues({
+    quantity: true,
+    seed: true,
+    style: true,
+    wear: true
+  });
+
+  const nameTag = CS2Economy.trimNameTag(attributes.value.nameTag);
+  const isNameTagValid = CS2Economy.safeValidateNameTag(nameTag);
+  const isValid =
+    (!hasNameTag || isNameTagValid) &&
+    Object.values(inputValidity.value).every(Boolean);
+
   async function handleReset() {
     if (
       await confirm({
@@ -216,16 +230,16 @@ export function ItemEditor({
   }
 
   useEffect(() => {
+    if (!isValid) {
+      onChange?.(undefined);
+      return;
+    }
     onChange?.({
       keychains:
         hasKeychains && hasKeys(attributes.value.keychains)
           ? attributes.value.keychains
           : undefined,
-      nameTag: hasNameTag
-        ? attributes.value.nameTag.length > 0
-          ? attributes.value.nameTag
-          : undefined
-        : undefined,
+      nameTag: hasNameTag ? nameTag : undefined,
       patches:
         hasPatches && hasKeys(attributes.value.patches)
           ? attributes.value.patches
@@ -255,13 +269,13 @@ export function ItemEditor({
           : undefined
         : undefined
     });
-  }, [attributes.value]);
+  }, [attributes.value, isValid]);
 
   const display = (
     <EditorItemDisplay
       item={item}
       keychains={attributes.value.keychains}
-      nameTag={attributes.value.nameTag || undefined}
+      nameTag={nameTag}
       seed={attributes.value.seed}
       statTrak={
         attributes.value.statTrak ? (defaults?.statTrak ?? 0) : undefined
@@ -286,7 +300,7 @@ export function ItemEditor({
                   ? attributes.value.keychains
                   : undefined
               }
-              nameTag={attributes.value.nameTag || undefined}
+              nameTag={nameTag}
               onChange={attributes.update("stickers")}
               seed={attributes.value.seed}
               statTrak={
@@ -341,7 +355,7 @@ export function ItemEditor({
               disabled={isDisabled}
               forItem={item}
               keychainFilter={keychain3dFilter}
-              nameTag={attributes.value.nameTag || undefined}
+              nameTag={nameTag}
               onChange={attributes.update("keychains")}
               seed={attributes.value.seed}
               statTrak={
@@ -382,9 +396,7 @@ export function ItemEditor({
             placeholder={
               isDisabled ? "N/A" : translate("EditorNametagPlaceholder")
             }
-            validate={(nameTag) =>
-              CS2Economy.safeValidateNameTag(nameTag ?? "")
-            }
+            validate={() => isNameTagValid}
             value={attributes.value.nameTag}
           />
         </EditorLabel>
@@ -399,6 +411,7 @@ export function ItemEditor({
             maxLength={String(item.getMaximumSeed()).length}
             min={minimumSeed}
             onChange={attributes.update("seed")}
+            onValidityChange={inputValidity.update("seed")}
             randomizable
             step={CS2_MIN_SEED}
             stepRangeStyles="flex-1"
@@ -421,6 +434,7 @@ export function ItemEditor({
             onChange={(value) =>
               attributes.update("style")(value === 0 ? undefined : value)
             }
+            onValidityChange={inputValidity.update("style")}
             placeholder={translate("PetStyleDefault")}
             step={1}
             stepRangeStyles="flex-1"
@@ -457,6 +471,7 @@ export function ItemEditor({
             maxLength={wearStringMaxLen}
             min={minimumWear}
             onChange={attributes.update("wear")}
+            onValidityChange={inputValidity.update("wear")}
             randomizable
             step={CS2_WEAR_FACTOR}
             stepRangeStyles="flex-1"
@@ -492,6 +507,7 @@ export function ItemEditor({
             maxLength={String(maxQuantity).length}
             min={1}
             onChange={attributes.update("quantity")}
+            onValidityChange={inputValidity.update("quantity")}
             step={1}
             stepRangeStyles="flex-1"
             type="int"
