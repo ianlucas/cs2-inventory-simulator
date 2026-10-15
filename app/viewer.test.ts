@@ -8,20 +8,25 @@ import {
   CS2_CHICKEN_FEED_TOOL_DEFINITION_INDEX,
   CS2_ITEMS,
   CS2_NAMETAG_TOOL_DEFINITION_INDEX,
+  CS2_PET_EGG_VARIANT_INDEX,
   CS2Economy,
   CS2ItemType,
   CS2RarityColor,
   ensure
 } from "@ianlucas/cs2-lib";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildViewerSrc,
   DEFAULT_VIEWER_EMBED_URL,
+  getViewerClip,
   getViewerItemIds,
   isViewerIdSupported,
   isViewerItemSupported,
   toViewerItem,
-  VIEWER_INSPECT_KINDS
+  VIEWER_AGENT_IDLE_CLIP,
+  VIEWER_EGG_IDLE_CLIP,
+  VIEWER_INSPECT_KINDS,
+  VIEWER_PET_IDLE_CLIP
 } from "./viewer";
 
 const catalog = {
@@ -89,6 +94,12 @@ CS2Economy.load({
       type: CS2ItemType.Tool,
       rarityColor: CS2RarityColor.Common,
       definitionIndex: CS2_NAMETAG_TOOL_DEFINITION_INDEX
+    },
+    {
+      id: 94,
+      type: CS2ItemType.Pet,
+      rarityColor: CS2RarityColor.Rare,
+      variantIndex: CS2_PET_EGG_VARIANT_INDEX
     }
   ]
 });
@@ -274,6 +285,36 @@ describe("isViewerItemSupported", () => {
   });
 });
 
+describe("getViewerClip", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("plays the breathing idle on an agent", () => {
+    expect(getViewerClip({ id: 80 })).toBe(VIEWER_AGENT_IDLE_CLIP);
+  });
+
+  it("plays the chicken idle on a pet, and the egg idle on both eggs", () => {
+    expect(getViewerClip({ id: 90 })).toBe(VIEWER_PET_IDLE_CLIP);
+    expect(getViewerClip({ id: 94 })).toBe(VIEWER_EGG_IDLE_CLIP);
+    expect(getViewerClip({ id: 91 })).toBe(VIEWER_EGG_IDLE_CLIP);
+  });
+
+  it("plays nothing on the feed bag, a weapon or an unknown item", () => {
+    expect(getViewerClip({ id: 92 })).toBeUndefined();
+    expect(getViewerClip({ id: 5 })).toBeUndefined();
+    expect(getViewerClip({ id: 7 })).toBeUndefined();
+  });
+
+  it("plays nothing when the user prefers reduced motion", () => {
+    vi.stubGlobal("matchMedia", (query: string) => ({
+      matches: query === "(prefers-reduced-motion: reduce)"
+    }));
+    expect(getViewerClip({ id: 80 })).toBeUndefined();
+    expect(getViewerClip({ id: 90 })).toBeUndefined();
+  });
+});
+
 describe("buildViewerSrc", () => {
   it("uses the default viewer base URL and encodes the item", () => {
     const url = new URL(buildViewerSrc({ id: 7 }));
@@ -334,6 +375,22 @@ describe("buildViewerSrc", () => {
     expect(new URL(buildViewerSrc({ id: 7 })).searchParams.has("icon")).toBe(
       false
     );
+  });
+
+  it("adds an agent's or a pet's idle to the item outside icon and capture mode", () => {
+    const itemParam = (
+      id: number,
+      options?: Parameters<typeof buildViewerSrc>[1]
+    ) =>
+      JSON.parse(
+        ensure(
+          new URL(buildViewerSrc({ id }, options)).searchParams.get("item")
+        )
+      );
+    expect(itemParam(80)).toEqual({ id: 80, clip: VIEWER_AGENT_IDLE_CLIP });
+    expect(itemParam(90)).toEqual({ id: 90, clip: VIEWER_PET_IDLE_CLIP });
+    expect(itemParam(80, { icon: true })).toEqual({ id: 80 });
+    expect(itemParam(90, { capture: true })).toEqual({ id: 90 });
   });
 
   it("always opts in to half-degree rotation", () => {

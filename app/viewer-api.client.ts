@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2BaseInventoryItem } from "@ianlucas/cs2-lib";
-import { ViewerItemInput, toViewerItem } from "~/viewer";
+import { ViewerItemInput, toPlayingViewerItem, toViewerItem } from "~/viewer";
 
 /**
  * The viewer's postMessage namespace.
@@ -17,8 +17,8 @@ const VIEWER_SOURCE = "3d.cstrike.app";
 const VIEWER_PROTOCOL_VERSION = 1;
 
 /**
- * The subset of a CS2BaseInventoryItem the viewer reads, the same shape as the
- * `?item=` query parameter.
+ * The subset of a CS2BaseInventoryItem the viewer reads, plus the animation
+ * clip an agent or a pet plays, the same shape as the `?item=` query parameter.
  */
 export type ViewerItem = Pick<
   CS2BaseInventoryItem,
@@ -32,7 +32,7 @@ export type ViewerItem = Pick<
   | "patches"
   | "style"
   | "upgradeLevel"
->;
+> & { clip?: string };
 
 /**
  * What the viewer canvas is editing: a sticker, the charm (whose index is always
@@ -66,16 +66,24 @@ export type RateLimitScope = "ip" | "origin" | "partner";
  * `webgl` means the device can't do 3D at all (WebGL or hardware acceleration
  * unavailable, or a context that keeps dying). `network` means an asset or API
  * load failed AFTER the viewer's own retries (e.g. a Great-Firewall-throttled
- * CDN edge). `weapon`, `sticker`, `keychain` and `patch` are cs2-lib catalog
- * mismatches for the requested item; `keychain` also covers a charmed weapon
- * whose physics engine failed to load.
+ * CDN edge). `weapon`, `sticker`, `keychain`, `patch` and `clip` are cs2-lib
+ * catalog mismatches for the requested item; `keychain` also covers a charmed
+ * weapon whose physics engine failed to load, and `clip` a clip that doesn't
+ * fit the item's model.
  *
  * Any of them flips the host back to its 2D editor. `asset` is the
  * pre-reason-split name, still accepted (and treated as network) from a stale or
  * cached viewer build.
  */
 export type ViewerUnsupportedReason =
-  "weapon" | "sticker" | "keychain" | "patch" | "network" | "webgl" | "asset";
+  | "weapon"
+  | "sticker"
+  | "keychain"
+  | "patch"
+  | "clip"
+  | "network"
+  | "webgl"
+  | "asset";
 
 /**
  * Why a capture produced no frame.
@@ -190,6 +198,8 @@ export class ViewerApi extends EventTarget {
   item: ViewerItem | undefined;
 
   private readonly iframe: HTMLIFrameElement;
+  /** Icon and capture viewers show still frames, so their items play no clip. */
+  private readonly still: boolean;
   private destroyed = false;
   private queue: (() => void)[] = [];
   private readyWaiters: {
@@ -209,6 +219,8 @@ export class ViewerApi extends EventTarget {
     const src = new URL(iframe.src, window.location.href);
     this.origin = options?.origin ?? src.origin;
     this.item = parseViewerItem(src.searchParams.get("item"));
+    this.still =
+      src.searchParams.has("icon") || src.searchParams.has("capture");
     window.addEventListener("message", this.onMessage);
     iframe.addEventListener("load", this.onLoad);
     this.solicitReady();
@@ -259,7 +271,7 @@ export class ViewerApi extends EventTarget {
   }
 
   setItem(item: ViewerItemInput): void {
-    this.item = toViewerItem(item);
+    this.item = this.still ? toViewerItem(item) : toPlayingViewerItem(item);
     this.send("setItem", { item: this.item });
   }
 
