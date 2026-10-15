@@ -13,6 +13,11 @@ import type { ViewerItem } from "~/viewer-api.client";
 
 export const DEFAULT_VIEWER_EMBED_URL = "https://3d.cstrike.app/view";
 
+export const VIEWER_AGENT_IDLE_CLIP =
+  "ui_anims/additive_anims/t/t_idle_layer01";
+export const VIEWER_PET_IDLE_CLIP = "chicken/world/chick_idle01";
+export const VIEWER_EGG_IDLE_CLIP = "egg/chick_egg_idle_phase02";
+
 export type ViewerItemInput =
   CS2EconomyItem | CS2InventoryItem | CS2BaseInventoryItem;
 
@@ -137,11 +142,14 @@ export function getViewerItemKey(item: ViewerItemInput): string {
     .join(",");
 }
 
+function getEconomyItem(item: ViewerItemInput): CS2EconomyItem | undefined {
+  return item instanceof CS2EconomyItem ? item : CS2Economy.items.get(item.id);
+}
+
 export function getViewerItemKind(
   item: ViewerItemInput
 ): ViewerItemKind | undefined {
-  const economyItem =
-    item instanceof CS2EconomyItem ? item : CS2Economy.items.get(item.id);
+  const economyItem = getEconomyItem(item);
   if (economyItem === undefined) {
     return undefined;
   }
@@ -192,6 +200,31 @@ export function toViewerItem(item: ViewerItemInput): ViewerItem {
   return viewerItem;
 }
 
+function prefersReducedMotion(): boolean {
+  return (
+    typeof matchMedia === "function" &&
+    matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+export function getViewerClip(item: ViewerItemInput): string | undefined {
+  const economyItem = getEconomyItem(item);
+  if (economyItem === undefined || prefersReducedMotion()) {
+    return undefined;
+  }
+  if (economyItem.isAgent()) return VIEWER_AGENT_IDLE_CLIP;
+  if (economyItem.isPetEgg() || economyItem.isChickenEgg())
+    return VIEWER_EGG_IDLE_CLIP;
+  if (economyItem.isPet()) return VIEWER_PET_IDLE_CLIP;
+  return undefined;
+}
+
+export function toPlayingViewerItem(item: ViewerItemInput): ViewerItem {
+  const viewerItem = toViewerItem(item);
+  const clip = getViewerClip(item);
+  return clip === undefined ? viewerItem : { ...viewerItem, clip };
+}
+
 function stableStringify(value: unknown): string {
   if (value === null || typeof value !== "object") {
     return JSON.stringify(value) ?? "null";
@@ -223,7 +256,13 @@ export function buildViewerSrc(
   const url = new URL(options?.embedUrl ?? DEFAULT_VIEWER_EMBED_URL);
   url.searchParams.set("halfRotation", "1");
   if (item !== undefined) {
-    url.searchParams.set("item", stringifyViewerItem(item));
+    const still = options?.icon === true || options?.capture === true;
+    url.searchParams.set(
+      "item",
+      still
+        ? stringifyViewerItem(item)
+        : stableStringify(toPlayingViewerItem(item))
+    );
   }
   if (options?.key !== undefined) {
     url.searchParams.set("key", options.key);
