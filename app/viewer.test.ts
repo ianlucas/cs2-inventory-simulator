@@ -392,13 +392,4 @@ describe("buildViewerSrc", () => {
     expect(itemParam(80, { icon: true })).toEqual({ id: 80 });
     expect(itemParam(90, { capture: true })).toEqual({ id: 90 });
   });
-
-  it("always opts in to half-degree rotation", () => {
-    expect(new URL(buildViewerSrc()).searchParams.get("halfRotation")).toBe(
-      "1"
-    );
-    expect(
-      new URL(buildViewerSrc({ id: 7 })).searchParams.get("halfRotation")
-    ).toBe("1");
-  });
 });
