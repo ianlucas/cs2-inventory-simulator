@@ -22,8 +22,10 @@ import {
   getLoadoutItem,
   getSlotGroup,
   isGridSlot,
+  isUsableByTeam,
   resolveSideSlot
 } from "~/shared/loadout";
+import { getDefaultWeapon } from "~/shared/loadout-defaults";
 import { playSound } from "~/sound.client";
 import { useInventory, useTranslate } from "./app-context";
 import { useInspectItem } from "./hooks/use-inspect-item";
@@ -148,6 +150,11 @@ export function LoadoutEditor() {
     setTeam(value);
     if (filter.group === "c4" && value === CS2Team.CT) {
       setFilter(ALL_ITEMS);
+    } else if (
+      filter.modelKey !== "all" &&
+      !isUsableByTeam(getDefaultWeapon(filter.modelKey), value)
+    ) {
+      setFilter({ group: filter.group, modelKey: "all" });
     }
   }
 
