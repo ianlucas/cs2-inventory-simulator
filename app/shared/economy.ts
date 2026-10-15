@@ -296,6 +296,8 @@ export function getEconomyPriceQuery(item: CS2InventoryItem) {
 export type EconomyPriceQuery = ReturnType<typeof getEconomyPriceQuery>;
 
 export interface EconomyListingPrice {
+  // Set when the snapshot guessed the price, e.g. from another Doppler phase.
+  approximate: boolean;
   exterior: CS2ItemWear | null;
   price: number;
 }
@@ -323,13 +325,16 @@ export function selectEconomyPrice(
 ) {
   if (item.isDefault || !item.hasWear()) {
     const listing = listings.find(({ exterior }) => exterior === null);
-    return { isApproximate: false, price: listing?.price ?? null };
+    return {
+      isApproximate: listing?.approximate ?? false,
+      price: listing?.price ?? null
+    };
   }
   const wear = item.getWear();
   const exterior = CS2Economy.getWearFromValue(wear);
   const exact = listings.find((listing) => listing.exterior === exterior);
   if (exact !== undefined) {
-    return { isApproximate: false, price: exact.price };
+    return { isApproximate: exact.approximate, price: exact.price };
   }
   let nearest: { distance: number; price: number } | undefined;
   for (const listing of listings) {
@@ -345,16 +350,4 @@ export function selectEconomyPrice(
     isApproximate: nearest !== undefined,
     price: nearest?.price ?? null
   };
-}
-
-export function pickEconomyPrice<T>({
-  avgPrice24h,
-  avgPrice7d,
-  avgPrice30d,
-  avgPrice90d
-}: Record<
-  "avgPrice24h" | "avgPrice7d" | "avgPrice30d" | "avgPrice90d",
-  T | null
->) {
-  return avgPrice24h ?? avgPrice7d ?? avgPrice30d ?? avgPrice90d;
 }

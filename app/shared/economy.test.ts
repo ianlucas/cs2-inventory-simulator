@@ -8,8 +8,8 @@ import { english } from "@ianlucas/cs2-lib/translations/english";
 import { expect, test } from "vitest";
 import {
   createItemHideFilter,
+  EconomyListingPrice,
   getEconomyPriceQuery,
-  pickEconomyPrice,
   selectEconomyPrice
 } from "./economy";
 import { createFakeInventoryItemFromBase } from "./inventory";
@@ -76,11 +76,16 @@ test("getEconomyPriceQuery prices an item by its id and StatTrak", () => {
 const asiimov = (wear: number) =>
   createFakeInventoryItemFromBase({ id: AK47_ASIIMOV_ID, wear });
 
+function listing(
+  exterior: EconomyListingPrice["exterior"],
+  price: number,
+  approximate = false
+): EconomyListingPrice {
+  return { approximate, exterior, price };
+}
+
 test("selectEconomyPrice picks the price of the item's exterior", () => {
-  const listings = [
-    { exterior: "FN" as const, price: 10 },
-    { exterior: "FT" as const, price: 3 }
-  ];
+  const listings = [listing("FN", 10), listing("FT", 3)];
   expect(selectEconomyPrice(listings, asiimov(0.06))).toEqual({
     isApproximate: false,
     price: 10
@@ -92,10 +97,7 @@ test("selectEconomyPrice picks the price of the item's exterior", () => {
 });
 
 test("selectEconomyPrice approximates with the exterior nearest the wear", () => {
-  const listings = [
-    { exterior: "FN" as const, price: 10 },
-    { exterior: "FT" as const, price: 3 }
-  ];
+  const listings = [listing("FN", 10), listing("FT", 3)];
   expect(selectEconomyPrice(listings, asiimov(0.08))).toEqual({
     isApproximate: true,
     price: 10
@@ -104,15 +106,29 @@ test("selectEconomyPrice approximates with the exterior nearest the wear", () =>
     isApproximate: true,
     price: 3
   });
+  expect(selectEconomyPrice([listing("BS", 1)], asiimov(0.06))).toEqual({
+    isApproximate: true,
+    price: 1
+  });
+});
+
+test("selectEconomyPrice keeps a listing the snapshot approximated approximate", () => {
+  expect(selectEconomyPrice([listing("FN", 10, true)], asiimov(0.06))).toEqual({
+    isApproximate: true,
+    price: 10
+  });
   expect(
-    selectEconomyPrice([{ exterior: "BS", price: 1 }], asiimov(0.06))
-  ).toEqual({ isApproximate: true, price: 1 });
+    selectEconomyPrice(
+      [listing(null, 1.25, true)],
+      createFakeInventoryItemFromBase({ id: KARAMBIT_VANILLA_ID })
+    )
+  ).toEqual({ isApproximate: true, price: 1.25 });
 });
 
 test("selectEconomyPrice picks the listing without exterior for an item without wear", () => {
   expect(
     selectEconomyPrice(
-      [{ exterior: null, price: 1.25 }],
+      [listing(null, 1.25)],
       createFakeInventoryItemFromBase({ id: KARAMBIT_VANILLA_ID })
     )
   ).toEqual({ isApproximate: false, price: 1.25 });
@@ -123,46 +139,14 @@ test("selectEconomyPrice is null without a matching listing", () => {
     isApproximate: false,
     price: null
   });
-  expect(
-    selectEconomyPrice([{ exterior: null, price: 1 }], asiimov(0.06))
-  ).toEqual({ isApproximate: false, price: null });
+  expect(selectEconomyPrice([listing(null, 1)], asiimov(0.06))).toEqual({
+    isApproximate: false,
+    price: null
+  });
   expect(
     selectEconomyPrice(
-      [{ exterior: "FN", price: 1 }],
+      [listing("FN", 1)],
       createFakeInventoryItemFromBase({ id: KILOWATT_CASE_ID })
     )
   ).toEqual({ isApproximate: false, price: null });
-});
-
-test("pickEconomyPrice falls back from the shortest window to the longest", () => {
-  const prices = {
-    avgPrice24h: 1,
-    avgPrice7d: 7,
-    avgPrice30d: 30,
-    avgPrice90d: 90
-  };
-  expect(pickEconomyPrice(prices)).toBe(1);
-  expect(pickEconomyPrice({ ...prices, avgPrice24h: null })).toBe(7);
-  expect(
-    pickEconomyPrice({ ...prices, avgPrice24h: null, avgPrice7d: null })
-  ).toBe(30);
-  expect(
-    pickEconomyPrice({
-      ...prices,
-      avgPrice24h: null,
-      avgPrice7d: null,
-      avgPrice30d: null
-    })
-  ).toBe(90);
-});
-
-test("pickEconomyPrice is null without any price", () => {
-  expect(
-    pickEconomyPrice({
-      avgPrice24h: null,
-      avgPrice7d: null,
-      avgPrice30d: null,
-      avgPrice90d: null
-    })
-  ).toBeNull();
 });

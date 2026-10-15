@@ -4,39 +4,34 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { prisma } from "~/db.server";
-import type { CS2ItemExterior } from "~/generated/prisma/enums";
-import { EconomyListingPrice, pickEconomyPrice } from "~/shared/economy";
+import { EconomyListingPrice } from "~/shared/economy";
 
+/**
+ * Finds the item's listings. A StatTrak item without StatTrak listings, e.g.
+ * one that can't be StatTrak in game, is approximated by its regular listings.
+ */
 export async function findEconomyPrices({
   id,
   statTrak
 }: {
   id: number;
   statTrak: boolean;
-}) {
+}): Promise<EconomyListingPrice[]> {
   const rows = await prisma.economyPrice.findMany({
-    orderBy: { sourceDate: "desc" },
-    select: {
-      avgPrice24h: true,
-      avgPrice7d: true,
-      avgPrice30d: true,
-      avgPrice90d: true,
-      exterior: true
-    },
-    where: { economyItemId: id, souvenir: false, statTrak }
+    select: { approximate: true, exterior: true, price: true, statTrak: true },
+    where: { economyItemId: id }
   });
-  const seen = new Set<CS2ItemExterior | null>();
-  const listings: EconomyListingPrice[] = [];
-  for (const row of rows) {
-    // Rows are newest first, so only each exterior's latest listing counts.
-    if (seen.has(row.exterior)) {
-      continue;
-    }
-    seen.add(row.exterior);
-    const price = pickEconomyPrice(row);
-    if (price !== null) {
-      listings.push({ exterior: row.exterior, price: price.toNumber() });
-    }
+  const matching = rows.filter((row) => row.statTrak === statTrak);
+  if (statTrak && matching.length === 0) {
+    return rows.map(({ exterior, price }) => ({
+      approximate: true,
+      exterior,
+      price: price.toNumber()
+    }));
   }
-  return listings;
+  return matching.map(({ approximate, exterior, price }) => ({
+    approximate,
+    exterior,
+    price: price.toNumber()
+  }));
 }

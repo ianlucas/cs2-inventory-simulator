@@ -7,26 +7,26 @@ import { expect, it } from "vitest";
 import { z } from "zod";
 import { CS2ItemExterior } from "~/generated/prisma/enums";
 import { nonNegativeFloat, nonNegativeInt } from "~/shared/shapes";
-import json from "./economy-prices-2026-08-02.json?raw";
-
-const priceShape = nonNegativeFloat.nullable();
+import json from "./economy-prices-2026-10-14.json?raw";
 
 const rowShape = z.strictObject({
   economyItemId: nonNegativeInt,
   exterior: z.enum(CS2ItemExterior).nullable(),
-  avgPrice24h: priceShape,
-  avgPrice7d: priceShape,
-  avgPrice30d: priceShape,
-  avgPrice90d: priceShape,
+  price: nonNegativeFloat,
+  approximate: z.boolean(),
   marketHashName: z.string().min(1),
-  souvenir: z.boolean(),
   statTrak: z.boolean()
 });
 
-it("holds one EconomyPrice row per market hash name", () => {
+it("holds one EconomyPrice row per item listing", () => {
   const rows = z.array(rowShape).parse(JSON.parse(json));
   expect(rows.length).toBeGreaterThan(0);
-  expect(new Set(rows.map(({ marketHashName }) => marketHashName)).size).toBe(
-    rows.length
-  );
+  expect(
+    new Set(
+      rows.map(
+        ({ economyItemId, exterior, statTrak }) =>
+          `${economyItemId}:${exterior}:${statTrak}`
+      )
+    ).size
+  ).toBe(rows.length);
 });

@@ -8,10 +8,12 @@ import { beforeEach, expect, test, vi } from "vitest";
 import type { CS2ItemExterior } from "~/generated/prisma/enums";
 import { findEconomyPrices } from "./economy-price.server";
 
-type Row = Record<
-  "avgPrice24h" | "avgPrice7d" | "avgPrice30d" | "avgPrice90d",
-  Decimal | null
-> & { exterior: CS2ItemExterior | null };
+type Row = {
+  approximate: boolean;
+  exterior: CS2ItemExterior | null;
+  price: Decimal;
+  statTrak: boolean;
+};
 
 const { findMany } = vi.hoisted(() => ({
   findMany: vi.fn(async (): Promise<Row[]> => [])
@@ -21,59 +23,63 @@ vi.mock("~/db.server", () => ({
   prisma: { economyPrice: { findMany } }
 }));
 
-function row(exterior: CS2ItemExterior | null, prices: Partial<Row> = {}) {
-  return {
-    avgPrice24h: null,
-    avgPrice7d: null,
-    avgPrice30d: null,
-    avgPrice90d: null,
-    exterior,
-    ...prices
-  };
+function row(
+  exterior: CS2ItemExterior | null,
+  price: string,
+  { approximate = false, statTrak = false } = {}
+) {
+  return { approximate, exterior, price: new Decimal(price), statTrak };
 }
 
 beforeEach(() => {
   findMany.mockClear();
 });
 
-test("findEconomyPrices looks up the item's non-souvenir listings, newest first", async () => {
+test("findEconomyPrices looks up the item's listings", async () => {
   await findEconomyPrices({ id: 244, statTrak: true });
   expect(findMany).toHaveBeenCalledWith(
-    expect.objectContaining({
-      orderBy: { sourceDate: "desc" },
-      where: { economyItemId: 244, souvenir: false, statTrak: true }
-    })
+    expect.objectContaining({ where: { economyItemId: 244 } })
   );
 });
 
-test("findEconomyPrices returns each exterior's first available price as a number", async () => {
-  findMany.mockResolvedValueOnce([
-    row("FN", { avgPrice7d: new Decimal("12.345678") }),
-    row("FT", { avgPrice24h: new Decimal("3"), avgPrice7d: new Decimal("4") })
-  ]);
+test("findEconomyPrices returns each exterior's price as a number", async () => {
+  findMany.mockResolvedValueOnce([row("FN", "12.345678"), row("FT", "3")]);
   expect(await findEconomyPrices({ id: 244, statTrak: false })).toEqual([
-    { exterior: "FN", price: 12.345678 },
-    { exterior: "FT", price: 3 }
+    { approximate: false, exterior: "FN", price: 12.345678 },
+    { approximate: false, exterior: "FT", price: 3 }
   ]);
 });
 
-test("findEconomyPrices keeps only each exterior's latest listing", async () => {
-  findMany.mockResolvedValueOnce([
-    row("FN", { avgPrice24h: new Decimal("2") }),
-    row("MW"),
-    row("FN", { avgPrice24h: new Decimal("1") }),
-    row("MW", { avgPrice24h: new Decimal("1") })
-  ]);
-  expect(await findEconomyPrices({ id: 244, statTrak: false })).toEqual([
-    { exterior: "FN", price: 2 }
+test("findEconomyPrices keeps whether the snapshot approximated a price", async () => {
+  findMany.mockResolvedValueOnce([row("FN", "1052.64", { approximate: true })]);
+  expect(await findEconomyPrices({ id: 1345, statTrak: false })).toEqual([
+    { approximate: true, exterior: "FN", price: 1052.64 }
   ]);
 });
 
 test("findEconomyPrices returns an item without wear's listing without exterior", async () => {
-  findMany.mockResolvedValueOnce([
-    row(null, { avgPrice90d: new Decimal("0.5") })
-  ]);
+  findMany.mockResolvedValueOnce([row(null, "0.5")]);
   expect(await findEconomyPrices({ id: 11422, statTrak: false })).toEqual([
-    { exterior: null, price: 0.5 }
+    { approximate: false, exterior: null, price: 0.5 }
+  ]);
+});
+
+test("findEconomyPrices keeps only listings matching StatTrak", async () => {
+  const rows = [row("FN", "10"), row("MW", "30", { statTrak: true })];
+  findMany.mockResolvedValueOnce(rows);
+  expect(await findEconomyPrices({ id: 244, statTrak: false })).toEqual([
+    { approximate: false, exterior: "FN", price: 10 }
+  ]);
+  findMany.mockResolvedValueOnce(rows);
+  expect(await findEconomyPrices({ id: 244, statTrak: true })).toEqual([
+    { approximate: false, exterior: "MW", price: 30 }
+  ]);
+});
+
+test("findEconomyPrices approximates a StatTrak item without StatTrak listings by its regular listings", async () => {
+  findMany.mockResolvedValueOnce([row("FN", "10"), row("FT", "3")]);
+  expect(await findEconomyPrices({ id: 244, statTrak: true })).toEqual([
+    { approximate: true, exterior: "FN", price: 10 },
+    { approximate: true, exterior: "FT", price: 3 }
   ]);
 });
