@@ -49,6 +49,7 @@ function pricesResponse(prices: Record<string, number> = {}) {
   return new Response(
     JSON.stringify({
       prices: Object.entries(prices).map(([exterior, price]) => ({
+        approximate: false,
         exterior,
         price
       }))

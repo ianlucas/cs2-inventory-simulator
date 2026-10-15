@@ -33,7 +33,7 @@ const mocks = vi.hoisted(() => {
   };
 });
 
-vi.mock("~/data/economy-prices-2026-08-02.json?raw", () => ({
+vi.mock("~/data/economy-prices-2026-10-14.json?raw", () => ({
   get default() {
     return mocks.readSnapshot();
   }
@@ -47,18 +47,15 @@ vi.mock("./economy-projector", () => ({
 import { logError } from "~/shared/monitoring";
 import { EconomyPriceLoader } from "./economy-price-loader";
 
-const SOURCE_DATE = new Date("2026-08-02");
+const SOURCE_DATE = new Date("2026-10-14");
 
 function price(economyItemId: number, marketHashName: string) {
   return {
     economyItemId,
     exterior: null,
-    avgPrice24h: 1.5,
-    avgPrice7d: null,
-    avgPrice30d: 2,
-    avgPrice90d: 2.25,
+    price: 1.5,
+    approximate: false,
     marketHashName,
-    souvenir: false,
     statTrak: false
   };
 }

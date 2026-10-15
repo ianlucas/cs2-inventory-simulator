@@ -10,12 +10,11 @@ import { singleton } from "~/singleton.server";
 import { economyProjector } from "./economy-projector";
 
 const PRICE_INSERT_BATCH_SIZE = 1_000;
-const SNAPSHOT_SOURCE_DATE = new Date("2026-08-02");
+const SNAPSHOT_SOURCE_DATE = new Date("2026-10-14");
 
 async function readSnapshot() {
-  // Imported raw so TypeScript never type-checks its 27k rows.
   const { default: json } =
-    await import("~/data/economy-prices-2026-08-02.json?raw");
+    await import("~/data/economy-prices-2026-10-14.json?raw");
   return JSON.parse(json) as Omit<
     Prisma.EconomyPriceCreateManyInput,
     "sourceDate"

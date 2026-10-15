@@ -63,20 +63,16 @@ model EconomyItem {
 }
 
 model EconomyPrice {
-  currency       String           @default("USD")
+  approximate    Boolean          @default(false)
   economyItem    EconomyItem      @relation(fields: [economyItemId], references: [id], onDelete: Restrict)
   economyItemId  Int
   exterior       CS2ItemExterior?
-  avgPrice24h    Decimal?         @db.Decimal(14, 6)
-  avgPrice7d     Decimal?         @db.Decimal(14, 6)
-  avgPrice30d    Decimal?         @db.Decimal(14, 6)
-  avgPrice90d    Decimal?         @db.Decimal(14, 6)
   marketHashName String
+  price          Decimal          @db.Decimal(14, 6)
   sourceDate     DateTime         @db.Date
-  souvenir       Boolean          @default(false)
   statTrak       Boolean          @default(false)
 
-  @@id([sourceDate, marketHashName])
+  @@id([sourceDate, economyItemId, marketHashName])
   @@index([economyItemId, sourceDate])
 }
 
