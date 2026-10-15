@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { ClientOnly } from "remix-utils/client-only";
 import { LoadoutEditor } from "~/components/loadout-editor";
 import { middleware } from "~/middleware.server";
 import { getMetaTitle } from "~/root-meta";
@@ -16,5 +17,5 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function Loadouts() {
-  return <LoadoutEditor />;
+  return <ClientOnly children={() => <LoadoutEditor />} />;
 }

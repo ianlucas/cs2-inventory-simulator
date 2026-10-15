@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { redirect } from "react-router";
+import { ClientOnly } from "remix-utils/client-only";
 import { DEFAULT_APP_NAME } from "~/app-defaults";
 import { Background } from "~/components/background";
 import { ProfileInventory } from "~/components/profile-inventory";
@@ -82,11 +83,15 @@ export default function Profile({
   return (
     <>
       <Background background={background} />
-      <ProfileInventory
-        inventory={inventory}
-        loadout={loadout}
-        ownerId={user.id}
-        rules={rules}
+      <ClientOnly
+        children={() => (
+          <ProfileInventory
+            inventory={inventory}
+            loadout={loadout}
+            ownerId={user.id}
+            rules={rules}
+          />
+        )}
       />
     </>
   );
