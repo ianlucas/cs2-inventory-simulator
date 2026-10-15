@@ -122,6 +122,7 @@ export function CraftEdit({
         />
         <ModalButton
           children={translate("EditorSave")}
+          disabled={attributes === undefined}
           onClick={handleSubmit}
           variant="primary"
         />

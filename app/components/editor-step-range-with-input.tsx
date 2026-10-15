@@ -21,6 +21,7 @@ export function EditorStepRangeWithInput({
   maxLength,
   min,
   onChange,
+  onValidityChange,
   placeholder,
   randomizable,
   step,
@@ -38,6 +39,7 @@ export function EditorStepRangeWithInput({
   maxLength: number;
   min: number;
   onChange: (value: number) => void;
+  onValidityChange?: (isValid: boolean) => void;
   placeholder?: string;
   randomizable?: boolean;
   step: number;
@@ -51,6 +53,11 @@ export function EditorStepRangeWithInput({
     emptyValue !== undefined && value === emptyValue ? "" : transform(value)
   );
   const translate = useTranslate();
+  const isValid = (!text && emptyValue !== undefined) || validate(Number(text));
+
+  useEffect(() => {
+    onValidityChange?.(isValid);
+  }, [isValid]);
 
   useEffect(() => {
     const isEmpty = emptyValue !== undefined && value === emptyValue;
@@ -110,9 +117,7 @@ export function EditorStepRangeWithInput({
         onChange={handleTextChange}
         onBlur={handleTextBlur}
         placeholder={placeholder}
-        validate={(wearText) =>
-          (!wearText && emptyValue !== undefined) || validate(Number(wearText))
-        }
+        validate={() => isValid}
         value={text}
       />
       {!disabled && (
