@@ -65,5 +65,7 @@ async function loadTranslationsAndHydrate() {
 loadTranslationsAndHydrate();
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/scripts/service-worker.js");
+  navigator.serviceWorker
+    .register("/scripts/service-worker.js")
+    .catch(() => {});
 }
