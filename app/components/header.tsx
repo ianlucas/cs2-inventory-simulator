@@ -135,6 +135,7 @@ export function Header({
                   {!appHideAuth && (
                     <HeaderLink
                       to="/sign-in"
+                      reloadDocument
                       icon={faSteam}
                       label={translate("HeaderSignInLabel")}
                     />

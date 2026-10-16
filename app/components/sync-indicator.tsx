@@ -10,7 +10,7 @@ import {
   ApiActionResyncData,
   ApiActionResyncUrl
 } from "~/routes/api.action.resync._index";
-import { getJson } from "~/shared/fetch";
+import { getJson, retryOnNetworkError } from "~/shared/fetch";
 import { loadOrCreateInventory } from "~/shared/inventory";
 import { detachMissingItems } from "~/shared/user-loadouts";
 import { sync } from "~/sync";
@@ -47,8 +47,9 @@ export function SyncIndicator() {
     async function handleSyncError() {
       setDisableContinueButton(true);
       setShowSyncErrorModal(true);
-      const { syncedAt, inventory, loadouts } =
-        await getJson<ApiActionResyncData>(ApiActionResyncUrl);
+      const { syncedAt, inventory, loadouts } = await retryOnNetworkError(() =>
+        getJson<ApiActionResyncData>(ApiActionResyncUrl)
+      );
       const resyncedInventory = loadOrCreateInventory(inventory, {
         maxItems: inventoryMaxItems,
         storageUnitMaxItems: inventoryStorageUnitMaxItems

@@ -5,6 +5,7 @@
 
 import * as Sentry from "@sentry/browser";
 import { isbot } from "isbot";
+import { isNetworkError } from "./shared/fetch";
 
 export function initClientMonitoring() {
   const { sentryDsn: dsn, sentryEnvironment: environment } =
@@ -22,6 +23,8 @@ export function initClientMonitoring() {
       /ResizeObserver loop/,
       "Non-Error promise rejection captured"
     ],
+    beforeSend: (event, hint) =>
+      isNetworkError(hint.originalException) ? null : event,
     integrations: (integrations) =>
       integrations.filter(({ name }) => name !== "BrowserSession")
   });
