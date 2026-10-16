@@ -150,7 +150,7 @@ export function LoadoutToolbar({
     return (
       !appHideAuth && (
         <LoadoutToolbarRow>
-          <Link className="underline" to="/sign-in">
+          <Link className="underline" to="/sign-in" reloadDocument>
             {translate("LoadoutSignIn")}
           </Link>
         </LoadoutToolbarRow>
