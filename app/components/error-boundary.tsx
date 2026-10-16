@@ -19,6 +19,7 @@ import type { loader as rootLoader } from "~/root";
 import { ApiActionResetInventoryUrl } from "~/routes/api.action.reset-inventory._index";
 import { isNetworkError } from "~/shared/fetch";
 import { isOurHostname } from "~/shared/misc";
+import { ConnectionError } from "./connection-error";
 import { confirm } from "./modal-generic";
 
 export function ErrorBoundary() {
@@ -35,11 +36,6 @@ export function ErrorBoundary() {
 
   function translate(token: keyof typeof errorBoundaryEnglish) {
     return translationMap?.[token] ?? errorBoundaryEnglish[token];
-  }
-
-  function handleRetry(event: MouseEvent) {
-    event.preventDefault();
-    window.location.reload();
   }
 
   async function handleRemoveAllItems(event: MouseEvent) {
@@ -84,17 +80,7 @@ export function ErrorBoundary() {
         <div className="lg:w-5xl">
           <FontAwesomeIcon icon={faFrown} className="h-16" />
           {isNetworkError(routeError) ? (
-            <>
-              <h1 className="mt-4 text-lg font-bold">
-                {translate("ErrorBoundaryConnectionTitle")}
-              </h1>
-              <p>{translate("ErrorBoundaryConnectionDesc")}</p>
-              <p className="mt-4">
-                <a className="underline" href="#" onClick={handleRetry}>
-                  {translate("ErrorBoundaryConnectionRetry")}
-                </a>
-              </p>
-            </>
+            <ConnectionError translate={translate} />
           ) : (
             <>
               <h1 className="mt-4 text-lg font-bold">
