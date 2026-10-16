@@ -465,11 +465,9 @@ describe("ViewerIcons", () => {
     }
     expect(viewer.captured).toEqual([4, 4, 4, 4, 4, 4]);
 
-    for (let timeout = 0; timeout < 2; timeout++) {
-      viewer.reply({ error: "timeout" });
-      await flush();
-    }
-    expect(viewer.captured).toHaveLength(8);
+    viewer.reply({ error: "encode" });
+    await flush();
+    expect(viewer.captured).toHaveLength(7);
     viewer.reply({ image: new Blob(["x"]) });
     await flush();
 
@@ -533,7 +531,7 @@ describe("ViewerIcons", () => {
     expect(urlOf(A)).toBeDefined();
   });
 
-  it("gives up for a day on an item whose captures keep dying, and reports it", async () => {
+  it("gives up for an hour on an item whose captures keep dying, and reports it", async () => {
     const viewer = fakeApi();
     const { icons, urlOf, written } = setup({ next: () => viewer });
 
@@ -544,12 +542,12 @@ describe("ViewerIcons", () => {
       await flush();
     }
 
-    expect(viewer.captured).toEqual([4, 4, 4]);
+    expect(viewer.captured).toEqual([4, 4]);
     expect(written).toEqual([
       {
         error: "crashed",
         key: getItemIconKey(A),
-        retryAfter: Date.now() + 24 * 60 * 60_000
+        retryAfter: Date.now() + 60 * 60_000
       }
     ]);
     expect(urlOf(A)).toBeUndefined();
@@ -563,13 +561,13 @@ describe("ViewerIcons", () => {
     expect(viewer.captured.at(-1)).toBe(5);
   });
 
-  it("retries a render the viewer gave up on, on a fresh viewer", async () => {
+  it("retries a render that failed to encode, on a fresh viewer", async () => {
     const viewer = fakeApi();
     const { icons, mounts, urlOf } = setup({ next: () => viewer });
 
     icons.request(A);
     await flush();
-    viewer.reply({ error: "timeout" });
+    viewer.reply({ error: "encode" });
     await flush();
 
     expect(mounts).toHaveLength(2);
@@ -580,38 +578,76 @@ describe("ViewerIcons", () => {
     expect(urlOf(A)).toBeDefined();
   });
 
-  it("stops retrying an item whose renders keep timing out or failing to encode", async () => {
+  it("gives up on an item whose renders keep failing to encode, without counting its timeouts", async () => {
     const viewer = fakeApi();
     const { icons, urlOf, written } = setup({ next: () => viewer });
 
     icons.request(A);
-    for (const error of ["timeout", "encode", "timeout"] as const) {
+    for (const error of ["encode", "timeout", "encode"] as const) {
       await flush();
       viewer.reply({ error });
       await flush();
+      await vi.advanceTimersByTimeAsync(
+        VIEWER_ICON_NETWORK_BACKOFF_BASE_MS + 1_000
+      );
     }
 
     expect(viewer.captured).toEqual([4, 4, 4]);
     expect(written).toEqual([
       {
-        error: "timeout",
+        error: "encode",
         key: getItemIconKey(A),
         retryAfter: expect.any(Number)
       }
     ]);
     expect(urlOf(A)).toBeUndefined();
-    expect(consoleError).toHaveBeenCalledTimes(1);
+    expect(consoleError).toHaveBeenCalledWith(
+      "[InventorySimulator] The 3D viewer gave up on an item's icon (encode).",
+      { key: getItemIconKey(A) }
+    );
   });
 
-  it("tries a timed-out item again only once its retry window has passed", async () => {
+  it("backs off and keeps retrying an item whose renders time out, without remembering or reporting it", async () => {
+    const viewer = fakeApi();
+    const { icons, mounts, urlOf, written } = setup({ next: () => viewer });
+
+    icons.request(A);
+    await flush();
+    viewer.reply({ error: "timeout" });
+    await flush();
+    expect(mounts).toHaveLength(1);
+    expect(viewer.captured).toEqual([4]);
+
+    for (let timeout = 0; timeout < 4; timeout++) {
+      await vi.advanceTimersByTimeAsync(
+        VIEWER_ICON_NETWORK_BACKOFF_CAP_MS + 1_000
+      );
+      await flush();
+      viewer.reply({ error: "timeout" });
+      await flush();
+    }
+    expect(viewer.captured).toHaveLength(5);
+    expect(written).toEqual([]);
+    expect(consoleError).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(
+      VIEWER_ICON_NETWORK_BACKOFF_CAP_MS + 1_000
+    );
+    await flush();
+    viewer.reply({ image: new Blob(["x"]) });
+    await flush();
+    expect(urlOf(A)).toBeDefined();
+  });
+
+  it("tries an item that failed to encode again only once its retry window has passed", async () => {
     const viewer = fakeApi();
     const { entries, icons, urlOf } = setup({ next: () => viewer });
     entries.set(getItemIconKey(B), {
-      error: "timeout",
+      error: "encode",
       retryAfter: Date.now() + 60_000
     });
     entries.set(getItemIconKey(A), {
-      error: "timeout",
+      error: "encode",
       retryAfter: Date.now() - 1
     });
 
@@ -623,7 +659,7 @@ describe("ViewerIcons", () => {
     expect(urlOf(B)).toBeUndefined();
   });
 
-  it("remembers a failure about the item for a day and reports it, but not one about the moment", async () => {
+  it("remembers a failure about the item for six hours and reports it, but not one about the moment", async () => {
     const viewer = fakeApi();
     const { icons, written } = setup({ next: () => viewer });
 
@@ -634,7 +670,7 @@ describe("ViewerIcons", () => {
     const itemFailure = {
       error: "weapon",
       key: getItemIconKey(A),
-      retryAfter: Date.now() + 24 * 60 * 60_000
+      retryAfter: Date.now() + 6 * 60 * 60_000
     };
     expect(written).toEqual([itemFailure]);
     expect(consoleError).toHaveBeenCalledWith(
@@ -1403,6 +1439,19 @@ describe("ViewerIconBudget", () => {
     expect(budget.backOffNetwork(START)).toBe(
       VIEWER_ICON_NETWORK_BACKOFF_BASE_MS
     );
+  });
+
+  it("starts the network backoff over once it has been quiet for a full cap", () => {
+    budget.backOffNetwork(START);
+    budget.backOffNetwork(START);
+    const pauseEnd = budget.load(START).cooldownUntil;
+
+    expect(
+      budget.load(pauseEnd + VIEWER_ICON_NETWORK_BACKOFF_CAP_MS - 1).networkStep
+    ).toBe(2);
+    expect(
+      budget.backOffNetwork(pauseEnd + VIEWER_ICON_NETWORK_BACKOFF_CAP_MS)
+    ).toBe(VIEWER_ICON_NETWORK_BACKOFF_BASE_MS);
   });
 
   it("spends without clearing a cooldown, and waits without refunding tokens", () => {
