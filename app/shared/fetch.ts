@@ -19,17 +19,24 @@ export async function getJson<T>(url: string) {
   return (await response.json()) as T;
 }
 
-// Messages browsers use when a request gets no response. Sentry appends the
-// host to errors thrown by `fetch()`, e.g. "Failed to fetch (example.com)".
+// Messages browsers use when a request gets no response. Chromium uses "network
+// error" when the connection drops while a body is still downloading. Sentry
+// appends the host to errors thrown by `fetch()`, e.g. "Failed to fetch
+// (example.com)".
 const NETWORK_ERROR_MESSAGES = [
   "Failed to fetch",
   "Load failed",
-  "NetworkError when attempting to fetch resource."
+  "NetworkError when attempting to fetch resource.",
+  "network error"
 ];
 
-export function isNetworkError(error: unknown) {
-  return (
-    error instanceof TypeError &&
-    NETWORK_ERROR_MESSAGES.some((message) => error.message.startsWith(message))
-  );
+// React Router wraps body failures on `.data` requests, e.g. "Unable to decode
+// turbo-stream response", so the original error is checked through `cause`.
+export function isNetworkError(error: unknown): boolean {
+  if (error instanceof TypeError) {
+    return NETWORK_ERROR_MESSAGES.some((message) =>
+      error.message.startsWith(message)
+    );
+  }
+  return error instanceof Error && isNetworkError(error.cause);
 }

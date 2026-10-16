@@ -10,7 +10,8 @@ describe("isNetworkError", () => {
   test.each([
     "Failed to fetch",
     "Load failed",
-    "NetworkError when attempting to fetch resource."
+    "NetworkError when attempting to fetch resource.",
+    "network error"
   ])("matches '%s'", (message) => {
     expect(isNetworkError(new TypeError(message))).toBe(true);
     expect(isNetworkError(new TypeError(`${message} (example.com)`))).toBe(
@@ -20,6 +21,26 @@ describe("isNetworkError", () => {
 
   test("ignores other errors with the same message", () => {
     expect(isNetworkError(new Error("Failed to fetch"))).toBe(false);
+  });
+
+  test("matches network errors wrapped as the cause", () => {
+    expect(
+      isNetworkError(
+        new Error("Unable to decode turbo-stream response", {
+          cause: new TypeError("network error")
+        })
+      )
+    ).toBe(true);
+  });
+
+  test("ignores wrapped errors with other causes", () => {
+    expect(
+      isNetworkError(
+        new Error("Unable to decode turbo-stream response", {
+          cause: new SyntaxError()
+        })
+      )
+    ).toBe(false);
   });
 
   test("ignores aborted requests", () => {
