@@ -31,10 +31,10 @@ export const VIEWER_ICON_CAPTURE_TIMEOUT_MS = VIEWER_CAPTURE_TIMEOUT_MS;
 export const VIEWER_ICON_STARTUP_TIMEOUT_MS = 60_000;
 export const VIEWER_ICON_IDLE_TEARDOWN_MS = 30_000;
 
-export const VIEWER_ICON_MAX_ATTEMPTS = 3;
-export const VIEWER_ICON_TRANSIENT_RETRY_AFTER_MS = 24 * 60 * 60_000;
-export const VIEWER_ICON_ITEM_RETRY_AFTER_MS = 24 * 60 * 60_000;
-export const VIEWER_ICON_WEBGL_DISABLE_MS = 6 * 60 * 60_000;
+export const VIEWER_ICON_MAX_ATTEMPTS = 2;
+export const VIEWER_ICON_TRANSIENT_RETRY_AFTER_MS = 60 * 60_000;
+export const VIEWER_ICON_ITEM_RETRY_AFTER_MS = 6 * 60 * 60_000;
+export const VIEWER_ICON_WEBGL_DISABLE_MS = 60 * 60_000;
 
 export const VIEWER_ICON_MAX_STORED = 512;
 export const VIEWER_ICON_PRUNE_EVERY = 32;
@@ -342,14 +342,18 @@ export class ViewerIconBudget {
     }
     const at = value.at ?? now;
     const elapsed = Math.max(0, now - at);
+    const cooldownUntil = value.cooldownUntil ?? 0;
     return {
       at,
-      cooldownUntil: value.cooldownUntil ?? 0,
+      cooldownUntil,
       cooldownReason: isCooldownReason(value.cooldownReason)
         ? value.cooldownReason
         : undefined,
       disabledUntil: value.disabledUntil ?? 0,
-      networkStep: value.networkStep ?? 0,
+      networkStep:
+        now - cooldownUntil >= VIEWER_ICON_NETWORK_BACKOFF_CAP_MS
+          ? 0
+          : (value.networkStep ?? 0),
       tokens: Math.min(
         VIEWER_ICON_API_CALL_BURST,
         (value.tokens ?? VIEWER_ICON_API_CALL_BURST) +
@@ -1044,6 +1048,7 @@ export class ViewerIcons {
         return;
       case "network":
       case "asset":
+      case "timeout":
         this.budget.backOffNetwork();
         this.recycle(api);
         this.requeue(entry);
