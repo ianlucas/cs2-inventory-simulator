@@ -17,7 +17,9 @@ export function Viewer({
   item,
   onApi,
   origin,
+  pauseIcons = capture !== true,
   title = "CS2 3D viewer",
+  zoom,
   ...props
 }: Omit<ComponentPropsWithoutRef<"iframe">, "src"> & {
   apiKey?: string;
@@ -28,13 +30,15 @@ export function Viewer({
   item?: ViewerItemInput;
   onApi: (api: ViewerApi | undefined) => void;
   origin?: string;
+  pauseIcons?: boolean;
+  zoom?: number;
 }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   // `?item=` only seeds the initial state; capture the src once so re-renders
   // (or a changed `item` prop) don't reload the iframe. Drive later changes
   // through the api, or remount with a `key`.
   const [src] = useState(() =>
-    buildViewerSrc(item, { embedUrl, cdn, key: apiKey, icon, capture })
+    buildViewerSrc(item, { embedUrl, cdn, key: apiKey, icon, capture, zoom })
   );
   const onApiRef = useRef(onApi);
   const originRef = useRef(origin);
@@ -43,7 +47,7 @@ export function Viewer({
     onApiRef.current = onApi;
   }, [onApi]);
 
-  useViewerIconPausedWhile(capture !== true);
+  useViewerIconPausedWhile(pauseIcons);
 
   useEffect(() => {
     const iframe = iframeRef.current;
