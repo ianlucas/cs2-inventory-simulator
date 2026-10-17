@@ -7,7 +7,9 @@ import {
   CS2BaseInventoryItem,
   CS2Economy,
   CS2EconomyItem,
-  CS2InventoryItem
+  CS2InventoryItem,
+  CS2ItemAppearanceOptions,
+  getItemAppearance
 } from "@ianlucas/cs2-lib";
 import type { ViewerItem } from "~/viewer-api.client";
 
@@ -179,25 +181,13 @@ export function isViewerItemSupported(
   );
 }
 
-export function toViewerItem(item: ViewerItemInput): ViewerItem {
-  if (item instanceof CS2InventoryItem) {
-    return toViewerItem(item.asBase());
-  }
-  if (item instanceof CS2EconomyItem) {
-    return { id: item.id };
-  }
-  const viewerItem: ViewerItem = { id: item.id };
-  if (item.seed !== undefined) viewerItem.seed = item.seed;
-  if (item.wear !== undefined) viewerItem.wear = item.wear;
-  if (item.stickers !== undefined) viewerItem.stickers = item.stickers;
-  if (item.keychains !== undefined) viewerItem.keychains = item.keychains;
-  if (item.statTrak !== undefined) viewerItem.statTrak = item.statTrak;
-  if (item.nameTag !== undefined) viewerItem.nameTag = item.nameTag;
-  if (item.patches !== undefined) viewerItem.patches = item.patches;
-  if (item.style !== undefined) viewerItem.style = item.style;
-  if (item.upgradeLevel !== undefined)
-    viewerItem.upgradeLevel = item.upgradeLevel;
-  return viewerItem;
+export function toViewerItem(
+  item: ViewerItemInput,
+  options?: CS2ItemAppearanceOptions
+): ViewerItem {
+  return item instanceof CS2EconomyItem
+    ? item.getAppearance(options)
+    : getItemAppearance(item, options);
 }
 
 function prefersReducedMotion(): boolean {
@@ -225,24 +215,6 @@ export function toPlayingViewerItem(item: ViewerItemInput): ViewerItem {
   return clip === undefined ? viewerItem : { ...viewerItem, clip };
 }
 
-function stableStringify(value: unknown): string {
-  if (value === null || typeof value !== "object") {
-    return JSON.stringify(value) ?? "null";
-  }
-  if (Array.isArray(value)) {
-    return `[${value.map(stableStringify).join(",")}]`;
-  }
-  const entries = Object.entries(value as Record<string, unknown>)
-    .filter(([, entry]) => entry !== undefined)
-    .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
-    .map(([key, entry]) => `${JSON.stringify(key)}:${stableStringify(entry)}`);
-  return `{${entries.join(",")}}`;
-}
-
-export function stringifyViewerItem(item: ViewerItemInput): string {
-  return stableStringify(toViewerItem(item));
-}
-
 export function buildViewerSrc(
   item?: ViewerItemInput,
   options?: {
@@ -258,9 +230,7 @@ export function buildViewerSrc(
     const still = options?.icon === true || options?.capture === true;
     url.searchParams.set(
       "item",
-      still
-        ? stringifyViewerItem(item)
-        : stableStringify(toPlayingViewerItem(item))
+      JSON.stringify(still ? toViewerItem(item) : toPlayingViewerItem(item))
     );
   }
   if (options?.key !== undefined) {
