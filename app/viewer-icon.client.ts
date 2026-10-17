@@ -11,11 +11,13 @@ import type { ViewerItemInput } from "~/viewer";
 import type {
   ViewerApi,
   ViewerCaptureError,
+  ViewerItem,
   ViewerUnsupportedReason
 } from "~/viewer-api.client";
 import { VIEWER_CAPTURE_TIMEOUT_MS } from "~/viewer-api.client";
 import {
   ICON_CACHE_VERSION,
+  getItemIconAppearance,
   getItemIconKey,
   getViewerIconSlot
 } from "~/viewer-icon";
@@ -676,7 +678,7 @@ class ViewerIconGenerator {
 
 interface Pending {
   key: string;
-  item: ViewerItemInput;
+  item: ViewerItem;
   uid?: number;
   priority: boolean;
   attempts: number;
@@ -878,7 +880,7 @@ export class ViewerIcons {
     this.generator.watchFocus();
     this.pending.set(key, {
       attempts: 0,
-      item,
+      item: getItemIconAppearance(item),
       key,
       priority,
       uid: item instanceof CS2InventoryItem ? item.uid : undefined

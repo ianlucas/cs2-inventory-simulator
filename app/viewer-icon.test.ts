@@ -24,6 +24,9 @@ CS2Economy.load({ items: CS2_ITEMS, language: english });
 const AK47_ID = 4;
 const KARAMBIT_ID = 41;
 const STICKER_ID = 2226;
+const KEYCHAIN_ID = ensure(
+  CS2_ITEMS.find((item) => item.type === CS2ItemType.Keychain)
+).id;
 const FREE_WEAPON_ID = ensure(
   CS2_ITEMS.find(
     (item) => item.type === CS2ItemType.Weapon && item.isDefault === true
@@ -69,7 +72,10 @@ describe("getItemIconKey", () => {
     expect(getItemIconKey({ id: AK47_ID, seed: 42, wear: 0.2 })).not.toBe(base);
   });
 
-  it("keeps wear unrounded, since a per-user cache has nothing to dedupe", () => {
+  it("shares an icon between wears too close to tell apart", () => {
+    expect(getItemIconKey({ id: AK47_ID, wear: 0.12341 })).toBe(
+      getItemIconKey({ id: AK47_ID, wear: 0.12344 })
+    );
     expect(getItemIconKey({ id: AK47_ID, wear: 0.1234 })).not.toBe(
       getItemIconKey({ id: AK47_ID, wear: 0.1235 })
     );
@@ -87,6 +93,33 @@ describe("getItemIconKey", () => {
   it("treats an absent field and an undefined one as the same item", () => {
     expect(getItemIconKey({ id: AK47_ID, seed: undefined })).toBe(
       getItemIconKey({ id: AK47_ID })
+    );
+  });
+
+  it("treats an empty record and an absent one as the same item", () => {
+    expect(
+      getItemIconKey({ id: AK47_ID, keychains: {}, patches: {}, stickers: {} })
+    ).toBe(getItemIconKey({ id: AK47_ID }));
+  });
+
+  it("keeps the keys icons were already cached under", () => {
+    expect(
+      getItemIconKey({
+        wear: 0.1234,
+        statTrak: 0,
+        stickers: {
+          3: { y: 0.2, x: 0.1, wear: 0.5, rotation: 30, id: STICKER_ID },
+          1: { id: STICKER_ID }
+        },
+        seed: 42,
+        nameTag: "mine",
+        keychains: { 0: { z: 1, seed: 7, id: KEYCHAIN_ID } },
+        id: AK47_ID
+      })
+    ).toBe(
+      `{"id":${AK47_ID},"keychains":{"0":{"id":${KEYCHAIN_ID},"seed":7,"z":1}},` +
+        `"nameTag":"mine","seed":42,"statTrak":0,"stickers":{"1":{"id":${STICKER_ID}},` +
+        `"3":{"id":${STICKER_ID},"rotation":30,"wear":0.5,"x":0.1,"y":0.2}},"wear":0.1234}`
     );
   });
 
@@ -140,6 +173,12 @@ describe("isIconRedundant", () => {
     expect(isIconRedundant({ id: FREE_WEAPON_ID })).toBe(true);
     expect(isIconRedundant({ id: FREE_GLOVES_ID })).toBe(true);
     expect(isIconRedundant(CS2Economy.getById(FREE_WEAPON_ID))).toBe(true);
+  });
+
+  it("leaves a free item whose records are all empty on its static CDN image", () => {
+    expect(
+      isIconRedundant({ id: FREE_WEAPON_ID, keychains: {}, stickers: {} })
+    ).toBe(true);
   });
 
   it("draws a free item the user customized, which the CDN image cannot show", () => {

@@ -13,14 +13,16 @@ import {
   ViewerItemInput,
   ViewerItemKind,
   isViewerItemSupported,
-  stringifyViewerItem,
   toViewerItem
 } from "~/viewer";
+import type { ViewerItem } from "~/viewer-api.client";
 
 export const ICON_WIDTH = 512;
 export const ICON_HEIGHT = 384;
 
 export const ICON_CACHE_VERSION = 2;
+
+const ICON_WEAR_FRACTION_DIGITS = 4;
 
 const ICON_RENDERABLE_KINDS: ReadonlySet<ViewerItemKind> = new Set([
   "weapon",
@@ -37,8 +39,12 @@ export function isIconRenderable(
   return isViewerItemSupported(catalog, item, ICON_RENDERABLE_KINDS);
 }
 
+export function getItemIconAppearance(item: ViewerItemInput): ViewerItem {
+  return toViewerItem(item, { wearFractionDigits: ICON_WEAR_FRACTION_DIGITS });
+}
+
 export function getItemIconKey(item: ViewerItemInput): string {
-  return stringifyViewerItem(item);
+  return JSON.stringify(getItemIconAppearance(item));
 }
 
 /**
