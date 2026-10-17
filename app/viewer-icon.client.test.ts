@@ -1203,6 +1203,15 @@ describe("ViewerIcons", () => {
     expect(seeds).toEqual([A]);
   });
 
+  it("renders the appearance the icon is keyed by, not the raw item", async () => {
+    const { icons, seeds } = setup();
+
+    icons.request({ id: 4, stickers: {}, wear: 0.123456 });
+    await flush();
+
+    expect(seeds).toStrictEqual([{ id: 4, wear: 0.1235 }]);
+  });
+
   it("reports what it is doing", async () => {
     const viewer = fakeApi();
     const { icons } = setup({ next: () => viewer });
