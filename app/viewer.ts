@@ -223,6 +223,7 @@ export function buildViewerSrc(
     key?: string;
     icon?: boolean;
     capture?: boolean;
+    zoom?: number;
   }
 ): string {
   const url = new URL(options?.embedUrl ?? DEFAULT_VIEWER_EMBED_URL);
@@ -244,6 +245,9 @@ export function buildViewerSrc(
   }
   if (options?.capture === true) {
     url.searchParams.set("capture", "");
+  }
+  if (options?.zoom !== undefined) {
+    url.searchParams.set("zoom", String(options.zoom));
   }
   return url.toString();
 }
