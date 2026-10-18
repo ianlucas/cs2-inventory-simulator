@@ -10,6 +10,7 @@ type OverlayTransition = {
   className: string | undefined;
   rootProps: {
     "data-state"?: "open" | "closed";
+    inert?: boolean;
     onAnimationEnd?: AnimationEventHandler<HTMLElement>;
   };
 };
@@ -24,6 +25,7 @@ export function useOverlayTransition(): OverlayTransition {
       "data-[state=open]:animate-overlay-open data-[state=closed]:animate-overlay-close",
     rootProps: {
       "data-state": presence.state,
+      inert: presence.state === "closed",
       onAnimationEnd: (event) => {
         if (event.target !== event.currentTarget) {
           return;
