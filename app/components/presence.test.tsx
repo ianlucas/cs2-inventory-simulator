@@ -71,6 +71,15 @@ describe("Presence + useOverlayTransition", () => {
     expect(overlay()).toBeNull();
   });
 
+  test("makes the overlay inert only while it is closing", () => {
+    renderPresence(true);
+    expect(overlay()?.hasAttribute("inert")).toBe(false);
+    renderPresence(false);
+    expect(overlay()?.hasAttribute("inert")).toBe(true);
+    renderPresence(true);
+    expect(overlay()?.hasAttribute("inert")).toBe(false);
+  });
+
   test("reopening before the exit finishes cancels the unmount", () => {
     renderPresence(true);
     renderPresence(false);
