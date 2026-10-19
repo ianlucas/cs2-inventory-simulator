@@ -30,7 +30,8 @@ export function initClientMonitoring() {
     allowUrls: [window.location.origin],
     ignoreErrors: [
       /ResizeObserver loop/,
-      "Non-Error promise rejection captured"
+      "Non-Error promise rejection captured",
+      /^TimeoutError: /
     ],
     beforeSend: (event, hint) =>
       isNetworkError(hint.originalException) ? null : event,
