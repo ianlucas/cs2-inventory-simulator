@@ -7,6 +7,7 @@ import {
   CSSProperties,
   useCallback,
   useEffect,
+  useState,
   useSyncExternalStore
 } from "react";
 import { useRules } from "~/components/app-context";
@@ -40,7 +41,6 @@ function getGenerationServer(): undefined {
 }
 
 export function ViewerIconHost() {
-  const { viewerAssetsBaseUrl, viewerEmbedUrl, viewerKey } = useRules();
   const generation = useSyncExternalStore(
     subscribe,
     getGeneration,
@@ -49,18 +49,21 @@ export function ViewerIconHost() {
 
   useEffect(() => viewerIcons.attachHost(), []);
 
-  const onApi = useCallback(
-    (api: ViewerApi | undefined) => {
-      if (generation !== undefined) {
-        viewerIcons.setApi(generation, api);
-      }
-    },
-    [generation]
-  );
-
   if (generation === undefined) {
     return null;
   }
+  return <ViewerIconFrame generation={generation} key={generation} />;
+}
+
+function ViewerIconFrame({ generation }: { generation: number }) {
+  const { viewerAssetsBaseUrl, viewerEmbedUrl, viewerKey } = useRules();
+  const [frameName] = useState(() => crypto.randomUUID());
+
+  const onApi = useCallback(
+    (api: ViewerApi | undefined) => viewerIcons.setApi(generation, api),
+    [generation]
+  );
+
   return (
     <Viewer
       aria-hidden
@@ -70,7 +73,7 @@ export function ViewerIconHost() {
       embedUrl={viewerEmbedUrl || undefined}
       icon
       item={viewerIcons.getSeed()}
-      key={generation}
+      name={frameName}
       onApi={onApi}
       style={PAINTED_BUT_INVISIBLE_STYLE}
       tabIndex={-1}
