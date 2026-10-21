@@ -32,7 +32,23 @@ const handleRouteError: ClientOnErrorFunction = (error, { pattern }) => {
   }
 };
 
+function isRenderedForOtherUrl() {
+  const renderedUrl = window.navigation?.activation?.entry.url;
+  if (!renderedUrl) {
+    return false;
+  }
+  const { pathname, search } = new URL(renderedUrl);
+  return (
+    pathname !== window.location.pathname || search !== window.location.search
+  );
+}
+
 function hydrate() {
+  if (isRenderedForOtherUrl()) {
+    window.location.reload();
+    return;
+  }
+
   CS2Economy.load({
     items: CS2_ITEMS,
     language: clientGlobals.itemTranslationMap
