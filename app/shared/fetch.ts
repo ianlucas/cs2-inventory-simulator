@@ -27,7 +27,8 @@ const NETWORK_ERROR_MESSAGES = [
   "Failed to fetch",
   "Load failed",
   "NetworkError when attempting to fetch resource.",
-  "network error"
+  "network error",
+  "Content-Length header of network response exceeds response Body."
 ];
 
 // React Router wraps body failures on `.data` requests, e.g. "Unable to decode
@@ -39,6 +40,10 @@ export function isNetworkError(error: unknown): boolean {
     );
   }
   return error instanceof Error && isNetworkError(error.cause);
+}
+
+export function isAbortError(error: unknown) {
+  return error instanceof DOMException && error.name === "AbortError";
 }
 
 const RETRY_DELAYS = [1000, 2000, 5000, 10000];

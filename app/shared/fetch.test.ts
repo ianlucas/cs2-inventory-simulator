@@ -4,14 +4,15 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { isNetworkError, retryOnNetworkError } from "./fetch";
+import { isAbortError, isNetworkError, retryOnNetworkError } from "./fetch";
 
 describe("isNetworkError", () => {
   test.each([
     "Failed to fetch",
     "Load failed",
     "NetworkError when attempting to fetch resource.",
-    "network error"
+    "network error",
+    "Content-Length header of network response exceeds response Body."
   ])("matches '%s'", (message) => {
     expect(isNetworkError(new TypeError(message))).toBe(true);
     expect(isNetworkError(new TypeError(`${message} (example.com)`))).toBe(
@@ -60,6 +61,24 @@ describe("isNetworkError", () => {
   test("ignores non-errors", () => {
     expect(isNetworkError("Failed to fetch")).toBe(false);
     expect(isNetworkError(undefined)).toBe(false);
+  });
+});
+
+describe("isAbortError", () => {
+  test("matches aborted requests", () => {
+    expect(
+      isAbortError(
+        new DOMException("The operation was aborted. ", "AbortError")
+      )
+    ).toBe(true);
+  });
+
+  test("ignores other errors", () => {
+    expect(
+      isAbortError(new DOMException("The operation timed out.", "TimeoutError"))
+    ).toBe(false);
+    expect(isAbortError(new TypeError("Failed to fetch"))).toBe(false);
+    expect(isAbortError(undefined)).toBe(false);
   });
 });
 

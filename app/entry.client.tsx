@@ -15,7 +15,7 @@ import { ConnectionError } from "./components/connection-error";
 import { errorBoundaryEnglish } from "./data/error-boundary-english";
 import { clientGlobals } from "./globals";
 import { initClientMonitoring } from "./monitoring.client";
-import { isNetworkError } from "./shared/fetch";
+import { isAbortError, isNetworkError } from "./shared/fetch";
 import { logError } from "./shared/monitoring";
 import {
   fetchItemTranslationMap,
@@ -89,7 +89,7 @@ async function loadTranslationsAndHydrate() {
     clientGlobals.systemTranslationMap = systemTranslationMap;
     clientGlobals.itemTranslationMap = itemTranslationMap;
   } catch (error) {
-    if (!isNetworkError(error)) {
+    if (!isNetworkError(error) && !isAbortError(error)) {
       logError("[InventorySimulator] Failed to load translations.", { error });
     }
     renderConnectionError();
