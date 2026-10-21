@@ -17,9 +17,11 @@ import { getItemIconKey, getViewerIconSlot } from "./viewer-icon";
 import {
   VIEWER_ICON_API_CALLS_PER_MINUTE,
   VIEWER_ICON_API_CALL_BURST,
+  VIEWER_ICON_CAPTURE_TIMEOUT_MS,
   VIEWER_ICON_IDLE_TEARDOWN_MS,
   VIEWER_ICON_NETWORK_BACKOFF_BASE_MS,
   VIEWER_ICON_NETWORK_BACKOFF_CAP_MS,
+  VIEWER_ICON_PROBE_TIMEOUT_MS,
   VIEWER_ICON_STARTUP_TIMEOUT_MS,
   VIEWER_ICON_WEBGL_DISABLE_MS,
   ViewerIconBudget,
@@ -36,42 +38,68 @@ interface FakeApi {
   destroy: () => void;
   emit: (type: string, data: unknown) => void;
   reply: (result: Partial<ViewerCaptured>) => void;
+  timeOut: () => void;
 }
 
-function fakeApi({ ready = true }: { ready?: boolean } = {}): FakeApi {
+function fakeApi({
+  answers = true,
+  ready = true
+}: { answers?: boolean; ready?: boolean } = {}): FakeApi {
   const captured: number[] = [];
   const handlers = new Map<string, (data: unknown) => void>();
+  const traffic: string[] = [];
   let pending: ((result: ViewerCaptured) => void) | undefined;
   let fail: ((error: Error) => void) | undefined;
   const api = {
     capture(item: { id: number }) {
       captured.push(item.id);
+      traffic.push(`capture ${item.id}`);
       return new Promise<ViewerCaptured>((resolve, reject) => {
         pending = resolve;
         fail = reject;
       });
     },
+    describeSince: (mark: number) => traffic.slice(mark).join(", "),
+    getState(timeoutMs: number) {
+      traffic.push("getState");
+      if (answers) {
+        traffic.push("state");
+        return Promise.resolve({});
+      }
+      return new Promise((_, reject) =>
+        setTimeout(() => {
+          traffic.push("no state");
+          reject(new Error("ViewerApi: getState timed out."));
+        }, timeoutMs)
+      );
+    },
+    markLog: () => traffic.length,
     on: (type: string, listener: (data: unknown) => void) => {
       handlers.set(type, listener);
       return () => handlers.delete(type);
     },
     whenReady: () => (ready ? Promise.resolve() : new Promise<void>(() => {}))
   } as unknown as ViewerApi;
+  const end = (error: string) => {
+    const reject = fail;
+    fail = undefined;
+    pending = undefined;
+    reject?.(new Error(`ViewerApi: ${error}.`));
+  };
   return {
     api,
     captured,
-    destroy: () => {
-      const reject = fail;
-      fail = undefined;
-      pending = undefined;
-      reject?.(new Error("ViewerApi: destroyed."));
-    },
+    destroy: () => end("destroyed"),
     emit: (type, data) => handlers.get(type)?.(data),
     reply: (result) => {
       const resolve = pending;
       pending = undefined;
       fail = undefined;
       resolve?.({ apiCalls: 1, item: { id: 0 }, ...result });
+    },
+    timeOut: () => {
+      traffic.push("timed out");
+      end("capture timed out");
     }
   };
 }
@@ -553,12 +581,128 @@ describe("ViewerIcons", () => {
     expect(urlOf(A)).toBeUndefined();
     expect(consoleError).toHaveBeenCalledWith(
       "[InventorySimulator] The 3D viewer gave up on an item's icon (crashed).",
-      { key: getItemIconKey(A) }
+      expect.objectContaining({ key: getItemIconKey(A) })
     );
 
     icons.request(B);
     await flush();
     expect(viewer.captured.at(-1)).toBe(5);
+  });
+
+  it("reports what passed between the page and each viewer since each capture when it gives up on an item", async () => {
+    let mounted = 0;
+    const { icons, mounts } = setup({
+      next: () => fakeApi({ answers: mounted++ === 0 })
+    });
+
+    icons.request(B);
+    await flush();
+    mounts[0].reply({ image: new Blob(["x"]) });
+    await flush();
+    icons.request(A);
+    await flush();
+    await vi.advanceTimersByTimeAsync(VIEWER_ICON_CAPTURE_TIMEOUT_MS);
+    mounts[0].timeOut();
+    await flush();
+    await vi.advanceTimersByTimeAsync(VIEWER_ICON_CAPTURE_TIMEOUT_MS);
+    mounts[1].timeOut();
+    await flush();
+    await vi.advanceTimersByTimeAsync(VIEWER_ICON_PROBE_TIMEOUT_MS);
+    await flush();
+
+    expect(consoleError).toHaveBeenCalledWith(
+      "[InventorySimulator] The 3D viewer gave up on an item's icon (crashed).",
+      {
+        attempts: [
+          "iframe #1 capture 4, timed out, getState, state",
+          "iframe #2 capture 4, timed out, getState, no state"
+        ],
+        device: { cores: 8, gpu: null, memory: null },
+        key: getItemIconKey(A),
+        recent: [
+          "-95s ok 5",
+          "-50s crashed 4 (this item)",
+          "-0s crashed 4 (this item)"
+        ]
+      }
+    );
+  });
+
+  it("gives a viewer that let a capture time out a few seconds to answer before moving on", async () => {
+    const { icons, mounts } = setup({
+      next: () => fakeApi({ answers: false })
+    });
+
+    icons.request(A);
+    await flush();
+    mounts[0].timeOut();
+    await flush();
+    await vi.advanceTimersByTimeAsync(VIEWER_ICON_PROBE_TIMEOUT_MS - 1);
+    expect(mounts).toHaveLength(1);
+
+    await vi.advanceTimersByTimeAsync(1);
+    await flush();
+    expect(mounts).toHaveLength(2);
+    expect(mounts[1].captured).toEqual([4]);
+  });
+
+  it("counts a capture the viewer let time out, whatever the viewer says while it waits for an answer", async () => {
+    const { icons, mounts } = setup({
+      next: () => fakeApi({ answers: false })
+    });
+
+    icons.request(A);
+    await flush();
+    mounts[0].timeOut();
+    await flush();
+    mounts[0].emit("unsupported", { reason: "network" });
+    await flush();
+
+    const { budget, queue, recent } = icons.getStatus();
+    expect(recent.at(-1)?.outcome).toBe("crashed");
+    expect(queue[0].attempts).toBe(1);
+    expect(budget.cooldownReason).toBeUndefined();
+  });
+
+  it("names the GPU in its report as the viewer does, letting go of the context it asked", async () => {
+    const loseContext = vi.fn();
+    const UNMASKED_VENDOR_WEBGL = 0x9245;
+    const UNMASKED_RENDERER_WEBGL = 0x9246;
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({
+      getExtension: (name: string) =>
+        name === "WEBGL_debug_renderer_info"
+          ? { UNMASKED_RENDERER_WEBGL, UNMASKED_VENDOR_WEBGL }
+          : name === "WEBGL_lose_context"
+            ? { loseContext }
+            : null,
+      getParameter: (parameter: number) =>
+        parameter === UNMASKED_RENDERER_WEBGL
+          ? "ANGLE (Intel, Intel(R) UHD Graphics 620 Direct3D11 vs_5_0 ps_5_0, D3D11)"
+          : "Google Inc. (Intel)"
+    } as unknown as WebGLRenderingContext);
+    const viewer = fakeApi();
+    const { icons } = setup({ next: () => viewer });
+
+    icons.request(A);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      await flush();
+      viewer.reply({ error: "encode" });
+      await flush();
+    }
+
+    expect(consoleError).toHaveBeenCalledWith(
+      "[InventorySimulator] The 3D viewer gave up on an item's icon (encode).",
+      expect.objectContaining({
+        device: expect.objectContaining({
+          gpu: {
+            renderer:
+              "ANGLE (Intel, Intel(R) UHD Graphics 620 Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            vendor: "Google Inc. (Intel)"
+          }
+        })
+      })
+    );
+    expect(loseContext).toHaveBeenCalledOnce();
   });
 
   it("retries a render that failed to encode, on a fresh viewer", async () => {
@@ -603,7 +747,7 @@ describe("ViewerIcons", () => {
     expect(urlOf(A)).toBeUndefined();
     expect(consoleError).toHaveBeenCalledWith(
       "[InventorySimulator] The 3D viewer gave up on an item's icon (encode).",
-      { key: getItemIconKey(A) }
+      expect.objectContaining({ key: getItemIconKey(A) })
     );
   });
 
@@ -1236,7 +1380,7 @@ describe("ViewerIcons", () => {
     viewer.reply({ image: new Blob(["x"]) });
     await flush();
     expect(icons.getStatus().recent).toEqual([
-      { at: Date.now(), key: getItemIconKey(A), outcome: "ok" }
+      { at: Date.now(), id: 4, key: getItemIconKey(A), outcome: "ok" }
     ]);
     expect(icons.getStatus().published).toBe(1);
   });

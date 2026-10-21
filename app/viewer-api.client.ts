@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CS2BaseInventoryItem } from "@ianlucas/cs2-lib";
+import { pushKeepingLast } from "~/shared/misc";
 import { ViewerItemInput, toPlayingViewerItem, toViewerItem } from "~/viewer";
 
 /**
@@ -15,6 +16,13 @@ const VIEWER_SOURCE = "3d.cstrike.app";
  * The viewer's postMessage protocol version.
  */
 const VIEWER_PROTOCOL_VERSION = 1;
+
+/**
+ * How much traffic `ViewerApi` keeps: the longest capture's, and then some.
+ */
+export const VIEWER_LOG_LIMIT = 32;
+
+const VIEWER_LOG_PREFIXES = { received: "← ", seen: "", sent: "→ " };
 
 /**
  * The subset of a CS2BaseInventoryItem the viewer reads, plus the animation
@@ -134,6 +142,18 @@ export interface ViewerEventMap {
   unsupported: { reason: ViewerUnsupportedReason };
 }
 
+interface ViewerLogEntry {
+  at: number;
+  kind: keyof typeof VIEWER_LOG_PREFIXES;
+  text: string;
+}
+
+export interface ViewerLogMark {
+  at: number;
+  capturesBefore: number;
+  entriesBefore: number;
+}
+
 export interface ViewerApiOptions {
   /**
    * The viewer's origin, for postMessage targeting and inbound filtering.
@@ -182,6 +202,26 @@ function parseViewerItem(value: string | null): ViewerItem | undefined {
 }
 
 /**
+ * A message's plain fields, such as a capture's error; nested ones, such as
+ * the item, would crowd the log.
+ */
+function describeFields(data: unknown): string {
+  if (typeof data !== "object" || data === null) {
+    return "";
+  }
+  return Object.entries(data)
+    .filter(([, value]) =>
+      ["boolean", "number", "string"].includes(typeof value)
+    )
+    .map(([field, value]) => ` ${field}=${value}`)
+    .join("");
+}
+
+function seconds(ms: number) {
+  return `${(ms / 1000).toFixed(1)}s`;
+}
+
+/**
  * Typed wrapper over the CS2 3D viewer's postMessage embed API. Construct it with
  * the viewer iframe; it owns the readiness handshake, buffers commands issued
  * before the viewer is ready, correlates `getState` replies, and re-emits viewer
@@ -207,6 +247,12 @@ export class ViewerApi extends EventTarget {
     reject: (error: Error) => void;
   }[] = [];
   private readonly pending = new Map<string, PendingReply>();
+  private readonly createdAt = Date.now();
+  private readyAt: number | undefined;
+  private hasLoaded = false;
+  private capturesSent = 0;
+  private readonly log: ViewerLogEntry[] = [];
+  private entriesLogged = 0;
 
   /**
    * Attaches to the viewer iframe and starts the readiness handshake. The iframe
@@ -367,12 +413,42 @@ export class ViewerApi extends EventTarget {
     item: ViewerItemInput,
     options?: { quality?: number; timeoutMs?: number }
   ): Promise<ViewerCaptured> {
+    this.capturesSent++;
     return this.request(
       "captured",
       "capture",
       { item: toViewerItem(item), quality: options?.quality },
       options?.timeoutMs ?? VIEWER_CAPTURE_TIMEOUT_MS
     );
+  }
+
+  markLog(): ViewerLogMark {
+    return {
+      at: Date.now(),
+      capturesBefore: this.capturesSent,
+      entriesBefore: this.entriesLogged
+    };
+  }
+
+  /**
+   * Whether the viewer was fresh or warm at `mark`, then the traffic since,
+   * timed from it.
+   */
+  describeSince({ at, capturesBefore, entriesBefore }: ViewerLogMark): string {
+    const viewer =
+      capturesBefore > 0
+        ? `warm (up ${seconds(at - this.createdAt)}, captured ${capturesBefore} before)`
+        : this.readyAt === undefined
+          ? "fresh (not ready)"
+          : `fresh (ready in ${seconds(this.readyAt - this.createdAt)})`;
+    const since = this.log.slice(
+      Math.max(0, this.log.length - (this.entriesLogged - entriesBefore))
+    );
+    const traffic = since.map(
+      (entry) =>
+        `+${seconds(entry.at - at)} ${VIEWER_LOG_PREFIXES[entry.kind]}${entry.text}`
+    );
+    return [viewer, ...traffic].join(" · ");
   }
 
   /**
@@ -401,8 +477,15 @@ export class ViewerApi extends EventTarget {
         if (this.destroyed) {
           return;
         }
+        const sentAt = Date.now();
         entry.timer = setTimeout(() => {
           this.pending.delete(id);
+          // A deadline the page itself was too busy to keep says the device
+          // was starved, rather than the viewer.
+          this.record(
+            "seen",
+            `${type} timed out (${Date.now() - sentAt - timeoutMs}ms late)`
+          );
           reject(new Error(`ViewerApi: ${type} timed out.`));
         }, timeoutMs);
         this.post(this.envelope(type, data, id));
@@ -491,9 +574,16 @@ export class ViewerApi extends EventTarget {
 
   private post(envelope: Envelope): void {
     if (!this.canReachViewer()) {
+      this.record("sent", `${envelope.type} (undelivered)`);
       return;
     }
+    this.record("sent", envelope.type);
     this.iframe.contentWindow?.postMessage(envelope, this.origin);
+  }
+
+  private record(kind: ViewerLogEntry["kind"], text: string): void {
+    pushKeepingLast(this.log, { at: Date.now(), kind, text }, VIEWER_LOG_LIMIT);
+    this.entriesLogged++;
   }
 
   private flush(): void {
@@ -501,6 +591,7 @@ export class ViewerApi extends EventTarget {
       return;
     }
     this.isReady = true;
+    this.readyAt = Date.now();
     const queue = this.queue;
     this.queue = [];
     for (const task of queue) {
@@ -528,6 +619,10 @@ export class ViewerApi extends EventTarget {
   };
 
   private readonly onLoad = (): void => {
+    // A fresh viewer says it's ready before its page finishes loading, so
+    // only a later load means it started over.
+    this.record("seen", this.hasLoaded ? "reload" : "load");
+    this.hasLoaded = true;
     this.solicitReady();
   };
 
@@ -548,6 +643,7 @@ export class ViewerApi extends EventTarget {
       return;
     }
     const { id, type, data } = message;
+    this.record("received", `${type}${describeFields(data)}`);
     if (id !== undefined) {
       const pending = this.pending.get(id);
       if (pending !== undefined) {

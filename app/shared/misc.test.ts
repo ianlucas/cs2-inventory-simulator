@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { describe, expect, test } from "vitest";
-import { colorText } from "./misc";
+import { colorText, pushKeepingLast } from "./misc";
 
 describe("colorText", () => {
   test("leaves plain text untouched", () => {
@@ -34,5 +34,19 @@ describe("colorText", () => {
     expect(colorText("{red}Usage: iam <name>")).toBe(
       '<span style="color: red;">Usage: iam &lt;name&gt;</span>'
     );
+  });
+});
+
+describe("pushKeepingLast", () => {
+  test("appends while under the count", () => {
+    const array = [1];
+    pushKeepingLast(array, 2, 3);
+    expect(array).toEqual([1, 2]);
+  });
+
+  test("drops the oldest items past the count", () => {
+    const array = [1, 2, 3];
+    pushKeepingLast(array, 4, 2);
+    expect(array).toEqual([3, 4]);
   });
 });
