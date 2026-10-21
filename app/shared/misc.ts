@@ -77,6 +77,13 @@ export function toArrayIf<T>(value: T, condition: (value: T) => boolean) {
   return condition(value) ? [value] : [];
 }
 
+export function pushKeepingLast<T>(array: T[], item: T, count: number) {
+  array.push(item);
+  if (array.length > count) {
+    array.splice(0, array.length - count);
+  }
+}
+
 export function tryOrDefault<T, R = undefined>(
   getValue: () => T,
   defaultValue?: R

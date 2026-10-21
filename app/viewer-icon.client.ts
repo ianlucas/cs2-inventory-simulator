@@ -6,12 +6,14 @@
 import { CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { clientGlobals } from "~/globals";
 import { getTypedFromLocalStorage, setToLocalStorage } from "~/local-storage";
+import { pushKeepingLast } from "~/shared/misc";
 import { logError } from "~/shared/monitoring";
 import type { ViewerItemInput } from "~/viewer";
 import type {
   ViewerApi,
   ViewerCaptureError,
   ViewerItem,
+  ViewerLogMark,
   ViewerUnsupportedReason
 } from "~/viewer-api.client";
 import { VIEWER_CAPTURE_TIMEOUT_MS } from "~/viewer-api.client";
@@ -30,6 +32,7 @@ export const VIEWER_ICON_NETWORK_BACKOFF_BASE_MS = 30_000;
 export const VIEWER_ICON_NETWORK_BACKOFF_CAP_MS = 8 * 60_000;
 
 export const VIEWER_ICON_CAPTURE_TIMEOUT_MS = VIEWER_CAPTURE_TIMEOUT_MS;
+export const VIEWER_ICON_PROBE_TIMEOUT_MS = 5_000;
 export const VIEWER_ICON_STARTUP_TIMEOUT_MS = 60_000;
 export const VIEWER_ICON_IDLE_TEARDOWN_MS = 30_000;
 
@@ -82,7 +85,12 @@ export interface ViewerIconStatus {
     attempts: number;
   }[];
   published: number;
-  recent: { at: number; key: string; outcome: ViewerIconOutcome }[];
+  recent: {
+    at: number;
+    id?: number;
+    key: string;
+    outcome: ViewerIconOutcome;
+  }[];
 }
 
 export interface ViewerIconEntry {
@@ -682,6 +690,13 @@ interface Pending {
   uid?: number;
   priority: boolean;
   attempts: number;
+  attemptReports: string[];
+}
+
+interface Attempt {
+  api: ViewerApi;
+  generation?: number;
+  mark: ViewerLogMark;
 }
 
 interface Slot {
@@ -704,6 +719,37 @@ export interface ViewerIconsOptions {
   store?: ViewerIconStoreLike;
   budget?: ViewerIconBudget;
   lock?: ViewerIconLock;
+}
+
+function getDevice() {
+  return {
+    cores: navigator.hardwareConcurrency,
+    gpu: getGpu(),
+    memory:
+      (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? null
+  };
+}
+
+function getGpu() {
+  try {
+    const gl = document.createElement("canvas").getContext("webgl");
+    if (gl === null) {
+      return null;
+    }
+    const info = gl.getExtension("WEBGL_debug_renderer_info");
+    const gpu = {
+      renderer: info
+        ? (gl.getParameter(info.UNMASKED_RENDERER_WEBGL) as string)
+        : null,
+      vendor: info
+        ? (gl.getParameter(info.UNMASKED_VENDOR_WEBGL) as string)
+        : null
+    };
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    return gpu;
+  } catch {
+    return null;
+  }
 }
 
 export class ViewerIcons {
@@ -879,6 +925,7 @@ export class ViewerIcons {
     }
     this.generator.watchFocus();
     this.pending.set(key, {
+      attemptReports: [],
       attempts: 0,
       item: getItemIconAppearance(item),
       key,
@@ -977,6 +1024,11 @@ export class ViewerIcons {
       interrupt = resolve;
     });
     this.inflight = { entry, interrupt };
+    const attempt: Attempt = {
+      api,
+      generation: this.generator.getMountedGeneration(),
+      mark: api.markLog()
+    };
     let outcome: CaptureOutcome;
     try {
       outcome = await Promise.race([
@@ -984,13 +1036,17 @@ export class ViewerIcons {
         interrupted
       ]);
     } catch {
-      outcome = {
-        apiCalls: 1,
-        error: this.generator.getApi() === api ? "crashed" : "interrupted"
-      };
+      const current = this.generator.getApi() === api;
+      if (current) {
+        await Promise.race([
+          api.getState(VIEWER_ICON_PROBE_TIMEOUT_MS).catch(() => {}),
+          interrupted
+        ]);
+      }
+      outcome = { apiCalls: 1, error: current ? "crashed" : "interrupted" };
     }
     try {
-      await this.settle(api, entry, outcome);
+      await this.settle(attempt, entry, outcome);
     } finally {
       this.inflight = undefined;
       this.pump();
@@ -1021,12 +1077,12 @@ export class ViewerIcons {
   }
 
   private async settle(
-    api: ViewerApi,
+    attempt: Attempt,
     entry: Pending,
     { apiCalls, error = "crashed", image }: CaptureOutcome
   ) {
     this.budget.spend(apiCalls);
-    this.record(entry.key, image !== undefined ? "ok" : error);
+    this.record(entry.key, entry.item.id, image !== undefined ? "ok" : error);
     if (image !== undefined) {
       this.budget.clearNetworkBackoff();
       await this.write(() => this.store.writeImage(entry.key, image));
@@ -1052,7 +1108,7 @@ export class ViewerIcons {
       case "asset":
       case "timeout":
         this.budget.backOffNetwork();
-        this.recycle(api);
+        this.recycle(attempt.api);
         this.requeue(entry);
         return;
       case "weapon":
@@ -1067,17 +1123,36 @@ export class ViewerIcons {
         return;
       default:
         entry.attempts++;
-        this.recycle(api);
+        entry.attemptReports.push(
+          `iframe #${attempt.generation} ${attempt.api.describeSince(attempt.mark)}`
+        );
+        this.recycle(attempt.api);
         if (entry.attempts < VIEWER_ICON_MAX_ATTEMPTS) {
           this.requeue(entry);
           return;
         }
         logError(
           `[InventorySimulator] The 3D viewer gave up on an item's icon (${error}).`,
-          { extra: { key: entry.key } }
+          {
+            extra: {
+              key: entry.key,
+              attempts: entry.attemptReports,
+              recent: this.describeRecent(entry.key),
+              device: getDevice()
+            }
+          }
         );
         await this.giveUp(entry, error, VIEWER_ICON_TRANSIENT_RETRY_AFTER_MS);
     }
+  }
+
+  private describeRecent(key: string) {
+    const now = Date.now();
+    return this.recent.map(({ at, id, key: recentKey, outcome }) => {
+      const age = Math.round((now - at) / 1000);
+      const which = recentKey === key ? " (this item)" : "";
+      return `-${age}s ${outcome} ${id ?? "?"}${which}`;
+    });
   }
 
   private async giveUp(
@@ -1139,6 +1214,7 @@ export class ViewerIcons {
     const seed = this.generator.getSeed();
     this.record(
       seed === undefined ? "" : getItemIconKey(seed),
+      seed?.id,
       "startup-timeout"
     );
     this.budget.backOffNetwork();
@@ -1273,11 +1349,16 @@ export class ViewerIcons {
     }
   }
 
-  private record(key: string, outcome: ViewerIconOutcome) {
-    this.recent.push({ at: Date.now(), key, outcome });
-    if (this.recent.length > VIEWER_ICON_RECENT_LIMIT) {
-      this.recent.shift();
-    }
+  private record(
+    key: string,
+    id: number | undefined,
+    outcome: ViewerIconOutcome
+  ) {
+    pushKeepingLast(
+      this.recent,
+      { at: Date.now(), id, key, outcome },
+      VIEWER_ICON_RECENT_LIMIT
+    );
   }
 }
 
