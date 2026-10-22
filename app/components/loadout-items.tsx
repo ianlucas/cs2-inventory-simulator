@@ -17,6 +17,7 @@ import {
 import { useInventory } from "./app-context";
 import { useEquipItemFilter } from "./hooks/use-item-hide-filters";
 import { useLoadoutDrag } from "./hooks/use-loadout-drag";
+import { InventoryGrid } from "./inventory-grid";
 import { InventoryItem } from "./inventory-item";
 import type { LoadoutFilter } from "./loadout-items-filter";
 
@@ -74,11 +75,16 @@ export function LoadoutItems({
   }, [filter, inventory, isEquippable, loadout, sorter, team]);
 
   return (
-    <div className="grid grid-cols-6 gap-x-5 gap-y-4 py-4">
-      {items.map(({ equipped, item, uid }) => (
+    <InventoryGrid
+      className="py-4"
+      columnGap={20}
+      fixedColumns={6}
+      items={items}
+      layoutKey="loadout"
+    >
+      {({ equipped, item, uid }) => (
         <div
           className="flex justify-center"
-          key={uid}
           {...(isReadOnly ? {} : getDragSourceProps(item))}
         >
           <InventoryItem
@@ -93,7 +99,7 @@ export function LoadoutItems({
             uid={uid}
           />
         </div>
-      ))}
-    </div>
+      )}
+    </InventoryGrid>
   );
 }

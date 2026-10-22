@@ -40,7 +40,7 @@ import { useSealItemSticker } from "./hooks/use-seal-item-sticker";
 import { useUnsealGraffiti } from "./hooks/use-unseal-graffiti";
 import { InfoIcon } from "./info-icon";
 import { InspectInventoryItem } from "./inspect-item";
-import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
+import { InventoryPageGrid } from "./inventory-grid";
 import { InventoryLoadoutNotice } from "./inventory-loadout-notice";
 import { InventorySelectedItem } from "./inventory-selected-item";
 import { useItemSelector } from "./item-selector-context";
@@ -303,54 +303,49 @@ export function Inventory() {
       ) : (
         <InventoryLoadoutNotice />
       )}
-      <div className="m-auto grid w-full grid-cols-[repeat(auto-fit,minmax(154px,1fr))] px-2 select-none [grid-gap:1em] lg:my-8 lg:w-5xl lg:px-0">
-        {displayedItems.map((item) => (
-          <div key={item.uid} className="flex items-start justify-center">
-            <InventoryItem
-              {...item}
-              {...(isSelectingAnItem
-                ? {
-                    clickSound: "inventory_item_select" as const,
-                    disableContextMenu: true,
-                    onClick: itemSelector?.readOnly
-                      ? undefined
-                      : handleSelectItem
-                  }
-                : {
-                    onApplyPatch: handleApplyItemPatch,
-                    onApplySticker: handleApplyItemSticker,
-                    onAttachCharm: handleApplyItemKeychain,
-                    onDepositToStorageUnit: handleDepositToStorageUnit,
-                    onDetachCharm: handleDetachCharm,
-                    onDetachCharmWithTool: handleDetachCharmWithTool,
-                    onEdit: handleEdit,
-                    onEquip: equip,
-                    onExtractSticker: handleExtractItemSticker,
-                    onInspectItem: handleInspectItem,
-                    onInspectStorageUnit: handleInspectStorageUnit,
-                    onRemove: handleRemove,
-                    onRemovePatch: handleRemoveItemPatch,
-                    onRename: handleRenameItem,
-                    onRenamePet: handleRenamePet,
-                    onRenameStorageUnit: handleRenameStorageUnit,
-                    onRetrieveFromStorageUnit: handleRetrieveFromStorageUnit,
-                    onScrapeSticker: handleScrapeItemSticker,
-                    onSealSticker: handleSealItemSticker,
-                    onSwapItemsStatTrak: handleSwapItemsStatTrak,
-                    onUnequip: unequip,
-                    onUnlockContainer: handleUnlockCase,
-                    onUnsealGraffiti: handleUnsealGraffiti,
-                    onUseItem: handleUnpackItem,
-                    onViewInLoadout: viewInLoadout,
-                    ownApplicableKeychains,
-                    ownApplicablePatches,
-                    ownApplicableStickers
-                  })}
-            />
-          </div>
-        ))}
-        <InventoryGridPlaceholder />
-      </div>
+      <InventoryPageGrid items={displayedItems} layoutKey="inventory">
+        {(item) => (
+          <InventoryItem
+            {...item}
+            {...(isSelectingAnItem
+              ? {
+                  clickSound: "inventory_item_select" as const,
+                  disableContextMenu: true,
+                  onClick: itemSelector?.readOnly ? undefined : handleSelectItem
+                }
+              : {
+                  onApplyPatch: handleApplyItemPatch,
+                  onApplySticker: handleApplyItemSticker,
+                  onAttachCharm: handleApplyItemKeychain,
+                  onDepositToStorageUnit: handleDepositToStorageUnit,
+                  onDetachCharm: handleDetachCharm,
+                  onDetachCharmWithTool: handleDetachCharmWithTool,
+                  onEdit: handleEdit,
+                  onEquip: equip,
+                  onExtractSticker: handleExtractItemSticker,
+                  onInspectItem: handleInspectItem,
+                  onInspectStorageUnit: handleInspectStorageUnit,
+                  onRemove: handleRemove,
+                  onRemovePatch: handleRemoveItemPatch,
+                  onRename: handleRenameItem,
+                  onRenamePet: handleRenamePet,
+                  onRenameStorageUnit: handleRenameStorageUnit,
+                  onRetrieveFromStorageUnit: handleRetrieveFromStorageUnit,
+                  onScrapeSticker: handleScrapeItemSticker,
+                  onSealSticker: handleSealItemSticker,
+                  onSwapItemsStatTrak: handleSwapItemsStatTrak,
+                  onUnequip: unequip,
+                  onUnlockContainer: handleUnlockCase,
+                  onUnsealGraffiti: handleUnsealGraffiti,
+                  onUseItem: handleUnpackItem,
+                  onViewInLoadout: viewInLoadout,
+                  ownApplicableKeychains,
+                  ownApplicablePatches,
+                  ownApplicableStickers
+                })}
+          />
+        )}
+      </InventoryPageGrid>
       {displayedItems.length === 0 && (
         <div className="m-auto flex justify-center select-none lg:w-5xl">
           <div className="flex w-full items-center justify-center gap-2 bg-linear-to-r from-transparent via-black/30 to-transparent py-1">
