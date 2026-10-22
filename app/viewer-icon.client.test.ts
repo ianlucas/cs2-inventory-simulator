@@ -177,7 +177,6 @@ function setup({
   host?: boolean;
   lock?: ViewerIconLock;
   next?: () => FakeApi | undefined;
-  /** Puts the tile of every item requested on screen. */
   onScreen?: boolean;
   strict?: boolean;
 } = {}) {

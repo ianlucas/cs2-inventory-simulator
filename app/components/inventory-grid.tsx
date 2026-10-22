@@ -32,23 +32,17 @@ interface InventoryGridLayout {
   uids: number[];
 }
 
-// The layout each grid had when it last unmounted, so mounting it again for the
-// same items starts at its real height and scroll restoration lands where the
-// user left.
 const layouts = new Map<string, InventoryGridLayout>();
 
 interface InventoryGridProps<T extends GridItem> {
   children: (item: T) => ReactNode;
   className?: string;
   columnGap?: number;
-  /** A column count to keep, instead of as many as fit the grid's width. */
   fixedColumns?: number;
   items: T[];
-  /** Names the list the grid shows, to remember its layout across remounts. */
   layoutKey: string;
 }
 
-/** Renders only the rows of tiles near the viewport. */
 export function InventoryGrid<T extends GridItem>(
   props: InventoryGridProps<T>
 ) {
@@ -62,8 +56,6 @@ export function InventoryGrid<T extends GridItem>(
     <div className={className}>
       <ClientOnly
         fallback={
-          // The server can't tell which rows are on screen, so it only holds
-          // the grid's estimated height for the client to fill in.
           <div
             style={{
               height:
@@ -80,7 +72,6 @@ export function InventoryGrid<T extends GridItem>(
   );
 }
 
-/** The page-wide grid the inventory and profiles lay their items out in. */
 export function InventoryPageGrid<T extends GridItem>({
   children,
   items,
@@ -154,8 +145,6 @@ function InventoryGridRows<T extends GridItem>({
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(list);
-    // Content above the grid growing or shrinking moves where it starts, and
-    // scrolling catches it moving without resizing the page.
     observer.observe(document.body);
     window.addEventListener("scroll", measureOffset, { passive: true });
     return () => {
@@ -181,7 +170,6 @@ function InventoryGridRows<T extends GridItem>({
     [layoutKey, virtualizer]
   );
 
-  // Fixed columns share the width evenly, as `grid-cols-*` does.
   const gridTemplateColumns = `repeat(${columns}, minmax(${
     fixedColumns === undefined ? `${INVENTORY_GRID_MIN_COLUMN_WIDTH}px` : 0
   }, 1fr))`;
@@ -193,8 +181,6 @@ function InventoryGridRows<T extends GridItem>({
       style={{ height: virtualizer.getTotalSize() }}
     >
       {virtualizer.getVirtualItems().map(({ index, key, start }) => (
-        // Positioned by `top` rather than a transform, which would stack each
-        // row on its own and hide context menus under the rows below.
         <div
           className="absolute left-0 grid w-full"
           data-index={index}

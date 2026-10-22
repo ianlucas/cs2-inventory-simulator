@@ -24,11 +24,8 @@ function getItems(count: number, firstUid = 0) {
   return range(count, firstUid).map((uid) => ({ uid }));
 }
 
-// Where the grid starts on the page.
 let gridTop = 0;
 
-// happy-dom doesn't lay anything out, so the grid's width, where it starts and
-// each row's height are what these stubs say.
 function stubLayout({
   rowHeight = INVENTORY_GRID_ESTIMATED_ROW_HEIGHT,
   width = 1024

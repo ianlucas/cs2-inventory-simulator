@@ -36,8 +36,6 @@ export const VIEWER_ICON_PROBE_TIMEOUT_MS = 5_000;
 export const VIEWER_ICON_STARTUP_TIMEOUT_MS = 60_000;
 export const VIEWER_ICON_IDLE_TEARDOWN_MS = 30_000;
 
-// How long a tile stays on screen before its icon is drawn, so scrolling past
-// an item doesn't spend the budget on it.
 export const VIEWER_ICON_VISIBLE_DWELL_MS = 300;
 
 export const VIEWER_ICON_MAX_ATTEMPTS = 2;
@@ -396,7 +394,6 @@ class ViewerIconVisibility {
 
   constructor(private readonly onChange: () => void) {}
 
-  /** When each slot on screen came into view. */
   getInViewSince() {
     return this.inViewSince.entries();
   }
@@ -995,8 +992,6 @@ export class ViewerIcons {
     }
   }
 
-  // Edited items go first, then what has stayed on screen for a moment. The
-  // rest waits for its tile to do so, so scrolling past an item spends nothing.
   private getLane(
     entry: Pending,
     inView: Map<string, number>,
@@ -1026,7 +1021,6 @@ export class ViewerIcons {
     return edited ?? visible;
   }
 
-  /** The least time an item on screen still has to stay there. */
   private getDwellLeftMs(inView: Map<string, number>, now: number) {
     let dwellLeft: number | undefined;
     for (const [key, since] of inView) {
@@ -1038,7 +1032,6 @@ export class ViewerIcons {
     return dwellLeft;
   }
 
-  /** When each item on screen came into view, through its earliest slot. */
   private getInView() {
     const inView = new Map<string, number>();
     for (const [slotId, since] of this.visibility.getInViewSince()) {

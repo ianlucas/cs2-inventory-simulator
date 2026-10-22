@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-/** Columns that fit `width`, as `repeat(auto-fit, minmax(min, 1fr))` lays out. */
 export function getGridColumns({
   gap,
   minColumnWidth,
