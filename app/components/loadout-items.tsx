@@ -78,11 +78,9 @@ export function LoadoutItems({
     <InventoryGrid
       className="py-4"
       columnGap={20}
-      columns={6}
-      getKey={({ uid }) => uid}
+      fixedColumns={6}
       items={items}
       layoutKey="loadout"
-      rowGap={16}
     >
       {({ equipped, item, uid }) => (
         <div

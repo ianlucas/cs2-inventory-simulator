@@ -9,6 +9,7 @@ import {
   ReactNode,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState
 } from "react";
@@ -17,37 +18,44 @@ import { getGridColumns, getGridRow, getGridRowCount } from "~/shared/grid";
 
 export const INVENTORY_GRID_DEFAULT_COLUMNS = 6;
 export const INVENTORY_GRID_ESTIMATED_ROW_HEIGHT = 150;
+export const INVENTORY_GRID_GAP = 16;
+export const INVENTORY_GRID_MIN_COLUMN_WIDTH = 154;
 export const INVENTORY_GRID_OVERSCAN_ROWS = 2;
 
-type Key = VirtualItem["key"];
+interface GridItem {
+  uid: number;
+}
 
-// What each grid measured when it last unmounted, so mounting it again starts
-// at its real height and scroll restoration lands where the user left.
-const layouts = new Map<
-  string,
-  { columns: number; rowHeights: Map<Key, number> }
->();
+interface InventoryGridLayout {
+  columns: number;
+  rowHeights: Map<VirtualItem["key"], number>;
+  uids: number[];
+}
 
-interface InventoryGridProps<T> {
+// The layout each grid had when it last unmounted, so mounting it again for the
+// same items starts at its real height and scroll restoration lands where the
+// user left.
+const layouts = new Map<string, InventoryGridLayout>();
+
+interface InventoryGridProps<T extends GridItem> {
   children: (item: T) => ReactNode;
   className?: string;
   columnGap?: number;
-  /** A fixed column count, instead of as many as fit `minColumnWidth`. */
-  columns?: number;
-  getKey: (item: T) => Key;
+  /** A column count to keep, instead of as many as fit the grid's width. */
+  fixedColumns?: number;
   items: T[];
-  /** Names the grid, so it remembers its layout across remounts. */
+  /** Names the list the grid shows, to remember its layout across remounts. */
   layoutKey: string;
-  minColumnWidth?: number;
-  rowGap?: number;
 }
 
 /** Renders only the rows of tiles near the viewport. */
-export function InventoryGrid<T>(props: InventoryGridProps<T>) {
-  const { className, columns, items, rowGap = 16 } = props;
+export function InventoryGrid<T extends GridItem>(
+  props: InventoryGridProps<T>
+) {
+  const { className, fixedColumns, items } = props;
   const rows = getGridRowCount(
     items.length,
-    columns ?? INVENTORY_GRID_DEFAULT_COLUMNS
+    fixedColumns ?? INVENTORY_GRID_DEFAULT_COLUMNS
   );
 
   return (
@@ -62,7 +70,7 @@ export function InventoryGrid<T>(props: InventoryGridProps<T>) {
                 rows === 0
                   ? 0
                   : rows * INVENTORY_GRID_ESTIMATED_ROW_HEIGHT +
-                    (rows - 1) * rowGap
+                    (rows - 1) * INVENTORY_GRID_GAP
             }}
           />
         }
@@ -72,15 +80,31 @@ export function InventoryGrid<T>(props: InventoryGridProps<T>) {
   );
 }
 
-function InventoryGridRows<T>({
+/** The page-wide grid the inventory and profiles lay their items out in. */
+export function InventoryPageGrid<T extends GridItem>({
   children,
-  columnGap = 16,
-  columns,
-  getKey,
   items,
-  layoutKey,
-  minColumnWidth = 154,
-  rowGap = 16
+  layoutKey
+}: Pick<InventoryGridProps<T>, "children" | "items" | "layoutKey">) {
+  return (
+    <InventoryGrid
+      className="m-auto w-full px-2 select-none lg:my-8 lg:w-5xl lg:px-0"
+      items={items}
+      layoutKey={layoutKey}
+    >
+      {(item) => (
+        <div className="flex items-start justify-center">{children(item)}</div>
+      )}
+    </InventoryGrid>
+  );
+}
+
+function InventoryGridRows<T extends GridItem>({
+  children,
+  columnGap = INVENTORY_GRID_GAP,
+  fixedColumns,
+  items,
+  layoutKey
 }: InventoryGridProps<T>) {
   const listRef = useRef<HTMLDivElement>(null);
   const [remembered] = useState(() => layouts.get(layoutKey));
@@ -88,15 +112,24 @@ function InventoryGridRows<T>({
     remembered?.columns ?? INVENTORY_GRID_DEFAULT_COLUMNS
   );
   const [scrollMargin, setScrollMargin] = useState(0);
-  const columnCount = columns ?? fitColumns;
-  const rowHeights =
-    remembered?.columns === columnCount ? remembered.rowHeights : undefined;
+  const columns = fixedColumns ?? fitColumns;
+  const uids = useMemo(() => items.map(({ uid }) => uid), [items]);
+  const rowHeights = useMemo(
+    () =>
+      remembered !== undefined &&
+      remembered.columns === columns &&
+      remembered.uids.length === uids.length &&
+      remembered.uids.every((uid, index) => uid === uids[index])
+        ? remembered.rowHeights
+        : undefined,
+    [remembered, columns, uids]
+  );
 
   const virtualizer = useWindowVirtualizer<HTMLDivElement>({
-    count: getGridRowCount(items.length, columnCount),
+    count: getGridRowCount(items.length, columns),
     estimateSize: (index) =>
       rowHeights?.get(index) ?? INVENTORY_GRID_ESTIMATED_ROW_HEIGHT,
-    gap: rowGap,
+    gap: INVENTORY_GRID_GAP,
     overscan: INVENTORY_GRID_OVERSCAN_ROWS,
     scrollMargin
   });
@@ -106,42 +139,51 @@ function InventoryGridRows<T>({
     if (list === null) {
       return;
     }
+    const measureOffset = () =>
+      setScrollMargin(list.getBoundingClientRect().top + window.scrollY);
     const measure = () => {
       setFitColumns(
         getGridColumns({
           gap: columnGap,
-          minColumnWidth,
+          minColumnWidth: INVENTORY_GRID_MIN_COLUMN_WIDTH,
           width: list.clientWidth
         })
       );
-      setScrollMargin(list.getBoundingClientRect().top + window.scrollY);
+      measureOffset();
     };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(list);
-    // Content above the grid growing or shrinking moves where it starts.
+    // Content above the grid growing or shrinking moves where it starts, and
+    // scrolling catches it moving without resizing the page.
     observer.observe(document.body);
-    return () => observer.disconnect();
-  }, [columnGap, minColumnWidth]);
+    window.addEventListener("scroll", measureOffset, { passive: true });
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", measureOffset);
+    };
+  }, [columnGap]);
 
-  const latest = useRef({ columnCount, rowHeights });
-  latest.current = { columnCount, rowHeights };
+  const latest = useRef({ columns, rowHeights, uids });
+  latest.current = { columns, rowHeights, uids };
   useEffect(
     () => () => {
-      const { columnCount, rowHeights } = latest.current;
+      const { columns, rowHeights, uids } = latest.current;
       layouts.set(layoutKey, {
-        columns: columnCount,
+        columns,
         rowHeights: new Map([
           ...(rowHeights ?? []),
           ...virtualizer.itemSizeCache
-        ])
+        ]),
+        uids
       });
     },
     [layoutKey, virtualizer]
   );
 
-  const gridTemplateColumns = `repeat(${columnCount}, minmax(${
-    columns === undefined ? `${minColumnWidth}px` : 0
+  // Fixed columns share the width evenly, as `grid-cols-*` does.
+  const gridTemplateColumns = `repeat(${columns}, minmax(${
+    fixedColumns === undefined ? `${INVENTORY_GRID_MIN_COLUMN_WIDTH}px` : 0
   }, 1fr))`;
 
   return (
@@ -160,8 +202,8 @@ function InventoryGridRows<T>({
           ref={virtualizer.measureElement}
           style={{ columnGap, gridTemplateColumns, top: start - scrollMargin }}
         >
-          {getGridRow(items, columnCount, index).map((item) => (
-            <Fragment key={getKey(item)}>{children(item)}</Fragment>
+          {getGridRow(items, columns, index).map((item) => (
+            <Fragment key={item.uid}>{children(item)}</Fragment>
           ))}
         </div>
       ))}

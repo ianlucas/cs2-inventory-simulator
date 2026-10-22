@@ -9,7 +9,9 @@ import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { range } from "~/shared/number";
 import {
+  INVENTORY_GRID_DEFAULT_COLUMNS,
   INVENTORY_GRID_ESTIMATED_ROW_HEIGHT,
+  INVENTORY_GRID_GAP,
   INVENTORY_GRID_OVERSCAN_ROWS,
   InventoryGrid
 } from "./inventory-grid";
@@ -18,15 +20,23 @@ import {
   globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
 ).IS_REACT_ACT_ENVIRONMENT = true;
 
-const GAP = 16;
+function getItems(count: number, firstUid = 0) {
+  return range(count, firstUid).map((uid) => ({ uid }));
+}
 
-// happy-dom doesn't lay anything out, so the grid's width and each row's
-// height are what these stubs say.
+// Where the grid starts on the page.
+let gridTop = 0;
+
+// happy-dom doesn't lay anything out, so the grid's width, where it starts and
+// each row's height are what these stubs say.
 function stubLayout({
   rowHeight = INVENTORY_GRID_ESTIMATED_ROW_HEIGHT,
   width = 1024
 }: { rowHeight?: number; width?: number } = {}) {
   vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(width);
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+    () => new DOMRect(0, gridTop - window.scrollY, width, 0)
+  );
   vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockImplementation(
     function (this: HTMLElement) {
       return this.dataset.index !== undefined ? rowHeight : 0;
@@ -50,6 +60,7 @@ describe("InventoryGrid", () => {
     document.body.appendChild(container);
     root = createRoot(container);
     window.scrollTo({ top: 0 });
+    gridTop = 0;
   });
 
   afterEach(() => {
@@ -62,22 +73,27 @@ describe("InventoryGrid", () => {
   const renderGrid = (
     count: number,
     {
-      columns,
+      firstUid,
+      fixedColumns,
       layoutKey = "test"
-    }: { columns?: number; layoutKey?: string } = {}
+    }: { firstUid?: number; fixedColumns?: number; layoutKey?: string } = {}
   ) =>
     act(() => {
       root.render(
         <InventoryGrid
-          columns={columns}
-          getKey={(item) => item}
-          items={range(count)}
+          fixedColumns={fixedColumns}
+          items={getItems(count, firstUid)}
           layoutKey={layoutKey}
         >
-          {(item) => <div data-tile={item} />}
+          {({ uid }) => <div data-tile={uid} />}
         </InventoryGrid>
       );
     });
+
+  const remount = () => {
+    act(() => root.unmount());
+    root = createRoot(container);
+  };
 
   const tiles = () =>
     Array.from(container.querySelectorAll<HTMLElement>("[data-tile]"), (tile) =>
@@ -87,6 +103,8 @@ describe("InventoryGrid", () => {
   const row = (index: number) =>
     container.querySelector(`[data-index="${index}"]`);
 
+  const height = () => row(0)?.parentElement?.style.height;
+
   test("mounts as many tiles for 5,000 items as for 1,000", () => {
     stubLayout();
     renderGrid(1_000);
@@ -94,12 +112,14 @@ describe("InventoryGrid", () => {
     renderGrid(5_000);
 
     const rowsOnScreen = Math.ceil(
-      window.innerHeight / (INVENTORY_GRID_ESTIMATED_ROW_HEIGHT + GAP)
+      window.innerHeight /
+        (INVENTORY_GRID_ESTIMATED_ROW_HEIGHT + INVENTORY_GRID_GAP)
     );
     expect(mounted).toBeGreaterThan(0);
     expect(tiles()).toHaveLength(mounted);
     expect(mounted).toBeLessThanOrEqual(
-      (rowsOnScreen + 1 + INVENTORY_GRID_OVERSCAN_ROWS * 2) * 6
+      (rowsOnScreen + INVENTORY_GRID_OVERSCAN_ROWS * 2) *
+        INVENTORY_GRID_DEFAULT_COLUMNS
     );
   });
 
@@ -107,10 +127,20 @@ describe("InventoryGrid", () => {
     stubLayout();
     renderGrid(1_000);
 
-    scrollTo(100 * (INVENTORY_GRID_ESTIMATED_ROW_HEIGHT + GAP));
+    scrollTo(100 * (INVENTORY_GRID_ESTIMATED_ROW_HEIGHT + INVENTORY_GRID_GAP));
 
     expect(tiles()).toContain(600);
     expect(tiles()).not.toContain(0);
+  });
+
+  test("follows the grid when content above it moves it down", () => {
+    stubLayout();
+    renderGrid(1_000);
+
+    gridTop = 5_000;
+    scrollTo(gridTop);
+
+    expect(tiles()).toContain(0);
   });
 
   test("fits as many columns as auto-fit would", () => {
@@ -122,7 +152,7 @@ describe("InventoryGrid", () => {
 
   test("keeps a fixed column count however narrow it is", () => {
     stubLayout({ width: 344 });
-    renderGrid(10, { columns: 6 });
+    renderGrid(10, { fixedColumns: 6 });
 
     expect(row(0)?.children).toHaveLength(6);
     expect(row(1)?.children).toHaveLength(4);
@@ -130,36 +160,48 @@ describe("InventoryGrid", () => {
 
   test("remounts at the height it measured, so scroll restoration lands", () => {
     stubLayout({ rowHeight: 200 });
-    vi.stubGlobal("innerHeight", 100 * (200 + GAP));
-    renderGrid(1_000, { layoutKey: "remount" });
-    const height = row(0)?.parentElement?.style.height;
-    act(() => root.unmount());
+    vi.stubGlobal("innerHeight", 100 * (200 + INVENTORY_GRID_GAP));
+    renderGrid(1_000, { layoutKey: "same-list" });
+    const measured = height();
 
+    remount();
     vi.stubGlobal("innerHeight", 768);
-    root = createRoot(container);
-    renderGrid(1_000, { layoutKey: "remount" });
+    renderGrid(1_000, { layoutKey: "same-list" });
 
     expect(row(50)).toBeNull();
-    expect(row(0)?.parentElement?.style.height).toBe(height);
+    expect(height()).toBe(measured);
+  });
+
+  test("remounts a different list from estimates, not the heights it measured", () => {
+    stubLayout({ rowHeight: 200 });
+    vi.stubGlobal("innerHeight", 100 * (200 + INVENTORY_GRID_GAP));
+    renderGrid(1_000, { layoutKey: "other-list" });
+    const measured = height();
+
+    remount();
+    vi.stubGlobal("innerHeight", 768);
+    renderGrid(1_000, { firstUid: 1_000, layoutKey: "other-list" });
+
+    expect(row(50)).toBeNull();
+    expect(height()).not.toBe(measured);
   });
 });
 
 describe("InventoryGrid on the server", () => {
   test("renders no tiles, only the grid's estimated height", () => {
     const html = renderToString(
-      <InventoryGrid
-        getKey={(item) => item}
-        items={range(1_000)}
-        layoutKey="ssr"
-      >
-        {(item) => <div data-tile={item} />}
+      <InventoryGrid items={getItems(1_000)} layoutKey="ssr">
+        {({ uid }) => <div data-tile={uid} />}
       </InventoryGrid>
     );
 
-    const rows = Math.ceil(1_000 / 6);
+    const rows = Math.ceil(1_000 / INVENTORY_GRID_DEFAULT_COLUMNS);
     expect(html).not.toContain("data-tile");
     expect(html).toContain(
-      `height:${rows * INVENTORY_GRID_ESTIMATED_ROW_HEIGHT + (rows - 1) * GAP}px`
+      `height:${
+        rows * INVENTORY_GRID_ESTIMATED_ROW_HEIGHT +
+        (rows - 1) * INVENTORY_GRID_GAP
+      }px`
     );
   });
 });

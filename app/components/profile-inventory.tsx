@@ -12,7 +12,7 @@ import type { Loadout } from "~/shared/loadout";
 import { useInventory, useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
-import { InventoryGrid } from "./inventory-grid";
+import { InventoryPageGrid } from "./inventory-grid";
 import { InventoryItem } from "./inventory-item";
 import { Presence } from "./presence";
 
@@ -61,23 +61,16 @@ export function ProfileInventory({
 
   return (
     <>
-      <InventoryGrid
-        className="m-auto w-full px-2 select-none lg:my-8 lg:w-5xl lg:px-0"
-        getKey={({ uid }) => uid}
-        items={items}
-        layoutKey="profile"
-      >
+      <InventoryPageGrid items={items} layoutKey={`profile:${ownerId}`}>
         {(item) => (
-          <div className="flex items-start justify-center">
-            <InventoryItem
-              {...item}
-              foreign
-              inspectOnly
-              onInspectItem={handleInspectItem}
-            />
-          </div>
+          <InventoryItem
+            {...item}
+            foreign
+            inspectOnly
+            onInspectItem={handleInspectItem}
+          />
         )}
-      </InventoryGrid>
+      </InventoryPageGrid>
       {items.length === 0 && (
         <div className="m-auto flex justify-center select-none lg:w-5xl">
           <div className="flex w-full items-center justify-center gap-2 bg-linear-to-r from-transparent via-black/30 to-transparent py-1">

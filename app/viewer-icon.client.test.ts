@@ -166,18 +166,37 @@ function fakeLock({ elsewhere = false }: { elsewhere?: boolean } = {}) {
 }
 
 function setup({
+  dwellMs = 0,
   host = true,
   lock = fakeLock().lock,
   next = () => fakeApi(),
+  onScreen = true,
   strict = false
 }: {
+  dwellMs?: number;
   host?: boolean;
   lock?: ViewerIconLock;
   next?: () => FakeApi | undefined;
+  /** Puts the tile of every item requested on screen. */
+  onScreen?: boolean;
   strict?: boolean;
 } = {}) {
+  stubIntersectionObserver();
   const memory = memoryStore();
-  const icons = new ViewerIcons({ store: memory.store, lock });
+  const icons = new ViewerIcons({ dwellMs, lock, store: memory.store });
+  if (onScreen) {
+    const request = icons.request.bind(icons);
+    const shown = new Set<string>();
+    icons.request = (item, slot = getViewerIconSlot(item)) => {
+      if (!shown.has(slot)) {
+        shown.add(slot);
+        const tile = document.createElement("div");
+        icons.observe(slot, tile);
+        intersect(tile);
+      }
+      request(item, slot);
+    };
+  }
   const mounts: FakeApi[] = [];
   const seeds: (ViewerItemInput | undefined)[] = [];
   let mounted: { generation: number; viewer?: FakeApi } | undefined;
@@ -247,23 +266,33 @@ function stubFocus(initial: boolean) {
   };
 }
 
+type IntersectionCallback = (
+  entries: { isIntersecting: boolean; target: Element }[]
+) => void;
+
+const observedTiles = new Map<Element, IntersectionCallback>();
+
 function stubIntersectionObserver() {
-  let notify: (
-    entries: { isIntersecting: boolean; target: Element }[]
-  ) => void = () => {};
   vi.stubGlobal(
     "IntersectionObserver",
     class {
-      constructor(callback: typeof notify) {
-        notify = callback;
+      private readonly callback: IntersectionCallback;
+      constructor(callback: IntersectionCallback) {
+        this.callback = callback;
       }
-      observe() {}
-      unobserve() {}
+      observe(tile: Element) {
+        observedTiles.set(tile, this.callback);
+      }
+      unobserve(tile: Element) {
+        observedTiles.delete(tile);
+      }
       disconnect() {}
     }
   );
-  return (element: Element, isIntersecting = true) =>
-    notify([{ isIntersecting, target: element }]);
+}
+
+function intersect(tile: Element, isIntersecting = true) {
+  observedTiles.get(tile)?.([{ isIntersecting, target: tile }]);
 }
 
 function watch(icons: ViewerIcons, item: ViewerItemInput) {
@@ -299,6 +328,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  observedTiles.clear();
   vi.useRealTimers();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
@@ -306,8 +336,10 @@ afterEach(() => {
 });
 
 describe("ViewerIcons", () => {
-  it("serves a cached icon without asking the viewer to render it", async () => {
-    const { entries, icons, isMounted, mounts, urlOf } = setup();
+  it("serves a cached icon without asking the viewer to render it, on screen or not", async () => {
+    const { entries, icons, isMounted, mounts, urlOf } = setup({
+      onScreen: false
+    });
     entries.set(getItemIconKey(A), { image: new Blob(["x"]) });
 
     icons.request(A);
@@ -385,9 +417,13 @@ describe("ViewerIcons", () => {
   });
 
   it("renders what is on screen before what the user scrolled past", async () => {
-    const intersect = stubIntersectionObserver();
     const viewer = fakeApi();
-    const { attachHost, icons } = setup({ host: false, next: () => viewer });
+    const { attachHost, icons } = setup({
+      dwellMs: VIEWER_ICON_VISIBLE_DWELL_MS,
+      host: false,
+      next: () => viewer,
+      onScreen: false
+    });
 
     const passed = watch(icons, A);
     const shown = watch(icons, B);
@@ -407,9 +443,13 @@ describe("ViewerIcons", () => {
   });
 
   it("still prefers a tile seen on screen before the queue knew of its item", async () => {
-    const intersect = stubIntersectionObserver();
     const viewer = fakeApi();
-    const { attachHost, icons } = setup({ host: false, next: () => viewer });
+    const { attachHost, icons } = setup({
+      dwellMs: VIEWER_ICON_VISIBLE_DWELL_MS,
+      host: false,
+      next: () => viewer,
+      onScreen: false
+    });
 
     intersect(watch(icons, B));
     icons.request(A);
@@ -422,9 +462,12 @@ describe("ViewerIcons", () => {
   });
 
   it("draws an item once its tile has stayed on screen for a moment", async () => {
-    const intersect = stubIntersectionObserver();
     const viewer = fakeApi();
-    const { icons } = setup({ next: () => viewer });
+    const { icons } = setup({
+      dwellMs: VIEWER_ICON_VISIBLE_DWELL_MS,
+      next: () => viewer,
+      onScreen: false
+    });
 
     const tile = watch(icons, A);
     icons.request(A);
@@ -438,9 +481,12 @@ describe("ViewerIcons", () => {
   });
 
   it("does not draw the items the user scrolls straight past", async () => {
-    const intersect = stubIntersectionObserver();
     const viewer = fakeApi();
-    const { icons, isMounted } = setup({ next: () => viewer });
+    const { icons, isMounted } = setup({
+      dwellMs: VIEWER_ICON_VISIBLE_DWELL_MS,
+      next: () => viewer,
+      onScreen: false
+    });
 
     for (const item of [A, B, C]) {
       const tile = watch(icons, item);
@@ -455,16 +501,35 @@ describe("ViewerIcons", () => {
     expect(viewer.captured).toEqual([]);
     expect(isMounted()).toBe(false);
     expect(icons.getStatus().queue.map(({ lane }) => lane)).toEqual([
-      "dormant",
-      "dormant",
-      "dormant"
+      "queued",
+      "queued",
+      "queued"
     ]);
   });
 
-  it("draws an item whose tile was unmounted once a new tile shows it", async () => {
-    const intersect = stubIntersectionObserver();
+  it("never draws an item whose tile was never on screen", async () => {
     const viewer = fakeApi();
-    const { icons } = setup({ next: () => viewer });
+    const { icons, isMounted } = setup({
+      dwellMs: VIEWER_ICON_VISIBLE_DWELL_MS,
+      next: () => viewer,
+      onScreen: false
+    });
+
+    icons.request(A);
+    await vi.advanceTimersByTimeAsync(VIEWER_ICON_VISIBLE_DWELL_MS * 10);
+    await flush();
+
+    expect(viewer.captured).toEqual([]);
+    expect(isMounted()).toBe(false);
+  });
+
+  it("draws an item whose tile was unmounted once a new tile shows it", async () => {
+    const viewer = fakeApi();
+    const { icons } = setup({
+      dwellMs: VIEWER_ICON_VISIBLE_DWELL_MS,
+      next: () => viewer,
+      onScreen: false
+    });
 
     const tile = document.createElement("div");
     const unwatch = icons.observe(getViewerIconSlot(A), tile);
@@ -483,9 +548,12 @@ describe("ViewerIcons", () => {
   });
 
   it("finishes drawing an item whose tile scrolls away mid-capture", async () => {
-    const intersect = stubIntersectionObserver();
     const viewer = fakeApi();
-    const { icons, urlOf } = setup({ next: () => viewer });
+    const { icons, urlOf } = setup({
+      dwellMs: VIEWER_ICON_VISIBLE_DWELL_MS,
+      next: () => viewer,
+      onScreen: false
+    });
 
     const tile = watch(icons, A);
     icons.request(A);
@@ -1463,8 +1531,8 @@ describe("ViewerIcons", () => {
       capturing: getItemIconKey(A)
     });
     expect(status.queue.map(({ key, lane }) => ({ key, lane }))).toEqual([
-      { key: getItemIconKey(A), lane: "queued" },
-      { key: getItemIconKey(B), lane: "queued" }
+      { key: getItemIconKey(A), lane: "visible" },
+      { key: getItemIconKey(B), lane: "visible" }
     ]);
 
     viewer.reply({ image: new Blob(["x"]) });
@@ -1518,9 +1586,8 @@ describe("ViewerIcons", () => {
     });
 
     it("renders an edited item straight away, even while its tile is off screen", async () => {
-      stubIntersectionObserver();
       const viewer = fakeApi();
-      const { icons } = setup({ next: () => viewer });
+      const { icons } = setup({ next: () => viewer, onScreen: false });
       const item = add(1);
 
       watch(icons, item);
