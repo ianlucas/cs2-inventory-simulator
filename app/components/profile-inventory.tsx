@@ -12,7 +12,7 @@ import type { Loadout } from "~/shared/loadout";
 import { useInventory, useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
 import { InspectItem } from "./inspect-item";
-import { InventoryGridPlaceholder } from "./inventory-grid-placeholder";
+import { InventoryGrid } from "./inventory-grid";
 import { InventoryItem } from "./inventory-item";
 import { Presence } from "./presence";
 
@@ -61,9 +61,14 @@ export function ProfileInventory({
 
   return (
     <>
-      <div className="m-auto grid w-full grid-cols-[repeat(auto-fit,minmax(154px,1fr))] px-2 select-none [grid-gap:1em] lg:my-8 lg:w-5xl lg:px-0">
-        {items.map((item) => (
-          <div key={item.uid} className="flex items-start justify-center">
+      <InventoryGrid
+        className="m-auto w-full px-2 select-none lg:my-8 lg:w-5xl lg:px-0"
+        getKey={({ uid }) => uid}
+        items={items}
+        layoutKey="profile"
+      >
+        {(item) => (
+          <div className="flex items-start justify-center">
             <InventoryItem
               {...item}
               foreign
@@ -71,9 +76,8 @@ export function ProfileInventory({
               onInspectItem={handleInspectItem}
             />
           </div>
-        ))}
-        <InventoryGridPlaceholder />
-      </div>
+        )}
+      </InventoryGrid>
       {items.length === 0 && (
         <div className="m-auto flex justify-center select-none lg:w-5xl">
           <div className="flex w-full items-center justify-center gap-2 bg-linear-to-r from-transparent via-black/30 to-transparent py-1">
