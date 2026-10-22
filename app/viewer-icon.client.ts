@@ -36,6 +36,8 @@ export const VIEWER_ICON_PROBE_TIMEOUT_MS = 5_000;
 export const VIEWER_ICON_STARTUP_TIMEOUT_MS = 60_000;
 export const VIEWER_ICON_IDLE_TEARDOWN_MS = 30_000;
 
+export const VIEWER_ICON_VISIBLE_DWELL_MS = 300;
+
 export const VIEWER_ICON_MAX_ATTEMPTS = 2;
 export const VIEWER_ICON_TRANSIENT_RETRY_AFTER_MS = 60 * 60_000;
 export const VIEWER_ICON_ITEM_RETRY_AFTER_MS = 6 * 60 * 60_000;
@@ -61,6 +63,8 @@ export type ViewerIconDisableReason = "webgl" | "untrusted" | "disabled";
 
 export type ViewerIconCooldownReason = "rate-limit" | "network";
 
+export type ViewerIconLane = "edited" | "visible" | "queued";
+
 export interface ViewerIconStatus {
   role: ViewerIconRole;
   disabled?: { reason: ViewerIconDisableReason; until?: number };
@@ -81,7 +85,7 @@ export interface ViewerIconStatus {
   queue: {
     key: string;
     uid?: number;
-    lane: "edited" | "visible" | "queued";
+    lane: ViewerIconLane;
     attempts: number;
   }[];
   published: number;
@@ -385,12 +389,13 @@ export class ViewerIconBudget {
 class ViewerIconVisibility {
   private readonly slots = new WeakMap<Element, string>();
   private readonly intersecting = new Map<string, Set<Element>>();
+  private readonly inViewSince = new Map<string, number>();
   private observer: IntersectionObserver | undefined;
 
   constructor(private readonly onChange: () => void) {}
 
-  visibleSlots() {
-    return this.intersecting.keys();
+  getInViewSince() {
+    return this.inViewSince.entries();
   }
 
   observe(slot: string, element: Element) {
@@ -438,6 +443,7 @@ class ViewerIconVisibility {
     if (isIntersecting) {
       if (elements === undefined) {
         this.intersecting.set(slot, new Set([element]));
+        this.inViewSince.set(slot, Date.now());
         return true;
       }
       elements.add(element);
@@ -450,6 +456,7 @@ class ViewerIconVisibility {
       return false;
     }
     this.intersecting.delete(slot);
+    this.inViewSince.delete(slot);
     return true;
   }
 }
@@ -719,6 +726,7 @@ export interface ViewerIconsOptions {
   store?: ViewerIconStoreLike;
   budget?: ViewerIconBudget;
   lock?: ViewerIconLock;
+  dwellMs?: number;
 }
 
 function getDevice() {
@@ -755,6 +763,7 @@ function getGpu() {
 export class ViewerIcons {
   private readonly store: ViewerIconStoreLike;
   private readonly budget: ViewerIconBudget;
+  private readonly dwellMs: number;
   private readonly visibility: ViewerIconVisibility;
   private readonly generator: ViewerIconGenerator;
   private readonly pending = new Map<string, Pending>();
@@ -774,10 +783,12 @@ export class ViewerIcons {
   constructor({
     store = new ViewerIconStore(),
     budget = new ViewerIconBudget(),
-    lock = requestWebLock
+    lock = requestWebLock,
+    dwellMs = VIEWER_ICON_VISIBLE_DWELL_MS
   }: ViewerIconsOptions = {}) {
     this.store = store;
     this.budget = budget;
+    this.dwellMs = dwellMs;
     this.visibility = new ViewerIconVisibility(() => this.pump());
     this.generator = new ViewerIconGenerator(
       {
@@ -881,6 +892,7 @@ export class ViewerIcons {
     const { cooldownReason, cooldownUntil, networkStep, tokens } =
       this.budget.load(now);
     const { generator, paused } = this.generator.getStatus();
+    const inView = this.getInView();
     return {
       role: this.generator.getRole(),
       disabled: this.getDisabled(now),
@@ -894,11 +906,7 @@ export class ViewerIcons {
       queue: Array.from(this.pending.values(), (entry) => ({
         key: entry.key,
         uid: entry.uid,
-        lane: entry.priority
-          ? "edited"
-          : this.isVisible(entry.key)
-            ? "visible"
-            : "queued",
+        lane: this.getLane(entry, inView, now),
         attempts: entry.attempts
       })),
       published: this.urls.size,
@@ -955,10 +963,16 @@ export class ViewerIcons {
     if (this.inflight !== undefined || this.takingOver > 0) {
       return;
     }
-    const next = this.pickNext();
+    const now = Date.now();
+    const inView = this.getInView();
+    const next = this.pickNext(inView, now);
     if (next === undefined) {
       this.generator.release();
       this.scheduleTeardown();
+      const dwellLeft = this.getDwellLeftMs(inView, now);
+      if (dwellLeft !== undefined) {
+        this.schedule(dwellLeft);
+      }
       return;
     }
     if (!this.generator.acquire()) {
@@ -978,30 +992,55 @@ export class ViewerIcons {
     }
   }
 
-  private pickNext() {
-    let edited: Pending | undefined;
-    let visible: Pending | undefined;
-    let queued: Pending | undefined;
-    for (const entry of this.pending.values()) {
-      if (entry.priority) {
-        edited = entry;
-        continue;
-      }
-      if (visible === undefined && this.isVisible(entry.key)) {
-        visible = entry;
-      }
-      queued ??= entry;
+  private getLane(
+    entry: Pending,
+    inView: Map<string, number>,
+    now: number
+  ): ViewerIconLane {
+    if (entry.priority) {
+      return "edited";
     }
-    return edited ?? visible ?? queued;
+    const since = inView.get(entry.key);
+    return since !== undefined && now - since >= this.dwellMs
+      ? "visible"
+      : "queued";
   }
 
-  private isVisible(key: string) {
-    for (const slot of this.visibility.visibleSlots()) {
-      if (this.slots.get(slot)?.key === key) {
-        return true;
+  private pickNext(inView: Map<string, number>, now: number) {
+    let edited: Pending | undefined;
+    let visible: Pending | undefined;
+    for (const entry of this.pending.values()) {
+      switch (this.getLane(entry, inView, now)) {
+        case "edited":
+          edited = entry;
+          break;
+        case "visible":
+          visible ??= entry;
       }
     }
-    return false;
+    return edited ?? visible;
+  }
+
+  private getDwellLeftMs(inView: Map<string, number>, now: number) {
+    let dwellLeft: number | undefined;
+    for (const [key, since] of inView) {
+      if (this.pending.has(key)) {
+        const left = since + this.dwellMs - now;
+        dwellLeft = Math.min(dwellLeft ?? left, left);
+      }
+    }
+    return dwellLeft;
+  }
+
+  private getInView() {
+    const inView = new Map<string, number>();
+    for (const [slotId, since] of this.visibility.getInViewSince()) {
+      const key = this.slots.get(slotId)?.key;
+      if (key !== undefined && since < (inView.get(key) ?? Infinity)) {
+        inView.set(key, since);
+      }
+    }
+    return inView;
   }
 
   private requeue(entry: Pending) {
