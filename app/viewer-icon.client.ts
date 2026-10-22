@@ -36,6 +36,10 @@ export const VIEWER_ICON_PROBE_TIMEOUT_MS = 5_000;
 export const VIEWER_ICON_STARTUP_TIMEOUT_MS = 60_000;
 export const VIEWER_ICON_IDLE_TEARDOWN_MS = 30_000;
 
+// How long a tile stays on screen before its icon is drawn, so scrolling past
+// an item doesn't spend the budget on it.
+export const VIEWER_ICON_VISIBLE_DWELL_MS = 300;
+
 export const VIEWER_ICON_MAX_ATTEMPTS = 2;
 export const VIEWER_ICON_TRANSIENT_RETRY_AFTER_MS = 60 * 60_000;
 export const VIEWER_ICON_ITEM_RETRY_AFTER_MS = 6 * 60 * 60_000;
@@ -81,7 +85,7 @@ export interface ViewerIconStatus {
   queue: {
     key: string;
     uid?: number;
-    lane: "edited" | "visible" | "queued";
+    lane: "edited" | "visible" | "queued" | "dormant";
     attempts: number;
   }[];
   published: number;
@@ -385,12 +389,20 @@ export class ViewerIconBudget {
 class ViewerIconVisibility {
   private readonly slots = new WeakMap<Element, string>();
   private readonly intersecting = new Map<string, Set<Element>>();
+  private readonly since = new Map<string, number>();
+  private readonly watched = new Set<string>();
   private observer: IntersectionObserver | undefined;
 
   constructor(private readonly onChange: () => void) {}
 
+  /** Slots on screen, with when each came into view. */
   visibleSlots() {
-    return this.intersecting.keys();
+    return this.since.entries();
+  }
+
+  /** Slots a tile has ever watched, on screen or not. */
+  watchedSlots() {
+    return this.watched.values();
   }
 
   observe(slot: string, element: Element) {
@@ -399,6 +411,7 @@ class ViewerIconVisibility {
       return () => {};
     }
     this.slots.set(element, slot);
+    this.watched.add(slot);
     observer.observe(element);
     return () => {
       observer.unobserve(element);
@@ -438,6 +451,7 @@ class ViewerIconVisibility {
     if (isIntersecting) {
       if (elements === undefined) {
         this.intersecting.set(slot, new Set([element]));
+        this.since.set(slot, Date.now());
         return true;
       }
       elements.add(element);
@@ -450,6 +464,7 @@ class ViewerIconVisibility {
       return false;
     }
     this.intersecting.delete(slot);
+    this.since.delete(slot);
     return true;
   }
 }
@@ -881,6 +896,8 @@ export class ViewerIcons {
     const { cooldownReason, cooldownUntil, networkStep, tokens } =
       this.budget.load(now);
     const { generator, paused } = this.generator.getStatus();
+    const inView = this.getInView();
+    const watched = this.getWatchedKeys();
     return {
       role: this.generator.getRole(),
       disabled: this.getDisabled(now),
@@ -896,9 +913,11 @@ export class ViewerIcons {
         uid: entry.uid,
         lane: entry.priority
           ? "edited"
-          : this.isVisible(entry.key)
+          : inView.has(entry.key)
             ? "visible"
-            : "queued",
+            : watched.has(entry.key)
+              ? "dormant"
+              : "queued",
         attempts: entry.attempts
       })),
       published: this.urls.size,
@@ -955,10 +974,15 @@ export class ViewerIcons {
     if (this.inflight !== undefined || this.takingOver > 0) {
       return;
     }
-    const next = this.pickNext();
+    const now = Date.now();
+    const next = this.pickNext(now);
     if (next === undefined) {
       this.generator.release();
       this.scheduleTeardown();
+      const settling = this.getSettlingMs(now);
+      if (settling !== undefined) {
+        this.schedule(settling);
+      }
       return;
     }
     if (!this.generator.acquire()) {
@@ -978,7 +1002,11 @@ export class ViewerIcons {
     }
   }
 
-  private pickNext() {
+  // Edited items go first, then what has stayed on screen for a moment, then
+  // what no tile watches. What the user scrolled past waits to be seen again.
+  private pickNext(now: number) {
+    const inView = this.getInView();
+    const watched = this.getWatchedKeys();
     let edited: Pending | undefined;
     let visible: Pending | undefined;
     let queued: Pending | undefined;
@@ -987,21 +1015,54 @@ export class ViewerIcons {
         edited = entry;
         continue;
       }
-      if (visible === undefined && this.isVisible(entry.key)) {
-        visible = entry;
+      const since = inView.get(entry.key);
+      if (since !== undefined) {
+        if (
+          visible === undefined &&
+          now - since >= VIEWER_ICON_VISIBLE_DWELL_MS
+        ) {
+          visible = entry;
+        }
+      } else if (!watched.has(entry.key)) {
+        queued ??= entry;
       }
-      queued ??= entry;
     }
     return edited ?? visible ?? queued;
   }
 
-  private isVisible(key: string) {
-    for (const slot of this.visibility.visibleSlots()) {
-      if (this.slots.get(slot)?.key === key) {
-        return true;
+  /** How long until the next item on screen has been there long enough. */
+  private getSettlingMs(now: number) {
+    let settling: number | undefined;
+    for (const [key, since] of this.getInView()) {
+      if (this.pending.has(key)) {
+        const left = since + VIEWER_ICON_VISIBLE_DWELL_MS - now;
+        settling = Math.min(settling ?? left, left);
       }
     }
-    return false;
+    return settling;
+  }
+
+  /** When each item on screen came into view, through its earliest slot. */
+  private getInView() {
+    const inView = new Map<string, number>();
+    for (const [slotId, since] of this.visibility.visibleSlots()) {
+      const key = this.slots.get(slotId)?.key;
+      if (key !== undefined && since < (inView.get(key) ?? Infinity)) {
+        inView.set(key, since);
+      }
+    }
+    return inView;
+  }
+
+  private getWatchedKeys() {
+    const watched = new Set<string>();
+    for (const slotId of this.visibility.watchedSlots()) {
+      const key = this.slots.get(slotId)?.key;
+      if (key !== undefined) {
+        watched.add(key);
+      }
+    }
+    return watched;
   }
 
   private requeue(entry: Pending) {
