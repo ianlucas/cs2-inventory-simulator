@@ -119,11 +119,16 @@ export function AppliedStickerEditor({
       return;
     }
 
+    const { schema, ...placement } = attributes.value;
     const preview = {
       id: forItem.id,
       stickers: {
         ...stickers,
-        [slot]: { id: item.id, ...attributes.value }
+        [slot]: {
+          id: item.id,
+          ...placement,
+          schema: schema !== -1 ? schema : undefined
+        }
       }
     };
     const inspectLink = generateInspectLink(
