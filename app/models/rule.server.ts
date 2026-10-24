@@ -27,8 +27,15 @@ type StoredRuleValues = {
   rules: Map<string, string>;
 };
 
+// Keeps the first row for each name.
 function byName(rows: RuleRow[]) {
-  return new Map(rows.map(({ name, value }) => [name, value]));
+  const values = new Map<string, string>();
+  for (const { name, value } of rows) {
+    if (!values.has(name)) {
+      values.set(name, value);
+    }
+  }
+  return values;
 }
 
 class RuleFor<RuleValue> {
@@ -115,23 +122,16 @@ export class Rule<RuleName extends string, RuleValue> {
         select: { name: true, value: true },
         where: { name: { in: names }, userId }
       }),
-      // Only the user's highest-priority group is consulted.
-      prisma.userGroup
-        .findFirst({
-          select: {
-            group: {
-              select: {
-                overrides: {
-                  select: { name: true, value: true },
-                  where: { name: { in: names } }
-                }
-              }
-            }
-          },
-          where: { userId },
-          orderBy: [{ group: { priority: "desc" } }, { groupId: "asc" }]
-        })
-        .then((userGroup) => userGroup?.group.overrides ?? [])
+      // Ordered so each rule's first row comes from the highest-priority
+      // group that overrides it.
+      prisma.groupRule.findMany({
+        select: { name: true, value: true },
+        where: {
+          name: { in: names },
+          group: { users: { some: { userId } } }
+        },
+        orderBy: [{ group: { priority: "desc" } }, { groupId: "asc" }]
+      })
     ]);
     return { userOverrideRows, groupOverrideRows };
   }

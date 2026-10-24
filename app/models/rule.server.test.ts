@@ -6,11 +6,11 @@
 import { CS2_MAX_STICKERS } from "@ianlucas/cs2-lib";
 import { beforeEach, expect, test, vi } from "vitest";
 
-const { ruleFindMany, userRuleFindMany, userGroupFindFirst } = vi.hoisted(
+const { ruleFindMany, userRuleFindMany, groupRuleFindMany } = vi.hoisted(
   () => ({
     ruleFindMany: vi.fn(),
     userRuleFindMany: vi.fn(),
-    userGroupFindFirst: vi.fn()
+    groupRuleFindMany: vi.fn()
   })
 );
 
@@ -18,7 +18,7 @@ vi.mock("~/db.server", () => ({
   prisma: {
     rule: { findMany: ruleFindMany },
     userRule: { findMany: userRuleFindMany },
-    userGroup: { findFirst: userGroupFindFirst }
+    groupRule: { findMany: groupRuleFindMany }
   }
 }));
 vi.mock("~/env.server", () => ({
@@ -45,7 +45,7 @@ type Row = { name: string; value: string };
 function mockRows({
   rules = [],
   userOverrides = [],
-  groupOverrides
+  groupOverrides = []
 }: {
   rules?: Row[];
   userOverrides?: Row[];
@@ -53,17 +53,13 @@ function mockRows({
 }) {
   ruleFindMany.mockResolvedValue(rules);
   userRuleFindMany.mockResolvedValue(userOverrides);
-  userGroupFindFirst.mockResolvedValue(
-    groupOverrides !== undefined
-      ? { group: { overrides: groupOverrides } }
-      : null
-  );
+  groupRuleFindMany.mockResolvedValue(groupOverrides);
 }
 
 beforeEach(() => {
   ruleFindMany.mockReset();
   userRuleFindMany.mockReset();
-  userGroupFindFirst.mockReset();
+  groupRuleFindMany.mockReset();
 });
 
 test("Rule.getMany reads all rules in one query when signed out", async () => {
@@ -81,7 +77,7 @@ test("Rule.getMany reads all rules in one query when signed out", async () => {
     where: { name: { in: ["appName", "inventoryMaxItems"] } }
   });
   expect(userRuleFindMany).not.toHaveBeenCalled();
-  expect(userGroupFindFirst).not.toHaveBeenCalled();
+  expect(groupRuleFindMany).not.toHaveBeenCalled();
 });
 
 test("Rule.getMany starts all three queries in parallel when signed in", async () => {
@@ -89,7 +85,7 @@ test("Rule.getMany starts all three queries in parallel when signed in", async (
   const pending = Rule.getMany({ appName, inventoryMaxItems }, userId);
   expect(ruleFindMany).toHaveBeenCalledOnce();
   expect(userRuleFindMany).toHaveBeenCalledOnce();
-  expect(userGroupFindFirst).toHaveBeenCalledOnce();
+  expect(groupRuleFindMany).toHaveBeenCalledOnce();
   await pending;
 });
 
@@ -102,21 +98,15 @@ test("Rule.getMany reads only the user's own overrides", async () => {
   });
 });
 
-test("Rule.getMany reads overrides from the user's top group by priority, then group id", async () => {
+test("Rule.getMany reads overrides from all the user's groups by priority, then group id", async () => {
   mockRows({});
   await Rule.getMany({ appName, inventoryMaxItems }, userId);
-  expect(userGroupFindFirst).toHaveBeenCalledWith({
-    select: {
-      group: {
-        select: {
-          overrides: {
-            select: { name: true, value: true },
-            where: { name: { in: ["appName", "inventoryMaxItems"] } }
-          }
-        }
-      }
+  expect(groupRuleFindMany).toHaveBeenCalledWith({
+    select: { name: true, value: true },
+    where: {
+      name: { in: ["appName", "inventoryMaxItems"] },
+      group: { users: { some: { userId } } }
     },
-    where: { userId },
     orderBy: [{ group: { priority: "desc" } }, { groupId: "asc" }]
   });
 });
@@ -146,13 +136,30 @@ test("Rule.getMany prefers user override, then group override, then rule, then d
   });
 });
 
-test("Rule.getMany falls back to the rule when the top group has no override", async () => {
+test("Rule.getMany falls through to a lower-priority group's override", async () => {
   mockRows({
-    rules: [{ name: "inventoryMaxItems", value: "100" }],
-    groupOverrides: []
+    rules: [{ name: "inventoryMaxLoadouts", value: "20" }],
+    groupOverrides: [
+      { name: "inventoryMaxItems", value: "200" },
+      { name: "inventoryMaxLoadouts", value: "30" }
+    ]
+  });
+  const rules = await Rule.getMany(
+    { inventoryMaxItems, inventoryMaxLoadouts },
+    userId
+  );
+  expect(rules).toEqual({ inventoryMaxItems: 200, inventoryMaxLoadouts: 30 });
+});
+
+test("Rule.getMany prefers the highest-priority group when several override a rule", async () => {
+  mockRows({
+    groupOverrides: [
+      { name: "inventoryMaxItems", value: "200" },
+      { name: "inventoryMaxItems", value: "150" }
+    ]
   });
   const rules = await Rule.getMany({ inventoryMaxItems }, userId);
-  expect(rules.inventoryMaxItems).toBe(100);
+  expect(rules.inventoryMaxItems).toBe(200);
 });
 
 test("Rule.getMany parses stored values by type", async () => {
@@ -195,6 +202,6 @@ test("rule.get and rule.for resolve the same way as Rule.getMany", async () => {
     groupOverrides: [{ name: "appName", value: "Group" }]
   });
   expect(await appName.get()).toBe("Global");
-  expect(userGroupFindFirst).not.toHaveBeenCalled();
+  expect(groupRuleFindMany).not.toHaveBeenCalled();
   expect(await appName.for(userId).get()).toBe("Group");
 });
