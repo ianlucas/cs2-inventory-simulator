@@ -5,10 +5,10 @@
 
 import { api } from "~/api.server";
 import { middleware } from "~/middleware.server";
-import { getRules } from "~/models/rule";
 import {
   inventoryItemEquipHideModel,
-  inventoryItemEquipHideType
+  inventoryItemEquipHideType,
+  Rule
 } from "~/models/rule.server";
 import { handleUserCachedResponse } from "~/models/user-cache.server";
 import { generate } from "~/shared/inventory-equipped-v4";
@@ -19,7 +19,7 @@ export const ApiEquippedV4UserIdJsonUrl = "/api/equipped/v4/$userId.json";
 export const loader = api(
   async ({ params: { userId }, request }: Route.LoaderArgs) => {
     await middleware(request, userId);
-    const rules = await getRules(
+    const rules = await Rule.getMany(
       {
         inventoryItemEquipHideModel,
         inventoryItemEquipHideType
