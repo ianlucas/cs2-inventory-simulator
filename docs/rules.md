@@ -642,7 +642,8 @@ Can anyone consume a charge of the user's equipped graffiti using `POST /api/con
 There are two ways to override rules: by adding records to `GroupRule` and `UserRule` tables. Users can be grouped by creating a record on `Group` table, and then associating each user to a group on `UserGroup`.
 
 1. If the system finds a rule for a user in `UserRule`, that rule will be enforced.
-2. If the system finds a rule for a group the user is in, on `GroupRule` table, that rule will enforced. If the user is associated to multiple groups, the rule for the group with the higher `priority` will be enforced.
+2. Otherwise, if any group the user is in has the rule in `GroupRule`, the rule from the group with the highest `priority` among them will be enforced. If several of those groups share the highest `priority`, the one whose `id` sorts first is used.
+3. Otherwise, the rule's value in `Rule` will be enforced.
 
 > [!TIP]  
-> For example, consider `admin` and `vip` groups - if a user is associated to both, you'd make sure `admin`'s `priority` is higher than `vip`'s.
+> Groups can build on each other. For example, consider `admin` and `vip` groups - if a user is associated to both, you'd make sure `admin`'s `priority` is higher than `vip`'s. `admin` only needs the rules that differ from `vip`: any rule `admin` doesn't override still comes from `vip`.

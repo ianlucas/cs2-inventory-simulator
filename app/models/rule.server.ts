@@ -15,6 +15,29 @@ import { STEAM_API_KEY, STEAM_CALLBACK_URL, VIEWER_KEY } from "~/env.server";
 import { noop } from "~/shared/misc";
 import { resolveLimit } from "~/shared/number";
 
+type RuleRow = { name: string; value: string };
+
+type RuleValues<T extends Record<string, Rule<string, unknown>>> = {
+  [K in keyof T]: T[K]["defaultValue"];
+};
+
+type StoredRuleValues = {
+  userOverrides: Map<string, string>;
+  groupOverrides: Map<string, string>;
+  rules: Map<string, string>;
+};
+
+// Keeps the first row for each name.
+function byName(rows: RuleRow[]) {
+  const values = new Map<string, string>();
+  for (const { name, value } of rows) {
+    if (!values.has(name)) {
+      values.set(name, value);
+    }
+  }
+  return values;
+}
+
 class RuleFor<RuleValue> {
   constructor(private value: Promise<RuleValue>) {}
 
@@ -68,36 +91,59 @@ export class Rule<RuleName extends string, RuleValue> {
     Rule.instances.push(this);
   }
 
-  private async getUserRuleOverride(userId: string) {
-    return (
-      await prisma.userRule.findUnique({
-        select: { value: true },
-        where: { name_userId: { userId, name: this.name } }
-      })
-    )?.value;
+  static async getMany<T extends Record<string, Rule<string, unknown>>>(
+    rules: T,
+    userId?: string
+  ): Promise<RuleValues<T>> {
+    const names = Object.values(rules).map((rule) => rule.name);
+    const [ruleRows, { userOverrideRows, groupOverrideRows }] =
+      await Promise.all([
+        prisma.rule.findMany({
+          select: { name: true, value: true },
+          where: { name: { in: names } }
+        }),
+        userId !== undefined
+          ? Rule.getOverrideRows(userId, names)
+          : { userOverrideRows: [], groupOverrideRows: [] }
+      ]);
+    const stored: StoredRuleValues = {
+      userOverrides: byName(userOverrideRows),
+      groupOverrides: byName(groupOverrideRows),
+      rules: byName(ruleRows)
+    };
+    return Object.fromEntries(
+      Object.entries(rules).map(([key, rule]) => [key, rule.resolve(stored)])
+    ) as RuleValues<T>;
   }
 
-  private async getUserGroupRuleOverride(userId: string) {
-    return (
-      await prisma.userGroup.findFirst({
-        select: {
-          group: {
-            select: {
-              overrides: {
-                select: { value: true },
-                where: { name: this.name }
-              }
-            }
-          }
+  private static async getOverrideRows(userId: string, names: string[]) {
+    const [userOverrideRows, groupOverrideRows] = await Promise.all([
+      prisma.userRule.findMany({
+        select: { name: true, value: true },
+        where: { name: { in: names }, userId }
+      }),
+      // Ordered so each rule's first row comes from the highest-priority
+      // group that overrides it.
+      prisma.groupRule.findMany({
+        select: { name: true, value: true },
+        where: {
+          name: { in: names },
+          group: { users: { some: { userId } } }
         },
-        where: { userId },
-        orderBy: {
-          group: {
-            priority: "desc"
-          }
-        }
+        orderBy: [{ group: { priority: "desc" } }, { groupId: "asc" }]
       })
-    )?.group.overrides[0]?.value;
+    ]);
+    return { userOverrideRows, groupOverrideRows };
+  }
+
+  private resolve({ userOverrides, groupOverrides, rules }: StoredRuleValues) {
+    const value =
+      userOverrides.get(this.name) ??
+      groupOverrides.get(this.name) ??
+      rules.get(this.name);
+    return this.toRuleValue(
+      value !== undefined ? this.toValue(value) : this.defaultValue
+    );
   }
 
   private toValue(str: string): RuleValue {
@@ -179,20 +225,12 @@ export class Rule<RuleName extends string, RuleValue> {
   }
 
   async get() {
-    const value = (await prisma.rule.findUnique({ where: { name: this.name } }))
-      ?.value;
-    return this.toRuleValue(
-      value !== undefined ? this.toValue(value) : this.defaultValue
-    );
+    return (await Rule.getMany({ rule: this })).rule;
   }
 
   for(userId: string): RuleFor<RuleValue> {
     return new RuleFor(
-      this.getUserRuleOverride(userId)
-        .then((v) => v ?? this.getUserGroupRuleOverride(userId))
-        .then((v) =>
-          v !== undefined ? this.toRuleValue(this.toValue(v)) : this.get()
-        )
+      Rule.getMany({ rule: this }, userId).then(({ rule }) => rule)
     );
   }
 

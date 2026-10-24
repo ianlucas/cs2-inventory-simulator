@@ -10,13 +10,13 @@ import { Background } from "~/components/background";
 import { ProfileInventory } from "~/components/profile-inventory";
 import { prisma } from "~/db.server";
 import { middleware } from "~/middleware.server";
-import { getRules } from "~/models/rule";
 import {
   inventoryAllowProfile,
   inventoryItemEquipHideModel,
   inventoryItemEquipHideType,
   inventoryMaxItems,
-  inventoryStorageUnitMaxItems
+  inventoryStorageUnitMaxItems,
+  Rule
 } from "~/models/rule.server";
 import { getActiveUserLoadout } from "~/models/user-loadout.server";
 import { getUserPreference } from "~/models/user-preference.server";
@@ -52,7 +52,7 @@ export async function loader({
   if (user === null || !(await inventoryAllowProfile.for(userId).get())) {
     throw redirect("/");
   }
-  const rules = await getRules(
+  const rules = await Rule.getMany(
     {
       inventoryItemEquipHideModel,
       inventoryItemEquipHideType,
