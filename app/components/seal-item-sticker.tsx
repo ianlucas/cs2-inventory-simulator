@@ -12,11 +12,11 @@ import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
-import { toArrayIf } from "~/shared/misc";
 import { range } from "~/shared/number";
 import { playSound } from "~/sound.client";
-import { useInventory, useRules, useTranslate } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import { HoldButton } from "./hold-button";
+import { useCraftShortcutMaxQuantity } from "./hooks/use-craft-shortcut-max-quantity";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
@@ -70,7 +70,7 @@ function SealItemStickerHeader() {
   );
 }
 
-function SealItemStickerAddSlab({
+export function SealItemStickerAddSlab({
   onAdd,
   slabToolItem
 }: {
@@ -80,15 +80,13 @@ function SealItemStickerAddSlab({
   const translate = useTranslate();
   const sync = useSync();
   const [inventory, setInventory] = useInventory();
-  const { craftMaxQuantity, inventoryMaxItems } = useRules();
   const [amount, setAmount] = useState("1");
   const [isCrafting, toggleIsCrafting] = useToggle(false);
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
 
-  const maxQuantity = Math.min(
-    inventoryMaxItems - inventory.size(),
-    SLAB_MAX_QUANTITY,
-    ...toArrayIf(craftMaxQuantity, (n) => n > 0)
+  const maxQuantity = useCraftShortcutMaxQuantity(
+    slabToolItem,
+    SLAB_MAX_QUANTITY
   );
 
   function handleClose() {
@@ -188,7 +186,10 @@ function SealItemStickerFooter({
         needsToAddSlab && (
           <div className="font-display flex items-center gap-2 text-lg">
             <ItemImage className="h-14" item={slabToolItem} />
-            <strong>{nameItemString(slabToolItem)}</strong>
+            <span>
+              {translate("CaseNeed")}{" "}
+              <strong>{nameItemString(slabToolItem)}</strong>
+            </span>
           </div>
         )
       }

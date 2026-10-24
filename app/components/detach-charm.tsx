@@ -19,11 +19,11 @@ import { useInventoryItem } from "~/components/hooks/use-inventory-item";
 import { useNameItemString } from "~/components/hooks/use-name-item";
 import { useSync } from "~/components/hooks/use-sync";
 import { SyncAction } from "~/data/sync";
-import { toArrayIf } from "~/shared/misc";
 import { range } from "~/shared/number";
 import { playSound } from "~/sound.client";
-import { useInventory, useRules, useTranslate } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import { HoldButton } from "./hold-button";
+import { useCraftShortcutMaxQuantity } from "./hooks/use-craft-shortcut-max-quantity";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
@@ -84,7 +84,7 @@ function DetachCharmHeader({
   );
 }
 
-function DetachCharmAddPack({
+export function DetachCharmAddPack({
   onAdd,
   packItem
 }: {
@@ -94,16 +94,11 @@ function DetachCharmAddPack({
   const translate = useTranslate();
   const sync = useSync();
   const [inventory, setInventory] = useInventory();
-  const { craftMaxQuantity, inventoryMaxItems } = useRules();
   const [amount, setAmount] = useState("1");
   const [isCrafting, toggleIsCrafting] = useToggle(false);
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
 
-  const maxQuantity = Math.min(
-    inventoryMaxItems - inventory.size(),
-    PACK_MAX_QUANTITY,
-    ...toArrayIf(craftMaxQuantity, (n) => n > 0)
-  );
+  const maxQuantity = useCraftShortcutMaxQuantity(packItem, PACK_MAX_QUANTITY);
 
   function handleClose() {
     toggleIsCrafting();

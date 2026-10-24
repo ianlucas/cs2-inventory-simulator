@@ -8,9 +8,9 @@ import { useToggle } from "@uidotdev/usehooks";
 import { useState } from "react";
 import { dispatchAppEvent } from "~/app";
 import { SyncAction } from "~/data/sync";
-import { toArrayIf } from "~/shared/misc";
 import { range } from "~/shared/number";
-import { useInventory, useRules, useTranslate } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
+import { useCraftShortcutMaxQuantity } from "./hooks/use-craft-shortcut-max-quantity";
 import { useSync } from "./hooks/use-sync";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { Modal, ModalHeader } from "./modal";
@@ -29,15 +29,13 @@ export function UnlockCaseContainerAddKey({
   const translate = useTranslate();
   const sync = useSync();
   const [inventory, setInventory] = useInventory();
-  const { craftMaxQuantity, inventoryMaxItems } = useRules();
   const [amount, setAmount] = useState("1");
   const [isCrafting, toggleIsCrafting] = useToggle(false);
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
 
-  const maxQuantity = Math.min(
-    inventoryMaxItems - inventory.size(),
-    KEY_MAX_QUANTITY,
-    ...toArrayIf(craftMaxQuantity, (n) => n > 0)
+  const maxQuantity = useCraftShortcutMaxQuantity(
+    neededKeyItem,
+    KEY_MAX_QUANTITY
   );
 
   function handleClose() {
