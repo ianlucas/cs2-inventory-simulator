@@ -16,9 +16,9 @@ export function size<T>(arr: T[] | undefined) {
   return arr?.length ?? 0;
 }
 
-export function format(n: number) {
+export function format(n: number, locale?: string) {
   try {
-    return new Intl.NumberFormat().format(n);
+    return new Intl.NumberFormat(locale).format(n);
   } catch {
     return n.toString();
   }

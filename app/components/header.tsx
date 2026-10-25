@@ -11,6 +11,7 @@ import {
   faHammer,
   faPersonRifle,
   faRightFromBracket,
+  faTrophy,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -52,7 +53,7 @@ export function Header({
   const [isMenuOpen, toggleIsMenuOpen] = useToggle(false);
   const isDesktop = useIsDesktop();
   const isOnTop = useIsOnTop();
-  const { appHideLogo, appHideAuth } = useRules();
+  const { appHideLogo, appHideAuth, appShowCommunity } = useRules();
   const ref = useCssHeightVariable<HTMLDivElement>("--header-height");
 
   function closeMenu() {
@@ -128,6 +129,15 @@ export function Header({
                   label={translate("HeaderLoadoutLabel")}
                   onClick={closeMenu}
                   tabSound="tab_mainmenu_loadout"
+                />
+              )}
+              {appShowCommunity && (
+                <HeaderLink
+                  className="max-w-30"
+                  to="/community"
+                  icon={faTrophy}
+                  label={translate("HeaderCommunityLabel")}
+                  onClick={closeMenu}
                 />
               )}
               {user === undefined ? (

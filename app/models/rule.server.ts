@@ -137,10 +137,14 @@ export class Rule<RuleName extends string, RuleValue> {
   }
 
   private resolve({ userOverrides, groupOverrides, rules }: StoredRuleValues) {
-    const value =
+    return this.parse(
       userOverrides.get(this.name) ??
-      groupOverrides.get(this.name) ??
-      rules.get(this.name);
+        groupOverrides.get(this.name) ??
+        rules.get(this.name)
+    );
+  }
+
+  private parse(value: string | undefined) {
     return this.toRuleValue(
       value !== undefined ? this.toValue(value) : this.defaultValue
     );
@@ -232,6 +236,56 @@ export class Rule<RuleName extends string, RuleValue> {
     return new RuleFor(
       Rule.getMany({ rule: this }, userId).then(({ rule }) => rule)
     );
+  }
+
+  /**
+   * Resolves the rule for many users at once, the same way `for` does.
+   */
+  async forUsers(userIds: string[]): Promise<(userId: string) => RuleValue> {
+    const [ruleRows, userOverrideRows, groupOverrideRows] = await Promise.all([
+      prisma.rule.findMany({
+        select: { name: true, value: true },
+        where: { name: this.name }
+      }),
+      prisma.userRule.findMany({
+        select: { userId: true, value: true },
+        where: { name: this.name, userId: { in: userIds } }
+      }),
+      prisma.groupRule.findMany({
+        select: {
+          group: {
+            select: {
+              users: {
+                select: { userId: true },
+                where: { userId: { in: userIds } }
+              }
+            }
+          },
+          value: true
+        },
+        where: {
+          name: this.name,
+          group: { users: { some: { userId: { in: userIds } } } }
+        },
+        orderBy: [{ group: { priority: "desc" } }, { groupId: "asc" }]
+      })
+    ]);
+    const ruleValue = byName(ruleRows).get(this.name);
+    const userOverrides = new Map(
+      userOverrideRows.map(({ userId, value }) => [userId, value])
+    );
+    const groupOverrides = new Map<string, string>();
+    for (const { group, value } of groupOverrideRows) {
+      for (const { userId } of group.users) {
+        if (!groupOverrides.has(userId)) {
+          groupOverrides.set(userId, value);
+        }
+      }
+    }
+    return (userId) =>
+      this.parse(
+        userOverrides.get(userId) ?? groupOverrides.get(userId) ?? ruleValue
+      );
   }
 
   async isTrueForAnyone() {
@@ -719,6 +773,24 @@ export const appShowUnlockFeed = new Rule({
   name: "appShowUnlockFeed",
   type: "boolean",
   defaultValue: true
+});
+
+export const appShowCommunity = new Rule({
+  name: "appShowCommunity",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const communityRankingIntervalHours = new Rule({
+  name: "communityRankingIntervalHours",
+  type: "number",
+  defaultValue: 1
+});
+
+export const communityWeeklyBudget = new Rule({
+  name: "communityWeeklyBudget",
+  type: "number",
+  defaultValue: 1000
 });
 
 export const viewerEnabled = new Rule({

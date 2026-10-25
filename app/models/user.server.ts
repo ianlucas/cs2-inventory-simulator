@@ -5,6 +5,7 @@
 
 import { CS2Inventory, CS2InventorySpec } from "@ianlucas/cs2-lib";
 import { prisma } from "~/db.server";
+import type { Prisma } from "~/generated/prisma/client";
 import { badRequest, conflict } from "~/responses.server";
 import {
   hasInventoryContent,
@@ -137,12 +138,14 @@ export async function getUserSyncedAt(userId: string) {
 
 export async function manipulateUserInventory({
   manipulate,
+  onSave,
   syncedAt,
   userId
 }: {
   manipulate:
     | ((inventory: CS2Inventory, loadouts: UserLoadoutsDraft) => void)
     | ((inventory: CS2Inventory, loadouts: UserLoadoutsDraft) => Promise<void>);
+  onSave?: (tx: Prisma.TransactionClient) => Promise<void>;
   syncedAt?: number;
   userId: string;
 }) {
@@ -187,11 +190,13 @@ export async function manipulateUserInventory({
           inventory.loadChanges
         );
       }
-      return await tx.user.update({
+      const user = await tx.user.update({
         select: { syncedAt: true },
         data: { rawInventory: inventory.stringify(), syncedAt: new Date() },
         where: { id: userId }
       });
+      await onSave?.(tx);
+      return user;
     },
     { timeout: 10_000 }
   );

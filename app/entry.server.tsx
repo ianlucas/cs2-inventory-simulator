@@ -19,6 +19,7 @@ import { economyPriceLoader } from "./routines/economy-price-loader";
 import { economyProjector } from "./routines/economy-projector";
 import { inactiveInventoryReset } from "./routines/inactive-inventory-reset";
 import { setupPurge } from "./routines/setup-purge";
+import { unboxingLeagueGenerator } from "./routines/unboxing-league-generator";
 import { userInventoryProjector } from "./routines/user-inventory-projector";
 import { logError } from "./shared/monitoring";
 import { setupTranslation } from "./translation.server";
@@ -32,6 +33,7 @@ inactiveInventoryReset.start();
 economyProjector.start();
 economyPriceLoader.start();
 userInventoryProjector.start();
+unboxingLeagueGenerator.start();
 void setupRules().then(() => {
   void setupLogo();
   viewerServerAvailability.start();

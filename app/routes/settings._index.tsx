@@ -18,7 +18,10 @@ import { Modal, ModalHeader } from "~/components/modal";
 import { ModalButton } from "~/components/modal-button";
 import { SettingsField } from "~/components/settings-field";
 import { SideMenuItem } from "~/components/side-menu-item";
+import { getUserIdFromRequest } from "~/auth.server";
 import { middleware } from "~/middleware.server";
+import { appShowCommunity, communityWeeklyBudget } from "~/models/rule.server";
+import { getUnboxingStats } from "~/models/unboxing-league.server";
 import { getMetaTitle } from "~/root-meta";
 import type { Route } from "./+types/settings._index";
 import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
@@ -26,8 +29,19 @@ import { ApiActionPreferencesUrl } from "./api.action.preferences._index";
 export const meta = getMetaTitle("HeaderSettingsLabel");
 
 export async function loader({ request }: Route.LoaderArgs) {
-  await middleware(request);
-  return null;
+  const userId = await getUserIdFromRequest(request);
+  await middleware(request, userId);
+  if (userId === undefined || !(await appShowCommunity.for(userId).get())) {
+    return { now: Date.now(), stats: undefined };
+  }
+  const now = new Date();
+  return {
+    now: now.getTime(),
+    stats: await getUnboxingStats(userId, {
+      budget: await communityWeeklyBudget.get(),
+      now
+    })
+  };
 }
 
 export default function Settings() {
