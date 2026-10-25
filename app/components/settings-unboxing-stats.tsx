@@ -24,8 +24,8 @@ export function SettingsUnboxingStats() {
 
   return (
     <div className="space-y-2">
-      <h3 className="font-display px-1 pt-1 font-semibold text-neutral-300 uppercase">
-        {translate("CommunityTitle")} · {translate("CommunityThisWeek")}
+      <h3 className="font-display px-1 text-sm font-semibold text-neutral-500 uppercase">
+        {translate("CommunityTitle")} ({translate("CommunityThisWeek")})
       </h3>
       <SettingsLabel label={translate("SettingsStatsBalance")}>
         <span className="font-display text-white tabular-nums">
@@ -75,8 +75,8 @@ export function SettingsUnboxingStats() {
           )}
         </span>
       </SettingsLabel>
-      <h3 className="font-display px-1 pt-2 font-semibold text-neutral-300 uppercase">
-        {translate("CommunityTitle")} · {translate("CommunityLastWeek")}
+      <h3 className="font-display px-1 pt-2 text-sm font-semibold text-neutral-500 uppercase">
+        {translate("CommunityTitle")} ({translate("CommunityLastWeek")})
       </h3>
       {lastWeek !== undefined ? (
         <>

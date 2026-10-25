@@ -136,7 +136,7 @@ export function Header({
                   className="max-w-30"
                   to="/community"
                   icon={faTrophy}
-                  label={translate("CommunityTitle")}
+                  label={translate("HeaderCommunityLabel")}
                   onClick={closeMenu}
                 />
               )}

@@ -5,7 +5,7 @@
 
 import { expect, test } from "vitest";
 import {
-  formatHours,
+  formatCompact,
   formatSimulatorDollars,
   isCountAllowed,
   resolveLimit
@@ -59,7 +59,8 @@ test("formatSimulatorDollars shows cents for small values and compacts large one
   expect(formatSimulatorDollars(412_000, "en", true)).toBe("+S$412K");
 });
 
-test("formatHours spells out the unit", () => {
-  expect(formatHours(1, "en")).toBe("1 hour");
-  expect(formatHours(24, "en")).toBe("24 hours");
+test("formatCompact keeps small numbers and shortens large ones", () => {
+  expect(formatCompact(999, "en")).toBe("999");
+  expect(formatCompact(1_234, "en")).toBe("1.2K");
+  expect(formatCompact(12_344, "en")).toBe("12K");
 });

@@ -3,11 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faTrophy } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { loader } from "~/routes/community._index";
 import type { SerializeFrom } from "~/shared/misc";
-import { formatHours, formatSimulatorDollars } from "~/shared/number";
+import { formatSimulatorDollars } from "~/shared/number";
 import { formatRelativeTime } from "~/shared/relative-time";
 import { usePreferences, useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
@@ -22,7 +20,7 @@ function CommunityInfo({ text }: { text: string }) {
     <>
       <span
         aria-label={text}
-        className="inline-flex shrink-0 cursor-help opacity-50 transition-opacity hover:opacity-100"
+        className="inline-flex shrink-0 opacity-50 transition-opacity hover:opacity-100"
         ref={setReference}
         tabIndex={0}
         {...getReferenceProps()}
@@ -38,7 +36,6 @@ function CommunityInfo({ text }: { text: string }) {
 
 export function Community({
   budget,
-  intervalHours,
   isViewerPrivate,
   league: { lastWeek, resetsAt, thisWeek },
   now
@@ -50,8 +47,7 @@ export function Community({
   return (
     <div className="m-auto px-4 pt-6 pb-12 lg:w-5xl lg:px-0">
       <div className="mb-4 flex flex-wrap items-end justify-between gap-x-4 gap-y-1 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
-        <h1 className="font-display flex items-center gap-3 text-3xl font-semibold text-white uppercase">
-          <FontAwesomeIcon className="h-7 text-amber-300" icon={faTrophy} />
+        <h1 className="font-display flex items-center gap-3 text-3xl font-semibold text-white">
           {translate("CommunityTitle")}
           <CommunityInfo
             text={translate(
@@ -70,11 +66,6 @@ export function Community({
               translate(
                 "CommunityUpdatedAt",
                 formatRelativeTime(new Date(generatedAt), now, lang)
-              ),
-            intervalHours > 0 &&
-              translate(
-                "CommunityUpdateInterval",
-                formatHours(intervalHours, lang)
               )
           ]
             .filter(Boolean)

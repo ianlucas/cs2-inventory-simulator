@@ -9,7 +9,6 @@ import { Community } from "~/components/community";
 import { middleware } from "~/middleware.server";
 import {
   appShowCommunity,
-  communityRankingIntervalHours,
   communityWeeklyBudget,
   inventoryAllowProfile
 } from "~/models/rule.server";
@@ -17,7 +16,7 @@ import { getUnboxingLeague } from "~/models/unboxing-league.server";
 import { getMetaTitle } from "~/root-meta";
 import type { Route } from "./+types/community._index";
 
-export const meta = getMetaTitle("CommunityTitle");
+export const meta = getMetaTitle("HeaderCommunityLabel");
 
 export async function loader({ request }: Route.LoaderArgs) {
   const userId = await getUserIdFromRequest(request);
@@ -30,15 +29,13 @@ export async function loader({ request }: Route.LoaderArgs) {
     throw redirect("/");
   }
   const now = new Date();
-  const [budget, intervalHours, isProfileAllowed, league] = await Promise.all([
+  const [budget, isProfileAllowed, league] = await Promise.all([
     communityWeeklyBudget.get(),
-    communityRankingIntervalHours.get(),
     userId !== undefined ? inventoryAllowProfile.for(userId).get() : true,
     getUnboxingLeague(userId, now)
   ]);
   return {
     budget,
-    intervalHours,
     isViewerPrivate: !isProfileAllowed,
     league,
     // Relative times render from the server's clock so hydration matches.

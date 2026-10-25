@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  faBoxOpen,
   faCaretDown,
   faCaretUp,
-  faFlagCheckered
+  faFlagCheckered,
+  faTrophy
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2Economy } from "@ianlucas/cs2-lib";
@@ -15,7 +15,7 @@ import clsx from "clsx";
 import { getSoundProps } from "~/interface-sounds";
 import type { loader } from "~/routes/community._index";
 import type { SerializeFrom } from "~/shared/misc";
-import { format, formatSimulatorDollars } from "~/shared/number";
+import { format, formatCompact, formatSimulatorDollars } from "~/shared/number";
 import { usePreferences, useTranslate } from "./app-context";
 import { useNameItemString } from "./hooks/use-name-item";
 import { ItemImage } from "./item-image";
@@ -30,14 +30,14 @@ const RANKING_KINDS = {
   lastWeek: {
     accent: "before:bg-sky-400",
     emptyViewer: "CommunityNotPlayedLastWeek",
-    icon: faFlagCheckered,
+    icon: faTrophy,
     iconColor: "text-sky-300",
     title: "CommunityLastWeek"
   },
   thisWeek: {
     accent: "before:bg-amber-400",
     emptyViewer: "CommunityNotRanked",
-    icon: faBoxOpen,
+    icon: faFlagCheckered,
     iconColor: "text-amber-300",
     title: "CommunityThisWeek"
   }
@@ -62,8 +62,8 @@ function RankBadge({ rank }: { rank: number }) {
       {rank}
     </span>
   ) : (
-    <span className="font-display min-w-8 shrink-0 text-center text-neutral-400 tabular-nums">
-      {format(rank, lang)}
+    <span className="font-display min-w-8 shrink-0 text-center text-sm text-neutral-400 tabular-nums">
+      {formatCompact(rank, lang)}
     </span>
   );
 }
@@ -79,18 +79,18 @@ function RankMovement({
   const { lang } = usePreferences();
   const delta = previousRank === null ? undefined : previousRank - rank;
   return (
-    <span className="font-display flex min-w-10 shrink-0 items-center justify-center gap-0.5 text-xs font-semibold tabular-nums">
+    <span className="font-display flex w-12 shrink-0 items-center justify-center text-xs font-semibold tabular-nums">
       {delta === undefined ? (
         <span className="text-sky-300">{translate("CommunityNew")}</span>
       ) : delta > 0 ? (
-        <span className="text-green-400">
-          <FontAwesomeIcon className="mr-0.5 h-3" icon={faCaretUp} />
-          {format(delta, lang)}
+        <span className="flex items-center gap-0.5 text-green-400">
+          <FontAwesomeIcon className="h-3" icon={faCaretUp} />
+          {formatCompact(delta, lang)}
         </span>
       ) : delta < 0 ? (
-        <span className="text-red-400">
-          <FontAwesomeIcon className="mr-0.5 h-3" icon={faCaretDown} />
-          {format(-delta, lang)}
+        <span className="flex items-center gap-0.5 text-red-400">
+          <FontAwesomeIcon className="h-3" icon={faCaretDown} />
+          {formatCompact(-delta, lang)}
         </span>
       ) : (
         <span className="text-neutral-500">–</span>
@@ -120,7 +120,13 @@ export function Profit({
   );
 }
 
-export function BestDrop({ drop }: { drop: RowData["bestDrop"] }) {
+export function BestDrop({
+  drop,
+  payoutClassName
+}: {
+  drop: RowData["bestDrop"];
+  payoutClassName?: string;
+}) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
   const { lang } = usePreferences();
@@ -136,7 +142,7 @@ export function BestDrop({ drop }: { drop: RowData["bestDrop"] }) {
       : undefined;
   return (
     <span
-      className="flex shrink-0 items-center gap-1.5"
+      className="flex shrink-0 items-center gap-2.5"
       title={
         name !== undefined
           ? `${translate("CommunityBestDrop")}: ${name}`
@@ -144,15 +150,19 @@ export function BestDrop({ drop }: { drop: RowData["bestDrop"] }) {
       }
     >
       {item !== undefined && (
-        <ItemImage
-          className="h-7 border-b-2"
-          item={item}
-          lazy
-          style={{ borderColor: item.rarityColor }}
-          wear={drop.wear}
-        />
+        <span
+          className="flex rounded-xs border border-b-2 border-white/15 bg-black/30 px-1"
+          style={{ borderBottomColor: item.rarityColor }}
+        >
+          <ItemImage className="h-7" item={item} lazy wear={drop.wear} />
+        </span>
       )}
-      <span className="font-display min-w-14 text-xs text-amber-200 tabular-nums">
+      <span
+        className={clsx(
+          "font-display text-amber-200 tabular-nums",
+          payoutClassName
+        )}
+      >
         {formatSimulatorDollars(drop.payout, lang)}
       </span>
     </span>
@@ -204,7 +214,7 @@ function RankingRow({
         />
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-2">
-            <span className="truncate text-white">{row.name}</span>
+            <span className="truncate text-sm text-white">{row.name}</span>
             {isViewer && (
               <span className="font-display shrink-0 rounded-xs bg-orange-400 px-1 text-xs font-semibold text-black uppercase">
                 {translate("CommunityYou")}
@@ -212,7 +222,7 @@ function RankingRow({
             )}
           </span>
           {rankedCount !== undefined && (
-            <span className="block text-xs text-neutral-400">
+            <span className="block truncate text-xs text-neutral-400">
               {translate(
                 "CommunityRankOf",
                 format(row.rank, lang),
@@ -221,8 +231,11 @@ function RankingRow({
             </span>
           )}
         </span>
-        <BestDrop drop={row.bestDrop} />
-        <Profit className="min-w-20 shrink-0 text-right" value={row.profit} />
+        <BestDrop drop={row.bestDrop} payoutClassName="w-16 text-xs" />
+        <Profit
+          className="w-20 shrink-0 text-right text-sm"
+          value={row.profit}
+        />
       </a>
     </li>
   );
@@ -259,7 +272,7 @@ export function UnboxingLeagueRanking({
           className={clsx("h-6 shrink-0", iconColor)}
           icon={icon}
         />
-        <h2 className="font-display min-w-0 flex-1 truncate text-xl font-semibold text-white uppercase">
+        <h2 className="font-display min-w-0 flex-1 truncate text-xl font-semibold text-white">
           {translate(title)}
         </h2>
       </header>

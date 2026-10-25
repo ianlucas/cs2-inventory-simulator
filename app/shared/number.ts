@@ -24,6 +24,14 @@ export function format(n: number, locale?: string) {
   }
 }
 
+export function formatCompact(n: number, locale?: string) {
+  try {
+    return new Intl.NumberFormat(locale, { notation: "compact" }).format(n);
+  } catch {
+    return n.toString();
+  }
+}
+
 export function formatUsd(n: number) {
   try {
     return new Intl.NumberFormat(undefined, {
@@ -52,18 +60,6 @@ export function formatSimulatorDollars(
     return `${sign}S$${formatted}`;
   } catch {
     return `${sign}S$${absolute.toFixed(2)}`;
-  }
-}
-
-export function formatHours(hours: number, locale?: string) {
-  try {
-    return new Intl.NumberFormat(locale, {
-      style: "unit",
-      unit: "hour",
-      unitDisplay: "long"
-    }).format(hours);
-  } catch {
-    return `${hours}h`;
   }
 }
 
