@@ -5,12 +5,13 @@
 
 import { prisma } from "~/db.server";
 import {
-  getUnboxingWeekStart,
+  findUnboxingWeek,
+  getUnboxingWeekStarts,
   roundSimulatorDollars,
   UNBOXING_LEAGUE_RANKING_SIZE,
   WEEK_IN_MS
 } from "~/shared/unboxing-league";
-import { getUnboxingBalance } from "./user-unlock.server";
+import { getUnboxingBalance, getUnboxingProfit } from "./user-unlock.server";
 
 const entrySelect = {
   bestItemId: true,
@@ -23,6 +24,20 @@ const entrySelect = {
   user: { select: { avatar: true, id: true, name: true } },
   weekStart: true
 } as const;
+
+function toBestDrop(drop: {
+  itemId: number;
+  payout: { toNumber(): number };
+  statTrak: boolean;
+  wear: number | null;
+}) {
+  return {
+    itemId: drop.itemId,
+    payout: drop.payout.toNumber(),
+    statTrak: drop.statTrak,
+    wear: drop.wear ?? undefined
+  };
+}
 
 function toRow({
   bestItemId,
@@ -45,12 +60,12 @@ function toRow({
 }) {
   return {
     avatar: user.avatar,
-    bestDrop: {
+    bestDrop: toBestDrop({
       itemId: bestItemId,
-      payout: bestPayout.toNumber(),
+      payout: bestPayout,
       statTrak: bestStatTrak,
-      wear: bestWear ?? undefined
-    },
+      wear: bestWear
+    }),
     name: user.name,
     previousRank,
     profit: profit.toNumber(),
@@ -59,20 +74,12 @@ function toRow({
   };
 }
 
-function getWeekStarts(now: Date) {
-  const weekStart = getUnboxingWeekStart(now);
-  return {
-    lastWeekStart: new Date(weekStart.getTime() - WEEK_IN_MS),
-    weekStart
-  };
-}
-
 /**
  * Finds the top of this week's and last week's snapshots and, for a signed-in
  * user, their own entry (`null` when they aren't ranked).
  */
 export async function getUnboxingLeague(userId: string | undefined, now: Date) {
-  const { lastWeekStart, weekStart } = getWeekStarts(now);
+  const { lastWeekStart, weekStart } = getUnboxingWeekStarts(now);
   const [rankings, viewerEntries] = await Promise.all([
     prisma.unboxingLeagueRanking.findMany({
       select: {
@@ -96,12 +103,8 @@ export async function getUnboxingLeague(userId: string | undefined, now: Date) {
         })
   ]);
   function getRanking(start: Date) {
-    const ranking = rankings.find(
-      (ranking) => ranking.weekStart.getTime() === start.getTime()
-    );
-    const viewerEntry = viewerEntries.find(
-      (entry) => entry.weekStart.getTime() === start.getTime()
-    );
+    const ranking = findUnboxingWeek(rankings, start);
+    const viewerEntry = findUnboxingWeek(viewerEntries, start);
     return {
       generatedAt: ranking?.generatedAt,
       hasMovement: ranking?.previousGeneratedAt != null,
@@ -122,12 +125,6 @@ export async function getUnboxingLeague(userId: string | undefined, now: Date) {
   };
 }
 
-export type UnboxingLeague = Awaited<ReturnType<typeof getUnboxingLeague>>;
-
-export type UnboxingLeagueRanking = UnboxingLeague["thisWeek"];
-
-export type UnboxingLeagueRow = UnboxingLeagueRanking["rows"][number];
-
 /**
  * The user's live results this week and last week, plus their ranks from the
  * snapshots.
@@ -136,7 +133,7 @@ export async function getUnboxingStats(
   userId: string,
   { budget, now }: { budget: number; now: Date }
 ) {
-  const { lastWeekStart, weekStart } = getWeekStarts(now);
+  const { lastWeekStart, weekStart } = getUnboxingWeekStarts(now);
   const where = { createdAt: { gte: weekStart, lte: now }, userId };
   const [balance, unlocks, bestDrop, lastUnlock, lastWeekTotals, entries] =
     await Promise.all([
@@ -149,7 +146,7 @@ export async function getUnboxingStats(
       }),
       prisma.userUnlock.findFirst({
         orderBy: { createdAt: "desc" },
-        select: { counted: true },
+        select: { price: true },
         where
       }),
       prisma.userUnlock.aggregate({
@@ -171,9 +168,7 @@ export async function getUnboxingStats(
       })
     ]);
   function getRank(start: Date) {
-    const entry = entries.find(
-      (entry) => entry.weekStart.getTime() === start.getTime()
-    );
+    const entry = findUnboxingWeek(entries, start);
     return entry === undefined
       ? undefined
       : {
@@ -184,24 +179,15 @@ export async function getUnboxingStats(
   }
   return {
     balance,
-    bestDrop:
-      bestDrop === null
-        ? undefined
-        : {
-            itemId: bestDrop.itemId,
-            payout: bestDrop.payout.toNumber(),
-            statTrak: bestDrop.statTrak,
-            wear: bestDrop.wear ?? undefined
-          },
-    isOutOfBudget: lastUnlock?.counted === false,
+    bestDrop: bestDrop === null ? undefined : toBestDrop(bestDrop),
+    // Counting is decided per container, so this only tells whether the
+    // container the user last unlocked has become unaffordable.
+    isOutOfBudget: lastUnlock !== null && balance < lastUnlock.price.toNumber(),
     lastWeek:
       lastWeekTotals._count === 0
         ? undefined
         : {
-            profit: roundSimulatorDollars(
-              (lastWeekTotals._sum.payout?.toNumber() ?? 0) -
-                (lastWeekTotals._sum.price?.toNumber() ?? 0)
-            ),
+            profit: getUnboxingProfit(lastWeekTotals._sum),
             rank: getRank(lastWeekStart)
           },
     profit: roundSimulatorDollars(balance - budget),
@@ -209,5 +195,3 @@ export async function getUnboxingStats(
     unlocks
   };
 }
-
-export type UnboxingStats = Awaited<ReturnType<typeof getUnboxingStats>>;

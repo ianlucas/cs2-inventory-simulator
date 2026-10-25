@@ -7,7 +7,6 @@ import { CS2_ITEMS, CS2Economy, ensure } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations/english";
 import { describe, expect, test } from "vitest";
 import {
-  formatSimulatorDollars,
   getUnboxingPayout,
   getUnboxingPrice,
   getUnboxingWeekStart,
@@ -200,11 +199,4 @@ test("rankUnboxingLeague ranks by profit, then by who got there first", () => {
     { previousRank: 1, rank: 3, userId: "b" },
     { previousRank: null, rank: 4, userId: "c" }
   ]);
-});
-
-test("formatSimulatorDollars shows cents for small values and compacts large ones", () => {
-  expect(formatSimulatorDollars(13.876, "en")).toBe("S$13.88");
-  expect(formatSimulatorDollars(781_250, "en")).toBe("S$781.3K");
-  expect(formatSimulatorDollars(-412.5, "en", true)).toBe("-S$412.50");
-  expect(formatSimulatorDollars(412_000, "en", true)).toBe("+S$412K");
 });

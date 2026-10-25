@@ -101,9 +101,9 @@ Show signed-in users a chat over their inventory announcing Ancient and Immortal
 ### `appShowCommunity`
 
 - **Type:** `boolean`
-- **Default:** `true`
+- **Default:** `false`
 
-Show the Community page, its header link, the Stats settings and the Unboxing League payout on unlocked items for stats for nerds. While it's off for everyone, rankings aren't generated.
+Turn the Unboxing League on: the Community page, its header link, the Stats settings and the payout on unlocked items for stats for nerds. Unlocks by users it's off for aren't logged, so they don't play. While it's off for everyone, rankings aren't generated.
 
 ## Steam
 
@@ -600,7 +600,7 @@ Weeks start on Monday at 00:00 UTC. Once a user can't afford a container, their 
 - **Type:** `number`
 - **Default:** `1`
 
-How many hours the week's ranking is kept before it's generated again. Last week's ranking is generated once more after the week ends. `0` stops generating them, keeping the last rankings. User and group overrides are ignored.
+How many hours the week's ranking is kept before it's generated again. Rankings are checked every 5 minutes, so `0` generates it on every check. Last week's ranking is generated once more a minute after the week ends. User and group overrides are ignored.
 
 ### `communityWeeklyBudget`
 

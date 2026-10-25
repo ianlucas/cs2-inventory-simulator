@@ -181,6 +181,21 @@ test("ranks this week's players by profit, leaving out private profiles", async 
   });
 });
 
+test("breaks ties to the cent by who got there first", async () => {
+  // 1000.3 - 990.2 and 20.3 - 10.2 are both 10.1 only once rounded.
+  mocks.state.totals = [
+    total(ALICE, 20.3, 10.2, 20),
+    total(BOB, 1000.3, 990.2, 10)
+  ];
+  await generateUnboxingLeague();
+  expect(mocks.tx.unboxingLeagueEntry.createMany).toHaveBeenCalledWith({
+    data: [
+      expect.objectContaining({ profit: 10.1, rank: 1, userId: BOB }),
+      expect.objectContaining({ profit: 10.1, rank: 2, userId: ALICE })
+    ]
+  });
+});
+
 test("carries ranks over from this week's previous snapshot", async () => {
   const previousGeneratedAt = ago(61);
   mocks.state.rankings = [
@@ -242,16 +257,44 @@ test("snapshots last week once more after it ends", async () => {
   });
 });
 
+test("waits a minute after the reset before snapshotting last week", async () => {
+  mocks.state.rankings = [
+    {
+      entries: [],
+      generatedAt: new Date(WEEK_START.getTime() - 30 * MINUTE_IN_MS),
+      weekStart: LAST_WEEK_START
+    }
+  ];
+  vi.setSystemTime(new Date(WEEK_START.getTime() + 30_000));
+  await generateUnboxingLeague();
+  expect(mocks.tx.userUnlock.groupBy).toHaveBeenCalledOnce();
+  expect(mocks.tx.unboxingLeagueRanking.create).toHaveBeenCalledWith({
+    data: expect.objectContaining({ weekStart: WEEK_START })
+  });
+  vi.clearAllMocks();
+  vi.setSystemTime(new Date(WEEK_START.getTime() + MINUTE_IN_MS));
+  await generateUnboxingLeague();
+  expect(mocks.tx.unboxingLeagueRanking.create).toHaveBeenCalledWith({
+    data: expect.objectContaining({ weekStart: LAST_WEEK_START })
+  });
+});
+
 test("does nothing while the Community is off for everyone", async () => {
   mocks.state.isEnabled = false;
   await generateUnboxingLeague();
   expect(mocks.prisma.$transaction).not.toHaveBeenCalled();
 });
 
-test("does nothing while paused", async () => {
+test("snapshots this week on every check with a 0 interval", async () => {
   mocks.state.intervalHours = 0;
+  mocks.state.rankings = [
+    finalLastWeek,
+    { entries: [], generatedAt: ago(1), weekStart: WEEK_START }
+  ];
   await generateUnboxingLeague();
-  expect(mocks.prisma.$transaction).not.toHaveBeenCalled();
+  expect(mocks.tx.unboxingLeagueRanking.create).toHaveBeenCalledWith({
+    data: expect.objectContaining({ weekStart: WEEK_START })
+  });
 });
 
 test("leaves generation to the process holding the lock", async () => {

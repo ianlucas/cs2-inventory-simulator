@@ -11,19 +11,15 @@ const RELATIVE_TIME_UNITS = [
 
 export function formatRelativeTime(date: Date, now: number, locale: string) {
   const seconds = (date.getTime() - now) / 1_000;
-  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
-  for (const [unit, unitSeconds] of RELATIVE_TIME_UNITS) {
-    if (Math.abs(seconds) >= unitSeconds) {
-      return formatter.format(Math.trunc(seconds / unitSeconds), unit);
+  try {
+    const formatter = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+    for (const [unit, unitSeconds] of RELATIVE_TIME_UNITS) {
+      if (Math.abs(seconds) >= unitSeconds) {
+        return formatter.format(Math.trunc(seconds / unitSeconds), unit);
+      }
     }
+    return formatter.format(0, "second");
+  } catch {
+    return date.toISOString();
   }
-  return formatter.format(0, "second");
-}
-
-export function formatHours(hours: number, locale: string) {
-  return new Intl.NumberFormat(locale, {
-    style: "unit",
-    unit: "hour",
-    unitDisplay: "long"
-  }).format(hours);
 }

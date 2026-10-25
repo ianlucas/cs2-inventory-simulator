@@ -22,27 +22,27 @@ enum CS2ItemExterior {
 }
 
 model User {
-  activeLoadout       UserLoadout?             @relation("ActiveLoadout", fields: [activeLoadoutId], references: [id], onDelete: SetNull)
-  activeLoadoutId     String?                  @unique
-  apiResponseCaches   UserApiResponseCache[]
-  authTokens          ApiAuthToken[]
-  avatar              String
-  createdAt           DateTime                 @default(now())
-  groups              UserGroup[]
-  id                  String                   @id
-  inventoryItems      UserInventoryItem[]
-  inventoryProjection UserInventoryProjection?
-  inventoryRecoveries UserInventoryRecovery[]
-  lastSeenAt          DateTime                 @default(now())
-  loadouts            UserLoadout[]            @relation("UserLoadouts")
-  name                String
-  rawInventory        String?
-  overrides           UserRule[]
-  preferences         UserPreference?
-  syncedAt            DateTime                 @default(now())
-  unboxingLeague      UnboxingLeagueEntry[]
-  unlocks             UserUnlock[]
-  updatedAt           DateTime                 @updatedAt
+  activeLoadout         UserLoadout?             @relation("ActiveLoadout", fields: [activeLoadoutId], references: [id], onDelete: SetNull)
+  activeLoadoutId       String?                  @unique
+  apiResponseCaches     UserApiResponseCache[]
+  authTokens            ApiAuthToken[]
+  avatar                String
+  createdAt             DateTime                 @default(now())
+  groups                UserGroup[]
+  id                    String                   @id
+  inventoryItems        UserInventoryItem[]
+  inventoryProjection   UserInventoryProjection?
+  inventoryRecoveries   UserInventoryRecovery[]
+  lastSeenAt            DateTime                 @default(now())
+  loadouts              UserLoadout[]            @relation("UserLoadouts")
+  name                  String
+  rawInventory          String?
+  overrides             UserRule[]
+  preferences           UserPreference?
+  syncedAt              DateTime                 @default(now())
+  unboxingLeagueEntries UnboxingLeagueEntry[]
+  unlocks               UserUnlock[]
+  updatedAt             DateTime                 @updatedAt
 
   @@index([syncedAt])
 }

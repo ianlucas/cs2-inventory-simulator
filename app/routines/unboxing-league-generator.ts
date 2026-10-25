@@ -10,9 +10,11 @@ import {
   communityRankingIntervalHours,
   inventoryAllowProfile
 } from "~/models/rule.server";
+import { getUnboxingProfit } from "~/models/user-unlock.server";
 import { Job } from "~/shared/scheduling";
 import {
-  getUnboxingWeekStart,
+  findUnboxingWeek,
+  getUnboxingWeekStarts,
   rankUnboxingLeague,
   WEEK_IN_MS
 } from "~/shared/unboxing-league";
@@ -20,11 +22,14 @@ import { singleton } from "~/singleton.server";
 
 const CHECK_INTERVAL_MS = 5 * 60_000;
 const ENTRY_INSERT_BATCH_SIZE = 1_000;
+// Longer than the unlock transaction's timeout, so unlocks stamped before the
+// reset have committed by the time last week's final snapshot reads them.
+const FINAL_SNAPSHOT_DELAY_MS = 60_000;
 const HOUR_IN_MS = 60 * 60_000;
 const LOCK_KEY = "unboxing-league-generator";
 const RULE_BATCH_SIZE = 5_000;
 
-type Client = Prisma.TransactionClient;
+type Transaction = Prisma.TransactionClient;
 
 interface BestDrop {
   itemId: number;
@@ -34,28 +39,26 @@ interface BestDrop {
   wear: number | null;
 }
 
-// Last week is due until it has a snapshot taken after it ended, and this week
-// once its snapshot is `intervalHours` old.
+// Last week is due until it has a final snapshot, taken shortly after it
+// ended, and this week once its snapshot is `intervalHours` old.
 async function getDueWeekStarts(
-  client: Client,
+  tx: Transaction,
   intervalHours: number,
   now: Date
 ) {
-  const weekStart = getUnboxingWeekStart(now);
-  const lastWeekStart = new Date(weekStart.getTime() - WEEK_IN_MS);
-  const rankings = await client.unboxingLeagueRanking.findMany({
+  const { lastWeekStart, weekStart } = getUnboxingWeekStarts(now);
+  const rankings = await tx.unboxingLeagueRanking.findMany({
     select: { generatedAt: true, weekStart: true },
     where: { weekStart: { in: [lastWeekStart, weekStart] } }
   });
   const getGeneratedAt = (start: Date) =>
-    rankings
-      .find((ranking) => ranking.weekStart.getTime() === start.getTime())
-      ?.generatedAt.getTime();
+    findUnboxingWeek(rankings, start)?.generatedAt.getTime();
   const lastWeekGeneratedAt = getGeneratedAt(lastWeekStart);
   const weekGeneratedAt = getGeneratedAt(weekStart);
+  const finalSnapshotAt = weekStart.getTime() + FINAL_SNAPSHOT_DELAY_MS;
   return [
-    ...(lastWeekGeneratedAt === undefined ||
-    lastWeekGeneratedAt < weekStart.getTime()
+    ...(now.getTime() >= finalSnapshotAt &&
+    (lastWeekGeneratedAt === undefined || lastWeekGeneratedAt < finalSnapshotAt)
       ? [lastWeekStart]
       : []),
     ...(weekGeneratedAt === undefined ||
@@ -79,7 +82,7 @@ async function getProfileAllowedUserIds(userIds: string[]) {
   return allowed;
 }
 
-async function generate(tx: Client, weekStart: Date, now: Date) {
+async function generate(tx: Transaction, weekStart: Date, now: Date) {
   const weekEnd = new Date(weekStart.getTime() + WEEK_IN_MS);
   const [totals, bestDrops, previous] = await Promise.all([
     tx.userUnlock.groupBy({
@@ -122,8 +125,7 @@ async function generate(tx: Client, weekStart: Date, now: Date) {
         {
           bestDrop,
           lastUnlockedAt: _max.createdAt,
-          profit:
-            (_sum.payout?.toNumber() ?? 0) - (_sum.price?.toNumber() ?? 0),
+          profit: getUnboxingProfit(_sum),
           userId
         }
       ];
@@ -153,7 +155,7 @@ async function generate(tx: Client, weekStart: Date, now: Date) {
           bestStatTrak: bestDrop.statTrak,
           bestWear: bestDrop.wear,
           previousRank,
-          profit: Math.round(profit * 100) / 100,
+          profit,
           rank,
           userId,
           weekStart
@@ -164,8 +166,8 @@ async function generate(tx: Client, weekStart: Date, now: Date) {
 
 /**
  * Snapshots this week's Unboxing League every `communityRankingIntervalHours`,
- * and last week's once more after it ends so its final ranks are exact. An
- * advisory lock keeps overlapping processes from generating them twice.
+ * and last week's once more shortly after it ends so its final ranks are exact.
+ * An advisory lock keeps overlapping processes from generating them twice.
  */
 export async function generateUnboxingLeague() {
   if (!(await appShowCommunity.isTrueForAnyone())) {
@@ -173,7 +175,6 @@ export async function generateUnboxingLeague() {
   }
   const intervalHours = await communityRankingIntervalHours.get();
   if (
-    intervalHours <= 0 ||
     (await getDueWeekStarts(prisma, intervalHours, new Date())).length === 0
   ) {
     return;

@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
 import { useState } from "react";
 import { useNavigate, useSubmit } from "react-router";
+import { getUserIdFromRequest } from "~/auth.server";
 import { usePreferences, useTranslate } from "~/components/app-context";
 import { ChipMenuItem } from "~/components/chip-menu-item";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
@@ -18,9 +19,12 @@ import { Modal, ModalHeader } from "~/components/modal";
 import { ModalButton } from "~/components/modal-button";
 import { SettingsField } from "~/components/settings-field";
 import { SideMenuItem } from "~/components/side-menu-item";
-import { getUserIdFromRequest } from "~/auth.server";
 import { middleware } from "~/middleware.server";
-import { appShowCommunity, communityWeeklyBudget } from "~/models/rule.server";
+import {
+  appShowCommunity,
+  communityWeeklyBudget,
+  inventoryAllowProfile
+} from "~/models/rule.server";
 import { getUnboxingStats } from "~/models/unboxing-league.server";
 import { getMetaTitle } from "~/root-meta";
 import type { Route } from "./+types/settings._index";
@@ -32,15 +36,17 @@ export async function loader({ request }: Route.LoaderArgs) {
   const userId = await getUserIdFromRequest(request);
   await middleware(request, userId);
   if (userId === undefined || !(await appShowCommunity.for(userId).get())) {
-    return { now: Date.now(), stats: undefined };
+    return { isViewerPrivate: false, now: Date.now(), stats: undefined };
   }
   const now = new Date();
+  const [budget, isProfileAllowed] = await Promise.all([
+    communityWeeklyBudget.get(),
+    inventoryAllowProfile.for(userId).get()
+  ]);
   return {
+    isViewerPrivate: !isProfileAllowed,
     now: now.getTime(),
-    stats: await getUnboxingStats(userId, {
-      budget: await communityWeeklyBudget.get(),
-      now
-    })
+    stats: await getUnboxingStats(userId, { budget, now })
   };
 }
 

@@ -4,7 +4,12 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { expect, test } from "vitest";
-import { isCountAllowed, resolveLimit } from "./number";
+import {
+  formatHours,
+  formatSimulatorDollars,
+  isCountAllowed,
+  resolveLimit
+} from "./number";
 
 test("resolveLimit uses the hard max for negative values", () => {
   expect(resolveLimit(-1, 5)).toBe(5);
@@ -45,4 +50,16 @@ test("isCountAllowed allows counts already over the max to shrink", () => {
 
 test("isCountAllowed blocks counts already over the max from growing", () => {
   expect(isCountAllowed({ next: 6, current: 5, max: 1 })).toBe(false);
+});
+
+test("formatSimulatorDollars shows cents for small values and compacts large ones", () => {
+  expect(formatSimulatorDollars(13.876, "en")).toBe("S$13.88");
+  expect(formatSimulatorDollars(781_250, "en")).toBe("S$781.3K");
+  expect(formatSimulatorDollars(-412.5, "en", true)).toBe("-S$412.50");
+  expect(formatSimulatorDollars(412_000, "en", true)).toBe("+S$412K");
+});
+
+test("formatHours spells out the unit", () => {
+  expect(formatHours(1, "en")).toBe("1 hour");
+  expect(formatHours(24, "en")).toBe("24 hours");
 });

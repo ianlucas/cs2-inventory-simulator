@@ -35,6 +35,38 @@ export function formatUsd(n: number) {
   }
 }
 
+export function formatSimulatorDollars(
+  value: number,
+  locale?: string,
+  signed = false
+) {
+  const absolute = Math.abs(value);
+  const sign = value < 0 ? "-" : signed && value > 0 ? "+" : "";
+  try {
+    const formatted = new Intl.NumberFormat(
+      locale,
+      absolute >= 10_000
+        ? { maximumFractionDigits: 1, notation: "compact" }
+        : { maximumFractionDigits: 2, minimumFractionDigits: 2 }
+    ).format(absolute);
+    return `${sign}S$${formatted}`;
+  } catch {
+    return `${sign}S$${absolute.toFixed(2)}`;
+  }
+}
+
+export function formatHours(hours: number, locale?: string) {
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: "unit",
+      unit: "hour",
+      unitDisplay: "long"
+    }).format(hours);
+  } catch {
+    return `${hours}h`;
+  }
+}
+
 export function resolveLimit(value: number, hardMax: number) {
   return value < 0 ? hardMax : Math.min(value, hardMax);
 }

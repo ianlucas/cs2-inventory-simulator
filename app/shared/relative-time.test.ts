@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { expect, test } from "vitest";
-import { formatHours, formatRelativeTime } from "./relative-time";
+import { formatRelativeTime } from "./relative-time";
 
 const NOW = new Date("2026-10-21T12:00:00.000Z").getTime();
 
@@ -16,9 +16,4 @@ test("formatRelativeTime formats past and future times in whole units", () => {
   expect(
     formatRelativeTime(new Date("2026-10-26T00:00:00.000Z"), NOW, "en")
   ).toBe("in 4 days");
-});
-
-test("formatHours spells out the unit", () => {
-  expect(formatHours(1, "en")).toBe("1 hour");
-  expect(formatHours(24, "en")).toBe("24 hours");
 });

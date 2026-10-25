@@ -24,10 +24,8 @@ import { VIEWER_INSPECT_KINDS } from "~/viewer";
 import { clientGlobals } from "~/globals";
 import { getInventoryItemShareUrl } from "~/inventory.client";
 import { wearToString } from "~/shared/economy";
-import {
-  formatSimulatorDollars,
-  type UnboxingResult
-} from "~/shared/unboxing-league";
+import { formatSimulatorDollars } from "~/shared/number";
+import type { UnboxingResult } from "~/shared/unboxing-league";
 import { usePreferences, useRules, useTranslate, useUser } from "./app-context";
 import { useKeyRelease } from "./hooks/use-key-release";
 import { useTimedState } from "./hooks/use-timed-state";

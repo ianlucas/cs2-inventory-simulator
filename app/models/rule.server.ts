@@ -137,14 +137,10 @@ export class Rule<RuleName extends string, RuleValue> {
   }
 
   private resolve({ userOverrides, groupOverrides, rules }: StoredRuleValues) {
-    return this.parse(
+    const value =
       userOverrides.get(this.name) ??
-        groupOverrides.get(this.name) ??
-        rules.get(this.name)
-    );
-  }
-
-  private parse(value: string | undefined) {
+      groupOverrides.get(this.name) ??
+      rules.get(this.name);
     return this.toRuleValue(
       value !== undefined ? this.toValue(value) : this.defaultValue
     );
@@ -270,22 +266,25 @@ export class Rule<RuleName extends string, RuleValue> {
         orderBy: [{ group: { priority: "desc" } }, { groupId: "asc" }]
       })
     ]);
-    const ruleValue = byName(ruleRows).get(this.name);
-    const userOverrides = new Map(
-      userOverrideRows.map(({ userId, value }) => [userId, value])
-    );
-    const groupOverrides = new Map<string, string>();
+    const rules = byName(ruleRows);
+    const userOverrideRowsById = new Map<string, RuleRow[]>();
+    const groupOverrideRowsById = new Map<string, RuleRow[]>();
+    for (const { userId, value } of userOverrideRows) {
+      userOverrideRowsById.set(userId, [{ name: this.name, value }]);
+    }
     for (const { group, value } of groupOverrideRows) {
       for (const { userId } of group.users) {
-        if (!groupOverrides.has(userId)) {
-          groupOverrides.set(userId, value);
-        }
+        const rows = groupOverrideRowsById.get(userId) ?? [];
+        rows.push({ name: this.name, value });
+        groupOverrideRowsById.set(userId, rows);
       }
     }
     return (userId) =>
-      this.parse(
-        userOverrides.get(userId) ?? groupOverrides.get(userId) ?? ruleValue
-      );
+      this.resolve({
+        groupOverrides: byName(groupOverrideRowsById.get(userId) ?? []),
+        rules,
+        userOverrides: byName(userOverrideRowsById.get(userId) ?? [])
+      });
   }
 
   async isTrueForAnyone() {
@@ -778,7 +777,7 @@ export const appShowUnlockFeed = new Rule({
 export const appShowCommunity = new Rule({
   name: "appShowCommunity",
   type: "boolean",
-  defaultValue: true
+  defaultValue: false
 });
 
 export const communityRankingIntervalHours = new Rule({

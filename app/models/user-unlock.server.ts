@@ -15,13 +15,29 @@ import {
   type UnboxingResult
 } from "~/shared/unboxing-league";
 
-type Client = Pick<Prisma.TransactionClient, "userUnlock">;
+type Transaction = Prisma.TransactionClient;
+
+/**
+ * Profit from the summed payouts and prices of counted unlocks, in whole cents
+ * so equal profits compare equal.
+ */
+export function getUnboxingProfit({
+  payout,
+  price
+}: {
+  payout: Prisma.Decimal | null;
+  price: Prisma.Decimal | null;
+}) {
+  return roundSimulatorDollars(
+    (payout?.toNumber() ?? 0) - (price?.toNumber() ?? 0)
+  );
+}
 
 export async function getUnboxingBalance(
-  client: Client,
+  tx: Transaction,
   { budget, now, userId }: { budget: number; now: Date; userId: string }
 ) {
-  const { _sum } = await client.userUnlock.aggregate({
+  const { _sum } = await tx.userUnlock.aggregate({
     _sum: { payout: true, price: true },
     where: {
       counted: true,
@@ -29,9 +45,7 @@ export async function getUnboxingBalance(
       userId
     }
   });
-  return roundSimulatorDollars(
-    budget + (_sum.payout?.toNumber() ?? 0) - (_sum.price?.toNumber() ?? 0)
-  );
+  return roundSimulatorDollars(budget + getUnboxingProfit(_sum));
 }
 
 function priceUnlock(container: CS2EconomyItem, unlockedItem: CS2UnlockedItem) {
@@ -60,7 +74,7 @@ function priceUnlock(container: CS2EconomyItem, unlockedItem: CS2UnlockedItem) {
  * while the week's balance covers the container's price.
  */
 export async function recordUserUnlock(
-  client: Client,
+  tx: Transaction,
   {
     budget,
     container,
@@ -82,9 +96,9 @@ export async function recordUserUnlock(
     return undefined;
   }
   const { payout, price, rarity, statTrak } = priced;
-  const balance = await getUnboxingBalance(client, { budget, now, userId });
+  const balance = await getUnboxingBalance(tx, { budget, now, userId });
   const counted = balance >= price;
-  await client.userUnlock.create({
+  await tx.userUnlock.create({
     data: {
       containerId: container.id,
       counted,

@@ -10,12 +10,12 @@ import {
   type CS2UnlockableItem,
   ensure
 } from "@ianlucas/cs2-lib";
+import { DAY_IN_MS } from "./inactivity";
 
-export const UNBOXING_LEAGUE_FLOAT_CAP = 0.01;
 export const UNBOXING_LEAGUE_RANKING_SIZE = 5;
-export const WEEK_IN_MS = 7 * 24 * 60 * 60_000;
+export const WEEK_IN_MS = 7 * DAY_IN_MS;
 
-const DAY_IN_MS = 24 * 60 * 60_000;
+const UNBOXING_LEAGUE_FLOAT_CAP = 0.01;
 
 export interface UnboxingResult {
   balance: number;
@@ -32,9 +32,9 @@ export interface UnboxingDrop {
 // The chances of a drop group, a rarity with or without StatTrak, ordered from
 // the best group to the worst.
 interface DropGroup {
-  better: number;
-  noWear: number;
-  wear: number;
+  betterChance: number;
+  noWearChance: number;
+  wearChance: number;
 }
 
 interface ContainerOdds {
@@ -66,18 +66,22 @@ function getWearPercentile(unlockable: CS2UnlockableItem, wear?: number) {
   return Math.min(1, Math.max(UNBOXING_LEAGUE_FLOAT_CAP, percentile));
 }
 
-// Average of 1 / (better + wear * percentile) over a uniform percentile,
-// with percentiles under the cap paying as the cap.
-function getAveragePayout({ better, noWear, wear }: DropGroup) {
+// Average of 1 / (betterChance + wearChance * percentile) over a uniform
+// percentile, with percentiles under the cap paying as the cap.
+function getAveragePayout({
+  betterChance,
+  noWearChance,
+  wearChance
+}: DropGroup) {
   let average = 0;
-  if (wear > 0) {
-    const capped = better + wear * UNBOXING_LEAGUE_FLOAT_CAP;
+  if (wearChance > 0) {
+    const capped = betterChance + wearChance * UNBOXING_LEAGUE_FLOAT_CAP;
     average +=
-      (wear * UNBOXING_LEAGUE_FLOAT_CAP) / capped +
-      Math.log((better + wear) / capped);
+      (wearChance * UNBOXING_LEAGUE_FLOAT_CAP) / capped +
+      Math.log((betterChance + wearChance) / capped);
   }
-  if (noWear > 0) {
-    average += noWear / (better + wear + noWear);
+  if (noWearChance > 0) {
+    average += noWearChance / (betterChance + wearChance + noWearChance);
   }
   return average;
 }
@@ -92,11 +96,15 @@ function getContainerOdds(container: CS2EconomyItem): ContainerOdds {
     (a, b) => CS2_RARITY_ORDER.indexOf(b) - CS2_RARITY_ORDER.indexOf(a)
   );
   const groups = new Map<string, DropGroup>();
-  let better = 0;
+  let betterChance = 0;
   let price = 0;
   for (const rarity of rarities) {
     for (const statTrak of [true, false]) {
-      const group: DropGroup = { better, noWear: 0, wear: 0 };
+      const group: DropGroup = {
+        betterChance,
+        noWearChance: 0,
+        wearChance: 0
+      };
       for (const unlockable of unlockables) {
         if (unlockable.rarity !== rarity) {
           continue;
@@ -107,14 +115,14 @@ function getContainerOdds(container: CS2EconomyItem): ContainerOdds {
             ? unlockable.statTrakChance
             : 1 - unlockable.statTrakChance);
         if (getWearRange(unlockable) !== undefined) {
-          group.wear += chance;
+          group.wearChance += chance;
         } else {
-          group.noWear += chance;
+          group.noWearChance += chance;
         }
       }
       groups.set(getGroupKey(rarity, statTrak), group);
       price += getAveragePayout(group);
-      better += group.wear + group.noWear;
+      betterChance += group.wearChance + group.noWearChance;
     }
   }
   odds = {
@@ -141,8 +149,10 @@ export function getUnboxingPayout(
   );
   const percentile = getWearPercentile(unlockable, drop.wear);
   const chance =
-    group.better +
-    (percentile < 1 ? group.wear * percentile : group.wear + group.noWear);
+    group.betterChance +
+    (percentile < 1
+      ? group.wearChance * percentile
+      : group.wearChance + group.noWearChance);
   assert(chance > 0);
   return 1 / chance;
 }
@@ -170,24 +180,19 @@ export function getUnboxingWeekStart(date: Date) {
   );
 }
 
-export function formatSimulatorDollars(
-  value: number,
-  locale?: string,
-  signed = false
+export function getUnboxingWeekStarts(now: Date) {
+  const weekStart = getUnboxingWeekStart(now);
+  return {
+    lastWeekStart: new Date(weekStart.getTime() - WEEK_IN_MS),
+    weekStart
+  };
+}
+
+export function findUnboxingWeek<T extends { weekStart: Date }>(
+  items: T[],
+  weekStart: Date
 ) {
-  const absolute = Math.abs(value);
-  const sign = value < 0 ? "-" : signed && value > 0 ? "+" : "";
-  try {
-    const formatted = new Intl.NumberFormat(
-      locale,
-      absolute >= 10_000
-        ? { maximumFractionDigits: 1, notation: "compact" }
-        : { maximumFractionDigits: 2, minimumFractionDigits: 2 }
-    ).format(absolute);
-    return `${sign}S$${formatted}`;
-  } catch {
-    return `${sign}S$${absolute.toFixed(2)}`;
-  }
+  return items.find((item) => item.weekStart.getTime() === weekStart.getTime());
 }
 
 export interface UnboxingLeaguePlayer {

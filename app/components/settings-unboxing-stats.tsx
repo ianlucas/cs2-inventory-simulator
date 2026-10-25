@@ -4,29 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { assert } from "@ianlucas/cs2-lib";
-import clsx from "clsx";
 import { useRouteLoaderData } from "react-router";
 import type { loader as settingsLoader } from "~/routes/settings._index";
-import { format } from "~/shared/number";
+import { format, formatSimulatorDollars } from "~/shared/number";
 import { formatRelativeTime } from "~/shared/relative-time";
-import { formatSimulatorDollars } from "~/shared/unboxing-league";
 import { usePreferences, useTranslate } from "./app-context";
 import { SettingsLabel } from "./settings-label";
-import { BestDrop } from "./unboxing-league-ranking";
-
-function Profit({ value }: { value: number }) {
-  const { lang } = usePreferences();
-  return (
-    <span
-      className={clsx(
-        "font-display tabular-nums",
-        value < 0 ? "text-red-400" : "text-emerald-400"
-      )}
-    >
-      {formatSimulatorDollars(value, lang, true)}
-    </span>
-  );
-}
+import { BestDrop, Profit } from "./unboxing-league-ranking";
 
 export function SettingsUnboxingStats() {
   const translate = useTranslate();
@@ -35,7 +19,7 @@ export function SettingsUnboxingStats() {
     "routes/settings._index"
   );
   assert(data?.stats !== undefined);
-  const { now, stats } = data;
+  const { isViewerPrivate, now, stats } = data;
   const { lastWeek, rank } = stats;
 
   return (
@@ -85,7 +69,9 @@ export function SettingsUnboxingStats() {
               </span>
             </>
           ) : (
-            translate("CommunityNotRanked")
+            translate(
+              isViewerPrivate ? "CommunityProfilePrivate" : "CommunityNotRanked"
+            )
           )}
         </span>
       </SettingsLabel>

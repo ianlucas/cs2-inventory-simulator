@@ -13,19 +13,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2Economy } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
 import { getSoundProps } from "~/interface-sounds";
-import type {
-  UnboxingLeagueRanking as UnboxingLeagueRankingData,
-  UnboxingLeagueRow
-} from "~/models/unboxing-league.server";
-import { format } from "~/shared/number";
-import { formatSimulatorDollars } from "~/shared/unboxing-league";
+import type { loader } from "~/routes/community._index";
+import type { SerializeFrom } from "~/shared/misc";
+import { format, formatSimulatorDollars } from "~/shared/number";
 import { usePreferences, useTranslate } from "./app-context";
 import { useNameItemString } from "./hooks/use-name-item";
 import { ItemImage } from "./item-image";
 
+type RankingData = SerializeFrom<typeof loader>["league"]["thisWeek"];
+
+type RowData = RankingData["rows"][number];
+
 const ROW_ANIMATION_STAGGER_MS = 60;
 
-const RANKING_STYLES = {
+const RANKING_KINDS = {
   lastWeek: {
     accent: "before:bg-sky-400",
     emptyViewer: "CommunityNotPlayedLastWeek",
@@ -98,7 +99,28 @@ function RankMovement({
   );
 }
 
-export function BestDrop({ drop }: { drop: UnboxingLeagueRow["bestDrop"] }) {
+export function Profit({
+  className,
+  value
+}: {
+  className?: string;
+  value: number;
+}) {
+  const { lang } = usePreferences();
+  return (
+    <span
+      className={clsx(
+        "font-display tabular-nums",
+        value < 0 ? "text-red-400" : "text-emerald-400",
+        className
+      )}
+    >
+      {formatSimulatorDollars(value, lang, true)}
+    </span>
+  );
+}
+
+export function BestDrop({ drop }: { drop: RowData["bestDrop"] }) {
   const translate = useTranslate();
   const nameItemString = useNameItemString();
   const { lang } = usePreferences();
@@ -148,7 +170,7 @@ function RankingRow({
   hasMovement: boolean;
   isViewer: boolean;
   rankedCount?: number;
-  row: UnboxingLeagueRow;
+  row: RowData;
 }) {
   const translate = useTranslate();
   const { lang } = usePreferences();
@@ -200,50 +222,45 @@ function RankingRow({
           )}
         </span>
         <BestDrop drop={row.bestDrop} />
-        <span
-          className={clsx(
-            "font-display min-w-20 shrink-0 text-right tabular-nums",
-            row.profit < 0 ? "text-red-400" : "text-emerald-400"
-          )}
-        >
-          {formatSimulatorDollars(row.profit, lang, true)}
-        </span>
+        <Profit className="min-w-20 shrink-0 text-right" value={row.profit} />
       </a>
     </li>
   );
 }
 
 export function UnboxingLeagueRanking({
-  index,
+  isViewerPrivate,
   kind,
+  order,
   ranking: { hasMovement, rankedCount, rows, viewer }
 }: {
-  index: number;
-  kind: keyof typeof RANKING_STYLES;
-  ranking: UnboxingLeagueRankingData;
+  isViewerPrivate: boolean;
+  kind: keyof typeof RANKING_KINDS;
+  order: number;
+  ranking: RankingData;
 }) {
   const translate = useTranslate();
-  const styles = RANKING_STYLES[kind];
+  const { accent, emptyViewer, icon, iconColor, title } = RANKING_KINDS[kind];
   const showMovement = kind === "thisWeek" && hasMovement;
   const isViewerOnTop =
     viewer != null && rows.some((row) => row.userId === viewer.userId);
   // Rankings slide in one after another, as do their rows.
-  const firstAnimationIndex = index * (rows.length + 1);
+  const firstAnimationIndex = order * (rows.length + 1);
 
   return (
     <section
       className={clsx(
         "relative overflow-hidden rounded-sm border border-white/10 bg-neutral-900/70 shadow-lg backdrop-blur-sm before:absolute before:inset-x-0 before:top-0 before:h-0.5",
-        styles.accent
+        accent
       )}
     >
       <header className="flex items-center gap-3 border-b border-white/10 bg-linear-to-r from-white/10 to-transparent px-4 py-3">
         <FontAwesomeIcon
-          className={clsx("h-6 shrink-0", styles.iconColor)}
-          icon={styles.icon}
+          className={clsx("h-6 shrink-0", iconColor)}
+          icon={icon}
         />
         <h2 className="font-display min-w-0 flex-1 truncate text-xl font-semibold text-white uppercase">
-          {translate(styles.title)}
+          {translate(title)}
         </h2>
       </header>
       {rows.length > 0 ? (
@@ -274,7 +291,7 @@ export function UnboxingLeagueRanking({
       )}
       {viewer === null && (
         <p className="border-t border-white/10 px-4 py-3 text-center text-sm text-neutral-400">
-          {translate(styles.emptyViewer)}
+          {translate(isViewerPrivate ? "CommunityProfilePrivate" : emptyViewer)}
         </p>
       )}
     </section>

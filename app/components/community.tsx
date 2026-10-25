@@ -5,9 +5,10 @@
 
 import { faTrophy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { UnboxingLeague } from "~/models/unboxing-league.server";
-import { formatHours, formatRelativeTime } from "~/shared/relative-time";
-import { formatSimulatorDollars } from "~/shared/unboxing-league";
+import type { loader } from "~/routes/community._index";
+import type { SerializeFrom } from "~/shared/misc";
+import { formatHours, formatSimulatorDollars } from "~/shared/number";
+import { formatRelativeTime } from "~/shared/relative-time";
 import { usePreferences, useTranslate } from "./app-context";
 import { InfoIcon } from "./info-icon";
 import { TooltipBubble, useTooltip } from "./tooltip";
@@ -38,14 +39,10 @@ function CommunityInfo({ text }: { text: string }) {
 export function Community({
   budget,
   intervalHours,
+  isViewerPrivate,
   league: { lastWeek, resetsAt, thisWeek },
   now
-}: {
-  budget: number;
-  intervalHours: number;
-  league: UnboxingLeague;
-  now: number;
-}) {
+}: SerializeFrom<typeof loader>) {
   const translate = useTranslate();
   const { lang } = usePreferences();
   const generatedAt = thisWeek.generatedAt;
@@ -85,8 +82,18 @@ export function Community({
         </p>
       </div>
       <div className="grid items-start gap-4 lg:grid-cols-2">
-        <UnboxingLeagueRanking index={0} kind="thisWeek" ranking={thisWeek} />
-        <UnboxingLeagueRanking index={1} kind="lastWeek" ranking={lastWeek} />
+        <UnboxingLeagueRanking
+          isViewerPrivate={isViewerPrivate}
+          kind="thisWeek"
+          order={0}
+          ranking={thisWeek}
+        />
+        <UnboxingLeagueRanking
+          isViewerPrivate={isViewerPrivate}
+          kind="lastWeek"
+          order={1}
+          ranking={lastWeek}
+        />
       </div>
     </div>
   );

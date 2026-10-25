@@ -9,6 +9,7 @@ import { api } from "~/api.server";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/middleware.server";
 import {
+  appShowCommunity,
   communityWeeklyBudget,
   inventoryItemAllowUnlockContainer
 } from "~/models/rule.server";
@@ -42,7 +43,10 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       keyUid: nonNegativeInt.optional()
     })
     .parse(await request.json());
-  const budget = await communityWeeklyBudget.get();
+  const [isLeagueOn, budget] = await Promise.all([
+    appShowCommunity.for(user.id).get(),
+    communityWeeklyBudget.get()
+  ]);
   let container: CS2EconomyItem | undefined;
   let keyId: number | undefined;
   let unlockedItem: CS2UnlockedItem | undefined;
@@ -57,7 +61,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       inventory.unlockContainer(unlockedItem, caseUid, keyUid);
     },
     async onSave(tx) {
-      if (container !== undefined && unlockedItem !== undefined) {
+      if (isLeagueOn && container !== undefined && unlockedItem !== undefined) {
         unboxing = await recordUserUnlock(tx, {
           budget,
           container,
