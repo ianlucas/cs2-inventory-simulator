@@ -6,11 +6,13 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
   faBoxesStacked,
+  faChartSimple,
   faHammer,
   faSliders,
   faVolumeHigh
 } from "@fortawesome/free-solid-svg-icons";
 import { ComponentType } from "react";
+import { useRouteLoaderData } from "react-router";
 import {
   useInventory,
   usePreferences,
@@ -20,8 +22,10 @@ import {
 } from "~/components/app-context";
 import { SettingsMasterVolume } from "~/components/settings-master-volume";
 import { SettingsResetInventory } from "~/components/settings-reset-inventory";
+import { SettingsUnboxingStats } from "~/components/settings-unboxing-stats";
 import { backgrounds } from "~/data/backgrounds";
 import { languages } from "~/data/languages";
+import type { loader as settingsLoader } from "~/routes/settings._index";
 
 // Preferences as submitted by the settings form, where an empty background
 // means random and an empty item language follows the interface language.
@@ -66,6 +70,9 @@ export function useSettingsGroups(): SettingsGroup[] {
   const { appShowUnlockFeed, viewerEnabled } = useRules();
   const user = useUser();
   const [inventory] = useInventory();
+  const stats = useRouteLoaderData<typeof settingsLoader>(
+    "routes/settings._index"
+  )?.stats;
   const languageOptions = languages.map(({ countries, name }) => ({
     image: `/images/flags/${countries[0].toUpperCase()}.svg`,
     label: translate(`Language$${name}`),
@@ -161,6 +168,17 @@ export function useSettingsGroups(): SettingsGroup[] {
           type: "toggle",
           key: "hideNewItemLabel",
           label: translate("SettingsHideNewLabel")
+        }
+      ]
+    },
+    {
+      id: "stats",
+      icon: faChartSimple,
+      label: translate("SettingsStats"),
+      fields: [
+        stats !== undefined && {
+          type: "custom",
+          component: SettingsUnboxingStats
         }
       ]
     }

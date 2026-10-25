@@ -20,6 +20,7 @@ import {
 import { unlockNonSpecialItem } from "~/shared/economy";
 import { postJson } from "~/shared/fetch";
 import { range } from "~/shared/number";
+import type { UnboxingResult } from "~/shared/unboxing-league";
 import { playSound } from "~/sound.client";
 import { dispatchSyncError, sync } from "~/sync";
 import { useInventory, useTranslate, useUser } from "./app-context";
@@ -38,14 +39,14 @@ const fakeOdds = new ConVar(
 );
 
 async function unlockCase(caseUid: number, keyUid?: number) {
-  const { unlockedItem, syncedAt } =
+  const { unboxing, unlockedItem, syncedAt } =
     await postJson<ApiActionUnlockCaseActionData>(ApiActionUnlockCaseUrl, {
       syncedAt: sync.syncedAt,
       caseUid,
       keyUid
     });
   sync.syncedAt = syncedAt;
-  return unlockedItem;
+  return { unboxing, unlockedItem };
 }
 
 export function UnlockCase({
@@ -57,7 +58,7 @@ export function UnlockCase({
   caseUid: number;
   keyUid?: number;
   onClose: () => void;
-  onInspect: (uid: number) => void;
+  onInspect: (uid: number, unboxing?: UnboxingResult) => void;
 }) {
   const user = useUser();
   const translate = useTranslate();
@@ -73,6 +74,7 @@ export function UnlockCase({
   const unlockedItemRef = useRef<{
     actual: CS2UnlockedItem;
     displayed: CS2UnlockedItem;
+    unboxing?: UnboxingResult;
   }>(undefined);
 
   const caseItem = useInventoryItem(caseUid);
@@ -114,12 +116,13 @@ export function UnlockCase({
 
   function handleUnlockComplete() {
     const rarity = unlockedItemRef.current?.actual.rarity;
+    const unboxing = unlockedItemRef.current?.unboxing;
     const unlockedUid = addUnlockedItemToInventory();
     if (unlockedUid !== undefined) {
       playSound(
         `case_awarded_${rarity as "common" | "uncommon" | "rare" | "mythical" | "legendary" | "ancient"}`
       );
-      onInspect(unlockedUid);
+      onInspect(unlockedUid, unboxing);
     }
     handleClose();
   }
@@ -128,9 +131,9 @@ export function UnlockCase({
     try {
       setIsDisplaying(false);
       setCanUnlock(false);
-      const actualItem =
+      const { unboxing, unlockedItem: actualItem } =
         user === undefined
-          ? caseItem.unlockContainer()
+          ? { unboxing: undefined, unlockedItem: caseItem.unlockContainer() }
           : await unlockCase(caseUid, keyUid);
       const displayedItem = fakeOdds.toBoolean()
         ? caseItem.unlockContainer({
@@ -139,7 +142,8 @@ export function UnlockCase({
         : actualItem;
       unlockedItemRef.current = {
         actual: actualItem,
-        displayed: displayedItem
+        displayed: displayedItem,
+        unboxing
       };
       if (isClosingRef.current) {
         addUnlockedItemToInventory();

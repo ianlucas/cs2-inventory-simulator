@@ -16,9 +16,17 @@ export function size<T>(arr: T[] | undefined) {
   return arr?.length ?? 0;
 }
 
-export function format(n: number) {
+export function format(n: number, locale?: string) {
   try {
-    return new Intl.NumberFormat().format(n);
+    return new Intl.NumberFormat(locale).format(n);
+  } catch {
+    return n.toString();
+  }
+}
+
+export function formatCompact(n: number, locale?: string) {
+  try {
+    return new Intl.NumberFormat(locale, { notation: "compact" }).format(n);
   } catch {
     return n.toString();
   }
@@ -32,6 +40,26 @@ export function formatUsd(n: number) {
     }).format(n);
   } catch {
     return n.toString();
+  }
+}
+
+export function formatSimulatorDollars(
+  value: number,
+  locale?: string,
+  signed = false
+) {
+  const absolute = Math.abs(value);
+  const sign = value < 0 ? "-" : signed && value > 0 ? "+" : "";
+  try {
+    const formatted = new Intl.NumberFormat(
+      locale,
+      absolute >= 10_000
+        ? { maximumFractionDigits: 1, notation: "compact" }
+        : { maximumFractionDigits: 2, minimumFractionDigits: 2 }
+    ).format(absolute);
+    return `${sign}S$${formatted}`;
+  } catch {
+    return `${sign}S$${absolute.toFixed(2)}`;
   }
 }
 

@@ -18,15 +18,17 @@ export function useRootLayout(): {
   )?.user;
   // Profiles render the owner's background and inventory instead.
   const isProfile = profile !== undefined;
-  const isLoadouts = useMatches().some(
-    ({ id }) => id === "routes/loadout._index"
+  const matches = useMatches();
+  const isLoadouts = matches.some(({ id }) => id === "routes/loadout._index");
+  const isCommunity = matches.some(
+    ({ id }) => id === "routes/community._index"
   );
 
   return {
     background: !isProfile,
     footer: true,
     header: true,
-    inventory: !isProfile && !isLoadouts,
+    inventory: !isProfile && !isLoadouts && !isCommunity,
     profile
   };
 }

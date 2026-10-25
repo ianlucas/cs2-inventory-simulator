@@ -24,7 +24,9 @@ import { VIEWER_INSPECT_KINDS } from "~/viewer";
 import { clientGlobals } from "~/globals";
 import { getInventoryItemShareUrl } from "~/inventory.client";
 import { wearToString } from "~/shared/economy";
-import { usePreferences, useTranslate, useUser } from "./app-context";
+import { formatSimulatorDollars } from "~/shared/number";
+import type { UnboxingResult } from "~/shared/unboxing-league";
+import { usePreferences, useRules, useTranslate, useUser } from "./app-context";
 import { useKeyRelease } from "./hooks/use-key-release";
 import { useTimedState } from "./hooks/use-timed-state";
 import { useViewer } from "./hooks/use-viewer";
@@ -45,6 +47,7 @@ interface InspectItemProps {
   onUnsealGraffiti?: (uid: number) => void;
   /** Credited in the share URL instead of the signed-in user. */
   ownerId?: string;
+  unboxing?: UnboxingResult;
 }
 
 export function InspectItemHeader({
@@ -178,6 +181,26 @@ function InspectItemShareButton({
   );
 }
 
+function InspectItemUnboxing({ unboxing }: { unboxing?: UnboxingResult }) {
+  const translate = useTranslate();
+  const { lang, statsForNerds } = usePreferences();
+  const { appShowCommunity } = useRules();
+  if (!statsForNerds || !appShowCommunity || unboxing === undefined) {
+    return null;
+  }
+  return (
+    <div className="font-display mb-2 text-center text-sm font-bold text-neutral-300 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
+      {unboxing.counted
+        ? translate(
+            "InspectUnboxingPayout",
+            formatSimulatorDollars(unboxing.payout, lang),
+            formatSimulatorDollars(unboxing.balance, lang)
+          )
+        : translate("InspectUnboxingNotCounted")}
+    </div>
+  );
+}
+
 function InspectItemDescription({ item }: { item: CS2InventoryItem }) {
   const translate = useTranslate();
   const isGraffitiWithCharges = item.isGraffiti() && item.hasCharges();
@@ -237,7 +260,8 @@ function InspectItem3d({
   item,
   onClose,
   onUnsealGraffiti,
-  ownerId
+  ownerId,
+  unboxing
 }: InspectItemProps) {
   const translate = useTranslate();
   const { api, viewerProps } = useViewer({ item });
@@ -251,6 +275,7 @@ function InspectItem3d({
         onClose={onClose}
         onUnsealGraffiti={onUnsealGraffiti}
         ownerId={ownerId}
+        unboxing={unboxing}
       />
     );
   }
@@ -261,6 +286,7 @@ function InspectItem3d({
       viewerProps={viewerProps}
     >
       <div className="pointer-events-none absolute bottom-8 left-0 w-full">
+        <InspectItemUnboxing unboxing={unboxing} />
         <InspectItemDescription item={item} />
         <UseItemFooter
           left={
@@ -300,7 +326,8 @@ function InspectItem2d({
   item,
   onClose,
   onUnsealGraffiti,
-  ownerId
+  ownerId,
+  unboxing
 }: InspectItemProps) {
   const translate = useTranslate();
   const { statsForNerds } = usePreferences();
@@ -349,6 +376,7 @@ function InspectItem2d({
               </div>
             </div>
             <div className="absolute bottom-8 left-0 w-full">
+              <InspectItemUnboxing unboxing={unboxing} />
               <InspectItemDescription item={item} />
               <UseItemFooter
                 className="mt-2 max-w-5xl px-8 lg:w-5xl"
@@ -401,7 +429,8 @@ export function InspectItem({
   item,
   onClose,
   onUnsealGraffiti,
-  ownerId
+  ownerId,
+  unboxing
 }: InspectItemProps) {
   const { canUse3d } = useViewerAvailability(item, {
     kinds: VIEWER_INSPECT_KINDS
@@ -425,6 +454,7 @@ export function InspectItem({
       onClose={onClose}
       onUnsealGraffiti={onUnsealGraffiti}
       ownerId={ownerId}
+      unboxing={unboxing}
     />
   ) : (
     <InspectItem2d
@@ -432,6 +462,7 @@ export function InspectItem({
       onClose={onClose}
       onUnsealGraffiti={onUnsealGraffiti}
       ownerId={ownerId}
+      unboxing={unboxing}
     />
   );
 }

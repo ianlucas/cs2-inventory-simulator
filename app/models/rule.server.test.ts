@@ -205,3 +205,25 @@ test("rule.get and rule.for resolve the same way as Rule.getMany", async () => {
   expect(groupRuleFindMany).not.toHaveBeenCalled();
   expect(await appName.for(userId).get()).toBe("Group");
 });
+
+test("rule.forUsers resolves each user the way rule.for does", async () => {
+  ruleFindMany.mockResolvedValue([{ name: "inventoryMaxItems", value: "100" }]);
+  userRuleFindMany.mockResolvedValue([{ userId: "a", value: "300" }]);
+  groupRuleFindMany.mockResolvedValue([
+    { group: { users: [{ userId: "a" }, { userId: "b" }] }, value: "200" },
+    { group: { users: [{ userId: "b" }, { userId: "c" }] }, value: "150" }
+  ]);
+  const resolve = await inventoryMaxItems.forUsers(["a", "b", "c", "d"]);
+  expect(["a", "b", "c", "d"].map(resolve)).toEqual([300, 200, 150, 100]);
+  expect(groupRuleFindMany).toHaveBeenCalledWith(
+    expect.objectContaining({
+      orderBy: [{ group: { priority: "desc" } }, { groupId: "asc" }]
+    })
+  );
+});
+
+test("rule.forUsers falls back to the default without a stored rule", async () => {
+  mockRows({});
+  const resolve = await inventoryMaxItems.forUsers(["a"]);
+  expect(resolve("a")).toBe(inventoryMaxItems.defaultValue);
+});

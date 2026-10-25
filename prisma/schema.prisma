@@ -22,25 +22,27 @@ enum CS2ItemExterior {
 }
 
 model User {
-  activeLoadout       UserLoadout?             @relation("ActiveLoadout", fields: [activeLoadoutId], references: [id], onDelete: SetNull)
-  activeLoadoutId     String?                  @unique
-  apiResponseCaches   UserApiResponseCache[]
-  authTokens          ApiAuthToken[]
-  avatar              String
-  createdAt           DateTime                 @default(now())
-  groups              UserGroup[]
-  id                  String                   @id
-  inventoryItems      UserInventoryItem[]
-  inventoryProjection UserInventoryProjection?
-  inventoryRecoveries UserInventoryRecovery[]
-  lastSeenAt          DateTime                 @default(now())
-  loadouts            UserLoadout[]            @relation("UserLoadouts")
-  name                String
-  rawInventory        String?
-  overrides           UserRule[]
-  preferences         UserPreference?
-  syncedAt            DateTime                 @default(now())
-  updatedAt           DateTime                 @updatedAt
+  activeLoadout         UserLoadout?             @relation("ActiveLoadout", fields: [activeLoadoutId], references: [id], onDelete: SetNull)
+  activeLoadoutId       String?                  @unique
+  apiResponseCaches     UserApiResponseCache[]
+  authTokens            ApiAuthToken[]
+  avatar                String
+  createdAt             DateTime                 @default(now())
+  groups                UserGroup[]
+  id                    String                   @id
+  inventoryItems        UserInventoryItem[]
+  inventoryProjection   UserInventoryProjection?
+  inventoryRecoveries   UserInventoryRecovery[]
+  lastSeenAt            DateTime                 @default(now())
+  loadouts              UserLoadout[]            @relation("UserLoadouts")
+  name                  String
+  rawInventory          String?
+  overrides             UserRule[]
+  preferences           UserPreference?
+  syncedAt              DateTime                 @default(now())
+  unboxingLeagueEntries UnboxingLeagueEntry[]
+  unlocks               UserUnlock[]
+  updatedAt             DateTime                 @updatedAt
 
   @@index([syncedAt])
 }
@@ -291,4 +293,49 @@ model RateLimitBucket {
   key       String   @id
   tokens    Float
   updatedAt DateTime
+}
+
+model UserUnlock {
+  containerId Int
+  counted     Boolean
+  createdAt   DateTime @default(now())
+  id          String   @id @default(uuid())
+  itemId      Int
+  keyId       Int?
+  payout      Decimal  @db.Decimal(18, 2)
+  price       Decimal  @db.Decimal(18, 2)
+  rarity      String
+  seed        Int?
+  statTrak    Boolean
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  wear        Float?
+
+  @@index([userId, createdAt])
+  @@index([createdAt])
+}
+
+model UnboxingLeagueRanking {
+  entries             UnboxingLeagueEntry[]
+  generatedAt         DateTime
+  previousGeneratedAt DateTime?
+  rankedCount         Int
+  weekStart           DateTime              @id
+}
+
+model UnboxingLeagueEntry {
+  bestItemId   Int
+  bestPayout   Decimal               @db.Decimal(18, 2)
+  bestStatTrak Boolean
+  bestWear     Float?
+  previousRank Int?
+  profit       Decimal               @db.Decimal(18, 2)
+  rank         Int
+  ranking      UnboxingLeagueRanking @relation(fields: [weekStart], references: [weekStart], onDelete: Cascade)
+  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  weekStart    DateTime
+
+  @@id([weekStart, userId])
+  @@index([weekStart, rank])
 }

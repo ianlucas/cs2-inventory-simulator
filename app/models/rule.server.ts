@@ -234,6 +234,59 @@ export class Rule<RuleName extends string, RuleValue> {
     );
   }
 
+  /**
+   * Resolves the rule for many users at once, the same way `for` does.
+   */
+  async forUsers(userIds: string[]): Promise<(userId: string) => RuleValue> {
+    const [ruleRows, userOverrideRows, groupOverrideRows] = await Promise.all([
+      prisma.rule.findMany({
+        select: { name: true, value: true },
+        where: { name: this.name }
+      }),
+      prisma.userRule.findMany({
+        select: { userId: true, value: true },
+        where: { name: this.name, userId: { in: userIds } }
+      }),
+      prisma.groupRule.findMany({
+        select: {
+          group: {
+            select: {
+              users: {
+                select: { userId: true },
+                where: { userId: { in: userIds } }
+              }
+            }
+          },
+          value: true
+        },
+        where: {
+          name: this.name,
+          group: { users: { some: { userId: { in: userIds } } } }
+        },
+        orderBy: [{ group: { priority: "desc" } }, { groupId: "asc" }]
+      })
+    ]);
+    const rules = byName(ruleRows);
+    const userOverrideRowsById = new Map<string, RuleRow[]>();
+    const groupOverrideRowsById = new Map<string, RuleRow[]>();
+    for (const { userId, value } of userOverrideRows) {
+      userOverrideRowsById.set(userId, [{ name: this.name, value }]);
+    }
+    for (const { group, value } of groupOverrideRows) {
+      for (const { userId } of group.users) {
+        const rows = groupOverrideRowsById.get(userId) ?? [];
+        rows.push({ name: this.name, value });
+        groupOverrideRowsById.set(userId, rows);
+      }
+    }
+    return (userId) =>
+      this.resolve({
+        groupOverrides: byName(groupOverrideRowsById.get(userId) ?? []),
+        rules,
+        userOverrides: byName(userOverrideRowsById.get(userId) ?? [])
+      });
+  }
+
   async isTrueForAnyone() {
     const where = { name: this.name, value: "true" };
     const [rule, userOverrides, groupOverrides] = await Promise.all([
@@ -719,6 +772,24 @@ export const appShowUnlockFeed = new Rule({
   name: "appShowUnlockFeed",
   type: "boolean",
   defaultValue: true
+});
+
+export const appShowCommunity = new Rule({
+  name: "appShowCommunity",
+  type: "boolean",
+  defaultValue: false
+});
+
+export const communityRankingIntervalHours = new Rule({
+  name: "communityRankingIntervalHours",
+  type: "number",
+  defaultValue: 1
+});
+
+export const communityWeeklyBudget = new Rule({
+  name: "communityWeeklyBudget",
+  type: "number",
+  defaultValue: 1000
 });
 
 export const viewerEnabled = new Rule({

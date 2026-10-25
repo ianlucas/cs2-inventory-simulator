@@ -4,14 +4,16 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { useState } from "react";
+import type { UnboxingResult } from "~/shared/unboxing-league";
 
 export function useInspectItem() {
   const [inspectItem, setInspectItem] = useState<{
     uid: number;
+    unboxing?: UnboxingResult;
   }>();
 
-  function handleInspectItem(uid: number) {
-    return setInspectItem({ uid });
+  function handleInspectItem(uid: number, unboxing?: UnboxingResult) {
+    return setInspectItem({ uid, unboxing });
   }
 
   function closeInspectItem() {

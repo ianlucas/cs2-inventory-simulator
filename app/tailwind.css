@@ -29,6 +29,7 @@
   --animate-loadout-drag-start: loadout-drag-start 150ms ease-out both;
   --animate-loadout-drop: loadout-drop 200ms ease-out;
   --animate-modal-button-slide-in: modal-button-slide-in 250ms ease-in-out;
+  --animate-community-row-in: community-row-in 350ms ease-out both;
 
   --color-ct: rgb(150 200 250);
   --color-t: #eabe54;
@@ -301,6 +302,13 @@
   from {
     opacity: 0;
     translate: -30px 0;
+  }
+}
+
+@keyframes community-row-in {
+  from {
+    opacity: 0;
+    translate: -24px 0;
   }
 }
 
