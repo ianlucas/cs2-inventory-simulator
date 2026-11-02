@@ -175,6 +175,7 @@ export const thai = {
   HeaderSignInLabel: "เข้าสู่ระบบ",
   HeaderSignOutLabel: "ออกจากระบบ",
   InspectClose: /* csgo_thai.txt */"ปิด",
+  InspectViewHighlight: /* csgo_thai.txt */"ดูไฮไลต์",
   InspectUnboxingNotCounted: "ไม่นับ · งบประมาณหมด",
   InspectUnboxingPayout: "{1} · ยอดคงเหลือ {2}",
   InventoryApplyPatch: /* csgo_thai.txt */"ใช้งานแพตช์ปัก",

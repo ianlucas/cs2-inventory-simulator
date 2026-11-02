@@ -175,6 +175,7 @@ export const latam = {
   HeaderSignInLabel: "Iniciar sesión para sincronizar",
   HeaderSignOutLabel: "Cerrar sesión",
   InspectClose: /* csgo_latam.txt */"Cerrar",
+  InspectViewHighlight: /* csgo_latam.txt */"Ver mejores jugadas",
   InspectUnboxingNotCounted: "No cuenta · Sin saldo",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_latam.txt */"Aplicar parche",

@@ -175,6 +175,7 @@ export const spanish = {
   HeaderSignInLabel: "Iniciar sesión",
   HeaderSignOutLabel: "Cerrar sesión",
   InspectClose: /* csgo_spanish.txt */"Cerrar",
+  InspectViewHighlight: /* csgo_spanish.txt */"Ver momento destacado",
   InspectUnboxingNotCounted: "No cuenta · Sin saldo",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_spanish.txt */"Aplicar parche",

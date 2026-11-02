@@ -173,6 +173,7 @@ export const norwegian = {
   HeaderSignInLabel: "Logg på for å synkronisere",
   HeaderSignOutLabel: "Logg ut",
   InspectClose: /* csgo_norwegian.txt */"Lukk",
+  InspectViewHighlight: /* csgo_norwegian.txt */"Se høydepunkt",
   InspectUnboxingNotCounted: "Teller ikke · Budsjettet er brukt opp",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_norwegian.txt */"Påfør lapp",

@@ -174,6 +174,7 @@ export const swedish = {
   HeaderSignInLabel: "Logga in",
   HeaderSignOutLabel: "Logga ut",
   InspectClose: /* csgo_swedish.txt */"Stäng",
+  InspectViewHighlight: /* csgo_swedish.txt */"Se höjdpunkt",
   InspectUnboxingNotCounted: "Räknas inte · Budgeten är slut",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_swedish.txt */"Fäst tygmärke",

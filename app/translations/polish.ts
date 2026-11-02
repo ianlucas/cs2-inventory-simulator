@@ -174,6 +174,7 @@ export const polish = {
   HeaderSignInLabel: "Zaloguj się, aby synchronizować",
   HeaderSignOutLabel: "Wyloguj",
   InspectClose: /* csgo_polish.txt */"Zamknij",
+  InspectViewHighlight: /* csgo_polish.txt */"Pokaż zagranie",
   InspectUnboxingNotCounted: "Nie liczy się · Brak budżetu",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_polish.txt */"Użyj naszywki",

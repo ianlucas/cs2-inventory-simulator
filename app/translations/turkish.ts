@@ -175,6 +175,7 @@ export const turkish = {
   HeaderSignInLabel: "Giriş yap",
   HeaderSignOutLabel: "Çıkış yap",
   InspectClose: /* csgo_turkish.txt */"Kapat",
+  InspectViewHighlight: /* csgo_turkish.txt */"Önemli Anları Seyret",
   InspectUnboxingNotCounted: "Sayılmadı · Bütçe bitti",
   InspectUnboxingPayout: "{1} · Bakiye {2}",
   InventoryApplyPatch: /* csgo_turkish.txt */"Yamayı İliştir",

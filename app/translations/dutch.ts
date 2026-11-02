@@ -174,6 +174,7 @@ export const dutch = {
   HeaderSignInLabel: "Inloggen om te synchroniseren",
   HeaderSignOutLabel: "Uitloggen",
   InspectClose: /* csgo_dutch.txt */"Sluiten",
+  InspectViewHighlight: /* csgo_dutch.txt */"Highlight kijken",
   InspectUnboxingNotCounted: "Telt niet mee · Budget op",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_dutch.txt */"Embleem aanbrengen",

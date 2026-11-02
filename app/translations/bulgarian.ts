@@ -175,6 +175,7 @@ export const bulgarian = {
   HeaderSignInLabel: "Влезте за синхронизация",
   HeaderSignOutLabel: "Изход",
   InspectClose: /* csgo_bulgarian.txt */"Затваряне",
+  InspectViewHighlight: /* csgo_bulgarian.txt */"Преглед на най-добър момент",
   InspectUnboxingNotCounted: "Не се брои · Бюджетът е изчерпан",
   InspectUnboxingPayout: "{1} · Баланс {2}",
   InventoryApplyPatch: /* csgo_bulgarian.txt */"Прилагане на нашивка",

@@ -173,6 +173,7 @@ export const french = {
   HeaderSignInLabel: "Se connecter pour synchroniser",
   HeaderSignOutLabel: "Se déconnecter",
   InspectClose: /* csgo_french.txt */"Fermer",
+  InspectViewHighlight: /* csgo_french.txt */"Voir l'action décisive",
   InspectUnboxingNotCounted: "Non comptabilisé · Budget épuisé",
   InspectUnboxingPayout: "{1} · Solde {2}",
   InventoryApplyPatch: /* csgo_french.txt */"Appliquer l'écusson",

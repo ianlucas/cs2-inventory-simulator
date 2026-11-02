@@ -159,6 +159,7 @@ const STRINGS_FROM_GAME: Record<string, string | string[] | {
   GenericYes: "GameUI_Yes",
   HeaderLoadoutLabel: "SFUI_InvPanel_Loadout_Title",
   InspectClose: "GameUI_Close",
+  InspectViewHighlight: "inv_context_view_highlight_reel",
   InventoryApplyPatch: "SFUI_InvContextMenu_can_patch",
   InventoryApplySticker: "SFUI_InvContextMenu_can_sticker",
   InventoryFilterAgents: "LoadoutSlot_customplayer",

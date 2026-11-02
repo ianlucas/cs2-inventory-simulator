@@ -177,6 +177,7 @@ export const english = {
   HeaderSignInLabel: "Sign-in to sync",
   HeaderSignOutLabel: "Sign out",
   InspectClose: /* csgo_english.txt */"Close",
+  InspectViewHighlight: /* csgo_english.txt */"View Highlight",
   InspectUnboxingNotCounted: "Not counted · Out of budget",
   InspectUnboxingPayout: "{1} · Balance {2}",
   InventoryApplyPatch: /* csgo_english.txt */"Apply Patch",

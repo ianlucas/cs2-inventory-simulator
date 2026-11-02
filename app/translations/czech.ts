@@ -174,6 +174,7 @@ export const czech = {
   HeaderSignInLabel: "Přihlásit se k synchronizaci",
   HeaderSignOutLabel: "Odhlásit se",
   InspectClose: /* csgo_czech.txt */"Zavřít",
+  InspectViewHighlight: /* csgo_czech.txt */"Přehrát top okamžik",
   InspectUnboxingNotCounted: "Nezapočítáno · Došel rozpočet",
   InspectUnboxingPayout: "{1} · Zůstatek {2}",
   InventoryApplyPatch: /* csgo_czech.txt */"Použít nášivku",

@@ -175,6 +175,7 @@ export const vietnamese = {
   HeaderSignInLabel: "Đăng nhập",
   HeaderSignOutLabel: "Đăng xuất",
   InspectClose: /* csgo_vietnamese.txt */"Đóng",
+  InspectViewHighlight: /* csgo_vietnamese.txt */"Xem tiêu điểm",
   InspectUnboxingNotCounted: "Không được tính · Hết ngân sách",
   InspectUnboxingPayout: "{1} · Số dư {2}",
   InventoryApplyPatch: /* csgo_vietnamese.txt */"Dùng phù hiệu",

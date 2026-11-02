@@ -174,6 +174,7 @@ export const brazilian = {
   HeaderSignInLabel: "Entrar e sincronizar",
   HeaderSignOutLabel: "Sair",
   InspectClose: /* csgo_brazilian.txt */"Fechar",
+  InspectViewHighlight: /* csgo_brazilian.txt */"Ver destaque",
   InspectUnboxingNotCounted: "Não contou · Sem saldo",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_brazilian.txt */"Aplicar emblema",

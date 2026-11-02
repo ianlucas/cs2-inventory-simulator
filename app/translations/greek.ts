@@ -175,6 +175,7 @@ export const greek = {
   HeaderSignInLabel: "Σύνδεση για συγχρονισμό",
   HeaderSignOutLabel: "Αποσύνδεση",
   InspectClose: /* csgo_greek.txt */"ΚΛΕΙΣΙΜΟ",
+  InspectViewHighlight: /* csgo_greek.txt */"Προβολή καλύτερης στιγμής",
   InspectUnboxingNotCounted: "Δεν μετράει · Τέλος προϋπολογισμού",
   InspectUnboxingPayout: "{1} · Υπόλοιπο {2}",
   InventoryApplyPatch: /* csgo_greek.txt */"Εφαρμογή διακριτικού",

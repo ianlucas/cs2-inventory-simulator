@@ -174,6 +174,7 @@ export const danish = {
   HeaderSignInLabel: "Log ind for at synkronisere",
   HeaderSignOutLabel: "Log ud",
   InspectClose: /* csgo_danish.txt */"Luk",
+  InspectViewHighlight: /* csgo_danish.txt */"Vis højdepunkt",
   InspectUnboxingNotCounted: "Tæller ikke · Budget opbrugt",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_danish.txt */"Påfør lap",

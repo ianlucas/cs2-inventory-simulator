@@ -174,6 +174,7 @@ export const russian = {
   HeaderSignInLabel: "Войти",
   HeaderSignOutLabel: "Выйти",
   InspectClose: /* csgo_russian.txt */"Закрыть",
+  InspectViewHighlight: /* csgo_russian.txt */"Посмотреть яркий момент",
   InspectUnboxingNotCounted: "Не учтено · Бюджет исчерпан",
   InspectUnboxingPayout: "{1} · Баланс {2}",
   InventoryApplyPatch: /* csgo_russian.txt */"Нанести нашивку",

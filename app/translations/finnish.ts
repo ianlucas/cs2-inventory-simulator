@@ -174,6 +174,7 @@ export const finnish = {
   HeaderSignInLabel: "Kirjaudu synkronoidaksesi",
   HeaderSignOutLabel: "Kirjaudu ulos",
   InspectClose: /* csgo_finnish.txt */"Sulje",
+  InspectViewHighlight: /* csgo_finnish.txt */"Katso kohokohta",
   InspectUnboxingNotCounted: "Ei laskettu · Budjetti loppui",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_finnish.txt */"Käytä kangasmerkki",

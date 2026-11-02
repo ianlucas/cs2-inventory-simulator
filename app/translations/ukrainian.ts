@@ -175,6 +175,7 @@ export const ukrainian = {
   HeaderSignInLabel: "Увійти",
   HeaderSignOutLabel: "Вийти",
   InspectClose: /* csgo_ukrainian.txt */"Закрити",
+  InspectViewHighlight: /* csgo_ukrainian.txt */"Переглянути яскравий момент",
   InspectUnboxingNotCounted: "Не враховано · Бюджет вичерпано",
   InspectUnboxingPayout: "{1} · Баланс {2}",
   InventoryApplyPatch: /* csgo_ukrainian.txt */"Застосувати нашивку",

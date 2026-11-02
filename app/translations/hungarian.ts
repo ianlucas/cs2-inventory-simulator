@@ -174,6 +174,7 @@ export const hungarian = {
   HeaderSignInLabel: "Bejelentkezés szinkronizáláshoz",
   HeaderSignOutLabel: "Kijelentkezés",
   InspectClose: /* csgo_hungarian.txt */"Bezár",
+  InspectViewHighlight: /* csgo_hungarian.txt */"Kiemelt pillanat megnézése",
   InspectUnboxingNotCounted: "Nem számít · Elfogyott a keret",
   InspectUnboxingPayout: "{1} · Egyenleg {2}",
   InventoryApplyPatch: /* csgo_hungarian.txt */"Felvarró elhelyezése",

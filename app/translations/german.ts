@@ -174,6 +174,7 @@ export const german = {
   HeaderSignInLabel: "Anmelden zum Synchronisieren",
   HeaderSignOutLabel: "Abmelden",
   InspectClose: /* csgo_german.txt */"Schließen",
+  InspectViewHighlight: /* csgo_german.txt */"Highlight ansehen",
   InspectUnboxingNotCounted: "Nicht gezählt · Budget aufgebraucht",
   InspectUnboxingPayout: "{1} · Kontostand {2}",
   InventoryApplyPatch: /* csgo_german.txt */"Aufnäher anbringen",

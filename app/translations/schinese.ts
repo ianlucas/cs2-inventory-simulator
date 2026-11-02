@@ -175,6 +175,7 @@ export const schinese = {
   HeaderSignInLabel: "登录",
   HeaderSignOutLabel: "登出",
   InspectClose: /* csgo_schinese.txt */"关闭",
+  InspectViewHighlight: /* csgo_schinese.txt */"观看高光时刻",
   InspectUnboxingNotCounted: "未计入 · 预算不足",
   InspectUnboxingPayout: "{1} · 余额 {2}",
   InventoryApplyPatch: /* csgo_schinese.txt */"应用布章",

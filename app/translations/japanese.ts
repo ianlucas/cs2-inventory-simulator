@@ -174,6 +174,7 @@ export const japanese = {
   HeaderSignInLabel: "同期するにはサインイン",
   HeaderSignOutLabel: "サインアウト",
   InspectClose: /* csgo_japanese.txt */"閉じる",
+  InspectViewHighlight: /* csgo_japanese.txt */"ハイライトを視聴",
   InspectUnboxingNotCounted: "カウント外 · 予算切れ",
   InspectUnboxingPayout: "{1} · 残高 {2}",
   InventoryApplyPatch: /* csgo_japanese.txt */"パッチを適用",

@@ -174,6 +174,7 @@ export const italian = {
   HeaderSignInLabel: "Accedi per sincronizzare",
   HeaderSignOutLabel: "Esci",
   InspectClose: /* csgo_italian.txt */"Chiudi",
+  InspectViewHighlight: /* csgo_italian.txt */"Vedi momenti salienti",
   InspectUnboxingNotCounted: "Non conteggiato · Budget esaurito",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_italian.txt */"Applica toppa",

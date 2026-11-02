@@ -174,6 +174,7 @@ export const portuguese = {
   HeaderSignInLabel: "Entrar e sincronizar",
   HeaderSignOutLabel: "Sair",
   InspectClose: /* csgo_portuguese.txt */"Fechar",
+  InspectViewHighlight: /* csgo_portuguese.txt */"Ver destaque",
   InspectUnboxingNotCounted: "Não contou · Sem saldo",
   InspectUnboxingPayout: "{1} · Saldo {2}",
   InventoryApplyPatch: /* csgo_portuguese.txt */"Aplicar emblema",

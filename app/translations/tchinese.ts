@@ -175,6 +175,7 @@ export const tchinese = {
   HeaderSignInLabel: "登入",
   HeaderSignOutLabel: "登出",
   InspectClose: /* csgo_tchinese.txt */"關閉",
+  InspectViewHighlight: /* csgo_tchinese.txt */"檢視精彩片段",
   InspectUnboxingNotCounted: "未計入 · 預算不足",
   InspectUnboxingPayout: "{1} · 餘額 {2}",
   InventoryApplyPatch: /* csgo_tchinese.txt */"套用布章",

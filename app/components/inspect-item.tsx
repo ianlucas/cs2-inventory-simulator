@@ -14,7 +14,7 @@ import {
 } from "@ianlucas/cs2-lib";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ClientOnly } from "remix-utils/client-only";
 import { useInspectFloating } from "~/components/hooks/use-inspect-floating";
@@ -32,13 +32,17 @@ import { useTimedState } from "./hooks/use-timed-state";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
+import { HighlightReelPopup } from "./highlight-reel-popup";
 import { InGameOverlay } from "./in-game-overlay";
 import { InfoIcon } from "./info-icon";
 import { InspectCharmDetachments } from "./inspect-charm-detachments";
 import { ItemDescription } from "./item-description";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
+import { Presence } from "./presence";
+import { TooltipBubble, useTooltip } from "./tooltip";
 import { UseItemFooter } from "./use-item-footer";
+import { VideoClipIcon } from "./video-clip-icon";
 import { ViewerOverlay } from "./viewer-overlay";
 
 interface InspectItemProps {
@@ -181,6 +185,36 @@ function InspectItemShareButton({
   );
 }
 
+function InspectItemHighlightButton({ item }: { item: CS2InventoryItem }) {
+  const translate = useTranslate();
+  const [isWatching, setIsWatching] = useState(false);
+  const { getReferenceProps, setReference, tooltip } = useTooltip();
+  const highlightId = item.highlight ?? item.keychains?.get(0)?.highlight;
+  if (highlightId === undefined) {
+    return null;
+  }
+  return (
+    <>
+      <ModalButton
+        variant="secondary"
+        forwardRef={setReference}
+        {...getReferenceProps({ onClick: () => setIsWatching(true) })}
+      >
+        <VideoClipIcon className="h-5" />
+      </ModalButton>
+      <TooltipBubble {...tooltip}>
+        {translate("InspectViewHighlight")}
+      </TooltipBubble>
+      <Presence present={isWatching}>
+        <HighlightReelPopup
+          highlight={CS2Economy.getById(highlightId)}
+          onClose={() => setIsWatching(false)}
+        />
+      </Presence>
+    </>
+  );
+}
+
 function InspectItemUnboxing({ unboxing }: { unboxing?: UnboxingResult }) {
   const translate = useTranslate();
   const { lang, statsForNerds } = usePreferences();
@@ -293,6 +327,7 @@ function InspectItem3d({
             <>
               {infoButton}
               <InspectItemShareButton item={item} ownerId={ownerId} />
+              <InspectItemHighlightButton item={item} />
             </>
           }
           right={
@@ -384,6 +419,7 @@ function InspectItem2d({
                   <>
                     {infoButton}
                     <InspectItemShareButton item={item} ownerId={ownerId} />
+                    <InspectItemHighlightButton item={item} />
                   </>
                 }
                 right={

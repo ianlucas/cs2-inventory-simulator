@@ -174,6 +174,7 @@ export const romanian = {
   HeaderSignInLabel: "Autentifică-te",
   HeaderSignOutLabel: "Deconectare",
   InspectClose: /* csgo_romanian.txt */"Închide",
+  InspectViewHighlight: /* csgo_romanian.txt */"Vezi momentul deosebit",
   InspectUnboxingNotCounted: "Nu contează · Buget epuizat",
   InspectUnboxingPayout: "{1} · Sold {2}",
   InventoryApplyPatch: /* csgo_romanian.txt */"Aplică ecusonul brodat",
