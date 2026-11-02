@@ -16,6 +16,7 @@ import { getUnboxingBalance, getUnboxingProfit } from "./user-unlock.server";
 const entrySelect = {
   bestItemId: true,
   bestPayout: true,
+  bestSouvenir: true,
   bestStatTrak: true,
   bestWear: true,
   previousRank: true,
@@ -28,12 +29,14 @@ const entrySelect = {
 function toBestDrop(drop: {
   itemId: number;
   payout: { toNumber(): number };
+  souvenir: boolean;
   statTrak: boolean;
   wear: number | null;
 }) {
   return {
     itemId: drop.itemId,
     payout: drop.payout.toNumber(),
+    souvenir: drop.souvenir,
     statTrak: drop.statTrak,
     wear: drop.wear ?? undefined
   };
@@ -42,6 +45,7 @@ function toBestDrop(drop: {
 function toRow({
   bestItemId,
   bestPayout,
+  bestSouvenir,
   bestStatTrak,
   bestWear,
   previousRank,
@@ -51,6 +55,7 @@ function toRow({
 }: {
   bestItemId: number;
   bestPayout: { toNumber(): number };
+  bestSouvenir: boolean;
   bestStatTrak: boolean;
   bestWear: number | null;
   previousRank: number | null;
@@ -63,6 +68,7 @@ function toRow({
     bestDrop: toBestDrop({
       itemId: bestItemId,
       payout: bestPayout,
+      souvenir: bestSouvenir,
       statTrak: bestStatTrak,
       wear: bestWear
     }),
@@ -141,7 +147,13 @@ export async function getUnboxingStats(
       prisma.userUnlock.count({ where: { ...where, counted: true } }),
       prisma.userUnlock.findFirst({
         orderBy: [{ payout: "desc" }, { createdAt: "desc" }],
-        select: { itemId: true, payout: true, statTrak: true, wear: true },
+        select: {
+          itemId: true,
+          payout: true,
+          souvenir: true,
+          statTrak: true,
+          wear: true
+        },
         where: { ...where, counted: true }
       }),
       prisma.userUnlock.findFirst({

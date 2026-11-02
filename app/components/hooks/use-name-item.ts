@@ -41,10 +41,18 @@ export function nameItemFactory(translate: ReturnType<typeof useTranslate>) {
       inventoryItem?.statTrak !== undefined
         ? `${translate("InventoryItemStatTrak")} `
         : "";
+    const highlight =
+      inventoryItem?.highlight !== undefined
+        ? inventoryItem.economy.getById(inventoryItem.highlight)
+        : undefined;
+    const souvenir =
+      inventoryItem?.souvenir === true || highlight !== undefined
+        ? `${translate("InventoryItemSouvenir")} `
+        : "";
     const quality = item.isMelee() && !item.isDefault ? "★ " : "";
     let [model, ...names] = item.name.split("|").map((s) => s.trim());
-    let name = names.join(" | ");
-    model = `${quality}${statTrak}${model}`;
+    let name = [...names, highlight?.name].filter(has).join(" | ");
+    model = `${quality}${statTrak}${souvenir}${model}`;
     if (
       item.isGraffiti() &&
       item.hasCharges() &&

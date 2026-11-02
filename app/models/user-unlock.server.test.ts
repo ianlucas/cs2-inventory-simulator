@@ -40,8 +40,11 @@ const unlockable = ensure(container.listUnlockableItems()[0]);
 const unlockedItem = {
   attributes: {
     containerId: KILOWATT_CASE_ID,
+    keychains: undefined,
     seed: 42,
+    souvenir: undefined,
     statTrak: undefined,
+    stickers: undefined,
     wear: unlockable.wearMin
   },
   id: unlockable.id,
@@ -94,10 +97,29 @@ test("recordUserUnlock counts an unlock the week's balance can afford", async ()
       price,
       rarity: unlockable.rarity,
       seed: 42,
+      souvenir: false,
       statTrak: false,
       userId: USER_ID,
       wear: unlockable.wearMin
     }
+  });
+});
+
+test("recordUserUnlock logs a souvenir unlock as a souvenir", async () => {
+  const client = createClient(null);
+  await recordUserUnlock(client as never, {
+    budget: 1000,
+    container,
+    keyId: KILOWATT_CASE_KEY_ID,
+    now: NOW,
+    unlockedItem: {
+      ...unlockedItem,
+      attributes: { ...unlockedItem.attributes, souvenir: true }
+    },
+    userId: USER_ID
+  });
+  expect(client.userUnlock.create).toHaveBeenCalledWith({
+    data: expect.objectContaining({ souvenir: true })
   });
 });
 

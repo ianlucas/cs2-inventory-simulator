@@ -44,6 +44,7 @@ function toUnlockFeedEvent(
 ): UnlockFeedEvent {
   return {
     itemId: unlockedItem.id,
+    souvenir: unlockedItem.attributes.souvenir === true,
     statTrak: unlockedItem.attributes.statTrak !== undefined,
     userId: user.id,
     userName: user.name

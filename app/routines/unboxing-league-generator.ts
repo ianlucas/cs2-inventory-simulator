@@ -34,6 +34,7 @@ type Transaction = Prisma.TransactionClient;
 interface BestDrop {
   itemId: number;
   payout: Prisma.Decimal;
+  souvenir: boolean;
   statTrak: boolean;
   userId: string;
   wear: number | null;
@@ -92,7 +93,7 @@ async function generate(tx: Transaction, weekStart: Date, now: Date) {
       where: { counted: true, createdAt: { gte: weekStart, lt: weekEnd } }
     }),
     tx.$queryRaw<BestDrop[]>`
-      SELECT DISTINCT ON ("userId") "userId", "itemId", "payout", "statTrak", "wear"
+      SELECT DISTINCT ON ("userId") "userId", "itemId", "payout", "souvenir", "statTrak", "wear"
       FROM "UserUnlock"
       WHERE "counted" AND "createdAt" >= ${weekStart} AND "createdAt" < ${weekEnd}
       ORDER BY "userId", "payout" DESC, "createdAt" DESC
@@ -152,6 +153,7 @@ async function generate(tx: Transaction, weekStart: Date, now: Date) {
         .map(({ bestDrop, previousRank, profit, rank, userId }) => ({
           bestItemId: bestDrop.itemId,
           bestPayout: bestDrop.payout,
+          bestSouvenir: bestDrop.souvenir,
           bestStatTrak: bestDrop.statTrak,
           bestWear: bestDrop.wear,
           previousRank,

@@ -564,6 +564,12 @@ export const craftAllowStatTrak = new Rule({
   defaultValue: true
 });
 
+export const craftAllowSouvenir = new Rule({
+  name: "craftAllowSouvenir",
+  type: "boolean",
+  defaultValue: true
+});
+
 export const craftAllowStickers = new Rule({
   name: "craftAllowStickers",
   type: "boolean",
@@ -674,6 +680,12 @@ export const editAllowWear = new Rule({
 
 export const editAllowStatTrak = new Rule({
   name: "editAllowStatTrak",
+  type: "boolean",
+  defaultValue: true
+});
+
+export const editAllowSouvenir = new Rule({
+  name: "editAllowSouvenir",
   type: "boolean",
   defaultValue: true
 });

@@ -286,11 +286,14 @@ export function isValidInspectLink(link: string) {
 
 /**
  * Identifies the market listings an inventory item prices from, one per
- * exterior. Attachments and souvenir origin are ignored, as the app doesn't
- * treat unlocked items from souvenir packages as souvenirs.
+ * exterior. Attachments are ignored.
  */
 export function getEconomyPriceQuery(item: CS2InventoryItem) {
-  return { id: item.id, statTrak: item.statTrak !== undefined };
+  return {
+    id: item.id,
+    souvenir: item.souvenir === true,
+    statTrak: item.statTrak !== undefined
+  };
 }
 
 export type EconomyPriceQuery = ReturnType<typeof getEconomyPriceQuery>;

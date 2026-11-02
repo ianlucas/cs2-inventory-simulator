@@ -65,12 +65,20 @@ test("getEconomyPriceQuery prices an item by its id and StatTrak", () => {
         wear: 0.2
       })
     )
-  ).toEqual({ id: AK47_ASIIMOV_ID, statTrak: true });
+  ).toEqual({ id: AK47_ASIIMOV_ID, souvenir: false, statTrak: true });
   expect(
     getEconomyPriceQuery(
       createFakeInventoryItemFromBase({ id: KILOWATT_CASE_ID })
     )
-  ).toEqual({ id: KILOWATT_CASE_ID, statTrak: false });
+  ).toEqual({ id: KILOWATT_CASE_ID, souvenir: false, statTrak: false });
+});
+
+test("getEconomyPriceQuery prices a souvenir as a souvenir", () => {
+  expect(
+    getEconomyPriceQuery(
+      createFakeInventoryItemFromBase({ id: 91, souvenir: true })
+    )
+  ).toEqual({ id: 91, souvenir: true, statTrak: false });
 });
 
 const asiimov = (wear: number) =>

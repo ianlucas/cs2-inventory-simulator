@@ -18,6 +18,7 @@ import {
 
 const EVENT: UnlockFeedEvent = {
   itemId: 1347,
+  souvenir: false,
   statTrak: false,
   userId: "76561197960265728",
   userName: "Player"

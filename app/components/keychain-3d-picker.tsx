@@ -39,6 +39,7 @@ import {
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
+import { HighlightPicker } from "./highlight-picker";
 import { useNameItemString } from "./hooks/use-name-item";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerStatus } from "./hooks/use-viewer-status";
@@ -62,6 +63,15 @@ function toKeychain(keychains: Keychains): Keychain | undefined {
   return keychains[lowest];
 }
 
+function withLocalHighlight(
+  incoming: Keychain | undefined,
+  local: Keychain | undefined
+): Keychain | undefined {
+  return incoming !== undefined && incoming.id === local?.id
+    ? { ...incoming, highlight: incoming.highlight ?? local.highlight }
+    : incoming;
+}
+
 function keychainsEqual(
   a: Keychain | undefined,
   b: Keychain | undefined
@@ -71,6 +81,7 @@ function keychainsEqual(
   }
   return (
     a.id === b.id &&
+    a.highlight === b.highlight &&
     (a.seed ?? CS2_MIN_KEYCHAIN_SEED) === (b.seed ?? CS2_MIN_KEYCHAIN_SEED) &&
     a.x === b.x &&
     a.y === b.y &&
@@ -159,7 +170,10 @@ function Keychain3dEditorOverlay({
         if (Date.now() - lastEditAtRef.current < FORM_ECHO_WINDOW_MS) {
           return;
         }
-        const incoming = toKeychain(item.keychains ?? {});
+        const incoming = withLocalHighlight(
+          toKeychain(item.keychains ?? {}),
+          keychainRef.current
+        );
         if (keychainsEqual(keychainRef.current, incoming)) {
           return;
         }
@@ -180,9 +194,10 @@ function Keychain3dEditorOverlay({
     if (current === undefined) {
       return {};
     }
-    const { id, seed: keychainSeed, x, y, z } = current;
+    const { highlight, id, seed: keychainSeed, x, y, z } = current;
     return {
       0: {
+        highlight,
         id,
         seed:
           keychainSeed !== undefined && keychainSeed !== CS2_MIN_KEYCHAIN_SEED
@@ -221,7 +236,14 @@ function Keychain3dEditorOverlay({
     setSelecting(false);
     const current = keychainRef.current;
     const next: Keychain =
-      current !== undefined ? { ...current, id: item.id } : { id: item.id };
+      current !== undefined
+        ? {
+            ...current,
+            highlight: current.id === item.id ? current.highlight : undefined,
+            id: item.id,
+            seed: item.hasSeed() ? current.seed : undefined
+          }
+        : { id: item.id };
     stageKeychain(next);
     api?.setItem(buildItem(next));
     setSelected(true);
@@ -288,13 +310,19 @@ function Keychain3dEditorOverlay({
     if (current === undefined) {
       return;
     }
-    const next: Keychain = { id: current.id, seed: current.seed };
+    const next: Keychain = {
+      highlight: current.highlight,
+      id: current.id,
+      seed: current.seed
+    };
     stageKeychain(next);
     api?.setItem(buildItem(next));
   }
 
   const item =
     keychain !== undefined ? CS2Economy.getById(keychain.id) : undefined;
+  const isMissingHighlight =
+    item?.hasHighlights() === true && keychain?.highlight === undefined;
   const hasPosition =
     keychain !== undefined &&
     (keychain.x !== undefined ||
@@ -397,21 +425,31 @@ function Keychain3dEditorOverlay({
           panelClassName="min-h-48 justify-center"
         >
           <div className="space-y-1.5 overflow-y-auto p-2">
-            <EditorLabel label={translate("EditorPattern")}>
-              <EditorStepRangeWithInput
-                inputStyles="w-24 min-w-0"
-                max={CS2_MAX_KEYCHAIN_SEED}
-                maxLength={keychainSeedStringMaxLen}
-                min={CS2_MIN_KEYCHAIN_SEED}
-                onChange={(seed) => handleEdit({ seed })}
-                randomizable
-                step={1}
-                stepRangeStyles="flex-1"
-                type="int"
-                validate={validateKeychainSeed}
-                value={keychain.seed ?? CS2_MIN_KEYCHAIN_SEED}
+            {item.hasHighlights() && (
+              <HighlightPicker
+                highlights={item.getHighlights()}
+                isHidePreview
+                onChange={(highlight) => handleEdit({ highlight })}
+                value={keychain.highlight}
               />
-            </EditorLabel>
+            )}
+            {item.hasSeed() && (
+              <EditorLabel label={translate("EditorPattern")}>
+                <EditorStepRangeWithInput
+                  inputStyles="w-24 min-w-0"
+                  max={CS2_MAX_KEYCHAIN_SEED}
+                  maxLength={keychainSeedStringMaxLen}
+                  min={CS2_MIN_KEYCHAIN_SEED}
+                  onChange={(seed) => handleEdit({ seed })}
+                  randomizable
+                  step={1}
+                  stepRangeStyles="flex-1"
+                  type="int"
+                  validate={validateKeychainSeed}
+                  value={keychain.seed ?? CS2_MIN_KEYCHAIN_SEED}
+                />
+              </EditorLabel>
+            )}
             {positionAxes.map(({ axis, label, bounds, rule }) => {
               const axisValue = keychain[axis] ?? keychainDefault?.[axis];
               if (
@@ -470,6 +508,7 @@ function Keychain3dEditorOverlay({
             <>
               <ModalButton
                 variant="primary"
+                disabled={isMissingHighlight}
                 onClick={handleApply}
                 children={translate("ApplyKeychainUse")}
               />

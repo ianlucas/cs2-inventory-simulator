@@ -4,7 +4,21 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { describe, expect, test } from "vitest";
-import { colorText, pushKeepingLast } from "./misc";
+import { colorText, pushKeepingLast, shuffle } from "./misc";
+
+describe("shuffle", () => {
+  test("returns every element once, in any order, without touching the input", () => {
+    const input = [1, 2, 3, 4, 5];
+    const orders = new Set<string>();
+    for (let roll = 0; roll < 200; roll++) {
+      const shuffled = shuffle(input);
+      expect([...shuffled].sort()).toEqual(input);
+      orders.add(shuffled.join());
+    }
+    expect(input).toEqual([1, 2, 3, 4, 5]);
+    expect(orders.size).toBeGreaterThan(1);
+  });
+});
 
 describe("colorText", () => {
   test("leaves plain text untouched", () => {

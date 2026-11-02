@@ -12,6 +12,7 @@ import { useRenamePet } from "~/components/hooks/use-rename-pet";
 import { useScrapeItemSticker } from "~/components/hooks/use-scrape-item-sticker";
 import { useStorageUnit } from "~/components/hooks/use-storage-unit";
 import { useSwapItemsStatTrak } from "~/components/hooks/use-swap-items-stattrak";
+import { canReceiveStickers } from "~/shared/inventory";
 import { useSync } from "~/components/hooks/use-sync";
 import { useUnlockCase } from "~/components/hooks/use-unlock-case";
 import { useUnpackItem } from "~/components/hooks/use-unpack-item";
@@ -68,7 +69,7 @@ export function Inventory() {
 
   const ownApplicableStickers =
     items.filter(({ item }) => item.isSticker()).length > 0 &&
-    items.filter(({ item }) => item.hasStickers()).length > 0;
+    items.filter(({ item }) => canReceiveStickers(item)).length > 0;
 
   const ownApplicableKeychains =
     items.filter(({ item }) => item.isKeychain()).length > 0 &&

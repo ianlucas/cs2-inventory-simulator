@@ -109,6 +109,10 @@ export function createFakeInventoryItemFromBase(item: CS2BaseInventoryItem) {
   );
 }
 
+export function canReceiveStickers(item: CS2InventoryItem) {
+  return item.hasStickers() && item.souvenir !== true;
+}
+
 export function toInventoryItem(item: CS2InventoryItem | CS2BaseInventoryItem) {
   return item instanceof CS2InventoryItem
     ? item
@@ -161,10 +165,12 @@ export function getCharmDetachmentsToDisplay(
 export function editInventoryItem(
   inventory: CS2Inventory,
   uid: number,
-  { statTrak, ...attributes }: Omit<ItemEditorAttributes, "quantity">
+  { souvenir, statTrak, ...attributes }: Omit<ItemEditorAttributes, "quantity">
 ) {
   return inventory.edit(uid, {
+    souvenir: souvenir ? true : undefined,
     statTrak: statTrak ? (inventory.get(uid).statTrak ?? 0) : undefined,
+    highlight: attributes.highlight,
     nameTag: attributes.nameTag,
     stickers: attributes.stickers,
     patches: attributes.patches,

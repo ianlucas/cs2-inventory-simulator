@@ -42,6 +42,7 @@ export function getSanitizedCachedInventoryData() {
           equipped: undefined,
           equippedCT: undefined,
           equippedT: undefined,
+          souvenir: value.souvenir === true ? (true as const) : undefined,
           statTrak: value.statTrak !== undefined ? (0 as const) : undefined,
           storage:
             value.storage !== undefined
@@ -50,6 +51,8 @@ export function getSanitizedCachedInventoryData() {
                     uid,
                     {
                       ...value,
+                      souvenir:
+                        value.souvenir === true ? (true as const) : undefined,
                       statTrak:
                         value.statTrak !== undefined ? (0 as const) : undefined,
                       storage: undefined

@@ -18,6 +18,7 @@ import { useLoadoutItemWarning } from "~/components/hooks/use-loadouts";
 import { useViewerAvailability } from "~/components/hooks/use-viewer-availability";
 import { getInventoryItemShareUrl } from "~/inventory.client";
 import {
+  canReceiveStickers,
   EDITABLE_ITEM_TYPE,
   INSPECTABLE_ITEM_TYPE,
   UNLOCKABLE_ITEM_TYPE
@@ -194,7 +195,7 @@ export function InventoryItem({
     inventoryItemAllowApplySticker &&
     ownApplicableStickers &&
     inventoryItemMaxStickers > 0 &&
-    ((item.hasStickers() &&
+    ((canReceiveStickers(item) &&
       item.getStickersCount() < inventoryItemMaxStickers) ||
       item.isSticker());
   const canAttachCharm =

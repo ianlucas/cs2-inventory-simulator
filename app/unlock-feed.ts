@@ -5,6 +5,7 @@
 
 export interface UnlockFeedEvent {
   itemId: number;
+  souvenir: boolean;
   statTrak: boolean;
   userId: string;
   userName: string;

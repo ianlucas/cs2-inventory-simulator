@@ -233,3 +233,38 @@ test("a hidden loadout item sends no skin but keeps its slot", async () => {
   expect(tWeapons[7]).toBeUndefined();
   expect(ensure(loadout)[CS2Team.T][15]).toBe(7);
 });
+
+const SOUVENIR_DEAGLE_ID = 91;
+const DEAGLE_DEFINDEX = 1;
+
+test("an equipped souvenir carries the souvenir flag", async () => {
+  const inventory = new CS2Inventory();
+  equipNew(inventory, { id: SOUVENIR_DEAGLE_ID, souvenir: true }, CS2Team.T);
+  equipNew(inventory, { id: SOUVENIR_DEAGLE_ID }, CS2Team.CT);
+  const { ctWeapons, tWeapons } = await generate(inventory);
+  expect(tWeapons[DEAGLE_DEFINDEX].souvenir).toBe(true);
+  expect(ctWeapons[DEAGLE_DEFINDEX]).not.toHaveProperty("souvenir");
+});
+
+test("a highlight charm carries its highlight reel", async () => {
+  const charm = ensure(
+    CS2_ITEMS.map(({ id }) => CS2Economy.getById(id)).find((item) =>
+      item.hasHighlights()
+    )
+  );
+  const highlight = charm.getHighlights()[0];
+  const inventory = new CS2Inventory();
+  equipNew(
+    inventory,
+    {
+      id: SOUVENIR_DEAGLE_ID,
+      keychains: { 0: { highlight: highlight.id, id: charm.id } }
+    },
+    CS2Team.T
+  );
+  const { tWeapons } = await generate(inventory);
+  expect(ensure(tWeapons[DEAGLE_DEFINDEX].keychains)[0]).toMatchObject({
+    def: charm.variantIndex,
+    highlight: highlight.variantIndex
+  });
+});

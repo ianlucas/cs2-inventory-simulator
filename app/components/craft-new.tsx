@@ -8,6 +8,7 @@ import { useState } from "react";
 import { toArrayIf } from "~/shared/misc";
 import { useInventory, useRules, useTranslate } from "./app-context";
 import { useCraftItemFilter } from "./hooks/use-item-hide-filters";
+import { EditorActions } from "./editor-actions";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ModalButton } from "./modal-button";
 
@@ -30,6 +31,7 @@ export function CraftNew({
     craftAllowNametag,
     craftAllowPatches,
     craftAllowSeed,
+    craftAllowSouvenir,
     craftAllowStatTrak,
     craftAllowStickerRotation,
     craftAllowStickerSchema,
@@ -49,6 +51,7 @@ export function CraftNew({
 
   const [inventory] = useInventory();
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
+  const [isSouvenirPanelOpen, setIsSouvenirPanelOpen] = useState(false);
   const filterStickerOrPatch = useCraftItemFilter({ attachment: true });
   const isItemCraftable = useCraftItemFilter();
 
@@ -61,6 +64,7 @@ export function CraftNew({
   const isHideNameTag = !craftAllowNametag;
   const isHideSeed = !craftAllowSeed;
   const isHideStatTrak = !craftAllowStatTrak;
+  const isHideSouvenir = !craftAllowSouvenir;
   const isHideWear = !craftAllowWear;
   const isHideStyle = !craftAllowStyle;
   const isHideUpgradeLevel = !craftAllowUpgradeLevel;
@@ -105,6 +109,7 @@ export function CraftNew({
         isHideNameTag={isHideNameTag}
         isHidePatches={isHidePatches}
         isHideSeed={isHideSeed}
+        isHideSouvenir={isHideSouvenir}
         isHideStatTrak={isHideStatTrak}
         isHideStickerRotation={isHideStickerRotation}
         isHideStickerSchema={isHideStickerSchema}
@@ -119,10 +124,11 @@ export function CraftNew({
         keychainFilter={filterStickerOrPatch}
         maxQuantity={maxQuantity}
         onChange={setAttributes}
+        onSouvenirPanelChange={setIsSouvenirPanelOpen}
         patchFilter={filterStickerOrPatch}
         stickerFilter={filterStickerOrPatch}
       />
-      <div className="my-6 flex justify-center gap-2">
+      <EditorActions isHidden={isSouvenirPanelOpen}>
         <ModalButton
           children={translate("EditorCancel")}
           onClick={onClose}
@@ -134,7 +140,7 @@ export function CraftNew({
           onClick={handleSubmit}
           variant="primary"
         />
-      </div>
+      </EditorActions>
     </>
   );
 }

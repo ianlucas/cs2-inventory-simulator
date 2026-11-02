@@ -26,8 +26,17 @@ import { ButtonWithTooltip } from "./button-with-tooltip";
 import { EditorItemDisplay } from "./editor-item-display";
 import { EditorLabel } from "./editor-label";
 import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
+import { HighlightPicker } from "./highlight-picker";
 import { useKeyValues } from "./hooks/use-key-values";
 import { confirm } from "./modal-generic";
+
+export interface AppliedKeychainData {
+  highlight?: number;
+  seed: number;
+  x: number;
+  y: number;
+  z: number;
+}
 
 export function AppliedKeychainEditor({
   className,
@@ -47,8 +56,8 @@ export function AppliedKeychainEditor({
   isHideKeychainY?: boolean;
   isHideKeychainZ?: boolean;
   item: CS2EconomyItem;
-  onChange?: (data: { seed: number; x: number; y: number; z: number }) => void;
-  value: { seed: number; x: number; y: number; z: number };
+  onChange?: (data: AppliedKeychainData) => void;
+  value: AppliedKeychainData;
 }) {
   const translate = useTranslate();
   const attributes = useKeyValues(value);
@@ -70,6 +79,7 @@ export function AppliedKeychainEditor({
       })
     ) {
       attributes.setValue({
+        highlight: attributes.value.highlight,
         seed: CS2_MIN_KEYCHAIN_SEED,
         x: getDefaultKeychainPosition(
           keychainPositionXMin,
@@ -93,9 +103,19 @@ export function AppliedKeychainEditor({
 
   return (
     <div className={clsx("m-auto text-sm select-none", className)}>
-      <EditorItemDisplay item={item} seed={attributes.value.seed} />
+      <EditorItemDisplay
+        item={item}
+        seed={item.hasSeed() ? attributes.value.seed : undefined}
+      />
       <div className="space-y-1.5">
-        {!isHideKeychainSeed && (
+        {item.hasHighlights() && (
+          <HighlightPicker
+            highlights={item.getHighlights()}
+            onChange={attributes.update("highlight")}
+            value={attributes.value.highlight}
+          />
+        )}
+        {!isHideKeychainSeed && item.hasSeed() && (
           <EditorLabel label={translate("EditorPattern")}>
             <EditorStepRangeWithInput
               inputStyles="w-24 min-w-0"
