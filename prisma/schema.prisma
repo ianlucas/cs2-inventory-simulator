@@ -84,6 +84,7 @@ model UserInventoryItem {
   equipped          Boolean                     @default(false)
   equippedCT        Boolean                     @default(false)
   equippedT         Boolean                     @default(false)
+  highlight         Int?
   id                String                      @id @default(uuid())
   inventoryKey      String
   itemId            Int
@@ -93,6 +94,7 @@ model UserInventoryItem {
   patches           UserInventoryItemPatch[]
   seed              Int?
   sourceContainerId Int?
+  souvenir          Boolean                     @default(false)
   statTrak          Int?
   stickers          UserInventoryItemSticker[]
   uid               Int
@@ -132,6 +134,7 @@ model UserInventoryItemPatch {
 }
 
 model UserInventoryItemKeychain {
+  highlight           Int?
   id                  String            @id @default(uuid())
   itemId              Int
   seed                Int?
@@ -306,6 +309,7 @@ model UserUnlock {
   price       Decimal  @db.Decimal(18, 2)
   rarity      String
   seed        Int?
+  souvenir    Boolean  @default(false)
   statTrak    Boolean
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
@@ -326,6 +330,7 @@ model UnboxingLeagueRanking {
 model UnboxingLeagueEntry {
   bestItemId   Int
   bestPayout   Decimal               @db.Decimal(18, 2)
+  bestSouvenir Boolean               @default(false)
   bestStatTrak Boolean
   bestWear     Float?
   previousRank Int?

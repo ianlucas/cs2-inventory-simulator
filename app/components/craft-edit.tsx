@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import { useRules, useTranslate } from "./app-context";
 import { useEditItemFilter } from "./hooks/use-item-hide-filters";
+import { EditorActions } from "./editor-actions";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ModalButton } from "./modal-button";
 
@@ -33,6 +34,7 @@ export function CraftEdit({
     editAllowNametag,
     editAllowPatches,
     editAllowSeed,
+    editAllowSouvenir,
     editAllowStatTrak,
     editAllowStickerRotation,
     editAllowStickerSchema,
@@ -49,11 +51,13 @@ export function CraftEdit({
   } = useRules();
 
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
+  const [isSouvenirPanelOpen, setIsSouvenirPanelOpen] = useState(false);
   const filterStickerOrPatch = useEditItemFilter();
 
   const isHideNameTag = !editAllowNametag;
   const isHideSeed = !editAllowSeed;
   const isHideStatTrak = !editAllowStatTrak;
+  const isHideSouvenir = !editAllowSouvenir;
   const isHideWear = !editAllowWear;
   const isHideStyle = !editAllowStyle;
   const isHideUpgradeLevel = !editAllowUpgradeLevel;
@@ -98,6 +102,7 @@ export function CraftEdit({
         isHideNameTag={isHideNameTag}
         isHidePatches={isHidePatches}
         isHideSeed={isHideSeed}
+        isHideSouvenir={isHideSouvenir}
         isHideStatTrak={isHideStatTrak}
         isHideStickerRotation={isHideStickerRotation}
         isHideStickerSchema={isHideStickerSchema}
@@ -111,10 +116,11 @@ export function CraftEdit({
         item={item}
         keychainFilter={filterStickerOrPatch}
         onChange={setAttributes}
+        onSouvenirPanelChange={setIsSouvenirPanelOpen}
         patchFilter={filterStickerOrPatch}
         stickerFilter={filterStickerOrPatch}
       />
-      <div className="my-6 flex justify-center gap-2">
+      <EditorActions isHidden={isSouvenirPanelOpen}>
         <ModalButton
           children={translate("EditorCancel")}
           onClick={onClose}
@@ -126,7 +132,7 @@ export function CraftEdit({
           onClick={handleSubmit}
           variant="primary"
         />
-      </div>
+      </EditorActions>
     </>
   );
 }

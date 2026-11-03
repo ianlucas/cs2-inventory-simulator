@@ -7,12 +7,15 @@ import {
   CS2_INVENTORY_VERSION,
   CS2_ITEMS,
   CS2Economy,
-  CS2Inventory
+  CS2Inventory,
+  ensure
 } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations/english";
 import { expect, test } from "vitest";
 import {
+  canReceiveStickers,
   CHARM_DETACHMENTS_DISPLAY_UID,
+  editInventoryItem,
   getCharmDetachmentsToDisplay,
   hasInventoryContent,
   loadOrCreateInventory,
@@ -182,4 +185,51 @@ test("getCharmDetachmentsToDisplay hides the free charm detachment when one is o
     id: CS2Economy.getCharmDetachment().id
   });
   expect(getCharmDetachmentsToDisplay(inventory)).toEqual([]);
+});
+
+const souvenirWeapon = ensure(
+  Array.from(CS2Economy.items.values()).find(
+    (item) =>
+      item.isWeapon() &&
+      item.getSouvenirSources().some(({ container }) => container === undefined)
+  )
+);
+const highlightCharm = ensure(
+  Array.from(CS2Economy.items.values()).find(
+    (item) => item.isKeychain() && item.hasHighlights()
+  )
+);
+
+test("editInventoryItem turns the Souvenir toggle into the souvenir flag", () => {
+  const { teams } = ensure(
+    souvenirWeapon
+      .getSouvenirSources()
+      .find(({ container }) => container === undefined)
+  );
+  const stickers = { 0: { id: teams[0].sticker.id } };
+  const inventory = new CS2Inventory();
+  inventory.add({ id: souvenirWeapon.id });
+  editInventoryItem(inventory, 0, { souvenir: true, stickers });
+  expect(inventory.get(0).souvenir).toBe(true);
+  editInventoryItem(inventory, 0, { souvenir: false, stickers });
+  expect(inventory.get(0).souvenir).toBeUndefined();
+  expect(inventory.get(0).stickers?.get(0)?.id).toBe(stickers[0].id);
+});
+
+test("editInventoryItem sets a loose charm's highlight", () => {
+  const [first, second] = highlightCharm.getHighlights();
+  const inventory = new CS2Inventory();
+  inventory.add({ id: highlightCharm.id, highlight: first.id });
+  editInventoryItem(inventory, 0, { highlight: second.id });
+  expect(inventory.get(0).highlight).toBe(second.id);
+});
+
+test("canReceiveStickers leaves souvenirs out", () => {
+  const inventory = new CS2Inventory();
+  inventory.add({ id: souvenirWeapon.id });
+  inventory.add({ id: souvenirWeapon.id, souvenir: true });
+  inventory.add({ id: FALLEN_COLOGNE_2015_ID });
+  expect(canReceiveStickers(inventory.get(0))).toBe(true);
+  expect(canReceiveStickers(inventory.get(1))).toBe(false);
+  expect(canReceiveStickers(inventory.get(2))).toBe(false);
 });

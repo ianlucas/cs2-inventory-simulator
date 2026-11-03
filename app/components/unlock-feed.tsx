@@ -85,7 +85,12 @@ function UnlockFeedLine({
 
   const item = CS2Economy.getById(event.itemId);
   const itemName = nameItemString(
-    event.statTrak ? createFakeInventoryItem(item, { statTrak: 0 }) : item
+    event.statTrak || event.souvenir
+      ? createFakeInventoryItem(item, {
+          souvenir: event.souvenir ? true : undefined,
+          statTrak: event.statTrak ? 0 : undefined
+        })
+      : item
   );
   // Placeholders are passed through as-is so the template can be split into
   // elements, whatever order the language puts them in.

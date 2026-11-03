@@ -22,6 +22,10 @@ export const loader = api(async ({ request }: Route.LoaderArgs) => {
   const query = z
     .object({
       id: z.coerce.number().int().nonnegative(),
+      souvenir: z
+        .enum(["true", "false"])
+        .optional()
+        .transform((souvenir) => souvenir === "true"),
       statTrak: z
         .enum(["true", "false"])
         .transform((statTrak) => statTrak === "true")

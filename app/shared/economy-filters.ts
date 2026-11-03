@@ -160,9 +160,15 @@ export function getPaidItems({ type }: EconomyItemFilter, model: string) {
   }).filter(({ isBase }) => type === CS2ItemType.Melee || !isBase);
 }
 
+const UNLISTED_ITEM_TYPES: CS2ItemType[] = [
+  CS2ItemType.Highlight,
+  CS2ItemType.Stub
+];
+
 export function getAllPaidItems() {
   return CS2Economy.itemsAsArray.filter(
     ({ isBase, type }) =>
-      type !== CS2ItemType.Stub && (type === CS2ItemType.Melee || !isBase)
+      !UNLISTED_ITEM_TYPES.includes(type) &&
+      (type === CS2ItemType.Melee || !isBase)
   );
 }

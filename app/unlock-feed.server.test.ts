@@ -40,13 +40,17 @@ const USER = { id: "76561197960265728", name: "Player" };
 
 function unlockedItem(
   rarity: CS2UnlockedItem["rarity"],
-  statTrak?: number
+  statTrak?: number,
+  souvenir?: true
 ): CS2UnlockedItem {
   return {
     attributes: {
       containerId: 1,
+      keychains: undefined,
       seed: undefined,
+      souvenir,
       statTrak,
+      stickers: undefined,
       wear: undefined
     },
     id: 1347,
@@ -86,11 +90,18 @@ describe("announceUnlockedItem", () => {
     vi.advanceTimersByTime(1);
     expect(listener).toHaveBeenCalledWith({
       itemId: 1347,
+      souvenir: false,
       statTrak: true,
       userId: USER.id,
       userName: USER.name
     });
     unsubscribe();
+  });
+
+  test("announces a souvenir drop as a souvenir", async () => {
+    expect(
+      await announce(unlockedItem("ancient", undefined, true))
+    ).toHaveBeenCalledWith(expect.objectContaining({ souvenir: true }));
   });
 
   test("ignores drops below ancient without using a token", async () => {

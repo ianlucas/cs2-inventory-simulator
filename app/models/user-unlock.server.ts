@@ -109,6 +109,7 @@ export async function recordUserUnlock(
       price,
       rarity,
       seed: unlockedItem.attributes.seed,
+      souvenir: unlockedItem.attributes.souvenir === true,
       statTrak,
       userId,
       wear: unlockedItem.attributes.wear

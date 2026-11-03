@@ -27,7 +27,8 @@ const INVENTORY_ITEM_TYPE_ORDER = {
   [CS2ItemType.Key]: 12,
   [CS2ItemType.Tool]: 13,
   [CS2ItemType.Utility]: 14,
-  [CS2ItemType.Stub]: 15
+  [CS2ItemType.Stub]: 15,
+  [CS2ItemType.Highlight]: 16
 } as const;
 
 export function getEquippedColors({

@@ -11,6 +11,7 @@ import {
   useRules
 } from "~/components/app-context";
 import { useItemSelector } from "~/components/item-selector-context";
+import { canReceiveStickers } from "~/shared/inventory";
 
 export function useApplyItemSticker() {
   const items = useInventoryItems();
@@ -28,7 +29,7 @@ export function useApplyItemSticker() {
       uid,
       items: items.filter(({ item }) =>
         selectedItem.isSticker()
-          ? item.hasStickers() &&
+          ? canReceiveStickers(item) &&
             item.getStickersCount() < inventoryItemMaxStickers
           : selectedItem.getStickersCount() < inventoryItemMaxStickers &&
             item.isSticker()

@@ -92,6 +92,8 @@ interface WeaponEconItem {
   nametag: string;
   paint: number;
   seed: number;
+  // Present only on souvenirs, which have item quality 12 in game.
+  souvenir?: true;
   stattrak: number;
   stickers: {
     def: number;
@@ -104,6 +106,8 @@ interface WeaponEconItem {
   }[];
   keychains: {
     def: number;
+    // The highlight reel, for charms with highlights.
+    highlight?: number;
     seed: number;
     slot: number;
     sticker?: number;
@@ -233,11 +237,13 @@ type PostAddItemRequest = {
   apiKey: string;
   userId: string;
   inventoryItem: {
+    highlight?: number | undefined;
     id: number;
     keychains?:
       | Record<
           string,
           {
+            highlight?: number | undefined;
             id: number;
             seed?: number | undefined;
             x?: number | undefined;
@@ -249,6 +255,7 @@ type PostAddItemRequest = {
     nameTag?: string | undefined;
     patches?: Record<string, number> | undefined;
     seed?: number | undefined;
+    souvenir?: true | undefined;
     statTrak?: 0 | undefined;
     stickers?:
       | Record<

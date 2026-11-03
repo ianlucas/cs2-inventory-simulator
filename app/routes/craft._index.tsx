@@ -138,6 +138,7 @@ export default function Craft() {
     const inventoryItem = {
       ...attributes,
       id: item.id,
+      souvenir: attributes.souvenir ? (true as const) : undefined,
       statTrak: attributes.statTrak ? (0 as const) : undefined
     } satisfies CS2BaseInventoryItem;
 

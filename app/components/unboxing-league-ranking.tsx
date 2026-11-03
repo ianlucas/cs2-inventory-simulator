@@ -135,6 +135,7 @@ export function BestDrop({
     item !== undefined
       ? [
           drop.statTrak && translate("InventoryItemStatTrak"),
+          drop.souvenir && translate("InventoryItemSouvenir"),
           nameItemString(item)
         ]
           .filter(Boolean)

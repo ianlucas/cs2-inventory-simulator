@@ -20,8 +20,8 @@
     "@fortawesome/free-regular-svg-icons": "^7.3.1",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@fortawesome/react-fontawesome": "^3.5.0",
-    "@ianlucas/cs2-lib": "^9.9.0",
-    "@ianlucas/cs2-lib-inspect": "^9.5.0",
+    "@ianlucas/cs2-lib": "^9.10.0",
+    "@ianlucas/cs2-lib-inspect": "^9.6.0",
     "@ianlucas/remix-auth-steam": "^8.0.1",
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
@@ -60,7 +60,7 @@
     "@types/react-dom": "^19.3.0",
     "eslint": "^10.13.0",
     "eslint-plugin-better-tailwindcss": "^4.10.0",
-    "happy-dom": "^20.14.6",
+    "happy-dom": "^21.0.4",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.3",
@@ -75,6 +75,9 @@
   },
   "overrides": {
     "deepmerge-ts": "^8.0.2",
-    "mysql2": "^3.24.4"
+    "mysql2": "^3.24.4",
+    "@hono/vite-dev-server": {
+      "@hono/node-server": "^2.1.5"
+    }
   }
 }

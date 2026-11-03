@@ -15,6 +15,7 @@ export const baseInventoryItemProps = {
   equipped: z.boolean().optional(),
   equippedCT: z.boolean().optional(),
   equippedT: z.boolean().optional(),
+  highlight: nonNegativeInt.optional(),
   id: nonNegativeInt,
   nameTag: z
     .string()
@@ -26,6 +27,7 @@ export const baseInventoryItemProps = {
     .record(
       z.string(),
       z.object({
+        highlight: nonNegativeInt.optional(),
         id: nonNegativeInt,
         seed: positiveInt.optional(),
         x: optionalNumber,
@@ -36,6 +38,7 @@ export const baseInventoryItemProps = {
     .optional(),
   patches: z.record(z.string(), nonNegativeInt).optional(),
   seed: positiveInt.optional(),
+  souvenir: z.literal(true).optional(),
   statTrak: z.literal(0).optional(),
   stickers: z
     .record(
@@ -90,6 +93,7 @@ export const syncInventoryShape = z.object({
 export const itemEditorAttributesShape = z
   .object(clientInventoryItemProps)
   .pick({
+    highlight: true,
     keychains: true,
     nameTag: true,
     patches: true,
@@ -100,6 +104,7 @@ export const itemEditorAttributesShape = z
     wear: true
   })
   .extend({
+    souvenir: z.boolean().optional(),
     statTrak: z.boolean().optional()
   });
 

@@ -39,6 +39,7 @@ interface EconItem {
   paint?: number;
   petId?: number;
   seed?: number;
+  souvenir?: true;
   stattrak?: number;
   stickers?: {
     def: number;
@@ -50,6 +51,7 @@ interface EconItem {
   }[];
   keychains?: {
     def: number;
+    highlight?: number;
     seed: number;
     slot: number;
     sticker?: number;
@@ -131,6 +133,7 @@ export async function generate(
           nametag: item.nameTag ?? "",
           paint: item.variantIndex ?? 0,
           seed: item.seed ?? CS2_MIN_SEED,
+          ...(item.souvenir === true ? { souvenir: true as const } : {}),
           stattrak: item.statTrak ?? -1,
           stickers: item.someStickers().map(([index, sticker]) => ({
             def: CS2Economy.getById(sticker.id).variantIndex ?? 0,
@@ -145,6 +148,12 @@ export async function generate(
             const keychainEcon = CS2Economy.getById(keychain.id);
             return {
               def: keychainEcon.variantIndex ?? 0,
+              ...(keychain.highlight !== undefined
+                ? {
+                    highlight: CS2Economy.getById(keychain.highlight)
+                      .variantIndex
+                  }
+                : {}),
               seed: keychain.seed ?? CS2_MIN_KEYCHAIN_SEED,
               slot: index,
               sticker: keychainEcon.displayedSticker?.variantIndex,

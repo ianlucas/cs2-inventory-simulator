@@ -19,11 +19,14 @@ import { usePreferences, useUser } from "../app-context";
 const listingsByUrl = new Map<string, EconomyListingPrice[]>();
 const requests = new Map<string, Promise<EconomyListingPrice[]>>();
 
-function getEconomyPriceUrl({ id, statTrak }: EconomyPriceQuery) {
+function getEconomyPriceUrl({ id, souvenir, statTrak }: EconomyPriceQuery) {
   const params = new URLSearchParams({
     id: String(id),
     statTrak: String(statTrak)
   });
+  if (souvenir) {
+    params.set("souvenir", "true");
+  }
   return `${ApiActionEconomyPriceUrl}?${params}`;
 }
 

@@ -23,7 +23,10 @@ import { useInput } from "~/components/hooks/use-input";
 import { getDefaultKeychainPosition, sortByName } from "~/shared/economy";
 import { range } from "~/shared/number";
 import { useTranslate } from "./app-context";
-import { AppliedKeychainEditor } from "./applied-keychain-editor";
+import {
+  AppliedKeychainData,
+  AppliedKeychainEditor
+} from "./applied-keychain-editor";
 import { ButtonWithTooltip } from "./button-with-tooltip";
 import { IconInput } from "./icon-input";
 import { ItemBrowser } from "./item-browser";
@@ -74,14 +77,18 @@ export function KeychainPicker({
     };
   }, [forItem]);
   const [appliedKeychainData, setAppliedKeychainData] =
-    useState(defaultKeychainData);
+    useState<AppliedKeychainData>(defaultKeychainData);
   const [selected, setSelected] = useState<CS2EconomyItem>();
   const [isEditing, setIsEditing] = useState(false);
   const canEditKeychainAttributes =
+    selected?.hasHighlights() ||
     !isHideKeychainSeed ||
     !isHideKeychainX ||
     !isHideKeychainY ||
     !isHideKeychainZ;
+  const isMissingHighlight =
+    selected?.hasHighlights() === true &&
+    appliedKeychainData.highlight === undefined;
 
   function handleClickSlot(index: number) {
     return function handleClickSlot() {
@@ -91,8 +98,9 @@ export function KeychainPicker({
 
   function handleClickEditSlot(index: number) {
     return function handleClickSlot() {
-      const { id, seed, x, y, z } = value[index];
+      const { highlight, id, seed, x, y, z } = value[index];
       setAppliedKeychainData({
+        highlight,
         seed: seed ?? defaultKeychainData.seed,
         x: x ?? defaultKeychainData.x,
         y: y ?? defaultKeychainData.y,
@@ -105,6 +113,7 @@ export function KeychainPicker({
   }
 
   function handleSelectKeychain(item: CS2EconomyItem) {
+    setAppliedKeychainData((data) => ({ ...data, highlight: undefined }));
     setSelected(item);
   }
 
@@ -121,8 +130,10 @@ export function KeychainPicker({
     onChange({
       ...value,
       [ensure(activeIndex)]: {
+        highlight: appliedKeychainData.highlight,
         id: selected.id,
         seed:
+          selected.hasSeed() &&
           appliedKeychainData.seed !== defaultKeychainData.seed
             ? appliedKeychainData.seed
             : undefined,
@@ -288,6 +299,7 @@ export function KeychainPicker({
             />
             <ModalButton
               children={translate("EditorApply")}
+              disabled={isMissingHighlight}
               onClick={handleAddKeychain}
               variant="primary"
             />

@@ -6,7 +6,10 @@
 import { CS2Economy, CS2EconomyItem, CS2_ITEMS } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations/english";
 import { describe, expect, test } from "vitest";
-import { createFakeInventoryItem } from "~/shared/inventory";
+import {
+  createFakeInventoryItem,
+  createFakeInventoryItemFromBase
+} from "~/shared/inventory";
 import { has } from "~/shared/misc";
 import { nameItemFactory } from "./use-name-item";
 
@@ -16,7 +19,11 @@ CS2Economy.load({
 });
 
 const translate = (token: string) =>
-  token === "ItemSealedGraffiti" ? "Sealed Graffiti" : "statTrak™";
+  token === "ItemSealedGraffiti"
+    ? "Sealed Graffiti"
+    : token === "InventoryItemSouvenir"
+      ? "Souvenir"
+      : "statTrak™";
 const nameItem = nameItemFactory(translate);
 const nameItemString = (...args: Parameters<typeof nameItem>) =>
   nameItem(...args)
@@ -325,4 +332,30 @@ describe("test useNameItem hook", () => {
       "Default CT Agent"
     );
   });
+});
+
+test("a souvenir is named with the Souvenir prefix", () => {
+  const souvenir = createFakeInventoryItem(AK47_ASIIMOV_ITEM, {
+    souvenir: true
+  });
+  expect(nameItemString(souvenir)).toBe("Souvenir AK-47 | Asiimov");
+  expect(nameItemString(souvenir, "inventory-name")).toBe(
+    "Souvenir AK-47 | Asiimov"
+  );
+});
+
+test("a charm with a highlight is a souvenir named after its highlight", () => {
+  const charm = CS2Economy.getById(14163);
+  const highlight = charm.getHighlights()[0];
+  const item = createFakeInventoryItemFromBase({
+    highlight: highlight.id,
+    id: charm.id
+  });
+  expect(nameItemString(item)).toBe(
+    `Souvenir Charm | Austin 2025 Highlight | ${highlight.name}`
+  );
+  expect(nameItemString(item, "craft-name")).toBe(
+    `Austin 2025 Highlight | ${highlight.name}`
+  );
+  expect(nameItemString(charm)).toBe("Charm | Austin 2025 Highlight");
 });

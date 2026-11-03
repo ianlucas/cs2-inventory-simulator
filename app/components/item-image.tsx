@@ -73,7 +73,7 @@ export function ItemImage({
       <div
         {...props}
         className={clsx(
-          "relative flex aspect-256/192 items-center justify-center",
+          "relative flex aspect-256/192 max-w-full items-center justify-center",
           className
         )}
       >

@@ -55,6 +55,7 @@ function projectInventoryItem(
     equipped: item.equipped ?? false,
     equippedCT: item.equippedCT ?? false,
     equippedT: item.equippedT ?? false,
+    highlight: item.highlight,
     id,
     inventoryKey,
     itemId: item.id,
@@ -62,6 +63,7 @@ function projectInventoryItem(
     nameTag: item.nameTag,
     seed: item.seed,
     sourceContainerId: item.containerId,
+    souvenir: item.souvenir === true,
     statTrak: item.statTrak,
     uid: item.uid,
     wear: item.wear
@@ -89,6 +91,7 @@ function projectInventoryItem(
   }
   for (const [slot, keychain] of item.someKeychains()) {
     keychains.push({
+      highlight: keychain.highlight,
       id: randomUUID(),
       itemId: keychain.id,
       seed: keychain.seed,

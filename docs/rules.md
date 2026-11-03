@@ -335,6 +335,13 @@ Can the user define a pet's Stage (upgrade level) when crafting?
 
 Can the user define StatTrak when crafting?
 
+### `craftAllowSouvenir`
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Can the user define Souvenir when crafting? A souvenir's stickers don't need `craftAllowStickers`, aren't hidden by `craftHideType`, and don't count towards `inventoryItemMaxStickers`. Their wear, rotation, position and schema still follow the matching sticker rules.
+
 ### `craftAllowWear`
 
 - **Type:** `boolean`
@@ -497,6 +504,13 @@ Can the user define a pet's Stage (upgrade level) when editing?
 - **Default:** `true`
 
 Can the user define StatTrak when editing?
+
+### `editAllowSouvenir`
+
+- **Type:** `boolean`
+- **Default:** `true`
+
+Can the user define Souvenir when editing? A souvenir's stickers don't need `editAllowStickers`, aren't hidden by `editHideType`, and don't count towards `inventoryItemMaxStickers`. Their wear, rotation, position and schema still follow the matching sticker rules.
 
 ### `editAllowWear`
 

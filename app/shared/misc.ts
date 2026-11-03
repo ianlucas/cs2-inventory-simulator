@@ -11,6 +11,15 @@ export function random<T>(array: T[]): T {
   return array[Math.floor(Math.random() * array.length)];
 }
 
+export function shuffle<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let index = shuffled.length - 1; index > 0; index--) {
+    const other = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[other]] = [shuffled[other], shuffled[index]];
+  }
+  return shuffled;
+}
+
 export function safeParseJson(json: string) {
   try {
     return JSON.parse(json);

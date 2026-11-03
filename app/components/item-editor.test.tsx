@@ -28,6 +28,10 @@ vi.mock("./editor-item-display", () => ({
   EditorItemDisplay: () => null
 }));
 
+vi.mock("./modal-generic", () => ({
+  confirm: async () => true
+}));
+
 vi.mock("./hooks/use-is-desktop", () => ({
   useIsDesktop: () => true
 }));
@@ -142,21 +146,30 @@ describe("ItemEditor", () => {
   });
 });
 
+const knife = ensure(
+  CS2Economy.itemsAsArray.find(
+    (item) =>
+      item.isMelee() &&
+      item.isPaintable() &&
+      item.hasNameTag() &&
+      item.hasSeed() &&
+      item.hasWear()
+  )
+);
+
 describe("ItemEditor layout", () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  test.each([
-    [250, "w-105"],
-    [251, "w-160"]
-  ])("opens with fields %ipx tall in the %s layout", (height, layoutClass) => {
+  function getFirstCommitLayout(target: typeof item, height: number) {
     vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(
       height
     );
     const container = document.createElement("div");
     document.body.appendChild(container);
     const root = createRoot(container);
+    let classList: string[] = [];
     act(() => {
       flushSync(() =>
         root.render(
@@ -165,14 +178,66 @@ describe("ItemEditor layout", () => {
             isHidePatches
             isHideStatTrak
             isHideStickers
-            item={item}
+            item={target}
           />
         )
       );
       // Checked before act flushes the rest, i.e. on the first commit.
-      expect(container.firstElementChild?.classList).toContain(layoutClass);
+      classList = [...(container.firstElementChild?.classList ?? [])];
     });
     act(() => root.unmount());
     container.remove();
+    return classList;
+  }
+
+  test.each([
+    [250, "w-105"],
+    [251, "w-160"]
+  ])(
+    "opens a knife with fields %ipx tall in the %s layout",
+    (height, layoutClass) => {
+      expect(getFirstCommitLayout(knife, height)).toContain(layoutClass);
+    }
+  );
+
+  test("opens a weapon in the w-160 layout however short its fields are", () => {
+    expect(getFirstCommitLayout(item, 100)).toContain("w-160");
   });
+
+  test.each([
+    [250, "w-105"],
+    [251, "w-160"]
+  ])(
+    "re-lays out a tall knife whose fields are %ipx tall after reset in the %s layout",
+    async (height, layoutClass) => {
+      const offsetHeight = vi
+        .spyOn(HTMLElement.prototype, "offsetHeight", "get")
+        .mockReturnValue(251);
+      const container = document.createElement("div");
+      document.body.appendChild(container);
+      const root = createRoot(container);
+      act(() => {
+        root.render(
+          <ItemEditor
+            isHideKeychains
+            isHidePatches
+            isHideStatTrak
+            isHideStickers
+            item={knife}
+          />
+        );
+      });
+      expect(container.firstElementChild?.classList).toContain("w-160");
+      offsetHeight.mockReturnValue(height);
+      const reset = ensure(
+        container
+          .querySelector('svg[data-icon="arrow-rotate-left"]')
+          ?.closest("button")
+      );
+      await act(async () => reset.click());
+      expect(container.firstElementChild?.classList).toContain(layoutClass);
+      act(() => root.unmount());
+      container.remove();
+    }
+  );
 });
