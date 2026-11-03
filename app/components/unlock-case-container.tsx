@@ -22,6 +22,7 @@ export function UnlockCaseContainer({
   hideCaseContents,
   isDisplaying,
   isSyncing,
+  isUnlocking,
   items,
   keyItem,
   neededKeyItem,
@@ -34,6 +35,7 @@ export function UnlockCaseContainer({
   hideCaseContents: boolean;
   isDisplaying: boolean;
   isSyncing: boolean;
+  isUnlocking: boolean;
   items: CS2UnlockedItem[];
   keyItem?: CS2EconomyItem;
   neededKeyItem?: CS2EconomyItem;
@@ -105,7 +107,7 @@ export function UnlockCaseContainer({
                 )}
                 <ModalButton
                   children={translate("CaseClose")}
-                  disabled={isSyncing}
+                  disabled={isSyncing || isUnlocking}
                   onClick={onClose}
                   variant="secondary"
                 />

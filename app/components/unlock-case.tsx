@@ -70,7 +70,9 @@ export function UnlockCase({
   const [canUnlock, setCanUnlock] = useState(true);
   const [isOpen, setIsOpen] = useState(true);
   const [hideCaseContents, setHideCaseContents] = useState(false);
+  const [isUnlocking, setIsUnlocking] = useState(false);
   const isClosingRef = useRef(false);
+  const isUnlockingRef = useRef(false);
   const unlockedItemRef = useRef<{
     actual: CS2UnlockedItem;
     displayed: CS2UnlockedItem;
@@ -105,8 +107,13 @@ export function UnlockCase({
     return unlockedUid;
   }
 
+  function setUnlocking(value: boolean) {
+    isUnlockingRef.current = value;
+    setIsUnlocking(value);
+  }
+
   function handleClose() {
-    if (isClosingRef.current) {
+    if (isClosingRef.current || isUnlockingRef.current) {
       return;
     }
     isClosingRef.current = true;
@@ -129,6 +136,7 @@ export function UnlockCase({
 
   async function handleUnlock() {
     try {
+      setUnlocking(true);
       setIsDisplaying(false);
       setCanUnlock(false);
       const { unboxing, unlockedItem: actualItem } =
@@ -145,10 +153,7 @@ export function UnlockCase({
         displayed: displayedItem,
         unboxing
       };
-      if (isClosingRef.current) {
-        addUnlockedItemToInventory();
-        return;
-      }
+      setUnlocking(false);
       wait(() => {
         setHideCaseContents(true);
         if (caseItem.keyIds !== undefined) {
@@ -165,6 +170,7 @@ export function UnlockCase({
         }, 100);
       }, 250);
     } catch {
+      setUnlocking(false);
       dispatchSyncError();
       handleClose();
     }
@@ -193,6 +199,7 @@ export function UnlockCase({
                 hideCaseContents={hideCaseContents}
                 isDisplaying={isDisplaying}
                 isSyncing={isSyncing}
+                isUnlocking={isUnlocking}
                 items={items}
                 keyItem={keyItem}
                 neededKeyItem={neededKeyItem}
