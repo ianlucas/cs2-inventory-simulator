@@ -60,7 +60,7 @@
     "@types/react-dom": "^19.3.0",
     "eslint": "^10.13.0",
     "eslint-plugin-better-tailwindcss": "^4.10.0",
-    "happy-dom": "^20.14.6",
+    "happy-dom": "^21.0.4",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.3",
@@ -75,6 +75,9 @@
   },
   "overrides": {
     "deepmerge-ts": "^8.0.2",
-    "mysql2": "^3.24.4"
+    "mysql2": "^3.24.4",
+    "@hono/vite-dev-server": {
+      "@hono/node-server": "^2.1.5"
+    }
   }
 }
