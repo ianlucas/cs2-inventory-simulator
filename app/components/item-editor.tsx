@@ -228,10 +228,11 @@ export function ItemEditor({
 
   const attributesRef = useRef<HTMLDivElement>(null);
   const [isTallEditor, setIsTallEditor] = useState(false);
-  // Measures before the first paint so the editor opens in its final layout.
+  // Measures before paint so the editor opens in its final layout. Latches
+  // once tall so edits can't flip it back; reset clears the latch to re-measure.
   useLayoutEffect(() => {
     const element = attributesRef.current;
-    if (element === null) {
+    if (isTallEditor || element === null) {
       return;
     }
     const update = () => {
@@ -243,7 +244,7 @@ export function ItemEditor({
     const observer = new ResizeObserver(update);
     observer.observe(element);
     return () => observer.disconnect();
-  }, []);
+  }, [isTallEditor]);
   const isTwoColumn = isDesktop && (item.isWeapon() || isTallEditor);
 
   const attributes = useKeyValues({
@@ -472,6 +473,7 @@ export function ItemEditor({
     ) {
       attributes.reset();
       setSouvenirSelection(initialSouvenirSelection);
+      setIsTallEditor(false);
     }
   }
 

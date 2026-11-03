@@ -28,6 +28,10 @@ vi.mock("./editor-item-display", () => ({
   EditorItemDisplay: () => null
 }));
 
+vi.mock("./modal-generic", () => ({
+  confirm: async () => true
+}));
+
 vi.mock("./hooks/use-is-desktop", () => ({
   useIsDesktop: () => true
 }));
@@ -199,4 +203,41 @@ describe("ItemEditor layout", () => {
   test("opens a weapon in the w-160 layout however short its fields are", () => {
     expect(getFirstCommitLayout(item, 100)).toContain("w-160");
   });
+
+  test.each([
+    [250, "w-105"],
+    [251, "w-160"]
+  ])(
+    "re-lays out a tall knife whose fields are %ipx tall after reset in the %s layout",
+    async (height, layoutClass) => {
+      const offsetHeight = vi
+        .spyOn(HTMLElement.prototype, "offsetHeight", "get")
+        .mockReturnValue(251);
+      const container = document.createElement("div");
+      document.body.appendChild(container);
+      const root = createRoot(container);
+      act(() => {
+        root.render(
+          <ItemEditor
+            isHideKeychains
+            isHidePatches
+            isHideStatTrak
+            isHideStickers
+            item={knife}
+          />
+        );
+      });
+      expect(container.firstElementChild?.classList).toContain("w-160");
+      offsetHeight.mockReturnValue(height);
+      const reset = ensure(
+        container
+          .querySelector('svg[data-icon="arrow-rotate-left"]')
+          ?.closest("button")
+      );
+      await act(async () => reset.click());
+      expect(container.firstElementChild?.classList).toContain(layoutClass);
+      act(() => root.unmount());
+      container.remove();
+    }
+  );
 });
