@@ -3,12 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  faCaretDown,
-  faCaretUp,
-  faFlagCheckered,
-  faTrophy
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2Economy } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
@@ -28,17 +23,13 @@ const ROW_ANIMATION_STAGGER_MS = 60;
 
 const RANKING_KINDS = {
   lastWeek: {
-    accent: "before:bg-sky-400",
-    emptyViewer: "CommunityNotPlayedLastWeek",
-    icon: faTrophy,
-    iconColor: "text-sky-300",
+    emptyViewer: undefined,
+    glow: "from-sky-400/35 after:via-sky-300",
     title: "CommunityLastWeek"
   },
   thisWeek: {
-    accent: "before:bg-amber-400",
     emptyViewer: "CommunityNotRanked",
-    icon: faFlagCheckered,
-    iconColor: "text-amber-300",
+    glow: "from-amber-400/35 after:via-amber-300",
     title: "CommunityThisWeek"
   }
 } as const;
@@ -215,7 +206,9 @@ function RankingRow({
         />
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-2">
-            <span className="truncate text-sm text-white">{row.name}</span>
+            <span className="truncate text-sm text-white" title={row.name}>
+              {row.name}
+            </span>
             {isViewer && (
               <span className="font-display shrink-0 rounded-xs bg-orange-400 px-1 text-xs font-semibold text-black uppercase">
                 {translate("CommunityYou")}
@@ -254,60 +247,64 @@ export function UnboxingLeagueRanking({
   ranking: RankingData;
 }) {
   const translate = useTranslate();
-  const { accent, emptyViewer, icon, iconColor, title } = RANKING_KINDS[kind];
+  const { emptyViewer, glow, title } = RANKING_KINDS[kind];
   const showMovement = kind === "thisWeek" && hasMovement;
   const isViewerOnTop =
     viewer != null && rows.some((row) => row.userId === viewer.userId);
   // Rankings slide in one after another, as do their rows.
   const firstAnimationIndex = order * (rows.length + 1);
+  const viewerNotice =
+    viewer === null
+      ? isViewerPrivate
+        ? "CommunityProfilePrivate"
+        : emptyViewer
+      : undefined;
 
   return (
-    <section
-      className={clsx(
-        "relative overflow-hidden rounded-sm border border-white/10 bg-neutral-900/70 shadow-lg backdrop-blur-sm before:absolute before:inset-x-0 before:top-0 before:h-0.5",
-        accent
-      )}
-    >
-      <header className="flex items-center gap-3 border-b border-white/10 bg-linear-to-r from-white/10 to-transparent px-4 py-3">
-        <FontAwesomeIcon
-          className={clsx("h-6 shrink-0", iconColor)}
-          icon={icon}
-        />
-        <h2 className="font-display min-w-0 flex-1 truncate text-xl font-semibold text-white">
+    <section>
+      <header
+        className={clsx(
+          "relative bg-radial-[ellipse_60%_100%_at_50%_100%] to-transparent px-4 pt-5 pb-4 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-linear-to-r after:from-transparent after:to-transparent",
+          glow
+        )}
+      >
+        <h2 className="font-display truncate text-center text-xl font-semibold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
           {translate(title)}
         </h2>
       </header>
-      {rows.length > 0 ? (
-        <ol className="py-1">
-          {rows.map((row, rowIndex) => (
-            <RankingRow
-              animationIndex={firstAnimationIndex + rowIndex}
-              hasMovement={showMovement}
-              isViewer={row.userId === viewer?.userId}
-              key={row.userId}
-              row={row}
-            />
-          ))}
-          {viewer != null && !isViewerOnTop && (
-            <RankingRow
-              animationIndex={firstAnimationIndex + rows.length}
-              hasMovement={showMovement}
-              isViewer
-              rankedCount={rankedCount}
-              row={viewer}
-            />
-          )}
-        </ol>
-      ) : (
-        <p className="px-4 py-6 text-center text-neutral-400">
-          {translate("CommunityEmpty")}
-        </p>
-      )}
-      {viewer === null && (
-        <p className="border-t border-white/10 px-4 py-3 text-center text-sm text-neutral-400">
-          {translate(isViewerPrivate ? "CommunityProfilePrivate" : emptyViewer)}
-        </p>
-      )}
+      <div className="overflow-hidden rounded-b-sm border border-t-0 border-white/10 bg-neutral-900/70 shadow-lg backdrop-blur-sm">
+        {rows.length > 0 ? (
+          <ol className="py-1">
+            {rows.map((row, rowIndex) => (
+              <RankingRow
+                animationIndex={firstAnimationIndex + rowIndex}
+                hasMovement={showMovement}
+                isViewer={row.userId === viewer?.userId}
+                key={row.userId}
+                row={row}
+              />
+            ))}
+            {viewer != null && !isViewerOnTop && (
+              <RankingRow
+                animationIndex={firstAnimationIndex + rows.length}
+                hasMovement={showMovement}
+                isViewer
+                rankedCount={rankedCount}
+                row={viewer}
+              />
+            )}
+          </ol>
+        ) : (
+          <p className="px-4 py-6 text-center text-neutral-400">
+            {translate("CommunityEmpty")}
+          </p>
+        )}
+        {viewerNotice !== undefined && (
+          <p className="border-t border-white/10 px-4 py-3 text-center text-sm text-neutral-400">
+            {translate(viewerNotice)}
+          </p>
+        )}
+      </div>
     </section>
   );
 }

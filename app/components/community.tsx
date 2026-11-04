@@ -46,32 +46,15 @@ export function Community({
 
   return (
     <div className="m-auto px-4 pt-6 pb-12 lg:w-5xl lg:px-0">
-      <div className="mb-4 flex flex-wrap items-end justify-between gap-x-4 gap-y-1 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
-        <h1 className="font-display flex items-center gap-3 text-3xl font-semibold text-white">
-          {translate("CommunityTitle")}
-          <CommunityInfo
-            text={translate(
-              "CommunityInfo",
-              formatSimulatorDollars(budget, lang)
-            )}
-          />
-        </h1>
-        <p className="font-display text-sm text-neutral-300">
-          {[
-            translate(
-              "CommunityResetsAt",
-              formatRelativeTime(new Date(resetsAt), now, lang)
-            ),
-            generatedAt !== undefined &&
-              translate(
-                "CommunityUpdatedAt",
-                formatRelativeTime(new Date(generatedAt), now, lang)
-              )
-          ]
-            .filter(Boolean)
-            .join(" · ")}
-        </p>
-      </div>
+      <h1 className="font-display mb-4 flex items-center gap-3 text-3xl font-semibold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+        {translate("CommunityTitle")}
+        <CommunityInfo
+          text={translate(
+            "CommunityInfo",
+            formatSimulatorDollars(budget, lang)
+          )}
+        />
+      </h1>
       <div className="grid items-start gap-4 lg:grid-cols-2">
         <UnboxingLeagueRanking
           isViewerPrivate={isViewerPrivate}
@@ -86,6 +69,21 @@ export function Community({
           ranking={lastWeek}
         />
       </div>
+      <p className="font-display mt-3 text-right text-sm text-neutral-300 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+        {[
+          translate(
+            "CommunityResetsAt",
+            formatRelativeTime(new Date(resetsAt), now, lang)
+          ),
+          generatedAt !== undefined &&
+            translate(
+              "CommunityUpdatedAt",
+              formatRelativeTime(new Date(generatedAt), now, lang)
+            )
+        ]
+          .filter(Boolean)
+          .join(" · ")}
+      </p>
     </div>
   );
 }
