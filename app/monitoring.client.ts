@@ -5,7 +5,7 @@
 
 import * as Sentry from "@sentry/browser";
 import { isbot } from "isbot";
-import { isNetworkError } from "./shared/fetch";
+import { isAbortError, isNetworkError } from "./shared/fetch";
 
 function isSupportedBrowser() {
   return CSS.supports("color", "color-mix(in srgb, red, red)");
@@ -33,8 +33,14 @@ export function initClientMonitoring() {
       "Non-Error promise rejection captured",
       /^TimeoutError: /
     ],
+    // Cancelled requests still reach the global handlers: React Router leaks
+    // an AbortError when a navigation interrupts a `.data` response, and some
+    // extensions wrap `fetch()` and rethrow aborts nobody catches.
     beforeSend: (event, hint) =>
-      isNetworkError(hint.originalException) ? null : event,
+      isNetworkError(hint.originalException) ||
+      isAbortError(hint.originalException)
+        ? null
+        : event,
     integrations: (integrations) =>
       integrations.filter(({ name }) => name !== "BrowserSession")
   });
