@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { sync } from "~/sync";
 
 export function useIsSyncing() {
@@ -23,4 +23,15 @@ export function useIsSyncing() {
     };
   });
   return isSyncing;
+}
+
+export function useListenSyncError(callback: () => void) {
+  const onSyncError = useEffectEvent(callback);
+  useEffect(() => {
+    function handleSyncError() {
+      onSyncError();
+    }
+    sync.addEventListener("syncerror", handleSyncError);
+    return () => sync.removeEventListener("syncerror", handleSyncError);
+  }, []);
 }

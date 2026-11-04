@@ -6,6 +6,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { createRoot } from "react-dom/client";
+import { sync } from "~/sync";
 import { useKeyRelease } from "./hooks/use-key-release";
 import { Modal, ModalHeader } from "./modal";
 import { ModalButton } from "./modal-button";
@@ -52,6 +53,15 @@ export async function confirm({
 }): Promise<boolean> {
   return new Promise((resolve) => {
     const root = createRoot(document.createElement("div"));
+    function settle(value: boolean) {
+      sync.removeEventListener("syncerror", handleSyncError);
+      root.unmount();
+      resolve(value);
+    }
+    function handleSyncError() {
+      settle(false);
+    }
+    sync.addEventListener("syncerror", handleSyncError);
     root.render(
       createPortal(
         <Modal className="w-137.5" blur>
@@ -61,18 +71,12 @@ export async function confirm({
           </p>
           <div className="my-6 flex justify-center gap-2 px-4">
             <ModalButton
-              onClick={() => {
-                root.unmount();
-                resolve(false);
-              }}
+              onClick={() => settle(false)}
               variant="secondary"
               children={cancelText}
             />
             <ModalButton
-              onClick={() => {
-                root.unmount();
-                resolve(true);
-              }}
+              onClick={() => settle(true)}
               variant="primary"
               children={confirmText}
             />

@@ -38,6 +38,7 @@ import { useExtractItemSticker } from "./hooks/use-extract-item-sticker";
 import { useListenAppEvent } from "./hooks/use-listen-app-event";
 import { useRemoveItemPatch } from "./hooks/use-remove-item-patch";
 import { useSealItemSticker } from "./hooks/use-seal-item-sticker";
+import { useListenSyncError } from "./hooks/use-sync-state";
 import { useUnsealGraffiti } from "./hooks/use-unseal-graffiti";
 import { InfoIcon } from "./info-icon";
 import { InspectInventoryItem } from "./inspect-item";
@@ -230,6 +231,10 @@ export function Inventory() {
 
   function dismissSelectItem() {
     setItemSelector(undefined);
+    closeDialogs();
+  }
+
+  function closeDialogs() {
     closeApplyItemKeychain();
     closeApplyItemPatch();
     closeDetachCharm();
@@ -286,6 +291,7 @@ export function Inventory() {
   }
 
   useListenAppEvent("unlockcase", handleUnlockCaseEvent);
+  useListenSyncError(closeDialogs);
 
   const isSelectingAnItem = itemSelector !== undefined;
   const displayedItems = isSelectingAnItem
