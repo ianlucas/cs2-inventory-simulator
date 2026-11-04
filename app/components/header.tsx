@@ -9,9 +9,9 @@ import {
   faBoxesStacked,
   faCog,
   faHammer,
+  faPeopleGroup,
   faPersonRifle,
   faRightFromBracket,
-  faTrophy,
   faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -135,7 +135,7 @@ export function Header({
                 <HeaderLink
                   className="max-w-30"
                   to="/community"
-                  icon={faTrophy}
+                  icon={faPeopleGroup}
                   label={translate("HeaderCommunityLabel")}
                   onClick={closeMenu}
                 />
