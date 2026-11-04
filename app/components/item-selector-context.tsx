@@ -13,6 +13,7 @@ import {
   useState
 } from "react";
 import { ClientOnly } from "remix-utils/client-only";
+import { useListenSyncError } from "~/components/hooks/use-sync-state";
 import { useWatch } from "~/components/hooks/use-watch";
 import { TransformedInventoryItems } from "~/shared/inventory-transform";
 
@@ -68,6 +69,8 @@ export function useItemSelectorScrollTopHandler<T>(dependency: T) {
 export function ItemSelectorProvider({ children }: { children: ReactNode }) {
   const [itemSelector, setItemSelector] = useState<ItemSelectorContextProps>();
   useItemSelectorScrollTopHandler(itemSelector);
+
+  useListenSyncError(() => setItemSelector(undefined));
 
   return (
     <ClientOnly
