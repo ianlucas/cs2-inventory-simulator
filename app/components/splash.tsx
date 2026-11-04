@@ -9,7 +9,7 @@ import { Logo } from "./logo";
 export function Splash() {
   const translate = useTranslate();
   return (
-    <div
+    <section
       id="splash"
       suppressHydrationWarning
       style={{
@@ -84,6 +84,6 @@ export function Splash() {
           __html: __SPLASH_SCRIPT__
         }}
       />
-    </div>
+    </section>
   );
 }
