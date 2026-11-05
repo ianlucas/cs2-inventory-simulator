@@ -4,28 +4,19 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS2Economy,
   CS2Inventory,
   CS2InventoryItem,
   CS2ItemType,
   CS2_ITEMS,
   ensure
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
 import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { loadEconomy, setupTestRoot } from "~/test-utils";
 import { getItemIconKey, getViewerIconSlot } from "~/viewer-icon";
 import { useViewerIcon } from "./use-viewer-icon";
 
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
-
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const icons = vi.hoisted(() => ({
   listeners: new Map<string, Set<() => void>>(),
@@ -78,8 +69,7 @@ function ViewerIconProbe({
 }
 
 describe("useViewerIcon", () => {
-  let container: HTMLElement;
-  let root: Root;
+  const view = setupTestRoot();
   let inventory: CS2Inventory;
   let item: CS2InventoryItem;
 
@@ -89,22 +79,17 @@ describe("useViewerIcon", () => {
     icons.requests.length = 0;
     icons.slots.length = 0;
     icons.urls.clear();
-    container = document.createElement("div");
-    document.body.appendChild(container);
-    root = createRoot(container);
     inventory = new CS2Inventory({});
     inventory.add({ id: 244, seed: 1, wear: 0.1 });
     item = inventory.getAll()[0];
   });
 
   afterEach(() => {
-    act(() => root.unmount());
-    container.remove();
     vi.useRealTimers();
   });
 
   function render(enabled = true) {
-    act(() => root.render(<ViewerIconProbe enabled={enabled} item={item} />));
+    view.render(<ViewerIconProbe enabled={enabled} item={item} />);
   }
 
   function publish(url: string) {
@@ -122,16 +107,16 @@ describe("useViewerIcon", () => {
 
     expect(icons.requests).toEqual([getItemIconKey(item)]);
     expect(icons.slots).toEqual([getViewerIconSlot(item)]);
-    expect(container.textContent).toBe("none");
+    expect(view.container.textContent).toBe("none");
   });
 
   it("shows the icon once there is one, and whichever replaces it", () => {
     render();
     publish("blob:before");
-    expect(container.textContent).toBe("blob:before");
+    expect(view.container.textContent).toBe("blob:before");
 
     publish("blob:after");
-    expect(container.textContent).toBe("blob:after");
+    expect(view.container.textContent).toBe("blob:after");
   });
 
   it("requests again when the item is edited in place", () => {
@@ -158,11 +143,11 @@ describe("useViewerIcon", () => {
     render();
 
     expect(icons.requests).toEqual([]);
-    expect(container.textContent).toBe("none");
+    expect(view.container.textContent).toBe("none");
   });
 
   it("slots someone else's item by its look, as its uid would clash with the user's", () => {
-    act(() => root.render(<ViewerIconProbe enabled foreign item={item} />));
+    view.render(<ViewerIconProbe enabled foreign item={item} />);
 
     expect(icons.requests).toEqual([getItemIconKey(item)]);
     expect(icons.slots).toEqual([getItemIconKey(item)]);
@@ -173,6 +158,6 @@ describe("useViewerIcon", () => {
     publish("blob:x");
 
     expect(icons.requests).toEqual([]);
-    expect(container.textContent).toBe("none");
+    expect(view.container.textContent).toBe("none");
   });
 });

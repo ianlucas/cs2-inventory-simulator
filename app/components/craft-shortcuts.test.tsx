@@ -3,23 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2Inventory, CS2_ITEMS, ensure } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
-import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { CS2Economy, CS2Inventory, ensure } from "@ianlucas/cs2-lib";
+import { beforeEach, describe, expect, test, vi } from "vitest";
+import { loadEconomy, setupTestRoot } from "~/test-utils";
 import { DetachCharmAddPack } from "./detach-charm";
 import { SealItemStickerAddSlab } from "./seal-item-sticker";
 import { UnlockCaseContainerAddKey } from "./unlock-case-container-add-key";
 
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
-
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 function createRules() {
   return {
@@ -76,45 +67,36 @@ const shortcuts = [
 ];
 
 describe.each(shortcuts)("$name", ({ element, item }) => {
-  let container: HTMLElement;
-  let root: Root;
+  const view = setupTestRoot();
 
   beforeEach(() => {
     rules = createRules();
-    container = document.createElement("div");
-    document.body.appendChild(container);
-    root = createRoot(container);
-  });
-
-  afterEach(() => {
-    act(() => root.unmount());
-    container.remove();
   });
 
   function render() {
-    act(() => root.render(element));
+    view.render(element);
   }
 
   test("shows the add button when no rule hides its item", () => {
     render();
-    expect(container.textContent).toContain("CaseAdd");
+    expect(view.container.textContent).toContain("CaseAdd");
   });
 
   test("is hidden when craftHideType contains its item type", () => {
     rules.craftHideType = [item.type];
     render();
-    expect(container.innerHTML).toBe("");
+    expect(view.container.innerHTML).toBe("");
   });
 
   test("is hidden when craftHideFilterType contains its item type", () => {
     rules.craftHideFilterType = [item.type];
     render();
-    expect(container.innerHTML).toBe("");
+    expect(view.container.innerHTML).toBe("");
   });
 
   test("is hidden when craftHideId contains its item id", () => {
     rules.craftHideId = [item.id];
     render();
-    expect(container.innerHTML).toBe("");
+    expect(view.container.innerHTML).toBe("");
   });
 });

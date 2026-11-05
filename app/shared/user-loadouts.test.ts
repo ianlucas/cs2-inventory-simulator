@@ -3,15 +3,10 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS2_ITEMS,
-  CS2Economy,
-  CS2Inventory,
-  CS2Team
-} from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2Inventory, CS2Team } from "@ianlucas/cs2-lib";
 import { expect, test } from "vitest";
 import { SyncAction } from "~/data/sync";
+import { loadEconomy } from "~/test-utils";
 import { getInventoryItemIds, getLoadoutItem } from "./loadout";
 import {
   LoadoutAction,
@@ -21,10 +16,7 @@ import {
   getLoadoutsUsingItem
 } from "./user-loadouts";
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const NOVA_SKIN_ID = 914;
 const LOADOUT_ID = "00000000-0000-4000-8000-000000000000";

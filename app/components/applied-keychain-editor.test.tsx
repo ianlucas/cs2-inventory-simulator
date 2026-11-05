@@ -3,25 +3,16 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2_ITEMS, ensure } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
-import { act, useState } from "react";
-import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { dragRange } from "~/test-utils";
+import { CS2Economy, ensure } from "@ianlucas/cs2-lib";
+import { useState } from "react";
+import { describe, expect, test, vi } from "vitest";
+import { dragRange, loadEconomy, setupTestRoot } from "~/test-utils";
 import {
   AppliedKeychainEditor,
   type AppliedKeychainData
 } from "./applied-keychain-editor";
 
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
-
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 vi.mock("./app-context", () => ({
   useTranslate: () => (key: string) => key
@@ -40,19 +31,7 @@ const keychain = ensure(
 );
 
 describe("AppliedKeychainEditor", () => {
-  let container: HTMLElement;
-  let root: Root;
-
-  beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-    root = createRoot(container);
-  });
-
-  afterEach(() => {
-    act(() => root.unmount());
-    container.remove();
-  });
+  const view = setupTestRoot();
 
   test("keeps the parent in step through a fast slider drag", () => {
     let parentValue: AppliedKeychainData | undefined;
@@ -75,9 +54,9 @@ describe("AppliedKeychainEditor", () => {
         />
       );
     }
-    act(() => root.render(<Parent />));
+    view.render(<Parent />);
     const seed = ensure(
-      container.querySelector<HTMLInputElement>('input[type="range"]')
+      view.container.querySelector<HTMLInputElement>('input[type="range"]')
     );
 
     expect(dragRange(seed, 80)).toEqual([]);

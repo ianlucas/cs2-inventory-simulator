@@ -3,22 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2Inventory, CS2_ITEMS, ensure } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2Economy, CS2Inventory, ensure } from "@ianlucas/cs2-lib";
 import { act, type ComponentProps } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { deferred, loadEconomy, setupTestRoot } from "~/test-utils";
 import { UnlockCase } from "./unlock-case";
 import type { UnlockCaseContainer } from "./unlock-case-container";
 
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
-
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const context = vi.hoisted(() => ({
   containerProps: undefined as
@@ -75,19 +67,8 @@ const caseItem = ensure(
 );
 const keyItem = CS2Economy.getById(ensure(caseItem.keyIds)[0]);
 
-function deferred<T>() {
-  let resolve!: (value: T) => void;
-  let reject!: (reason: unknown) => void;
-  const promise = new Promise<T>((onResolve, onReject) => {
-    resolve = onResolve;
-    reject = onReject;
-  });
-  return { promise, reject, resolve };
-}
-
 describe("UnlockCase", () => {
-  let container: HTMLElement;
-  let root: Root;
+  const view = setupTestRoot();
   let caseUid: number;
   let keyUid: number;
 
@@ -100,27 +81,20 @@ describe("UnlockCase", () => {
     keyUid = ensure(uids.find(({ id }) => id === keyItem.id)).uid;
     context.inventory = inventory;
     context.containerProps = undefined;
-    container = document.createElement("div");
-    document.body.appendChild(container);
-    root = createRoot(container);
   });
 
   afterEach(() => {
-    act(() => root.unmount());
-    container.remove();
     vi.clearAllMocks();
   });
 
   function render() {
-    act(() =>
-      root.render(
-        <UnlockCase
-          caseUid={caseUid}
-          keyUid={keyUid}
-          onClose={vi.fn()}
-          onInspect={vi.fn()}
-        />
-      )
+    view.render(
+      <UnlockCase
+        caseUid={caseUid}
+        keyUid={keyUid}
+        onClose={vi.fn()}
+        onInspect={vi.fn()}
+      />
     );
   }
 

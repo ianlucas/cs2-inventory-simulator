@@ -4,10 +4,11 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { range } from "~/shared/number";
+import { setupTestRoot } from "~/test-utils";
 import {
   INVENTORY_GRID_DEFAULT_COLUMNS,
   INVENTORY_GRID_ESTIMATED_ROW_HEIGHT,
@@ -15,10 +16,6 @@ import {
   INVENTORY_GRID_OVERSCAN_ROWS,
   InventoryGrid
 } from "./inventory-grid";
-
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
 
 function getItems(count: number, firstUid = 0) {
   return range(count, firstUid).map((uid) => ({ uid }));
@@ -49,20 +46,14 @@ function scrollTo(top: number) {
 }
 
 describe("InventoryGrid", () => {
-  let container: HTMLElement;
-  let root: Root;
+  const view = setupTestRoot();
 
   beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-    root = createRoot(container);
     window.scrollTo({ top: 0 });
     gridTop = 0;
   });
 
   afterEach(() => {
-    act(() => root.unmount());
-    container.remove();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
   });
@@ -75,30 +66,29 @@ describe("InventoryGrid", () => {
       layoutKey = "test"
     }: { firstUid?: number; fixedColumns?: number; layoutKey?: string } = {}
   ) =>
-    act(() => {
-      root.render(
-        <InventoryGrid
-          fixedColumns={fixedColumns}
-          items={getItems(count, firstUid)}
-          layoutKey={layoutKey}
-        >
-          {({ uid }) => <div data-tile={uid} />}
-        </InventoryGrid>
-      );
-    });
+    view.render(
+      <InventoryGrid
+        fixedColumns={fixedColumns}
+        items={getItems(count, firstUid)}
+        layoutKey={layoutKey}
+      >
+        {({ uid }) => <div data-tile={uid} />}
+      </InventoryGrid>
+    );
 
   const remount = () => {
-    act(() => root.unmount());
-    root = createRoot(container);
+    act(() => view.root.unmount());
+    view.root = createRoot(view.container);
   };
 
   const tiles = () =>
-    Array.from(container.querySelectorAll<HTMLElement>("[data-tile]"), (tile) =>
-      Number(tile.dataset.tile)
+    Array.from(
+      view.container.querySelectorAll<HTMLElement>("[data-tile]"),
+      (tile) => Number(tile.dataset.tile)
     );
 
   const row = (index: number) =>
-    container.querySelector(`[data-index="${index}"]`);
+    view.container.querySelector(`[data-index="${index}"]`);
 
   const height = () => row(0)?.parentElement?.style.height;
 

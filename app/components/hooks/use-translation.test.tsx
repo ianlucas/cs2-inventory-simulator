@@ -4,13 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, expect, it, vi } from "vitest";
+import { beforeEach, expect, it, vi } from "vitest";
+import { setupTestRoot } from "~/test-utils";
 import { useTranslation } from "./use-translation";
-
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
 
 const api = vi.hoisted(() => ({
   fetchItemTranslationMap: vi.fn(async (language: string) => ({
@@ -25,7 +21,7 @@ vi.mock("~/translation-api.client", () => api);
 
 type Languages = Parameters<typeof useTranslation>[0];
 
-let root: Root;
+const view = setupTestRoot();
 let translation: ReturnType<typeof useTranslation>;
 
 function Probe(languages: Languages) {
@@ -35,17 +31,12 @@ function Probe(languages: Languages) {
 
 async function render(languages: Languages) {
   await act(async () => {
-    root.render(<Probe {...languages} />);
+    view.root.render(<Probe {...languages} />);
   });
 }
 
 beforeEach(() => {
-  root = createRoot(document.createElement("div"));
   vi.clearAllMocks();
-});
-
-afterEach(() => {
-  act(() => root.unmount());
 });
 
 it("loads each map in its own language", async () => {

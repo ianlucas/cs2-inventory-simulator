@@ -4,15 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS2_ITEMS,
   CS2Economy,
   CS2Inventory,
   CS2ItemType,
   CS2Team,
   ensure
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
 import { expect, test } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import {
   LOADOUT_SLOTS,
   Loadout,
@@ -41,10 +40,7 @@ import {
 } from "./loadout";
 import { LOADOUT_PRICES } from "./loadout-defaults";
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const AK47_ID = 4;
 const GLOCK_ID = 3;

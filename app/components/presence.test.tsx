@@ -4,14 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
+import { setupTestRoot } from "~/test-utils";
 import { useOverlayTransition } from "./hooks/use-overlay-transition";
 import { Presence } from "./presence";
-
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
 
 function TestOverlay() {
   const transition = useOverlayTransition();
@@ -25,31 +21,15 @@ function TestOverlay() {
 }
 
 describe("Presence + useOverlayTransition", () => {
-  let container: HTMLElement;
-  let root: Root;
-
-  beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-    root = createRoot(container);
-  });
-
-  afterEach(() => {
-    act(() => root.unmount());
-    container.remove();
-  });
+  const view = setupTestRoot();
 
   const renderPresence = (present: boolean) =>
-    act(() => {
-      root.render(
-        <Presence present={present}>
-          {present ? <TestOverlay /> : null}
-        </Presence>
-      );
-    });
+    view.render(
+      <Presence present={present}>{present ? <TestOverlay /> : null}</Presence>
+    );
 
   const overlay = () =>
-    container.querySelector<HTMLElement>('[data-testid="overlay"]');
+    view.container.querySelector<HTMLElement>('[data-testid="overlay"]');
 
   const endAnimation = () =>
     act(() => {
@@ -91,20 +71,16 @@ describe("Presence + useOverlayTransition", () => {
 
   test("notifies when the exit animation completes", () => {
     const onExitComplete = vi.fn();
-    act(() => {
-      root.render(
-        <Presence present={true} onExitComplete={onExitComplete}>
-          <TestOverlay />
-        </Presence>
-      );
-    });
-    act(() => {
-      root.render(
-        <Presence present={false} onExitComplete={onExitComplete}>
-          {null}
-        </Presence>
-      );
-    });
+    view.render(
+      <Presence present={true} onExitComplete={onExitComplete}>
+        <TestOverlay />
+      </Presence>
+    );
+    view.render(
+      <Presence present={false} onExitComplete={onExitComplete}>
+        {null}
+      </Presence>
+    );
     endAnimation();
     expect(onExitComplete).toHaveBeenCalledOnce();
   });

@@ -3,23 +3,19 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2Inventory, CS2_ITEMS, ensure } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2Economy, CS2Inventory, ensure } from "@ianlucas/cs2-lib";
 import { act, useState } from "react";
 import { flushSync } from "react-dom";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { dragRange } from "~/test-utils";
+import {
+  dragRange,
+  loadEconomy,
+  setInputValue,
+  setupTestRoot
+} from "~/test-utils";
 import { ItemEditor, type ItemEditorAttributes } from "./item-editor";
 
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
-
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 vi.mock("./app-context", () => ({
   useTranslate: () => (key: string) => key
@@ -56,16 +52,12 @@ const item = ensure(
 );
 
 describe("ItemEditor", () => {
-  let container: HTMLElement;
-  let root: Root;
+  const view = setupTestRoot();
   let onChange: ReturnType<
     typeof vi.fn<(attributes: ItemEditorAttributes | undefined) => void>
   >;
 
   beforeEach(() => {
-    container = document.createElement("div");
-    document.body.appendChild(container);
-    root = createRoot(container);
     onChange = vi.fn();
     function Parent() {
       const [, setAttributes] = useState<ItemEditorAttributes>();
@@ -83,31 +75,18 @@ describe("ItemEditor", () => {
         />
       );
     }
-    act(() => {
-      root.render(<Parent />);
-    });
-  });
-
-  afterEach(() => {
-    act(() => root.unmount());
-    container.remove();
+    view.render(<Parent />);
   });
 
   function getInput(label: string, selector = "input") {
-    const field = Array.from(container.querySelectorAll("label")).find(
+    const field = Array.from(view.container.querySelectorAll("label")).find(
       (element) => element.textContent === label
     )?.parentElement;
     return ensure(field?.querySelector<HTMLInputElement>(selector));
   }
 
   function type(input: HTMLInputElement, value: string) {
-    act(() => {
-      Object.getOwnPropertyDescriptor(
-        HTMLInputElement.prototype,
-        "value"
-      )?.set?.call(input, value);
-      input.dispatchEvent(new Event("input", { bubbles: true }));
-    });
+    act(() => setInputValue(input, value));
   }
 
   function blur(input: HTMLInputElement) {
@@ -172,6 +151,8 @@ const knife = ensure(
 );
 
 describe("ItemEditor layout", () => {
+  const view = setupTestRoot();
+
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -180,13 +161,10 @@ describe("ItemEditor layout", () => {
     vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(
       height
     );
-    const container = document.createElement("div");
-    document.body.appendChild(container);
-    const root = createRoot(container);
     let classList: string[] = [];
     act(() => {
       flushSync(() =>
-        root.render(
+        view.root.render(
           <ItemEditor
             isHideKeychains
             isHidePatches
@@ -197,10 +175,8 @@ describe("ItemEditor layout", () => {
         )
       );
       // Checked before act flushes the rest, i.e. on the first commit.
-      classList = [...(container.firstElementChild?.classList ?? [])];
+      classList = [...(view.container.firstElementChild?.classList ?? [])];
     });
-    act(() => root.unmount());
-    container.remove();
     return classList;
   }
 
@@ -227,31 +203,26 @@ describe("ItemEditor layout", () => {
       const offsetHeight = vi
         .spyOn(HTMLElement.prototype, "offsetHeight", "get")
         .mockReturnValue(251);
-      const container = document.createElement("div");
-      document.body.appendChild(container);
-      const root = createRoot(container);
-      act(() => {
-        root.render(
-          <ItemEditor
-            isHideKeychains
-            isHidePatches
-            isHideStatTrak
-            isHideStickers
-            item={knife}
-          />
-        );
-      });
-      expect(container.firstElementChild?.classList).toContain("w-160");
+      view.render(
+        <ItemEditor
+          isHideKeychains
+          isHidePatches
+          isHideStatTrak
+          isHideStickers
+          item={knife}
+        />
+      );
+      expect(view.container.firstElementChild?.classList).toContain("w-160");
       offsetHeight.mockReturnValue(height);
       const reset = ensure(
-        container
+        view.container
           .querySelector('svg[data-icon="arrow-rotate-left"]')
           ?.closest("button")
       );
       await act(async () => reset.click());
-      expect(container.firstElementChild?.classList).toContain(layoutClass);
-      act(() => root.unmount());
-      container.remove();
+      expect(view.container.firstElementChild?.classList).toContain(
+        layoutClass
+      );
     }
   );
 });

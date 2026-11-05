@@ -6,14 +6,13 @@
 import {
   CS2_ITEMS,
   CS2BaseInventoryItem,
-  CS2Economy,
   CS2Inventory,
   CS2ItemType,
   CS2Team,
   ensure
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
 import { expect, test } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import { createEquippedInventory } from "./inventory-equipped";
 import {
   Loadout,
@@ -23,10 +22,7 @@ import {
   place
 } from "./loadout";
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const catalana = ensure(
   CS2_ITEMS.find(

@@ -3,8 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_ITEMS, CS2Economy, ensure } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2Economy, ensure } from "@ianlucas/cs2-lib";
 import { Decimal } from "@prisma/client/runtime/client";
 import { expect, test, vi } from "vitest";
 import {
@@ -12,6 +11,7 @@ import {
   getUnboxingPrice,
   roundSimulatorDollars
 } from "~/shared/unboxing-league";
+import { loadEconomy } from "~/test-utils";
 import { recordUserUnlock } from "./user-unlock.server";
 
 const KILOWATT_CASE_ID = 11422;
@@ -19,7 +19,7 @@ const KILOWATT_CASE_KEY_ID = 11423;
 const NOW = new Date("2026-10-21T12:00:00.000Z");
 const USER_ID = "76561198000000001";
 
-CS2Economy.load({ items: CS2_ITEMS, language: english });
+loadEconomy();
 
 function createClient(sums: { payout: number; price: number } | null) {
   return {

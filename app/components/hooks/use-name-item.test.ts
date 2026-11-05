@@ -3,20 +3,17 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2EconomyItem, CS2_ITEMS } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2Economy, CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { describe, expect, test } from "vitest";
 import {
   createFakeInventoryItem,
   createFakeInventoryItemFromBase
 } from "~/shared/inventory";
 import { has } from "~/shared/misc";
+import { loadEconomy } from "~/test-utils";
 import { nameItemFactory } from "./use-name-item";
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const translate = (token: string) =>
   token === "ItemSealedGraffiti"

@@ -3,19 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS2_INVENTORY_VERSION,
-  CS2_ITEMS,
-  CS2Economy
-} from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2_INVENTORY_VERSION } from "@ianlucas/cs2-lib";
 import { beforeEach, expect, test } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import { getCachedInventoryData } from "./inventory-storage";
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const AK47_ID = 4;
 
