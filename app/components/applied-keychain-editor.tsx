@@ -13,7 +13,6 @@ import {
   CS2_MIN_KEYCHAIN_SEED
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useEffect } from "react";
 import {
   getDefaultKeychainPosition,
   keychainPositionStringMaxLen,
@@ -60,7 +59,7 @@ export function AppliedKeychainEditor({
   value: AppliedKeychainData;
 }) {
   const translate = useTranslate();
-  const attributes = useKeyValues(value);
+  const attributes = useKeyValues(value, onChange);
   const keychainPositionBounds = forItem?.getKeychainPositionBounds();
   const keychainPositionXMin = keychainPositionBounds?.x.min;
   const keychainPositionXMax = keychainPositionBounds?.x.max;
@@ -78,8 +77,8 @@ export function AppliedKeychainEditor({
         confirmText: translate("GenericYes")
       })
     ) {
-      attributes.setValue({
-        highlight: attributes.value.highlight,
+      attributes.setValue((current) => ({
+        highlight: current.highlight,
         seed: CS2_MIN_KEYCHAIN_SEED,
         x: getDefaultKeychainPosition(
           keychainPositionXMin,
@@ -93,13 +92,9 @@ export function AppliedKeychainEditor({
           keychainPositionZMin,
           keychainPositionZMax
         )
-      });
+      }));
     }
   }
-
-  useEffect(() => {
-    onChange?.(attributes.value);
-  }, [attributes.value]);
 
   return (
     <div className={clsx("m-auto text-sm select-none", className)}>

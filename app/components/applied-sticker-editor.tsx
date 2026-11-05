@@ -25,7 +25,7 @@ import {
 } from "@ianlucas/cs2-lib-inspect";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import clsx from "clsx";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import {
   stickerOffsetStringMaxLen,
   stickerOffsetToString,
@@ -44,6 +44,14 @@ import { EditorStepRangeWithInput } from "./editor-step-range-with-input";
 import { useKeyValues } from "./hooks/use-key-values";
 import { useTimedState } from "./hooks/use-timed-state";
 import { confirm } from "./modal-generic";
+
+export interface AppliedStickerData {
+  rotation: number;
+  schema: number;
+  wear: number;
+  x: number;
+  y: number;
+}
 
 export function AppliedStickerEditor({
   className,
@@ -74,38 +82,17 @@ export function AppliedStickerEditor({
   isHideStickerX?: boolean;
   isHideStickerY?: boolean;
   item: CS2EconomyItem;
-  onChange?: (data: {
-    rotation: number;
-    schema: number;
-    wear: number;
-    x: number;
-    y: number;
-  }) => void;
+  onChange?: (data: AppliedStickerData) => void;
   slot?: number;
-  stickers?: Record<
-    string,
-    {
-      wear?: number;
-      rotation?: number;
-      schema?: number;
-      x?: number;
-      y?: number;
-    }
-  >;
-  value: {
-    wear: number;
-    rotation: number;
-    schema: number;
-    x: number;
-    y: number;
-  };
+  stickers?: Record<string, Partial<AppliedStickerData>>;
+  value: AppliedStickerData;
   valueRevision?: number;
 }) {
   const translate = useTranslate();
   const [, copyToClipboard] = useCopyToClipboard();
   const [copied, triggerCopied] = useTimedState();
 
-  const attributes = useKeyValues(value);
+  const attributes = useKeyValues(value, onChange);
   const canPreviewItem =
     slot !== undefined && forItem !== undefined && stickers !== undefined;
   const stickerOffsetBounds = forItem?.getStickerOffsetBounds();
@@ -162,17 +149,13 @@ export function AppliedStickerEditor({
     }
   }
 
-  useEffect(() => {
-    onChange?.(attributes.value);
-  }, [attributes.value]);
-
   const shownRevisionRef = useRef(valueRevision);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (valueRevision === shownRevisionRef.current) {
       return;
     }
     shownRevisionRef.current = valueRevision;
-    attributes.setValue(value);
+    attributes.setValueSilently(value);
   }, [valueRevision]);
 
   return (

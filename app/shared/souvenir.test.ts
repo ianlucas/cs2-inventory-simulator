@@ -4,14 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS2_ITEMS,
   CS2Economy,
   CS2Inventory,
   CS2SouvenirSource,
   ensure
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
 import { expect, test } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import {
   createSouvenirSelection,
   findSouvenirSelection,
@@ -28,10 +27,7 @@ import {
   SouvenirSelection
 } from "./souvenir";
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const FENNEC_FOX_ID = 91;
 const URBAN_DDPAT_ID = 66;

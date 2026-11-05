@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { nextMacrotask } from "~/test-utils";
 
 type Price = { economyItemId: number; marketHashName: string };
 
@@ -60,10 +61,6 @@ function price(economyItemId: number, marketHashName: string) {
   };
 }
 
-function flush() {
-  return new Promise((resolve) => setTimeout(resolve, 0));
-}
-
 beforeEach(() => {
   vi.clearAllMocks();
 });
@@ -73,7 +70,7 @@ describe("EconomyPriceLoader", () => {
     mocks.isCurrentAfterRun.mockResolvedValueOnce(false);
     new EconomyPriceLoader().start();
     await vi.waitFor(() => expect(mocks.isCurrentAfterRun).toHaveBeenCalled());
-    await flush();
+    await nextMacrotask();
     expect(mocks.prisma.economyPrice.findFirst).not.toHaveBeenCalled();
     expect(mocks.readSnapshot).not.toHaveBeenCalled();
   });
@@ -89,7 +86,7 @@ describe("EconomyPriceLoader", () => {
         where: { sourceDate: SOURCE_DATE }
       })
     );
-    await flush();
+    await nextMacrotask();
     expect(mocks.readSnapshot).not.toHaveBeenCalled();
     expect(mocks.prisma.$transaction).not.toHaveBeenCalled();
   });
@@ -107,7 +104,7 @@ describe("EconomyPriceLoader", () => {
     await vi.waitFor(() =>
       expect(mocks.tx.economyPrice.createMany).toHaveBeenCalledTimes(2)
     );
-    await flush();
+    await nextMacrotask();
     expect(mocks.prisma.$transaction).toHaveBeenCalledTimes(1);
     const batches = mocks.tx.economyPrice.createMany.mock.calls.map(
       ([args]) => args

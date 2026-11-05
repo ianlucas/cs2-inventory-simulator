@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { nextMacrotask } from "~/test-utils";
 
 class FakeGain {
   gain = { value: 1 };
@@ -56,10 +57,6 @@ class FakeAudioContext {
 const activation = { hasBeenActive: true };
 let now = 0;
 
-function flush() {
-  return new Promise((resolve) => setTimeout(resolve));
-}
-
 function getSources() {
   return FakeAudioContext.instances.flatMap(({ sources }) => sources);
 }
@@ -107,7 +104,7 @@ describe("playSound", () => {
     activation.hasBeenActive = false;
     const { playSound } = await importSounds();
     playSound("generic_button_press");
-    await flush();
+    await nextMacrotask();
     expect(FakeAudioContext.instances).toHaveLength(0);
     expect(fetch).not.toHaveBeenCalled();
   });
@@ -116,7 +113,7 @@ describe("playSound", () => {
     window.localStorage.setItem("appVolume", "0.5");
     const { playSound } = await importSounds();
     playSound("generic_button_rollover");
-    await flush();
+    await nextMacrotask();
     const source = getSource("ui/panorama/generic_scroll_01.wav");
     expect(source.playbackRate.value).toBe(1.4);
     expect(source.output?.gain.value).toBeCloseTo(0.05);
@@ -128,22 +125,22 @@ describe("playSound", () => {
     playSound("generic_button_press");
     now = 5;
     playSound("generic_button_press");
-    await flush();
+    await nextMacrotask();
     expect(getSources()).toHaveLength(1);
     now = 15;
     playSound("generic_button_press");
-    await flush();
+    await nextMacrotask();
     expect(getSources()).toHaveLength(2);
   });
 
   test("stops the oldest instance past the instance limit", async () => {
     const { playSound } = await importSounds();
     playSound("inventory_item_rollover");
-    await flush();
+    await nextMacrotask();
     const [first] = getSources();
     now = 20;
     playSound("inventory_item_rollover");
-    await flush();
+    await nextMacrotask();
     expect(first.stop).toHaveBeenCalled();
     expect(getSources()[1].stop).not.toHaveBeenCalled();
   });
@@ -151,7 +148,7 @@ describe("playSound", () => {
   test("layers child events after their delay", async () => {
     const { playSound } = await importSounds();
     playSound("submenu_select");
-    await flush();
+    await nextMacrotask();
     const select = getSource("submenu_select_01.wav");
     expect(select.playbackRate.value).toBe(1.2);
     expect(select.start).toHaveBeenCalledWith(10);
@@ -166,7 +163,7 @@ describe("playSound", () => {
   test("loops until stopped", async () => {
     const { playSound } = await importSounds();
     const handle = playSound("laptop_button_fill_loop", { loop: true });
-    await flush();
+    await nextMacrotask();
     const source = getSource("ui/laptop_button_fill_loop_01.wav");
     expect(source.loop).toBe(true);
     expect(source.stop).not.toHaveBeenCalled();
@@ -177,7 +174,7 @@ describe("playSound", () => {
   test("never starts a sound stopped while it was loading", async () => {
     const { playSound } = await importSounds();
     playSound("case_drop").stop();
-    await flush();
+    await nextMacrotask();
     expect(getSources()).toHaveLength(0);
   });
 });

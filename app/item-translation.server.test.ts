@@ -3,13 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_ITEMS, CS2Economy } from "@ianlucas/cs2-lib";
+import { CS2Economy } from "@ianlucas/cs2-lib";
 import { brazilian } from "@ianlucas/cs2-lib/translations/brazilian";
-import { english } from "@ianlucas/cs2-lib/translations/english";
 import { expect, it } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import { getItemTranslation } from "./item-translation.server";
 
-CS2Economy.load({ items: CS2_ITEMS, language: english });
+loadEconomy();
 
 const AK47_ID = 4;
 

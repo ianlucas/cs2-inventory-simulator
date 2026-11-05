@@ -4,13 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { setupTestRoot } from "~/test-utils";
 import { ItemSelectorProvider, useItemSelector } from "./item-selector-context";
-
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
 
 const context = vi.hoisted(() => ({
   itemSelector: undefined as ReturnType<typeof useItemSelector>[0],
@@ -29,26 +25,18 @@ function Probe() {
 }
 
 describe("ItemSelectorProvider", () => {
-  let container: HTMLElement;
-  let root: Root;
+  const view = setupTestRoot();
 
   beforeEach(() => {
     vi.spyOn(window, "scrollTo").mockImplementation(() => {});
-    container = document.createElement("div");
-    document.body.appendChild(container);
-    root = createRoot(container);
-    act(() => {
-      root.render(
-        <ItemSelectorProvider>
-          <Probe />
-        </ItemSelectorProvider>
-      );
-    });
+    view.render(
+      <ItemSelectorProvider>
+        <Probe />
+      </ItemSelectorProvider>
+    );
   });
 
   afterEach(() => {
-    act(() => root.unmount());
-    container.remove();
     context.itemSelector = undefined;
     context.setItemSelector = undefined;
     vi.restoreAllMocks();

@@ -10,8 +10,8 @@ import {
   CS2ItemType,
   ensure
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
 import { describe, expect, it } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import { ViewerCatalogLike } from "~/viewer";
 import {
   getItemIconKey,
@@ -19,7 +19,7 @@ import {
   isIconRenderable
 } from "./viewer-icon";
 
-CS2Economy.load({ items: CS2_ITEMS, language: english });
+loadEconomy();
 
 const AK47_ID = 4;
 const KARAMBIT_ID = 41;

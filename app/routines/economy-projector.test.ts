@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { nextMacrotask } from "~/test-utils";
 
 type Item = { id: number; name: string; removed: boolean };
 
@@ -92,17 +93,13 @@ beforeEach(() => {
   lib.items = [];
 });
 
-function flush() {
-  return new Promise((resolve) => setTimeout(resolve, 0));
-}
-
 async function track<T>(promise: Promise<T>) {
   const tracked = { settled: false, value: undefined as T | undefined };
   void promise.then((value) => {
     tracked.settled = true;
     tracked.value = value;
   });
-  await flush();
+  await nextMacrotask();
   return tracked;
 }
 
@@ -113,7 +110,7 @@ describe("EconomyProjector", () => {
     projector.start();
     const current = await track(projector.isCurrentAfterRun());
     db.transaction.release();
-    await flush();
+    await nextMacrotask();
     expect(await projector.isCurrentAfterRun()).toBe(true);
     expect(current.value).toBe(true);
     expect(db.prisma.$transaction).toHaveBeenCalledTimes(1);
@@ -125,7 +122,7 @@ describe("EconomyProjector", () => {
     const current = await track(projector.isCurrentAfterRun());
     expect(current.settled).toBe(false);
     db.transaction.release();
-    await flush();
+    await nextMacrotask();
     expect(current).toEqual({ settled: true, value: true });
   });
 
@@ -134,7 +131,7 @@ describe("EconomyProjector", () => {
     const projector = new EconomyProjector();
     const current = await track(projector.isCurrentAfterRun());
     db.transaction.release();
-    await flush();
+    await nextMacrotask();
     expect(current).toEqual({ settled: true, value: false });
     expect(logError).toHaveBeenCalledWith("Economy projection: failed.", {
       error: expect.any(Error)
@@ -144,7 +141,7 @@ describe("EconomyProjector", () => {
   it("skips the rebuild when the stored projection is already current", async () => {
     const first = new EconomyProjector();
     const projected = first.isCurrentAfterRun();
-    await flush();
+    await nextMacrotask();
     db.transaction.release();
     await projected;
     expect(await new EconomyProjector().isCurrentAfterRun()).toBe(true);
@@ -182,7 +179,7 @@ describe("EconomyProjector", () => {
       { id: 5, name: "Added", type: "weapon" }
     ];
     const projected = new EconomyProjector().isCurrentAfterRun();
-    await flush();
+    await nextMacrotask();
     db.transaction.release();
     expect(await projected).toBe(true);
     expect(db.tx.economyItem.update).toHaveBeenCalledTimes(2);

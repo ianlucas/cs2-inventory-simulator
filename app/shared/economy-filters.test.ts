@@ -3,15 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_ITEMS, CS2Economy, CS2ItemType } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2ItemType } from "@ianlucas/cs2-lib";
 import { expect, test } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import { getAllPaidItems } from "./economy-filters";
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 test("getAllPaidItems leaves out items that can't be crafted on their own", () => {
   const types = new Set(getAllPaidItems().map(({ type }) => type));

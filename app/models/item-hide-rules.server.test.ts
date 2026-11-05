@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_ITEMS, CS2Economy, CS2ItemType } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2ItemType } from "@ianlucas/cs2-lib";
 import { beforeEach, expect, test, vi } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import {
   craftHideRules,
   enforceCraftItemHideRules,
@@ -40,10 +40,7 @@ vi.mock("./rule.server", () => ({
   editHideType: rule("editHideType")
 }));
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const USER_ID = "76561197960287930";
 const AK47_ID = 4;
