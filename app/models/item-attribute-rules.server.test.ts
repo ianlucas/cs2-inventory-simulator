@@ -4,14 +4,13 @@
  *--------------------------------------------------------------------------------------------*/
 
 import {
-  CS2_ITEMS,
   CS2BaseInventoryItem,
   CS2Economy,
   CS2Inventory,
   ensure
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
 import { beforeEach, expect, test, vi } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import {
   enforceCraftRulesForInventoryItem,
   enforceEditRulesForInventoryItem
@@ -95,10 +94,7 @@ vi.mock("./item-hide-rules.server", () => ({
   enforceItemHideRules: vi.fn()
 }));
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const USER_ID = "76561197960287930";
 

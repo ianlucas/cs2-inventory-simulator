@@ -3,13 +3,38 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, SetStateAction, useRef, useState } from "react";
 
-export function useKeyValues<T extends object>(initialState: T) {
-  const [value, setValue] = useState(initialState);
+export function useKeyValues<T extends object>(
+  initialState: T,
+  onChange?: (value: T) => void
+) {
+  const [value, setState] = useState(initialState);
+  const latestRef = useRef(initialState);
+
+  function apply(action: SetStateAction<T>, notify: boolean) {
+    const next =
+      typeof action === "function"
+        ? (action as (current: T) => T)(latestRef.current)
+        : action;
+    latestRef.current = next;
+    setState(next);
+    if (notify) {
+      onChange?.(next);
+    }
+  }
+
+  function setValue(action: SetStateAction<T>) {
+    apply(action, true);
+  }
+
   return {
     value,
     setValue,
+
+    setValueSilently(next: T) {
+      apply(next, false);
+    },
 
     update(key: keyof T) {
       return function handler(value: T[keyof T]) {

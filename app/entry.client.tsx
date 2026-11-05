@@ -59,7 +59,14 @@ function hydrate() {
       document,
       <StrictMode>
         <HydratedRouter onError={handleRouteError} />
-      </StrictMode>
+      </StrictMode>,
+      {
+        onRecoverableError: (error, { componentStack }) =>
+          logError("React recovered from an error.", {
+            error,
+            extra: { componentStack }
+          })
+      }
     );
   });
 }

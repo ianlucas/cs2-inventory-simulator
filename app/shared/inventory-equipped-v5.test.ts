@@ -17,8 +17,8 @@ import {
   CS2Team,
   ensure
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
 import { expect, test } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import { generate } from "./inventory-equipped-v5";
 import {
   Loadout,
@@ -29,10 +29,7 @@ import {
   place
 } from "./loadout";
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const pets = CS2_ITEMS.filter((item) => item.type === CS2ItemType.Pet);
 const egg = ensure(

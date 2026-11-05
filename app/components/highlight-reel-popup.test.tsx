@@ -3,21 +3,13 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2_ITEMS } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2Economy } from "@ianlucas/cs2-lib";
 import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
+import { loadEconomy, setupTestRoot } from "~/test-utils";
 import { HighlightReelPopup } from "./highlight-reel-popup";
 
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
-
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 vi.mock("./app-context", () => ({
   useTranslate: () => (key: string) => key
@@ -26,27 +18,14 @@ vi.mock("./app-context", () => ({
 const highlight = CS2Economy.getById(28171);
 
 describe("HighlightReelPopup", () => {
-  let container: HTMLElement;
-  let root: Root;
-
-  beforeEach(() => {
-    container = document.createElement("div");
-    document.body.append(container);
-    root = createRoot(container);
-  });
+  const view = setupTestRoot();
 
   afterEach(() => {
-    act(() => root.unmount());
-    container.remove();
     window.localStorage.clear();
   });
 
   function render(onClose = vi.fn()) {
-    act(() =>
-      root.render(
-        <HighlightReelPopup highlight={highlight} onClose={onClose} />
-      )
-    );
+    view.render(<HighlightReelPopup highlight={highlight} onClose={onClose} />);
     return onClose;
   }
 

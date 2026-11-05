@@ -3,14 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import {
-  CS2Economy,
-  CS2Inventory,
-  CS2InventoryItem,
-  CS2_ITEMS
-} from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2Inventory, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import type { ViewerItemInput } from "./viewer";
 import type { ViewerApi, ViewerCaptured } from "./viewer-api.client";
 import { getItemIconKey, getViewerIconSlot } from "./viewer-icon";
@@ -31,7 +26,7 @@ import {
   ViewerIcons
 } from "./viewer-icon.client";
 
-CS2Economy.load({ items: CS2_ITEMS, language: english });
+loadEconomy();
 
 interface FakeApi {
   api: ViewerApi;

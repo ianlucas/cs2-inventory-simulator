@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_ITEMS, CS2Economy, ensure } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2Economy, ensure } from "@ianlucas/cs2-lib";
 import { describe, expect, test } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import {
   getUnboxingPayout,
   getUnboxingPrice,
@@ -18,7 +18,7 @@ const STICKER_CAPSULE_ID = 9134;
 const STATTRAK_MASTERMINDS_MUSIC_KIT_BOX_ID = 9401;
 const GRID_STEPS = 4_000;
 
-CS2Economy.load({ items: CS2_ITEMS, language: english });
+loadEconomy();
 
 // Every outcome of a container with its chance, splitting each wear range into
 // `GRID_STEPS` equally likely floats.

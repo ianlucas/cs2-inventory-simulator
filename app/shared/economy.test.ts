@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2_ITEMS, CS2Economy, CS2ItemType } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2Economy, CS2ItemType } from "@ianlucas/cs2-lib";
 import { expect, test } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import {
   createItemHideFilter,
   EconomyListingPrice,
@@ -14,10 +14,7 @@ import {
 } from "./economy";
 import { createFakeInventoryItemFromBase } from "./inventory";
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const AK47_ID = 4;
 const FALLEN_COLOGNE_2015_ID = 2226;

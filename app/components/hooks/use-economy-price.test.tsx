@@ -3,22 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { CS2Economy, CS2InventoryItem, CS2_ITEMS } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
+import { CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createFakeInventoryItemFromBase } from "~/shared/inventory";
+import { deferred, loadEconomy } from "~/test-utils";
 import type { useEconomyPrice as UseEconomyPrice } from "./use-economy-price";
 
-(
-  globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
-).IS_REACT_ACT_ENVIRONMENT = true;
-
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const context = vi.hoisted(() => ({
   statsForNerds: true,
@@ -36,14 +29,6 @@ vi.mock("~/routes/api.action.economy-price._index", () => ({
 
 const AK47_ASIIMOV_ID = 244;
 const AK47_ASIIMOV_URL = "/api/action/economy-price?id=244&statTrak=false";
-
-function deferred<T>() {
-  let resolve!: (value: T) => void;
-  const promise = new Promise<T>((settle) => {
-    resolve = settle;
-  });
-  return { promise, resolve };
-}
 
 function pricesResponse(prices: Record<string, number> = {}) {
   return new Response(

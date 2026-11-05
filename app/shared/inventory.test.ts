@@ -5,13 +5,12 @@
 
 import {
   CS2_INVENTORY_VERSION,
-  CS2_ITEMS,
   CS2Economy,
   CS2Inventory,
   ensure
 } from "@ianlucas/cs2-lib";
-import { english } from "@ianlucas/cs2-lib/translations/english";
 import { expect, test } from "vitest";
+import { loadEconomy } from "~/test-utils";
 import {
   canReceiveStickers,
   CHARM_DETACHMENTS_DISPLAY_UID,
@@ -22,10 +21,7 @@ import {
   safeLoadInventory
 } from "./inventory";
 
-CS2Economy.load({
-  items: CS2_ITEMS,
-  language: english
-});
+loadEconomy();
 
 const AK47_ID = 4;
 const FALLEN_COLOGNE_2015_ID = 2226;
