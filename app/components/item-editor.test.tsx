@@ -5,10 +5,11 @@
 
 import { CS2Economy, CS2Inventory, CS2_ITEMS, ensure } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations/english";
-import { act } from "react";
+import { act, useState } from "react";
 import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { dragRange } from "~/test-utils";
 import { ItemEditor, type ItemEditorAttributes } from "./item-editor";
 
 (
@@ -66,17 +67,24 @@ describe("ItemEditor", () => {
     document.body.appendChild(container);
     root = createRoot(container);
     onChange = vi.fn();
-    act(() => {
-      root.render(
+    function Parent() {
+      const [, setAttributes] = useState<ItemEditorAttributes>();
+      return (
         <ItemEditor
           isHideKeychains
           isHidePatches
           isHideStatTrak
           isHideStickers
           item={item}
-          onChange={onChange}
+          onChange={(attributes) => {
+            onChange(attributes);
+            setAttributes(attributes);
+          }}
         />
       );
+    }
+    act(() => {
+      root.render(<Parent />);
     });
   });
 
@@ -85,11 +93,11 @@ describe("ItemEditor", () => {
     container.remove();
   });
 
-  function getInput(label: string) {
+  function getInput(label: string, selector = "input") {
     const field = Array.from(container.querySelectorAll("label")).find(
       (element) => element.textContent === label
     )?.parentElement;
-    return ensure(field?.querySelector<HTMLInputElement>("input"));
+    return ensure(field?.querySelector<HTMLInputElement>(selector));
   }
 
   function type(input: HTMLInputElement, value: string) {
@@ -143,6 +151,12 @@ describe("ItemEditor", () => {
     expect(lastAttributes()).toBeUndefined();
     blur(seed);
     expect(lastAttributes()?.seed).toBe(42);
+  });
+
+  test("keeps the parent in step through a fast wear drag", () => {
+    const wear = getInput("EditorWear", 'input[type="range"]');
+    expect(dragRange(wear, 80)).toEqual([]);
+    expect(lastAttributes()?.wear).toBe(Number(wear.value));
   });
 });
 

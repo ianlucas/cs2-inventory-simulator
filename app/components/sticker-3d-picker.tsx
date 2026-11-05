@@ -23,7 +23,10 @@ import {
 } from "react";
 import { range } from "~/shared/number";
 import { useRules, useTranslate } from "./app-context";
-import { AppliedStickerEditor } from "./applied-sticker-editor";
+import {
+  AppliedStickerEditor,
+  type AppliedStickerData
+} from "./applied-sticker-editor";
 import {
   AttachmentEditorDrawer,
   AttachmentSlotsDrawer,
@@ -277,13 +280,7 @@ function Sticker3dEditorOverlay({
   }
 
   function handleEdit(index: number) {
-    return function handleEdit(data: {
-      rotation: number;
-      schema: number;
-      wear: number;
-      x: number;
-      y: number;
-    }) {
+    return function handleEdit(data: AppliedStickerData) {
       const current = stickers[index];
       if (current === undefined) {
         return;

@@ -477,7 +477,7 @@ export function ItemEditor({
     }
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isValid) {
       onChange?.(undefined);
       return;
