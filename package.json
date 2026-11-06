@@ -31,7 +31,7 @@
     "@sentry/cli": "^3.8.2",
     "@sentry/core": "^10.78.0",
     "@sentry/node": "^10.78.0",
-    "@tanstack/react-virtual": "^3.14.23",
+    "@tanstack/react-virtual": "^3.14.24",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.6.20",
