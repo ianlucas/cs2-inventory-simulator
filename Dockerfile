@@ -30,6 +30,7 @@ COPY ./prisma /app/prisma
 COPY --from=production-dependencies-env /app/node_modules /app/node_modules
 COPY --from=build-env /app/build /app/build
 WORKDIR /app
+ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
 HEALTHCHECK --start-period=40s --interval=10s --timeout=5s --retries=3 \
