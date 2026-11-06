@@ -2,4 +2,4 @@
 
 npx prisma migrate deploy
 ./scripts/upload-sourcemaps.sh &
-npm run start
+exec node ./build/server/index.js
