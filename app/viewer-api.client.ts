@@ -222,6 +222,12 @@ function seconds(ms: number) {
 }
 
 /**
+ * A command the viewer didn't answer in time, as opposed to one `destroy()`
+ * cut short or one that failed to go out.
+ */
+export class ViewerTimeoutError extends Error {}
+
+/**
  * Typed wrapper over the CS2 3D viewer's postMessage embed API. Construct it with
  * the viewer iframe; it owns the readiness handshake, buffers commands issued
  * before the viewer is ready, correlates `getState` replies, and re-emits viewer
@@ -486,7 +492,7 @@ export class ViewerApi extends EventTarget {
             "seen",
             `${type} timed out (${Date.now() - sentAt - timeoutMs}ms late)`
           );
-          reject(new Error(`ViewerApi: ${type} timed out.`));
+          reject(new ViewerTimeoutError(`ViewerApi: ${type} timed out.`));
         }, timeoutMs);
         this.post(this.envelope(type, data, id));
       });

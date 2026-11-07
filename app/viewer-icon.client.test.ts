@@ -8,6 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { loadEconomy } from "~/test-utils";
 import type { ViewerItemInput } from "./viewer";
 import type { ViewerApi, ViewerCaptured } from "./viewer-api.client";
+import { ViewerTimeoutError } from "./viewer-api.client";
 import { getItemIconKey, getViewerIconSlot } from "./viewer-icon";
 import {
   VIEWER_ICON_API_CALLS_PER_MINUTE,
@@ -33,40 +34,64 @@ interface FakeApi {
   captured: number[];
   destroy: () => void;
   emit: (type: string, data: unknown) => void;
+  fail: (error: Error) => void;
   reply: (result: Partial<ViewerCaptured>) => void;
+  revive: () => void;
   timeOut: () => void;
 }
 
 function fakeApi({
+  answerAfterMs = 0,
   answers = true,
   ready = true
-}: { answers?: boolean; ready?: boolean } = {}): FakeApi {
+}: {
+  answerAfterMs?: number;
+  answers?: boolean;
+  ready?: boolean;
+} = {}): FakeApi {
   const captured: number[] = [];
   const handlers = new Map<string, (data: unknown) => void>();
   const traffic: string[] = [];
   let pending: ((result: ViewerCaptured) => void) | undefined;
-  let fail: ((error: Error) => void) | undefined;
+  let rejectPending: ((error: Error) => void) | undefined;
+  // Like the real one, a destroyed viewer answers nothing and logs nothing,
+  // until a test mounts it again as a fresh one.
+  let destroyed = false;
   const api = {
     capture(item: { id: number }) {
+      if (destroyed) {
+        return Promise.reject(new Error("ViewerApi: destroyed."));
+      }
       captured.push(item.id);
       traffic.push(`capture ${item.id}`);
       return new Promise<ViewerCaptured>((resolve, reject) => {
         pending = resolve;
-        fail = reject;
+        rejectPending = reject;
       });
     },
     describeSince: (mark: number) => traffic.slice(mark).join(", "),
     getState(timeoutMs: number) {
+      if (destroyed) {
+        return Promise.reject(new Error("ViewerApi: destroyed."));
+      }
       traffic.push("getState");
-      if (answers) {
+      if (!answers || answerAfterMs >= timeoutMs) {
+        return new Promise((_, reject) =>
+          setTimeout(() => {
+            traffic.push("no state");
+            reject(new ViewerTimeoutError("ViewerApi: getState timed out."));
+          }, timeoutMs)
+        );
+      }
+      if (answerAfterMs === 0) {
         traffic.push("state");
         return Promise.resolve({});
       }
-      return new Promise((_, reject) =>
+      return new Promise((resolve) =>
         setTimeout(() => {
-          traffic.push("no state");
-          reject(new Error("ViewerApi: getState timed out."));
-        }, timeoutMs)
+          traffic.push("state");
+          resolve({});
+        }, answerAfterMs)
       );
     },
     markLog: () => traffic.length,
@@ -76,26 +101,33 @@ function fakeApi({
     },
     whenReady: () => (ready ? Promise.resolve() : new Promise<void>(() => {}))
   } as unknown as ViewerApi;
-  const end = (error: string) => {
-    const reject = fail;
-    fail = undefined;
+  const fail = (error: Error) => {
+    const reject = rejectPending;
+    rejectPending = undefined;
     pending = undefined;
-    reject?.(new Error(`ViewerApi: ${error}.`));
+    reject?.(error);
   };
   return {
     api,
     captured,
-    destroy: () => end("destroyed"),
+    destroy: () => {
+      destroyed = true;
+      fail(new Error("ViewerApi: destroyed."));
+    },
     emit: (type, data) => handlers.get(type)?.(data),
+    fail,
     reply: (result) => {
       const resolve = pending;
       pending = undefined;
-      fail = undefined;
+      rejectPending = undefined;
       resolve?.({ apiCalls: 1, item: { id: 0 }, ...result });
+    },
+    revive: () => {
+      destroyed = false;
     },
     timeOut: () => {
       traffic.push("timed out");
-      end("capture timed out");
+      fail(new ViewerTimeoutError("ViewerApi: capture timed out."));
     }
   };
 }
@@ -211,6 +243,7 @@ function setup({
     if (strict) {
       const discarded = next();
       if (discarded !== undefined) {
+        discarded.revive();
         mounts.push(discarded);
         icons.setApi(generation, discarded.api);
         discarded.destroy();
@@ -220,6 +253,7 @@ function setup({
     const viewer = next();
     mounted = { generation, viewer };
     if (viewer !== undefined) {
+      viewer.revive();
       mounts.push(viewer);
       icons.setApi(generation, viewer.api);
     }
@@ -299,6 +333,17 @@ async function flush(): Promise<void> {
   for (let index = 0; index < 50; index++) {
     await Promise.resolve();
   }
+}
+
+// How the generator took the capture it settled last: the outcome it recorded,
+// the attempts it counts against the item first in line, and any cooldown.
+function getLastCapture(icons: ViewerIcons) {
+  const { budget, queue, recent } = icons.getStatus();
+  return {
+    outcome: recent.at(-1)?.outcome,
+    attempts: queue[0]?.attempts,
+    cooldownReason: budget.cooldownReason
+  };
 }
 
 const A = { id: 4 };
@@ -742,9 +787,8 @@ describe("ViewerIcons", () => {
   });
 
   it("reports what passed between the page and each viewer since each capture when it gives up on an item", async () => {
-    let mounted = 0;
     const { icons, mounts } = setup({
-      next: () => fakeApi({ answers: mounted++ === 0 })
+      next: () => fakeApi({ answers: false })
     });
 
     icons.request(B);
@@ -756,6 +800,8 @@ describe("ViewerIcons", () => {
     await vi.advanceTimersByTimeAsync(VIEWER_ICON_CAPTURE_TIMEOUT_MS);
     mounts[0].timeOut();
     await flush();
+    await vi.advanceTimersByTimeAsync(VIEWER_ICON_PROBE_TIMEOUT_MS);
+    await flush();
     await vi.advanceTimersByTimeAsync(VIEWER_ICON_CAPTURE_TIMEOUT_MS);
     mounts[1].timeOut();
     await flush();
@@ -766,13 +812,13 @@ describe("ViewerIcons", () => {
       "[InventorySimulator] The 3D viewer gave up on an item's icon (crashed).",
       {
         attempts: [
-          "iframe #1 capture 4, timed out, getState, state",
+          "iframe #1 capture 4, timed out, getState, no state",
           "iframe #2 capture 4, timed out, getState, no state"
         ],
         device: { cores: 8, gpu: null, memory: null },
         key: getItemIconKey(A),
         recent: [
-          "-95s ok 5",
+          "-100s ok 5",
           "-50s crashed 4 (this item)",
           "-0s crashed 4 (this item)"
         ]
@@ -798,7 +844,27 @@ describe("ViewerIcons", () => {
     expect(mounts[1].captured).toEqual([4]);
   });
 
-  it("counts a capture the viewer let time out, whatever the viewer says while it waits for an answer", async () => {
+  it("takes a viewer that answers late, but within those few seconds, as slow rather than dead", async () => {
+    const { icons, mounts } = setup({
+      next: () => fakeApi({ answerAfterMs: VIEWER_ICON_PROBE_TIMEOUT_MS - 1 })
+    });
+
+    icons.request(A);
+    await flush();
+    mounts[0].timeOut();
+    await flush();
+    expect(getLastCapture(icons).outcome).toBeUndefined();
+
+    await vi.advanceTimersByTimeAsync(VIEWER_ICON_PROBE_TIMEOUT_MS - 1);
+    await flush();
+    expect(getLastCapture(icons)).toEqual({
+      outcome: "timeout",
+      attempts: 0,
+      cooldownReason: "network"
+    });
+  });
+
+  it("counts a capture that timed out on a viewer that no longer answers, whatever the viewer says while it waits for an answer", async () => {
     const { icons, mounts } = setup({
       next: () => fakeApi({ answers: false })
     });
@@ -810,10 +876,48 @@ describe("ViewerIcons", () => {
     mounts[0].emit("unsupported", { reason: "network" });
     await flush();
 
-    const { budget, queue, recent } = icons.getStatus();
-    expect(recent.at(-1)?.outcome).toBe("crashed");
-    expect(queue[0].attempts).toBe(1);
-    expect(budget.cooldownReason).toBeUndefined();
+    expect(getLastCapture(icons)).toEqual({
+      outcome: "crashed",
+      attempts: 1,
+      cooldownReason: undefined
+    });
+  });
+
+  it("counts a capture that failed for another reason than time, even on a viewer that still answers", async () => {
+    const { icons, mounts } = setup();
+
+    icons.request(A);
+    await flush();
+    mounts[0].fail(new TypeError("Cannot read properties of undefined"));
+    await flush();
+
+    expect(getLastCapture(icons)).toEqual({
+      outcome: "crashed",
+      attempts: 1,
+      cooldownReason: undefined
+    });
+  });
+
+  it("drops, without counting it, a capture stopped while its viewer is asked whether it still answers", async () => {
+    const { icons, mounts } = setup({
+      next: () => fakeApi({ answers: false })
+    });
+
+    icons.request(A);
+    await flush();
+    mounts[0].timeOut();
+    await flush();
+    const resume = icons.pause();
+    await flush();
+    expect(getLastCapture(icons)).toEqual({
+      outcome: "interrupted",
+      attempts: 0,
+      cooldownReason: undefined
+    });
+
+    resume();
+    await flush();
+    expect(mounts[1].captured).toEqual([4]);
   });
 
   it("names the GPU in its report as the viewer does, letting go of the context it asked", async () => {
@@ -903,37 +1007,54 @@ describe("ViewerIcons", () => {
     );
   });
 
-  it("backs off and keeps retrying an item whose renders time out, without remembering or reporting it", async () => {
-    const viewer = fakeApi();
-    const { icons, mounts, urlOf, written } = setup({ next: () => viewer });
+  it.each([
+    [
+      "the viewer gives up on them",
+      (viewer: FakeApi) => viewer.reply({ error: "timeout" })
+    ],
+    [
+      "the page gives up on a viewer that still answers",
+      (viewer: FakeApi) => viewer.timeOut()
+    ]
+  ])(
+    "backs off and keeps retrying an item whose renders time out, without remembering or reporting it, when %s",
+    async (_, timeOut) => {
+      const viewer = fakeApi();
+      const { icons, mounts, urlOf, written } = setup({ next: () => viewer });
 
-    icons.request(A);
-    await flush();
-    viewer.reply({ error: "timeout" });
-    await flush();
-    expect(mounts).toHaveLength(1);
-    expect(viewer.captured).toEqual([4]);
+      icons.request(A);
+      await flush();
+      timeOut(viewer);
+      await flush();
+      expect(mounts).toHaveLength(1);
+      expect(viewer.captured).toEqual([4]);
+      expect(getLastCapture(icons)).toEqual({
+        outcome: "timeout",
+        attempts: 0,
+        cooldownReason: "network"
+      });
 
-    for (let timeout = 0; timeout < 4; timeout++) {
+      for (let timeout = 0; timeout < 4; timeout++) {
+        await vi.advanceTimersByTimeAsync(
+          VIEWER_ICON_NETWORK_BACKOFF_CAP_MS + 1_000
+        );
+        await flush();
+        timeOut(viewer);
+        await flush();
+      }
+      expect(viewer.captured).toHaveLength(5);
+      expect(written).toEqual([]);
+      expect(consoleError).not.toHaveBeenCalled();
+
       await vi.advanceTimersByTimeAsync(
         VIEWER_ICON_NETWORK_BACKOFF_CAP_MS + 1_000
       );
       await flush();
-      viewer.reply({ error: "timeout" });
+      viewer.reply({ image: new Blob(["x"]) });
       await flush();
+      expect(urlOf(A)).toBeDefined();
     }
-    expect(viewer.captured).toHaveLength(5);
-    expect(written).toEqual([]);
-    expect(consoleError).not.toHaveBeenCalled();
-
-    await vi.advanceTimersByTimeAsync(
-      VIEWER_ICON_NETWORK_BACKOFF_CAP_MS + 1_000
-    );
-    await flush();
-    viewer.reply({ image: new Blob(["x"]) });
-    await flush();
-    expect(urlOf(A)).toBeDefined();
-  });
+  );
 
   it("tries an item that failed to encode again only once its retry window has passed", async () => {
     const viewer = fakeApi();
