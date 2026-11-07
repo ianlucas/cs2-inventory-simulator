@@ -166,7 +166,6 @@ export const norwegian = {
   HeaderCraftCannotCraft: "Du kan ikke lage.",
   HeaderCraftInventoryFull: "Lageret ditt er fullt.",
   HeaderCraftLabel: "Lag gjenstand",
-  HeaderDonate: "Spander en kaffe",
   HeaderInventoryLabel: "Lager",
   HeaderLoadoutLabel: /* csgo_norwegian.txt */"Oppakning",
   HeaderSettingsLabel: "Innstillinger",

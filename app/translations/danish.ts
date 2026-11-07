@@ -167,7 +167,6 @@ export const danish = {
   HeaderCraftCannotCraft: "Du kan ikke fremstille.",
   HeaderCraftInventoryFull: "Dit inventar er fuldt.",
   HeaderCraftLabel: "Fremstil genstand",
-  HeaderDonate: "Giv en kop kaffe",
   HeaderInventoryLabel: "Inventar",
   HeaderLoadoutLabel: /* csgo_danish.txt */"Udstyr",
   HeaderSettingsLabel: "Indstillinger",

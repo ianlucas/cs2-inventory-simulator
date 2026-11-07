@@ -167,7 +167,6 @@ export const czech = {
   HeaderCraftCannotCraft: "Nemůžeš vytvářet.",
   HeaderCraftInventoryFull: "Tvůj inventář je plný.",
   HeaderCraftLabel: "Vytvořit předmět",
-  HeaderDonate: "Kup mi kafe",
   HeaderInventoryLabel: "Inventář",
   HeaderLoadoutLabel: /* csgo_czech.txt */"Vybavení",
   HeaderSettingsLabel: "Nastavení",

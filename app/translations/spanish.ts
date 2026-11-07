@@ -168,7 +168,6 @@ export const spanish = {
   HeaderCraftCannotCraft: "No puedes crear objetos.",
   HeaderCraftInventoryFull: "El inventario está lleno.",
   HeaderCraftLabel: "Crear objetos",
-  HeaderDonate: "Invítame a un café",
   HeaderInventoryLabel: "Inventario",
   HeaderLoadoutLabel: /* csgo_spanish.txt */"Equipamiento",
   HeaderSettingsLabel: "Ajustes",

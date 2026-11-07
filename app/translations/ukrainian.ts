@@ -168,7 +168,6 @@ export const ukrainian = {
   HeaderCraftCannotCraft: "Ви не можете створювати предмети.",
   HeaderCraftInventoryFull: "Інвентар заповнено.",
   HeaderCraftLabel: "Створити предмети",
-  HeaderDonate: "Пригостити кавою",
   HeaderInventoryLabel: "Інвентар",
   HeaderLoadoutLabel: /* csgo_ukrainian.txt */"Набір",
   HeaderSettingsLabel: "Налаштування",

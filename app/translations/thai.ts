@@ -168,7 +168,6 @@ export const thai = {
   HeaderCraftCannotCraft: "คุณไม่สามารถสร้างไอเท็มได้",
   HeaderCraftInventoryFull: "คลังเต็มแล้ว",
   HeaderCraftLabel: "สร้างไอเท็ม",
-  HeaderDonate: "เลี้ยงกาแฟผมสักแก้ว",
   HeaderInventoryLabel: "คลัง",
   HeaderLoadoutLabel: /* csgo_thai.txt */"ชุดอุปกรณ์",
   HeaderSettingsLabel: "การตั้งค่า",

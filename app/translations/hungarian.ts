@@ -167,7 +167,6 @@ export const hungarian = {
   HeaderCraftCannotCraft: "Nem tudsz készíteni.",
   HeaderCraftInventoryFull: "A raktárad tele van.",
   HeaderCraftLabel: "Tárgy készítése",
-  HeaderDonate: "Hívj meg egy kávéra",
   HeaderInventoryLabel: "Raktár",
   HeaderLoadoutLabel: /* csgo_hungarian.txt */"Összeállítás",
   HeaderSettingsLabel: "Beállítások",

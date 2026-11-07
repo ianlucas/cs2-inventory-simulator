@@ -167,7 +167,6 @@ export const german = {
   HeaderCraftCannotCraft: "Sie können nicht herstellen.",
   HeaderCraftInventoryFull: "Ihr Inventar ist voll.",
   HeaderCraftLabel: "Gegenstand herstellen",
-  HeaderDonate: "Spendier mir einen Kaffee",
   HeaderInventoryLabel: "Inventar",
   HeaderLoadoutLabel: /* csgo_german.txt */"Ausrüstung",
   HeaderSettingsLabel: "Einstellungen",
