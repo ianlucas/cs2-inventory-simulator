@@ -168,7 +168,6 @@ export const turkish = {
   HeaderCraftCannotCraft: "Eşya oluşturamazsın.",
   HeaderCraftInventoryFull: "Envanter dolu.",
   HeaderCraftLabel: "Eşya oluştur",
-  HeaderDonate: "Bana bir kahve ısmarla",
   HeaderInventoryLabel: "Envanter",
   HeaderLoadoutLabel: /* csgo_turkish.txt */"Ekipman",
   HeaderSettingsLabel: "Ayarlar",

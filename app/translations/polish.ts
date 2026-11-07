@@ -167,7 +167,6 @@ export const polish = {
   HeaderCraftCannotCraft: "Nie możesz tworzyć.",
   HeaderCraftInventoryFull: "Twój ekwipunek jest pełny.",
   HeaderCraftLabel: "Stwórz przedmiot",
-  HeaderDonate: "Postaw mi kawę",
   HeaderInventoryLabel: "Ekwipunek",
   HeaderLoadoutLabel: /* csgo_polish.txt */"Wyposażenie",
   HeaderSettingsLabel: "Ustawienia",

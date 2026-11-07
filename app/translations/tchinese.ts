@@ -168,7 +168,6 @@ export const tchinese = {
   HeaderCraftCannotCraft: "您無法製作物品。",
   HeaderCraftInventoryFull: "庫存已滿。",
   HeaderCraftLabel: "製作物品",
-  HeaderDonate: "請我喝杯咖啡",
   HeaderInventoryLabel: "庫存",
   HeaderLoadoutLabel: /* csgo_tchinese.txt */"武器裝備",
   HeaderSettingsLabel: "設定",

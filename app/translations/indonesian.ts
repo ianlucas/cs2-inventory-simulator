@@ -164,7 +164,6 @@ export const indonesian = {
   HeaderCommunityLabel: "Komunitas",
   HeaderCraftCannotCraft: "Kamu tidak bisa craft.",
   HeaderCraftInventoryFull: "Inventaris kamu penuh.",
-  HeaderDonate: "Traktir kopi",
   HeaderInventoryLabel: "Inventaris",
   HeaderLoadoutLabel: /* csgo_indonesian.txt */"Perlengkapan",
   HeaderSettingsLabel: "Pengaturan",

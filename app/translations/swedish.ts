@@ -167,7 +167,6 @@ export const swedish = {
   HeaderCraftCannotCraft: "Du kan inte skapa föremål.",
   HeaderCraftInventoryFull: "Inventariet är fullt.",
   HeaderCraftLabel: "Skapa föremål",
-  HeaderDonate: "Bjud på en kaffe",
   HeaderInventoryLabel: "Inventarium",
   HeaderLoadoutLabel: /* csgo_swedish.txt */"Utrustning",
   HeaderSettingsLabel: "Inställningar",

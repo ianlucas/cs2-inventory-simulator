@@ -168,7 +168,6 @@ export const vietnamese = {
   HeaderCraftCannotCraft: "Bạn không thể chế tạo vật phẩm.",
   HeaderCraftInventoryFull: "Kho đồ đã đầy.",
   HeaderCraftLabel: "Chế tạo vật phẩm",
-  HeaderDonate: "Mời tôi ly cà phê",
   HeaderInventoryLabel: "Kho đồ",
   HeaderLoadoutLabel: /* csgo_vietnamese.txt */"Hành trang",
   HeaderSettingsLabel: "Cài đặt",

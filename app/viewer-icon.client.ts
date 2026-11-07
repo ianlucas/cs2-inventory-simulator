@@ -16,7 +16,10 @@ import type {
   ViewerLogMark,
   ViewerUnsupportedReason
 } from "~/viewer-api.client";
-import { VIEWER_CAPTURE_TIMEOUT_MS } from "~/viewer-api.client";
+import {
+  VIEWER_CAPTURE_TIMEOUT_MS,
+  ViewerTimeoutError
+} from "~/viewer-api.client";
 import {
   ICON_CACHE_VERSION,
   getItemIconAppearance,
@@ -1074,15 +1077,11 @@ export class ViewerIcons {
         api.capture(entry.item, { timeoutMs: VIEWER_ICON_CAPTURE_TIMEOUT_MS }),
         interrupted
       ]);
-    } catch {
-      const current = this.generator.getApi() === api;
-      if (current) {
-        await Promise.race([
-          api.getState(VIEWER_ICON_PROBE_TIMEOUT_MS).catch(() => {}),
-          interrupted
-        ]);
-      }
-      outcome = { apiCalls: 1, error: current ? "crashed" : "interrupted" };
+    } catch (error) {
+      outcome = {
+        apiCalls: 1,
+        error: await this.explainFailure(api, error, interrupted)
+      };
     }
     try {
       await this.settle(attempt, entry, outcome);
@@ -1090,6 +1089,29 @@ export class ViewerIcons {
       this.inflight = undefined;
       this.pump();
     }
+  }
+
+  // A viewer that still answers after missing the deadline is slow rather than
+  // dead, most often stuck on a throttled network before its own capture
+  // timeout could start. A stop while it is asked drops the capture like any
+  // other, but nothing else the viewer says meanwhile excuses it.
+  private async explainFailure(
+    api: ViewerApi,
+    error: unknown,
+    interrupted: Promise<CaptureOutcome>
+  ): Promise<"timeout" | "crashed" | "interrupted"> {
+    if (this.generator.getApi() !== api) {
+      return "interrupted";
+    }
+    return Promise.race([
+      api.getState(VIEWER_ICON_PROBE_TIMEOUT_MS).then(
+        () => (error instanceof ViewerTimeoutError ? "timeout" : "crashed"),
+        () => "crashed" as const
+      ),
+      interrupted.then((outcome) =>
+        outcome.error === "interrupted" ? "interrupted" : "crashed"
+      )
+    ]);
   }
 
   // Another tab may have drawn, or given up on, what this one waited on. Tabs

@@ -168,7 +168,6 @@ export const greek = {
   HeaderCraftCannotCraft: "Δεν μπορείτε να κατασκευάσετε.",
   HeaderCraftInventoryFull: "Η λίστα αντικειμένων σας είναι γεμάτη.",
   HeaderCraftLabel: "Κατασκευή αντικειμένου",
-  HeaderDonate: "Κέρνα με έναν καφέ",
   HeaderInventoryLabel: "Λίστα αντικειμένων",
   HeaderLoadoutLabel: /* csgo_greek.txt */"Εξόπλιση",
   HeaderSettingsLabel: "Ρυθμίσεις",

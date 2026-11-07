@@ -6,7 +6,11 @@
 import { CS2Economy, CS2ItemType, CS2RarityColor } from "@ianlucas/cs2-lib";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildViewerSrc, VIEWER_AGENT_IDLE_CLIP } from "./viewer";
-import { VIEWER_LOG_LIMIT, ViewerApi } from "./viewer-api.client";
+import {
+  VIEWER_LOG_LIMIT,
+  ViewerApi,
+  ViewerTimeoutError
+} from "./viewer-api.client";
 
 CS2Economy.load({
   items: [
@@ -143,6 +147,7 @@ describe("ViewerApi.describeSince", () => {
     vi.setSystemTime(Date.now() + 3_000);
     vi.advanceTimersByTime(1_000);
 
+    await expect(state).rejects.toThrow(ViewerTimeoutError);
     await expect(state).rejects.toThrow("ViewerApi: getState timed out.");
     expect(api.describeSince(mark)).toBe(
       "fresh (ready in 0.0s) · +0.0s → getState · +4.0s getState timed out (3000ms late)"

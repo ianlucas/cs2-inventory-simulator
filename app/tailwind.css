@@ -22,7 +22,6 @@
 
   --animate-overlay-open: overlay-open 467ms ease-out both;
   --animate-overlay-close: overlay-close 517ms ease-in both;
-  --animate-wiggle: wiggle 600ms ease-in-out infinite;
   /* Leave duration matches UNLOCK_FEED_LINE_FADE_OUT_MS. */
   --animate-unlock-feed-line-enter: unlock-feed-line-enter 200ms ease-out both;
   --animate-unlock-feed-line-leave: unlock-feed-line-leave 500ms ease-in both;
@@ -151,19 +150,6 @@
   100% {
     filter: brightness(1);
     transform: scale(1);
-  }
-}
-
-@keyframes wiggle {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-12deg);
-  }
-  75% {
-    transform: rotate(12deg);
   }
 }
 

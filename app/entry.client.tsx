@@ -17,6 +17,7 @@ import { clientGlobals } from "./globals";
 import { initClientMonitoring } from "./monitoring.client";
 import { isAbortError, isNetworkError } from "./shared/fetch";
 import { logError } from "./shared/monitoring";
+import { startSync } from "./sync";
 import {
   fetchItemTranslationMap,
   fetchSystemTranslationMap
@@ -53,6 +54,8 @@ function hydrate() {
     items: CS2_ITEMS,
     language: clientGlobals.itemTranslationMap
   });
+
+  startSync();
 
   startTransition(() => {
     hydrateRoot(

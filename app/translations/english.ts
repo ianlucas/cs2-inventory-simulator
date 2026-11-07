@@ -170,7 +170,6 @@ export const english = {
   HeaderCraftCannotCraft: "You cannot craft.",
   HeaderCraftInventoryFull: "Your inventory is full.",
   HeaderCraftLabel: "Craft Item",
-  HeaderDonate: "Buy me a coffee",
   HeaderInventoryLabel: "Inventory",
   HeaderLoadoutLabel: /* csgo_english.txt */"Loadout",
   HeaderSettingsLabel: "Settings",
