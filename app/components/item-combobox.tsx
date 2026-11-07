@@ -69,6 +69,7 @@ export function ItemCombobox({
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const listRef = useRef<(HTMLElement | null)[]>([]);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
   const selected = options.find((option) => option.id === value);
   const filtered = useMemo(
     () => filterItemComboboxOptions(options, query),
@@ -106,7 +107,14 @@ export function ItemCombobox({
     whileElementsMounted: autoUpdate
   });
   const role = useRole(context, { role: "listbox" });
-  const dismiss = useDismiss(context);
+  const dismiss = useDismiss(context, {
+    // The toggle handles its own clicks; dismissing first would reopen it.
+    outsidePress: (event) =>
+      !(
+        event.target instanceof Node &&
+        toggleRef.current?.contains(event.target)
+      )
+  });
   const listNavigation = useListNavigation(context, {
     activeIndex,
     disabledIndices: [],
@@ -134,10 +142,23 @@ export function ItemCombobox({
     }
   }
 
-  function handleSelect(option: ItemComboboxOption) {
-    onChange(option.id);
+  function close() {
     handleOpenChange(false);
     refs.domReference.current?.blur();
+  }
+
+  function handleSelect(option: ItemComboboxOption) {
+    onChange(option.id);
+    close();
+  }
+
+  function handleToggle() {
+    if (isOpen) {
+      close();
+    } else {
+      refs.domReference.current?.focus();
+      handleOpenChange(true);
+    }
   }
 
   return (
@@ -188,12 +209,20 @@ export function ItemCombobox({
           </div>
         )}
       </div>
-      {!disabled && (
-        <FontAwesomeIcon
-          className="h-4 shrink-0 pr-2 text-neutral-400"
-          icon={faCaretDown}
-        />
-      )}
+      {/* Pointer shortcut only; the input is the accessible combobox. */}
+      <button
+        {...getSoundProps({ hover: "none", press: "none" })}
+        aria-hidden
+        className="flex shrink-0 cursor-default items-center self-stretch pr-2 text-neutral-400 transition-opacity disabled:opacity-50"
+        disabled={disabled || options.length === 0}
+        onClick={handleToggle}
+        onMouseDown={(event) => event.preventDefault()}
+        ref={toggleRef}
+        tabIndex={-1}
+        type="button"
+      >
+        <FontAwesomeIcon className="h-4" icon={faCaretDown} />
+      </button>
       {isOpen && filtered.length > 0 && (
         <FloatingPortal>
           <div
