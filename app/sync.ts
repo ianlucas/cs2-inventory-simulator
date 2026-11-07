@@ -60,4 +60,6 @@ async function doSync() {
   setTimeout(doSync, 1000 / 3);
 }
 
-doSync();
+export function startSync() {
+  doSync();
+}
