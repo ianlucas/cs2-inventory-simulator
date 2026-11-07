@@ -18,7 +18,6 @@ export function HeaderLink({
   disabled,
   disabledText,
   icon,
-  iconStyles,
   label,
   tabSound,
   ...props
@@ -27,7 +26,6 @@ export function HeaderLink({
   disabled?: boolean;
   disabledText?: string;
   icon?: IconProp;
-  iconStyles?: string;
   label?: string;
   /** Like the game's main menu tabs, plays only when switching to it. */
   tabSound?: SoundName;
@@ -39,10 +37,7 @@ export function HeaderLink({
     collapsed ? "group box-content h-lh" : "lg:px-1.5"
   );
   const iconElement = icon !== undefined && (
-    <FontAwesomeIcon
-      className={clsx("shrink-0", iconStyles ?? "h-4")}
-      icon={icon}
-    />
+    <FontAwesomeIcon className="h-4 shrink-0" icon={icon} />
   );
   const content =
     props.children !== undefined ? (
@@ -50,7 +45,7 @@ export function HeaderLink({
     ) : collapsed ? (
       <>
         {iconElement}
-        <span className="mask-reveal pointer-events-none absolute inset-y-0 left-0 z-10 flex whitespace-nowrap group-hover:mask-left">
+        <span className="mask-reveal pointer-events-none absolute inset-y-0 left-0 z-10 flex whitespace-nowrap group-hover:mask-left group-focus-visible:mask-left">
           {/* Over an active link's background, 57% adds up to the label's 70%. */}
           <span
             className={clsx(

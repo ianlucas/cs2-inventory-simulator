@@ -167,7 +167,6 @@ export const dutch = {
   HeaderCraftCannotCraft: "Je kunt niet maken.",
   HeaderCraftInventoryFull: "Je inventaris is vol.",
   HeaderCraftLabel: "Voorwerp maken",
-  HeaderDonate: "Trakteer me op koffie",
   HeaderInventoryLabel: "Inventaris",
   HeaderLoadoutLabel: /* csgo_dutch.txt */"Uitrusting",
   HeaderSettingsLabel: "Instellingen",

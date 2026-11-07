@@ -168,7 +168,6 @@ export const schinese = {
   HeaderCraftCannotCraft: "您无法制作物品。",
   HeaderCraftInventoryFull: "库存已满。",
   HeaderCraftLabel: "制作物品",
-  HeaderDonate: "请我喝杯咖啡",
   HeaderInventoryLabel: "库存",
   HeaderLoadoutLabel: /* csgo_schinese.txt */"武器装备",
   HeaderSettingsLabel: "设置",

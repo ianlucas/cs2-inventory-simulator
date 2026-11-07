@@ -167,7 +167,6 @@ export const finnish = {
   HeaderCraftCannotCraft: "Et voi valmistaa.",
   HeaderCraftInventoryFull: "Varusteluettelosi on täynnä.",
   HeaderCraftLabel: "Valmista esine",
-  HeaderDonate: "Tarjoa kahvit",
   HeaderInventoryLabel: "Varusteluettelo",
   HeaderLoadoutLabel: /* csgo_finnish.txt */"Varustus",
   HeaderSettingsLabel: "Asetukset",

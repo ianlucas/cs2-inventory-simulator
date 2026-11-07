@@ -168,7 +168,6 @@ export const latam = {
   HeaderCraftCannotCraft: "No puedes crear.",
   HeaderCraftInventoryFull: "Tu inventario está lleno.",
   HeaderCraftLabel: "Crear objeto",
-  HeaderDonate: "Invítame un café",
   HeaderInventoryLabel: "Inventario",
   HeaderLoadoutLabel: /* csgo_latam.txt */"Equipamiento",
   HeaderSettingsLabel: "Configuración",

@@ -167,7 +167,6 @@ export const japanese = {
   HeaderCraftCannotCraft: "クラフトできません。",
   HeaderCraftInventoryFull: "インベントリがいっぱいです。",
   HeaderCraftLabel: "アイテムをクラフト",
-  HeaderDonate: "コーヒーをおごる",
   HeaderInventoryLabel: "インベントリ",
   HeaderLoadoutLabel: /* csgo_japanese.txt */"装備",
   HeaderSettingsLabel: "設定",

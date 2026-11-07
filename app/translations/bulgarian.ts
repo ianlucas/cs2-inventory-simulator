@@ -168,7 +168,6 @@ export const bulgarian = {
   HeaderCraftCannotCraft: "Не можете да изработвате.",
   HeaderCraftInventoryFull: "Вашият инвентар е пълен.",
   HeaderCraftLabel: "Изработка на артикул",
-  HeaderDonate: "Почерпи ме кафе",
   HeaderInventoryLabel: "Инвентар",
   HeaderLoadoutLabel: /* csgo_bulgarian.txt */"Снаряжение",
   HeaderSettingsLabel: "Настройки",

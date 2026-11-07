@@ -167,7 +167,6 @@ export const portuguese = {
   HeaderCraftCannotCraft: "Não podes criar.",
   HeaderCraftInventoryFull: "O teu inventário está cheio.",
   HeaderCraftLabel: "Criar Item",
-  HeaderDonate: "Paga-me um café",
   HeaderInventoryLabel: "Inventário",
   HeaderLoadoutLabel: /* csgo_portuguese.txt */"Equipamento",
   HeaderSettingsLabel: "Configurações",

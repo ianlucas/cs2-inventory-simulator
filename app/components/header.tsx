@@ -29,7 +29,6 @@ import {
   useTranslate,
   useUser
 } from "./app-context";
-import { DonateHeaderLink } from "./donate-header-link";
 import { HeaderLink } from "./header-link";
 import { InventoryFilter } from "./inventory-filter";
 import { InventoryShare } from "./inventory-share";
@@ -151,7 +150,6 @@ export function Header({
                     />
                   )}
                   <div className="gap-2 lg:flex lg:flex-1 lg:justify-end">
-                    <DonateHeaderLink />
                     <HeaderLink
                       to="/settings"
                       icon={faCog}
@@ -163,17 +161,16 @@ export function Header({
                 </>
               ) : (
                 <>
-                  {!appHideAuth && (
-                    <HeaderLink
-                      collapsed={isDesktop}
-                      icon={faRightFromBracket}
-                      label={translate("HeaderSignOutLabel")}
-                      onClick={closeMenu}
-                      to="/sign-out"
-                    />
-                  )}
-                  <div className="gap-2 lg:flex lg:flex-1 lg:justify-end">
-                    <DonateHeaderLink />
+                  <div className="gap-2 lg:flex lg:flex-1 lg:items-center lg:justify-end">
+                    {!appHideAuth && (
+                      <HeaderLink
+                        collapsed={isDesktop}
+                        icon={faRightFromBracket}
+                        label={translate("HeaderSignOutLabel")}
+                        onClick={closeMenu}
+                        to="/sign-out"
+                      />
+                    )}
                     <HeaderLink
                       to="/settings"
                       onClick={closeMenu}

@@ -167,7 +167,6 @@ export const romanian = {
   HeaderCraftCannotCraft: "Nu poți crea.",
   HeaderCraftInventoryFull: "Inventarul este plin.",
   HeaderCraftLabel: "Creează obiecte",
-  HeaderDonate: "Cumpără-mi o cafea",
   HeaderInventoryLabel: "Inventar",
   HeaderLoadoutLabel: /* csgo_romanian.txt */"Echipament activ",
   HeaderSettingsLabel: "Setări",
