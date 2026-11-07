@@ -11,6 +11,7 @@ import {
   CS2ItemAppearanceOptions,
   getItemAppearance
 } from "@ianlucas/cs2-lib";
+import { prefersReducedMotion } from "~/reduced-motion";
 import type { ViewerItem } from "~/viewer-api.client";
 
 export const DEFAULT_VIEWER_EMBED_URL = "https://3d.cstrike.app/view";
@@ -188,13 +189,6 @@ export function toViewerItem(
   return item instanceof CS2EconomyItem
     ? item.getAppearance(options)
     : getItemAppearance(item, options);
-}
-
-function prefersReducedMotion(): boolean {
-  return (
-    typeof matchMedia === "function" &&
-    matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
 }
 
 export function getViewerClip(item: ViewerItemInput): string | undefined {
