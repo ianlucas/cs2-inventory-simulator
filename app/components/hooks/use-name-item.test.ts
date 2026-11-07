@@ -356,3 +356,11 @@ test("a charm with a highlight is a souvenir named after its highlight", () => {
   );
   expect(nameItemString(charm)).toBe("Charm | Austin 2025 Highlight");
 });
+
+test("an agent without a faction separator keeps its whole name", () => {
+  const agent = CS2Economy.getById(8639);
+  agent.name = "Agent | Ricksaw, NSWC SEAL";
+  expect(nameItem(agent)).toEqual(["Ricksaw, NSWC SEAL", ""]);
+  expect(nameItem(agent, "editor-name")).toEqual(["", "Ricksaw, NSWC SEAL"]);
+  expect(nameItemString(agent, "craft-name")).toBe("Ricksaw, NSWC SEAL");
+});
