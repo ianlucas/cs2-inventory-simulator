@@ -17,7 +17,7 @@ import { VIEWER_INSPECT_KINDS } from "~/viewer";
 import { playSound } from "~/sound.client";
 import { useInventory, useTranslate } from "./app-context";
 import { useViewer } from "./hooks/use-viewer";
-import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useOpensIn3d } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -275,11 +275,12 @@ function ApplyItemPatch2d({
 export function ApplyItemPatch(props: ApplyItemPatchProps) {
   const targetItem = useInventoryItem(props.targetUid);
   const patchItem = useInventoryItem(props.patchUid);
-  const { canUse3d, isIdSupported } = useViewerAvailability(targetItem, {
+  const opensIn3d = useOpensIn3d(targetItem, {
     attachment: true,
+    attachmentIds: [patchItem.id],
     kinds: VIEWER_INSPECT_KINDS
   });
-  return canUse3d && isIdSupported(patchItem.id) ? (
+  return opensIn3d ? (
     <ApplyItemPatch3d {...props} />
   ) : (
     <ApplyItemPatch2d {...props} />

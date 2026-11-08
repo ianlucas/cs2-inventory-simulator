@@ -28,7 +28,7 @@ import {
 import { AttachmentSelectRow } from "./attachment-select-row";
 import { HoldButton } from "./hold-button";
 import { useViewer } from "./hooks/use-viewer";
-import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useOpensIn3d } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -61,7 +61,7 @@ function useScrapeSticker({
 }) {
   const [inventory, setInventory] = useInventory();
   const sync = useSync();
-  const item = inventory.get(uid);
+  const item = useInventoryItem(uid);
 
   const [selectedIndex, setSelectedIndex] = useState<number>();
   const [wear, setWear] = useState(0);
@@ -358,8 +358,8 @@ function ScrapeItemSticker2d({ onClose, uid }: ScrapeItemStickerProps) {
 
 export function ScrapeItemSticker(props: ScrapeItemStickerProps) {
   const item = useInventoryItem(props.uid);
-  const { canUse3d } = useViewerAvailability(item, { attachment: true });
-  return canUse3d ? (
+  const opensIn3d = useOpensIn3d(item, { attachment: true });
+  return opensIn3d ? (
     <ScrapeItemSticker3d {...props} />
   ) : (
     <ScrapeItemSticker2d {...props} />

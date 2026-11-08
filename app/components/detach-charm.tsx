@@ -25,7 +25,7 @@ import { useInventory, useTranslate } from "./app-context";
 import { HoldButton } from "./hold-button";
 import { useCraftShortcutMaxQuantity } from "./hooks/use-craft-shortcut-max-quantity";
 import { useViewer } from "./hooks/use-viewer";
-import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useOpensIn3d } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ItemImage } from "./item-image";
@@ -48,7 +48,7 @@ interface DetachCharmProps {
 function useDetachCharmAction({ onClose, uid }: DetachCharmProps) {
   const [inventory, setInventory] = useInventory();
   const sync = useSync();
-  const item = inventory.get(uid);
+  const item = useInventoryItem(uid);
   const charges = inventory.getCharmDetachmentCharges();
 
   function handleDetach() {
@@ -310,6 +310,10 @@ function DetachCharm2d({ onClose, uid }: DetachCharmProps) {
 
 export function DetachCharm(props: DetachCharmProps) {
   const item = useInventoryItem(props.uid);
-  const { canUse3d } = useViewerAvailability(item);
-  return canUse3d ? <DetachCharm3d {...props} /> : <DetachCharm2d {...props} />;
+  const opensIn3d = useOpensIn3d(item);
+  return opensIn3d ? (
+    <DetachCharm3d {...props} />
+  ) : (
+    <DetachCharm2d {...props} />
+  );
 }

@@ -5,6 +5,7 @@
 
 import { act } from "react";
 import { afterEach, describe, expect, test, vi } from "vitest";
+import { findButton } from "~/test-utils";
 import { confirm } from "./modal-generic";
 
 (
@@ -30,12 +31,6 @@ function openConfirm() {
     });
   });
   return result;
-}
-
-function findButton(text: string) {
-  return Array.from(document.body.querySelectorAll("button")).find(
-    (button) => button.textContent === text
-  );
 }
 
 describe("confirm", () => {

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { act } from "react";
+import { act, useState } from "react";
 import { describe, expect, test, vi } from "vitest";
 import { setupTestRoot } from "~/test-utils";
 import { useOverlayTransition } from "./hooks/use-overlay-transition";
@@ -67,6 +67,25 @@ describe("Presence + useOverlayTransition", () => {
     expect(overlay()?.getAttribute("data-state")).toBe("open");
     endAnimation();
     expect(overlay()).not.toBeNull();
+  });
+
+  test("reopening before the exit finishes mounts a fresh instance", () => {
+    const onMount = vi.fn();
+    function TrackedOverlay() {
+      useState(onMount);
+      return <TestOverlay />;
+    }
+    const renderTracked = (present: boolean) =>
+      view.render(
+        <Presence present={present}>
+          {present ? <TrackedOverlay /> : null}
+        </Presence>
+      );
+    renderTracked(true);
+    renderTracked(false);
+    expect(onMount).toHaveBeenCalledOnce();
+    renderTracked(true);
+    expect(onMount).toHaveBeenCalledTimes(2);
   });
 
   test("notifies when the exit animation completes", () => {

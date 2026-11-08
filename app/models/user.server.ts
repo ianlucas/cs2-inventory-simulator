@@ -8,6 +8,7 @@ import { prisma } from "~/db.server";
 import type { Prisma } from "~/generated/prisma/client";
 import { badRequest, conflict } from "~/responses.server";
 import {
+  createInventory,
   hasInventoryContent,
   loadOrCreateInventory,
   safeLoadInventory
@@ -163,7 +164,7 @@ export async function manipulateUserInventory({
         loadedInventory === undefined && hasInventoryContent(rawInventory)
           ? rawInventory
           : undefined;
-      const inventory = loadedInventory ?? new CS2Inventory(options);
+      const inventory = loadedInventory ?? createInventory(options);
       const loadouts = createUserLoadoutsDraft(tx, userId, inventory);
       try {
         await manipulate(inventory, loadouts);

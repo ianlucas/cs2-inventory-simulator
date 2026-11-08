@@ -12,7 +12,7 @@ import { playSound } from "~/sound.client";
 import { useInventory, useTranslate } from "./app-context";
 import { HoldButton } from "./hold-button";
 import { useViewer } from "./hooks/use-viewer";
-import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useOpensIn3d } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
 import { InGameOverlay } from "./in-game-overlay";
 import { ItemImage } from "./item-image";
@@ -136,8 +136,8 @@ function ExtractItemSticker2d(props: ExtractItemStickerProps) {
 
 export function ExtractItemSticker(props: ExtractItemStickerProps) {
   const item = useInventoryItem(props.uid);
-  const { canUse3d } = useViewerAvailability(item);
-  return canUse3d ? (
+  const opensIn3d = useOpensIn3d(item);
+  return opensIn3d ? (
     <ExtractItemSticker3d {...props} />
   ) : (
     <ExtractItemSticker2d {...props} />

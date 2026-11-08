@@ -14,6 +14,7 @@ import { loadEconomy } from "~/test-utils";
 import {
   canReceiveStickers,
   CHARM_DETACHMENTS_DISPLAY_UID,
+  createInventory,
   editInventoryItem,
   getCharmDetachmentsToDisplay,
   hasInventoryContent,
@@ -141,6 +142,25 @@ test("loadOrCreateInventory returns the loaded inventory when readable", () => {
 test("loadOrCreateInventory falls back to an empty inventory", () => {
   expect(loadOrCreateInventory(null).size()).toBe(0);
   expect(loadOrCreateInventory("not json").size()).toBe(0);
+});
+
+function addStockRifleWithSticker(inventory: CS2Inventory) {
+  return inventory.add({
+    id: AK47_ID,
+    stickers: { 0: { id: FALLEN_COLOGNE_2015_ID } }
+  });
+}
+
+test("createInventory drops a default item once emptied, like the server", () => {
+  const inventory = addStockRifleWithSticker(createInventory());
+  inventory.removeItemSticker(0, 0);
+  expect(inventory.size()).toBe(0);
+});
+
+test("loadOrCreateInventory's fallback drops a default item once emptied", () => {
+  const inventory = addStockRifleWithSticker(loadOrCreateInventory(null));
+  inventory.removeItemSticker(0, 0);
+  expect(inventory.size()).toBe(0);
 });
 
 test("hasInventoryContent is false when there is nothing to lose", () => {

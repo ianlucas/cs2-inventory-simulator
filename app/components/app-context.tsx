@@ -33,6 +33,7 @@ import {
 import type { loader } from "~/root";
 import { updateEconomyLanguage } from "~/shared/economy";
 import {
+  createInventory,
   getCharmDetachmentsToDisplay,
   getFreeItemsToDisplay
 } from "~/shared/inventory";
@@ -145,7 +146,7 @@ export function AppProvider({
     storageUnitMaxItems: rules.inventoryStorageUnitMaxItems
   } satisfies Partial<CS2InventorySpec>;
   const [inventory, setInventoryState, reactSetInventory] = useInventoryState(
-    () => new CS2Inventory(inventorySpec)
+    () => createInventory(inventorySpec)
   );
   const [loadouts, setLoadouts] = useState(() =>
     user?.loadouts !== undefined
@@ -194,7 +195,7 @@ export function AppProvider({
             data: cachedData
           });
           setInventory(
-            new CS2Inventory({
+            createInventory({
               ...inventorySpec,
               data: cachedData
             })
@@ -208,12 +209,11 @@ export function AppProvider({
 
   useEffect(() => {
     updateEconomyLanguage(translation.items);
-    reactSetInventory(
-      (inventory) =>
-        new CS2Inventory({
-          ...inventorySpec,
-          data: inventory.getData()
-        })
+    reactSetInventory((inventory) =>
+      createInventory({
+        ...inventorySpec,
+        data: inventory.getData()
+      })
     );
   }, [translation.items]);
 

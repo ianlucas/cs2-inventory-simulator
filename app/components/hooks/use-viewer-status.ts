@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { noop } from "~/shared/misc";
 import { ViewerApi } from "~/viewer-api.client";
 import { viewerClientAvailability } from "~/viewer-client-availability";
+import { useHeldWhileClosing } from "../presence";
 
 const VIEWER_READY_TIMEOUT_MS = 6_000;
 
@@ -67,8 +68,9 @@ export function useViewerStatus(api: ViewerApi | undefined) {
     };
   }, [api]);
 
+  const shown = useHeldWhileClosing(status);
   return {
-    isReady: status === "ready",
-    isUnavailable: status === "unavailable"
+    isReady: shown === "ready",
+    isUnavailable: shown === "unavailable"
   };
 }

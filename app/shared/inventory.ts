@@ -44,6 +44,14 @@ export const INSPECTABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Weapon
 ];
 
+const SYNCED_INVENTORY_SPEC = {
+  dropEmptyDefaultItems: true
+} satisfies Partial<CS2InventorySpec>;
+
+export function createInventory(options?: Partial<CS2InventorySpec>) {
+  return new CS2Inventory({ ...SYNCED_INVENTORY_SPEC, ...options });
+}
+
 export function safeLoadInventory(
   rawInventory: string | null,
   options?: Partial<CS2InventorySpec>
@@ -53,7 +61,7 @@ export function safeLoadInventory(
   }
   try {
     return CS2Inventory.load(rawInventory, {
-      dropEmptyDefaultItems: true,
+      ...SYNCED_INVENTORY_SPEC,
       ...options
     });
   } catch {
@@ -65,7 +73,7 @@ export function loadOrCreateInventory(
   rawInventory: string | null,
   options?: Partial<CS2InventorySpec>
 ) {
-  return safeLoadInventory(rawInventory, options) ?? new CS2Inventory(options);
+  return safeLoadInventory(rawInventory, options) ?? createInventory(options);
 }
 
 export function hasInventoryContent(

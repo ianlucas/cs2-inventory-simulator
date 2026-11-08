@@ -21,7 +21,7 @@ import { useInventory, useTranslate } from "./app-context";
 import { AttachmentSelectRow } from "./attachment-select-row";
 import { HoldButton } from "./hold-button";
 import { useViewer } from "./hooks/use-viewer";
-import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useOpensIn3d } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -48,7 +48,7 @@ function useRemovePatch({
 }) {
   const [inventory, setInventory] = useInventory();
   const sync = useSync();
-  const item = inventory.get(uid);
+  const item = useInventoryItem(uid);
 
   const [selectedSlot, setSelectedSlot] = useState<number>();
 
@@ -221,11 +221,12 @@ function RemoveItemPatch2d({ onClose, uid }: RemoveItemPatchProps) {
 
 export function RemoveItemPatch(props: RemoveItemPatchProps) {
   const item = useInventoryItem(props.uid);
-  const { canUse3d, isIdSupported } = useViewerAvailability(item, {
+  const opensIn3d = useOpensIn3d(item, {
     attachment: true,
+    attachmentIds: item.somePatches().map(([, id]) => id),
     kinds: VIEWER_INSPECT_KINDS
   });
-  return canUse3d && item.somePatches().every(([, id]) => isIdSupported(id)) ? (
+  return opensIn3d ? (
     <RemoveItemPatch3d {...props} />
   ) : (
     <RemoveItemPatch2d {...props} />
