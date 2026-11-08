@@ -18,7 +18,7 @@ import { useInventory, useTranslate } from "./app-context";
 import { HoldButton } from "./hold-button";
 import { useCraftShortcutMaxQuantity } from "./hooks/use-craft-shortcut-max-quantity";
 import { useViewer } from "./hooks/use-viewer";
-import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useOpensIn3d } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
 import { InGameOverlay } from "./in-game-overlay";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
@@ -282,8 +282,8 @@ function SealItemSticker2d(props: SealItemStickerProps) {
 
 export function SealItemSticker(props: SealItemStickerProps) {
   const stickerItem = useInventoryItem(props.stickerUid);
-  const { canUse3d } = useViewerAvailability(stickerItem.getDisplayCase());
-  return canUse3d ? (
+  const opensIn3d = useOpensIn3d(stickerItem.getDisplayCase());
+  return opensIn3d ? (
     <SealItemSticker3d {...props} />
   ) : (
     <SealItemSticker2d {...props} />

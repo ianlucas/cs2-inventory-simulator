@@ -5,9 +5,16 @@
 
 import { CS2Economy, CS2_ITEMS, ensure } from "@ianlucas/cs2-lib";
 import { english } from "@ianlucas/cs2-lib/translations/english";
-import { act, type ReactNode } from "react";
+import {
+  act,
+  createElement,
+  type ReactNode,
+  useState,
+  useSyncExternalStore
+} from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach } from "vitest";
+import { afterEach, beforeEach, vi } from "vitest";
+import { Presence } from "~/components/presence";
 
 const environment = globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean };
 environment.IS_REACT_ACT_ENVIRONMENT = true;
@@ -80,4 +87,51 @@ export function dragRange(input: HTMLInputElement, ticks: number) {
     environment.IS_REACT_ACT_ENVIRONMENT = wasActEnvironment;
   }
   return errors;
+}
+
+export function createTestStore<T>(initial: T) {
+  let value = initial;
+  const listeners = new Set<() => void>();
+  function subscribe(listener: () => void) {
+    listeners.add(listener);
+    return () => {
+      listeners.delete(listener);
+    };
+  }
+  return {
+    get: () => value,
+    set(next: T) {
+      value = next;
+      listeners.forEach((listener) => listener());
+    },
+    subscribe,
+    use: () => useSyncExternalStore(subscribe, () => value)
+  };
+}
+
+export function PresenceHarness({
+  children
+}: {
+  children: (onClose: () => void) => ReactNode;
+}) {
+  const [open, setOpen] = useState(true);
+  return createElement(Presence, {
+    children: open ? children(() => setOpen(false)) : null,
+    present: open
+  });
+}
+
+export function findButton(text: string) {
+  return Array.from(document.body.querySelectorAll("button")).find(
+    (button) => button.textContent === text
+  );
+}
+
+export function holdButton(button: HTMLButtonElement | undefined) {
+  act(() => {
+    ensure(button).dispatchEvent(
+      new PointerEvent("pointerdown", { bubbles: true, button: 0 })
+    );
+    vi.runOnlyPendingTimers();
+  });
 }

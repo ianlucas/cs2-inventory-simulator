@@ -24,7 +24,7 @@ import { range } from "~/shared/number";
 import { playSound } from "~/sound.client";
 import { useInventory, useTranslate } from "./app-context";
 import { useViewer } from "./hooks/use-viewer";
-import { useViewerAvailability } from "./hooks/use-viewer-availability";
+import { useOpensIn3d } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemImage } from "./item-image";
 import { ModalButton } from "./modal-button";
@@ -441,10 +441,11 @@ function ApplyItemSticker2d({
 export function ApplyItemSticker(props: ApplyItemStickerProps) {
   const targetItem = useInventoryItem(props.targetUid);
   const stickerItem = useInventoryItem(props.stickerUid);
-  const { canUse3d, isIdSupported } = useViewerAvailability(targetItem, {
-    attachment: true
+  const opensIn3d = useOpensIn3d(targetItem, {
+    attachment: true,
+    attachmentIds: [stickerItem.id]
   });
-  return canUse3d && isIdSupported(stickerItem.id) ? (
+  return opensIn3d ? (
     <ApplyItemSticker3d {...props} />
   ) : (
     <ApplyItemSticker2d {...props} />

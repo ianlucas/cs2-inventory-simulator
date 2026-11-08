@@ -5,6 +5,7 @@
 
 import {
   createContext,
+  Fragment,
   ReactNode,
   useContext,
   useEffect,
@@ -23,6 +24,15 @@ export function usePresenceContext() {
   return useContext(PresenceContext);
 }
 
+export function useHeldWhileClosing<T>(value: T) {
+  const closing = usePresenceContext()?.state === "closed";
+  const [held, setHeld] = useState(value);
+  if (!closing && held !== value) {
+    setHeld(value);
+  }
+  return closing ? held : value;
+}
+
 export function Presence({
   children,
   onExitComplete,
@@ -36,6 +46,14 @@ export function Presence({
   const lastChildren = useRef(children);
   if (present) {
     lastChildren.current = children;
+  }
+  const [opening, setOpening] = useState(0);
+  const [wasPresent, setWasPresent] = useState(present);
+  if (present !== wasPresent) {
+    setWasPresent(present);
+    if (present) {
+      setOpening(opening + 1);
+    }
   }
 
   useEffect(() => {
@@ -61,7 +79,9 @@ export function Presence({
         }
       }}
     >
-      {present ? children : lastChildren.current}
+      <Fragment key={opening}>
+        {present ? children : lastChildren.current}
+      </Fragment>
     </PresenceContext.Provider>
   );
 }
