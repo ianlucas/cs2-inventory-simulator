@@ -6,7 +6,7 @@
 export function CloudflareAnalyticsScript({ token }: { token?: string }) {
   return token !== undefined ? (
     <script
-      defer
+      async
       src="https://static.cloudflareinsights.com/beacon.min.js"
       data-cf-beacon={JSON.stringify({
         token
