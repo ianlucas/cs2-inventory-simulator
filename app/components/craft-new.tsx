@@ -51,7 +51,6 @@ export function CraftNew({
 
   const [inventory] = useInventory();
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
-  const [isSouvenirPanelOpen, setIsSouvenirPanelOpen] = useState(false);
   const filterStickerOrPatch = useCraftItemFilter({ attachment: true });
   const isItemCraftable = useCraftItemFilter();
 
@@ -124,11 +123,10 @@ export function CraftNew({
         keychainFilter={filterStickerOrPatch}
         maxQuantity={maxQuantity}
         onChange={setAttributes}
-        onSouvenirPanelChange={setIsSouvenirPanelOpen}
         patchFilter={filterStickerOrPatch}
         stickerFilter={filterStickerOrPatch}
       />
-      <EditorActions isHidden={isSouvenirPanelOpen}>
+      <EditorActions>
         <ModalButton
           children={translate("EditorCancel")}
           onClick={onClose}

@@ -9,13 +9,84 @@ import {
   CS2ItemType
 } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState
+} from "react";
 import { useViewer } from "./hooks/use-viewer";
 import { useViewerAvailability } from "./hooks/use-viewer-availability";
 import { useViewerStatus } from "./hooks/use-viewer-status";
 import { ItemEditorName } from "./item-editor-name";
 import { ItemImage } from "./item-image";
 import { Viewer } from "./viewer";
+
+export interface EditorItemImageTarget {
+  box: HTMLElement | null;
+  image: HTMLImageElement | null;
+  is3d: boolean;
+}
+
+interface EditorItemImageHandoff {
+  isImageHidden: boolean;
+  isRevealHeld: boolean;
+  onImageLoad?: () => void;
+  target?: EditorItemImageTarget;
+}
+
+const EditorItemImageContext = createContext<EditorItemImageHandoff>({
+  isImageHidden: false,
+  isRevealHeld: false
+});
+
+export function EditorItemImageProvider({
+  children,
+  value
+}: {
+  children: ReactNode;
+  value: EditorItemImageHandoff;
+}) {
+  return (
+    <EditorItemImageContext.Provider value={value}>
+      {children}
+    </EditorItemImageContext.Provider>
+  );
+}
+
+function useEditorItemImageHandoff() {
+  const handoff = useContext(EditorItemImageContext);
+  const { target } = handoff;
+  const boxRef = useCallback(
+    (box: HTMLElement | null) => {
+      if (target !== undefined) {
+        target.box = box;
+      }
+    },
+    [target]
+  );
+  const imageRef = useCallback(
+    (image: HTMLElement | null) => {
+      if (target !== undefined) {
+        target.image = image instanceof HTMLImageElement ? image : null;
+      }
+    },
+    [target]
+  );
+  const setIs3d = useCallback(
+    (is3d: boolean) => {
+      if (target !== undefined) {
+        target.is3d = is3d;
+      }
+    },
+    [target]
+  );
+  return { ...handoff, boxRef, imageRef, setIs3d };
+}
 
 interface EditorItemDisplayProps {
   item: CS2EconomyItem;
@@ -33,10 +104,24 @@ function EditorItem2dPreview({
   item,
   wear
 }: Pick<EditorItemDisplayProps, "item" | "wear">) {
+  const { boxRef, imageRef, isImageHidden, onImageLoad, setIs3d } =
+    useEditorItemImageHandoff();
+  const ref = useCallback(
+    (image: HTMLImageElement | null) => {
+      boxRef(image);
+      imageRef(image);
+    },
+    [boxRef, imageRef]
+  );
+
+  useLayoutEffect(() => setIs3d(false), [setIs3d]);
+
   return (
     <ItemImage
-      className="m-auto w-[256px]"
+      className={clsx("m-auto w-[256px]", isImageHidden && "invisible")}
       item={item}
+      onLoad={onImageLoad}
+      ref={ref}
       wear={item.hasWear() ? wear : undefined}
     />
   );
@@ -66,17 +151,28 @@ function EditorItem3dPreview({
   }));
   const { api, viewerProps } = useViewer({ item: initialItem });
   const viewerStatus = useViewerStatus(api);
+  const {
+    boxRef,
+    imageRef,
+    isImageHidden,
+    isRevealHeld,
+    onImageLoad,
+    setIs3d
+  } = useEditorItemImageHandoff();
   const imageLoadedRef = useRef(false);
-  const [reveal, setReveal] = useState<"pending" | "instant" | "fade">(
-    "pending"
-  );
+  const [viewerReveal, setViewerReveal] = useState<
+    "pending" | "instant" | "fade"
+  >("pending");
+  const reveal = isRevealHeld ? "pending" : viewerReveal;
+
+  useLayoutEffect(() => setIs3d(reveal !== "pending"), [reveal, setIs3d]);
 
   useEffect(() => {
     if (api === undefined) {
       return;
     }
     return api.once("rendered", () => {
-      setReveal(imageLoadedRef.current ? "fade" : "instant");
+      setViewerReveal(imageLoadedRef.current ? "fade" : "instant");
     });
   }, [api]);
 
@@ -110,10 +206,11 @@ function EditorItem3dPreview({
   }
 
   return (
-    <div className="relative m-auto aspect-256/192 w-[256px]">
+    <div className="relative m-auto aspect-256/192 w-[256px]" ref={boxRef}>
       <ItemImage
         className={clsx(
           "absolute inset-0 w-full",
+          isImageHidden && "invisible",
           reveal === "instant" && "opacity-0",
           reveal === "fade" &&
             "opacity-0 transition-opacity delay-1000 duration-1000"
@@ -121,7 +218,9 @@ function EditorItem3dPreview({
         item={item}
         onLoad={() => {
           imageLoadedRef.current = true;
+          onImageLoad?.();
         }}
+        ref={imageRef}
         wear={item.hasWear() ? wear : undefined}
       />
       <Viewer

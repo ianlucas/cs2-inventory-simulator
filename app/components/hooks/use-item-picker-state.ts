@@ -15,6 +15,7 @@ import {
 } from "~/shared/economy-filters";
 import { useCraftFilterRules } from "./use-craft-filter-rules";
 import { useInput } from "./use-input";
+import { ItemClickHandler } from "../item-button";
 import { useCraftItemFilter } from "./use-item-hide-filters";
 
 export type ItemPickerState = ReturnType<typeof useItemPickerState>;
@@ -22,7 +23,7 @@ export type ItemPickerState = ReturnType<typeof useItemPickerState>;
 export function useItemPickerState({
   onPickItem
 }: {
-  onPickItem: (item: CS2EconomyItem) => void;
+  onPickItem: ItemClickHandler;
 }) {
   const isItemCraftable = useCraftItemFilter();
   const categoryFilter = useCraftFilterRules();
@@ -54,13 +55,13 @@ export function useItemPickerState({
     return reset();
   }
 
-  function handleItemClick(item: CS2EconomyItem) {
+  const handleItemClick: ItemClickHandler = (item, image) => {
     if (!filter.hasModel || model !== undefined || !item.isBase) {
-      return onPickItem(item);
+      return onPickItem(item, image);
     }
     setQuery("");
     setModel(item.modelKey);
-  }
+  };
 
   function filterItem(item: CS2EconomyItem) {
     const { alternateName, name } = item;

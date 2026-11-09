@@ -51,7 +51,6 @@ export function CraftEdit({
   } = useRules();
 
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
-  const [isSouvenirPanelOpen, setIsSouvenirPanelOpen] = useState(false);
   const filterStickerOrPatch = useEditItemFilter();
 
   const isHideNameTag = !editAllowNametag;
@@ -116,11 +115,10 @@ export function CraftEdit({
         item={item}
         keychainFilter={filterStickerOrPatch}
         onChange={setAttributes}
-        onSouvenirPanelChange={setIsSouvenirPanelOpen}
         patchFilter={filterStickerOrPatch}
         stickerFilter={filterStickerOrPatch}
       />
-      <EditorActions isHidden={isSouvenirPanelOpen}>
+      <EditorActions>
         <ModalButton
           children={translate("EditorCancel")}
           onClick={onClose}

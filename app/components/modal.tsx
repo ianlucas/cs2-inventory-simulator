@@ -117,7 +117,7 @@ export function ModalHeader({
 }: {
   closeTo?: string;
   onClose?: () => void;
-  title: string;
+  title: ReactNode;
 }) {
   return (
     <div className="bg-linear-to-t from-black/30 to-transparent p-1 pr-2 select-none">

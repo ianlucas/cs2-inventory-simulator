@@ -5,7 +5,7 @@
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import { GridList } from "./grid-list";
-import { ItemButton } from "./item-button";
+import { ItemButton, ItemClickHandler } from "./item-button";
 
 export function ItemBrowser({
   ignoreRarityColor,
@@ -16,7 +16,7 @@ export function ItemBrowser({
   ignoreRarityColor?: boolean;
   items: CS2EconomyItem[];
   maxItemsIntoView?: number;
-  onClick?: (item: CS2EconomyItem) => void;
+  onClick?: ItemClickHandler;
 }) {
   return (
     <GridList itemHeight={64} maxItemsIntoView={maxItemsIntoView} items={items}>
