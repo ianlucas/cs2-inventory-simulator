@@ -5,12 +5,18 @@
 
 import { CS2EconomyItem } from "@ianlucas/cs2-lib";
 import clsx from "clsx";
+import { useRef } from "react";
 import { useNameItem } from "~/components/hooks/use-name-item";
 import { getSoundProps } from "~/interface-sounds";
 import { isNewItem } from "~/shared/economy";
 import { usePreferences, useTranslate } from "./app-context";
 import { ItemImage } from "./item-image";
 import { Marquee } from "./marquee";
+
+export type ItemClickHandler = (
+  item: CS2EconomyItem,
+  image: HTMLElement | null
+) => void;
 
 export function ItemButton({
   bigger,
@@ -23,12 +29,13 @@ export function ItemButton({
   ignoreRarityColor?: boolean;
   index?: number;
   item: CS2EconomyItem;
-  onClick?: (item: CS2EconomyItem) => void;
+  onClick?: ItemClickHandler;
 }) {
   const translate = useTranslate();
   const { hideNewItemLabel } = usePreferences();
   const nameItem = useNameItem();
   const [model, name] = nameItem(item, "editor-name");
+  const imageRef = useRef<HTMLImageElement>(null);
   const clickable = onClick !== undefined;
   const showAltname =
     item.alternateName !== undefined &&
@@ -38,7 +45,7 @@ export function ItemButton({
 
   function handleClick() {
     if (onClick) {
-      onClick(item);
+      onClick(item, imageRef.current);
     }
   }
 
@@ -74,6 +81,7 @@ export function ItemButton({
           item={item}
           lazy
           key={item.imagePath}
+          ref={imageRef}
         />
         <div
           className={clsx(

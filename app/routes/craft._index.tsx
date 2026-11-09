@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { faLink } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faLink } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
-import clsx from "clsx";
 import lzstring from "lz-string";
 import { useState } from "react";
 import { data, useLoaderData, useNavigate } from "react-router";
@@ -21,6 +21,11 @@ import { CraftImportInspectLink } from "~/components/craft-import-inspect-link";
 import { CraftNew } from "~/components/craft-new";
 import { CraftShareUser } from "~/components/craft-share-user";
 import { CraftView } from "~/components/craft-view";
+import {
+  CraftMorphLayers,
+  CraftMorphTitles,
+  useCraftMorph
+} from "~/components/craft-morph";
 import { useIsDesktop } from "~/components/hooks/use-is-desktop";
 import { useLockScroll } from "~/components/hooks/use-lock-scroll";
 import { useSync } from "~/components/hooks/use-sync";
@@ -115,6 +120,8 @@ export default function Craft() {
         : undefined
   );
 
+  const morph = useCraftMorph({ onClosed: () => setItem(undefined) });
+
   useLockScroll();
 
   function handleSubmit({ quantity, ...attributes }: ItemEditorAttributes) {
@@ -153,10 +160,13 @@ export default function Craft() {
   }
 
   function handleClose() {
-    if (isEditing || isSharing) {
-      return navigate("/", { preventScrollReset: true });
+    return navigate("/", { preventScrollReset: true });
+  }
+
+  function pickItem(item: CS2EconomyItem, image?: HTMLElement | null) {
+    if (morph.open(image)) {
+      setItem(item);
     }
-    return setItem(undefined);
   }
 
   function handleImportFromInspectLinkOpen() {
@@ -169,7 +179,7 @@ export default function Craft() {
 
   function handleInspectLinkImport(item: CS2BaseInventoryItem) {
     setIsImportFromInspectLink(false);
-    setItem(createFakeInventoryItemFromBase(item));
+    pickItem(createFakeInventoryItemFromBase(item));
   }
 
   const editorProps =
@@ -182,32 +192,74 @@ export default function Craft() {
       : undefined;
   const hasItem = editorProps !== undefined;
 
-  const CraftComponent = isEditing
-    ? CraftEdit
-    : isSharing
-      ? CraftView
-      : CraftNew;
+  const CraftComponent = isEditing ? CraftEdit : CraftView;
 
   return (
     <>
       {isCrafting && (
-        <Modal className={clsx(isDesktop ? "max-w-180 min-w-160" : "w-135")}>
-          <ModalHeader title={translate("CraftSelectHeader")} closeTo="/" />
-          <ItemPicker
-            navItems={[
-              user !== undefined &&
-                craftAllowImportInspectLink && {
-                  icon: faLink,
-                  isActive: isImportFromInspectLink,
-                  label: translate("CraftImportNavLabel"),
-                  onClick: handleImportFromInspectLinkOpen
+        <Modal
+          className={
+            morph.isPicking
+              ? isDesktop
+                ? "max-w-180 min-w-160"
+                : "w-135"
+              : "w-fit"
+          }
+        >
+          <ModalHeader
+            closeTo="/"
+            title={
+              <CraftMorphTitles
+                editor={
+                  <>
+                    <button
+                      aria-label={translate("CraftBack")}
+                      className="-ml-1 flex h-4 cursor-default items-center pr-2.5 pl-1 opacity-50 transition hover:opacity-100"
+                      onClick={morph.close}
+                      type="button"
+                    >
+                      <FontAwesomeIcon
+                        icon={faArrowLeft}
+                        className="size-3.5"
+                      />
+                    </button>
+                    {translate("CraftConfirmHeader")}
+                  </>
                 }
-            ]}
-            onPickItem={setItem}
+                morph={morph}
+                picker={translate("CraftSelectHeader")}
+              />
+            }
+          />
+          <CraftMorphLayers
+            editor={
+              item !== undefined ? (
+                <CraftNew
+                  item={item}
+                  onClose={morph.close}
+                  onSubmit={handleSubmit}
+                />
+              ) : undefined
+            }
+            morph={morph}
+            picker={
+              <ItemPicker
+                navItems={[
+                  user !== undefined &&
+                    craftAllowImportInspectLink && {
+                      icon: faLink,
+                      isActive: isImportFromInspectLink,
+                      label: translate("CraftImportNavLabel"),
+                      onClick: handleImportFromInspectLinkOpen
+                    }
+                ]}
+                onPickItem={pickItem}
+              />
+            }
           />
         </Modal>
       )}
-      {hasItem && (
+      {!isCrafting && hasItem && (
         <Modal className="w-fit">
           <ModalHeader
             title={translate(
