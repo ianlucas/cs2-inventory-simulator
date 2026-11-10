@@ -147,6 +147,8 @@ export const russian = {
   ErrorAlertFailedToAuthTitle: "Не удалось войти",
   ErrorAlertFailedToValidate: "Возникла проблема при проверке входа через Steam. Попробуйте снова.",
   ErrorAlertFailedToValidateTitle: "Проверка не удалась",
+  ErrorAlertInvalidShareLink: "Эта ссылка недействительна или неполна. Попросите новую.",
+  ErrorAlertInvalidShareLinkTitle: "Недействительная ссылка",
   ErrorBoundaryConnectionDesc: "Не удалось подключиться к Inventory Simulator. Проверьте подключение к интернету.",
   ErrorBoundaryConnectionRetry: "Нажмите здесь, чтобы повторить попытку.",
   ErrorBoundaryConnectionTitle: "Ошибка подключения",

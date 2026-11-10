@@ -148,6 +148,8 @@ export const koreana = {
   ErrorAlertFailedToAuthTitle: "Steam에 연결할 수 없습니다",
   ErrorAlertFailedToValidate: "Steam 로그인을 확인할 수 없습니다. 다시 로그인해 주세요.",
   ErrorAlertFailedToValidateTitle: "Steam 인증 실패",
+  ErrorAlertInvalidShareLink: "이 공유 링크는 잘못되었거나 불완전합니다. 새 링크를 요청해 주세요.",
+  ErrorAlertInvalidShareLinkTitle: "잘못된 공유 링크",
   ErrorBoundaryConnectionDesc: "Inventory Simulator에 연결할 수 없습니다. 인터넷 연결을 확인하세요.",
   ErrorBoundaryConnectionRetry: "다시 시도하려면 여기를 클릭하세요.",
   ErrorBoundaryConnectionTitle: "연결 오류",

@@ -148,6 +148,8 @@ export const spanish = {
   ErrorAlertFailedToAuthTitle: "Error de autenticación",
   ErrorAlertFailedToValidate: "Hubo un problema al validar el inicio de sesión de Steam. Inténtalo de nuevo.",
   ErrorAlertFailedToValidateTitle: "Error de validación",
+  ErrorAlertInvalidShareLink: "Este enlace compartido no es válido o está incompleto. Por favor, pide uno nuevo.",
+  ErrorAlertInvalidShareLinkTitle: "Enlace compartido no válido",
   ErrorBoundaryConnectionDesc: "No se ha podido conectar con Inventory Simulator. Comprueba tu conexión a Internet.",
   ErrorBoundaryConnectionRetry: "Haz clic aquí para volver a intentarlo.",
   ErrorBoundaryConnectionTitle: "Error de conexión",

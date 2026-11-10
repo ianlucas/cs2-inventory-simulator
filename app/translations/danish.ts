@@ -147,6 +147,8 @@ export const danish = {
   ErrorAlertFailedToAuthTitle: "Kunne ikke oprette forbindelse til Steam",
   ErrorAlertFailedToValidate: "Vi kunne ikke bekræfte dit login med Steam. Prøv venligst at logge ind igen.",
   ErrorAlertFailedToValidateTitle: "Godkendelse med Steam mislykkedes",
+  ErrorAlertInvalidShareLink: "Dette delingslink er ugyldigt eller ufuldstændigt. Bed venligst om et nyt.",
+  ErrorAlertInvalidShareLinkTitle: "Ugyldigt delingslink",
   ErrorBoundaryConnectionDesc: "Kunne ikke oprette forbindelse til Inventory Simulator. Tjek din internetforbindelse.",
   ErrorBoundaryConnectionRetry: "Klik her for at prøve igen.",
   ErrorBoundaryConnectionTitle: "Forbindelsesfejl",

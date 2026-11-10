@@ -148,6 +148,8 @@ export const vietnamese = {
   ErrorAlertFailedToAuthTitle: "Xác thực thất bại",
   ErrorAlertFailedToValidate: "Đã xảy ra sự cố khi xác thực đăng nhập Steam. Vui lòng thử lại.",
   ErrorAlertFailedToValidateTitle: "Xác thực thất bại",
+  ErrorAlertInvalidShareLink: "Liên kết chia sẻ này không hợp lệ hoặc không đầy đủ. Vui lòng yêu cầu liên kết mới.",
+  ErrorAlertInvalidShareLinkTitle: "Liên kết chia sẻ không hợp lệ",
   ErrorBoundaryConnectionDesc: "Không thể kết nối tới Inventory Simulator. Hãy kiểm tra kết nối Internet của bạn.",
   ErrorBoundaryConnectionRetry: "Nhấn vào đây để thử lại.",
   ErrorBoundaryConnectionTitle: "Lỗi kết nối",

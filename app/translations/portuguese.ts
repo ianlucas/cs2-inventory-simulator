@@ -147,6 +147,8 @@ export const portuguese = {
   ErrorAlertFailedToAuthTitle: "Não foi possível ligar ao Steam",
   ErrorAlertFailedToValidate: "Não conseguimos validar o teu início de sessão com Steam. Por favor, tenta iniciar sessão novamente.",
   ErrorAlertFailedToValidateTitle: "Falha na autenticação com Steam",
+  ErrorAlertInvalidShareLink: "Este link de partilha é inválido ou está incompleto. Por favor, pede um novo.",
+  ErrorAlertInvalidShareLinkTitle: "Link de partilha inválido",
   ErrorBoundaryConnectionDesc: "Não foi possível ligar ao Inventory Simulator. Verifica a tua ligação à Internet.",
   ErrorBoundaryConnectionRetry: "Clica aqui para tentar novamente.",
   ErrorBoundaryConnectionTitle: "Erro de ligação",

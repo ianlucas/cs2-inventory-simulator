@@ -147,6 +147,8 @@ export const swedish = {
   ErrorAlertFailedToAuthTitle: "Autentisering misslyckades",
   ErrorAlertFailedToValidate: "Det uppstod ett problem när Steam-inloggningen skulle valideras. Försök igen.",
   ErrorAlertFailedToValidateTitle: "Validering misslyckades",
+  ErrorAlertInvalidShareLink: "Den här delningslänken är ogiltig eller ofullständig. Be om en ny.",
+  ErrorAlertInvalidShareLinkTitle: "Ogiltig delningslänk",
   ErrorBoundaryConnectionDesc: "Det gick inte att ansluta till Inventory Simulator. Kontrollera din internetanslutning.",
   ErrorBoundaryConnectionRetry: "Klicka här för att försöka igen.",
   ErrorBoundaryConnectionTitle: "Anslutningsfel",

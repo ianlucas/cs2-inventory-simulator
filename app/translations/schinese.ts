@@ -148,6 +148,8 @@ export const schinese = {
   ErrorAlertFailedToAuthTitle: "身份验证失败",
   ErrorAlertFailedToValidate: "验证 Steam 登录时出现问题。请重试。",
   ErrorAlertFailedToValidateTitle: "验证失败",
+  ErrorAlertInvalidShareLink: "此分享链接无效或不完整，请重新获取链接。",
+  ErrorAlertInvalidShareLinkTitle: "分享链接无效",
   ErrorBoundaryConnectionDesc: "无法连接到 Inventory Simulator。请检查你的网络连接。",
   ErrorBoundaryConnectionRetry: "点击此处重试。",
   ErrorBoundaryConnectionTitle: "连接错误",

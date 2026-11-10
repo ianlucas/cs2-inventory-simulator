@@ -147,6 +147,8 @@ export const japanese = {
   ErrorAlertFailedToAuthTitle: "Steamに接続できませんでした",
   ErrorAlertFailedToValidate: "Steamでのログインを確認できませんでした。もう一度ログインしてください。",
   ErrorAlertFailedToValidateTitle: "Steamでの認証に失敗しました",
+  ErrorAlertInvalidShareLink: "この共有リンクは無効か、不完全です。新しいリンクをもらってください。",
+  ErrorAlertInvalidShareLinkTitle: "無効な共有リンク",
   ErrorBoundaryConnectionDesc: "Inventory Simulator に接続できませんでした。インターネット接続を確認してください。",
   ErrorBoundaryConnectionRetry: "ここをクリックして再試行してください。",
   ErrorBoundaryConnectionTitle: "接続エラー",

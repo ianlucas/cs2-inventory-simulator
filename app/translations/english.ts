@@ -149,6 +149,8 @@ export const english = {
   ErrorAlertFailedToAuthTitle: "Could not connect to Steam",
   ErrorAlertFailedToValidate: "We couldn't verify your login with Steam. Please try logging in again.",
   ErrorAlertFailedToValidateTitle: "Authentication with Steam failed",
+  ErrorAlertInvalidShareLink: "This share link is invalid or incomplete. Please ask for a new one.",
+  ErrorAlertInvalidShareLinkTitle: "Invalid share link",
   ErrorBoundaryConnectionDesc: "Could not reach Inventory Simulator. Check your internet connection.",
   ErrorBoundaryConnectionRetry: "Click here to try again.",
   ErrorBoundaryConnectionTitle: "Connection Error",

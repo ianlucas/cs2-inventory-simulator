@@ -148,6 +148,8 @@ export const thai = {
   ErrorAlertFailedToAuthTitle: "การยืนยันตัวตนล้มเหลว",
   ErrorAlertFailedToValidate: "เกิดปัญหาในการตรวจสอบการเข้าสู่ระบบ Steam โปรดลองอีกครั้ง",
   ErrorAlertFailedToValidateTitle: "การตรวจสอบล้มเหลว",
+  ErrorAlertInvalidShareLink: "ลิงก์แชร์นี้ไม่ถูกต้องหรือไม่สมบูรณ์ โปรดขอลิงก์ใหม่",
+  ErrorAlertInvalidShareLinkTitle: "ลิงก์แชร์ไม่ถูกต้อง",
   ErrorBoundaryConnectionDesc: "ไม่สามารถเชื่อมต่อกับ Inventory Simulator ได้ โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ",
   ErrorBoundaryConnectionRetry: "คลิกที่นี่เพื่อลองอีกครั้ง",
   ErrorBoundaryConnectionTitle: "การเชื่อมต่อผิดพลาด",

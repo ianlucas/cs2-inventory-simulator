@@ -147,6 +147,8 @@ export const dutch = {
   ErrorAlertFailedToAuthTitle: "Kan geen verbinding maken met Steam",
   ErrorAlertFailedToValidate: "We konden je login met Steam niet verifiëren. Probeer opnieuw in te loggen.",
   ErrorAlertFailedToValidateTitle: "Authenticatie met Steam mislukt",
+  ErrorAlertInvalidShareLink: "Deze deellink is ongeldig of onvolledig. Vraag om een nieuwe.",
+  ErrorAlertInvalidShareLinkTitle: "Ongeldige deellink",
   ErrorBoundaryConnectionDesc: "Kan geen verbinding maken met Inventory Simulator. Controleer je internetverbinding.",
   ErrorBoundaryConnectionRetry: "Klik hier om het opnieuw te proberen.",
   ErrorBoundaryConnectionTitle: "Verbindingsfout",
