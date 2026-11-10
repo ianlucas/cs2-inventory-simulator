@@ -5,6 +5,29 @@
 
 import { logError } from "./shared/monitoring";
 
+const BAD_REQUEST_MESSAGE =
+  "Please check this endpoint's documentation for the correct request parameters.";
+
+function errorResponse(error: string, status: number) {
+  return new Response(JSON.stringify({ error }), {
+    status,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+}
+
+export async function parseJsonBody(request: Request): Promise<unknown> {
+  try {
+    return await request.json();
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      throw errorResponse(BAD_REQUEST_MESSAGE, 400);
+    }
+    throw error;
+  }
+}
+
 export function api<T, U>(action: (args: T) => Promise<U>) {
   return async function handler(args: T): Promise<U> {
     try {
@@ -18,8 +41,7 @@ export function api<T, U>(action: (args: T) => Promise<U>) {
       let statusCode = 500;
       if (error instanceof Error) {
         if (error.name === "ZodError") {
-          errorMessage =
-            "Please check this endpoint's documentation for the correct request parameters.";
+          errorMessage = BAD_REQUEST_MESSAGE;
           shouldLog = false;
           statusCode = 400;
         }
@@ -27,12 +49,7 @@ export function api<T, U>(action: (args: T) => Promise<U>) {
       if (shouldLog) {
         logError("API request failed.", { error });
       }
-      throw new Response(JSON.stringify({ error: errorMessage }), {
-        status: statusCode,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
+      throw errorResponse(errorMessage, statusCode);
     }
   };
 }

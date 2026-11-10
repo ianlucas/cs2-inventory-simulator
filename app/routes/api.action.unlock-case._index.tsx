@@ -5,7 +5,7 @@
 
 import { CS2EconomyItem, CS2UnlockedItem } from "@ianlucas/cs2-lib";
 import { z } from "zod";
-import { api } from "~/api.server";
+import { api, parseJsonBody } from "~/api.server";
 import { requireUser } from "~/auth.server";
 import { middleware } from "~/middleware.server";
 import {
@@ -42,7 +42,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       caseUid: nonNegativeInt,
       keyUid: nonNegativeInt.optional()
     })
-    .parse(await request.json());
+    .parse(await parseJsonBody(request));
   const [isLeagueOn, budget] = await Promise.all([
     appShowCommunity.for(user.id).get(),
     communityWeeklyBudget.get()

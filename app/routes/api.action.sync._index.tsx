@@ -5,7 +5,7 @@
 
 import { assert, CS2Team } from "@ianlucas/cs2-lib";
 import { z } from "zod";
-import { api } from "~/api.server";
+import { api, parseJsonBody } from "~/api.server";
 import { requireUser } from "~/auth.server";
 import { SyncAction } from "~/data/sync";
 import { middleware } from "~/middleware.server";
@@ -271,7 +271,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       syncedAt: z.number(),
       actions: z.array(actionShape)
     })
-    .parse(await request.json());
+    .parse(await parseJsonBody(request));
   let addedFromCache = false;
   let maxLoadouts: number | undefined;
   const { syncedAt: responseSyncedAt } = await manipulateUserInventory({

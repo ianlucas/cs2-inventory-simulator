@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { z } from "zod";
-import { api } from "~/api.server";
+import { api, parseJsonBody } from "~/api.server";
 import { middleware } from "~/middleware.server";
 import {
   API_SCOPE,
@@ -32,7 +32,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       inventoryItem: clientInventoryItemShape,
       userId: z.string()
     })
-    .parse(await request.json());
+    .parse(await parseJsonBody(request));
 
   if (!(await isApiKeyValid(apiKey, [API_SCOPE, INVENTORY_SCOPE]))) {
     throw unauthorized;

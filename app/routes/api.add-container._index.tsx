@@ -5,7 +5,7 @@
 
 import { CS2Economy, ensure } from "@ianlucas/cs2-lib";
 import { z } from "zod";
-import { api } from "~/api.server";
+import { api, parseJsonBody } from "~/api.server";
 import { getItemTranslation } from "~/item-translation.server";
 import { middleware } from "~/middleware.server";
 import {
@@ -43,7 +43,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       userId: z.string(),
       weapon: z.boolean().optional()
     })
-    .parse(await request.json());
+    .parse(await parseJsonBody(request));
 
   if (!(await isApiKeyValid(apiKey, [API_SCOPE, INVENTORY_SCOPE]))) {
     throw unauthorized;

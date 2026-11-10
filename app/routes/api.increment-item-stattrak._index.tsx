@@ -5,7 +5,7 @@
 
 import { assert } from "@ianlucas/cs2-lib";
 import { z } from "zod";
-import { api } from "~/api.server";
+import { api, parseJsonBody } from "~/api.server";
 import { middleware } from "~/middleware.server";
 import {
   API_SCOPE,
@@ -39,7 +39,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       userId: z.string(),
       targetUid: nonNegativeInt
     })
-    .parse(await request.json());
+    .parse(await parseJsonBody(request));
 
   if (apiKey !== undefined) {
     if (!(await isApiKeyValid(apiKey, [API_SCOPE, STATTRAK_INCREMENT_SCOPE]))) {

@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { z } from "zod";
-import { api } from "~/api.server";
+import { api, parseJsonBody } from "~/api.server";
 import { middleware } from "~/middleware.server";
 import { generateAuthToken } from "~/models/api-auth-token.server";
 import { API_AUTH_SCOPE, isApiKeyValid } from "~/models/api-credential.server";
@@ -22,7 +22,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
       apiKey: z.string(),
       userId: z.string()
     })
-    .parse(await request.json());
+    .parse(await parseJsonBody(request));
 
   if (!(await isApiKeyValid(apiKey, [API_AUTH_SCOPE]))) {
     throw unauthorized;

@@ -14,7 +14,7 @@ import {
   parseInspectLink
 } from "@ianlucas/cs2-lib-inspect";
 import z from "zod";
-import { api } from "~/api.server";
+import { api, parseJsonBody } from "~/api.server";
 import { getUserIdFromRequest } from "~/auth.server";
 import { usePostFetcher } from "~/components/hooks/use-post-fetcher";
 import { fetchCSFloatItemInfo } from "~/csfloat.server";
@@ -70,7 +70,7 @@ export const action = api(async ({ request }: Route.ActionArgs) => {
     .object({
       inspectLink: z.string().refine((value) => isValidInspectLink(value))
     })
-    .parse(await request.json());
+    .parse(await parseJsonBody(request));
   let item: CS2BaseInventoryItem;
   if (isSteamInspectLink(inspectLink)) {
     item = parseCSFloatItemInfo(
