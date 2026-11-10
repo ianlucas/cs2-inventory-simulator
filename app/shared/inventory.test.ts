@@ -10,15 +10,19 @@ import {
   ensure
 } from "@ianlucas/cs2-lib";
 import { expect, test } from "vitest";
+import lzstring from "lz-string";
+import { getInventoryItemShareUrl } from "~/inventory.client";
 import { loadEconomy } from "~/test-utils";
 import {
   canReceiveStickers,
   CHARM_DETACHMENTS_DISPLAY_UID,
+  createFakeInventoryItemFromBase,
   createInventory,
   editInventoryItem,
   getCharmDetachmentsToDisplay,
   hasInventoryContent,
   loadOrCreateInventory,
+  parseInventoryItemShare,
   safeLoadInventory
 } from "./inventory";
 
@@ -248,4 +252,63 @@ test("canReceiveStickers leaves souvenirs out", () => {
   expect(canReceiveStickers(inventory.get(0))).toBe(true);
   expect(canReceiveStickers(inventory.get(1))).toBe(false);
   expect(canReceiveStickers(inventory.get(2))).toBe(false);
+});
+
+function getShareParam(...args: Parameters<typeof getInventoryItemShareUrl>) {
+  return ensure(
+    new URL(getInventoryItemShareUrl(...args)).searchParams.get("share")
+  );
+}
+
+function encodeShare(value: unknown) {
+  return lzstring.compressToEncodedURIComponent(JSON.stringify(value));
+}
+
+test("parseInventoryItemShare reads back a shared item and its owner", () => {
+  const stickers = { 0: { id: FALLEN_COLOGNE_2015_ID, schema: 0 } };
+  const item = createFakeInventoryItemFromBase({
+    id: AK47_ID,
+    nameTag: "my rifle",
+    stickers
+  });
+  expect(
+    parseInventoryItemShare(getShareParam(item, "76561198000000000"))
+  ).toEqual({
+    item: { id: AK47_ID, nameTag: "my rifle", stickers },
+    userId: "76561198000000000"
+  });
+  expect(parseInventoryItemShare(getShareParam(item))?.userId).toBeUndefined();
+});
+
+test("parseInventoryItemShare resets a shared StatTrak counter", () => {
+  const { id } = ensure(
+    Array.from(CS2Economy.items.values()).find(
+      (item) => item.isWeapon() && item.hasStatTrak()
+    )
+  );
+  expect(
+    parseInventoryItemShare(encodeShare({ i: { id, statTrak: 1337 } }))?.item
+      .statTrak
+  ).toBe(0);
+});
+
+test("parseInventoryItemShare rejects a link damaged in transit", () => {
+  const share = getShareParam(createFakeInventoryItemFromBase({ id: AK47_ID }));
+  expect(parseInventoryItemShare(share.slice(0, -3))).toBeUndefined();
+  expect(parseInventoryItemShare(share.slice(2))).toBeUndefined();
+  expect(parseInventoryItemShare(share.toLowerCase())).toBeUndefined();
+  expect(parseInventoryItemShare("")).toBeUndefined();
+});
+
+test("parseInventoryItemShare rejects a link that is not a craftable item", () => {
+  expect(parseInventoryItemShare(encodeShare(null))).toBeUndefined();
+  expect(parseInventoryItemShare(encodeShare({ u: "1" }))).toBeUndefined();
+  expect(
+    parseInventoryItemShare(encodeShare({ i: { id: 99999999 } }))
+  ).toBeUndefined();
+  expect(
+    parseInventoryItemShare(
+      encodeShare({ i: { id: AK47_ID, stickers: { 0: { id: 99999999 } } } })
+    )
+  ).toBeUndefined();
 });

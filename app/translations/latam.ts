@@ -148,6 +148,8 @@ export const latam = {
   ErrorAlertFailedToAuthTitle: "No se pudo conectar con Steam",
   ErrorAlertFailedToValidate: "No pudimos verificar tu inicio de sesión con Steam. Intenta iniciar sesión nuevamente.",
   ErrorAlertFailedToValidateTitle: "La autenticación con Steam falló",
+  ErrorAlertInvalidShareLink: "Este enlace para compartir no es válido o está incompleto. Por favor, pide uno nuevo.",
+  ErrorAlertInvalidShareLinkTitle: "Enlace para compartir no válido",
   ErrorBoundaryConnectionDesc: "No se pudo conectar con Inventory Simulator. Revisa tu conexión a internet.",
   ErrorBoundaryConnectionRetry: "Haz clic aquí para intentar de nuevo.",
   ErrorBoundaryConnectionTitle: "Error de conexión",

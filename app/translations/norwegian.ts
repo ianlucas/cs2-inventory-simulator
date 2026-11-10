@@ -146,6 +146,8 @@ export const norwegian = {
   ErrorAlertFailedToAuthTitle: "Kunne ikke koble til Steam",
   ErrorAlertFailedToValidate: "Vi kunne ikke bekrefte påloggingen din med Steam. Prøv å logge på igjen.",
   ErrorAlertFailedToValidateTitle: "Autentisering med Steam mislyktes",
+  ErrorAlertInvalidShareLink: "Denne delingslenken er ugyldig eller ufullstendig. Be om en ny.",
+  ErrorAlertInvalidShareLinkTitle: "Ugyldig delingslenke",
   ErrorBoundaryConnectionDesc: "Kunne ikke koble til Inventory Simulator. Sjekk internettilkoblingen din.",
   ErrorBoundaryConnectionRetry: "Klikk her for å prøve igjen.",
   ErrorBoundaryConnectionTitle: "Tilkoblingsfeil",

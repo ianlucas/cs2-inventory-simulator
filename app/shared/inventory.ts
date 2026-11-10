@@ -12,8 +12,11 @@ import {
   CS2InventorySpec,
   CS2ItemType
 } from "@ianlucas/cs2-lib";
+import lzstring from "lz-string";
+import { z } from "zod";
 import type { ItemEditorAttributes } from "~/components/item-editor";
-import { safeParseJson } from "./misc";
+import { safeParseJson, tryOrDefault } from "./misc";
+import { baseInventoryItemProps } from "./shapes";
 
 export const UNLOCKABLE_ITEM_TYPE: CS2ItemType[] = [
   CS2ItemType.Container,
@@ -115,6 +118,32 @@ export function createFakeInventoryItemFromBase(item: CS2BaseInventoryItem) {
     item,
     CS2Economy.getById(item.id)
   );
+}
+
+const inventoryItemShareShape = z.object({
+  i: z.object({
+    ...baseInventoryItemProps,
+    statTrak: z
+      .number()
+      .optional()
+      .transform((statTrak) =>
+        statTrak !== undefined ? (0 as const) : undefined
+      )
+  }),
+  u: z.string().optional()
+});
+
+export function parseInventoryItemShare(share: string) {
+  const { data } = inventoryItemShareShape.safeParse(
+    safeParseJson(lzstring.decompressFromEncodedURIComponent(share))
+  );
+  if (
+    data === undefined ||
+    tryOrDefault(() => createFakeInventoryItemFromBase(data.i)) === undefined
+  ) {
+    return undefined;
+  }
+  return { item: data.i, userId: data.u };
 }
 
 export function canReceiveStickers(item: CS2InventoryItem) {

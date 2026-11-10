@@ -148,6 +148,8 @@ export const turkish = {
   ErrorAlertFailedToAuthTitle: "Kimlik doğrulama başarısız",
   ErrorAlertFailedToValidate: "Steam girişi doğrulanırken bir sorun oluştu. Lütfen tekrar dene.",
   ErrorAlertFailedToValidateTitle: "Doğrulama başarısız",
+  ErrorAlertInvalidShareLink: "Bu paylaşım bağlantısı geçersiz veya eksik. Lütfen yeni bir bağlantı isteyin.",
+  ErrorAlertInvalidShareLinkTitle: "Geçersiz paylaşım bağlantısı",
   ErrorBoundaryConnectionDesc: "Inventory Simulator'a bağlanılamadı. İnternet bağlantını kontrol et.",
   ErrorBoundaryConnectionRetry: "Tekrar denemek için buraya tıkla.",
   ErrorBoundaryConnectionTitle: "Bağlantı Hatası",

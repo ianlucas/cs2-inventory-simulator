@@ -148,6 +148,8 @@ export const bulgarian = {
   ErrorAlertFailedToAuthTitle: "Неуспешна връзка със Steam",
   ErrorAlertFailedToValidate: "Не можахме да потвърдим вашето влизане със Steam. Моля, опитайте да влезете отново.",
   ErrorAlertFailedToValidateTitle: "Неуспешно удостоверяване със Steam",
+  ErrorAlertInvalidShareLink: "Този линк за споделяне е невалиден или непълен. Моля, поискайте нов.",
+  ErrorAlertInvalidShareLinkTitle: "Невалиден линк за споделяне",
   ErrorBoundaryConnectionDesc: "Неуспешна връзка с Inventory Simulator. Проверете интернет връзката си.",
   ErrorBoundaryConnectionRetry: "Щракнете тук, за да опитате отново.",
   ErrorBoundaryConnectionTitle: "Грешка при връзката",

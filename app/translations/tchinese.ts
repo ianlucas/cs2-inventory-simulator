@@ -148,6 +148,8 @@ export const tchinese = {
   ErrorAlertFailedToAuthTitle: "驗證失敗",
   ErrorAlertFailedToValidate: "驗證 Steam 登入時發生問題。請重試。",
   ErrorAlertFailedToValidateTitle: "驗證失敗",
+  ErrorAlertInvalidShareLink: "此分享連結無效或不完整，請重新取得連結。",
+  ErrorAlertInvalidShareLinkTitle: "分享連結無效",
   ErrorBoundaryConnectionDesc: "無法連線至 Inventory Simulator。請檢查你的網路連線。",
   ErrorBoundaryConnectionRetry: "點擊此處重試。",
   ErrorBoundaryConnectionTitle: "連線錯誤",

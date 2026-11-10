@@ -6,9 +6,8 @@
 import { faArrowLeft, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CS2BaseInventoryItem, CS2EconomyItem } from "@ianlucas/cs2-lib";
-import lzstring from "lz-string";
 import { useState } from "react";
-import { data, useLoaderData, useNavigate } from "react-router";
+import { data, redirect, useLoaderData, useNavigate } from "react-router";
 import { z } from "zod";
 import {
   useInventory,
@@ -40,11 +39,11 @@ import { getMetaTitle } from "~/root-meta";
 import { isItemCountable } from "~/shared/economy";
 import {
   createFakeInventoryItemFromBase,
-  editInventoryItem
+  editInventoryItem,
+  parseInventoryItemShare
 } from "~/shared/inventory";
 import { tryOrDefault } from "~/shared/misc";
 import { range } from "~/shared/number";
-import { baseInventoryItemProps } from "~/shared/shapes";
 import { playSound } from "~/sound.client";
 import type { Route } from "./+types/craft._index";
 
@@ -54,37 +53,22 @@ export async function loader({ request }: Route.LoaderArgs) {
   await middleware(request);
   const url = new URL(request.url);
   const share = url.searchParams.get("share");
-  const shared = z
-    .object({
-      i: z.object({
-        ...baseInventoryItemProps,
-        statTrak: z
-          .number()
-          .optional()
-          .transform((statTrak) =>
-            statTrak !== undefined ? (0 as const) : undefined
-          )
-      }),
-      u: z.string().optional()
-    })
-    .optional()
-    .parse(
-      share !== null
-        ? JSON.parse(lzstring.decompressFromEncodedURIComponent(share))
-        : undefined
-    );
+  const shared = share !== null ? parseInventoryItemShare(share) : undefined;
+  if (share !== null && shared === undefined) {
+    throw redirect("/craft?error=InvalidShareLink");
+  }
   return data({
     shared:
       shared !== undefined
         ? {
-            item: shared.i,
+            item: shared.item,
             user:
-              shared.u !== undefined
-                ? await getUserBasicData(shared.u)
+              shared.userId !== undefined
+                ? await getUserBasicData(shared.userId)
                 : undefined,
             userHasProfile:
-              shared.u !== undefined &&
-              (await inventoryAllowProfile.for(shared.u).get())
+              shared.userId !== undefined &&
+              (await inventoryAllowProfile.for(shared.userId).get())
           }
         : undefined,
     uid: z

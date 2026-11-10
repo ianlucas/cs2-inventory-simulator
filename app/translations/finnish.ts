@@ -147,6 +147,8 @@ export const finnish = {
   ErrorAlertFailedToAuthTitle: "Ei voitu yhdistää Steamiin",
   ErrorAlertFailedToValidate: "Emme voineet vahvistaa kirjautumistasi Steamiin. Yritä kirjautua uudelleen.",
   ErrorAlertFailedToValidateTitle: "Todennus Steamin kanssa epäonnistui",
+  ErrorAlertInvalidShareLink: "Tämä jakolinkki on virheellinen tai puutteellinen. Pyydä uusi linkki.",
+  ErrorAlertInvalidShareLinkTitle: "Virheellinen jakolinkki",
   ErrorBoundaryConnectionDesc: "Yhteyttä Inventory Simulatoriin ei saatu. Tarkista internetyhteytesi.",
   ErrorBoundaryConnectionRetry: "Yritä uudelleen napsauttamalla tästä.",
   ErrorBoundaryConnectionTitle: "Yhteysvirhe",

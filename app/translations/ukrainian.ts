@@ -148,6 +148,8 @@ export const ukrainian = {
   ErrorAlertFailedToAuthTitle: "Не вдалося автентифікувати",
   ErrorAlertFailedToValidate: "Виникла проблема під час перевірки входу через Steam. Спробуйте ще раз.",
   ErrorAlertFailedToValidateTitle: "Не вдалося перевірити",
+  ErrorAlertInvalidShareLink: "Це посилання недійсне або неповне. Попросіть нове.",
+  ErrorAlertInvalidShareLinkTitle: "Недійсне посилання",
   ErrorBoundaryConnectionDesc: "Не вдалося під'єднатися до Inventory Simulator. Перевірте підключення до інтернету.",
   ErrorBoundaryConnectionRetry: "Натисніть тут, щоб спробувати ще раз.",
   ErrorBoundaryConnectionTitle: "Помилка підключення",

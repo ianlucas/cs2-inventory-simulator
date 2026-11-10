@@ -147,6 +147,8 @@ export const polish = {
   ErrorAlertFailedToAuthTitle: "Nie można połączyć się ze Steam",
   ErrorAlertFailedToValidate: "Nie udało się zweryfikować logowania do Steam. Spróbuj zalogować się ponownie.",
   ErrorAlertFailedToValidateTitle: "Uwierzytelnienie Steam nie powiodło się",
+  ErrorAlertInvalidShareLink: "Ten link udostępniania jest nieprawidłowy lub niekompletny. Poproś o nowy.",
+  ErrorAlertInvalidShareLinkTitle: "Nieprawidłowy link udostępniania",
   ErrorBoundaryConnectionDesc: "Nie udało się połączyć z Inventory Simulator. Sprawdź połączenie z internetem.",
   ErrorBoundaryConnectionRetry: "Kliknij tutaj, aby spróbować ponownie.",
   ErrorBoundaryConnectionTitle: "Błąd połączenia",

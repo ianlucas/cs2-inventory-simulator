@@ -147,6 +147,8 @@ export const czech = {
   ErrorAlertFailedToAuthTitle: "Nepodařilo se připojit ke službě Steam",
   ErrorAlertFailedToValidate: "Nepodařilo se nám ověřit tvé přihlášení přes Steam. Zkus se prosím přihlásit znovu.",
   ErrorAlertFailedToValidateTitle: "Ověření přes Steam se nezdařilo",
+  ErrorAlertInvalidShareLink: "Tento odkaz ke sdílení je neplatný nebo neúplný. Požádejte prosím o nový.",
+  ErrorAlertInvalidShareLinkTitle: "Neplatný odkaz ke sdílení",
   ErrorBoundaryConnectionDesc: "Nepodařilo se připojit k aplikaci Inventory Simulator. Zkontrolujte své připojení k internetu.",
   ErrorBoundaryConnectionRetry: "Klikněte sem a zkuste to znovu.",
   ErrorBoundaryConnectionTitle: "Chyba připojení",

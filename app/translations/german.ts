@@ -147,6 +147,8 @@ export const german = {
   ErrorAlertFailedToAuthTitle: "Verbindung mit Steam nicht möglich",
   ErrorAlertFailedToValidate: "Ihre Anmeldung bei Steam konnte nicht überprüft werden. Bitte versuchen Sie sich erneut anzumelden.",
   ErrorAlertFailedToValidateTitle: "Authentifizierung mit Steam fehlgeschlagen",
+  ErrorAlertInvalidShareLink: "Dieser Freigabelink ist ungültig oder unvollständig. Bitte frage nach einem neuen.",
+  ErrorAlertInvalidShareLinkTitle: "Ungültiger Freigabelink",
   ErrorBoundaryConnectionDesc: "Inventory Simulator ist nicht erreichbar. Überprüfen Sie Ihre Internetverbindung.",
   ErrorBoundaryConnectionRetry: "Klicken Sie hier, um es erneut zu versuchen.",
   ErrorBoundaryConnectionTitle: "Verbindungsfehler",

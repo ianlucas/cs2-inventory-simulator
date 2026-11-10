@@ -147,6 +147,8 @@ export const romanian = {
   ErrorAlertFailedToAuthTitle: "Autentificarea nu a reușit",
   ErrorAlertFailedToValidate: "A apărut o problemă la validarea autentificării prin Steam. Te rugăm să încerci din nou.",
   ErrorAlertFailedToValidateTitle: "Validarea nu a reușit",
+  ErrorAlertInvalidShareLink: "Acest link de partajare este nevalid sau incomplet. Te rugăm să ceri unul nou.",
+  ErrorAlertInvalidShareLinkTitle: "Link de partajare nevalid",
   ErrorBoundaryConnectionDesc: "Nu s-a putut realiza conexiunea cu Inventory Simulator. Verifică-ți conexiunea la internet.",
   ErrorBoundaryConnectionRetry: "Apasă aici pentru a încerca din nou.",
   ErrorBoundaryConnectionTitle: "Eroare de conexiune",

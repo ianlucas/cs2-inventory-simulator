@@ -148,6 +148,8 @@ export const greek = {
   ErrorAlertFailedToAuthTitle: "Αδυναμία σύνδεσης με το Steam",
   ErrorAlertFailedToValidate: "Δεν μπορέσαμε να επαληθεύσουμε τη σύνδεσή σας με το Steam. Δοκιμάστε να συνδεθείτε ξανά.",
   ErrorAlertFailedToValidateTitle: "Αποτυχία ελέγχου ταυτότητας με το Steam",
+  ErrorAlertInvalidShareLink: "Αυτός ο σύνδεσμος κοινοποίησης δεν είναι έγκυρος ή είναι ελλιπής. Ζητήστε έναν νέο.",
+  ErrorAlertInvalidShareLinkTitle: "Μη έγκυρος σύνδεσμος κοινοποίησης",
   ErrorBoundaryConnectionDesc: "Δεν ήταν δυνατή η σύνδεση με το Inventory Simulator. Ελέγξτε τη σύνδεσή σας στο διαδίκτυο.",
   ErrorBoundaryConnectionRetry: "Κάντε κλικ εδώ για να δοκιμάσετε ξανά.",
   ErrorBoundaryConnectionTitle: "Σφάλμα σύνδεσης",

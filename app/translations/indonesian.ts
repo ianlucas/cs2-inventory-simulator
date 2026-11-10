@@ -145,6 +145,8 @@ export const indonesian = {
   ErrorAlertFailedToAuthTitle: "Tidak dapat terhubung ke Steam",
   ErrorAlertFailedToValidate: "Kami tidak dapat memverifikasi login kamu dengan Steam. Silakan coba login lagi.",
   ErrorAlertFailedToValidateTitle: "Autentikasi dengan Steam gagal",
+  ErrorAlertInvalidShareLink: "Link berbagi ini tidak valid atau tidak lengkap. Silakan minta link yang baru.",
+  ErrorAlertInvalidShareLinkTitle: "Link berbagi tidak valid",
   ErrorBoundaryConnectionDesc: "Tidak dapat terhubung ke Inventory Simulator. Periksa koneksi internet Anda.",
   ErrorBoundaryConnectionRetry: "Klik di sini untuk mencoba lagi.",
   ErrorBoundaryConnectionTitle: "Kesalahan Koneksi",

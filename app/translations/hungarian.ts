@@ -147,6 +147,8 @@ export const hungarian = {
   ErrorAlertFailedToAuthTitle: "Nem sikerült csatlakozni a Steamhez",
   ErrorAlertFailedToValidate: "Nem sikerült ellenőrizni a Steam bejelentkezésedet. Kérjük, próbálj meg újra bejelentkezni.",
   ErrorAlertFailedToValidateTitle: "Steam hitelesítés sikertelen",
+  ErrorAlertInvalidShareLink: "Ez a megosztási link érvénytelen vagy hiányos. Kérj egy újat.",
+  ErrorAlertInvalidShareLinkTitle: "Érvénytelen megosztási link",
   ErrorBoundaryConnectionDesc: "Nem sikerült elérni az Inventory Simulatort. Ellenőrizd az internetkapcsolatodat.",
   ErrorBoundaryConnectionRetry: "Kattints ide az újrapróbáláshoz.",
   ErrorBoundaryConnectionTitle: "Kapcsolódási hiba",
