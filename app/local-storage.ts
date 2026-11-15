@@ -7,20 +7,26 @@ import { safeParseJson } from "./shared/misc";
 
 export function getFromLocalStorage(key: string) {
   if (typeof document !== "undefined") {
-    return window.localStorage.getItem(key);
+    try {
+      return window.localStorage.getItem(key);
+    } catch {}
   }
   return undefined;
 }
 
 export function setToLocalStorage(key: string, value: string) {
   if (typeof document !== "undefined") {
-    return window.localStorage.setItem(key, value);
+    try {
+      window.localStorage.setItem(key, value);
+    } catch {}
   }
 }
 
 export function removeFromLocalStorage(key: string) {
   if (typeof document !== "undefined") {
-    return window.localStorage.removeItem(key);
+    try {
+      window.localStorage.removeItem(key);
+    } catch {}
   }
 }
 

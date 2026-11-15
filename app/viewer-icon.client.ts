@@ -380,12 +380,10 @@ export class ViewerIconBudget {
   }
 
   private write(stored: StoredBudget, now: number) {
-    try {
-      setToLocalStorage(
-        BUDGET_STORAGE_KEY,
-        JSON.stringify({ ...stored, at: now })
-      );
-    } catch {}
+    setToLocalStorage(
+      BUDGET_STORAGE_KEY,
+      JSON.stringify({ ...stored, at: now })
+    );
   }
 }
 
