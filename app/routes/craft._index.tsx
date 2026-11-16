@@ -109,7 +109,11 @@ export default function Craft() {
   useLockScroll();
 
   function handleSubmit({ quantity, ...attributes }: ItemEditorAttributes) {
-    if (isSubmitting || item === undefined) {
+    if (
+      isSubmitting ||
+      item === undefined ||
+      (!isEditing && inventory.isFull())
+    ) {
       return;
     }
 

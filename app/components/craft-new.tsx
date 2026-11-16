@@ -134,7 +134,11 @@ export function CraftNew({
         />
         <ModalButton
           children={translate("EditorCraft")}
-          disabled={attributes === undefined || !isItemCraftable(item)}
+          disabled={
+            attributes === undefined ||
+            !isItemCraftable(item) ||
+            inventory.isFull()
+          }
           onClick={handleSubmit}
           variant="primary"
         />
