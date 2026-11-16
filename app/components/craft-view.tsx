@@ -5,7 +5,7 @@
 
 import { CS2EconomyItem, CS2InventoryItem } from "@ianlucas/cs2-lib";
 import { useState } from "react";
-import { useTranslate } from "./app-context";
+import { useInventory, useTranslate } from "./app-context";
 import { useCraftItemFilter } from "./hooks/use-item-hide-filters";
 import { ItemEditor, ItemEditorAttributes } from "./item-editor";
 import { ModalButton } from "./modal-button";
@@ -20,6 +20,7 @@ export function CraftView({
   onSubmit: (attributes: ItemEditorAttributes) => void;
 }) {
   const translate = useTranslate();
+  const [inventory] = useInventory();
   const [attributes, setAttributes] = useState<ItemEditorAttributes>();
   const isItemCraftable = useCraftItemFilter();
 
@@ -45,7 +46,7 @@ export function CraftView({
         />
         <ModalButton
           children={translate("EditorCraft")}
-          disabled={!isItemCraftable(item)}
+          disabled={!isItemCraftable(item) || inventory.isFull()}
           onClick={handleSubmit}
           variant="primary"
         />
