@@ -18,6 +18,7 @@ import {
   getSouvenirAutographs,
   getSouvenirKeychains,
   getSouvenirSourceName,
+  getSouvenirSources,
   getSouvenirStickers,
   isSouvenirSelectionComplete,
   moveSouvenirStickerField,
@@ -34,7 +35,7 @@ const URBAN_DDPAT_ID = 66;
 const MUDDER_ID = 70;
 
 function sourcesOf(id: number) {
-  return CS2Economy.getById(id).getSouvenirSources();
+  return getSouvenirSources(CS2Economy.getById(id));
 }
 
 function indexOf(
@@ -88,6 +89,13 @@ test("the newest source is preselected", () => {
   const newest = sources[getNewestSouvenirSourceIndex(sources)];
   expect(newest.container).toBeUndefined();
   expect(getSouvenirSourceName(newest)).toBe("IEM Cologne 2026");
+});
+
+test("PGL Singapore 2026 is not offered yet", () => {
+  const item = CS2Economy.getById(FENNEC_FOX_ID);
+  const singapore = ({ eventId }: CS2SouvenirSource) => eventId === 27;
+  expect(item.getSouvenirSources().some(singapore)).toBe(true);
+  expect(sourcesOf(FENNEC_FOX_ID).some(singapore)).toBe(false);
 });
 
 test("a crafted source needs two teams, an autograph and a map", () => {

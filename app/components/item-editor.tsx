@@ -37,6 +37,7 @@ import {
   findSouvenirSelection,
   getNewestSouvenirSourceIndex,
   getSouvenirKeychains,
+  getSouvenirSources,
   getSouvenirStickers,
   isSouvenirSelectionComplete,
   SouvenirSelection
@@ -217,7 +218,7 @@ export function ItemEditor({
   const hasSouvenir = !isHideSouvenir && item.hasSouvenir();
   const hasType = hasStatTrak || hasSouvenir;
   const souvenirSources = useMemo(
-    () => (hasSouvenir ? item.getSouvenirSources() : []),
+    () => (hasSouvenir ? getSouvenirSources(item) : []),
     [item, hasSouvenir]
   );
   const hasStyle = !isHideStyle && item.hasStyle();

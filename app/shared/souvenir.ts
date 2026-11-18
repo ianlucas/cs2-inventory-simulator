@@ -30,6 +30,26 @@ export interface SouvenirSelection {
   teamIds: [number | undefined, number | undefined];
 }
 
+// PGL Singapore 2026: no souvenirs drop yet, and cs2-lib has no map pool for
+// it until Valve ships its highlight reels.
+const DISABLED_SOUVENIR_EVENT_IDS = [27];
+
+function isSouvenirEventDisabled(eventId: number) {
+  return DISABLED_SOUVENIR_EVENT_IDS.includes(eventId);
+}
+
+export function getSouvenirSources(item: CS2EconomyItem) {
+  return item
+    .getSouvenirSources()
+    .filter(({ eventId }) => !isSouvenirEventDisabled(eventId));
+}
+
+export function hasDisabledSouvenirStickers(stickers: Stickers) {
+  return Object.values(stickers).some(({ id }) =>
+    CS2Economy.getById(id).souvenirEventIds?.some(isSouvenirEventDisabled)
+  );
+}
+
 export function getNewestSouvenirSourceIndex(sources: CS2SouvenirSource[]) {
   return sources.reduce(
     (newest, source, index) =>
