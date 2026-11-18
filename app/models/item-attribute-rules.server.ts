@@ -13,6 +13,7 @@ import {
 import { ItemEditorAttributes } from "~/components/item-editor";
 import { hasKeys } from "~/shared/misc";
 import { isCountAllowed } from "~/shared/number";
+import { hasDisabledSouvenirStickers } from "~/shared/souvenir";
 import {
   craftHideRules,
   editHideRules,
@@ -179,6 +180,7 @@ export async function enforceCraftRulesForInventoryItem(
   }
   if (souvenir === true) {
     await craftAllowSouvenir.for(userId).truthy();
+    assert(stickers === undefined || !hasDisabledSouvenirStickers(stickers));
   }
   if (statTrak !== undefined) {
     await craftAllowStatTrak.for(userId).truthy();
@@ -260,6 +262,7 @@ export async function enforceEditRulesForInventoryItem(
   }
   if (souvenir === true) {
     await editAllowSouvenir.for(userId).truthy();
+    assert(stickers === undefined || !hasDisabledSouvenirStickers(stickers));
   }
   if (statTrak !== undefined) {
     await editAllowStatTrak.for(userId).truthy();

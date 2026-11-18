@@ -181,6 +181,32 @@ test("a crafted souvenir's sticker attributes still follow their rules", async (
   ).rejects.toThrow();
 });
 
+test("a PGL Singapore 2026 souvenir can't be crafted or edited yet", async () => {
+  const singapore = ensure(
+    souvenirWeapon.getSouvenirSources().find(({ eventId }) => eventId === 27)
+  );
+  const stickers = {
+    0: { id: singapore.teams[0].sticker.id },
+    1: { id: singapore.teams[1].sticker.id }
+  };
+  await expect(
+    enforceCraftRulesForInventoryItem(souvenir(stickers), USER_ID)
+  ).rejects.toThrow();
+  await expect(
+    enforceEditRulesForInventoryItem(
+      { souvenir: true, stickers },
+      USER_ID,
+      inventoryItem()
+    )
+  ).rejects.toThrow();
+  await expect(
+    enforceCraftRulesForInventoryItem(
+      { id: souvenirWeapon.id, stickers },
+      USER_ID
+    )
+  ).resolves.toBeUndefined();
+});
+
 test("a highlight charm needs no rule beyond keychains", async () => {
   denied.add("craftAllowKeychainSeed");
   await expect(
