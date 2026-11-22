@@ -28,6 +28,15 @@ vi.mock("./app-context", () => ({
     (next: CS2Inventory) => inventoryStore.set(next.move())
   ],
   useInventoryItems: () => [],
+  useRules: () => ({
+    craftHideCategory: [],
+    craftHideFilterType: [],
+    craftHideId: [],
+    craftHideModel: [],
+    craftHideType: [],
+    craftMaxQuantity: 0,
+    inventoryMaxItems: 2
+  }),
   useTranslate: () => (key: string) => key
 }));
 
@@ -41,7 +50,9 @@ vi.mock("~/components/hooks/use-name-item", () => ({
   useNameItemString: () => () => ""
 }));
 
-vi.mock("~/components/hooks/use-sync", () => ({ useSync: () => vi.fn() }));
+const sync = vi.hoisted(() => vi.fn());
+
+vi.mock("~/components/hooks/use-sync", () => ({ useSync: () => sync }));
 
 vi.mock("~/sound.client", () => ({ initSounds: vi.fn(), playSound: vi.fn() }));
 
@@ -58,6 +69,7 @@ describe("DetachCharm", () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
+    sync.mockClear();
     const inventory = createInventory()
       .add({ id: defaultWeapon.id, keychains: { 0: { id: charm.id } } })
       .add({ id: CS2Economy.getCharmDetachment().id })
@@ -85,5 +97,53 @@ describe("DetachCharm", () => {
         .some((item) => item.uid === uid && item.id === defaultWeapon.id)
     ).toBe(false);
     expect(findButton("DetachCharmClose")).toBeDefined();
+  });
+
+  function setupFullInventory(charges: number) {
+    const inventory = createInventory({ maxItems: 2 }).add({
+      id: defaultWeapon.id,
+      keychains: { 0: { id: charm.id } }
+    });
+    for (let i = 0; i < charges; i++) {
+      inventory.add({ id: CS2Economy.getCharmDetachment().id });
+    }
+    expect(inventory.isFull()).toBe(true);
+    uid = ensure(
+      inventory.getAll().find(({ id }) => id === defaultWeapon.id)
+    ).uid;
+    inventoryStore.set(inventory);
+  }
+
+  function renderDetachCharm() {
+    view.render(
+      <PresenceHarness>
+        {(onClose) => <DetachCharm onClose={onClose} uid={uid} />}
+      </PresenceHarness>
+    );
+  }
+
+  test("blocks detaching when the inventory is full and charges remain", () => {
+    setupFullInventory(2);
+    renderDetachCharm();
+    const button = ensure(findButton("DetachCharmConfirm"));
+    expect(button.disabled).toBe(true);
+    expect(document.body.textContent).toContain("HeaderCraftInventoryFull");
+    holdButton(button);
+    const inventory = ensure(inventoryStore.get());
+    expect(inventory.get(uid).getKeychainsCount()).toBe(1);
+    expect(inventory.getCharmDetachmentCharges()).toBe(2);
+    expect(sync).not.toHaveBeenCalled();
+  });
+
+  test("allows detaching when the inventory is full and one charge remains", () => {
+    setupFullInventory(1);
+    renderDetachCharm();
+    const button = ensure(findButton("DetachCharmConfirm"));
+    expect(button.disabled).toBe(false);
+    holdButton(button);
+    const inventory = ensure(inventoryStore.get());
+    expect(inventory.getCharmDetachmentCharges()).toBe(0);
+    expect(inventory.getAll().some(({ id }) => id === charm.id)).toBe(true);
+    expect(sync).toHaveBeenCalledTimes(1);
   });
 });

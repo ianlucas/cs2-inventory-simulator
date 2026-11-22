@@ -50,19 +50,20 @@ function useDetachCharmAction({ onClose, uid }: DetachCharmProps) {
   const sync = useSync();
   const item = useInventoryItem(uid);
   const charges = inventory.getCharmDetachmentCharges();
+  const canDetach = !inventory.isFull() || charges === 1;
 
   function handleDetach() {
     const [slot] = item.someKeychains()[0] ?? [];
-    if (slot === undefined) {
+    if (slot === undefined || !canDetach) {
       return;
     }
-    sync({ type: SyncAction.RemoveItemKeychain, targetUid: uid, slot });
     setInventory(inventory.removeItemKeychain(uid, slot));
+    sync({ type: SyncAction.RemoveItemKeychain, targetUid: uid, slot });
     playSound("inventory_item_pickup");
     onClose();
   }
 
-  return { charges, handleDetach, item };
+  return { canDetach, charges, handleDetach, item };
 }
 
 function DetachCharmHeader({
@@ -168,12 +169,14 @@ export function DetachCharmAddPack({
 }
 
 function DetachCharmFooter({
+  canDetach,
   charges,
   className,
   item,
   onClose,
   onDetach
 }: {
+  canDetach: boolean;
   charges: number;
   className?: string;
   item: CS2InventoryItem;
@@ -190,7 +193,7 @@ function DetachCharmFooter({
     <UseItemFooter
       className={className}
       left={
-        needsPack && (
+        needsPack ? (
           <div className="font-display flex items-center gap-2 text-lg">
             <ItemImage className="h-14" item={item} />
             <span>
@@ -198,6 +201,12 @@ function DetachCharmFooter({
               <strong>{nameItemString(packItem)}</strong>
             </span>
           </div>
+        ) : (
+          !canDetach && (
+            <div className="font-display text-lg">
+              {translate("HeaderCraftInventoryFull")}
+            </div>
+          )
         )
       }
       right={
@@ -206,6 +215,7 @@ function DetachCharmFooter({
             <DetachCharmAddPack onAdd={onClose} packItem={packItem} />
           ) : (
             <HoldButton
+              disabled={!canDetach}
               durationMs={DETACH_CHARM_HOLD_MS}
               onHold={onDetach}
               tooltip={translate("DetachCharmHint")}
@@ -225,7 +235,7 @@ function DetachCharmFooter({
 }
 
 function DetachCharm3d({ onClose, uid }: DetachCharmProps) {
-  const { charges, handleDetach, item } = useDetachCharmAction({
+  const { canDetach, charges, handleDetach, item } = useDetachCharmAction({
     onClose,
     uid
   });
@@ -258,6 +268,7 @@ function DetachCharm3d({ onClose, uid }: DetachCharmProps) {
     >
       <div className="pointer-events-none absolute bottom-8 left-0 w-full">
         <DetachCharmFooter
+          canDetach={canDetach}
           charges={charges}
           item={item}
           onClose={onClose}
@@ -269,7 +280,7 @@ function DetachCharm3d({ onClose, uid }: DetachCharmProps) {
 }
 
 function DetachCharm2d({ onClose, uid }: DetachCharmProps) {
-  const { charges, handleDetach, item } = useDetachCharmAction({
+  const { canDetach, charges, handleDetach, item } = useDetachCharmAction({
     onClose,
     uid
   });
@@ -295,6 +306,7 @@ function DetachCharm2d({ onClose, uid }: DetachCharmProps) {
               </div>
             </div>
             <DetachCharmFooter
+              canDetach={canDetach}
               charges={charges}
               item={item}
               onClose={onClose}
