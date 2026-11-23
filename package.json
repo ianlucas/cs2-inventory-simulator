@@ -27,15 +27,15 @@
     "@prisma/client": "^7.10.1",
     "@react-router/fs-routes": "^8.5.1",
     "@react-router/node": "^8.5.1",
-    "@sentry/browser": "^10.78.0",
+    "@sentry/browser": "^11.12.0",
     "@sentry/cli": "^3.8.2",
-    "@sentry/core": "^10.78.0",
-    "@sentry/node": "^10.78.0",
+    "@sentry/core": "^11.12.0",
+    "@sentry/node": "^11.12.0",
     "@tanstack/react-virtual": "^3.14.26",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
     "country-flag-icons": "^1.6.20",
-    "dotenv": "^17.4.2",
+    "dotenv": "^18.0.10",
     "hash-object": "^5.1.0",
     "hono": "^4.13.18",
     "isbot": "^5.2.3",
@@ -44,7 +44,7 @@
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router": "^8.5.1",
-    "react-router-hono-server": "^4.1.10",
+    "react-router-hono-server": "^4.1.11",
     "remix-auth": "^4.2.0",
     "remix-utils": "^10.0.1",
     "steamapi": "^3.1.5",
@@ -68,7 +68,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",
-    "vitest": "^4.1.12"
+    "vitest": "^5.1.0"
   },
   "engines": {
     "node": ">=24.0.0"
