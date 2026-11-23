@@ -27,6 +27,7 @@ export function initClientMonitoring() {
     environment,
     release: __SOURCE_COMMIT__,
     sampleRate: 1,
+    dataCollection: { userInfo: false, cookies: false, httpBodies: [] },
     allowUrls: [window.location.origin],
     ignoreErrors: [
       /ResizeObserver loop/,

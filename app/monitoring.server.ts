@@ -16,13 +16,14 @@ export function initServerMonitoring() {
     dsn,
     environment: SENTRY_ENVIRONMENT,
     release: nonEmptyString(SOURCE_COMMIT),
-    registerEsmLoaderHooks: false,
+    enableRuntimeChannelInjection: false,
+    dataCollection: { userInfo: false, cookies: false, httpBodies: [] },
     tracePropagationTargets: [],
     integrations: (integrations) => [
       ...integrations.filter(({ name }) => name !== "ProcessSession"),
       Sentry.httpIntegration({
         spans: false,
-        trackIncomingRequestsAsSessions: false
+        sessions: false
       }),
       Sentry.onUnhandledRejectionIntegration({ mode: "strict" })
     ],
